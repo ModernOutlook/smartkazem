@@ -821,6 +821,21 @@ function selectRealm(id){
   }
 }
 
+const realmShare=document.getElementById('realm-share');
+if(realmShare){
+  realmShare.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    openShare();
+  });
+  realmShare.addEventListener('keydown',event=>{
+    if(event.key==='Enter'||event.key===' '){
+      event.preventDefault();
+      openShare();
+    }
+  });
+}
+
 const realmGeometry=[
   ['structure',365,445],
   ['continuity',285,365],
