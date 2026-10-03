@@ -57,3 +57,46 @@ jobs:
               print('\n'.join(bad)); sys.exit(1)
           print('HTML checks passed')
           PY
+
+      - name: Validate SiteAudio integration
+        run: |
+          python3 - <<'PY'
+          import json, pathlib, re, sys
+          root = pathlib.Path('.')
+          pages = {
+              'index.html': 'blue',
+              'observation.html': 'red',
+              'philosophical-treatise.html': 'red',
+              'shahnameh.html': 'yellow',
+          }
+          expected_rings = {
+              'structure': 'blue',
+              'continuity': 'yellow',
+              'experience': 'purple',
+              'reference': 'red',
+              'share': 'green',
+          }
+          errors = []
+          for name, theme in pages.items():
+              source = (root / name).read_text(encoding='utf-8')
+              if len(re.findall(r'<script\\s+src=["\\']site-audio\\.js["\\']\\s+defer\\s*></script>', source, re.I)) != 1:
+                  errors.append(f'{name}: expected exactly one deferred SiteAudio script')
+              if not re.search(r'<html\\b[^>]*data-sound-theme=["\\']' + re.escape(theme) + r'["\\']', source, re.I):
+                  errors.append(f'{name}: missing default sound theme {theme}')
+              if source.count('data-sound-toggle') != 1:
+                  errors.append(f'{name}: expected exactly one sound toggle')
+              if 'data-i18n="labels.sound"' not in source:
+                  errors.append(f'{name}: sound toggle label must use i18n')
+          home = (root / 'index.html').read_text(encoding='utf-8')
+          for realm, theme in expected_rings.items():
+              if not re.search(r'data-id=["\\']' + re.escape(realm) + r'["\\'][^>]*data-sound-theme=["\\']' + re.escape(theme) + r'["\\']', home):
+                  errors.append(f'index.html: {realm} ring must use {theme} theme')
+          for lang, label in {'fa':'صدا','en':'Sound','zh':'声音','ar':'الصوت'}.items():
+              catalog = json.loads((root / 'translations' / f'{lang}.json').read_text(encoding='utf-8'))
+              if catalog.get('labels', {}).get('sound') != label:
+                  errors.append(f'translations/{lang}.json: missing expected labels.sound')
+          if errors:
+              print('\\n'.join(errors))
+              sys.exit(1)
+          print('SiteAudio integration checks passed')
+          PY
