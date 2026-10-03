@@ -183,7 +183,6 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 }
 @keyframes corePulse{0%,100%{transform:translate(-50%,-50%) scale(.94);opacity:.9}50%{transform:translate(-50%,-50%) scale(1.06);opacity:1}}
 
-.ring-label{display:none}
 
 
 
@@ -207,9 +206,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .info .kicker{font-size:clamp(.5rem,1.6vw,.68rem);letter-spacing:.16em;opacity:.45;margin-bottom:4px;direction:ltr}
 .info h1{font-size:clamp(.9rem,3.2vw,1.35rem);margin-bottom:5px}
 .info p{font-size:clamp(.55rem,1.75vw,.78rem);line-height:1.8;color:var(--muted);max-width:95%;margin:auto}
-.info .tap{display:inline-block;margin-top:7px;font-size:.56rem;opacity:.35}
 .info.reference{border-color:rgba(255,80,55,.26)}
-.info.reference .tap{color:#ffb1a7;opacity:.7}
 
 .lang-switch{
   position:absolute;z-index:40;left:5%;top:4%;  display:flex;direction:ltr;border:1px solid rgba(220,240,255,.12);
@@ -275,18 +272,15 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .ring-experience{--size:55%;--c:#6c2990;--nebula:#dc76ff;--glow:rgba(164,67,219,.42);--z:3}
 .ring-reference{--size:32%;--c:#9b3d30;--nebula:#ff866d;--glow:rgba(208,76,57,.4);--z:4}
 .ring-share{--size:14%;--c:#0d8458;--nebula:#68ffc2;--glow:rgba(33,192,126,.42);--z:5}
-.ring-label{display:none}
 
 
 
-.ring-continuity .ring-label,.ring-reference .ring-label{display:none}
 
 .core,.center-label{display:none}
 .info{background:linear-gradient(180deg,rgba(3,13,25,.64),rgba(1,6,13,.84));border-color:rgba(117,192,239,.15);box-shadow:0 14px 34px rgba(0,0,0,.4);backdrop-filter:none;height:15%;min-height:0;padding:clamp(10px,2.4%,16px) clamp(12px,3.4%,18px)}
 .info .kicker{margin-bottom:3px}
 .info h1{margin-bottom:3px}
 .info p{line-height:1.65}
-.info .tap{margin-top:5px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 
@@ -299,7 +293,6 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 .rings{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .ring{cursor:pointer;pointer-events:none;outline:none}
 .ring:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:4px}
-.ring-label{display:none}
 .icon-btn,.lang-switch button{touch-action:manipulation}
 .info{pointer-events:none}
 @media (max-width:520px){
