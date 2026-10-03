@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google" content="notranslate"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; child-src 'none'; connect-src 'none'; img-src 'self' data:; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer"><meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()">
 <meta name="theme-color" content="#02060c">
@@ -91,7 +91,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 }
 .icon-btn:hover{background:rgba(40,130,210,.2);border-color:rgba(150,220,255,.5);transform:translateY(-1px)}
 .audio-toggle{font-size:.62rem;letter-spacing:-.08em;direction:ltr;white-space:nowrap}
-.topbar{gap:7px}
+.topbar{gap:7px;display:flex;align-items:center}.topbar .icon-btn{position:static!important;transform:none!important}.topbar #x-social{text-decoration:none}.icon-btn:focus,.icon-btn:focus-visible,.lang-switch button:focus,.lang-switch button:focus-visible{outline:none;box-shadow:none}
 
 .orbit{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
 .menu-svg{width:min(96vw,96vh);height:min(96vw,96vh);overflow:visible;position:relative;z-index:2outline:none;-webkit-tap-highlight-color:transparent}
@@ -356,6 +356,7 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
       <button id="ui-zh" type="button">中文</button>
       <button id="ui-fa" class="active" type="button">فارسی</button>
       <button id="ui-en" type="button">English</button>
+      <button id="ui-ar" type="button">العربية</button>
     </div>
 
     <div class="orbit" aria-label="پنج قلمرو">
@@ -719,6 +720,14 @@ const copy = {
     share:{title:'Economy of Shares · ECONOMY OF SHARES',text:'The Economy of Shares is the realm closest to the center, where competition, distribution, shares, and positions within the network become visible.'},
     core:{title:'Actuality Focus · ACTUALITY FOCUS',text:'The white center is the final point of convergence; a focus present from the beginning, whose calculation and recognition become possible only when the configuration is complete.'}
   },
+  ar:{
+    structure:{title:'بنية القاعة · HALL STRUCTURE',text:'بنية القاعة هي المجال الخارجي والأساس الأولي للشبكة، حيث تتشكل الإمكانات والعلاقات الأساسية.'},
+    continuity:{title:'استمرارية العالم · CONTINUITY OF THE WORLD',text:'استمرارية العالم هي التدفق المتواصل الذي يربط البنية بالاستمرار والتحول وظهور التجربة.'},
+    experience:{title:'مجال التجربة · REALM OF EXPERIENCE',text:'مجال التجربة هو حيث تتحول الاستمرارية إلى تجربة معاشة وإدراك ومعنى واتجاه.'},
+    reference:{title:'سلطة التقليد · IMITATIVE AUTHORITY',text:'سلطة التقليد هي المجال الذي تتجه فيه التجربة إلى النماذج ومصادر السلطة والاختيارات المتعلقة بما ينبغي اتباعه.'},
+    share:{title:'اقتصاد الحصص · ECONOMY OF SHARES',text:'اقتصاد الحصص هو المجال الأقرب إلى المركز، حيث تظهر المنافسة والتوزيع والحصص والمواقع داخل الشبكة.'},
+    core:{title:'بؤرة الواقع · ACTUALITY FOCUS',text:'المركز الأبيض هو نقطة التقارب النهائية؛ وهو حاضر منذ البداية، ولا يصبح حسابه والتعرف إليه ممكنين إلا عند اكتمال التكوين.'}
+  },
   zh:{
     structure:{title:'结构殿堂 · HALL STRUCTURE',text:'结构殿堂是最外层的领域，也是网络的起始基础；基本的可能性与关系在这里形成。'},
     continuity:{title:'世界的延续 · CONTINUITY OF THE WORLD',text:'世界的延续是连接结构、持续、变化与经验生成的连续流动。'},
@@ -839,20 +848,21 @@ realms.forEach(realm=>{
 });
 
 function setUiLanguage(lang){
-  if(!['zh','fa','en'].includes(lang)) lang='fa';
+  if(!['zh','fa','en','ar'].includes(lang)) lang='fa';
   uiLang=lang;
   try{localStorage.setItem('modern-outlook.lang.v1',lang)}catch(_){}
   document.documentElement.lang=lang;
-  document.documentElement.dir='rtl';
+  document.documentElement.dir=(lang==='en'?'ltr':'rtl');
   document.body.dataset.lang=lang;
   document.getElementById('ui-zh').classList.toggle('active',lang==='zh');
   document.getElementById('ui-fa').classList.toggle('active',lang==='fa');
   document.getElementById('ui-en').classList.toggle('active',lang==='en');
+  document.getElementById('ui-ar').classList.toggle('active',lang==='ar');
   document.querySelectorAll('[data-fa][data-en]').forEach(el=>{
     const value=lang==='fa'?el.dataset.fa:(lang==='en'?el.dataset.en:(el.dataset.zh||el.dataset.en));
     if(value!=null)el.textContent=value;
   });
-  const current=copy[lang][activeId]||copy.fa[activeId];
+  const current=copy[lang]?.[activeId]||copy.fa[activeId];
   infoTitle.textContent=current.title;
   infoText.textContent=current.text;
   const brand=document.querySelector('.brand strong');
@@ -863,16 +873,19 @@ function setUiLanguage(lang){
   }else if(lang==='en'){
     brand.textContent='Modern Outlook';
     brandAlt.textContent='نگرش نوین';
+  }else if(lang==='ar'){
+    brand.textContent='النظرة الحديثة';
+    brandAlt.textContent='Modern Outlook';
   }else{
     brand.textContent='نگرش نوین';
     brandAlt.textContent='Modern Outlook';
   }
-  document.title=lang==='zh'?'现代视野 — Modern Outlook':lang==='en'?'Modern Outlook — نگرش نوین':'نگرش نوین — Modern Outlook';
+  document.title=lang==='zh'?'现代视野 — Modern Outlook':lang==='en'?'Modern Outlook — نگرش نوین':lang==='ar'?'النظرة الحديثة — Modern Outlook':'نگرش نوین — Modern Outlook';
   // The book is part of this page, so it follows the same single global language control.
   if(typeof bookLang!=='undefined'){
     bookLang=lang;
     const bt=document.getElementById('book-title');
-    if(bt) bt.textContent=lang==='en'?'📖 The Forgers of Imitation — Ten Chapters':lang==='zh'?'📖 《模仿的伪造者》— 十章':'📖 جاعلان تقلید — در ده فصل';
+    if(bt) bt.textContent=lang==='en'?'📖 The Forgers of Imitation — Ten Chapters':lang==='zh'?'📖 《模仿的伪造者》— 十章':lang==='ar'?'📖 مزوّرو التقليد — عشرة فصول':'📖 جاعلان تقلید — در ده فصل';
     if(typeof bookPage!=='undefined'&&bookPage.style.display==='block'){
       const currentTab=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
       buildBookTabs(currentTab);
@@ -889,6 +902,7 @@ function chooseUiLanguage(lang,event){
 document.getElementById('ui-zh').addEventListener('click',e=>chooseUiLanguage('zh',e));
 document.getElementById('ui-fa').addEventListener('click',e=>chooseUiLanguage('fa',e));
 document.getElementById('ui-en').addEventListener('click',e=>chooseUiLanguage('en',e));
+document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));
 document.getElementById('audio-toggle').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();SiteAudio.unlock();SiteAudio.toggle();});
 
 const home=document.getElementById('home-page');
@@ -931,7 +945,7 @@ function selectChapter(i){
   ch.paragraphs.forEach(p=>html+='<p>'+p+'</p>');
   html+='</div>';
   if(i===chapters.length-1){
-    html+='<div class="moral"><h2>'+(bookLang==='en'?'Fable Wisdom':bookLang==='zh'?'寓言智慧':'حکمت فابل')+'</h2><p>'+(bookLang==='en'?bookMoralEn:bookLang==='zh'?'展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。':bookMoralFa)+'</p></div>';
+    html+='<div class="moral"><h2>'+(bookLang==='en'?'Fable Wisdom':bookLang==='zh'?'寓言智慧':'حکمت فابل')+'</h2><p>'+(bookLang==='en'?bookMoralEn:bookLang==='zh'?'展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。':bookLang==='ar'?'من يعرض مهارة لا يذهب إلا بقدر ما لديه من متفرجين؛ ومن يمارس مهارة يذهب إلى أبعد ما يستطيع. والغابة التي يكون الجميع فيها متفرجين لا يبقى فيها في النهاية شيء يُرى سوى فعل المشاهدة نفسه.':bookMoralFa)+'</p></div>';
   }
   bookBody.classList.toggle('lang-en',bookLang==='en');
   bookBody.dir=bookLang==='en'?'ltr':'rtl';
@@ -987,7 +1001,7 @@ document.addEventListener('keydown',e=>{
 });
 
 let initialLang='fa';
-try{const saved=localStorage.getItem('modern-outlook.lang.v1');if(['zh','fa','en'].includes(saved))initialLang=saved}catch(_){}
+try{const saved=localStorage.getItem('modern-outlook.lang.v1');if(['zh','fa','en','ar'].includes(saved))initialLang=saved}catch(_){}
 setUiLanguage(initialLang);
 setInfo('structure');
 </script>
