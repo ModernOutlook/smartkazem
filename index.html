@@ -218,6 +218,40 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 .reference-actions{position:absolute;z-index:8;left:5%;right:5%;bottom:5.5%;display:grid;grid-template-columns:1fr 1fr;gap:9px;direction:rtl}.reference-action{min-height:62px;border:1px solid rgba(255,188,168,.34);border-radius:16px;background:linear-gradient(145deg,rgba(70,5,3,.72),rgba(12,0,0,.68));color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(9px);cursor:pointer;transition:transform .2s ease,filter .2s ease,border-color .2s ease;font-weight:800;font-size:clamp(.65rem,2.3vw,.9rem)}.reference-action:hover{transform:translateY(-2px);filter:brightness(1.18);border-color:rgba(255,220,205,.7)}.reference-action small{display:block;font-size:.62em;font-weight:500;opacity:.55;direction:ltr;margin-top:2px}.reference-action.games{cursor:not-allowed;opacity:.48}
 @media(max-width:520px){.reference-actions{bottom:4%;gap:7px}.reference-action{min-height:56px;border-radius:13px}.ref-castle{right:3%;width:48%;top:21%}.ref-platform.p1{right:4%;width:58%}.ref-observer{left:5%;bottom:21%}}
 @media(min-width:700px){.reference-actions{max-width:600px;margin:auto}.reference-page{border-radius:4px}}
+/* ===== Structure Hall page ===== */
+.structure-page{z-index:96;display:none;overflow:hidden;background:
+radial-gradient(ellipse at 78% 62%,rgba(79,174,255,.95),transparent 27%),
+radial-gradient(ellipse at 54% 20%,rgba(25,91,159,.72),transparent 34%),
+radial-gradient(ellipse at 20% 58%,rgba(12,79,145,.82),transparent 35%),
+linear-gradient(180deg,#020b18 0%,#06264a 43%,#0b4380 72%,#061b34 100%);color:#fff}
+.structure-page::before{content:"";position:absolute;inset:0;opacity:.72;background:
+radial-gradient(circle at 18% 12%,#fff 0 1px,transparent 1.5px),
+radial-gradient(circle at 43% 8%,rgba(170,220,255,.9) 0 1px,transparent 1.7px),
+radial-gradient(circle at 67% 14%,#fff 0 1px,transparent 1.6px),
+radial-gradient(circle at 84% 28%,rgba(180,230,255,.9) 0 1px,transparent 1.7px),
+radial-gradient(circle at 32% 34%,rgba(180,225,255,.8) 0 1px,transparent 1.7px);
+background-size:97px 113px,139px 157px,127px 149px,163px 131px,151px 173px}
+.structure-space{position:absolute;inset:0;background:
+radial-gradient(ellipse at 60% 19%,rgba(95,179,255,.42),transparent 18%),
+radial-gradient(ellipse at 51% 55%,rgba(67,156,255,.24),transparent 26%),
+linear-gradient(135deg,transparent 0 28%,rgba(30,95,154,.25) 29% 31%,transparent 32% 100%)}
+.structure-arch{position:absolute;border:18px solid rgba(9,27,47,.96);border-bottom:0;border-radius:52% 52% 0 0;box-shadow:inset 0 0 0 3px rgba(122,176,222,.18),0 0 22px rgba(0,0,0,.55)}
+.structure-arch.a1{left:-13%;top:-5%;width:72%;height:55%;transform:rotate(18deg)}
+.structure-arch.a2{right:-18%;top:18%;width:63%;height:58%;transform:rotate(-3deg)}
+.structure-arch.a3{left:22%;top:31%;width:38%;height:39%;border-width:11px;opacity:.85}
+.structure-column{position:absolute;width:9%;height:62%;bottom:14%;background:linear-gradient(90deg,#061425,#173655 42%,#071425 78%);box-shadow:inset 2px 0 rgba(140,195,235,.18),0 0 18px rgba(0,0,0,.45)}
+.structure-column::before{content:"";position:absolute;left:-18%;top:-4%;width:136%;height:5%;background:linear-gradient(90deg,#07182b,#5d87a9,#07182b);box-shadow:0 5px 10px rgba(0,0,0,.5)}
+.structure-column.c1{left:8%;top:3%;height:69%}.structure-column.c2{left:29%;top:16%;height:55%;width:7%}.structure-column.c3{right:25%;top:19%;height:53%;width:7%}.structure-column.c4{right:6%;top:6%;height:67%;width:8%}
+.structure-floor{position:absolute;left:-5%;right:-5%;bottom:-13%;height:45%;background:radial-gradient(ellipse at 70% 15%,rgba(104,190,255,.32),transparent 27%),linear-gradient(165deg,#071426,#102d4d 44%,#071425 100%);transform:perspective(500px) rotateX(52deg);transform-origin:bottom;box-shadow:0 -20px 40px rgba(0,0,0,.45)}
+.structure-floor::after{content:"";position:absolute;inset:20% 8% 8%;border:2px solid rgba(100,174,225,.5);border-radius:50%;box-shadow:0 0 0 18px rgba(66,143,198,.12),0 0 0 42px rgba(66,143,198,.08),0 0 0 70px rgba(66,143,198,.06)}
+.structure-banner{position:absolute;top:31%;width:12%;height:29%;background:linear-gradient(90deg,#061a34,#0a3158,#061a34);clip-path:polygon(0 0,100% 0,100% 86%,50% 100%,0 86%);box-shadow:0 7px 20px rgba(0,0,0,.45)}
+.structure-banner::after{content:"Ⅲ";position:absolute;inset:25% 0 auto;text-align:center;font:700 28px Georgia;color:rgba(220,235,250,.82)}
+.structure-banner.b1{left:18%}.structure-banner.b2{left:45%;top:37%;width:9%;height:25%}
+.structure-light{position:absolute;right:0;bottom:18%;width:44%;height:55%;background:radial-gradient(ellipse at 95% 52%,rgba(168,230,255,.95),rgba(70,164,255,.3) 30%,transparent 67%);filter:blur(3px)}
+.structure-spire{position:absolute;right:29%;top:15%;width:17%;height:31%;background:linear-gradient(180deg,rgba(9,34,62,.15),rgba(5,22,42,.95));clip-path:polygon(50% 0,59% 27%,72% 52%,88% 100%,12% 100%,28% 52%,41% 27%);filter:drop-shadow(0 0 12px rgba(70,171,255,.45))}
+.structure-head{position:absolute;z-index:5;top:5%;left:5%;right:5%;display:flex;justify-content:space-between;align-items:center;direction:rtl}.structure-title strong{display:block;font-size:clamp(1rem,3.5vw,1.4rem);text-shadow:0 2px 12px #000}.structure-title span{display:block;font-size:.62rem;opacity:.58;direction:ltr}.structure-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(190,225,255,.35);background:rgba(0,12,25,.42);color:#fff;cursor:pointer}
+@media(max-width:520px){.structure-column{width:10%}.structure-banner{top:35%;width:14%}.structure-banner.b2{top:41%;width:10%}.structure-spire{right:26%;width:22%}}
+
 </style>
 </head>
 <body>
@@ -298,7 +332,15 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
     </section>
   </section>
 
-  <section class="page reference-page" id="reference-page" aria-label="مرجع تقلید">
+  <section class="page structure-page" id="structure-page" aria-label="ساختار تالار">
+<div class="structure-space" aria-hidden="true">
+<div class="structure-arch a1"></div><div class="structure-arch a2"></div><div class="structure-arch a3"></div>
+<div class="structure-column c1"></div><div class="structure-column c2"></div><div class="structure-column c3"></div><div class="structure-column c4"></div>
+<div class="structure-banner b1"></div><div class="structure-banner b2"></div><div class="structure-spire"></div><div class="structure-light"></div><div class="structure-floor"></div>
+</div>
+<header class="structure-head"><div class="structure-title"><strong>ساختار تالار</strong><span>Structure of the Hall</span></div><button class="structure-close" id="structure-close" aria-label="بازگشت">✕</button></header>
+</section>
+<section class="page reference-page" id="reference-page" aria-label="مرجع تقلید">
     <div class="reference-scene" aria-hidden="true"><div class="ref-ring r1"></div><div class="ref-ring r2"></div><div class="ref-ring r3"></div><div class="ref-ring r4"></div><div class="ref-castle"></div><div class="ref-platform p1"></div><div class="ref-platform p2"></div><div class="ref-platform p3"></div><div class="ref-beam b1"></div><div class="ref-beam b2"></div><div class="ref-beam b3"></div><div class="ref-observer"></div></div>
     <header class="reference-head"><div class="reference-title"><strong>مرجع تقلید</strong><span>Reference of Imitation</span></div><button class="reference-close" id="reference-close" aria-label="بازگشت">✕</button></header>
     <div class="reference-actions"><button class="reference-action" id="ref-forgers">جاعلان تقلید<small>The Forgers of Imitation</small></button><button class="reference-action" id="ref-treatise">رساله فلسفی<small>A Philosophical Treatise</small></button><button class="reference-action" id="ref-observation">سرزمین مشاهده<small>The Land of Observation</small></button><button class="reference-action games" id="ref-games" type="button" aria-disabled="true">بازی ها<small>Games · Coming later</small></button></div>
@@ -647,6 +689,7 @@ function selectRealm(id){
   const realm=realms.find(r=>r.dataset.id===id);
   if(!realm) return;
   setInfo(id);
+  if(id==='structure'){window.clearTimeout(window.__structureOpenTimer);window.__structureOpenTimer=window.setTimeout(openStructure,220);}
   if(id==='reference'){
     window.clearTimeout(window.__referenceOpenTimer);
     window.__referenceOpenTimer=window.setTimeout(openReference,220);
@@ -704,6 +747,7 @@ document.getElementById('ui-fa').addEventListener('click',()=>setUiLanguage('fa'
 document.getElementById('ui-en').addEventListener('click',()=>setUiLanguage('en'));
 
 const home=document.getElementById('home-page');
+const structurePage=document.getElementById('structure-page');
 const referencePage=document.getElementById('reference-page');
 const bookPage=document.getElementById('book-page');
 let bookReturn='home';
@@ -745,6 +789,8 @@ function selectChapter(i){
   bookBody.scrollTop=0;
 }
 
+function openStructure(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='block';tone(680);}
+function closeStructure(){structurePage.style.display='none';home.style.display='block';setInfo('structure');tone(520);}
 function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';tone(820);}
 function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');tone(560);}
 function openBook(from='home'){bookReturn=from;
@@ -758,6 +804,7 @@ function openBook(from='home'){bookReturn=from;
 
 function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';tone(560)}else{home.style.display='block';setInfo('reference');tone(560)}}
 
+document.getElementById('structure-close').addEventListener('click',closeStructure);
 document.getElementById('reference-close').addEventListener('click',closeReference);
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference'));
 document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html'});
@@ -785,8 +832,9 @@ document.getElementById('book-en').addEventListener('click',()=>{
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
+  if(e.key==='Escape'&&structurePage.style.display==='block')closeStructure();
   if(e.key==='Escape'&&referencePage.style.display==='block')closeReference();
-  if(bookPage.style.display==='block'||referencePage.style.display==='block')return;
+  if(bookPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block')return;
   const order=['structure','continuity','experience','reference','share'];
   const idx=order.indexOf(activeId);
   if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
