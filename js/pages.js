@@ -5,7 +5,10 @@ const continuityPage=document.getElementById('continuity-page');
 const structurePage=document.getElementById('structure-page');
 const referencePage=document.getElementById('reference-page');
 const bookPage=document.getElementById('book-page');
+const paragraphPage=document.getElementById('paragraph-page');
 
+function openParagraph(kind){home.style.display='none';sharePage.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';paragraphPage.style.display='block';window.ParagraphPage?.open(kind);clearInfo();}
+function closeParagraph(){window.ParagraphPage?.close();paragraphPage.style.display='none';home.style.display='block';setInfo('structure');}
 function openShare(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';sharePage.style.display='block';clearInfo();}
 function closeShare(){sharePage.style.display='none';home.style.display='block';setInfo('share');}
 function openExperience(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='block';clearInfo();}
