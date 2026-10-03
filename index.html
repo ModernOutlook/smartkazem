@@ -10,8 +10,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --page-w:min(92vw, 72vh);
-  --page-h:calc(var(--page-w) * 1.3333333);
+  --page-w:min(100vw,75vh);
+  --page-h:min(133.333333vw,100vh);
   --white:#f6fbff;
   --muted:rgba(226,239,250,.66);
   --glass:rgba(4,10,18,.72);
@@ -37,8 +37,6 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   position:relative;
   width:var(--page-w);
   height:var(--page-h);
-  max-width:100vw;
-  max-height:100vh;
   aspect-ratio:3/4;
   overflow:hidden;
   isolation:isolate;
@@ -280,9 +278,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .moral p{font-weight:700;font-size:.88rem}
 
 @media (max-width:520px){
-  :root{--page-w:100vw}
   body{place-items:center}
-  .app{width:100vw;height:133.333vw;max-height:100vh}
   .rings{width:80%}
   .info{bottom:4.2%;min-height:14%}
 }
@@ -299,7 +295,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .ring{border:0;pointer-events:none;animation:none;transition:filter .18s ease,opacity .18s ease;background:radial-gradient(circle at 29% 21%,rgba(255,255,255,.88) 0 .14%,transparent .45%),radial-gradient(circle at 72% 30%,rgba(255,255,255,.68) 0 .13%,transparent .42%),radial-gradient(ellipse at 50% 50%,transparent 0 51%,rgba(0,0,0,.05) 52%,var(--c) 54%,var(--nebula) 62%,rgba(255,255,255,.2) 64%,var(--c) 67%,transparent 69%),radial-gradient(circle at 38% 35%,color-mix(in srgb,var(--nebula) 18%,transparent),transparent 35%),radial-gradient(circle at 67% 65%,color-mix(in srgb,var(--c) 18%,transparent),transparent 43%);box-shadow:0 0 0 1px rgba(255,255,255,.045),0 0 18px var(--glow)}
 .ring::before{content:"";position:absolute;inset:-2%;border-radius:50%;pointer-events:none;background:repeating-conic-gradient(from 7deg,rgba(255,255,255,.16) 0deg .3deg,transparent .3deg 8deg);opacity:.58;animation:none;mix-blend-mode:screen}
 .ring::after{content:"";position:absolute;inset:-5%;border-radius:50%;pointer-events:none;border:1px solid color-mix(in srgb,var(--nebula) 72%,transparent);box-shadow:0 0 20px var(--glow);opacity:.82;animation:none}
-.ring:hover,.ring.active{filter:brightness(1.16) saturate(1.1)}
+.ring:hover,.ring.hover-proxy,.ring.active{filter:brightness(1.16) saturate(1.1)}
 .ring-structure{--size:100%;--c:#12658c;--nebula:#45c9ff;--glow:rgba(30,163,225,.42);--z:1}
 .ring-continuity{--size:78%;--c:#b27d19;--nebula:#ffe08a;--glow:rgba(230,176,45,.4);--z:2}
 .ring-experience{--size:55%;--c:#6c2990;--nebula:#dc76ff;--glow:rgba(164,67,219,.42);--z:3}
@@ -316,6 +312,23 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 
+
+/* ===== Landing page stability / interaction layer ===== */
+html{width:100%;min-height:100%;background:#000}
+body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
+.app{contain:layout paint;overflow:hidden}
+.home-page{overflow:hidden}
+.rings{touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.ring{cursor:pointer;pointer-events:none;outline:none}
+.ring:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:4px}
+.ring-label{pointer-events:none}
+.icon-btn,.lang-switch button{touch-action:manipulation}
+.info{pointer-events:none}
+@media (max-width:520px){
+  .topbar{padding:12px 14px}
+  .lang-switch{top:12px;left:14px}
+  .info{left:4.5%;right:4.5%;bottom:4.2%;min-height:14%;padding:11px 13px}
+}
 </style>
 </head>
 <body>
@@ -680,43 +693,64 @@ function setInfo(id){
   tone({structure:520,continuity:620,experience:720,reference:820,share:920,core:1040}[id]||620);
 }
 
-// Pointer selection is handled by the annular territories, so nested rings never steal each other's clicks.
+// Ring selection is based on the actual rendered ring sizes.
+// This keeps the entire visible territory clickable after responsive resizing or zooming.
+const ringHost=document.getElementById('rings');
+
+function selectRing(id){
+  const ring=rings.find(r=>r.dataset.id===id);
+  if(!ring) return;
+  setInfo(id);
+  if(id==='reference'){
+    window.clearTimeout(window.__bookOpenTimer);
+    window.__bookOpenTimer=window.setTimeout(openBook,220);
+  }
+}
+
+function ringAtPoint(clientX,clientY){
+  const rect=ringHost.getBoundingClientRect();
+  if(!rect.width || !rect.height) return null;
+  const x=(clientX-rect.left)/rect.width*100;
+  const y=(clientY-rect.top)/rect.height*100;
+  const radius=Math.hypot(x-50,y-50);
+
+  const bands=rings.map(r=>{
+    const size=parseFloat(getComputedStyle(r).getPropertyValue('--size')) || 0;
+    return {ring:r,outer:size/2};
+  }).sort((a,b)=>b.outer-a.outer);
+
+  for(let i=0;i<bands.length;i++){
+    const outer=bands[i].outer;
+    const inner=i===bands.length-1 ? 0 : (bands[i+1].outer+outer)/2;
+    if(radius<=outer && radius>=inner) return bands[i].ring;
+  }
+  return null;
+}
+
 rings.forEach(r=>{
-  r.dataset.hitRadius = ({
-    structure:'25.2,35.8',
-    continuity:'19.0,26.8',
-    experience:'13.4,19.2',
-    reference:'7.7,11.8',
-    share:'2.7,5.2'
-  })[r.dataset.id] || '';
-  r.addEventListener('click',()=>{
-    const id=r.dataset.id;
-    setInfo(id);
-    if(id==='reference') setTimeout(openBook,220);
+  r.addEventListener('keydown',e=>{
+    if(e.key==='Enter' || e.key===' '){
+      e.preventDefault();
+      selectRing(r.dataset.id);
+    }
   });
 });
 
-document.getElementById('rings').addEventListener('click',e=>{
-  if(e.target.closest('.core')) return;
-  const rect=e.currentTarget.getBoundingClientRect();
-  const x=(e.clientX-rect.left)/rect.width*100;
-  const y=(e.clientY-rect.top)/rect.height*100;
-  const radius=Math.hypot(x-50,y-50);
-  let selected=null;
-  let best=Infinity;
-  rings.forEach(r=>{
-    const [inner,outer]=(r.dataset.hitRadius||'').split(',').map(Number);
-    if(radius>=inner && radius<=outer){
-      const center=(inner+outer)/2;
-      const d=Math.abs(radius-center);
-      if(d<best){best=d;selected=r;}
-    }
-  });
-  if(!selected) return;
-  const id=selected.dataset.id;
-  setInfo(id);
-  if(id==='reference') setTimeout(openBook,220);
+ringHost.addEventListener('click',e=>{
+  const ring=ringAtPoint(e.clientX,e.clientY);
+  if(ring) selectRing(ring.dataset.id);
 });
+
+ringHost.addEventListener('pointermove',e=>{
+  if(e.pointerType!=='mouse') return;
+  const ring=ringAtPoint(e.clientX,e.clientY);
+  rings.forEach(r=>r.classList.toggle('hover-proxy',r===ring));
+});
+
+ringHost.addEventListener('pointerleave',()=>{
+  rings.forEach(r=>r.classList.remove('hover-proxy'));
+});
+
 
 
 document.getElementById('fullscreen').addEventListener('click',()=>{
