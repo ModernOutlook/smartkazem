@@ -1037,7 +1037,7 @@ function setUiLanguage(lang){
     }
   }
 }
-document.addEventListener('site:languagechange',event=>{if(event.detail?.lang && event.detail.lang!==uiLang) setUiLanguage(event.detail.lang)});
+document.addEventListener('site:languagechange',event=>{if(event.detail?.lang) setUiLanguage(event.detail.lang)});
 function chooseUiLanguage(lang,event){
   if(event){event.preventDefault();event.stopPropagation();}
   SiteAudio.unlock();
