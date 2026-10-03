@@ -925,7 +925,7 @@ let bookReturn='home';
 const bookTabs=document.getElementById('book-tabs');
 const bookBody=document.getElementById('book-body');
 
-function activeChapters(){return (bookLang==='en'||bookLang==='ar')?bookChaptersEn:bookChapters}
+function activeChapters(){return bookLang==='fa'?bookChapters:bookChaptersEn}
 
 function buildBookTabs(active=0){
   bookTabs.innerHTML='';
