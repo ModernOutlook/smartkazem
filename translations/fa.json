@@ -1,0 +1,24 @@
+{
+  "code": "fa",
+  "name": "فارسی",
+  "dir": "rtl",
+  "source": true,
+  "labels": {
+    "share": "اقتصاد سهم",
+    "experience": "قلمرو تجربه",
+    "continuity": "تداوم عالم",
+    "structure": "ساختار تالار",
+    "reference": "مرجع تقلید",
+    "forgers": "جاعلان تقلید",
+    "treatise": "رساله فلسفی",
+    "observation": "سرزمین مشاهده",
+    "games": "بازی ها",
+    "back": "بازگشت",
+    "close": "بستن",
+    "comingSoon": "به‌زودی"
+  },
+  "meta": {
+    "brand": "نگرش نوین",
+    "brandLatin": "Modern Outlook"
+  }
+}
