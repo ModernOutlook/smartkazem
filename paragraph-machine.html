@@ -1,0 +1,833 @@
+<html><body><meta charset="utf-8"><style>
+.title {
+  font-weight: bold;
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+body {
+  white-space:break-spaces;
+   word-wrap:break-word;
+ }
+</style><h2 class="title">paragraph-machine</h2><p></p><div align="left">
+ <span style="font-size:16">&lt;!DOCTYPE&nbsp;html&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;html&nbsp;lang="fa"&nbsp;dir="rtl"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;head&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;meta&nbsp;charset="UTF-8"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;meta&nbsp;name="viewport"&nbsp;content="width=device-width,&nbsp;initial-scale=1.0"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;title&gt;ماشین&nbsp;تولید&nbsp;و&nbsp;سنجش&nbsp;پاراگراف&lt;/title&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;style&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;:root&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--bg:&nbsp;#0f1115;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--panel:&nbsp;#1a1d24;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--border:&nbsp;#2a2f3a;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--text:&nbsp;#e6e8ec;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--muted:&nbsp;#8b93a7;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--ok:&nbsp;#2ecc71;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--warn:&nbsp;#f39c12;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--bad:&nbsp;#e74c3c;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;--accent:&nbsp;#4f8cff;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;*&nbsp;{&nbsp;box-sizing:&nbsp;border-box;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;body&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;margin:&nbsp;0;&nbsp;padding:&nbsp;20px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;background:&nbsp;var(--bg);&nbsp;color:&nbsp;var(--text);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;font-family:&nbsp;'Vazirmatn',&nbsp;Tahoma,&nbsp;sans-serif;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;line-height:&nbsp;1.8;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.container&nbsp;{&nbsp;max-width:&nbsp;1000px;&nbsp;margin:&nbsp;0&nbsp;auto;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;h1&nbsp;{&nbsp;font-size:&nbsp;1.6rem;&nbsp;margin:&nbsp;0&nbsp;0&nbsp;20px;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.panel&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;background:&nbsp;var(--panel);&nbsp;border:&nbsp;1px&nbsp;solid&nbsp;var(--border);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;border-radius:&nbsp;12px;&nbsp;padding:&nbsp;16px;&nbsp;margin-bottom:&nbsp;16px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;label&nbsp;{&nbsp;display:&nbsp;block;&nbsp;font-size:&nbsp;0.9rem;&nbsp;color:&nbsp;var(--muted);&nbsp;margin-bottom:&nbsp;6px;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;input,&nbsp;select,&nbsp;textarea&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;width:&nbsp;100%;&nbsp;padding:&nbsp;10px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;background:&nbsp;#0b0d11;&nbsp;color:&nbsp;var(--text);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;border:&nbsp;1px&nbsp;solid&nbsp;var(--border);&nbsp;border-radius:&nbsp;8px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;font-family:&nbsp;inherit;&nbsp;font-size:&nbsp;0.95rem;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;button&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;background:&nbsp;var(--accent);&nbsp;color:&nbsp;white;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;border:&nbsp;none;&nbsp;padding:&nbsp;12px&nbsp;24px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;border-radius:&nbsp;8px;&nbsp;cursor:&nbsp;pointer;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;font-family:&nbsp;inherit;&nbsp;font-size:&nbsp;1rem;&nbsp;font-weight:&nbsp;600;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;transition:&nbsp;opacity&nbsp;0.2s;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;button:disabled&nbsp;{&nbsp;opacity:&nbsp;0.5;&nbsp;cursor:&nbsp;not-allowed;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;button:hover:not(:disabled)&nbsp;{&nbsp;opacity:&nbsp;0.9;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.controls&nbsp;{&nbsp;display:&nbsp;flex;&nbsp;gap:&nbsp;12px;&nbsp;align-items:&nbsp;end;&nbsp;margin-bottom:&nbsp;16px;&nbsp;flex-wrap:&nbsp;wrap;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.controls&nbsp;&gt;&nbsp;*&nbsp;{&nbsp;flex:&nbsp;1;&nbsp;min-width:&nbsp;120px;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.controls&nbsp;button&nbsp;{&nbsp;flex:&nbsp;0&nbsp;0&nbsp;auto;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.paragraph&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;background:&nbsp;var(--panel);&nbsp;border:&nbsp;1px&nbsp;solid&nbsp;var(--border);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;border-radius:&nbsp;12px;&nbsp;padding:&nbsp;16px;&nbsp;margin-bottom:&nbsp;16px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.paragraph-text&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;font-size:&nbsp;1.05rem;&nbsp;line-height:&nbsp;2;&nbsp;margin-bottom:&nbsp;14px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;padding-bottom:&nbsp;14px;&nbsp;border-bottom:&nbsp;1px&nbsp;dashed&nbsp;var(--border);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;word-break:&nbsp;break-word;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;table&nbsp;{&nbsp;width:&nbsp;100%;&nbsp;border-collapse:&nbsp;collapse;&nbsp;font-size:&nbsp;0.9rem;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;th,&nbsp;td&nbsp;{&nbsp;padding:&nbsp;8px&nbsp;10px;&nbsp;text-align:&nbsp;right;&nbsp;border-bottom:&nbsp;1px&nbsp;solid&nbsp;var(--border);&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;th&nbsp;{&nbsp;color:&nbsp;var(--muted);&nbsp;font-weight:&nbsp;500;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.status&nbsp;{&nbsp;font-weight:&nbsp;700;&nbsp;font-size:&nbsp;1.1rem;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.s-ok&nbsp;{&nbsp;color:&nbsp;var(--ok);&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.s-warn&nbsp;{&nbsp;color:&nbsp;var(--warn);&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.s-bad&nbsp;{&nbsp;color:&nbsp;var(--bad);&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.summary&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;flex;&nbsp;gap:&nbsp;12px;&nbsp;margin-top:&nbsp;12px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;padding-top:&nbsp;12px;&nbsp;border-top:&nbsp;1px&nbsp;dashed&nbsp;var(--border);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;font-size:&nbsp;0.9rem;&nbsp;color:&nbsp;var(--muted);&nbsp;flex-wrap:&nbsp;wrap;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.summary&nbsp;span&nbsp;{&nbsp;padding:&nbsp;2px&nbsp;10px;&nbsp;border-radius:&nbsp;6px;&nbsp;background:&nbsp;#0b0d11;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.meta&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;flex;&nbsp;gap:&nbsp;10px;&nbsp;margin-top:&nbsp;8px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;font-size:&nbsp;0.8rem;&nbsp;color:&nbsp;var(--muted);&nbsp;flex-wrap:&nbsp;wrap;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.meta&nbsp;span&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;padding:&nbsp;3px&nbsp;10px;&nbsp;border-radius:&nbsp;6px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;background:&nbsp;#0b0d11;&nbsp;border:&nbsp;1px&nbsp;solid&nbsp;var(--border);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.meta&nbsp;span.violation&nbsp;{&nbsp;color:&nbsp;var(--bad);&nbsp;border-color:&nbsp;var(--bad);&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.meta&nbsp;span.okflag&nbsp;{&nbsp;color:&nbsp;var(--ok);&nbsp;border-color:&nbsp;var(--ok);&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.spinner&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;inline-block;&nbsp;width:&nbsp;14px;&nbsp;height:&nbsp;14px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;border:&nbsp;2px&nbsp;solid&nbsp;rgba(255,255,255,0.3);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;border-top-color:&nbsp;white;&nbsp;border-radius:&nbsp;50%;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;animation:&nbsp;spin&nbsp;0.8s&nbsp;linear&nbsp;infinite;&nbsp;margin-right:&nbsp;8px;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;vertical-align:&nbsp;middle;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;@keyframes&nbsp;spin&nbsp;{&nbsp;to&nbsp;{&nbsp;transform:&nbsp;rotate(360deg);&nbsp;}&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.error&nbsp;{&nbsp;color:&nbsp;var(--bad);&nbsp;font-size:&nbsp;0.9rem;&nbsp;margin-top:&nbsp;8px;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;.hint&nbsp;{&nbsp;font-size:&nbsp;0.8rem;&nbsp;color:&nbsp;var(--muted);&nbsp;margin-top:&nbsp;6px;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;/style&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;/head&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;body&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;div&nbsp;class="container"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&lt;h1&gt;ماشین&nbsp;تولید&nbsp;و&nbsp;سنجش&nbsp;پاراگراف&lt;/h1&gt;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&lt;div&nbsp;class="panel"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;کلید&nbsp;API&nbsp;(OpenAI&nbsp;یا&nbsp;سازگار)&lt;/label&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;input&nbsp;type="password"&nbsp;id="apiKey"&nbsp;placeholder="sk-..."&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class="hint"&gt;کلید&nbsp;فقط&nbsp;در&nbsp;مرورگر&nbsp;شما&nbsp;ذخیره&nbsp;می‌شود&nbsp;و&nbsp;به&nbsp;سرور&nbsp;ما&nbsp;ارسال&nbsp;نمی‌گردد.&lt;/div&gt;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&nbsp;style="margin-top:12px;"&gt;Base&nbsp;URL&lt;/label&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;input&nbsp;type="text"&nbsp;id="baseUrl"&nbsp;value="</span><span style="font-size:16"><a href="https://api.openai.com/v1">https://api.openai.com/v1</a></span><span style="font-size:16">"&gt;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&nbsp;style="margin-top:12px;"&gt;مدل&lt;/label&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;input&nbsp;type="text"&nbsp;id="model"&nbsp;value="gpt-4o-mini"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&lt;/div&gt;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&lt;div&nbsp;class="panel"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class="controls"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;تعداد&nbsp;پاراگراف&lt;/label&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select&nbsp;id="count"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&gt;1&lt;/option&gt;&lt;option&gt;3&lt;/option&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&nbsp;selected&gt;5&lt;/option&gt;&lt;option&gt;10&lt;/option&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;label&gt;حالت&nbsp;نیّت&lt;/label&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;select&nbsp;id="mode"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&nbsp;value="mixed"&nbsp;selected&gt;ترکیبی&nbsp;(پیش‌فرض)&lt;/option&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&nbsp;value="all-ok"&gt;همه&nbsp;✅&lt;/option&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&nbsp;value="all-bad"&gt;همه&nbsp;❌&lt;/option&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&nbsp;value="all-warn"&gt;همه&nbsp;⚠️&lt;/option&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;option&nbsp;value="cross"&gt;تناقض&nbsp;بین‌قلمرویی&lt;/option&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/select&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;button&nbsp;id="generateBtn"&gt;تولید&nbsp;پاراگراف&lt;/button&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;id="error"&nbsp;class="error"&gt;&lt;/div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&lt;/div&gt;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&lt;div&nbsp;id="output"&gt;&lt;/div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;/div&gt;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&lt;script&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">//&nbsp;=====&nbsp;محدودیت‌ها&nbsp;=====</span>
+</div><div align="left">
+ <span style="font-size:16">const&nbsp;MAX_WORDS&nbsp;=&nbsp;144;</span>
+</div><div align="left">
+ <span style="font-size:16">const&nbsp;MAX_WORD_LENGTH&nbsp;=&nbsp;34;</span>
+</div><div align="left">
+ <span style="font-size:16">const&nbsp;MAX_CHARS&nbsp;=&nbsp;900;</span>
+</div><div align="left">
+ <span style="font-size:16">const&nbsp;HARD_TRUNCATE&nbsp;=&nbsp;true;</span>
+</div><br><div align="left">
+ <span style="font-size:16">const&nbsp;SYSTEM_PROMPT&nbsp;=&nbsp;`تو&nbsp;یک&nbsp;ماشین&nbsp;تولید&nbsp;و&nbsp;سنجش&nbsp;پاراگراف&nbsp;هستی.&nbsp;وظیفه‌ات&nbsp;این&nbsp;است:</span>
+</div><br><div align="left">
+ <span style="font-size:16">۱.&nbsp;بر&nbsp;اساس&nbsp;«رساله&nbsp;فلسفی&nbsp;نگرش&nbsp;نوین»&nbsp;که&nbsp;در&nbsp;ادامه&nbsp;می‌آید،&nbsp;پاراگراف‌هایی&nbsp;غیرتکرار،&nbsp;مستقل&nbsp;از&nbsp;هم&nbsp;تولید&nbsp;کنی.</span>
+</div><div align="left">
+ <span style="font-size:16">۲.&nbsp;هر&nbsp;پاراگراف&nbsp;را&nbsp;با&nbsp;ماتریس&nbsp;داوری&nbsp;در&nbsp;۵&nbsp;قلمرو&nbsp;ارزیابی&nbsp;کنی.</span>
+</div><br><div align="left">
+ <span style="font-size:16">##&nbsp;محدودیت‌های&nbsp;سخت&nbsp;(اجباری)</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;هر&nbsp;پاراگراف&nbsp;حداکثر&nbsp;${MAX_WORDS}&nbsp;کلمه&nbsp;باشد.</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;هیچ&nbsp;کلمه‌ای&nbsp;در&nbsp;متن&nbsp;پاراگراف&nbsp;نباید&nbsp;بیش&nbsp;از&nbsp;${MAX_WORD_LENGTH}&nbsp;حرف&nbsp;داشته&nbsp;باشد.</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;مجموع&nbsp;طول&nbsp;متن&nbsp;هر&nbsp;پاراگراف&nbsp;(با&nbsp;احتساب&nbsp;فاصله‌ها)&nbsp;حداکثر&nbsp;${MAX_CHARS}&nbsp;حرف&nbsp;باشد.</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;این&nbsp;سه&nbsp;محدودیت&nbsp;بر&nbsp;محتوا&nbsp;اولویت&nbsp;دارند.&nbsp;اگر&nbsp;لازم&nbsp;شد،&nbsp;محتوا&nbsp;را&nbsp;فشرده&nbsp;کن.</span>
+</div><br><div align="left">
+ <span style="font-size:16">##&nbsp;رساله&nbsp;فلسفی&nbsp;نگرش&nbsp;نوین&nbsp;(خلاصه‌ی&nbsp;قواعد)</span>
+</div><br><div align="left">
+ <span style="font-size:16">اصول&nbsp;مشترک&nbsp;(M):</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;M1:&nbsp;اصالت&nbsp;رابطه&nbsp;بر&nbsp;شیء</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;M2:&nbsp;قانون&nbsp;تراکم&nbsp;متناسب&nbsp;(نشانگر&nbsp;↔&nbsp;نزدیکی&nbsp;واقعی)</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;M3:&nbsp;دوگانگی&nbsp;energeia/entelecheia&nbsp;(حضور&nbsp;در&nbsp;فرایند&nbsp;+&nbsp;محاسبه&nbsp;در&nbsp;پایان)</span>
+</div><br><div align="left">
+ <span style="font-size:16">۱.&nbsp;ساختار&nbsp;تالار&nbsp;(S):</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;S1:&nbsp;تفکیک&nbsp;آغاز/پایان/مرکز</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;S2:&nbsp;مرکز&nbsp;=&nbsp;تقارن&nbsp;آغاز&nbsp;و&nbsp;پایان</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;S3:&nbsp;شتاب&nbsp;∝&nbsp;زاویه&nbsp;با&nbsp;محور&nbsp;آغاز→پایان</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;S4:&nbsp;واگرایی&nbsp;→&nbsp;رکود&nbsp;در&nbsp;فقدان&nbsp;(نه&nbsp;نیستی)</span>
+</div><br><div align="left">
+ <span style="font-size:16">۲.&nbsp;تداوم&nbsp;عالم&nbsp;(T):</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;T1:&nbsp;وحدت&nbsp;ظرفیت،&nbsp;کثرت&nbsp;تحقق</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;T2:&nbsp;هر&nbsp;رویداد&nbsp;فضای&nbsp;امکان&nbsp;را&nbsp;تنگ‌تر&nbsp;می‌کند</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;T3:&nbsp;یقین&nbsp;نسبت&nbsp;به&nbsp;کل&nbsp;=&nbsp;حد،&nbsp;نه&nbsp;مالکیت</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;T4:&nbsp;جزء&nbsp;و&nbsp;کل:&nbsp;دور&nbsp;هرمنوتیکی</span>
+</div><br><div align="left">
+ <span style="font-size:16">۳.&nbsp;قلمرو&nbsp;تجربه&nbsp;(E):</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;E1:&nbsp;تعادل&nbsp;=&nbsp;تقارن&nbsp;پویا&nbsp;(نه&nbsp;سکون)</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;E2:&nbsp;گذار&nbsp;نیازمند&nbsp;نقطه‌ی&nbsp;عطف</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;E3:&nbsp;برهم‌نهی:&nbsp;مطلق&nbsp;با&nbsp;مطلق،&nbsp;نسبی&nbsp;با&nbsp;نسبی</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;E4:&nbsp;شادی&nbsp;≡&nbsp;هم‌راستایی&nbsp;اراده&nbsp;≡&nbsp;دقت&nbsp;تفسیری</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;E5:&nbsp;راز/برهنگی&nbsp;مطلق&nbsp;=&nbsp;نقض&nbsp;گرادیان</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;E6:&nbsp;حقیقت&nbsp;≠&nbsp;واقعیت</span>
+</div><br><div align="left">
+ <span style="font-size:16">۴.&nbsp;مرجع&nbsp;تقلید&nbsp;/&nbsp;اقتدار&nbsp;شبیه‌سازی&nbsp;(R):</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;R1:&nbsp;افق&nbsp;شبیه‌ساز&nbsp;محدود&nbsp;به&nbsp;چشم‌انداز&nbsp;مرجع</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;R2:&nbsp;مشروعیت&nbsp;اقتدار&nbsp;=&nbsp;همگرایی&nbsp;مرجع&nbsp;به&nbsp;کانون</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;R3:&nbsp;اصالت&nbsp;بر&nbsp;اساس&nbsp;هم‌راستایی،&nbsp;نه&nbsp;منشأ</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;R4:&nbsp;تکامل&nbsp;=&nbsp;تغییر&nbsp;قواعد&nbsp;تولیدکننده‌ی&nbsp;گزینه‌ها</span>
+</div><br><div align="left">
+ <span style="font-size:16">۵.&nbsp;اقتصاد&nbsp;سهم&nbsp;(C):</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;C1:&nbsp;کثرت&nbsp;=&nbsp;میدان،&nbsp;فردیت&nbsp;=&nbsp;سهم</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;C2:&nbsp;کمونیسم&nbsp;=&nbsp;رازِ&nbsp;سهم&nbsp;/&nbsp;سرمایه‌داری&nbsp;=&nbsp;برهنگیِ&nbsp;سهم</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;C3:&nbsp;هر&nbsp;گره&nbsp;سهم&nbsp;متناسب&nbsp;با&nbsp;جایگاه&nbsp;حقیقی</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;C4:&nbsp;فقدان&nbsp;اجتماعی&nbsp;=&nbsp;واگرایی،&nbsp;نه&nbsp;نابودی</span>
+</div><br><div align="left">
+ <span style="font-size:16">##&nbsp;پروتکل&nbsp;داوری</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;✅&nbsp;منطبق:&nbsp;پاراگراف&nbsp;با&nbsp;اصل&nbsp;صریح&nbsp;قلمرو&nbsp;سازگار&nbsp;است.</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;⚠️&nbsp;مبهم:&nbsp;پاراگراف&nbsp;نه&nbsp;تأیید&nbsp;صریح&nbsp;دارد&nbsp;نه&nbsp;رد&nbsp;صریح،&nbsp;ولی&nbsp;مفهومش&nbsp;قابل&nbsp;انتساب&nbsp;به&nbsp;قلمرو&nbsp;است.&nbsp;(R-ADJ-1)</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;❌&nbsp;متناقض:&nbsp;پاراگراف&nbsp;اصل&nbsp;مشخصی&nbsp;را&nbsp;نقض&nbsp;می‌کند.</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;R-ADJ-2:&nbsp;کلمات&nbsp;تعلیقی&nbsp;(«شاید»،&nbsp;«ممکن&nbsp;است»)&nbsp;در&nbsp;سطح&nbsp;پاراگراف،&nbsp;⚠️&nbsp;را&nbsp;به&nbsp;کل&nbsp;قلمرو&nbsp;تعمیم&nbsp;می‌دهند.</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;R-ADJ-3:&nbsp;⚠️&nbsp;وقتی&nbsp;رخ&nbsp;می‌دهد&nbsp;که&nbsp;نه&nbsp;تأیید&nbsp;صریح،&nbsp;نه&nbsp;رد&nbsp;صریح،&nbsp;ولی&nbsp;مفهوم&nbsp;قابل&nbsp;انتساب&nbsp;باشد.</span>
+</div><br><div align="left">
+ <span style="font-size:16">##&nbsp;فرمت&nbsp;خروجی&nbsp;(اجباری&nbsp;-&nbsp;فقط&nbsp;JSON&nbsp;معتبر،&nbsp;بدون&nbsp;markdown)</span>
+</div><div align="left">
+ <span style="font-size:16">{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;"paragraphs":&nbsp;[</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"text":&nbsp;"متن&nbsp;پاراگراف...",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"judgment":&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"S":&nbsp;{"status":&nbsp;"ok|warn|bad",&nbsp;"reason":&nbsp;"ارجاع&nbsp;به&nbsp;شناسه"},</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"T":&nbsp;{"status":&nbsp;"ok|warn|bad",&nbsp;"reason":&nbsp;"..."},</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"E":&nbsp;{"status":&nbsp;"ok|warn|bad",&nbsp;"reason":&nbsp;"..."},</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"R":&nbsp;{"status":&nbsp;"ok|warn|bad",&nbsp;"reason":&nbsp;"..."},</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"C":&nbsp;{"status":&nbsp;"ok|warn|bad",&nbsp;"reason":&nbsp;"..."}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;]</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">فقط&nbsp;JSON&nbsp;برگردان.&nbsp;هیچ&nbsp;توضیح&nbsp;اضافه‌ای&nbsp;نده.`;</span>
+</div><br><div align="left">
+ <span style="font-size:16">const&nbsp;MODE_INSTRUCTIONS&nbsp;=&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;"mixed":&nbsp;"پاراگراف‌ها&nbsp;را&nbsp;با&nbsp;نیّت‌های&nbsp;متنوع&nbsp;تولید&nbsp;کن:&nbsp;بعضی&nbsp;کاملاً&nbsp;منطبق&nbsp;(همه&nbsp;✅)،&nbsp;بعضی&nbsp;کاملاً&nbsp;متناقض&nbsp;(همه&nbsp;❌)،&nbsp;بعضی&nbsp;ترکیبی&nbsp;(چند&nbsp;✅&nbsp;چند&nbsp;❌)،&nbsp;بعضی&nbsp;مبهم&nbsp;(همه&nbsp;⚠️).",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;"all-ok":&nbsp;"همه‌ی&nbsp;پاراگراف‌ها&nbsp;باید&nbsp;کاملاً&nbsp;منطبق&nbsp;با&nbsp;هر&nbsp;۵&nbsp;قلمرو&nbsp;باشند&nbsp;(همه&nbsp;✅).",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;"all-bad":&nbsp;"همه‌ی&nbsp;پاراگراف‌ها&nbsp;باید&nbsp;کاملاً&nbsp;متناقض&nbsp;با&nbsp;هر&nbsp;۵&nbsp;قلمرو&nbsp;باشند&nbsp;(همه&nbsp;❌)&nbsp;ولی&nbsp;درونی&nbsp;منسجم.",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;"all-warn":&nbsp;"همه‌ی&nbsp;پاراگراف‌ها&nbsp;باید&nbsp;مبهم&nbsp;باشند&nbsp;(همه&nbsp;⚠️)&nbsp;—&nbsp;با&nbsp;کلمات&nbsp;تعلیقی&nbsp;مثل&nbsp;«شاید».",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;"cross":&nbsp;"هر&nbsp;پاراگراف&nbsp;باید&nbsp;در&nbsp;چند&nbsp;قلمرو&nbsp;✅&nbsp;و&nbsp;در&nbsp;چند&nbsp;قلمرو&nbsp;❌&nbsp;باشد&nbsp;(تناقض&nbsp;بین‌قلمرویی&nbsp;ظریف)."</span>
+</div><div align="left">
+ <span style="font-size:16">};</span>
+</div><br><div align="left">
+ <span style="font-size:16">const&nbsp;$&nbsp;=&nbsp;id&nbsp;=&gt;&nbsp;document.getElementById(id);</span>
+</div><br><div align="left">
+ <span style="font-size:16">//&nbsp;بارگذاری&nbsp;تنظیمات&nbsp;از&nbsp;localStorage</span>
+</div><div align="left">
+ <span style="font-size:16">["apiKey",&nbsp;"baseUrl",&nbsp;"model"].forEach(id&nbsp;=&gt;&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;saved&nbsp;=&nbsp;localStorage.getItem("pgm_"&nbsp;+&nbsp;id);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;if&nbsp;(saved)&nbsp;$(id).value&nbsp;=&nbsp;saved;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;$(id).addEventListener("change",&nbsp;()&nbsp;=&gt;&nbsp;localStorage.setItem("pgm_"&nbsp;+&nbsp;id,&nbsp;$(id).value));</span>
+</div><div align="left">
+ <span style="font-size:16">});</span>
+</div><br><div align="left">
+ <span style="font-size:16">const&nbsp;statusMap&nbsp;=&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;ok:&nbsp;{&nbsp;cls:&nbsp;"s-ok",&nbsp;label:&nbsp;"✅"&nbsp;},</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;warn:&nbsp;{&nbsp;cls:&nbsp;"s-warn",&nbsp;label:&nbsp;"⚠️"&nbsp;},</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;bad:&nbsp;{&nbsp;cls:&nbsp;"s-bad",&nbsp;label:&nbsp;"❌"&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">};</span>
+</div><br><div align="left">
+ <span style="font-size:16">const&nbsp;domainNames&nbsp;=&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;S:&nbsp;"ساختار&nbsp;تالار",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;T:&nbsp;"تداوم&nbsp;عالم",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;E:&nbsp;"قلمرو&nbsp;تجربه",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;R:&nbsp;"مرجع&nbsp;تقلید",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;C:&nbsp;"اقتصاد&nbsp;سهم"</span>
+</div><div align="left">
+ <span style="font-size:16">};</span>
+</div><br><div align="left">
+ <span style="font-size:16">//&nbsp;=====&nbsp;ابزارهای&nbsp;اعتبارسنجی&nbsp;=====</span>
+</div><div align="left">
+ <span style="font-size:16">function&nbsp;countWords(text)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;text.trim().split(/\s+/).filter(Boolean).length;</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">function&nbsp;countChars(text)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;text.replace(/\s+/g,&nbsp;"&nbsp;").trim().length;</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">function&nbsp;wordLength(word)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;cleaned&nbsp;=&nbsp;word.replace(/^[.,;:!?«»"'()\[\]{}…\-—–]+|[.,;:!?«»"'()\[\]{}…\-—–]+$/g,&nbsp;"");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;cleaned.length;</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">function&nbsp;findLongWords(text)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;words&nbsp;=&nbsp;text.trim().split(/\s+/);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;words.filter(w&nbsp;=&gt;&nbsp;wordLength(w)&nbsp;&gt;&nbsp;MAX_WORD_LENGTH);</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">function&nbsp;breakLongWords(text)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;text.split(/\s+/).map(w&nbsp;=&gt;&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(wordLength(w)&nbsp;&lt;=&nbsp;MAX_WORD_LENGTH)&nbsp;return&nbsp;w;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;pieces&nbsp;=&nbsp;[w];</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;guard&nbsp;=&nbsp;0;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;while&nbsp;(pieces.some(p&nbsp;=&gt;&nbsp;p.length&nbsp;&gt;&nbsp;MAX_WORD_LENGTH)&nbsp;&amp;&amp;&nbsp;guard&nbsp;&lt;&nbsp;20)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pieces&nbsp;=&nbsp;pieces.flatMap(p&nbsp;=&gt;&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(p.length&nbsp;&lt;=&nbsp;MAX_WORD_LENGTH)&nbsp;return&nbsp;[p];</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;half&nbsp;=&nbsp;Math.ceil(p.length&nbsp;/&nbsp;2);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;[p.slice(0,&nbsp;half),&nbsp;p.slice(half)];</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;});</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;guard++;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;pieces.join("‌");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}).join("&nbsp;");</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">function&nbsp;enforceWordLimit(text,&nbsp;maxWords)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;words&nbsp;=&nbsp;text.trim().split(/\s+/);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;if&nbsp;(words.length&nbsp;&lt;=&nbsp;maxWords)&nbsp;return&nbsp;{&nbsp;text,&nbsp;truncated:&nbsp;false&nbsp;};</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;{&nbsp;text:&nbsp;words.slice(0,&nbsp;maxWords).join("&nbsp;"),&nbsp;truncated:&nbsp;true&nbsp;};</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">function&nbsp;enforceCharLimit(text,&nbsp;maxChars)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;if&nbsp;(text.length&nbsp;&lt;=&nbsp;maxChars)&nbsp;return&nbsp;{&nbsp;text,&nbsp;truncated:&nbsp;false&nbsp;};</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;let&nbsp;cut&nbsp;=&nbsp;text.slice(0,&nbsp;maxChars);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;lastSpace&nbsp;=&nbsp;cut.lastIndexOf("&nbsp;");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;if&nbsp;(lastSpace&nbsp;&gt;&nbsp;maxChars&nbsp;*&nbsp;0.7)&nbsp;cut&nbsp;=&nbsp;cut.slice(0,&nbsp;lastSpace);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;{&nbsp;text:&nbsp;cut.trim(),&nbsp;truncated:&nbsp;true&nbsp;};</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">function&nbsp;processText(text)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;originalWords&nbsp;=&nbsp;countWords(text);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;originalChars&nbsp;=&nbsp;countChars(text);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;longWords&nbsp;=&nbsp;findLongWords(text);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;let&nbsp;processed&nbsp;=&nbsp;text;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;let&nbsp;truncatedByWord&nbsp;=&nbsp;false;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;let&nbsp;truncatedByChar&nbsp;=&nbsp;false;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;if&nbsp;(longWords.length&nbsp;&gt;&nbsp;0)&nbsp;processed&nbsp;=&nbsp;breakLongWords(processed);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;wordLock&nbsp;=&nbsp;enforceWordLimit(processed,&nbsp;MAX_WORDS);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;processed&nbsp;=&nbsp;wordLock.text;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;truncatedByWord&nbsp;=&nbsp;wordLock.truncated;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;charLock&nbsp;=&nbsp;enforceCharLimit(processed,&nbsp;MAX_CHARS);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;processed&nbsp;=&nbsp;charLock.text;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;truncatedByChar&nbsp;=&nbsp;charLock.truncated;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;finalWords&nbsp;=&nbsp;countWords(processed);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;finalChars&nbsp;=&nbsp;countChars(processed);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;finalLongWords&nbsp;=&nbsp;findLongWords(processed);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;text:&nbsp;processed,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;originalWordCount:&nbsp;originalWords,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;originalCharCount:&nbsp;originalChars,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;finalWordCount:&nbsp;finalWords,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;finalCharCount:&nbsp;finalChars,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;longWordsFound:&nbsp;longWords,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;remainingLongWords:&nbsp;finalLongWords,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;truncated:&nbsp;truncatedByWord&nbsp;||&nbsp;truncatedByChar,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;truncatedByWord,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;truncatedByChar,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;violations:&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wordLimit:&nbsp;finalWords&nbsp;&gt;&nbsp;MAX_WORDS,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;charLimit:&nbsp;finalChars&nbsp;&gt;&nbsp;MAX_CHARS,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wordLength:&nbsp;finalLongWords.length&nbsp;&gt;&nbsp;0</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;};</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">//&nbsp;=====&nbsp;شمارنده‌ی&nbsp;زنده&nbsp;=====</span>
+</div><div align="left">
+ <span style="font-size:16">function&nbsp;renderCounter(proc)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;badges&nbsp;=&nbsp;[];</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;wordCls&nbsp;=&nbsp;proc.violations.wordLimit&nbsp;?&nbsp;"violation"&nbsp;:&nbsp;"okflag";</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;badges.push(`&lt;span&nbsp;class="${wordCls}"&gt;کلمات:&nbsp;${proc.finalWordCount}&nbsp;/&nbsp;${MAX_WORDS}&lt;/span&gt;`);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;charCls&nbsp;=&nbsp;proc.violations.charLimit&nbsp;?&nbsp;"violation"&nbsp;:&nbsp;"okflag";</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;badges.push(`&lt;span&nbsp;class="${charCls}"&gt;حروف:&nbsp;${proc.finalCharCount}&nbsp;/&nbsp;${MAX_CHARS}&lt;/span&gt;`);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;longCls&nbsp;=&nbsp;proc.violations.wordLength&nbsp;?&nbsp;"violation"&nbsp;:&nbsp;"okflag";</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;badges.push(`&lt;span&nbsp;class="${longCls}"&gt;کلمات&nbsp;بلند:&nbsp;${proc.remainingLongWords.length}&lt;/span&gt;`);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;if&nbsp;(proc.longWordsFound.length&nbsp;&gt;&nbsp;0)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;badges.push(`&lt;span&nbsp;class="violation"&gt;اصلاح‌شده:&nbsp;${proc.longWordsFound.length}&nbsp;کلمه‌ی&nbsp;بلند&lt;/span&gt;`);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;if&nbsp;(proc.truncated)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;how&nbsp;=&nbsp;[];</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(proc.truncatedByWord)&nbsp;how.push("کلمه");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(proc.truncatedByChar)&nbsp;how.push("حرف");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;badges.push(`&lt;span&nbsp;class="violation"&gt;کوتاه‌سازی:&nbsp;${how.join("&nbsp;+&nbsp;")}&lt;/span&gt;`);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;`&lt;div&nbsp;class="meta"&gt;${badges.join("")}&lt;/div&gt;`;</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">//&nbsp;=====&nbsp;رندر&nbsp;پاراگراف&nbsp;=====</span>
+</div><div align="left">
+ <span style="font-size:16">function&nbsp;renderParagraph(p,&nbsp;index)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;j&nbsp;=&nbsp;p.judgment;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;proc&nbsp;=&nbsp;processText(p.text);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;rows&nbsp;=&nbsp;["S",&nbsp;"T",&nbsp;"E",&nbsp;"R",&nbsp;"C"].map(k&nbsp;=&gt;&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;s&nbsp;=&nbsp;statusMap[j[k].status];</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;`&lt;tr&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;${domainNames[k]}&lt;/td&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&nbsp;class="status&nbsp;${s.cls}"&gt;${s.label}&lt;/td&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;td&gt;${j[k].reason&nbsp;||&nbsp;""}&lt;/td&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/tr&gt;`;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}).join("");</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;counts&nbsp;=&nbsp;{&nbsp;ok:&nbsp;0,&nbsp;warn:&nbsp;0,&nbsp;bad:&nbsp;0&nbsp;};</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;["S","T","E","R","C"].forEach(k&nbsp;=&gt;&nbsp;counts[j[k].status]++);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;return&nbsp;`&lt;div&nbsp;class="paragraph"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class="paragraph-text"&gt;${proc.text}&lt;/div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;${renderCounter(proc)}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;table&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;thead&gt;&lt;tr&gt;&lt;th&gt;قلمرو&lt;/th&gt;&lt;th&gt;وضعیت&lt;/th&gt;&lt;th&gt;دلیل&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;tbody&gt;${rows}&lt;/tbody&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/table&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;div&nbsp;class="summary"&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;✅&nbsp;${counts.ok}&lt;/span&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;⚠️&nbsp;${counts.warn}&lt;/span&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;span&gt;❌&nbsp;${counts.bad}&lt;/span&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&lt;/div&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&lt;/div&gt;`;</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">//&nbsp;=====&nbsp;فراخوانی&nbsp;API&nbsp;=====</span>
+</div><div align="left">
+ <span style="font-size:16">async&nbsp;function&nbsp;generate()&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;apiKey&nbsp;=&nbsp;$("apiKey").value.trim();</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;baseUrl&nbsp;=&nbsp;$("baseUrl").value.trim().replace(/\/$/,&nbsp;"");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;model&nbsp;=&nbsp;$("model").value.trim();</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;count&nbsp;=&nbsp;$("count").value;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;mode&nbsp;=&nbsp;$("mode").value;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;$("error").textContent&nbsp;=&nbsp;"";</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;if&nbsp;(!apiKey)&nbsp;{&nbsp;$("error").textContent&nbsp;=&nbsp;"کلید&nbsp;API&nbsp;را&nbsp;وارد&nbsp;کنید.";&nbsp;return;&nbsp;}</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;btn&nbsp;=&nbsp;$("generateBtn");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;btn.disabled&nbsp;=&nbsp;true;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;btn.innerHTML&nbsp;=&nbsp;'در&nbsp;حال&nbsp;تولید...&lt;span&nbsp;class="spinner"&gt;&lt;/span&gt;';</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;$("output").innerHTML&nbsp;=&nbsp;"";</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;const&nbsp;userPrompt&nbsp;=&nbsp;`تعداد&nbsp;پاراگراف:&nbsp;${count}</span>
+</div><div align="left">
+ <span style="font-size:16">${MODE_INSTRUCTIONS[mode]}</span>
+</div><br><div align="left">
+ <span style="font-size:16">یادآوری&nbsp;محدودیت‌ها:</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;هر&nbsp;پاراگراف&nbsp;حداکثر&nbsp;${MAX_WORDS}&nbsp;کلمه.</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;هر&nbsp;کلمه&nbsp;حداکثر&nbsp;${MAX_WORD_LENGTH}&nbsp;حرف.</span>
+</div><div align="left">
+ <span style="font-size:16">-&nbsp;مجموع&nbsp;حروف&nbsp;هر&nbsp;پاراگراف&nbsp;حداکثر&nbsp;${MAX_CHARS}.</span>
+</div><br><div align="left">
+ <span style="font-size:16">پاراگراف‌ها&nbsp;را&nbsp;تولید&nbsp;کن&nbsp;و&nbsp;ماتریس&nbsp;داوری&nbsp;هر&nbsp;کدام&nbsp;را&nbsp;طبق&nbsp;فرمت&nbsp;JSON&nbsp;بده.`;</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;try&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;res&nbsp;=&nbsp;await&nbsp;fetch(baseUrl&nbsp;+&nbsp;"/chat/completions",&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;method:&nbsp;"POST",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;headers:&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Content-Type":&nbsp;"application/json",</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"Authorization":&nbsp;"Bearer&nbsp;"&nbsp;+&nbsp;apiKey</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;},</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;body:&nbsp;JSON.stringify({</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;model:&nbsp;model,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;messages:&nbsp;[</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;role:&nbsp;"system",&nbsp;content:&nbsp;SYSTEM_PROMPT&nbsp;},</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{&nbsp;role:&nbsp;"user",&nbsp;content:&nbsp;userPrompt&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;],</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;temperature:&nbsp;0.9,</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;response_format:&nbsp;{&nbsp;type:&nbsp;"json_object"&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;})</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;});</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!res.ok)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;t&nbsp;=&nbsp;await&nbsp;res.text();</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw&nbsp;new&nbsp;Error(`خطای&nbsp;API&nbsp;(${res.status}):&nbsp;${t.slice(0,&nbsp;200)}`);</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;}</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;data&nbsp;=&nbsp;await&nbsp;res.json();</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;let&nbsp;content&nbsp;=&nbsp;data.choices[0].message.content.trim();</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;content&nbsp;=&nbsp;content.replace(/^```json\s*/,&nbsp;"").replace(/```$/,&nbsp;"").trim();</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;const&nbsp;parsed&nbsp;=&nbsp;JSON.parse(content);</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;(!parsed.paragraphs&nbsp;||&nbsp;!Array.isArray(parsed.paragraphs))&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;throw&nbsp;new&nbsp;Error("ساختار&nbsp;پاسخ&nbsp;نامعتبر&nbsp;است.");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;}</span>
+</div><br><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;$("output").innerHTML&nbsp;=&nbsp;parsed.paragraphs.map(renderParagraph).join("");</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}&nbsp;catch&nbsp;(e)&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;$("error").textContent&nbsp;=&nbsp;"خطا:&nbsp;"&nbsp;+&nbsp;e.message;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}&nbsp;finally&nbsp;{</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;btn.disabled&nbsp;=&nbsp;false;</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;&nbsp;&nbsp;btn.textContent&nbsp;=&nbsp;"تولید&nbsp;پاراگراف";</span>
+</div><div align="left">
+ <span style="font-size:16">&nbsp;&nbsp;}</span>
+</div><div align="left">
+ <span style="font-size:16">}</span>
+</div><br><div align="left">
+ <span style="font-size:16">$("generateBtn").addEventListener("click",&nbsp;generate);</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;/script&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;/body&gt;</span>
+</div><div align="left">
+ <span style="font-size:16">&lt;/html&gt;</span>
+</div><p></p></body></html>
