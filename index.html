@@ -653,7 +653,13 @@ function selectRealm(id){
   }
 }
 
-const realmGeometry=[['structure',445],['continuity',365],['experience',285],['reference',205],['share',125]];
+const realmGeometry=[
+  ['structure',365,445],
+  ['continuity',285,365],
+  ['experience',205,285],
+  ['reference',125,205],
+  ['share',70,125]
+];
 const universe=document.getElementById('universe');
 
 function realmFromPoint(event){
@@ -662,7 +668,9 @@ function realmFromPoint(event){
   const y=(event.clientY-rect.top)/rect.height*1000;
   const radius=Math.hypot(x-500,y-500);
   if(radius<=70)return 'core';
-  for(const [id,r] of realmGeometry)if(radius<=r)return id;
+  for(const [id,inner,outer] of realmGeometry){
+    if(radius>inner && radius<=outer)return id;
+  }
   return null;
 }
 let lastSelectionAt=0;
