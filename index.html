@@ -936,10 +936,8 @@ realms.forEach(realm=>{
 });
 
 function renderHomeFromCatalog(){
-  const lang=currentSiteLang();
   const catalog=window.SiteI18n?.getCatalog?.()||{};
   const labels=catalog.labels||{};
-  const realms=catalog.home?.realms||{};
   const pages=catalog.home?.pages||{};
   [['share-page',labels.share],['experience-page',labels.experience],['continuity-page',labels.continuity],['structure-page',labels.structure],['reference-page',labels.reference]].forEach(([id,title])=>{
     const q=document.getElementById(id); if(!q)return;
@@ -948,7 +946,7 @@ function renderHomeFromCatalog(){
     if(strong&&title)strong.textContent=title;
     if(span){
       const key=id.replace('-page','');
-      span.textContent=englishMap[key]||title||'';
+      span.textContent=(title||'').split(' · ')[1]||title||'';
     }
     q.setAttribute('aria-label',title||'');
   });
