@@ -91,16 +91,18 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 
 .orbit{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
 .menu-svg{width:min(96vw,96vh);height:min(96vw,96vh);overflow:visible;position:relative;z-index:2}
-.realm{cursor:pointer;transition:opacity .35s ease,filter .35s ease,transform .35s ease;transform-origin:500px 500px}
+.realm{cursor:pointer;transition:opacity .35s ease,filter .35s ease,transform .35s ease;transform-origin:500px 500px;outline:none}
 .realm:hover{filter:brightness(1.35) drop-shadow(0 0 18px currentColor)}
+.realm-labels{pointer-events:none;position:relative;z-index:100}
+.realm-label{pointer-events:none}
 .realm.selected{filter:brightness(1.45) drop-shadow(0 0 25px currentColor)}
 .ring-border{fill:none;stroke-width:2;vector-effect:non-scaling-stroke;opacity:.95}
 .realm-title{fill:#fff;font-size:28px;font-weight:600;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:rgba(0,0,0,.65);stroke-width:5px;stroke-linejoin:round}
 .realm-subtitle{fill:rgba(255,255,255,.68);font-size:13px;text-anchor:middle;pointer-events:none}
-.realm-icon{fill:white;font-size:34px;text-anchor:middle;pointer-events:none;filter:drop-shadow(0 0 7px rgba(255,255,255,.4))}
+
 #core{cursor:pointer;transition:transform .5s ease,filter .5s ease}
 #core:hover{filter:brightness(1.3) drop-shadow(0 0 30px white)}
-@media(max-width:600px){.menu-svg{width:108vw;height:108vw}.realm-title{font-size:24px}.realm-subtitle{font-size:11px}.realm-icon{font-size:30px}}
+@media(max-width:600px){.menu-svg{width:108vw;height:108vw}.realm-title{font-size:24px}.realm-subtitle{font-size:11px}}
 .info{
   position:absolute;z-index:30;left:50%;bottom:3vh;transform:translateX(-50%);
   width:min(90%,650px);padding:18px 25px;
@@ -114,8 +116,8 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .info .kicker{font-size:clamp(.5rem,1.6vw,.68rem);letter-spacing:.16em;opacity:.45;margin-bottom:4px;direction:ltr}
 .info h1{font-size:clamp(.9rem,3.2vw,1.35rem);margin-bottom:5px}
 .info p{font-size:clamp(.55rem,1.75vw,.78rem);line-height:1.8;color:var(--muted);max-width:95%;margin:auto}
-.info .info-close{position:absolute;top:8px;right:10px;width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:rgba(255,255,255,.7);font-size:1.35rem;line-height:1;cursor:pointer}
-.info .info-close:hover{background:rgba(255,255,255,.1);color:#fff}
+
+
 .info.reference{border-color:rgba(255,80,55,.26)}
 
 .lang-switch{
@@ -188,7 +190,7 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 .home-page{overflow:hidden}
 .menu-svg{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .realm{outline:none}
-.realm:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:4px}
+
 .icon-btn,.lang-switch button{touch-action:manipulation}
 @media (max-width:520px){
   .topbar{padding:12px 14px}
@@ -251,37 +253,42 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
           <circle cx="500" cy="500" r="445" fill="url(#blueGradient)" opacity=".94"/>
           <circle class="ring-border" cx="500" cy="500" r="445" stroke="#0879b8"/>
           <circle class="ring-border" cx="500" cy="500" r="438" stroke="#0c5d82" opacity=".35"/>
-          <text class="realm-icon" x="500" y="145">♜</text><text class="realm-title" x="500" y="185">ساختار تالار</text><text class="realm-subtitle" x="500" y="210">HALL STRUCTURE</text>
+          
         </g>
         <g class="realm" data-id="continuity" id="realm-continuity" tabindex="0" role="button" aria-label="تداوم عالم">
           <circle cx="500" cy="500" r="365" fill="url(#goldGradient)" opacity=".96"/>
           <circle class="ring-border" cx="500" cy="500" r="365" stroke="#e1b72b"/>
-          <text class="realm-icon" x="500" y="185">∞</text><text class="realm-title" x="500" y="225">تداوم عالم</text><text class="realm-subtitle" x="500" y="249">CONTINUITY OF THE WORLD</text>
+          
         </g>
         <g class="realm" data-id="experience" id="realm-experience" tabindex="0" role="button" aria-label="قلمرو تجربه">
           <circle cx="500" cy="500" r="285" fill="url(#purpleGradient)" opacity=".97"/>
           <circle class="ring-border" cx="500" cy="500" r="285" stroke="#b653ff"/>
-          <text class="realm-icon" x="500" y="250">◉</text><text class="realm-title" x="500" y="290">قلمرو تجربه</text><text class="realm-subtitle" x="500" y="314">REALM OF EXPERIENCE</text>
+          
         </g>
         <g class="realm" data-id="reference" id="realm-reference" tabindex="0" role="button" aria-label="مرجع تقلید">
           <circle cx="500" cy="500" r="205" fill="url(#redGradient)" opacity=".98"/>
           <circle class="ring-border" cx="500" cy="500" r="205" stroke="#e94d43"/>
-          <text class="realm-icon" x="500" y="315">▢</text><text class="realm-title" x="500" y="355">مرجع تقلید</text><text class="realm-subtitle" x="500" y="373">IMITATIVE AUTHORITY</text>
+          
         </g>
         <g class="realm" data-id="share" id="realm-share" tabindex="0" role="button" aria-label="اقتصاد سهم">
           <circle cx="500" cy="500" r="125" fill="url(#greenGradient)" opacity=".98"/>
           <circle class="ring-border" cx="500" cy="500" r="125" stroke="#1bd58a"/>
-          <text class="realm-icon" x="500" y="425">↗</text><text class="realm-title" x="500" y="455" style="font-size:21px">اقتصاد سهم</text><text class="realm-subtitle" x="500" y="477" style="font-size:10px">ECONOMY OF SHARES</text>
+          
         </g>
         <g id="core" tabindex="0" role="button" aria-label="نگرش نوین">
           <circle cx="500" cy="500" r="70" fill="url(#whiteCore)" filter="url(#glow)"/>
           <circle cx="500" cy="500" r="25" fill="#fff"/>
         </g>
-      </svg>
+      <g class="realm-labels" aria-hidden="true">
+  <g class="realm-label"><text class="realm-title" x="500" y="185">ساختار تالار</text><text class="realm-subtitle" x="500" y="210">HALL STRUCTURE</text></g>
+  <g class="realm-label"><text class="realm-title" x="500" y="225">تداوم عالم</text><text class="realm-subtitle" x="500" y="249">CONTINUITY OF THE WORLD</text></g>
+  <g class="realm-label"><text class="realm-title" x="500" y="290">قلمرو تجربه</text><text class="realm-subtitle" x="500" y="314">REALM OF EXPERIENCE</text></g>
+  <g class="realm-label"><text class="realm-title" x="500" y="350">مرجع تقلید</text><text class="realm-subtitle" x="500" y="373">IMITATIVE AUTHORITY</text></g>
+  <g class="realm-label"><text class="realm-title" x="500" y="455" style="font-size:21px">اقتصاد سهم</text><text class="realm-subtitle" x="500" y="477" style="font-size:10px">ECONOMY OF SHARES</text></g>
+</g></svg>
     </div>
 
     <section class="info" id="info">
-      <button class="info-close" id="info-close" type="button" aria-label="بستن">×</button>
       <div class="kicker">SELECTED REALM</div>
       <h1 id="info-title"></h1>
       <p id="info-text"></p>
@@ -566,19 +573,46 @@ const infoTitle=document.getElementById('info-title');
 const infoText=document.getElementById('info-text');
 const realms=[...document.querySelectorAll('.realm')];
 const core=document.getElementById('core');
-const infoClose=document.getElementById('info-close');
 
 function tone(freq=620){
   try{
     if(!window.__audio) window.__audio=new (window.AudioContext||window.webkitAudioContext)();
     const ctx=window.__audio;
     if(ctx.state==='suspended') ctx.resume();
-    const o=ctx.createOscillator(),g=ctx.createGain();
-    o.type='sine';o.frequency.setValueAtTime(freq,ctx.currentTime);
-    o.frequency.exponentialRampToValueAtTime(freq*1.35,ctx.currentTime+.08);
-    g.gain.setValueAtTime(.035,ctx.currentTime);
-    g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.14);
-    o.connect(g).connect(ctx.destination);o.start();o.stop(ctx.currentTime+.15);
+    const now=ctx.currentTime;
+    const master=ctx.createGain();
+    master.gain.setValueAtTime(.0001,now);
+    master.gain.exponentialRampToValueAtTime(.055,now+.008);
+    master.gain.exponentialRampToValueAtTime(.0001,now+.32);
+    master.connect(ctx.destination);
+
+    const osc=ctx.createOscillator(), shimmer=ctx.createOscillator(), sub=ctx.createOscillator();
+    const filter=ctx.createBiquadFilter();
+    const shimmerGain=ctx.createGain(), subGain=ctx.createGain();
+
+    osc.type='sine';
+    osc.frequency.setValueAtTime(freq*.72,now);
+    osc.frequency.exponentialRampToValueAtTime(freq*1.08,now+.22);
+
+    shimmer.type='triangle';
+    shimmer.frequency.setValueAtTime(freq*2.04,now);
+    shimmer.frequency.exponentialRampToValueAtTime(freq*1.55,now+.18);
+    shimmerGain.gain.value=.12;
+
+    sub.type='sine';
+    sub.frequency.setValueAtTime(freq*.24,now);
+    subGain.gain.value=.32;
+
+    filter.type='lowpass';
+    filter.frequency.setValueAtTime(2600,now);
+    filter.frequency.exponentialRampToValueAtTime(700,now+.3);
+    filter.Q.value=1.2;
+
+    osc.connect(filter).connect(master);
+    shimmer.connect(shimmerGain).connect(master);
+    sub.connect(subGain).connect(master);
+    osc.start(now);shimmer.start(now);sub.start(now);
+    osc.stop(now+.34);shimmer.stop(now+.24);sub.stop(now+.3);
   }catch(e){}
 }
 
@@ -611,6 +645,29 @@ function selectRealm(id){
     window.__referenceOpenTimer=window.setTimeout(openReference,220);
   }
 }
+
+const realmGeometry=[['structure',445],['continuity',365],['experience',285],['reference',205],['share',125]];
+const universe=document.getElementById('universe');
+
+realms.forEach(realm=>{
+  realm.addEventListener('keydown',e=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRealm(realm.dataset.id);}
+  });
+});
+
+function realmFromPoint(event){
+  const rect=universe.getBoundingClientRect();
+  const x=(event.clientX-rect.left)/rect.width*1000;
+  const y=(event.clientY-rect.top)/rect.height*1000;
+  const radius=Math.hypot(x-500,y-500);
+  if(radius<=70)return 'core';
+  for(const [id,r] of realmGeometry)if(radius<=r)return id;
+  return null;
+}
+universe.addEventListener('click',event=>{
+  const id=realmFromPoint(event);
+  if(id)selectRealm(id);
+});
 
 function setUiLanguage(lang){
   uiLang=lang;
