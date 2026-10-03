@@ -16,7 +16,9 @@
     "back": "Back",
     "close": "Close",
     "comingSoon": "Coming later",
-    "language": "Site language"
+    "language": "Site language",
+    "shahnameh": "Shahnameh Reading",
+    "shahnamehEn": "Shahnameh Reading"
   },
   "meta": {
     "brand": "Modern Outlook",
