@@ -41,15 +41,6 @@ function applyDom(data){
     btn.classList.toggle('active',btn.dataset.siteLang===current);
     btn.setAttribute('aria-pressed',btn.dataset.siteLang===current?'true':'false');
   });
-  // Any current or future component can bind directly to the central catalog.
-  document.querySelectorAll('[data-i18n]').forEach(el=>{
-    const value=String(get(el.dataset.i18n,''));
-    if(value!=='')el.textContent=value;
-  });
-  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
-    const value=String(get(el.dataset.i18nHtml,''));
-    if(value!=='')el.innerHTML=value;
-  });
   document.documentElement.lang=current;
   document.documentElement.dir=data.dir||((current==='fa'||current==='ar')?'rtl':'ltr');
   document.body.dataset.lang=current;
