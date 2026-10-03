@@ -252,6 +252,35 @@ linear-gradient(135deg,transparent 0 28%,rgba(30,95,154,.25) 29% 31%,transparent
 .structure-head{position:absolute;z-index:5;top:5%;left:5%;right:5%;display:flex;justify-content:space-between;align-items:center;direction:rtl}.structure-title strong{display:block;font-size:clamp(1rem,3.5vw,1.4rem);text-shadow:0 2px 12px #000}.structure-title span{display:block;font-size:.62rem;opacity:.58;direction:ltr}.structure-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(190,225,255,.35);background:rgba(0,12,25,.42);color:#fff;cursor:pointer}
 @media(max-width:520px){.structure-column{width:10%}.structure-banner{top:35%;width:14%}.structure-banner.b2{top:41%;width:10%}.structure-spire{right:26%;width:22%}}
 
+/* ===== Continuity of the Universe page ===== */
+.continuity-page{display:none;overflow:hidden;background:
+radial-gradient(circle at 36% 18%,rgba(255,229,153,.98) 0 4%,rgba(247,184,67,.72) 15%,transparent 34%),
+radial-gradient(ellipse at 72% 70%,rgba(255,203,86,.85),transparent 30%),
+linear-gradient(180deg,#21160d 0%,#68431b 31%,#c3832b 63%,#f1c56a 83%,#7d4b1d 100%);color:#fff}
+.continuity-page::before{content:"";position:absolute;inset:0;background:
+radial-gradient(circle at 12% 10%,#ffe7a0 0 1px,transparent 2px),
+radial-gradient(circle at 27% 23%,#fff0bd 0 1px,transparent 2px),
+radial-gradient(circle at 63% 10%,#ffe9a6 0 1px,transparent 2px),
+radial-gradient(circle at 86% 23%,#fff3c7 0 1px,transparent 2px),
+radial-gradient(circle at 48% 34%,rgba(255,244,202,.9) 0 1px,transparent 2px);
+background-size:123px 137px,157px 149px,181px 163px,139px 151px,173px 127px;opacity:.72}
+.continuity-space{position:absolute;inset:0;overflow:hidden}
+.continuity-moon{position:absolute;left:25%;top:9%;width:25%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff0ad,#d59636 55%,#7c4b18 100%);box-shadow:0 0 45px rgba(255,210,105,.7),inset -18px -15px 25px rgba(69,34,7,.3)}
+.continuity-moon::after{content:"";position:absolute;inset:12%;border-radius:50%;background:radial-gradient(circle at 35% 40%,transparent 0 7%,rgba(112,62,16,.16) 8% 12%,transparent 13% 22%,rgba(112,62,16,.13) 23% 29%,transparent 30%)}
+.continuity-island{position:absolute;border-radius:48% 48% 8% 8%;background:linear-gradient(180deg,#6f4a1d,#332310 55%,#160f09);box-shadow:0 10px 35px rgba(0,0,0,.42);clip-path:polygon(0 20%,100% 0,92% 68%,72% 83%,61% 100%,38% 82%,16% 88%)}
+.continuity-island::before{content:"";position:absolute;left:10%;right:10%;top:7%;height:25%;border-radius:50%;background:linear-gradient(180deg,#536b32,#1e3017);box-shadow:inset 0 5px 10px rgba(255,220,112,.25)}
+.continuity-island.i1{left:40%;top:27%;width:40%;height:35%}.continuity-island.i2{left:12%;top:43%;width:48%;height:35%}.continuity-island.i3{right:-3%;top:56%;width:36%;height:28%}.continuity-island.i4{left:58%;top:66%;width:29%;height:22%}
+.continuity-tower{position:absolute;z-index:2;width:7%;height:18%;bottom:40%;background:linear-gradient(90deg,#6f4817,#ffe0a0 42%,#8c5b20 72%,#3e270f);clip-path:polygon(18% 100%,18% 22%,35% 10%,50% 0,65% 10%,82% 22%,82% 100%);filter:drop-shadow(0 0 10px rgba(255,222,130,.35))}
+.continuity-tower::after{content:"";position:absolute;left:38%;top:8%;width:24%;height:32%;background:#fff0b1;opacity:.7}
+.continuity-tower.t1{left:51%;bottom:48%;height:22%}.continuity-tower.t2{left:29%;bottom:39%;height:18%;width:5%}.continuity-tower.t3{right:11%;bottom:30%;height:18%;width:5%}
+.continuity-waterfall{position:absolute;z-index:3;width:2.5%;height:31%;background:linear-gradient(180deg,rgba(255,243,179,.95),rgba(255,208,77,.55),transparent);filter:blur(1px);box-shadow:0 0 18px rgba(255,229,136,.75)}
+.continuity-waterfall.w1{left:63%;top:44%}.continuity-waterfall.w2{left:27%;top:57%;height:22%}.continuity-waterfall.w3{right:19%;top:64%;height:20%}
+.continuity-ring{position:absolute;border:2px solid rgba(255,222,125,.72);border-radius:50%;transform:rotate(-8deg);box-shadow:0 0 10px rgba(255,205,77,.3)}
+.continuity-ring.r1{right:2%;top:45%;width:40%;height:10%}.continuity-ring.r2{right:10%;top:53%;width:31%;height:8%}.continuity-ring.r3{left:43%;top:22%;width:27%;height:7%}
+.continuity-terrace{position:absolute;left:-8%;bottom:-11%;width:70%;height:37%;border-radius:50% 50% 0 0;background:linear-gradient(180deg,#d39a3f,#553417 65%,#21160e);box-shadow:0 -15px 35px rgba(255,209,104,.22);transform:rotate(-7deg);border-top:3px solid rgba(255,231,158,.65)}
+.continuity-terrace::after{content:"";position:absolute;inset:10% 12%;border:2px solid rgba(255,219,123,.5);border-radius:50%;box-shadow:0 0 0 28px rgba(255,211,100,.08),0 0 0 58px rgba(255,211,100,.06)}
+.continuity-head{position:absolute;z-index:8;top:5%;left:5%;right:5%;display:flex;justify-content:space-between;align-items:center;direction:rtl}.continuity-title strong{display:block;font-size:clamp(1rem,3.5vw,1.4rem);text-shadow:0 2px 12px #000}.continuity-title span{display:block;font-size:.62rem;opacity:.58;direction:ltr}.continuity-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,232,170,.4);background:rgba(36,18,4,.45);color:#fff;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -332,7 +361,18 @@ linear-gradient(135deg,transparent 0 28%,rgba(30,95,154,.25) 29% 31%,transparent
     </section>
   </section>
 
-  <section class="page structure-page" id="structure-page" aria-label="ساختار تالار">
+  <section class="page continuity-page" id="continuity-page" aria-label="تداوم عالم">
+<div class="continuity-space" aria-hidden="true">
+<div class="continuity-moon"></div>
+<div class="continuity-island i1"></div><div class="continuity-island i2"></div><div class="continuity-island i3"></div><div class="continuity-island i4"></div>
+<div class="continuity-tower t1"></div><div class="continuity-tower t2"></div><div class="continuity-tower t3"></div>
+<div class="continuity-waterfall w1"></div><div class="continuity-waterfall w2"></div><div class="continuity-waterfall w3"></div>
+<div class="continuity-ring r1"></div><div class="continuity-ring r2"></div><div class="continuity-ring r3"></div>
+<div class="continuity-terrace"></div>
+</div>
+<header class="continuity-head"><div class="continuity-title"><strong>تداوم عالم</strong><span>Continuity of the Universe</span></div><button class="continuity-close" id="continuity-close" aria-label="بازگشت">✕</button></header>
+</section>
+<section class="page structure-page" id="structure-page" aria-label="ساختار تالار">
 <div class="structure-space" aria-hidden="true">
 <div class="structure-arch a1"></div><div class="structure-arch a2"></div><div class="structure-arch a3"></div>
 <div class="structure-column c1"></div><div class="structure-column c2"></div><div class="structure-column c3"></div><div class="structure-column c4"></div>
@@ -689,6 +729,7 @@ function selectRealm(id){
   const realm=realms.find(r=>r.dataset.id===id);
   if(!realm) return;
   setInfo(id);
+  if(id==='continuity'){openContinuity();}
   if(id==='structure'){window.clearTimeout(window.__structureOpenTimer);openStructure();}
   if(id==='reference'){
     window.clearTimeout(window.__referenceOpenTimer);
@@ -756,6 +797,7 @@ document.getElementById('ui-fa').addEventListener('click',()=>setUiLanguage('fa'
 document.getElementById('ui-en').addEventListener('click',()=>setUiLanguage('en'));
 
 const home=document.getElementById('home-page');
+const continuityPage=document.getElementById('continuity-page');
 const structurePage=document.getElementById('structure-page');
 const referencePage=document.getElementById('reference-page');
 const bookPage=document.getElementById('book-page');
@@ -798,7 +840,9 @@ function selectChapter(i){
   bookBody.scrollTop=0;
 }
 
-function openStructure(){window.clearTimeout(window.__structureOpenTimer);home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='block';clearInfo();tone(680);}
+function openContinuity(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='block';clearInfo();tone(600);}
+function closeContinuity(){continuityPage.style.display='none';home.style.display='block';setInfo('continuity');tone(520);}
+function openStructure(){window.clearTimeout(window.__structureOpenTimer);home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';continuityPage.style.display='none';structurePage.style.display='block';clearInfo();tone(680);}
 function closeStructure(){structurePage.style.display='none';home.style.display='block';setInfo('structure');tone(520);}
 function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';tone(820);}
 function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');tone(560);}
@@ -813,6 +857,7 @@ function openBook(from='home'){bookReturn=from;
 
 function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';tone(560)}else{home.style.display='block';setInfo('reference');tone(560)}}
 
+document.getElementById('continuity-close').addEventListener('click',closeContinuity);
 document.getElementById('structure-close').addEventListener('click',closeStructure);
 document.getElementById('reference-close').addEventListener('click',closeReference);
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference'));
@@ -841,9 +886,10 @@ document.getElementById('book-en').addEventListener('click',()=>{
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
+  if(e.key==='Escape'&&continuityPage.style.display==='block')closeContinuity();
   if(e.key==='Escape'&&structurePage.style.display==='block')closeStructure();
   if(e.key==='Escape'&&referencePage.style.display==='block')closeReference();
-  if(bookPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block')return;
+  if(bookPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block')return;
   const order=['structure','continuity','experience','reference','share'];
   const idx=order.indexOf(activeId);
   if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
