@@ -45,6 +45,12 @@ function applyDom(data){
   document.documentElement.dir=data.dir||((current==='fa'||current==='ar')?'rtl':'ltr');
   document.body.dataset.lang=current;
   document.body.dataset.mode=current;
+  if(document.querySelector('meta[name="i18n-blocks"][content="book"]')){
+    document.querySelectorAll('.book-body .fa,.book-body .en,.book-body .zh,.book-body .ar').forEach(el=>{
+      const lang=['fa','en','zh','ar'].find(x=>el.classList.contains(x));
+      el.hidden=lang!==current;
+    });
+  }
 }
 async function load(lang){
   lang=normalize(lang);
