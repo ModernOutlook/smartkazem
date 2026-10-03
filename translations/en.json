@@ -1,0 +1,24 @@
+{
+  "code": "en",
+  "name": "English",
+  "dir": "ltr",
+  "source": false,
+  "labels": {
+    "share": "Share Economy",
+    "experience": "Realm of Experience",
+    "continuity": "Continuity of the Universe",
+    "structure": "Structure of the Hall",
+    "reference": "Reference of Imitation",
+    "forgers": "The Forgers of Imitation",
+    "treatise": "A Philosophical Treatise",
+    "observation": "The Land of Observation",
+    "games": "Games",
+    "back": "Back",
+    "close": "Close",
+    "comingSoon": "Coming later"
+  },
+  "meta": {
+    "brand": "Modern Outlook",
+    "brandNative": "نگرش نوین"
+  }
+}
