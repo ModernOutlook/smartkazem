@@ -148,9 +148,10 @@ document.getElementById('experience-close').addEventListener('click',closeExperi
 document.getElementById('continuity-close').addEventListener('click',closeContinuity);
 document.getElementById('continuity-shahnameh').addEventListener('click',()=>{window.location.href='shahnameh.html';});
 document.getElementById('structure-close').addEventListener('click',closeStructure);
+document.getElementById('structure-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
 document.getElementById('reference-close').addEventListener('click',closeReference);
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference','forgers'));document.getElementById('share-human-machines').addEventListener('click',()=>openBook('share','humanMachines'));
-document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
+
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
 document.getElementById('ref-games').addEventListener('click',()=>{});
 document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
