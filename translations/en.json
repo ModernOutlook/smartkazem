@@ -68,7 +68,6 @@
       "tab": "The Land of Observation",
       "close": "Close"
     },
-    "shahnameh": {"title":"Shahnameh Reading","subtitle":"81 parts · Ferdowsi’s original verse and prose in four languages","part":"Part","originalVerse":"Original Verse","prose":"Prose","placeholder":"Coming soon"},
     "treatise": {
       "title": "A Philosophical Treatise",
       "close": "Close",
@@ -265,6 +264,11 @@
       ]
     },
     "shahnameh": {
+      "title": "Shahnameh Reading",
+      "subtitle": "81 parts · Ferdowsi’s original verse and prose in four languages",
+      "part": "Part",
+      "originalVerse": "Original Verse",
+      "prose": "Prose",
       "part1": {
         "title": "Part 1: Kayumars, the First King",
         "part": "Part",
