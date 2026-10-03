@@ -144,9 +144,6 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   border-bottom:2px solid #c93a33;direction:rtl;
 }
 .book-head .book-title{font-weight:800;font-size:.83rem;flex:1}
-.book-head .book-lang{display:flex;gap:4px;direction:ltr}
-.book-head .book-lang button{background:rgba(255,255,255,.08);border:1px solid rgba(255,215,160,.25);color:#ffd8a4;padding:4px 7px;border-radius:12px;font-size:.62rem;font-weight:800;cursor:pointer}
-.book-head .book-lang button.active{background:#ffd8a4;color:#241414}
 .book-close{width:29px;height:29px;border-radius:50%;border:1px solid rgba(255,150,150,.35);background:rgba(255,80,80,.1);color:#ffb0aa;cursor:pointer}
 .book-tabs{display:flex;gap:5px;overflow-x:auto;flex:0 0 auto;padding:9px;background:#e5e7e3;border-bottom:1px solid #cdd1cc}
 .book-tabs::-webkit-scrollbar{height:4px}.book-tabs::-webkit-scrollbar-thumb{background:#aaa;border-radius:5px}
@@ -469,10 +466,6 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
     <div class="book-shell">
       <header class="book-head">
         <div class="book-title" id="book-title">📖 جاعلان تقلید — در ده فصل</div>
-        <div class="book-lang">
-          <button id="book-fa" class="active">فارسی</button>
-          <button id="book-en">English</button>
-        </div>
         <button class="book-close" id="book-close" aria-label="بستن">✕</button>
       </header>
       <nav class="book-tabs" id="book-tabs" aria-label="فصل‌های کتاب"></nav>
@@ -876,7 +869,16 @@ function setUiLanguage(lang){
   }
   document.title=lang==='zh'?'现代视野 — Modern Outlook':lang==='en'?'Modern Outlook — نگرش نوین':'نگرش نوین — Modern Outlook';
   // The book is part of this page, so it follows the same single global language control.
-  if(typeof bookLang!=='undefined') bookLang=lang;
+  if(typeof bookLang!=='undefined'){
+    bookLang=lang;
+    const bt=document.getElementById('book-title');
+    if(bt) bt.textContent=lang==='en'?'📖 The Forgers of Imitation — Ten Chapters':lang==='zh'?'📖 《模仿的伪造者》— 十章':'📖 جاعلان تقلید — در ده فصل';
+    if(typeof bookPage!=='undefined'&&bookPage.style.display==='block'){
+      const currentTab=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
+      buildBookTabs(currentTab);
+      selectChapter(currentTab);
+    }
+  }
 }
 function chooseUiLanguage(lang,event){
   if(event){event.preventDefault();event.stopPropagation();}
