@@ -4,6 +4,7 @@ const bookTabs=document.getElementById('book-tabs');
 const bookBody=document.getElementById('book-body');
 
 function activeBookCatalog(){
+  if(currentSiteLang()==='fa')return null;
   try{
     const p=window.SiteI18n&&window.SiteI18n.getCatalog?window.SiteI18n.getCatalog().pages?.[activeBookKind]:null;
     if(p&&Array.isArray(p.chapters)&&p.chapters.length)return p;
@@ -11,11 +12,14 @@ function activeBookCatalog(){
   return null;
 }
 function activeChapters(){
+  if(currentSiteLang()==='fa'){
+    if(activeBookKind==='forgers')return bookChapters;
+    if(activeBookKind==='humanMachines'&&Array.isArray(humanMachinesFaCatalog?.chapters))return humanMachinesFaCatalog.chapters;
+  }
   const p=activeBookCatalog();
   if(p)return p.chapters;
-  return currentSiteLang()==='fa'?bookChapters:(currentSiteLang()==='zh'?bookChaptersZh:(currentSiteLang()==='ar'?bookChaptersAr:bookChaptersEn));
+  return currentSiteLang()==='zh'?bookChaptersZh:(currentSiteLang()==='ar'?bookChaptersAr:bookChaptersEn);
 }
-
 function buildBookTabs(active=0){
   bookTabs.innerHTML='';
   activeChapters().forEach((ch,i)=>{
