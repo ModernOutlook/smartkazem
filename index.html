@@ -174,7 +174,6 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   .app{border-radius:4px}
 }
 
-.home-page .info{display:none}
 
 /* ===== Modern Outlook — Optimized Cosmic Territory System ===== */
 .home-page{background:radial-gradient(ellipse at 50% 45%,rgba(22,111,173,.16),transparent 58%),radial-gradient(circle at 15% 25%,rgba(103,62,220,.13),transparent 27%),radial-gradient(circle at 86% 26%,rgba(224,170,54,.12),transparent 27%),radial-gradient(circle at 14% 79%,rgba(207,69,48,.11),transparent 28%),radial-gradient(circle at 86% 80%,rgba(34,177,121,.12),transparent 28%),linear-gradient(145deg,#01040b 0%,#031426 40%,#020914 72%,#010308 100%)}
@@ -357,8 +356,9 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
     </header>
 
     <div class="lang-switch" aria-label="زبان رابط">
-      <button id="ui-fa" class="active">FA</button>
-      <button id="ui-en">EN</button>
+      <button id="ui-zh" type="button">中文</button>
+      <button id="ui-fa" class="active" type="button">فارسی</button>
+      <button id="ui-en" type="button">English</button>
     </div>
 
     <div class="orbit" aria-label="پنج قلمرو">
@@ -725,6 +725,14 @@ const copy = {
     reference:{title:'Imitative Authority · IMITATIVE AUTHORITY',text:'Imitative Authority is the realm where experience turns toward models, sources of authority, and choices about what should be followed.'},
     share:{title:'Economy of Shares · ECONOMY OF SHARES',text:'The Economy of Shares is the realm closest to the center, where competition, distribution, shares, and positions within the network become visible.'},
     core:{title:'Actuality Focus · ACTUALITY FOCUS',text:'The white center is the final point of convergence; a focus present from the beginning, whose calculation and recognition become possible only when the configuration is complete.'}
+  },
+  zh:{
+    structure:{title:'结构殿堂 · HALL STRUCTURE',text:'结构殿堂是最外层的领域，也是网络的起始基础；基本的可能性与关系在这里形成。'},
+    continuity:{title:'世界的延续 · CONTINUITY OF THE WORLD',text:'世界的延续是连接结构、持续、变化与经验生成的连续流动。'},
+    experience:{title:'经验领域 · REALM OF EXPERIENCE',text:'经验领域是世界的延续转化为生活经验、感知、意义与方向的地方。'},
+    reference:{title:'模仿权威 · IMITATIVE AUTHORITY',text:'模仿权威是经验转向范式、权威来源以及选择应当追随何物的领域。'},
+    share:{title:'份额经济 · ECONOMY OF SHARES',text:'份额经济是最接近中心的领域，竞争、分配、份额以及网络中的位置在这里显现。'},
+    core:{title:'现实焦点 · ACTUALITY FOCUS',text:'白色中心是最终的汇聚点；它从一开始便存在，而只有当整体配置完成后，才能计算并识别它。'}
   }
 };
 
@@ -838,26 +846,48 @@ realms.forEach(realm=>{
 });
 
 function setUiLanguage(lang){
+  if(!['zh','fa','en'].includes(lang)) lang='fa';
   uiLang=lang;
+  try{localStorage.setItem('modern-outlook.lang.v1',lang)}catch(_){}
   document.documentElement.lang=lang;
-  document.documentElement.dir=lang==='fa'?'rtl':'ltr';
+  document.documentElement.dir='rtl';
+  document.body.dataset.lang=lang;
+  document.getElementById('ui-zh').classList.toggle('active',lang==='zh');
   document.getElementById('ui-fa').classList.toggle('active',lang==='fa');
   document.getElementById('ui-en').classList.toggle('active',lang==='en');
-  document.querySelectorAll('[data-fa][data-en]').forEach(el=>el.textContent=el.dataset[lang]);
-  const current=copy[lang][activeId];
+  document.querySelectorAll('[data-fa][data-en]').forEach(el=>{
+    const value=lang==='fa'?el.dataset.fa:(lang==='en'?el.dataset.en:(el.dataset.zh||el.dataset.en));
+    if(value!=null)el.textContent=value;
+  });
+  const current=copy[lang][activeId]||copy.fa[activeId];
   infoTitle.textContent=current.title;
   infoText.textContent=current.text;
-  if(lang==='en'){
-    document.querySelector('.brand strong').textContent='Modern Outlook';
-    document.querySelector('.brand span').textContent='نگرش نوین';
+  const brand=document.querySelector('.brand strong');
+  const brandAlt=document.querySelector('.brand span');
+  if(lang==='zh'){
+    brand.textContent='现代视野';
+    brandAlt.textContent='Modern Outlook';
+  }else if(lang==='en'){
+    brand.textContent='Modern Outlook';
+    brandAlt.textContent='نگرش نوین';
   }else{
-    document.querySelector('.brand strong').textContent='نگرش نوین';
-    document.querySelector('.brand span').textContent='Modern Outlook';
+    brand.textContent='نگرش نوین';
+    brandAlt.textContent='Modern Outlook';
   }
+  document.title=lang==='zh'?'现代视野 — Modern Outlook':lang==='en'?'Modern Outlook — نگرش نوین':'نگرش نوین — Modern Outlook';
+  // The book is part of this page, so it follows the same single global language control.
+  if(typeof bookLang!=='undefined') bookLang=lang;
 }
-document.getElementById('ui-fa').addEventListener('click',()=>{SiteAudio.play('ui.click');setUiLanguage('fa')});
-document.getElementById('ui-en').addEventListener('click',()=>{SiteAudio.play('ui.click');setUiLanguage('en')});
-document.getElementById('audio-toggle').addEventListener('click',()=>SiteAudio.toggle());
+function chooseUiLanguage(lang,event){
+  if(event){event.preventDefault();event.stopPropagation();}
+  SiteAudio.unlock();
+  SiteAudio.play('ui.click',{cooldown:0});
+  setUiLanguage(lang);
+}
+document.getElementById('ui-zh').addEventListener('click',e=>chooseUiLanguage('zh',e));
+document.getElementById('ui-fa').addEventListener('click',e=>chooseUiLanguage('fa',e));
+document.getElementById('ui-en').addEventListener('click',e=>chooseUiLanguage('en',e));
+document.getElementById('audio-toggle').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();SiteAudio.unlock();SiteAudio.toggle();});
 
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
@@ -891,13 +921,15 @@ function selectChapter(i){
   if(i===0){
     html+=bookLang==='en'
       ? '<h1 class="book-h1">The Forgers of Imitation</h1><p class="book-sub">Ten Chapters</p>'
-      : '<h1 class="book-h1">جاعلان تقلید</h1><p class="book-sub">در ده فصل</p>';
+      : bookLang==='zh'
+        ? '<h1 class="book-h1">《模仿的伪造者》</h1><p class="book-sub">十章</p>'
+        : '<h1 class="book-h1">جاعلان تقلید</h1><p class="book-sub">در ده فصل</p>';
   }
   html+='<div class="chapter" style="--dot:'+ch.dot+'"><h2><i></i>'+ch.title+'</h2>';
   ch.paragraphs.forEach(p=>html+='<p>'+p+'</p>');
   html+='</div>';
   if(i===chapters.length-1){
-    html+='<div class="moral"><h2>'+(bookLang==='en'?'Fable Wisdom':'حکمت فابل')+'</h2><p>'+(bookLang==='en'?bookMoralEn:bookMoralFa)+'</p></div>';
+    html+='<div class="moral"><h2>'+(bookLang==='en'?'Fable Wisdom':bookLang==='zh'?'寓言智慧':'حکمت فابل')+'</h2><p>'+(bookLang==='en'?bookMoralEn:bookLang==='zh'?'展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。':bookMoralFa)+'</p></div>';
   }
   bookBody.classList.toggle('lang-en',bookLang==='en');
   bookBody.dir=bookLang==='en'?'ltr':'rtl';
@@ -932,29 +964,10 @@ document.getElementById('continuity-close').addEventListener('click',closeContin
 document.getElementById('structure-close').addEventListener('click',closeStructure);
 document.getElementById('reference-close').addEventListener('click',closeReference);
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference'));
-document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html'});
-document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html'});
+document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
+document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
 document.getElementById('ref-games').addEventListener('click',()=>{});
 document.getElementById('book-close').addEventListener('click',closeBook);
-document.getElementById('book-fa').addEventListener('click',()=>{
-  if(bookLang==='fa')return;
-  const idx=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
-  bookLang='fa';
-  document.getElementById('book-fa').classList.add('active');
-  document.getElementById('book-en').classList.remove('active');
-  document.getElementById('book-title').textContent='📖 جاعلان تقلید — در ده فصل';
-  buildBookTabs(idx);selectChapter(idx);
-});
-document.getElementById('book-en').addEventListener('click',()=>{
-  if(bookLang==='en')return;
-  const idx=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
-  bookLang='en';
-  document.getElementById('book-en').classList.add('active');
-  document.getElementById('book-fa').classList.remove('active');
-  document.getElementById('book-title').textContent='📖 The Forgers of Imitation — Ten Chapters';
-  buildBookTabs(idx);selectChapter(idx);
-});
-
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&logoViewer.classList.contains('open')){closeLogoViewer();return;}
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
@@ -971,8 +984,10 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&activeId==='reference')openReference();
 });
 
-setUiLanguage('fa');
-setTimeout(()=>setInfo('structure'),700);
+let initialLang='fa';
+try{const saved=localStorage.getItem('modern-outlook.lang.v1');if(['zh','fa','en'].includes(saved))initialLang=saved}catch(_){}
+setUiLanguage(initialLang);
+setInfo('structure');
 </script>
 </body>
 </html>
