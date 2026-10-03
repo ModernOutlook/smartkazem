@@ -42,18 +42,5 @@ body{display:grid;place-items:center;font-family:Vazirmatn,Tahoma,sans-serif;col
 </section>
 <script src="translations/i18n.js"></script>
 <script src="content/echo-layer3.js"></script>
-<script>
-(()=>{const c=window.EchoLayer3Content;const tabs=document.getElementById('tabs');const body=document.getElementById('body');
-function render(){tabs.innerHTML='';body.innerHTML='';document.getElementById('book-title').textContent=c.title;
-const head=document.createElement('div');head.className='head';head.innerHTML='<h1>'+c.title+'</h1><p class="sub">'+c.subtitle+'</p>';body.appendChild(head);
-let first=true;
-c.chapters.forEach(ch=>{const lab=document.createElement('span');lab.className='chapter-label';lab.textContent=ch.title;tabs.appendChild(lab);
-ch.parts.forEach((part,i)=>{const b=document.createElement('button');b.className='book-tab'+(first?' active':'');b.textContent=part.title;b.dataset.target=part.id;tabs.appendChild(b);
-const sec=document.createElement('section');sec.className='story-part';sec.id=part.id;sec.innerHTML='<h2>'+part.title+'</h2>'+part.text.map(p=>'<p>'+p+'</p>').join('');body.appendChild(sec);first=false;});
-});
-tabs.querySelectorAll('.book-tab').forEach(b=>b.addEventListener('click',()=>document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'})));
-}
-document.getElementById('close').addEventListener('click',()=>location.href='index.html');window.addEventListener('site:languagechange',render);render();
-})();
-</script>
+
 </body></html>
