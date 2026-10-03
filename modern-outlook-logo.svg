@@ -1,1 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1112 1127" width="1112" height="1127"><rect width="100%" height="100%" fill="#000"/><circle cx="555.15" cy="562.10" r="492.57" fill="#ffd800"/><g fill="#000" fill-rule="evenodd"><path d="M 79,694 532,278 532,381 80,773 Z"/><path d="M 574,279 1031,694 1031,774 574,381 Z"/><path d="M 164,772 532,443 532,535 258,777 Z"/><path d="M 574,444 951,773 948,780 574,535 Z"/><path d="M 333,722 532,543 532,613 421,722 Z"/><path d="M 574,543 761,705 761,722 574,612 Z"/><path d="M 429,696 526,607 578,608 772,610 775,635 574,634 547,692 Z"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1112 1127" role="img" aria-labelledby="title desc">
+<title id="title">Modern Outlook Smart</title>
+<desc id="desc">Yellow circular emblem with black geometric mountain mark and the word Smart.</desc>
+<rect width="1112" height="1127" fill="#000"/>
+<circle cx="556" cy="564" r="493" fill="#ffd800"/>
+<g fill="#000">
+  <path d="M78 694 531 278v104L79 774z"/>
+  <path d="M578 278 1034 694v80L578 382z"/>
+  <path d="M164 775 531 444v91L258 778z"/>
+  <path d="M578 444 951 772l-4 8-369-245z"/>
+  <path d="M333 722 531 544v70L421 722z"/>
+  <path d="M578 544 761 705v17H578z"/>
+  <path d="M429 696 527 607h50l198 3-1 26H575l-28 56z"/>
+</g>
+<text x="555" y="697" text-anchor="middle" fill="#000" font-size="124" font-family="Brush Script MT, Segoe Script, Snell Roundhand, cursive" font-style="italic" font-weight="500">Smart</text>
+</svg>
