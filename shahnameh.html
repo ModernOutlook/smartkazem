@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fa" dir="rtl" translate="no">
+<html lang="fa" dir="rtl" translate="no" data-sound-theme="yellow">
 <head>
 <meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="i18n-page" content="shahnameh">
@@ -13,12 +13,12 @@ body{padding:24px}.wrap{max-width:1100px;margin:auto}.top{display:flex;align-ite
 .reader{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:clamp(18px,4vw,34px);min-height:360px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.reader h2{margin-top:0}.block{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.block h3{margin:0 0 10px;font-size:1rem}.placeholder{color:var(--muted);line-height:1.9}.verse{font-family:Georgia,"Times New Roman",serif;font-size:1.12rem;line-height:2.1;white-space:pre-line}.prose{line-height:2.05;white-space:pre-line}
 @media(max-width:650px){body{padding:14px}.top{align-items:flex-start;flex-direction:column}.parts{grid-template-columns:repeat(5,1fr)}}
 </style>
-</head>
+<script src="site-audio.js" defer></script><style>.site-sound-toggle{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 12px;border:1px solid rgba(255,255,255,.24);border-radius:12px;background:rgba(10,10,20,.3);color:inherit;font:inherit;font-weight:800;cursor:pointer;flex:0 0 auto}.site-sound-toggle .sound-glyph{font-size:1.15rem;line-height:1}.site-sound-toggle .sound-label{white-space:nowrap}@media(max-width:520px){.site-sound-toggle{width:44px;height:44px;padding:0}.site-sound-toggle .sound-label{display:none}}</style></head>
 <body>
 <main class="wrap">
 <header class="top">
 <div class="title"><h1 data-i18n="pages.shahnameh.title">شاهنامه‌خوانی</h1><p data-i18n="pages.shahnameh.subtitle">۸۱ قسمت · نظم اصیل فردوسی و نثر چهارزبانه</p></div>
-<div class="actions"><button class="back" id="back" data-i18n="labels.back">بازگشت</button><button class="lang" data-site-lang="fa">فا</button><button class="lang" data-site-lang="en">EN</button><button class="lang" data-site-lang="zh">中</button><button class="lang" data-site-lang="ar">ع</button></div>
+<div class="actions"><button class="site-sound-toggle book-sound-toggle" type="button" data-sound-toggle data-sound="none" data-i18n-aria="labels.sound" data-i18n-title="labels.sound" aria-label="صدا" title="صدا"><span class="sound-glyph" aria-hidden="true">♫</span><span class="sound-label" data-i18n="labels.sound">صدا</span></button><button class="back" id="back" data-sound="back" data-i18n="labels.back">بازگشت</button><button class="lang" data-site-lang="fa">فا</button><button class="lang" data-site-lang="en">EN</button><button class="lang" data-site-lang="zh">中</button><button class="lang" data-site-lang="ar">ع</button></div>
 </header>
 <nav class="parts" id="parts"></nav>
 <section class="reader" id="reader"></section>
