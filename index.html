@@ -290,167 +290,30 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   .app{border-radius:4px}
 }
 
-/* ===== Modern Outlook — Cosmic Territory System ===== */
-.home-page{
-  background:
-    radial-gradient(ellipse at 50% 45%,rgba(22,111,173,.18) 0%,rgba(4,31,53,.08) 34%,transparent 61%),
-    radial-gradient(circle at 15% 25%,rgba(103,62,220,.17),transparent 27%),
-    radial-gradient(circle at 86% 26%,rgba(224,170,54,.15),transparent 27%),
-    radial-gradient(circle at 14% 79%,rgba(207,69,48,.15),transparent 28%),
-    radial-gradient(circle at 86% 80%,rgba(34,177,121,.16),transparent 28%),
-    linear-gradient(145deg,#01040b 0%,#031426 40%,#020914 72%,#010308 100%);
-}
-.app::before{
-  background:
-    radial-gradient(ellipse at 50% 48%,rgba(17,92,143,.22),rgba(2,18,32,.06) 40%,transparent 68%),
-    radial-gradient(circle at 50% 50%,transparent 44%,rgba(0,0,0,.76) 91%);
-}
-.app::after{
-  background:
-    radial-gradient(circle at 50% 47%,transparent 29%,rgba(0,0,0,.08) 56%,rgba(0,0,0,.72) 100%),
-    linear-gradient(180deg,rgba(0,0,0,.22),transparent 18%,transparent 80%,rgba(0,0,0,.48));
-}
-.atmosphere{
-  opacity:.92;
-  background:
-    radial-gradient(circle at 7% 11%,rgba(255,255,255,.88) 0 1px,transparent 1.6px),
-    radial-gradient(circle at 22% 37%,rgba(106,190,255,.72) 0 1px,transparent 1.7px),
-    radial-gradient(circle at 42% 13%,rgba(255,220,137,.7) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 63% 23%,rgba(255,255,255,.66) 0 1px,transparent 1.6px),
-    radial-gradient(circle at 82% 14%,rgba(150,208,255,.76) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 93% 43%,rgba(255,231,170,.7) 0 1px,transparent 1.7px),
-    radial-gradient(circle at 14% 68%,rgba(214,133,255,.7) 0 1px,transparent 1.7px),
-    radial-gradient(circle at 39% 83%,rgba(255,160,113,.62) 0 1px,transparent 1.6px),
-    radial-gradient(circle at 67% 76%,rgba(111,255,194,.68) 0 1px,transparent 1.7px),
-    radial-gradient(circle at 89% 88%,rgba(255,255,255,.72) 0 1px,transparent 1.7px);
-  background-size:103px 127px,149px 173px,127px 151px,173px 139px,131px 167px,157px 143px,139px 181px,167px 151px,151px 173px,191px 157px;
-  mix-blend-mode:screen;
-}
-.rings{
-  width:88%;
-  transform:translateY(-2%);
-  filter:drop-shadow(0 0 24px rgba(52,151,220,.12));
-  isolation:isolate;
-}
-.ring{
-  position:absolute;
-  width:var(--size);
-  height:var(--size);
-  border:0;
-  border-radius:50%;
-  cursor:pointer;
-  appearance:none;
-  -webkit-tap-highlight-color:transparent;
-  background:
-    radial-gradient(circle at 29% 21%,rgba(255,255,255,.95) 0 .17%,transparent .52%),
-    radial-gradient(circle at 72% 30%,rgba(255,255,255,.78) 0 .15%,transparent .48%),
-    radial-gradient(circle at 77% 69%,rgba(255,255,255,.72) 0 .14%,transparent .46%),
-    radial-gradient(circle at 23% 75%,rgba(255,255,255,.64) 0 .13%,transparent .44%),
-    radial-gradient(ellipse at 50% 50%,transparent 0 51%,rgba(0,0,0,.05) 52%,var(--c) 54%,var(--nebula) 63%,rgba(255,255,255,.26) 65%,var(--c) 68%,transparent 70%),
-    radial-gradient(circle at 38% 35%,color-mix(in srgb,var(--nebula) 23%,transparent),transparent 35%),
-    radial-gradient(circle at 67% 65%,color-mix(in srgb,var(--c) 24%,transparent),transparent 43%),
-    transparent;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.055),
-    0 0 20px var(--glow),
-    0 0 62px color-mix(in srgb,var(--glow) 58%,transparent),
-    inset 0 0 26px rgba(255,255,255,.04);
-  transition:filter .35s var(--ease),transform .35s var(--ease),box-shadow .35s var(--ease);
-  z-index:var(--z);
-  animation:nebulaDrift var(--orbit-speed,18s) ease-in-out infinite alternate;
-  overflow:visible;
-  pointer-events:none;
-}
-.ring::before{
-  content:"";
-  position:absolute;
-  inset:-2.5%;
-  border-radius:50%;
-  pointer-events:none;
-  background:
-    repeating-conic-gradient(from 7deg,rgba(255,255,255,.23) 0deg .42deg,transparent .42deg 6.5deg),
-    radial-gradient(ellipse at 34% 26%,rgba(255,255,255,.2),transparent 24%),
-    radial-gradient(ellipse at 68% 72%,var(--nebula),transparent 30%);
-  mix-blend-mode:screen;
-  opacity:.72;
-  filter:blur(.2px);
-  animation:starField var(--star-speed,24s) linear infinite;
-}
-.ring::after{
-  content:"";
-  position:absolute;
-  inset:-5.8%;
-  border-radius:50%;
-  pointer-events:none;
-  border:1.5px solid color-mix(in srgb,var(--nebula) 74%,transparent);
-  box-shadow:
-    0 0 15px var(--glow),
-    0 0 42px color-mix(in srgb,var(--glow) 62%,transparent),
-    inset 0 0 13px color-mix(in srgb,var(--nebula) 30%,transparent);
-  opacity:.92;
-  animation:ringPulse 4.8s ease-in-out infinite;
-}
-.ring:hover{
-  filter:brightness(1.22) saturate(1.18);
-}
-.ring.active{
-  filter:brightness(1.3) saturate(1.22);
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.16),
-    0 0 48px var(--glow),
-    0 0 105px color-mix(in srgb,var(--glow) 50%,transparent),
-    inset 0 0 32px rgba(255,255,255,.16);
-}
-.ring-structure{--size:100%;--c:#12658c;--nebula:#45c9ff;--glow:rgba(30,163,225,.5);--z:1;--orbit-speed:22s;--star-speed:31s}
-.ring-continuity{--size:78%;--c:#b27d19;--nebula:#ffe08a;--glow:rgba(230,176,45,.48);--z:2;--orbit-speed:19s;--star-speed:27s}
-.ring-experience{--size:55%;--c:#6c2990;--nebula:#dc76ff;--glow:rgba(164,67,219,.5);--z:3;--orbit-speed:17s;--star-speed:23s}
-.ring-reference{--size:32%;--c:#9b3d30;--nebula:#ff866d;--glow:rgba(208,76,57,.48);--z:4;--orbit-speed:15s;--star-speed:21s}
-.ring-share{--size:14%;--c:#0d8458;--nebula:#68ffc2;--glow:rgba(33,192,126,.5);--z:5;--orbit-speed:13s;--star-speed:19s}
-.ring-label{
-  position:absolute;
-  top:50%;
-  left:50%;
-  width:clamp(31px,7vw,45px);
-  min-width:0;
-  height:clamp(31px,7vw,45px);
-  padding:6px;
-  transform:translate(-50%,-50%);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid rgba(255,255,255,.25);
-  border-radius:50%;
-  background:rgba(2,8,15,.54);
-  backdrop-filter:blur(6px);
-  box-shadow:
-    0 0 16px color-mix(in srgb,var(--glow) 60%,transparent),
-    inset 0 0 11px rgba(255,255,255,.07);
-  pointer-events:none;
-  z-index:3;
-}
+/* ===== Modern Outlook — Optimized Cosmic Territory System ===== */
+.home-page{background:radial-gradient(ellipse at 50% 45%,rgba(22,111,173,.16),transparent 58%),radial-gradient(circle at 15% 25%,rgba(103,62,220,.13),transparent 27%),radial-gradient(circle at 86% 26%,rgba(224,170,54,.12),transparent 27%),radial-gradient(circle at 14% 79%,rgba(207,69,48,.11),transparent 28%),radial-gradient(circle at 86% 80%,rgba(34,177,121,.12),transparent 28%),linear-gradient(145deg,#01040b 0%,#031426 40%,#020914 72%,#010308 100%)}
+.app::before{background:radial-gradient(ellipse at 50% 48%,rgba(17,92,143,.18),rgba(2,18,32,.05) 42%,transparent 68%),radial-gradient(circle at 50% 50%,transparent 44%,rgba(0,0,0,.72) 91%)}
+.app::after{background:radial-gradient(circle at 50% 47%,transparent 29%,rgba(0,0,0,.06) 56%,rgba(0,0,0,.68) 100%),linear-gradient(180deg,rgba(0,0,0,.18),transparent 18%,transparent 80%,rgba(0,0,0,.42))}
+.atmosphere{opacity:.82;background:radial-gradient(circle at 7% 11%,rgba(255,255,255,.82) 0 1px,transparent 1.5px),radial-gradient(circle at 22% 37%,rgba(106,190,255,.62) 0 1px,transparent 1.6px),radial-gradient(circle at 42% 13%,rgba(255,220,137,.6) 0 1px,transparent 1.7px),radial-gradient(circle at 63% 23%,rgba(255,255,255,.58) 0 1px,transparent 1.5px),radial-gradient(circle at 82% 14%,rgba(150,208,255,.64) 0 1px,transparent 1.7px),radial-gradient(circle at 93% 43%,rgba(255,231,170,.58) 0 1px,transparent 1.6px),radial-gradient(circle at 14% 68%,rgba(214,133,255,.58) 0 1px,transparent 1.6px),radial-gradient(circle at 39% 83%,rgba(255,160,113,.52) 0 1px,transparent 1.5px),radial-gradient(circle at 67% 76%,rgba(111,255,194,.56) 0 1px,transparent 1.6px);background-size:103px 127px,149px 173px,127px 151px,173px 139px,131px 167px,157px 143px,139px 181px,167px 151px,151px 173px;mix-blend-mode:screen}
+.rings{width:88%;transform:translateY(-2%);filter:none;isolation:isolate}
+.ring{border:0;pointer-events:none;animation:none;transition:filter .18s ease,opacity .18s ease;background:radial-gradient(circle at 29% 21%,rgba(255,255,255,.88) 0 .14%,transparent .45%),radial-gradient(circle at 72% 30%,rgba(255,255,255,.68) 0 .13%,transparent .42%),radial-gradient(ellipse at 50% 50%,transparent 0 51%,rgba(0,0,0,.05) 52%,var(--c) 54%,var(--nebula) 62%,rgba(255,255,255,.2) 64%,var(--c) 67%,transparent 69%),radial-gradient(circle at 38% 35%,color-mix(in srgb,var(--nebula) 18%,transparent),transparent 35%),radial-gradient(circle at 67% 65%,color-mix(in srgb,var(--c) 18%,transparent),transparent 43%);box-shadow:0 0 0 1px rgba(255,255,255,.045),0 0 18px var(--glow)}
+.ring::before{content:"";position:absolute;inset:-2%;border-radius:50%;pointer-events:none;background:repeating-conic-gradient(from 7deg,rgba(255,255,255,.16) 0deg .3deg,transparent .3deg 8deg);opacity:.58;animation:none;mix-blend-mode:screen}
+.ring::after{content:"";position:absolute;inset:-5%;border-radius:50%;pointer-events:none;border:1px solid color-mix(in srgb,var(--nebula) 72%,transparent);box-shadow:0 0 20px var(--glow);opacity:.82;animation:none}
+.ring:hover,.ring.active{filter:brightness(1.16) saturate(1.1)}
+.ring-structure{--size:100%;--c:#12658c;--nebula:#45c9ff;--glow:rgba(30,163,225,.42);--z:1}
+.ring-continuity{--size:78%;--c:#b27d19;--nebula:#ffe08a;--glow:rgba(230,176,45,.4);--z:2}
+.ring-experience{--size:55%;--c:#6c2990;--nebula:#dc76ff;--glow:rgba(164,67,219,.42);--z:3}
+.ring-reference{--size:32%;--c:#9b3d30;--nebula:#ff866d;--glow:rgba(208,76,57,.4);--z:4}
+.ring-share{--size:14%;--c:#0d8458;--nebula:#68ffc2;--glow:rgba(33,192,126,.42);--z:5}
+.ring-label{position:absolute;top:50%;width:clamp(30px,6.8vw,44px);height:clamp(30px,6.8vw,44px);padding:6px;min-width:0;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(2,8,15,.72);box-shadow:0 0 12px var(--glow),inset 0 0 8px rgba(255,255,255,.06);pointer-events:none;z-index:3}
 .ring-label span{display:none}
-.ring-label .label-icon{
-  width:100%;
-  height:100%;
-  flex:none;
-  filter:drop-shadow(0 0 5px rgba(255,255,255,.7));
-}
-.ring-share .ring-label{
-  width:clamp(28px,6.2vw,39px);
-  height:clamp(28px,6.2vw,39px);
-}
-.core{
-  z-index:8;
-}
-.center-label{
-  z-index:10;
-}
-.info{
-  background:linear-gradient(180deg,rgba(3,13,25,.62),rgba(1,6,13,.84));
-  border-color:rgba(117,192,239,.16);
-  box-shadow:0 18px 46px rgba(0,0,0,.44),inset 0 1px 0 rgba(255,255,255,.035);
-  backdrop-filter:blur(16px) saturate(1.2);
-}
+.ring-label .label-icon{width:100%;height:100%;flex:none;filter:drop-shadow(0 0 3px rgba(255,255,255,.55))}
+.ring-structure .ring-label,.ring-experience .ring-label,.ring-share .ring-label{left:calc(50% - (var(--size) / 2));right:auto}
+.ring-continuity .ring-label,.ring-reference .ring-label{right:calc(50% - (var(--size) / 2));left:auto}
+.ring-share .ring-label{width:clamp(27px,6vw,38px);height:clamp(27px,6vw,38px)}
+.core,.center-label{display:none}
+.info{background:linear-gradient(180deg,rgba(3,13,25,.64),rgba(1,6,13,.84));border-color:rgba(117,192,239,.15);box-shadow:0 14px 34px rgba(0,0,0,.4);backdrop-filter:none}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 
 
 </style>
@@ -507,8 +370,6 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
             
           </span>
         </button>
-        <button class="core" id="core" aria-label="نگرش نوین"></button>
-        <div class="center-label" id="center-label"><strong>نگرش نوین</strong><small>Modern Outlook</small></div>
       </div>
     </div>
 
@@ -793,8 +654,6 @@ const infoTitle=document.getElementById('info-title');
 const infoText=document.getElementById('info-text');
 const infoTap=document.getElementById('info-tap');
 const rings=[...document.querySelectorAll('.ring')];
-const core=document.getElementById('core');
-const centerLabel=document.getElementById('center-label');
 
 function tone(freq=620){
   try{
@@ -813,13 +672,11 @@ function tone(freq=620){
 function setInfo(id){
   activeId=id;
   rings.forEach(r=>r.classList.toggle('active',r.dataset.id===id));
-  core.classList.toggle('active',id==='core');
   const d=copy[uiLang][id];
   infoTitle.textContent=d.title;
   infoText.textContent=d.text;
   infoTap.textContent=d.tap;
   info.classList.toggle('reference',id==='reference');
-  centerLabel.style.opacity=id==='core'?'1':'0';
   tone({structure:520,continuity:620,experience:720,reference:820,share:920,core:1040}[id]||620);
 }
 
@@ -861,7 +718,6 @@ document.getElementById('rings').addEventListener('click',e=>{
   if(id==='reference') setTimeout(openBook,220);
 });
 
-core.addEventListener('click',()=>setInfo('core'));
 
 document.getElementById('fullscreen').addEventListener('click',()=>{
   if(!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(()=>{});
@@ -968,7 +824,7 @@ document.getElementById('book-en').addEventListener('click',()=>{
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
   if(bookPage.style.display==='block')return;
-  const order=['structure','continuity','experience','reference','share','core'];
+  const order=['structure','continuity','experience','reference','share'];
   const idx=order.indexOf(activeId);
   if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
   if(['ArrowUp','ArrowLeft'].includes(e.key)){e.preventDefault();setInfo(order[(idx-1+order.length)%order.length])}
