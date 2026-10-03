@@ -4,7 +4,7 @@
   if (window.SiteAudio) return;
 
   const KEY = 'siteaudio:enabled';
-  const defaults = { enabled: true, volume: 0.22 };
+  const defaults = { enabled: true, volume: 0.42 };
   let enabled = defaults.enabled;
   let ctx = null;
   let master = null;
@@ -52,24 +52,60 @@
     const c = getContext();
     if (!c || !master) return;
     try {
-      if (c.state !== 'running') {
-        unlock();
-        return;
-      }
+      if (c.state !== 'running') { unlock(); return; }
+
       const now = c.currentTime;
-      const o = c.createOscillator();
-      const g = c.createGain();
-      const f = cue === 'back' ? 220 : cue === 'success' ? 660 : 440;
-      o.type = cue === 'error' ? 'triangle' : 'sine';
-      o.frequency.setValueAtTime(f, now);
-      o.frequency.exponentialRampToValueAtTime(f * (cue === 'back' ? 0.72 : 1.18), now + 0.12);
-      g.gain.setValueAtTime(0.0001, now);
-      g.gain.exponentialRampToValueAtTime(0.22, now + 0.008);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
-      o.connect(g);
-      g.connect(master);
-      o.start(now);
-      o.stop(now + 0.18);
+      const profiles = {
+        tap:   { notes: [196, 293.66], length: 0.24, peak: 0.16 },
+        open:  { notes: [174.61, 261.63, 392.00], length: 0.72, peak: 0.13 },
+        back:  { notes: [293.66, 220.00, 146.83], length: 0.38, peak: 0.15 },
+        success: { notes: [261.63, 329.63, 392.00, 523.25], length: 0.58, peak: 0.14 },
+        error: { notes: [155.56, 130.81], length: 0.32, peak: 0.12 }
+      };
+      const p = profiles[cue] || profiles.tap;
+
+      p.notes.forEach((freq, i) => {
+        const o = c.createOscillator();
+        const g = c.createGain();
+        const filter = c.createBiquadFilter();
+
+        o.type = i === 0 ? 'sine' : 'triangle';
+        o.frequency.setValueAtTime(freq, now);
+        if (cue === 'error') o.frequency.exponentialRampToValueAtTime(freq * 0.82, now + p.length);
+        else o.frequency.exponentialRampToValueAtTime(freq * 0.985, now + p.length);
+
+        filter.type = 'lowpass';
+        filter.frequency.value = cue === 'open' ? 1800 : 2600;
+        filter.Q.value = 0.7;
+
+        const delay = i * 0.045;
+        const start = now + delay;
+        const end = start + p.length;
+        g.gain.setValueAtTime(0.0001, start);
+        g.gain.exponentialRampToValueAtTime(p.peak, start + 0.018);
+        g.gain.exponentialRampToValueAtTime(0.0001, end);
+
+        o.connect(filter);
+        filter.connect(g);
+        g.connect(master);
+        o.start(start);
+        o.stop(end + 0.03);
+      });
+
+      // A very quiet high harmonic gives the interface a glassy, mysterious tail.
+      if (cue === 'open' || cue === 'success') {
+        const shimmer = c.createOscillator();
+        const sg = c.createGain();
+        shimmer.type = 'sine';
+        shimmer.frequency.setValueAtTime(1046.5, now + 0.12);
+        sg.gain.setValueAtTime(0.0001, now + 0.12);
+        sg.gain.exponentialRampToValueAtTime(0.035, now + 0.18);
+        sg.gain.exponentialRampToValueAtTime(0.0001, now + 1.15);
+        shimmer.connect(sg);
+        sg.connect(master);
+        shimmer.start(now + 0.12);
+        shimmer.stop(now + 1.18);
+      }
     } catch (_) {}
   }
 
