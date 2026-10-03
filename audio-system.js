@@ -21,7 +21,7 @@ const cues={
 function save(){try{localStorage.setItem(KEY,JSON.stringify({enabled,volume}))}catch(_){}}
 function ensure(){
  if(!AC)return null;
- if(!ctx){ctx=new AC({latencyHint:'interactive'});const comp=ctx.createDynamicsCompressor();comp.threshold.value=-18;comp.knee.value=16;comp.ratio.value=4;comp.attack.value=.003;comp.release.value=.18;master=ctx.createGain();master.gain.value=enabled?volume:0;master.connect(comp).connect(ctx.destination)}
+ if(!ctx){ctx=new AC();const comp=ctx.createDynamicsCompressor();comp.threshold.value=-18;comp.knee.value=16;comp.ratio.value=4;comp.attack.value=.003;comp.release.value=.18;master=ctx.createGain();master.gain.value=enabled?volume:0;master.connect(comp).connect(ctx.destination)}
  return ctx
 }
 async function unlock(){const c=ensure();if(!c)return false;try{if(c.state==='suspended')await c.resume();return c.state==='running'}catch(_){return false}}
@@ -61,7 +61,9 @@ function registerCue(name,definition){if(name&&definition)cues[name]={...definit
 function registerSample(name,url){if(name&&url)state.samples.set(name,{url,buffer:null})}
 function ui(){document.querySelectorAll('[data-audio-toggle]').forEach(b=>{b.setAttribute('aria-pressed',String(enabled));b.setAttribute('aria-label',enabled?'خاموش کردن صدا':'روشن کردن صدا');b.textContent=enabled?'◖))':'×))'})}
 window.SiteAudio=Object.freeze({play,unlock,toggle,setEnabled,setVolume,registerCue,registerSample,isEnabled:()=>enabled,getVolume:()=>volume});
-document.addEventListener('pointerdown',()=>unlock(),{capture:true,passive:true});
-document.addEventListener('keydown',()=>unlock(),{capture:true,passive:true});
+document.addEventListener('pointerdown',()=>{unlock();},{capture:true,passive:true});
+document.addEventListener('touchstart',()=>{unlock();},{capture:true,passive:true});
+document.addEventListener('keydown',()=>{unlock();},{capture:true,passive:true});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&ctx&&ctx.state==='suspended')unlock();});
 document.addEventListener('DOMContentLoaded',ui);
 })();
