@@ -214,26 +214,6 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   line-height:1.2;
 }
 
-/* Titles sit on the horizontal diameter, alternating left/right by territory. */
-.ring-structure .ring-label,
-.ring-experience .ring-label,
-.ring-share .ring-label{
-  right:calc(100% + 12px);
-}
-.ring-continuity .ring-label,
-.ring-reference .ring-label{
-  left:calc(100% + 12px);
-}
-.ring-structure .ring-label,
-.ring-experience .ring-label,
-.ring-share .ring-label{
-  flex-direction:row-reverse;
-}
-.ring-continuity .ring-label,
-.ring-reference .ring-label{
-  flex-direction:row;
-}
-
 .center-label{
   position:absolute;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);
   width:34%;text-align:center;color:#fff;text-shadow:0 2px 9px #000;
@@ -310,35 +290,35 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   .app{border-radius:4px}
 }
 
-/* ===== Modern Outlook — Cosmic Home Redesign ===== */
+/* ===== Modern Outlook — Cosmic Territory System ===== */
 .home-page{
   background:
-    radial-gradient(ellipse at 50% 47%, rgba(20,100,155,.18) 0%, rgba(5,30,52,.10) 28%, transparent 55%),
-    radial-gradient(circle at 18% 29%, rgba(105,54,210,.20) 0%, transparent 27%),
-    radial-gradient(circle at 84% 29%, rgba(210,157,46,.18) 0%, transparent 28%),
-    radial-gradient(circle at 18% 78%, rgba(191,62,42,.17) 0%, transparent 28%),
-    radial-gradient(circle at 83% 78%, rgba(36,168,116,.19) 0%, transparent 28%),
-    linear-gradient(145deg,#01050d 0%,#031225 38%,#020914 68%,#01040a 100%);
+    radial-gradient(ellipse at 50% 45%,rgba(22,111,173,.18) 0%,rgba(4,31,53,.08) 34%,transparent 61%),
+    radial-gradient(circle at 15% 25%,rgba(103,62,220,.17),transparent 27%),
+    radial-gradient(circle at 86% 26%,rgba(224,170,54,.15),transparent 27%),
+    radial-gradient(circle at 14% 79%,rgba(207,69,48,.15),transparent 28%),
+    radial-gradient(circle at 86% 80%,rgba(34,177,121,.16),transparent 28%),
+    linear-gradient(145deg,#01040b 0%,#031426 40%,#020914 72%,#010308 100%);
 }
 .app::before{
   background:
-    radial-gradient(ellipse at 50% 50%,rgba(12,83,128,.22) 0%,rgba(2,19,34,.08) 38%,transparent 65%),
-    radial-gradient(circle at 50% 50%,transparent 45%,rgba(0,0,0,.72) 88%);
+    radial-gradient(ellipse at 50% 48%,rgba(17,92,143,.22),rgba(2,18,32,.06) 40%,transparent 68%),
+    radial-gradient(circle at 50% 50%,transparent 44%,rgba(0,0,0,.76) 91%);
 }
 .app::after{
   background:
-    radial-gradient(circle at 50% 48%,transparent 31%,rgba(0,0,0,.08) 58%,rgba(0,0,0,.72) 100%),
-    linear-gradient(180deg,rgba(0,0,0,.24),transparent 18%,transparent 82%,rgba(0,0,0,.46));
+    radial-gradient(circle at 50% 47%,transparent 29%,rgba(0,0,0,.08) 56%,rgba(0,0,0,.72) 100%),
+    linear-gradient(180deg,rgba(0,0,0,.22),transparent 18%,transparent 80%,rgba(0,0,0,.48));
 }
 .atmosphere{
-  opacity:.9;
+  opacity:.92;
   background:
-    radial-gradient(circle at 8% 12%,rgba(255,255,255,.85) 0 1px,transparent 1.6px),
-    radial-gradient(circle at 22% 38%,rgba(106,190,255,.72) 0 1px,transparent 1.7px),
-    radial-gradient(circle at 41% 13%,rgba(255,220,137,.72) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 63% 23%,rgba(255,255,255,.65) 0 1px,transparent 1.6px),
-    radial-gradient(circle at 81% 14%,rgba(150,208,255,.75) 0 1px,transparent 1.8px),
-    radial-gradient(circle at 92% 42%,rgba(255,231,170,.72) 0 1px,transparent 1.7px),
+    radial-gradient(circle at 7% 11%,rgba(255,255,255,.88) 0 1px,transparent 1.6px),
+    radial-gradient(circle at 22% 37%,rgba(106,190,255,.72) 0 1px,transparent 1.7px),
+    radial-gradient(circle at 42% 13%,rgba(255,220,137,.7) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 63% 23%,rgba(255,255,255,.66) 0 1px,transparent 1.6px),
+    radial-gradient(circle at 82% 14%,rgba(150,208,255,.76) 0 1px,transparent 1.8px),
+    radial-gradient(circle at 93% 43%,rgba(255,231,170,.7) 0 1px,transparent 1.7px),
     radial-gradient(circle at 14% 68%,rgba(214,133,255,.7) 0 1px,transparent 1.7px),
     radial-gradient(circle at 39% 83%,rgba(255,160,113,.62) 0 1px,transparent 1.6px),
     radial-gradient(circle at 67% 76%,rgba(111,255,194,.68) 0 1px,transparent 1.7px),
@@ -349,82 +329,129 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .rings{
   width:88%;
   transform:translateY(-2%);
-  filter:drop-shadow(0 0 22px rgba(52,151,220,.10));
+  filter:drop-shadow(0 0 24px rgba(52,151,220,.12));
+  isolation:isolate;
 }
 .ring{
+  position:absolute;
+  width:var(--size);
+  height:var(--size);
+  border:0;
+  border-radius:50%;
+  cursor:pointer;
+  appearance:none;
+  -webkit-tap-highlight-color:transparent;
   background:
-    radial-gradient(circle at 30% 22%,rgba(255,255,255,.95) 0 .16%,transparent .48%),
-    radial-gradient(circle at 71% 30%,rgba(255,255,255,.76) 0 .14%,transparent .45%),
-    radial-gradient(circle at 77% 68%,rgba(255,255,255,.72) 0 .13%,transparent .43%),
-    radial-gradient(circle at 24% 74%,rgba(255,255,255,.64) 0 .12%,transparent .42%),
-    repeating-radial-gradient(circle at 50% 50%,transparent 0 43%,rgba(255,255,255,.025) 43.3% 43.8%,transparent 44% 100%),
-    radial-gradient(ellipse at 50% 50%,transparent 0 55%,rgba(0,0,0,.04) 55.5%,var(--c) 58%,var(--nebula) 63%,rgba(255,255,255,.24) 64%,transparent 69%),
-    radial-gradient(circle at 39% 36%,color-mix(in srgb,var(--nebula) 24%,transparent),transparent 34%),
-    radial-gradient(circle at 66% 64%,color-mix(in srgb,var(--c) 24%,transparent),transparent 42%),
+    radial-gradient(circle at 29% 21%,rgba(255,255,255,.95) 0 .17%,transparent .52%),
+    radial-gradient(circle at 72% 30%,rgba(255,255,255,.78) 0 .15%,transparent .48%),
+    radial-gradient(circle at 77% 69%,rgba(255,255,255,.72) 0 .14%,transparent .46%),
+    radial-gradient(circle at 23% 75%,rgba(255,255,255,.64) 0 .13%,transparent .44%),
+    radial-gradient(ellipse at 50% 50%,transparent 0 51%,rgba(0,0,0,.05) 52%,var(--c) 54%,var(--nebula) 63%,rgba(255,255,255,.26) 65%,var(--c) 68%,transparent 70%),
+    radial-gradient(circle at 38% 35%,color-mix(in srgb,var(--nebula) 23%,transparent),transparent 35%),
+    radial-gradient(circle at 67% 65%,color-mix(in srgb,var(--c) 24%,transparent),transparent 43%),
     transparent;
   box-shadow:
-    0 0 0 1px rgba(255,255,255,.045),
-    0 0 18px var(--glow),
-    0 0 54px color-mix(in srgb,var(--glow) 58%,transparent),
-    inset 0 0 24px rgba(255,255,255,.035);
-  border:0;
+    0 0 0 1px rgba(255,255,255,.055),
+    0 0 20px var(--glow),
+    0 0 62px color-mix(in srgb,var(--glow) 58%,transparent),
+    inset 0 0 26px rgba(255,255,255,.04);
+  transition:filter .35s var(--ease),transform .35s var(--ease),box-shadow .35s var(--ease);
+  z-index:var(--z);
+  animation:nebulaDrift var(--orbit-speed,18s) ease-in-out infinite alternate;
+  overflow:visible;
+  pointer-events:none;
 }
 .ring::before{
-  inset:-2.2%;
+  content:"";
+  position:absolute;
+  inset:-2.5%;
+  border-radius:50%;
+  pointer-events:none;
   background:
-    repeating-conic-gradient(from 0deg,rgba(255,255,255,.22) 0deg .45deg,transparent .45deg 7deg),
-    radial-gradient(ellipse at 34% 26%,rgba(255,255,255,.18),transparent 23%),
-    radial-gradient(ellipse at 68% 72%,var(--nebula),transparent 29%);
-  opacity:.68;
-  filter:blur(.25px);
+    repeating-conic-gradient(from 7deg,rgba(255,255,255,.23) 0deg .42deg,transparent .42deg 6.5deg),
+    radial-gradient(ellipse at 34% 26%,rgba(255,255,255,.2),transparent 24%),
+    radial-gradient(ellipse at 68% 72%,var(--nebula),transparent 30%);
+  mix-blend-mode:screen;
+  opacity:.72;
+  filter:blur(.2px);
   animation:starField var(--star-speed,24s) linear infinite;
 }
 .ring::after{
-  inset:-5%;
-  border:1.5px solid color-mix(in srgb,var(--nebula) 70%,transparent);
-  box-shadow:
-    0 0 14px var(--glow),
-    0 0 38px color-mix(in srgb,var(--glow) 62%,transparent),
-    inset 0 0 12px color-mix(in srgb,var(--nebula) 28%,transparent);
-  opacity:.9;
-}
-.ring-structure{--size:100%;--c:#12658c;--nebula:#45c9ff;--glow:rgba(30,163,225,.48);--z:1;--orbit-speed:22s;--star-speed:31s}
-.ring-continuity{--size:80%;--c:#b27d19;--nebula:#ffe08a;--glow:rgba(230,176,45,.46);--z:2;--orbit-speed:19s;--star-speed:27s}
-.ring-experience{--size:60%;--c:#6c2990;--nebula:#dc76ff;--glow:rgba(164,67,219,.48);--z:3;--orbit-speed:17s;--star-speed:23s}
-.ring-reference{--size:40%;--c:#9b3d30;--nebula:#ff866d;--glow:rgba(208,76,57,.46);--z:4;--orbit-speed:15s;--star-speed:21s}
-.ring-share{--size:21%;--c:#0d8458;--nebula:#68ffc2;--glow:rgba(33,192,126,.48);--z:5;--orbit-speed:13s;--star-speed:19s}
-.ring-label{
-  top:50%;
-  width:clamp(30px,7vw,44px);
-  min-width:0;
-  height:clamp(30px,7vw,44px);
-  padding:6px;
-  border:1px solid rgba(255,255,255,.22);
+  content:"";
+  position:absolute;
+  inset:-5.8%;
   border-radius:50%;
-  background:rgba(2,8,15,.48);
-  backdrop-filter:blur(5px);
-  box-shadow:0 0 14px color-mix(in srgb,var(--glow) 55%,transparent),inset 0 0 10px rgba(255,255,255,.06);
+  pointer-events:none;
+  border:1.5px solid color-mix(in srgb,var(--nebula) 74%,transparent);
+  box-shadow:
+    0 0 15px var(--glow),
+    0 0 42px color-mix(in srgb,var(--glow) 62%,transparent),
+    inset 0 0 13px color-mix(in srgb,var(--nebula) 30%,transparent);
+  opacity:.92;
+  animation:ringPulse 4.8s ease-in-out infinite;
+}
+.ring:hover{
+  filter:brightness(1.22) saturate(1.18);
+}
+.ring.active{
+  filter:brightness(1.3) saturate(1.22);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.16),
+    0 0 48px var(--glow),
+    0 0 105px color-mix(in srgb,var(--glow) 50%,transparent),
+    inset 0 0 32px rgba(255,255,255,.16);
+}
+.ring-structure{--size:100%;--c:#12658c;--nebula:#45c9ff;--glow:rgba(30,163,225,.5);--z:1;--orbit-speed:22s;--star-speed:31s}
+.ring-continuity{--size:78%;--c:#b27d19;--nebula:#ffe08a;--glow:rgba(230,176,45,.48);--z:2;--orbit-speed:19s;--star-speed:27s}
+.ring-experience{--size:55%;--c:#6c2990;--nebula:#dc76ff;--glow:rgba(164,67,219,.5);--z:3;--orbit-speed:17s;--star-speed:23s}
+.ring-reference{--size:32%;--c:#9b3d30;--nebula:#ff866d;--glow:rgba(208,76,57,.48);--z:4;--orbit-speed:15s;--star-speed:21s}
+.ring-share{--size:14%;--c:#0d8458;--nebula:#68ffc2;--glow:rgba(33,192,126,.5);--z:5;--orbit-speed:13s;--star-speed:19s}
+.ring-label{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:clamp(31px,7vw,45px);
+  min-width:0;
+  height:clamp(31px,7vw,45px);
+  padding:6px;
+  transform:translate(-50%,-50%);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,255,255,.25);
+  border-radius:50%;
+  background:rgba(2,8,15,.54);
+  backdrop-filter:blur(6px);
+  box-shadow:
+    0 0 16px color-mix(in srgb,var(--glow) 60%,transparent),
+    inset 0 0 11px rgba(255,255,255,.07);
+  pointer-events:none;
+  z-index:3;
 }
 .ring-label span{display:none}
-.ring-label .label-icon{width:100%;height:100%;filter:drop-shadow(0 0 5px rgba(255,255,255,.65))}
-.ring-structure .ring-label,
-.ring-experience .ring-label,
-.ring-share .ring-label{right:auto;left:50%;transform:translate(-50%,-50%);}
-.ring-continuity .ring-label,
-.ring-reference .ring-label{left:50%;transform:translate(-50%,-50%);}
-.ring-structure .ring-label,
-.ring-experience .ring-label,
-.ring-share .ring-label,
-.ring-continuity .ring-label,
-.ring-reference .ring-label{flex-direction:row;}
-.ring-share .ring-label{width:clamp(27px,6vw,38px);height:clamp(27px,6vw,38px);}
+.ring-label .label-icon{
+  width:100%;
+  height:100%;
+  flex:none;
+  filter:drop-shadow(0 0 5px rgba(255,255,255,.7));
+}
+.ring-share .ring-label{
+  width:clamp(28px,6.2vw,39px);
+  height:clamp(28px,6.2vw,39px);
+}
+.core{
+  z-index:8;
+}
+.center-label{
+  z-index:10;
+}
 .info{
-  background:linear-gradient(180deg,rgba(3,13,25,.62),rgba(1,6,13,.82));
+  background:linear-gradient(180deg,rgba(3,13,25,.62),rgba(1,6,13,.84));
   border-color:rgba(117,192,239,.16);
-  box-shadow:0 18px 46px rgba(0,0,0,.42),inset 0 1px 0 rgba(255,255,255,.035);
+  box-shadow:0 18px 46px rgba(0,0,0,.44),inset 0 1px 0 rgba(255,255,255,.035);
   backdrop-filter:blur(16px) saturate(1.2);
 }
-.topbar{z-index:30}
+
 
 </style>
 </head>
@@ -796,12 +823,42 @@ function setInfo(id){
   tone({structure:520,continuity:620,experience:720,reference:820,share:920,core:1040}[id]||620);
 }
 
+// Pointer selection is handled by the annular territories, so nested rings never steal each other's clicks.
 rings.forEach(r=>{
+  r.dataset.hitRadius = ({
+    structure:'25.2,35.8',
+    continuity:'19.0,26.8',
+    experience:'13.4,19.2',
+    reference:'7.7,11.8',
+    share:'2.7,5.2'
+  })[r.dataset.id] || '';
   r.addEventListener('click',()=>{
     const id=r.dataset.id;
     setInfo(id);
     if(id==='reference') setTimeout(openBook,220);
   });
+});
+
+document.getElementById('rings').addEventListener('click',e=>{
+  if(e.target.closest('.core')) return;
+  const rect=e.currentTarget.getBoundingClientRect();
+  const x=(e.clientX-rect.left)/rect.width*100;
+  const y=(e.clientY-rect.top)/rect.height*100;
+  const radius=Math.hypot(x-50,y-50);
+  let selected=null;
+  let best=Infinity;
+  rings.forEach(r=>{
+    const [inner,outer]=(r.dataset.hitRadius||'').split(',').map(Number);
+    if(radius>=inner && radius<=outer){
+      const center=(inner+outer)/2;
+      const d=Math.abs(radius-center);
+      if(d<best){best=d;selected=r;}
+    }
+  });
+  if(!selected) return;
+  const id=selected.dataset.id;
+  setInfo(id);
+  if(id==='reference') setTimeout(openBook,220);
 });
 
 core.addEventListener('click',()=>setInfo('core'));
