@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fa" dir="rtl" translate="no">
+<html lang="fa" dir="rtl" translate="no" data-sound-theme="blue">
 <head>
 <meta charset="UTF-8">
 <meta name="google" content="notranslate"><meta name="i18n-page" content="home"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -11,6 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/site.css">
+<script src="site-audio.js" defer></script>
 </head>
 <body>
 <main class="app" id="app">
@@ -25,6 +26,7 @@
 
   <section class="page home-page" id="home-page" aria-label="نگرش نوین">
     <header class="topbar">
+      <button class="site-sound-toggle home-sound-toggle" type="button" data-sound-toggle data-sound="none" data-i18n-aria="labels.sound" data-i18n-title="labels.sound" aria-label="صدا" title="صدا"><span class="sound-glyph" aria-hidden="true">♫</span><span class="sound-label" data-i18n="labels.sound">صدا</span></button>
       <a class="icon-btn" id="x-social" href="https://x.com/_thekazem" target="_blank" rel="noopener noreferrer" title="X / Twitter" aria-label="X / Twitter">𝕏</a>
     </header>
 
@@ -41,28 +43,28 @@
         </defs>
         <circle cx="500" cy="500" r="490" fill="#010405"/>
         <circle cx="500" cy="500" r="470" fill="none" stroke="#12384b" stroke-width="3" opacity=".25"/>
-        <g class="realm" data-id="structure" id="realm-structure" role="button" aria-label="ساختار تالار">
+        <g class="realm" data-id="structure" data-sound-theme="blue" id="realm-structure" role="button" aria-label="ساختار تالار">
           <circle cx="500" cy="500" r="445" fill="url(#blueGradient)" opacity=".94"/>
           <circle class="ring-border" cx="500" cy="500" r="445" stroke="#0879b8"/>
           <circle class="ring-border" cx="500" cy="500" r="438" stroke="#0c5d82" opacity=".35"/>
           
         </g>
-        <g class="realm" data-id="continuity" id="realm-continuity" role="button" aria-label="تداوم عالم">
+        <g class="realm" data-id="continuity" data-sound-theme="yellow" id="realm-continuity" role="button" aria-label="تداوم عالم">
           <circle cx="500" cy="500" r="365" fill="url(#goldGradient)" opacity=".96"/>
           <circle class="ring-border" cx="500" cy="500" r="365" stroke="#e1b72b"/>
           
         </g>
-        <g class="realm" data-id="experience" id="realm-experience" role="button" aria-label="قلمرو تجربه">
+        <g class="realm" data-id="experience" data-sound-theme="purple" id="realm-experience" role="button" aria-label="قلمرو تجربه">
           <circle cx="500" cy="500" r="285" fill="url(#purpleGradient)" opacity=".97"/>
           <circle class="ring-border" cx="500" cy="500" r="285" stroke="#b653ff"/>
           
         </g>
-        <g class="realm" data-id="reference" id="realm-reference" role="button" aria-label="مرجع تقلید">
+        <g class="realm" data-id="reference" data-sound-theme="red" id="realm-reference" role="button" aria-label="مرجع تقلید">
           <circle cx="500" cy="500" r="205" fill="url(#redGradient)" opacity=".98"/>
           <circle class="ring-border" cx="500" cy="500" r="205" stroke="#e94d43"/>
           
         </g>
-        <g class="realm" data-id="share" id="realm-share" role="button" aria-label="اقتصاد سهم">
+        <g class="realm" data-id="share" data-sound-theme="green" id="realm-share" role="button" aria-label="اقتصاد سهم">
           <circle cx="500" cy="500" r="125" fill="url(#greenGradient)" opacity=".98"/>
           <circle class="ring-border" cx="500" cy="500" r="125" stroke="#1bd58a"/>
           
@@ -81,7 +83,7 @@
     </section>
   </section>
 
-  <div class="logo-viewer" id="logo-viewer" role="dialog" aria-modal="true" aria-label="نگرش نوین"><button class="logo-viewer-close" id="logo-viewer-close" type="button" aria-label="بستن">×</button><div class="logo-art" aria-label="نگرش نوین — Modern Outlook"><img src="modern-outlook-logo.svg" alt="نگرش نوین — Modern Outlook"></div></div>
+  <div class="logo-viewer" id="logo-viewer" role="dialog" aria-modal="true" aria-label="نگرش نوین"><button class="logo-viewer-close" id="logo-viewer-close" type="button" data-sound="none" aria-label="بستن">×</button><div class="logo-art" aria-label="نگرش نوین — Modern Outlook"><img src="modern-outlook-logo.svg" alt="نگرش نوین — Modern Outlook"></div></div>
 
   <section class="page share-page" id="share-page" aria-label="اقتصاد سهم">
 <div class="share-space" aria-hidden="true">
@@ -93,7 +95,7 @@
 <div class="share-coin c1"></div><div class="share-coin c2"></div><div class="share-coin c3"></div>
 <div class="share-terrace"></div>
 </div>
-<header class="share-head"><div class="share-title"><strong data-i18n="labels.share">اقتصاد سهم</strong><span>Share Economy</span></div><button class="share-close" id="share-close" aria-label="بازگشت">✕</button></header><button class="share-story-action" id="share-human-machines">انسان و ماشین‌هایش<small>Humanity and Its Machines</small></button>
+<header class="share-head"><div class="share-title"><strong data-i18n="labels.share">اقتصاد سهم</strong><span>Share Economy</span></div><button class="share-close" id="share-close" aria-label="بازگشت" data-sound="back">✕</button></header><button class="share-story-action" id="share-human-machines" data-sound="open">انسان و ماشین‌هایش<small>Humanity and Its Machines</small></button>
 </section>
 <section class="page experience-page" id="experience-page" aria-label="قلمرو تجربه">
 <div class="experience-space" aria-hidden="true">
@@ -105,8 +107,8 @@
 <div class="experience-screen s1"></div><div class="experience-screen s2"></div><div class="experience-screen s3"></div><div class="experience-screen s4"></div>
 <div class="experience-figure"></div><div class="experience-platform"></div>
 </div>
-<header class="experience-head"><div class="experience-title"><strong data-i18n="labels.experience">قلمرو تجربه</strong><span>Realm of Experience</span></div><button class="experience-close" id="experience-close" aria-label="بازگشت">✕</button></header>
-<div class="experience-actions"><button class="experience-action" id="experience-detect" type="button" data-i18n="paragraphMachine.recognize">بازشناسی</button></div>
+<header class="experience-head"><div class="experience-title"><strong data-i18n="labels.experience">قلمرو تجربه</strong><span>Realm of Experience</span></div><button class="experience-close" id="experience-close" aria-label="بازگشت" data-sound="back">✕</button></header>
+<div class="experience-actions"><button class="experience-action" id="experience-detect" type="button" data-i18n="paragraphMachine.recognize" data-sound="open">بازشناسی</button></div>
 </section>
 <section class="page continuity-page" id="continuity-page" aria-label="تداوم عالم">
 <div class="continuity-space" aria-hidden="true">
@@ -117,8 +119,8 @@
 <div class="continuity-ring r1"></div><div class="continuity-ring r2"></div><div class="continuity-ring r3"></div>
 <div class="continuity-terrace"></div>
 </div>
-<header class="continuity-head"><div class="continuity-title"><strong data-i18n="labels.continuity">تداوم عالم</strong><span>Continuity of the Universe</span></div><button class="continuity-close" id="continuity-close" aria-label="بازگشت">✕</button></header>
-<div class="continuity-actions"><button class="continuity-action" id="continuity-shahnameh" type="button"><span data-i18n="labels.shahnameh">شاهنامه‌خوانی</span><small data-i18n="labels.shahnamehEn">Shahnameh Reading</small></button></div>
+<header class="continuity-head"><div class="continuity-title"><strong data-i18n="labels.continuity">تداوم عالم</strong><span>Continuity of the Universe</span></div><button class="continuity-close" id="continuity-close" aria-label="بازگشت" data-sound="back">✕</button></header>
+<div class="continuity-actions"><button class="continuity-action" id="continuity-shahnameh" type="button" data-sound="open"><span data-i18n="labels.shahnameh">شاهنامه‌خوانی</span><small data-i18n="labels.shahnamehEn">Shahnameh Reading</small></button></div>
 </section>
 <section class="page structure-page" id="structure-page" aria-label="ساختار تالار">
 <div class="structure-space" aria-hidden="true">
@@ -126,19 +128,19 @@
 <div class="structure-column c1"></div><div class="structure-column c2"></div><div class="structure-column c3"></div><div class="structure-column c4"></div>
 <div class="structure-banner b1"></div><div class="structure-banner b2"></div><div class="structure-spire"></div><div class="structure-light"></div><div class="structure-floor"></div>
 </div>
-<header class="structure-head"><div class="structure-title"><strong data-i18n="labels.structure">ساختار تالار</strong><span>Structure of the Hall</span></div><button class="structure-close" id="structure-close" aria-label="بازگشت">✕</button></header>
+<header class="structure-head"><div class="structure-title"><strong data-i18n="labels.structure">ساختار تالار</strong><span>Structure of the Hall</span></div><button class="structure-close" id="structure-close" aria-label="بازگشت" data-sound="back">✕</button></header>
 </section>
 <section class="page reference-page" id="reference-page" aria-label="مرجع تقلید">
     <div class="reference-scene" aria-hidden="true"><div class="ref-ring r1"></div><div class="ref-ring r2"></div><div class="ref-ring r3"></div><div class="ref-ring r4"></div><div class="ref-castle"></div><div class="ref-platform p1"></div><div class="ref-platform p2"></div><div class="ref-platform p3"></div><div class="ref-beam b1"></div><div class="ref-beam b2"></div><div class="ref-beam b3"></div><div class="ref-observer"></div></div>
-    <header class="reference-head"><div class="reference-title"><strong data-i18n="labels.reference">مرجع تقلید</strong><span>Reference of Imitation</span></div><button class="reference-close" id="reference-close" aria-label="بازگشت">✕</button></header>
-    <div class="reference-actions"><button class="reference-action" id="ref-forgers">جاعلان تقلید<small>The Forgers of Imitation</small></button><button class="reference-action" id="ref-treatise">رساله فلسفی<small>A Philosophical Treatise</small></button><button class="reference-action" id="ref-observation">سرزمین مشاهده<small>The Land of Observation</small></button><button class="reference-action" id="ref-equivalence" type="button"><span data-i18n="paragraphMachine.equivalence">هم‌سنگی</span><small>Equivalence</small></button></div>
+    <header class="reference-head"><div class="reference-title"><strong data-i18n="labels.reference">مرجع تقلید</strong><span>Reference of Imitation</span></div><button class="reference-close" id="reference-close" aria-label="بازگشت" data-sound="back">✕</button></header>
+    <div class="reference-actions"><button class="reference-action" id="ref-forgers" data-sound="open">جاعلان تقلید<small>The Forgers of Imitation</small></button><button class="reference-action" id="ref-treatise" data-sound="open">رساله فلسفی<small>A Philosophical Treatise</small></button><button class="reference-action" id="ref-observation" data-sound="open">سرزمین مشاهده<small>The Land of Observation</small></button><button class="reference-action" id="ref-equivalence" type="button" data-sound="open"><span data-i18n="paragraphMachine.equivalence">هم‌سنگی</span><small>Equivalence</small></button></div>
   </section>
 
   <section class="page paragraph-page" id="paragraph-page" aria-label="ماشین پاراگراف">
     <div class="paragraph-workspace">
       <header class="paragraph-head">
         <div><strong data-i18n="paragraphMachine.title">ماشین پاراگراف</strong><span data-i18n="paragraphMachine.subtitle">تولید و سنجش پاراگراف</span></div>
-        <button id="paragraph-close" type="button" aria-label="بستن">✕</button>
+        <button id="paragraph-close" type="button" aria-label="بستن" data-sound="back">✕</button>
       </header>
       <div class="paragraph-context">
         <strong id="paragraph-source"></strong>
@@ -175,7 +177,7 @@
     <div class="book-shell">
       <header class="book-head">
         <div class="book-title" id="book-title">📖 جاعلان تقلید — در ده فصل</div>
-        <button class="book-close" id="book-close" aria-label="بستن">✕</button>
+        <button class="book-close" id="book-close" aria-label="بستن" data-sound="back">✕</button>
       </header>
       <nav class="book-tabs" id="book-tabs" aria-label="فصل‌های کتاب"></nav>
       <article class="book-body" id="book-body"></article>
