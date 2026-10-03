@@ -689,7 +689,7 @@ function selectRealm(id){
   const realm=realms.find(r=>r.dataset.id===id);
   if(!realm) return;
   setInfo(id);
-  if(id==='structure'){window.clearTimeout(window.__structureOpenTimer);window.__structureOpenTimer=window.setTimeout(openStructure,220);}
+  if(id==='structure'){window.clearTimeout(window.__structureOpenTimer);openStructure();}
   if(id==='reference'){
     window.clearTimeout(window.__referenceOpenTimer);
     window.__referenceOpenTimer=window.setTimeout(openReference,220);
@@ -717,12 +717,21 @@ function realmFromPoint(event){
   return null;
 }
 let lastSelectionAt=0;
-universe.addEventListener('click',event=>{
-  const now=performance.now();
-  if(now-lastSelectionAt<90)return;
-  lastSelectionAt=now;
-  const id=realmFromPoint(event);
-  if(id)selectRealm(id);
+realms.forEach(realm=>{
+  realm.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    const now=performance.now();
+    if(now-lastSelectionAt<90)return;
+    lastSelectionAt=now;
+    selectRealm(realm.dataset.id);
+  });
+  realm.addEventListener('keydown',event=>{
+    if(event.key==='Enter'||event.key===' '){
+      event.preventDefault();
+      selectRealm(realm.dataset.id);
+    }
+  });
 });
 
 function setUiLanguage(lang){
@@ -789,7 +798,7 @@ function selectChapter(i){
   bookBody.scrollTop=0;
 }
 
-function openStructure(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='block';tone(680);}
+function openStructure(){window.clearTimeout(window.__structureOpenTimer);home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='block';clearInfo();tone(680);}
 function closeStructure(){structurePage.style.display='none';home.style.display='block';setInfo('structure');tone(520);}
 function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';tone(820);}
 function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');tone(560);}
