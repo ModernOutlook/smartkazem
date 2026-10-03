@@ -1,39 +1,37 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>سرزمین مشاهده · The Land of Observation</title>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700&family=Literata:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-<style>
-:root{--bg:#f6f4ef;--fg:#1f2a2e;--mut:#5d6b70;--ac:#2b6f77;--hl:rgba(43,111,119,.09);--ln:rgba(43,111,119,.28);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12191b;--fg:#e4e8e6;--mut:#9aa8ac;--ac:#6fb6bd;--hl:rgba(111,182,189,.13);--ln:rgba(111,182,189,.35)}}
-:root[data-theme="dark"]{--bg:#12191b;--fg:#e4e8e6;--mut:#9aa8ac;--ac:#6fb6bd;--hl:rgba(111,182,189,.13);--ln:rgba(111,182,189,.35)}
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 3.6rem)}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:'Vazirmatn',Tahoma,sans-serif;line-height:2.1;font-size:1.04rem}
-nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;display:flex;justify-content:center;gap:.4rem;padding:.55rem;background:var(--bg);border-bottom:1px solid var(--ln)}
-nav button{font:inherit;font-size:.85rem;line-height:1.6;padding:.2rem .95rem;border:1px solid var(--ln);border-radius:2rem;background:none;color:var(--mut);cursor:pointer}
-nav button[aria-pressed=true]{background:var(--ac);color:var(--bg);border-color:var(--ac)}
-main{max-width:35rem;margin:0 auto;padding:2.2rem 1.4rem 4.5rem}
-body[data-mode=both] main{max-width:62rem}
-h1{font-size:2.1rem;margin:0;color:var(--ac)}
-.sub{color:var(--mut);margin:.5rem 0 0;font-size:.92rem}
-.head{margin-bottom:2.6rem}
-.en{font-family:Literata,Georgia,serif;direction:ltr;text-align:left;line-height:1.85;font-size:.98rem;color:var(--mut)}
-.head .en.h{font-size:1.5rem;line-height:1.4;color:var(--ac);margin:.4rem 0 0}
-.pair{padding:.2rem .7rem;margin:0 -.7rem 1.1rem;border-radius:.6rem;cursor:pointer;transition:background .2s}
-.pair.on{background:var(--hl)}
-.pair p{margin:0 0 .9em}
-.fa{text-align:justify}
-body[data-mode=both] .pair .en{border-left:2px solid var(--ln);padding-left:.8rem}
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>سرزمین مشاهده</title><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:#f3f4f2;color:#202321;font-family:Vazirmatn,Tahoma,sans-serif}
+.page{position:fixed;inset:0;display:flex;flex-direction:column;min-height:0;background:#f3f4f2;color:#202321;overflow:hidden}
+.book-head{flex:0 0 auto;background:linear-gradient(135deg,#101214,#351818);color:#ffd8a4;padding:14px 15px 12px;display:flex;align-items:center;gap:9px;border-bottom:2px solid #c93a33;direction:rtl}
+.book-head .book-title{font-weight:800;font-size:.83rem;flex:1}.book-head .book-lang{display:flex;gap:4px;direction:ltr}
+.book-head .book-lang button{background:rgba(255,255,255,.08);border:1px solid rgba(255,215,160,.25);color:#ffd8a4;padding:4px 7px;border-radius:12px;font-size:.62rem;font-weight:800;cursor:pointer}
+.book-head .book-lang button.active{background:#ffd8a4;color:#241414}
+.book-close{width:29px;height:29px;border-radius:50%;border:1px solid rgba(255,150,150,.35);background:rgba(255,80,80,.1);color:#ffb0aa;cursor:pointer}
+.book-tabs{display:flex;gap:5px;overflow-x:auto;flex:0 0 auto;padding:9px;background:#e5e7e3;border-bottom:1px solid #cdd1cc;direction:rtl}
+.book-tabs::-webkit-scrollbar{height:4px}.book-tabs::-webkit-scrollbar-thumb{background:#aaa;border-radius:5px}
+.book-tab{flex:0 0 auto;border:1px solid #c9cdc9;background:#fff;color:#5a5f5c;padding:6px 9px;border-radius:7px;font-size:.58rem;font-weight:800;cursor:pointer}
+.book-tab.active{background:#2f6fd0;color:#fff;border-color:#2f6fd0}
+.book-body{flex:1;min-height:0;overflow:auto;padding:22px 18px 40px;background:#f3f4f2;font-size:.82rem;line-height:2;color:#202321}
+.book-body .head{margin-bottom:22px}.book-body h1{font-size:1.55rem;line-height:1.3;margin:0 0 2px;font-weight:800}.book-body h2{font-size:1.02rem;line-height:1.5;margin:24px 0 7px;font-weight:800;color:#202321;border-top:1px solid #cdd1cc;padding-top:12px}.book-body h3{font-size:.9rem;margin:18px 0 5px;color:#4e5451}
+.book-body .sub{color:#626763;margin:0 0 22px;font-size:.8rem}.book-body p{margin:.55rem 0;text-align:justify}
+.book-body .pair{display:grid;grid-template-columns:1fr;gap:.1rem 3rem;margin:0 0 .6rem;padding:0}
+.book-body .pair .en{direction:ltr;text-align:left;font-family:Georgia,'Times New Roman',serif;line-height:1.75;font-size:.8rem;color:#303432;padding-left:.9rem;border-left:2px solid #cdd1cc}
+.book-body .pair .fa{direction:rtl;text-align:justify}
+.book-body .pair .en p{margin:.55rem 0}
+.book-body .q{padding:.3rem 1rem;border-right:3px solid #cdd1cc;color:#626763}
+.book-body table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.76rem}.book-body th,.book-body td{border:1px solid #cdd1cc;padding:.4rem .5rem}.book-body th{color:#626763}
 body[data-mode=fa] .en,body[data-mode=en] .fa{display:none}
-body[data-mode=en] .en{color:var(--fg)}
-@media(min-width:760px){body[data-mode=both] .pair{display:grid;grid-template-columns:1fr 1fr;gap:2.4rem}body[data-mode=both] .pair .en{border-left:0;padding-left:0}}
-</style>
-</head>
-<body data-mode="both">
-<nav><button data-m="fa" aria-pressed="false">فارسی</button><button data-m="both" aria-pressed="true">Both</button><button data-m="en" aria-pressed="false">English</button></nav>
-<main>
+body[data-mode=en] .book-body{direction:ltr;text-align:left;font-family:Georgia,'Times New Roman',serif;line-height:1.75}
+body[data-mode=en] .book-body .fa{font-family:Vazirmatn,Tahoma,sans-serif}
+body[data-mode=both] .book-body .pair{grid-template-columns:1fr 1fr}
+body[data-mode=both] .book-body .pair .en{padding-left:0;border-left:0}
+@media(max-width:700px){body[data-mode=both] .book-body .pair{grid-template-columns:1fr}.book-body .pair .en{border-left:2px solid #cdd1cc;padding-left:.9rem}}
+.book-body a{color:#2f6fd0}.book-body img{max-width:100%;height:auto}
+.book-body .chapter{margin-bottom:28px}.book-body .moral{margin-top:30px;padding:14px;border:1px solid #cdd1cc;border-radius:10px;background:#e9ebe8}
+</style></head><body data-mode="both"><section class="page">
+<header class="book-head"><div class="book-title">📖 سرزمین مشاهده</div><div class="book-lang"><button id="fa" class="active">فارسی</button><button id="both">Both</button><button id="en">English</button></div><button class="book-close" id="close" aria-label="بستن">✕</button></header>
+<nav class="book-tabs" id="tabs"><button class="book-tab active" data-target="">سرزمین مشاهده</button></nav>
+<article class="book-body" id="body">
 <div class="head">
 <h1 class="fa">سرزمین مشاهده</h1>
 <p class="sub fa">یک رود، یک جریان · جلد دوم رسالهٔ فلسفی نگرش نوین</p>
@@ -52,14 +50,10 @@ body[data-mode=en] .en{color:var(--fg)}
 <div class="pair"><p class="fa" lang="fa">رود به تو چه می‌بخشد؟ حیات؛ یعنی فعلیت یافتنِ تو. هر جا که ایستاده‌ای در دسترس است، نه فقط در مصب، چون هر لحظه خودِ حضور واحد است. این فعلیت‌یافتن، شهودِ نسبی است: لحظه‌ای که می‌فهمی تنها ماهیتِ حقیقی خودِ فعل است و فاعل و مفعول جایگاه‌اند. و شاید، اگر بتوانی، از مشاهده دست بکشی و شاهد شوی.</p><p class="en" lang="en" dir="ltr">What does the river give you? Life - which is to say, your coming into actuality. It is within reach wherever you stand, not only at the mouth, for every moment is the one presence itself. This coming into actuality is relative witnessing: the moment you grasp that the only true essence is the act itself, and that subject and object are positions. And perhaps, if you can, you will lay observation down and become a witness.</p></div>
 <div class="pair"><p class="fa" lang="fa">اما شهودِ مطلق از آنِ حضور واحد است: همان فعلیتِ پایانی که همهٔ کانون‌های فعلیت با آن مطابق‌اند، و تقارنِ آغاز تا پایانش سرچشمهٔ گوناگونی. این‌همه نو، که می‌بینی و در برابرش حیرانی، از همین‌جا می‌آید.</p><p class="en" lang="en" dir="ltr">But absolute witnessing belongs to the one presence alone: that final actuality with which all foci of actuality accord, and whose symmetry from beginning to end is the source of diversity. All this newness you behold, and stand amazed before, comes from here.</p></div>
 <div class="pair"><p class="fa" lang="fa">اکنون به پرسشی بازگرد که در پایان می‌پرسید: مشاهده‌گری که همیشه در حال نگریستن بوده، چرا خیالِ آغاز فعلی دیگر را در سر ندارد؟ شاید چون فریفته بود، شاید چون می‌ترسید. اما فعلِ تازه فعلی دیگر در کنار نگریستن نیست؛ رها کردنِ جایگاه است. رود تو را می‌برد، چه بایستی و چه بروی. شهود آن است که بدانی آن‌که می‌نگرد و آنچه می‌نگرد، یک حضورند.</p><p class="en" lang="en" dir="ltr">Now return to the question that closed the opening text: why does the observer, who has always been observing, never imagine beginning another act? Perhaps because he was enchanted; perhaps because he was afraid. But the new act is not another act beside looking; it is the letting go of position. The river carries you, whether you stand or go. Witnessing is knowing that the one who looks and what is looked at are one presence.</p></div>
-</main>
-<script>
-const pairs=[...document.querySelectorAll('.pair')],btns=[...document.querySelectorAll('nav button')];
-let cur=0;
-const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)cur=pairs.indexOf(e.target)}),{rootMargin:'-40% 0px -50% 0px'});
-const mark=p=>pairs.forEach(x=>x.classList.toggle('on',x===p));
-pairs.forEach(p=>{io.observe(p);p.addEventListener('click',()=>mark(p));p.addEventListener('mouseenter',()=>mark(p))});
-btns.forEach(b=>b.addEventListener('click',()=>{const k=pairs[cur];document.body.dataset.mode=b.dataset.m;btns.forEach(x=>x.setAttribute('aria-pressed',String(x===b)));mark(k);requestAnimationFrame(()=>k.scrollIntoView({block:'center'}))}));
-</script>
-</body>
-</html>
+</article>
+</section><script>
+const body=document.body,bs=[...document.querySelectorAll('.book-lang button')];
+bs.forEach(b=>b.onclick=()=>{body.dataset.mode=b.id;bs.forEach(x=>x.classList.toggle('active',x===b));});
+document.getElementById('close').onclick=()=>{if(history.length>1)history.back();else location.href='index.html'};
+document.querySelectorAll('.book-tab').forEach(b=>b.onclick=()=>{const id=b.dataset.target;if(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}});
+</script></body></html>
