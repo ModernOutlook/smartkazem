@@ -134,6 +134,7 @@ function renderHomeFromCatalog(){
   if(brandAlt)brandAlt.textContent=catalog.home?.brandLatin||catalog.meta?.brandLatin||brandAlt.textContent;
   const current=catalog.home?.realms?.[activeId];
   if(current){infoTitle.textContent=current.title||'';infoText.textContent=current.text||'';}
+  if(home&&home.style.display!=='none') info.classList.add('visible');
 }
 document.addEventListener('site:languagechange',()=>{
   renderHomeFromCatalog();
