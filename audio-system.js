@@ -21,10 +21,20 @@ const cues={
 function save(){try{localStorage.setItem(KEY,JSON.stringify({enabled,volume}))}catch(_){}}
 function ensure(){
  if(!AC)return null;
- if(!ctx){ctx=new AC();const comp=ctx.createDynamicsCompressor();comp.threshold.value=-18;comp.knee.value=16;comp.ratio.value=4;comp.attack.value=.003;comp.release.value=.18;master=ctx.createGain();master.gain.value=enabled?volume:0;master.connect(comp).connect(ctx.destination)}
+ if(!ctx){
+  try{
+   ctx=new AC();
+   const comp=ctx.createDynamicsCompressor();
+   comp.threshold.value=-18;comp.knee.value=16;comp.ratio.value=4;comp.attack.value=.003;comp.release.value=.18;
+   master=ctx.createGain();master.gain.value=enabled?volume:0;master.connect(comp).connect(ctx.destination);
+  }catch(_){ctx=null;master=null;return null}
+ }
  return ctx
 }
-async function unlock(){const c=ensure();if(!c)return false;try{if(c.state==='suspended')await c.resume();return c.state==='running'}catch(_){return false}}
+function unlock(){
+ const c=ensure();if(!c)return false;
+ try{if(c.state!=='running'){const p=c.resume();if(p&&typeof p.catch==='function')p.catch(()=>{});}return true}catch(_){return false}
+}
 function env(g,now,peak,d){g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(Math.max(.0002,peak),now+.008);g.gain.exponentialRampToValueAtTime(.0001,now+d)}
 function playTone(c,q,now){
  const o=c.createOscillator(),g=c.createGain(),f=c.createBiquadFilter(),hz=q.f||440;
@@ -51,11 +61,18 @@ async function playSample(name,opt={}){
 }
 async function play(name,opt={}){
  if(!enabled)return false;const q=cues[name];if(!q&&samples.has(name))return playSample(name,opt);if(!q)return false;const t=performance.now();if(t-(last[name]||0)<(opt.cooldown??25))return false;last[name]=t;
- const c=await unlock();if(!c)return false;const now=c.currentTime+.005;
+ const c=unlock();if(!c)return false;const now=c.currentTime+.005;
  if(q.n)playNoise(c,{...q,...opt},now);else if(q.c)playChord(c,{...q,...opt},now);else playTone(c,{...q,...opt},now);return true
 }
 function setEnabled(v){enabled=!!v;save();if(master&&ctx)master.gain.setTargetAtTime(enabled?volume:0,ctx.currentTime,.025);ui()}
-function toggle(){setEnabled(!enabled);if(enabled)play('ui.click',{cooldown:0});return enabled}
+function toggle(){
+ setEnabled(!enabled);
+ if(enabled){
+  unlock();
+  play('ui.click',{cooldown:0});
+ }
+ return enabled
+}
 function setVolume(v){volume=Math.max(0,Math.min(1,Number(v)||0));save();if(master&&ctx)master.gain.setTargetAtTime(enabled?volume:0,ctx.currentTime,.025)}
 function registerCue(name,definition){if(name&&definition)cues[name]={...definition}}
 function registerSample(name,url){if(name&&url)samples.set(name,{url,buffer:null})}
