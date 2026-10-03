@@ -12,7 +12,6 @@
     "forgers": "The Forgers of Imitation",
     "treatise": "A Philosophical Treatise",
     "observation": "The Land of Observation",
-    "games": "Games",
     "back": "Back",
     "close": "Close",
     "comingSoon": "Coming later",
@@ -56,9 +55,7 @@
     "pages": {
       "forgers": "The Forgers of Imitation",
       "treatise": "A Philosophical Treatise",
-      "observation": "The Land of Observation",
-      "games": "Games",
-      "gamesEn": "Coming later"
+      "observation": "The Land of Observation"
     },
     "title": "Modern Outlook — نگرش نوین"
   },
@@ -73,14 +70,14 @@
       "close": "Close",
       "titleEn": "A Philosophical Treatise",
       "tabs": [
-  "Preface",
-  "Hall Structure",
-  "Continuity of the World",
-  "Experience",
-  "The Authority of Simulation",
-  "Share Economy",
-  "Postscript"
-]
+        "Preface",
+        "Hall Structure",
+        "Continuity of the World",
+        "Experience",
+        "The Authority of Simulation",
+        "Share Economy",
+        "Postscript"
+      ]
     },
     "forgers": {
       "title": "The Forgers of Imitation",
