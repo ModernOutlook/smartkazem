@@ -337,17 +337,17 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 <main class="app" id="app">
   <div class="atmosphere"></div>
 
+  <div class="lang-switch" aria-label="زبان رابط">
+    <button id="ui-zh" data-site-lang="zh" type="button">中文</button>
+    <button id="ui-fa" data-site-lang="fa" class="active" type="button">فارسی</button>
+    <button id="ui-en" data-site-lang="en" type="button">English</button>
+    <button id="ui-ar" data-site-lang="ar" type="button">العربية</button>
+  </div>
+
   <section class="page home-page" id="home-page" aria-label="نگرش نوین">
     <header class="topbar">
       <a class="icon-btn" id="x-social" href="https://x.com/_thekazem" target="_blank" rel="noopener noreferrer" title="X / Twitter" aria-label="X / Twitter">𝕏</a>
     </header>
-
-    <div class="lang-switch" aria-label="زبان رابط">
-      <button id="ui-zh" data-site-lang="zh" type="button">中文</button>
-      <button id="ui-fa" data-site-lang="fa" class="active" type="button">فارسی</button>
-      <button id="ui-en" data-site-lang="en" type="button">English</button>
-      <button id="ui-ar" data-site-lang="ar" type="button">العربية</button>
-    </div>
 
     <div class="orbit" aria-label="پنج قلمرو">
       <svg class="menu-svg" id="universe" viewBox="0 0 1000 1000" role="group" aria-label="پنج قلمرو">
@@ -466,7 +466,6 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 </main>
 
 <script src="translations/i18n.js"></script>
-<script src="audio-system.js"></script>
 <script>
 const bookChapters = [
     {
@@ -892,12 +891,12 @@ function clearInfo(){
 function selectRealm(id){
   if(id==='core'){
     setInfo('core');
-    SiteAudio.play('core.open');
+    
     return;
   }
   const realm=realms.find(r=>r.dataset.id===id);
   if(!realm) return;
-  SiteAudio.play('realm.select');
+  
   setInfo(id);
   if(id==='share'){openShare();}
   if(id==='experience'){openExperience();}
@@ -911,8 +910,8 @@ function selectRealm(id){
 
 const logoViewer=document.getElementById('logo-viewer');
 const logoViewerClose=document.getElementById('logo-viewer-close');
-function openLogoViewer(){clearInfo();logoViewer.classList.add('open');SiteAudio.play('core.open',{cooldown:0});}
-function closeLogoViewer(){logoViewer.classList.remove('open');SiteAudio.play('page.close',{cooldown:0});}
+function openLogoViewer(){clearInfo();logoViewer.classList.add('open');}
+function closeLogoViewer(){logoViewer.classList.remove('open');}
 core.setAttribute('tabindex','0');
 core.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();openLogoViewer();});
 core.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openLogoViewer();}});
@@ -1038,17 +1037,6 @@ function setUiLanguage(lang){
   }
 }
 document.addEventListener('site:languagechange',event=>{if(event.detail?.lang) setUiLanguage(event.detail.lang)});
-function chooseUiLanguage(lang,event){
-  if(event){event.preventDefault();event.stopPropagation();}
-  SiteAudio.unlock();
-  SiteAudio.play('ui.click',{cooldown:0});
-  setUiLanguage(lang);
-  SiteI18n.setLanguage(lang);
-}
-document.getElementById('ui-zh').addEventListener('click',e=>chooseUiLanguage('zh',e));
-document.getElementById('ui-fa').addEventListener('click',e=>chooseUiLanguage('fa',e));
-document.getElementById('ui-en').addEventListener('click',e=>chooseUiLanguage('en',e));
-document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));
 
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
@@ -1098,26 +1086,26 @@ function selectChapter(i){
   bookBody.scrollTop=0;
 }
 
-function openShare(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';sharePage.style.display='block';clearInfo();SiteAudio.play('page.open');}
-function closeShare(){sharePage.style.display='none';home.style.display='block';setInfo('share');SiteAudio.play('page.close');}
-function openExperience(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='block';clearInfo();SiteAudio.play('page.open');}
-function closeExperience(){experiencePage.style.display='none';home.style.display='block';setInfo('experience');SiteAudio.play('page.close');}
-function openContinuity(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';experiencePage.style.display='none';continuityPage.style.display='block';clearInfo();SiteAudio.play('page.open');}
-function closeContinuity(){continuityPage.style.display='none';home.style.display='block';setInfo('continuity');SiteAudio.play('page.close');}
-function openStructure(){window.clearTimeout(window.__structureOpenTimer);home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';continuityPage.style.display='none';structurePage.style.display='block';clearInfo();SiteAudio.play('page.open');}
-function closeStructure(){structurePage.style.display='none';home.style.display='block';setInfo('structure');SiteAudio.play('page.close');}
-function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';SiteAudio.play('page.open');}
-function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');SiteAudio.play('page.close');}
+function openShare(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';sharePage.style.display='block';clearInfo();}
+function closeShare(){sharePage.style.display='none';home.style.display='block';setInfo('share');}
+function openExperience(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='block';clearInfo();}
+function closeExperience(){experiencePage.style.display='none';home.style.display='block';setInfo('experience');}
+function openContinuity(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';experiencePage.style.display='none';continuityPage.style.display='block';clearInfo();}
+function closeContinuity(){continuityPage.style.display='none';home.style.display='block';setInfo('continuity');}
+function openStructure(){window.clearTimeout(window.__structureOpenTimer);home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';continuityPage.style.display='none';structurePage.style.display='block';clearInfo();}
+function closeStructure(){structurePage.style.display='none';home.style.display='block';setInfo('structure');}
+function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';}
+function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');}
 function openBook(from='home'){bookReturn=from;
   home.style.display='none';
   referencePage.style.display='none';
   bookPage.style.display='block';
   buildBookTabs(0);
   selectChapter(0);
-  SiteAudio.play('page.open');
+  
 }
 
-function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';}else{home.style.display='block';setInfo('reference');}SiteAudio.play('page.close');}
+function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';}else{home.style.display='block';setInfo('reference');}}
 
 document.getElementById('share-close').addEventListener('click',closeShare);
 document.getElementById('experience-close').addEventListener('click',closeExperience);
