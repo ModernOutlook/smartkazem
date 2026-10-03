@@ -1048,7 +1048,18 @@ let bookReturn='home';
 const bookTabs=document.getElementById('book-tabs');
 const bookBody=document.getElementById('book-body');
 
-function activeChapters(){return bookLang==='fa'?bookChapters:(bookLang==='zh'?bookChaptersZh:(bookLang==='ar'?bookChaptersAr:bookChaptersEn))}
+function activeBookCatalog(){
+  try{
+    const p=window.SiteI18n&&window.SiteI18n.getCatalog?window.SiteI18n.getCatalog().pages?.forgers:null;
+    if(p&&Array.isArray(p.chapters)&&p.chapters.length)return p;
+  }catch(_){}
+  return null;
+}
+function activeChapters(){
+  const p=activeBookCatalog();
+  if(p)return p.chapters;
+  return bookLang==='fa'?bookChapters:(bookLang==='zh'?bookChaptersZh:(bookLang==='ar'?bookChaptersAr:bookChaptersEn));
+}
 
 function buildBookTabs(active=0){
   bookTabs.innerHTML='';
@@ -1066,18 +1077,19 @@ function selectChapter(i){
   document.querySelectorAll('.book-tab').forEach((b,n)=>b.classList.toggle('active',n===i));
   const ch=chapters[i];
   let html='';
+  const bookCatalog=activeBookCatalog();
   if(i===0){
-    html+=bookLang==='en'
-      ? '<h1 class="book-h1">The Forgers of Imitation</h1><p class="book-sub">Ten Chapters</p>'
-      : bookLang==='zh'
-        ? '<h1 class="book-h1">《模仿的伪造者》</h1><p class="book-sub">十章</p>'
-        : '<h1 class="book-h1">جاعلان تقلید</h1><p class="book-sub">در ده فصل</p>';
+    const bookTitle=bookCatalog?.title||(bookLang==='en'?'The Forgers of Imitation':bookLang==='zh'?'《模仿的伪造者》':bookLang==='ar'?'مزوّرو التقليد':'جاعلان تقلید');
+    const bookSubtitle=bookCatalog?.subtitle||(bookLang==='en'?'Ten Chapters':bookLang==='zh'?'十章':bookLang==='ar'?'عشرة فصول':'در ده فصل');
+    html+='<h1 class="book-h1">'+bookTitle+'</h1><p class="book-sub">'+bookSubtitle+'</p>';
   }
   html+='<div class="chapter" style="--dot:'+ch.dot+'"><h2><i></i>'+ch.title+'</h2>';
   ch.paragraphs.forEach(p=>html+='<p>'+p+'</p>');
   html+='</div>';
   if(i===chapters.length-1){
-    html+='<div class="moral"><h2>'+(bookLang==='en'?'Fable Wisdom':bookLang==='zh'?'寓言智慧':'حکمت فابل')+'</h2><p>'+(bookLang==='en'?bookMoralEn:bookLang==='zh'?'展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。':bookLang==='ar'?'من يعرض مهارة لا يذهب إلا بقدر ما لديه من متفرجين؛ ومن يمارس مهارة يذهب إلى أبعد ما يستطيع. والغابة التي يكون الجميع فيها متفرجين لا يبقى فيها في النهاية شيء يُرى سوى فعل المشاهدة نفسه.':bookMoralFa)+'</p></div>';
+    const moralTitle=bookLang==='en'?'Fable Wisdom':bookLang==='zh'?'寓言智慧':bookLang==='ar'?'حكمة الحكاية':'حکمت فابل';
+    const moralText=bookCatalog?.moral||(bookLang==='en'?bookMoralEn:bookLang==='zh'?'展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。':bookLang==='ar'?'من يعرض مهارة لا يذهب إلا بقدر ما لديه من متفرجين؛ ومن يمارس مهارة يذهب إلى أبعد ما يستطيع. والغابة التي يكون الجميع فيها متفرجين لا يبقى فيها في النهاية شيء يُرى سوى فعل المشاهدة نفسه.':bookMoralFa);
+    html+='<div class="moral"><h2>'+moralTitle+'</h2><p>'+moralText+'</p></div>';
   }
   bookBody.classList.toggle('lang-en',bookLang==='en');
   bookBody.dir=bookLang==='en'?'ltr':'rtl';
