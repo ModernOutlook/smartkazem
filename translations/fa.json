@@ -12,6 +12,7 @@
     "forgers": "جاعلان تقلید",
     "treatise": "رساله فلسفی",
     "observation": "سرزمین مشاهده",
+    "games": "بازی ها",
     "back": "بازگشت",
     "close": "بستن",
     "comingSoon": "به‌زودی",
@@ -55,7 +56,9 @@
     "pages": {
       "forgers": "جاعلان تقلید",
       "treatise": "رساله فلسفی",
-      "observation": "سرزمین مشاهده"
+      "observation": "سرزمین مشاهده",
+      "games": "بازی ها",
+      "gamesEn": "به‌زودی"
     },
     "title": "نگرش نوین — Modern Outlook"
   },
