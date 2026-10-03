@@ -102,16 +102,20 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 #core:hover{filter:brightness(1.3) drop-shadow(0 0 30px white)}
 @media(max-width:600px){.menu-svg{width:108vw;height:108vw}.realm-title{font-size:24px}.realm-subtitle{font-size:11px}.realm-icon{font-size:30px}}
 .info{
-  position:absolute;z-index:30;left:5%;right:5%;bottom:5%;
-  min-height:15%;padding:clamp(12px,3.2%,20px) clamp(14px,4%,22px);
-  border:1px solid var(--line);border-radius:18px;
-  background:linear-gradient(180deg,rgba(4,13,23,.74),rgba(2,7,13,.82));
-  backdrop-filter:blur(12px);box-shadow:0 16px 40px rgba(0,0,0,.35);
-  text-align:center;transition:transform .35s var(--ease),opacity .25s;
+  position:absolute;z-index:30;left:50%;bottom:3vh;transform:translateX(-50%);
+  width:min(90%,650px);padding:18px 25px;
+  border:1px solid rgba(255,255,255,.15);border-radius:18px;
+  background:rgba(2,5,6,.72);backdrop-filter:blur(18px);
+  box-shadow:0 16px 40px rgba(0,0,0,.35);text-align:center;
+  opacity:0;visibility:hidden;pointer-events:none;
+  transition:opacity .35s ease,visibility .35s ease,transform .35s var(--ease);
 }
+.info.visible{opacity:1;visibility:visible;pointer-events:auto}
 .info .kicker{font-size:clamp(.5rem,1.6vw,.68rem);letter-spacing:.16em;opacity:.45;margin-bottom:4px;direction:ltr}
 .info h1{font-size:clamp(.9rem,3.2vw,1.35rem);margin-bottom:5px}
 .info p{font-size:clamp(.55rem,1.75vw,.78rem);line-height:1.8;color:var(--muted);max-width:95%;margin:auto}
+.info .info-close{position:absolute;top:8px;right:10px;width:30px;height:30px;border:0;border-radius:50%;background:transparent;color:rgba(255,255,255,.7);font-size:1.35rem;line-height:1;cursor:pointer}
+.info .info-close:hover{background:rgba(255,255,255,.1);color:#fff}
 .info.reference{border-color:rgba(255,80,55,.26)}
 
 .lang-switch{
@@ -156,8 +160,8 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 
 @media (max-width:520px){
   body{place-items:center}
-  .rings{width:80%}
-  .info{bottom:4.2%;min-height:14%}
+  .menu-svg{width:108vw;height:108vw}
+  .info{bottom:3vh;width:90%;padding:15px 18px}
 }
 @media (min-width:700px){
   .app{border-radius:4px}
@@ -168,22 +172,8 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .app::before{background:radial-gradient(ellipse at 50% 48%,rgba(17,92,143,.18),rgba(2,18,32,.05) 42%,transparent 68%),radial-gradient(circle at 50% 50%,transparent 44%,rgba(0,0,0,.72) 91%)}
 .app::after{background:radial-gradient(circle at 50% 47%,transparent 29%,rgba(0,0,0,.06) 56%,rgba(0,0,0,.68) 100%),linear-gradient(180deg,rgba(0,0,0,.18),transparent 18%,transparent 80%,rgba(0,0,0,.42))}
 .atmosphere{opacity:.82;background:radial-gradient(circle at 7% 11%,rgba(255,255,255,.82) 0 1px,transparent 1.5px),radial-gradient(circle at 22% 37%,rgba(106,190,255,.62) 0 1px,transparent 1.6px),radial-gradient(circle at 42% 13%,rgba(255,220,137,.6) 0 1px,transparent 1.7px),radial-gradient(circle at 63% 23%,rgba(255,255,255,.58) 0 1px,transparent 1.5px),radial-gradient(circle at 82% 14%,rgba(150,208,255,.64) 0 1px,transparent 1.7px),radial-gradient(circle at 93% 43%,rgba(255,231,170,.58) 0 1px,transparent 1.6px),radial-gradient(circle at 14% 68%,rgba(214,133,255,.58) 0 1px,transparent 1.6px),radial-gradient(circle at 39% 83%,rgba(255,160,113,.52) 0 1px,transparent 1.5px),radial-gradient(circle at 67% 76%,rgba(111,255,194,.56) 0 1px,transparent 1.6px);background-size:103px 127px,149px 173px,127px 151px,173px 139px,131px 167px,157px 143px,139px 181px,167px 151px,151px 173px;mix-blend-mode:screen}
-.rings{width:78%;transform:translateY(-13%);filter:none;isolation:isolate}
-.ring{border:0;pointer-events:none;animation:none;transition:filter .18s ease,opacity .18s ease;background:radial-gradient(circle at 29% 21%,rgba(255,255,255,.88) 0 .14%,transparent .45%),radial-gradient(circle at 72% 30%,rgba(255,255,255,.68) 0 .13%,transparent .42%),radial-gradient(ellipse at 50% 50%,transparent 0 51%,rgba(0,0,0,.05) 52%,var(--c) 54%,var(--nebula) 62%,rgba(255,255,255,.2) 64%,var(--c) 67%,transparent 69%),radial-gradient(circle at 38% 35%,color-mix(in srgb,var(--nebula) 18%,transparent),transparent 35%),radial-gradient(circle at 67% 65%,color-mix(in srgb,var(--c) 18%,transparent),transparent 43%);box-shadow:0 0 0 1px rgba(255,255,255,.045),0 0 18px var(--glow)}
-.ring::before{content:"";position:absolute;inset:-1.5%;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.34) 0 1px,transparent 2px),radial-gradient(circle at 72% 31%,rgba(255,255,255,.24) 0 1px,transparent 2px),radial-gradient(circle at 66% 72%,rgba(255,255,255,.2) 0 1px,transparent 2px),radial-gradient(circle at 24% 70%,rgba(255,255,255,.18) 0 1px,transparent 2px);opacity:.42;animation:none;mix-blend-mode:screen}
-.ring::after{content:"";position:absolute;inset:-5%;border-radius:50%;pointer-events:none;border:1px solid color-mix(in srgb,var(--nebula) 72%,transparent);box-shadow:0 0 20px var(--glow);opacity:.82;animation:none}
-.ring:hover,.ring.hover-proxy,.ring.active{filter:brightness(1.16) saturate(1.1)}
-.ring-structure{--size:100%;--c:#12658c;--nebula:#45c9ff;--glow:rgba(30,163,225,.42);--z:1}
-.ring-continuity{--size:78%;--c:#b27d19;--nebula:#ffe08a;--glow:rgba(230,176,45,.4);--z:2}
-.ring-experience{--size:55%;--c:#6c2990;--nebula:#dc76ff;--glow:rgba(164,67,219,.42);--z:3}
-.ring-reference{--size:32%;--c:#9b3d30;--nebula:#ff866d;--glow:rgba(208,76,57,.4);--z:4}
-.ring-share{--size:14%;--c:#0d8458;--nebula:#68ffc2;--glow:rgba(33,192,126,.42);--z:5}
-
-
-
-
 .core,.center-label{display:none}
-.info{background:linear-gradient(180deg,rgba(3,13,25,.64),rgba(1,6,13,.84));border-color:rgba(117,192,239,.15);box-shadow:0 14px 34px rgba(0,0,0,.4);backdrop-filter:none;height:15%;min-height:0;padding:clamp(10px,2.4%,16px) clamp(12px,3.4%,18px)}
+.info{box-shadow:0 14px 34px rgba(0,0,0,.4)}
 .info .kicker{margin-bottom:3px}
 .info h1{margin-bottom:3px}
 .info p{line-height:1.65}
@@ -196,17 +186,16 @@ html{width:100%;min-height:100%;background:#000}
 body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 .app{contain:layout paint;overflow:hidden}
 .home-page{overflow:hidden}
-.rings{touch-action:manipulation;user-select:none;-webkit-user-select:none}
-.ring{cursor:pointer;pointer-events:none;outline:none}
-.ring:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:4px}
+.menu-svg{touch-action:manipulation;user-select:none;-webkit-user-select:none}
+.realm{outline:none}
+.realm:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:4px}
 .icon-btn,.lang-switch button{touch-action:manipulation}
-.info{pointer-events:none}
 @media (max-width:520px){
   .topbar{padding:12px 14px}
   #x-social{right:0;top:100%;transform:none;width:30px;height:30px}
   .lang-switch{top:12px;left:14px}
-  .rings{width:78%;transform:translateY(-13%)}
-  .info{left:4.5%;right:4.5%;bottom:3.2%;height:15%;min-height:0;padding:10px 13px}
+  .menu-svg{width:108vw;height:108vw}
+  .info{bottom:3vh;width:90%;padding:12px 15px}
 }
 /* ===== Reference Realm page ===== */
 .reference-page{z-index:95;display:none;overflow:hidden;color:#fff;background:radial-gradient(ellipse at 50% 16%,rgba(255,100,85,.75),transparent 24%),radial-gradient(ellipse at 82% 42%,rgba(255,28,20,.72),transparent 34%),radial-gradient(ellipse at 24% 64%,rgba(180,10,8,.66),transparent 38%),radial-gradient(ellipse at 50% 76%,rgba(255,150,72,.46),transparent 32%),linear-gradient(180deg,#170000 0%,#4b0605 38%,#b91e13 70%,#250000 100%)}
@@ -292,9 +281,10 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
     </div>
 
     <section class="info" id="info">
-      <div class="kicker">SELECT A LUMINOUS LAYER</div>
-      <h1 id="info-title">ساختار تالار</h1>
-      <p id="info-text">لایه‌ی بیرونی، چارچوب و ساختار کلی تالار را نمایندگی می‌کند.</p>
+      <button class="info-close" id="info-close" type="button" aria-label="بستن">×</button>
+      <div class="kicker">SELECTED REALM</div>
+      <h1 id="info-title"></h1>
+      <p id="info-text"></p>
     </section>
   </section>
 
@@ -549,20 +539,20 @@ const bookMoralFa = 'آنکه مهارت را نمایش می‌دهد، فقط 
 
 const copy = {
   fa:{
-    structure:{title:'ساختار تالار',text:'لایه‌ی بیرونی، چارچوب و ساختار کلی تالار را نمایندگی می‌کند.',tap:'برای انتخاب، روی حلقه بزنید'},
-    continuity:{title:'تداوم عالم',text:'حلقه‌ی طلایی، تداوم و پیوستگی جریان عالم را نمایندگی می‌کند.',tap:'برای انتخاب، روی حلقه بزنید'},
-    experience:{title:'قلمرو تجربه',text:'این لایه به تجربه، آگاهی و دانشی اشاره دارد که در مسیر زیستن شکل می‌گیرد.',tap:'برای انتخاب، روی حلقه بزنید'},
-    reference:{title:'مرجع تقلید',text:'مرجع الگوها و منابع تقلید. با انتخاب این حلقه، کتاب «جاعلان تقلید» باز می‌شود.',tap:'برای ورود به کتاب بزنید'},
-    share:{title:'اقتصاد سهم',text:'لایه‌ی مرکزیِ سهم و توزیع منابع؛ جایی که ارزش، مشارکت و سهم‌مندی به هم می‌رسند.',tap:'برای انتخاب، روی حلقه بزنید'},
-    core:{title:'نگرش نوین',text:'مرکز روشن ساختار؛ نقطه‌ی همگرایی همه‌ی لایه‌ها و نام این تجربه.',tap:'برای بازگشت به مرکز بزنید'}
+    structure:{title:'ساختار تالار · HALL STRUCTURE',text:'ساختار تالار، بیرونی‌ترین قلمرو و بستر آغازین شبکه است؛ جایی که امکان‌ها و روابط بنیادی شکل می‌گیرند.'},
+    continuity:{title:'تداوم عالم · CONTINUITY OF THE WORLD',text:'تداوم عالم، جریان پیوسته‌ای است که ساختار را به امکان استمرار، تحول و پیدایش تجربه متصل می‌کند.'},
+    experience:{title:'قلمرو تجربه · REALM OF EXPERIENCE',text:'قلمرو تجربه جایی است که تداوم عالم به تجربه زیسته، ادراک، معنا و جهت‌گیری تبدیل می‌شود.'},
+    reference:{title:'مرجع تقلید · IMITATIVE AUTHORITY',text:'مرجع تقلید قلمروی است که تجربه، انسان را به سوی الگوها، منابع اعتبار و انتخاب آنچه باید از آن پیروی شود می‌برد.'},
+    share:{title:'اقتصاد سهم · ECONOMY OF SHARES',text:'اقتصاد سهم نزدیک‌ترین قلمرو به مرکز است؛ جایی که رقابت، توزیع، سهم و موقعیت افراد در شبکه آشکار می‌شود.'},
+    core:{title:'کانون فعلیت · ACTUALITY FOCUS',text:'مرکز سفید، نقطه همگرایی نهایی است؛ کانونی که از آغاز حاضر است اما محاسبه و تشخیص آن تنها با کامل شدن پیکربندی ممکن می‌شود.'}
   },
   en:{
-    structure:{title:'Hall Structure',text:'The outer layer represents the hall’s overall structure, framework, and foundations.',tap:'Tap a ring to select it'},
-    continuity:{title:'Continuity of the Universe',text:'The golden layer represents continuity and the ongoing flow of the universe.',tap:'Tap a ring to select it'},
-    experience:{title:'Realm of Experience',text:'This layer represents experience, awareness, and knowledge formed through living.',tap:'Tap a ring to select it'},
-    reference:{title:'Reference of Imitation',text:'The layer of models and sources of imitation. Select it to open “The Forgers of Imitation.”',tap:'Tap to enter the book'},
-    share:{title:'Share Economy',text:'The central layer of shares and distribution, where value, participation, and ownership meet.',tap:'Tap a ring to select it'},
-    core:{title:'Modern Outlook',text:'The luminous center where all layers converge — the name of this experience.',tap:'Tap to return to the center'}
+    structure:{title:'Hall Structure · HALL STRUCTURE',text:'The Hall Structure is the outermost realm and the starting ground of the network, where fundamental possibilities and relations take shape.'},
+    continuity:{title:'Continuity of the World · CONTINUITY OF THE WORLD',text:'Continuity of the World is the continuous flow connecting structure to persistence, transformation, and the emergence of experience.'},
+    experience:{title:'Realm of Experience · REALM OF EXPERIENCE',text:'The Realm of Experience is where continuity becomes lived experience, perception, meaning, and orientation.'},
+    reference:{title:'Imitative Authority · IMITATIVE AUTHORITY',text:'Imitative Authority is the realm where experience turns toward models, sources of authority, and choices about what should be followed.'},
+    share:{title:'Economy of Shares · ECONOMY OF SHARES',text:'The Economy of Shares is the realm closest to the center, where competition, distribution, shares, and positions within the network become visible.'},
+    core:{title:'Actuality Focus · ACTUALITY FOCUS',text:'The white center is the final point of convergence; a focus present from the beginning, whose calculation and recognition become possible only when the configuration is complete.'}
   }
 };
 
@@ -577,6 +567,7 @@ const infoText=document.getElementById('info-text');
 const infoTap=document.getElementById('info-tap');
 const realms=[...document.querySelectorAll('.realm')];
 const core=document.getElementById('core');
+const infoClose=document.getElementById('info-close');
 
 function tone(freq=620){
   try{
@@ -592,15 +583,20 @@ function tone(freq=620){
   }catch(e){}
 }
 
-function setInfo(id){
+function setInfo(id,show=true){
   activeId=id;
   realms.forEach(r=>r.classList.toggle('selected',r.dataset.id===id));
   const d=copy[uiLang][id];
   infoTitle.textContent=d.title;
   infoText.textContent=d.text;
-  if(infoTap) infoTap.textContent=d.tap;
   info.classList.toggle('reference',id==='reference');
+  if(show) info.classList.add('visible');
   tone({structure:520,continuity:620,experience:720,reference:820,share:920,core:1040}[id]||620);
+}
+
+function clearInfo(){
+  info.classList.remove('visible');
+  realms.forEach(r=>r.classList.remove('selected'));
 }
 
 function selectRealm(id){
@@ -617,17 +613,6 @@ function selectRealm(id){
   }
 }
 
-realms.forEach(realm=>{
-  realm.addEventListener('click',()=>selectRealm(realm.dataset.id));
-  realm.addEventListener('keydown',e=>{
-    if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRealm(realm.dataset.id);}
-  });
-});
-core.addEventListener('click',()=>selectRealm('core'));
-core.addEventListener('keydown',e=>{
-  if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRealm('core');}
-});
-
 function setUiLanguage(lang){
   uiLang=lang;
   document.documentElement.lang=lang;
@@ -638,7 +623,6 @@ function setUiLanguage(lang){
   const current=copy[lang][activeId];
   infoTitle.textContent=current.title;
   infoText.textContent=current.text;
-  if(infoTap) infoTap.textContent=current.tap;
   if(lang==='en'){
     document.querySelector('.brand strong').textContent='Modern Outlook';
     document.querySelector('.brand span').textContent='نگرش نوین';
@@ -742,7 +726,7 @@ document.addEventListener('keydown',e=>{
 });
 
 setUiLanguage('fa');
-setInfo('structure');
+setTimeout(()=>setInfo('structure'),700);
 </script>
 </body>
 </html>
