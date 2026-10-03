@@ -3,7 +3,7 @@
 'use strict';
 const KEY='modern-outlook.audio.v1';
 const AC=window.AudioContext||window.webkitAudioContext;
-let ctx=null,master=null,enabled=true,volume=.34,last={}; const samples=new Map();
+let ctx=null,master=null,enabled=true,volume=.34,last={}; const samples=new Map(); const sampleLoads=new Map();
 try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');if(typeof s.enabled==='boolean')enabled=s.enabled;if(Number.isFinite(s.volume))volume=Math.max(0,Math.min(1,s.volume))}catch(_){}
 const cues={
 'ui.click':{f:680,d:.11,v:.20,t:'triangle',g:1.18},
@@ -50,7 +50,7 @@ async function playSample(name,opt={}){
  }catch(_){return false}
 }
 async function play(name,opt={}){
- if(!enabled)return false;const q=cues[name];if(!q&&state.samples.has(name))return playSample(name,opt);if(!q)return false;const t=performance.now();if(t-(last[name]||0)<(opt.cooldown??25))return false;last[name]=t;
+ if(!enabled)return false;const q=cues[name];if(!q&&samples.has(name))return playSample(name,opt);if(!q)return false;const t=performance.now();if(t-(last[name]||0)<(opt.cooldown??25))return false;last[name]=t;
  const c=await unlock();if(!c)return false;const now=c.currentTime+.005;
  if(q.n)playNoise(c,{...q,...opt},now);else if(q.c)playChord(c,{...q,...opt},now);else playTone(c,{...q,...opt},now);return true
 }
