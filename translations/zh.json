@@ -68,7 +68,6 @@
       "tab": "观察之地",
       "close": "关闭"
     },
-    "shahnameh": {"title":"《列王纪》诵读","subtitle":"81 部分 · 菲尔多西原诗与四种语言散文","part":"部分","originalVerse":"原诗","prose":"散文","placeholder":"即将推出"},
     "treatise": {
       "title": "哲学论述",
       "close": "关闭",
@@ -265,6 +264,11 @@
       ]
     },
     "shahnameh": {
+      "title": "《列王纪》诵读",
+      "subtitle": "81 部分 · 菲尔多西原诗与四种语言散文",
+      "part": "部分",
+      "originalVerse": "原诗",
+      "prose": "散文",
       "part1": {
         "title": "第1部分：凯尤马尔斯，第一位君王",
         "part": "第",
