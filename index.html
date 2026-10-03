@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; child-src 'none'; connect-src 'none'; img-src 'self' data:; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; form-action 'self'; upgrade-insecure-requests">
+<meta name="referrer" content="no-referrer"><meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()">
 <meta name="theme-color" content="#02060c">
 <title>نگرش نوین — Modern Outlook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -574,7 +576,11 @@ const infoText=document.getElementById('info-text');
 const realms=[...document.querySelectorAll('.realm')];
 const core=document.getElementById('core');
 
+let lastToneAt=0;
 function tone(freq=620){
+  const nowMs=performance.now();
+  if(nowMs-lastToneAt<120)return;
+  lastToneAt=nowMs;
   try{
     if(!window.__audio) window.__audio=new (window.AudioContext||window.webkitAudioContext)();
     const ctx=window.__audio;
@@ -664,7 +670,11 @@ function realmFromPoint(event){
   for(const [id,r] of realmGeometry)if(radius<=r)return id;
   return null;
 }
+let lastSelectionAt=0;
 universe.addEventListener('click',event=>{
+  const now=performance.now();
+  if(now-lastSelectionAt<90)return;
+  lastSelectionAt=now;
   const id=realmFromPoint(event);
   if(id)selectRealm(id);
 });
