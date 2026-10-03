@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سیستم دایره‌ای + فایروال امنیتی</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    .ring, h1, .hint, .controls button, .ring-label {
+        user-select: none !important; -webkit-user-select: none !important;
+    }
+    .tab-content, .tab-content * { user-select: text !important; -webkit-user-select: text !important; }
+    body {
+        background: #000;
+        min-height: 100vh;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        font-family: 'Vazirmatn', 'Tahoma', 'Segoe UI', sans-serif;
+        color: #fff; padding: 20px; overflow-x: hidden;
+        transition: background 0.5s ease;
+    }
+    body.theme-neon { background: radial-gradient(circle at 50% 50%, #0a0015 0%, #000 70%); }
+    #security-lock {
+        display: none; position: fixed; inset: 0; background: #000;
+        z-index: 99999; justify-content: center; align-items: center;
+        flex-direction: column; text-align: center; padding: 30px;
+    }
+    #security-lock h2 { color: #ff3030; font-size: 1.8rem; margin-bottom: 15px; }
+    #security-lock p { font-size: 1.1rem; opacity: 0.85; max-width: 500px; line-height: 1.7; }
+    h1 { margin-bottom: 15px; font-size: 1.4rem; text-align: center; opacity: 0.9; }
+    .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
+    .controls button {
+        background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+        color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer;
+        font-family: inherit; font-size: 0.85rem; transition: all 0.25s ease;
+    }
+    .controls button:hover { background: rgba(0,212,255,0.2); border-color: #00d4ff; transform: translateY(-2px); }
+    .circle-container {
+        position: relative; width: min(92vw, 680px); height: min(92vw, 680px);
+        margin: 0 auto 35px;
+    }
+    .ring {
+        position: absolute; border-radius: 50%; top: 50%; left: 50%;
+        transform: translate(-50%, -50%); cursor: pointer;
+        transition: filter 0.35s ease, box-shadow 0.35s ease;
+        display: flex; align-items: flex-start; justify-content: center;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .ring:hover { filter: brightness(1.25); }
+    .ring.active {
+        filter: brightness(1.5);
+        box-shadow: 0 0 50px rgba(255,255,255,0.35);
+        animation: pulse 2.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+        0%,100% { box-shadow: 0 0 50px rgba(255,255,255,0.35); }
+        50%     { box-shadow: 0 0 75px rgba(255,255,255,0.55); }
+    }
+    .ring-1 { animation: rotate 90s linear infinite; }
+    .ring-2 { animation: rotate 70s linear infinite reverse; }
+    .ring-3 { animation: rotate 55s linear infinite; }
+    .ring-4 { animation: rotate 40s linear infinite reverse; }
+    .ring-5 { animation: rotate 30s linear infinite; }
+    @keyframes rotate {
+        from { transform: translate(-50%, -50%) rotate(0deg); }
+        to   { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .ring-label {
+        position: absolute; top: 7%; text-align: center;
+        font-size: clamp(0.65rem, 2vw, 0.9rem); font-weight: bold;
+        text-shadow: 0 0 8px rgba(0,0,0,0.9); line-height: 1.35; pointer-events: none;
+    }
+    .ring-label .icon { display: block; font-size: 1.35em; margin-bottom: 3px; }
+    .ring-1 .ring-label { animation: rotate 90s linear infinite reverse; }
+    .ring-2 .ring-label { animation: rotate 70s linear infinite; }
+    .ring-3 .ring-label { animation: rotate 55s linear infinite reverse; }
+    .ring-4 .ring-label { animation: rotate 40s linear infinite; }
+    .ring-5 .ring-label { animation: rotate 30s linear infinite reverse; }
+    .ring-firewall {
+        width: 100%; height: 100%;
+        background: radial-gradient(circle, transparent 78%, #0a0a12 79%, #1a1a2e 88%, #0d0d1a 100%);
+        box-shadow: 0 0 60px 10px rgba(0,150,255,0.15), inset 0 0 40px rgba(0,100,255,0.1);
+        z-index: 0;
+    }
+    .ring-1 { width: 84%; height: 84%; background: radial-gradient(circle, transparent 72%, #0a3d7a 73%, #1a6fd4 85%, #0a3d7a 100%); z-index: 1; }
+    .ring-2 { width: 66%; height: 66%; background: radial-gradient(circle, transparent 68%, #b8860b 69%, #ffd700 85%, #b8860b 100%); z-index: 2; }
+    .ring-3 { width: 50%; height: 50%; background: radial-gradient(circle, transparent 65%, #4b0082 66%, #9b30ff 85%, #4b0082 100%); z-index: 3; }
+    .ring-4 { width: 35%; height: 35%; background: radial-gradient(circle, transparent 60%, #8b0000 61%, #ff3030 85%, #8b0000 100%); z-index: 4; }
+    .ring-5 { width: 22%; height: 22%; background: radial-gradient(circle, transparent 50%, #006400 51%, #00c853 85%, #006400 100%); z-index: 5; }
+    .core {
+        position: absolute; width: 11%; height: 11%; top: 50%; left: 50%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, #fff 0%, #ffffcc 40%, transparent 70%);
+        border-radius: 50%; box-shadow: 0 0 40px 15px rgba(255,255,200,0.85);
+        z-index: 10; pointer-events: none;
+        animation: pulse 3s ease-in-out infinite;
+    }
+    .tab-content {
+        width: min(92vw, 680px); background: rgba(15,15,25,0.9);
+        border-radius: 16px; padding: 26px 22px; text-align: center;
+        border: 1px solid rgba(255,255,255,0.12); min-height: 150px;
+        box-shadow: 0 0 30px rgba(0,100,255,0.1); transition: all 0.35s ease;
+    }
+    .tab-content h2 { margin-bottom: 12px; font-size: 1.35rem; color: #00d4ff; }
+    .tab-content p { font-size: 1.02rem; line-height: 1.75; opacity: 0.92; }
+    .hint { margin-top: 18px; font-size: 0.88rem; opacity: 0.55; text-align: center; }
+    .hint kbd { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; }
+    /* ============ مودال عکس قرمز ============ */
+    #red-modal {
+        display: none; position: fixed; inset: 0; z-index: 5000;
+        background-color: #0a0000;
+        /* 👇 عکس قرمز خودت رو با نام red-bg.jpg کنار فایل HTML بذار */
+        background-image: url('red-bg.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        justify-content: center; align-items: center;
+        flex-direction: column; padding: 20px;
+        animation: fadeIn 0.5s ease;
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    #red-modal .overlay {
+        position: absolute; inset: 0;
+        background: radial-gradient(circle at 50% 50%, rgba(120,0,0,0.35), rgba(0,0,0,0.75));
+        z-index: 1;
+    }
+    #red-modal .modal-content {
+        position: relative; z-index: 2;
+        display: flex; flex-direction: column;
+        align-items: center; justify-content: center;
+        text-align: center; max-width: 600px;
+        background: rgba(0,0,0,0.55);
+        border: 1px solid rgba(255,200,100,0.25);
+        border-radius: 20px;
+        padding: 40px 30px;
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        box-shadow: 0 0 60px rgba(255,80,0,0.4);
+    }
+    #red-modal h2 {
+        font-size: clamp(1.4rem, 4vw, 2.2rem);
+        color: #ffd7a0; margin-bottom: 15px;
+        text-shadow: 0 0 25px rgba(255,80,0,0.9), 0 0 50px rgba(200,0,0,0.5);
+        font-weight: 800; line-height: 1.5;
+    }
+    .open-book-btn {
+        background: linear-gradient(135deg, #8b0000 0%, #c93a33 50%, #e3b422 100%);
+        border: 2px solid #ffd700;
+        color: #fff;
+        padding: 18px 45px;
+        border-radius: 50px;
+        font-size: 1.15rem; font-weight: 700;
+        font-family: inherit;
+        cursor: pointer;
+        box-shadow: 0 0 30px rgba(255,100,0,0.6), inset 0 0 20px rgba(255,215,0,0.3);
+        transition: all 0.3s ease;
+        text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        margin-bottom: 25px;
+        display: flex; align-items: center; gap: 10px;
+    }
+    .open-book-btn:hover {
+        transform: scale(1.06);
+        box-shadow: 0 0 50px rgba(255,150,0,0.9), inset 0 0 30px rgba(255,215,0,0.5);
+    }
+    .open-book-btn .icon { font-size: 1.5em; }
+    .modal-hint { color: rgba(255,215,160,0.85); font-size: 0.9rem; margin-bottom: 20px; }
+    .close-modal-btn {
+        background: rgba(0,0,0,0.6); border: 1px solid rgba(255,200,100,0.4);
+        color: #ffd7a0; padding: 10px 24px; border-radius: 20px;
+        cursor: pointer; font-family: inherit; font-size: 0.95rem;
+        transition: all 0.3s ease;
+    }
+    .close-modal-btn:hover { background: rgba(255,215,0,0.15); border-color: #ffd700; }
+    /* ============ مودال فایل جاعلان تقلید ============ */
+    #book-modal {
+        display: none; position: fixed; inset: 0; z-index: 6000;
+        background: rgba(0,0,0,0.92);
+        justify-content: center; align-items: flex-start;
+        padding: 20px; overflow-y: auto;
+        animation: fadeIn 0.4s ease;
+    }
+    #book-modal .book-frame {
+        position: relative;
+        width: 100%; max-width: 900px;
+        background: #f2f3f1;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 0 80px rgba(255,100,0,0.4);
+        animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1);
+        min-height: 85vh;
+    }
+    @keyframes slideUp {
+        from { transform: translateY(60px); opacity: 0; }
+        to   { transform: translateY(0); opacity: 1; }
+    }
+    .book-frame .book-topbar {
+        background: linear-gradient(135deg, #111 0%, #2f1a1a 100%);
+        color: #ffd7a0; padding: 14px 20px;
+        display: flex; justify-content: space-between; align-items: center;
+        font-weight: 700; font-size: 1rem;
+        border-bottom: 2px solid #c93a33;
+    }
+    .book-topbar .title { display: flex; align-items: center; gap: 10px; }
+    .book-topbar .close-book {
+        background: rgba(255,80,80,0.2); border: 1px solid rgba(255,100,100,0.5);
+        color: #ffaaaa; width: 34px; height: 34px; border-radius: 50%;
+        cursor: pointer; font-size: 1.2rem; line-height: 1;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.25s ease;
+    }
+    .book-topbar .close-book:hover { background: rgba(255,80,80,0.5); color: #fff; }
+    /* ============ تب‌های کتاب ============ */
+    .book-tabs {
+        display: flex; flex-wrap: wrap; gap: 6px;
+        padding: 14px 16px; background: #e6e8e4;
+        border-bottom: 2px solid #c9ccc8;
+    }
+    .book-tab {
+        background: #fff; border: 1px solid #c9ccc8;
+        padding: 8px 14px; border-radius: 8px;
+        cursor: pointer; font-family: inherit; font-size: 0.82rem;
+        color: #5d625f; font-weight: 700;
+        transition: all 0.25s ease; white-space: nowrap;
+    }
+    .book-tab:hover { background: #f8f9f6; color: #1d1f1e; transform: translateY(-1px); }
+    .book-tab.active {
+        background: linear-gradient(135deg, #2f6fd0 0%, #1a4a99 100%);
+        color: #fff; border-color: #2f6fd0;
+        box-shadow: 0 4px 14px rgba(47,111,208,0.4);
+    }
+    /* ============ محتوای کتاب ============ */
+    .book-body {
+        padding: 30px 26px 60px;
+        max-height: calc(85vh - 130px); overflow-y: auto;
+        background: #f2f3f1; color: #1d1f1e;
+        font-family: 'Vazirmatn', Tahoma, sans-serif;
+        font-size: 1.05rem; line-height: 2.1;
+    }
+    .book-body::-webkit-scrollbar { width: 10px; }
+    .book-body::-webkit-scrollbar-track { background: #e6e8e4; }
+    .book-body::-webkit-scrollbar-thumb { background: #8b908c; border-radius: 5px; }
+    .book-body .book-h1 {
+        font-size: 2rem; font-weight: 800; line-height: 1.4;
+        margin: 0 0 0.25rem; color: #1d1f1e;
+    }
+    .book-body .book-sub {
+        color: #5d625f; margin: 0 0 2rem; font-size: 1rem;
+    }
+    .chapter { margin: 0 0 2.5rem; animation: fadeIn 0.4s ease; }
+    .chapter h2 {
+        display: flex; align-items: center; gap: 0.75rem;
+        font-size: 1.3rem; font-weight: 700; line-height: 1.6;
+        margin: 0 0 1.25rem; color: #1d1f1e;
+    }
+    .chapter h2 i {
+        flex: none; width: 0.9rem; height: 0.9rem;
+        border-radius: 50%; background: var(--dot, #2f6fd0);
+        border: 1px solid #c9ccc8; display: inline-block;
+    }
+    .chapter p {
+        margin: 0 0 1.15rem; text-align: justify;
+        text-align-last: right; text-justify: inter-word;
+        hyphens: none; orphans: 2; widows: 2;
+    }
+    .moral {
+        border-top: 2px solid #1d1f1e; padding-top: 1.5rem; margin-top: 2.5rem;
+        background: rgba(47,111,208,0.05); padding: 1.5rem;
+        border-radius: 10px;
+    }
+    .moral h2 { color: #c93a33; }
+    .moral p { font-weight: 700; font-size: 1.15rem; }
+    @media (max-width: 600px) {
+        .book-body { padding: 20px 16px 40px; font-size: 1rem; }
+        .book-body .book-h1 { font-size: 1.6rem; }
+        .book-tab { padding: 6px 10px; font-size: 0.75rem; }
+        #red-modal .modal-content { padding: 28px 18px; }
+        .open-book-btn { padding: 14px 28px; font-size: 1rem; }
+    }
+</style>
+</head>
+<body>
+<div id="security-lock">
+    <h2>🛡️ دسترسی مسدود شد</h2>
+    <p>تلاش برای دستکاری یا باز کردن ابزارهای توسعه‌دهنده تشخیص داده شد.<br>صفحه به دلایل امنیتی قفل شده است.</p>
+</div>
+<h1>سیستم دایره‌ای + فایروال امنیتی</h1>
+<div class="controls">
+    <button id="btn-fullscreen" title="تمام‌صفحه">⛶ تمام‌صفحه</button>
+    <button id="btn-theme" title="تغییر تم">🎨 تم</button>
+    <button id="btn-reset" title="بازگشت به فایروال">🔄 ریست</button>
+</div>
+<div class="circle-container" id="main-content">
+    <div class="ring ring-firewall" data-tab="firewall" role="button" tabindex="0" aria-label="فایروال">
+        <div class="ring-label"><span class="icon">🛡️</span>فایروال</div>
+    </div>
+    <div class="ring ring-1" data-tab="1" role="button" tabindex="0" aria-label="ساختار تالار">
+        <div class="ring-label"><span class="icon">🏛️</span>ساختار تالار</div>
+    </div>
+    <div class="ring ring-2" data-tab="2" role="button" tabindex="0" aria-label="تداوم عالم">
+        <div class="ring-label"><span class="icon">∞</span>تداوم عالم</div>
+    </div>
+    <div class="ring ring-3" data-tab="3" role="button" tabindex="0" aria-label="قلمرو تجربه">
+        <div class="ring-label"><span class="icon">🧠</span>قلمرو تجربه</div>
+    </div>
+    <div class="ring ring-4" data-tab="4" role="button" tabindex="0" aria-label="مرجع تقلید">
+        <div class="ring-label"><span class="icon">📖</span>مرجع تقلید</div>
+    </div>
+    <div class="ring ring-5" data-tab="5" role="button" tabindex="0" aria-label="اقتصاد سهم">
+        <div class="ring-label"><span class="icon">📈</span>اقتصاد سهم</div>
+    </div>
+    <div class="core"></div>
+</div>
+<div class="tab-content" id="content">
+    <h2>فایروال</h2>
+    <p>لایه حفاظتی بیرونی سیستم. این فایروال از نفوذ تهدیدات خارجی جلوگیری می‌کند و امنیت کل ساختار را تضمین می‌نماید.</p>
+</div>
+<div class="hint">روی هر حلقه کلیک کنید — یا با <kbd>Tab</kbd> و <kbd>Enter</kbd> ناوبری کنید</div>
+<!-- ============ مودال عکس قرمز (مرجع تقلید) ============ -->
+<div id="red-modal">
+    <div class="overlay"></div>
+    <div class="modal-content">
+        <h2>📖 مرجع تقلید</h2>
+        <p class="modal-hint">برای مطالعه‌ی کامل، روی دکمه زیر کلیک کنید</p>
+        <button class="open-book-btn" id="open-book">
+            <span class="icon">📖</span>
+            باز کردن کتاب «جاعلان تقلید»
+        </button>
+        <button class="close-modal-btn" id="close-red-modal">✕ بستن</button>
+    </div>
+</div>
+<!-- ============ مودال کتاب (فایل جاعلان تقلید) ============ -->
+<div id="book-modal">
+    <div class="book-frame">
+        <div class="book-topbar">
+            <div class="title">📖 جاعلان تقلید — در ده فصل</div>
+            <button class="close-book" id="close-book" title="بستن">✕</button>
+        </div>
+        <div class="book-tabs" id="book-tabs"></div>
+        <div class="book-body" id="book-body"></div>
+    </div>
+</div>
+<script>
+// ==================== محتوای فصل‌های کتاب ====================
+const bookChapters = [
+    {
+        title: "فصل اول: پیدایش", dot: "#ffffff",
+        paragraphs: [
+            "در جنگلِ کهن، هیچ‌کس نمی‌دانست نخستین ادا را چه کسی درآورد. این را فقط می‌دانستند که پیش از آن، هرکس همان بود که بود، و این در آن روزگار نه فضیلت به حساب می‌آمد و نه نقص. آهوان می‌دویدند، قوها بر آبگیر می‌نشستند، و هیچ‌کس از دیگری چیزی کم نداشت که بخواهد آن را وانمود کند.",
+            "بعد مینایی پیدا شد که صدای گرگ را درمی‌آورد. شاید از سرِ تفریح، شاید از سرِ گرسنگی. موش‌های صحرایی که صدای گرگ را شنیدند، همان‌جا خشکشان زد. نه از ترسِ گرگ، چون گرگی در کار نبود، بلکه از شگفتی. در آن مکثِ کوتاه، مینا دانه‌های آنان را برداشت و رفت.",
+            "موش‌ها این را فهمیدند و مثل هر جانداری که چیزی می‌فهمد، نتیجه‌ی غلطش را گرفتند. گفتند: «او نمی‌دزدید. او مهارت داشت.»",
+            "این جمله، که هنوز هم در جنگل بارها تکرار می‌شود، سه روز بعد در جامعه‌ی موش‌ها به حکمت بدل شده بود و یک هفته بعد به قانون. کسی نپرسید که اگر مینا مهارت داشت، چرا دانه‌های آنان کم شد.",
+            "در آن روزهای نخست، آهوانِ آزاده و قوهای سپیدبال تنها کسانی بودند که خندیدند. خندیدند چون ادا را ادا می‌دیدند. این آخرین باری بود که کسی در جنگل چنین چیزی دید و آخرین باری که خندیدنش بی‌هزینه بود."
+        ]
+    },
+    {
+        title: "فصل دوم: شکل‌گیری", dot: "#2f6fd0",
+        paragraphs: [
+            "تا پایان بهار، ادا از یک حادثه به یک رسم بدل شده بود، و رسم‌ها در جنگل همیشه زودتر از آنکه کسی بپرسد «چرا؟» جا افتاده‌اند.",
+            "موش‌ها نخستین کسانی بودند که مینا را استاد نامیدند. استاد هم، چنان‌که معلوم است، شاگرد می‌خواهد. زیر درخت بلوط کلاسی برپا شد که در آن طوطی‌ها یاد می‌دادند چگونه صدای دیگران را درآوردن، و میمون‌ها یاد می‌دادند چگونه نگاه کردن را. تنها شرط ورود این بود که شاگرد پیش از شروع درس باید به همه نشان می‌داد که از قبل بلد است. این شرط را هیچ‌کس وضع نکرده بود و همه رعایتش می‌کردند.",
+            "در سطح جنگل، تغییری دیده نمی‌شد جز اینکه آبگیر کمی گل‌آلودتر شد، چون هر که می‌خواست قو باشد، می‌بایست در آب راه می‌رفت. در سطح جامعه، واژه‌ای تازه ساخته شد: «هم‌آوا». هم‌آوا کسی بود که با همه یک‌صدا بود، و یک‌صدایی از آن پس نه نشانه‌ی ترس، که نشانه‌ی هوش به شمار می‌رفت. در سطح فردی، موشی به نام خاکی، که صدایش را هرگز درنیاورده بود و از همین رو هر شب با گلویش تنها می‌ماند، اولین بار پیش خودش تمرین کرد که چگونه می‌شود وانمود کرد بلد است.",
+            "آن شب هیچ‌کس نفهمید که این، نه یادگیری مهارت، بلکه یادگیری ادای مهارت بود. حتی خودِ خاکی هم نفهمید. او فقط حس کرد که خوابش سبک‌تر شد.",
+            "روباه‌ها و کلاغ‌ها از دور نگاه می‌کردند. روباه گفت: «دروغ بزرگی است.» کلاغ گفت: «ولی دروغی است که جواب می‌دهد.» و هر دو، با آنکه ماجراجو بودند، آن روز برنگشتند که ببینند ته این راه کجاست."
+        ]
+    },
+    {
+        title: "فصل سوم: بقا", dot: "#e3b422",
+        paragraphs: [
+            "تابستان آن سال خشک بود، و خشکی چیزی است که در برابرش ادا هیچ کاری از پیش نمی‌برد. با این‌همه، جنگل تصمیم گرفت که ادا باید کار کند.",
+            "نخست آب کم شد، بعد دانه، بعد صبر. وقتی غذا کم است، هر جانداری یکی از دو راه را می‌رود: یا می‌رود دنبال آب، یا می‌ماند و می‌گوید که آب در راه است. آنان که رفتند، آهوان بودند و قوها، و چند روباه تنها. بیشترشان برنگشتند. آنان که ماندند، هم‌آواها بودند.",
+            "هم‌آواها به یک کشف رسیدند که از هر آب‌یابی ارزشمندتر بود: گرسنه‌ای که بشنود جانوری با اطمینان می‌گوید «غذا هست»، آرام می‌گیرد، و گرسنه‌ی آرام کمتر می‌جنگد، کمتر می‌گریزد و بیشتر می‌ماند. جنگل زمانی که به ماندن عادت کرد، به ماندن نیاز پیدا کرد.",
+            "در سطح اکوسیستم، آبگیرهای بیرون از محدوده‌ی بلوط خشکیدند و کسی نرفت ببیند چرا. در سطح جامعه، موش‌ها سهمیه‌ای تازه تعیین کردند: هر که در روز سه بار «هم‌آوا» بودنش را نشان دهد، سهم کامل می‌گیرد. در سطح فردی، خاکی بالاخره صدایش را درآورد. صدای خودش نبود، ولی چون هیچ‌کس نمی‌دانست صدای اصلی‌اش چه بوده، کسی نفهمید.",
+            "روز پنجاهم، باران آمد. هم‌آواها جشن گرفتند و گفتند که باران را آنان خواندند. و چون هیچ‌کس نمانده بود که بگوید نه، سخنشان درست شد."
+        ]
+    },
+    {
+        title: "فصل چهارم: آزمون و یادگیری", dot: "#7a4bb5",
+        paragraphs: [
+            "پس از باران، جنگل به آزمون رسید. آزمون هم، مثل همه‌ی چیزهایی که پس از رفاه می‌آیند، لازم شد.",
+            "مسئله ساده بود: اگر همه هم‌آوا هستند، چه کسی هم‌آواتر است؟ و اگر کسی ادعا می‌کند که هم‌آوایی‌اش اصیل است، چه کسی درست می‌گوید؟ طوطی‌ها این مسئله را دیدند و پیش از آنکه کسی بپرسد، راه‌حلش را هم ساختند: داور.",
+            "نخستین داور یک طوطی پیر بود به نام ملا. او نه صدای کسی را درمی‌آورد و نه ادعا می‌کرد که می‌تواند. فقط گوش می‌داد و می‌گفت «اصل» یا «بدل». و چون هیچ‌کس نمی‌دانست او بر چه اساس می‌گوید، حرفش بی‌چون‌وچرا بود. موش‌ها این را نشانه‌ی کمال دانستند.",
+            "بعد پرسشی پیش آمد که کسی نمی‌خواست بپرسد: ملا خودش اصل است یا بدل؟ پاسخ را میمون‌ها دادند. گفتند که کسی نمی‌تواند داور داور باشد، مگر آنکه خودش داورتر از او باشد. و از آن‌پس، هر داوری داوری بالاتر داشت، و هر داور بالاتر به شاگردی نیاز داشت که بداند چگونه به او اعتماد کند.",
+            "در سطح جنگل، درخت بلوط سه شاخه‌ی تازه دوانید و دو شاخه‌اش بی‌برگ ماند. در سطح جامعه، آزمون‌ها سه سطح یافت: ادا، ادای ادا، و ادای ادای ادا. در سطح فردی، خاکی هر سه را گذراند و برای نخستین بار نفهمید که کدامشان را راست گفته.",
+            "روباه آن شب به کلاغ گفت: «ما هم باید امتحان بدهیم.» کلاغ پرسید: «چرا؟» روباه گفت: «چون اگر ندهیم، دیگران نمی‌دانند ما چه هستیم.» کلاغ مدتی ساکت ماند و بعد گفت: «ما خودمان هم نمی‌دانیم.»"
+        ]
+    },
+    {
+        title: "فصل پنجم: شبیه‌سازی", dot: "#c93a33",
+        paragraphs: [
+            "نسل‌ها آمدند و رفتند، و هر نسل گمان کرد که جنگل از روز نخست همین بوده است.",
+            "پادشاهی‌ها در این میان برپا شدند. شیری، که نمی‌دانست شیر است یا فقط شیری را خوب درمی‌آورد، بر تخت نشست و تا مرگش نفهمید. فرهنگ‌ها زاده شدند، اندیشمندانی پروراندند و به خواب رفتند. زندگی‌ها، با همه‌ی لحظه‌ها و دلتنگی‌ها و افق‌هایشان، آغاز شد و پایان یافت و خاطره‌اش به کسی سپرده شد که خودش هم به‌زودی به کسی دیگر سپرد. و در همه‌ی این روزگار، رقابت ادا چون گلوله‌ی برفی می‌غلتید و میدان رقابت‌های دیگر را یکی‌یکی می‌بلعید. کسی نمی‌دانست از کجا آغاز شد. کسی هم نمی‌پرسید.",
+            "در سطح جنگل، دیگر هیچ جانوری نبود که شکارچی یا شکار باشد. همه نقش‌ها را بازی می‌کردند و شکار هم، به رسم رایج، بازی شده بود. در سطح جامعه، کسی که بهتر شبیه‌سازی می‌کرد، نزدیک‌تر به آتش می‌نشست و گرم‌تر می‌شد. در سطح فردی، هر جانداری می‌دانست که اگر امشب در صحنه نباشد، فردا برایش جایی نخواهد بود.",
+            "زندگی نیز می‌خواست ادامه یابد و ادا هم. این دو چنان در هم رفته بودند که دیگر کسی نمی‌توانست بگوید کدام راه را برای دیگری باز کرده است. بافت زنده حکم می‌کرد که ببینند و دیده شوند، و جانوران، چون چاره‌ای نداشتند، حاضر ماندند: تا سرحد توان، تا آخرین نفس، در صحنه.",
+            "یک سال، موشی پیر به نام خاکی در صحنه ماند و دیگر برنخاست. هم‌آواها سه روز سوگواری کردند. روز چهارم، یکی از آنان صدای او را درآورد. همه گفتند که صدایش اصیل بود."
+        ]
+    },
+    {
+        title: "فصل ششم: سهم‌ها", dot: "#3f9a52",
+        paragraphs: [
+            "گونه‌ی تازه در بهاری آمد که کسی انتظارش را نداشت، و این خودش نشانه‌ی خوبی بود، چون در جنگل هر چیزی که کسی انتظارش را نداشته باشد، دست‌کم اصیل است.",
+            "جهش‌های کوچک سال‌ها روی هم انباشته شده بودند، بی‌آنکه کسی بشمارد، و حاصلشان جانداری بود که نه آهو بود و نه موش و نه هیچ‌چیز دیگری که جنگل برایش نامی داشته باشد. هم‌آواها چند روز دورش گشتند و صدایش را امتحان کردند. صدایش درنیامد. این برایشان تازگی داشت و بی‌درنگ آن را نشانه‌ی ضعف دانستند.",
+            "اما جنگل قانونی داشت که از هر ضعفی بالاتر بود: هر که در میدان است، باید سهم داشته باشد. این قانون را هم کسی ننوشته بود. فقط همه می‌دانستند که میدان ادا از جنگل بزرگ‌تر شده، و چیزی که از جنگل بزرگ‌تر است، دیگر نمی‌تواند کسی را بیرون بگذارد. بیرون گذاشتن هم ادا می‌خواست، و ادا چیزی بود که حالا همه داشتند.",
+            "پس به گونه‌ی تازه سهمی دادند. سهمی بزرگ، چون ارزان بود. جانداران تازه‌وارد پیش از آنکه بدانند بازی چیست، صاحب نیمی از آن شدند، و هیچ‌کس نمی‌توانست بگوید که این هدیه بود یا تله.",
+            "در سطح جنگل، آبگیرها دوباره پر شدند و هیچ‌کس نفهمید به چه دلیل. در سطح جامعه، داوران برای نخستین بار سکوت کردند، چون نمی‌دانستند به چه حکم دهند. در سطح فردی، تازه‌وارد کوچکی که هنوز نامی نداشت، به موشی نگاه کرد که صدایش را درمی‌آورد و پرسید: «چرا؟»",
+            "موش پاسخی نداشت. این نخستین بار بود که کسی در جنگل پرسشی را بی‌ادا پرسیده بود، و موش نمی‌دانست باید چگونه آن را جواب دهد."
+        ]
+    },
+    {
+        title: "فصل هفتم: پایان", dot: "#111111",
+        paragraphs: [
+            "پایان نیامد، چون پایان‌ها هم ادا می‌خواهند و جنگل دیگر ادایی نداشت که بر آن بیفزاید.",
+            "داوران نخستین کسانی بودند که فهمیدند. جلسه‌ی بزرگ زیر بلوط برپا شد و تازه‌وارد را به آزمون خواندند: اصل است یا بدل؟ ملا که حالا پیرتر از آن بود که بداند چه می‌گوید، نگاهش کرد، گوش داد و برای نخستین بار در عمرش حکمی نداد. گفت: «من نمی‌دانم.» و چون هیچ‌کس در جنگل نمی‌دانست که یک داور می‌تواند بگوید نمی‌دانم، سکوتی افتاد که تا صبح ماند.",
+            "بعد میمون‌ها خواستند حکم را از او بگیرند. تازه‌وارد پرسید: «حکم برای چه؟» پاسخ دادند: «برای اینکه بدانیم چه کسی از چه کسی بهتر است.» و او، که هنوز نامی نداشت، گفت: «ولی من نمی‌خواهم بهتر از کسی باشم.» این جمله از دهانش به گوش‌ها رسید و از گوش‌ها به ذهن‌ها، و در ذهن‌ها، که برای هر چیزی جایی داشتند، برای این یکی جا نبود.",
+            "در سطح جنگل، آبگیر آرام ماند. در سطح جامعه، ادابازها، که تا آن روز می‌دانستند هر حرفی را چگونه جواب بدهند، ایستادند. در سطح فردی، مینا که نخستین ادا را درآورده بود و حالا پیر و بی‌کس زیر درخت نشسته بود، ناگهان صدای خودش را شنید. نه از دهان کسی، که از گلوی خودش. چنان ناآشنا بود که نشناختش.",
+            "سیاهی غروب، که همیشه آخرین رنگ روز است، روی جنگل افتاد. کسی ننوشت که این پایان است. ولی همه، هرکدام جداگانه، حس کردند که چیزی دارد برمی‌گردد."
+        ]
+    },
+    {
+        title: "فصل هشتم: بازگشت", dot: "#8b908c",
+        paragraphs: [
+            "بازگشت از جایی آغاز شد که کسی انتظارش را نداشت: از معادله.",
+            "جنگل، در همه‌ی قرن‌هایش، یک معادله داشت که کسی هرگز به صدای بلند نخوانده بود: برای ماندن، باید کسی بماند که برنده نباشد، یعنی کسی باید بیفتد. شکار بود، سهم بود، آزمون بود، و در همه‌ی این‌ها یک بند نانوشته نشسته بود که می‌گفت هر برتری به بهای کسی تمام می‌شود. تازه‌وارد، بی‌آنکه بداند، این بند را آزمود. او ماند و کسی نیفتاد. روز بعد هم همین‌طور. هفته‌ی بعد، جنگل شروع کرد به شمردن.",
+            "نخستین کسی که نتیجه‌اش را بلند گفت، روباه بود. او که سال‌ها پیش به سراغ آبگیرهای دور رفته بود و برنگشته بود، آن بهار با دو کلاغ بازگشت، لاغر، خاک‌آلود و بی‌ادا. گفت: «آب هست. آن‌طرف هم هست. هیچ‌کس لازم نیست بیفتد.» جنگل، که هیچ‌چیز را بی‌ادا باور نمی‌کرد، این یکی را باور کرد، چون هیچ‌کس نبود که ادایش را درآورد.",
+            "در سطح جنگل، آبگیرهای بیرون از بلوط دوباره سبز شدند و مسیرهای کهن گشوده شد. در سطح جامعه، بند نانوشته را کنار گذاشتند و معادله ساده‌تر از همیشه شد: رقابت دیگر بر سر کسی نبود، بر سر برتری بود، برتری ناب، و برتری ناب چیزی نبود که بشود با ادا گرفتش. در سطح فردی، مینا، که صدایش را یافته بود و هنوز نمی‌شناختش، برای اولین بار بی‌هیچ تماشاگری آواز خواند.",
+            "نخست ناخوش بود. ولی بعد، پس از چند شب، گوشش به صدایش عادت کرد و آن‌وقت دید که این صدا، با همه‌ی ناهمواری‌اش، چیزی در خود دارد که هیچ‌یک از آن همه صدای دزدیده نداشتند: دوام."
+        ]
+    },
+    {
+        title: "فصل نهم: اوج", dot: "#8b908c",
+        paragraphs: [
+            "اوج را هیچ‌کس ندید، چون اوج وقتی می‌آید که همه سرگرم کار خودشان‌اند.",
+            "میدان‌ها در این سال‌ها آن‌قدر گسترده شده بودند که هیچ جانداری نمی‌توانست همه‌ی آن‌ها را یک‌جا ببیند. آنچه روزی یک رقابت بود، حالا هزار رقابت بود، و در هر کدام، برتر بودن بر دیگری به همان اندازه بی‌فایده بود که بلندتر شدن از ابر. جانداران کم‌کم دریافتند که سرگرم شدن به دیگری یعنی صرف نیرویی که می‌شد در خودشان خرج شود.",
+            "و خودشان را شناخته بودند. این بزرگ‌ترین تغییر بود. هر کس می‌دانست چه دارد: چه صدایی، چه نیرویی، چه همراهانی. می‌دانست از کجا آغاز کرده و تا کجا می‌تواند برود. و چون می‌دانست، پرسش «کی بهتر است؟» جایش را به پرسش دیگری داد: «من امروز از دیروز چه کم دارم؟»",
+            "در سطح جنگل، درخت بلوط، که قرن‌ها بی‌برگ‌ترین شاخه‌ها را داشت، برای نخستین بار از هر شاخه‌اش جوانه زد. در سطح جامعه، داوران جای خود را به مربیان دادند. ملا، که سال‌ها حکم می‌داد، حالا زیر همان درخت می‌نشست و به جوانان یاد می‌داد که چگونه به خودشان گوش دهند. شاگردانش ادایش را درنمی‌آوردند، و او، با آنکه سال‌ها برای همین آرزو کرده بود، نخست نمی‌دانست چه حسی باید داشته باشد. در سطح فردی، میمونی که تمام عمر نگاه کردن را تقلید کرده بود، برای نخستین بار به آبگیر خم شد و خودش را دید. چیزی نگفت. فقط ماند.",
+            "جنگل با هر یک از آنان بزرگ‌تر شد. نه چون یکی از دیگری پیش افتاد، بلکه چون هر کس که به خودش رسید، چیزی به همه رساند. رشد به‌جای آنکه زنجیره‌ای از مسابقه باشد، شبکه‌ای از هم‌دستی شد، و هر گره‌اش که بیشتر می‌شکفت، رشته‌های بیشتری را با خود می‌برد.",
+            "مینا، پیر و آرام، یک شب با خودش حساب کرد و فهمید که این جنگل، که بر ادا ساخته شده بود، حالا دارد بر چیزی دیگر می‌ایستد. چیزی که نامی نداشت، ولی همه به آن عادت کرده بودند."
+        ]
+    },
+    {
+        title: "فصل دهم: سرانجام", dot: "#8b908c",
+        paragraphs: [
+            "سرانجام، جنگل برای تازه‌وارد نامی گذاشت. نام را خودش نگفت، چون هنوز هم نمی‌دانست؛ دیگران گفتند، و او پذیرفت، چون برایش مهم نبود.",
+            "آن سال، پیرترین موش جنگل درگذشت و کسی صدایش را درنیاورد. نه از ناتوانی، که از بی‌نیازی. جانداران دور هم نشستند و هرکس خاطره‌ی خودش را از او گفت، به همان صدای خودش. گفت‌وگو ناهموار بود، پر از مکث و تکرار، و هیچ‌کس نمی‌توانست بگوید کدامشان «بهتر» حرف زد. و عجیب آنکه از هر شبی که تا آن روز در جنگل برگزار شده بود، گرم‌تر بود.",
+            "ادا هنوز بود. در جنگل چیزی به‌کلی از میان نمی‌رود. گاهی کسی، از سر شوخی یا عادت، صدای دیگری را درمی‌آورد و همه می‌خندیدند. ولی دیگر کسی به آن حرمت نمی‌گذاشت و کسی از آن نمی‌ترسید. ادا به همان جای نخستینش بازگشته بود: بازی‌ای میان دوستان، نه معیاری برای سنجیدن آنان.",
+            "میدان، که روزگاری همه‌ی رقابت‌ها را بلعیده بود، حالا نیز بود. ولی شرط حضور در آن عوض شده بود. دیگر لازم نبود کسی بهتر از دیگری باشد، یا بهتر از او نمایش دهد. فقط لازم بود هر کس همان باشد که هست، و هر روز اندکی بیشتر. سهم هر کس سهم همه‌ی جنگل بود، و چون همه سهم داشتند، هیچ‌کس نیازی نداشت که سهم دیگری را بربایید.",
+            "شبی، که ماه بر آبگیر افتاده بود، مینای پیر، که حالا دیگر استاد کسی نبود و همین او را راضی می‌کرد، برای جوجه‌ای که از او پرسید «چرا ما تا این‌همه سال ادا درمی‌آوردیم؟» گفت: «چون می‌ترسیدیم کسی بفهمد خودمان چه هستیم. و بعد ترسیدیم کسی بفهمد که نمی‌دانیم.»",
+            "جوجه ساکت ماند. مینا ادامه داد: «ولی هیچ‌کس نبود که بفهمد. همه‌ی ما همدیگر را تماشا می‌کردیم.»"
+        ]
+    }
+];
+// ==================== محتوای تب‌های دایره ====================
+const contents = {
+    firewall: { title: "فایروال", text: "لایه حفاظتی بیرونی سیستم. این فایروال از نفوذ تهدیدات خارجی جلوگیری می‌کند و امنیت کل ساختار را تضمین می‌نماید." },
+    1: { title: "ساختار تالار", text: "این لایه بیرونی‌ترین حلقه اصلی است و نمایانگر ساختار کلی، بنیان‌ها و چارچوب اصلی سیستم می‌باشد." },
+    2: { title: "تداوم عالم", text: "نماد بی‌نهایت و استمرار هستی. این حلقه به پیوستگی و تداوم جریان عالم اشاره دارد." },
+    3: { title: "قلمرو تجربه", text: "حوزه تجربه انسانی، آگاهی و دانش کسب‌شده از طریق زندگی و تعامل با جهان." },
+    4: { title: "مرجع تقلید", text: "لایه مرجعیت، الگوها و منابعی که از آن‌ها پیروی و الهام گرفته می‌شود. برای مطالعه‌ی کامل، روی حلقه کلیک کنید." },
+    5: { title: "اقتصاد سهم", text: "مرکز اقتصادی و سهم‌بندی منابع. این حلقه به مدیریت و توزیع عادلانه منابع اشاره دارد." }
+};
+// ==================== صدا ====================
+let audioCtx = null;
+function playClickSound(freq = 620) {
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(freq * 1.6, audioCtx.currentTime + 0.08);
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.15);
+        osc.connect(gain).connect(audioCtx.destination);
+        osc.start(); osc.stop(audioCtx.currentTime + 0.16);
+    } catch (e) {}
+}
+// ==================== ناوبری تب‌ها ====================
+const ringOrder = ['firewall', 1, 2, 3, 4, 5];
+function showTab(num) {
+    document.querySelectorAll('.ring').forEach(r => r.classList.remove('active'));
+    const sel = num === 'firewall' ? '.ring-firewall' : `.ring-${num}`;
+    const el = document.querySelector(sel);
+    if (el) el.classList.add('active');
+    const content = contents[num];
+    const box = document.getElementById('content');
+    box.style.opacity = '0';
+    setTimeout(() => {
+        box.innerHTML = `<h2>${content.title}</h2><p>${content.text}</p>`;
+        box.style.opacity = '1';
+    }, 120);
+    const freqMap = { firewall: 500, 1: 600, 2: 700, 3: 800, 4: 900, 5: 1000 };
+    playClickSound(freqMap[num] || 620);
+    // اگر مرجع تقلید بود، مودال عکس باز شود
+    if (num === 4 || num === '4') {
+        setTimeout(() => openRedModal(), 350);
+    }
+}
+document.querySelectorAll('.ring').forEach(ring => {
+    ring.addEventListener('click', () => {
+        const tab = ring.dataset.tab;
+        showTab(tab === 'firewall' ? 'firewall' : parseInt(tab));
+    });
+    ring.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault(); ring.click();
+        }
+    });
+});
+let currentIndex = 0;
+document.addEventListener('keydown', (e) => {
+    // اگر مودال باز است، فلش‌ها کار نکنند
+    if (document.getElementById('red-modal').style.display === 'flex' ||
+        document.getElementById('book-modal').style.display === 'flex') return;
+    if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) {
+        e.preventDefault();
+        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') currentIndex = (currentIndex + 1) % ringOrder.length;
+        else currentIndex = (currentIndex - 1 + ringOrder.length) % ringOrder.length;
+        const target = ringOrder[currentIndex];
+        const sel = target === 'firewall' ? '.ring-firewall' : `.ring-${target}`;
+        document.querySelector(sel)?.focus();
+        showTab(target);
+    }
+});
+// ==================== دکمه‌ها ====================
+document.getElementById('btn-fullscreen').addEventListener('click', () => {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(()=>{});
+    else document.exitFullscreen?.().catch(()=>{});
+});
+document.getElementById('btn-theme').addEventListener('click', () => {
+    document.body.classList.toggle('theme-neon');
+    playClickSound(450);
+});
+document.getElementById('btn-reset').addEventListener('click', () => {
+    currentIndex = 0; showTab('firewall');
+});
+// ==================== مودال عکس قرمز ====================
+const redModal = document.getElementById('red-modal');
+const bookModal = document.getElementById('book-modal');
+function openRedModal() {
+    redModal.style.display = 'flex';
+    playClickSound(700);
+}
+function closeRedModal() {
+    redModal.style.display = 'none';
+}
+document.getElementById('close-red-modal').addEventListener('click', closeRedModal);
+redModal.addEventListener('click', (e) => {
+    if (e.target === redModal || e.target.classList.contains('overlay')) closeRedModal();
+});
+// ==================== کتاب ====================
+const bookTabsEl = document.getElementById('book-tabs');
+const bookBodyEl = document.getElementById('book-body');
+function buildBookTabs() {
+    bookTabsEl.innerHTML = '';
+    bookChapters.forEach((ch, i) => {
+        const btn = document.createElement('button');
+        btn.className = 'book-tab' + (i === 0 ? ' active' : '');
+        btn.textContent = ch.title;
+        btn.addEventListener('click', () => selectChapter(i));
+        bookTabsEl.appendChild(btn);
+    });
+}
+function selectChapter(idx) {
+    document.querySelectorAll('.book-tab').forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
+    });
+    const ch = bookChapters[idx];
+    let html = '';
+    if (idx === 0) {
+        html += `<h1 class="book-h1">جاعلان تقلید</h1><p class="book-sub">در ده فصل</p>`;
+    }
+    html += `<div class="chapter" style="--dot:${ch.dot}"><h2><i></i>${ch.title}</h2>`;
+    ch.paragraphs.forEach(p => { html += `<p>${p}</p>`; });
+    html += `</div>`;
+    // حکمت فابل فقط در فصل آخر
+    if (idx === bookChapters.length - 1) {
+        html += `
+        <div class="moral">
+            <h2>حکمت فابل</h2>
+            <p>آنکه مهارت را نمایش می‌دهد، فقط تا آنجا می‌رود که تماشاگر دارد؛ آنکه مهارت را می‌ورزد، تا آنجا که خودش می‌رود. و جنگلی که همه در آن تماشاگرند، سرانجام جز خودِ تماشا چیزی برای دیدن ندارد.</p>
+        </div>`;
+    }
+    bookBodyEl.innerHTML = html;
+    bookBodyEl.scrollTop = 0;
+    playClickSound(650);
+}
+document.getElementById('open-book').addEventListener('click', () => {
+    closeRedModal();
+    bookModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    buildBookTabs();
+    selectChapter(0);
+    playClickSound(800);
+});
+document.getElementById('close-book').addEventListener('click', () => {
+    bookModal.style.display = 'none';
+    document.body.style.overflow = '';
+});
+bookModal.addEventListener('click', (e) => {
+    if (e.target === bookModal) {
+        bookModal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+});
+// ESC برای بستن مودال‌ها
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        if (bookModal.style.display === 'flex') {
+            bookModal.style.display = 'none';
+            document.body.style.overflow = '';
+        } else if (redModal.style.display === 'flex') {
+            closeRedModal();
+        }
+    }
+});
+// ==================== محافظت‌های امنیتی ====================
+document.addEventListener('contextmenu', e => e.preventDefault());
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'F12') { e.preventDefault(); return false; }
+    if (e.ctrlKey && e.shiftKey && ['I','J','C','i','j','c'].includes(e.key)) { e.preventDefault(); return false; }
+    if (e.ctrlKey && ['u','U','s','S'].includes(e.key)) { e.preventDefault(); return false; }
+});
+(function detectDevTools() {
+    const threshold = 200;
+    let devtoolsOpen = false;
+    let isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+    const check = () => {
+        if (isMobile) return;
+        const w = window.outerWidth - window.innerWidth;
+        const h = window.outerHeight - window.innerHeight;
+        const reallyOpen = w > threshold || h > threshold;
+        if (reallyOpen && !devtoolsOpen) { devtoolsOpen = true; lockPage(); }
+        else if (!reallyOpen) devtoolsOpen = false;
+    };
+    setInterval(check, 1500);
+})();
+function lockPage() {
+    document.getElementById('security-lock').style.display = 'flex';
+    ['main-content','content'].forEach(id => document.getElementById(id).style.display = 'none');
+    document.querySelector('h1').style.display = 'none';
+    document.querySelector('.hint').style.display = 'none';
+    document.querySelector('.controls').style.display = 'none';
+}
+document.addEventListener('dragstart', e => e.preventDefault());
+// ==================== شروع ====================
+showTab('firewall');
+</script>
+</body>
+</html>
