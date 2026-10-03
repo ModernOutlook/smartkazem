@@ -378,3 +378,14 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
   .info p { font-size: clamp(.5rem, 1.8vh, .68rem); line-height: 1.45; }
 }
 @media (prefers-reduced-motion: reduce) { .info { transition: none; } }
+
+
+/* SiteAudio toggle — localized by the existing i18n catalog. */
+.site-sound-toggle{min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:0 12px;border:1px solid rgba(255,255,255,.24);border-radius:12px;background:rgba(8,12,16,.62);color:#fff;font:inherit;font-weight:800;cursor:pointer;flex:0 0 auto;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);transition:opacity .2s ease,border-color .2s ease,background .2s ease}
+.site-sound-toggle:hover,.site-sound-toggle:focus-visible{opacity:1;border-color:rgba(255,255,255,.5)}
+.site-sound-toggle:focus-visible{outline:2px solid currentColor;outline-offset:3px}
+.site-sound-toggle .sound-glyph{font-size:1.15rem;line-height:1}
+.site-sound-toggle .sound-label{white-space:nowrap}
+.home-sound-toggle{position:fixed;z-index:10001;top:max(12px,env(safe-area-inset-top));left:12px;opacity:.82}
+@media(max-width:520px){.site-sound-toggle{width:44px;height:44px;padding:0;border-radius:50%}.site-sound-toggle .sound-label{display:none}}
+@media(prefers-reduced-motion:reduce){.site-sound-toggle{transition:none}}
