@@ -310,6 +310,35 @@ background-size:127px 139px,151px 127px,173px 149px,139px 157px,181px 163px;opac
 .experience-platform{position:absolute;left:-6%;bottom:-9%;width:82%;height:30%;border-radius:50%;background:linear-gradient(180deg,#2a1836,#100a18);border-top:3px solid rgba(204,131,255,.65);transform:rotate(-5deg);box-shadow:0 -10px 35px rgba(194,85,255,.25)}
 .experience-head{position:absolute;z-index:12;top:5%;left:5%;right:5%;display:flex;justify-content:space-between;align-items:center;direction:rtl}.experience-title strong{display:block;font-size:clamp(1rem,3.5vw,1.4rem);text-shadow:0 2px 12px #000}.experience-title span{display:block;font-size:.62rem;opacity:.58;direction:ltr}.experience-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(239,190,255,.45);background:rgba(15,0,30,.48);color:#fff;cursor:pointer}
 
+/* ===== Share Economy page ===== */
+.share-page{display:none;overflow:hidden;background:
+radial-gradient(ellipse at 52% 18%,rgba(194,255,194,.98),transparent 24%),
+radial-gradient(ellipse at 18% 58%,rgba(42,180,132,.75),transparent 30%),
+linear-gradient(180deg,#04251e 0%,#0a8d67 39%,#73d9ad 72%,#e8f8d7 100%);color:#fff}
+.share-page::before{content:"";position:absolute;inset:0;background:
+radial-gradient(circle at 8% 12%,#dffff0 0 1px,transparent 2px),
+radial-gradient(circle at 25% 18%,#fff 0 1px,transparent 2px),
+radial-gradient(circle at 74% 10%,#eafff4 0 1px,transparent 2px),
+radial-gradient(circle at 91% 31%,#fff 0 1px,transparent 2px),
+radial-gradient(circle at 42% 45%,rgba(238,255,247,.9) 0 1px,transparent 2px);
+background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opacity:.72}
+.share-space{position:absolute;inset:0;overflow:hidden}
+.share-moon{position:absolute;left:-10%;top:7%;width:27%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 35% 34%,#efffdc,#9ad6a0 57%,#3b8065);box-shadow:0 0 38px rgba(200,255,224,.5)}
+.share-island{position:absolute;background:linear-gradient(180deg,#4f713c,#183c2d 48%,#09241d);clip-path:polygon(0 18%,100% 0,91% 61%,74% 75%,61% 100%,38% 82%,14% 88%);box-shadow:0 18px 38px rgba(0,0,0,.48)}
+.share-island::before{content:"";position:absolute;left:7%;right:7%;top:4%;height:28%;border-radius:50%;background:linear-gradient(180deg,#477c46,#1a442e);box-shadow:inset 0 4px 9px rgba(232,255,181,.3)}
+.share-island.i1{left:22%;top:31%;width:58%;height:40%}.share-island.i2{left:-12%;top:56%;width:31%;height:26%}.share-island.i3{right:-4%;top:57%;width:36%;height:31%}.share-island.i4{left:24%;top:71%;width:34%;height:24%}.share-island.i5{right:2%;top:22%;width:18%;height:20%}
+.share-city{position:absolute;z-index:3;left:33%;top:15%;width:37%;height:27%;background:linear-gradient(90deg,#0d3029,#071a16);clip-path:polygon(0 100%,4% 57%,9% 78%,13% 31%,18% 68%,24% 48%,29% 72%,35% 20%,40% 70%,47% 5%,52% 68%,59% 22%,64% 74%,71% 34%,77% 68%,84% 12%,90% 70%,96% 38%,100% 100%);filter:drop-shadow(0 0 12px rgba(214,255,171,.75))}
+.share-city::before{content:"";position:absolute;left:47%;top:-35%;width:7%;height:90%;background:linear-gradient(180deg,transparent,#f4ffb5 38%,#68ffbb 65%,transparent);box-shadow:0 0 20px #dcff99}
+.share-coin{position:absolute;z-index:6;width:7.5%;aspect-ratio:1;border-radius:50%;border:3px solid #ffe46b;background:radial-gradient(circle,#b7ff8c,#338d54 62%,#16452d);box-shadow:0 0 16px rgba(255,225,85,.75),inset 0 0 9px rgba(255,239,126,.7)}
+.share-coin::after{content:"↗";position:absolute;inset:11%;display:grid;place-items:center;color:#fff9cf;font:bold 25px Arial}
+.share-coin.c1{left:45%;top:27%}.share-coin.c2{left:8%;top:10%}.share-coin.c3{right:8%;top:20%}
+.share-waterfall{position:absolute;z-index:4;width:3%;background:linear-gradient(180deg,rgba(216,255,224,.98),rgba(89,224,187,.45),transparent);box-shadow:0 0 18px rgba(180,255,220,.72)}
+.share-waterfall.w1{left:42%;top:54%;height:31%}.share-waterfall.w2{right:21%;top:64%;height:25%}.share-waterfall.w3{left:57%;top:72%;height:20%}
+.share-ring{position:absolute;border:2px solid rgba(255,231,106,.88);border-radius:50%;box-shadow:0 0 10px rgba(255,220,72,.7);transform:rotate(-8deg)}
+.share-ring.r1{left:25%;top:12%;width:54%;height:13%}.share-ring.r2{left:10%;top:26%;width:83%;height:13%}.share-ring.r3{left:31%;top:48%;width:48%;height:9%}.share-ring.r4{left:15%;top:69%;width:66%;height:9%}
+.share-terrace{position:absolute;left:-9%;bottom:-10%;width:44%;height:31%;border-radius:50%;background:linear-gradient(180deg,#557b43,#132c22);border-top:3px solid rgba(239,255,191,.6);transform:rotate(-8deg);box-shadow:0 -12px 35px rgba(113,255,197,.25)}
+.share-head{position:absolute;z-index:12;top:5%;left:5%;right:5%;display:flex;justify-content:space-between;align-items:center;direction:rtl}.share-title strong{display:block;font-size:clamp(1rem,3.5vw,1.4rem);text-shadow:0 2px 12px #000}.share-title span{display:block;font-size:.62rem;opacity:.58;direction:ltr}.share-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(231,255,192,.5);background:rgba(0,35,23,.48);color:#fff;cursor:pointer}
+
 </style>
 </head>
 <body>
@@ -390,7 +419,19 @@ background-size:127px 139px,151px 127px,173px 149px,139px 157px,181px 163px;opac
     </section>
   </section>
 
-  <section class="page experience-page" id="experience-page" aria-label="قلمرو تجربه">
+  <section class="page share-page" id="share-page" aria-label="اقتصاد سهم">
+<div class="share-space" aria-hidden="true">
+<div class="share-moon"></div>
+<div class="share-island i1"></div><div class="share-island i2"></div><div class="share-island i3"></div><div class="share-island i4"></div><div class="share-island i5"></div>
+<div class="share-city"></div>
+<div class="share-ring r1"></div><div class="share-ring r2"></div><div class="share-ring r3"></div><div class="share-ring r4"></div>
+<div class="share-waterfall w1"></div><div class="share-waterfall w2"></div><div class="share-waterfall w3"></div>
+<div class="share-coin c1"></div><div class="share-coin c2"></div><div class="share-coin c3"></div>
+<div class="share-terrace"></div>
+</div>
+<header class="share-head"><div class="share-title"><strong>اقتصاد سهم</strong><span>Share Economy</span></div><button class="share-close" id="share-close" aria-label="بازگشت">✕</button></header>
+</section>
+<section class="page experience-page" id="experience-page" aria-label="قلمرو تجربه">
 <div class="experience-space" aria-hidden="true">
 <div class="experience-tree"></div>
 <div class="experience-island i1"></div><div class="experience-island i2"></div><div class="experience-island i3"></div><div class="experience-island i4"></div><div class="experience-island i5"></div>
@@ -770,6 +811,7 @@ function selectRealm(id){
   const realm=realms.find(r=>r.dataset.id===id);
   if(!realm) return;
   setInfo(id);
+  if(id==='share'){openShare();}
   if(id==='experience'){openExperience();}
   if(id==='continuity'){openContinuity();}
   if(id==='structure'){window.clearTimeout(window.__structureOpenTimer);openStructure();}
@@ -839,6 +881,7 @@ document.getElementById('ui-fa').addEventListener('click',()=>setUiLanguage('fa'
 document.getElementById('ui-en').addEventListener('click',()=>setUiLanguage('en'));
 
 const home=document.getElementById('home-page');
+const sharePage=document.getElementById('share-page');
 const experiencePage=document.getElementById('experience-page');
 const continuityPage=document.getElementById('continuity-page');
 const structurePage=document.getElementById('structure-page');
@@ -883,6 +926,8 @@ function selectChapter(i){
   bookBody.scrollTop=0;
 }
 
+function openShare(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';sharePage.style.display='block';clearInfo();tone(560);}
+function closeShare(){sharePage.style.display='none';home.style.display='block';setInfo('share');tone(520);}
 function openExperience(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='block';clearInfo();tone(620);}
 function closeExperience(){experiencePage.style.display='none';home.style.display='block';setInfo('experience');tone(520);}
 function openContinuity(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';experiencePage.style.display='none';continuityPage.style.display='block';clearInfo();tone(600);}
@@ -902,6 +947,7 @@ function openBook(from='home'){bookReturn=from;
 
 function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';tone(560)}else{home.style.display='block';setInfo('reference');tone(560)}}
 
+document.getElementById('share-close').addEventListener('click',closeShare);
 document.getElementById('experience-close').addEventListener('click',closeExperience);
 document.getElementById('continuity-close').addEventListener('click',closeContinuity);
 document.getElementById('structure-close').addEventListener('click',closeStructure);
@@ -932,11 +978,12 @@ document.getElementById('book-en').addEventListener('click',()=>{
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
+  if(e.key==='Escape'&&sharePage.style.display==='block')closeShare();
   if(e.key==='Escape'&&experiencePage.style.display==='block')closeExperience();
   if(e.key==='Escape'&&continuityPage.style.display==='block')closeContinuity();
   if(e.key==='Escape'&&structurePage.style.display==='block')closeStructure();
   if(e.key==='Escape'&&referencePage.style.display==='block')closeReference();
-  if(bookPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block'||experiencePage.style.display==='block')return;
+  if(bookPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block'||experiencePage.style.display==='block'||sharePage.style.display==='block')return;
   const order=['structure','continuity','experience','reference','share'];
   const idx=order.indexOf(activeId);
   if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
