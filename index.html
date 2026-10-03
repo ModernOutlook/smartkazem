@@ -74,23 +74,14 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   mix-blend-mode:screen;
 }
 
-.topbar{
-  position:absolute;z-index:30;top:0;left:0;right:0;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:clamp(12px,3.2%,24px) clamp(14px,4.5%,30px);
-  direction:rtl;
-}
+.topbar{position:relative;display:flex;align-items:center;justify-content:flex-end;gap:8px;min-height:34px}
+.topbar:has(.lang-switch){padding-right:0}
 .brand{display:flex;flex-direction:column;gap:2px;text-shadow:0 2px 12px #000}
 .brand strong{font-size:clamp(.8rem,2.3vw,1.05rem);font-weight:800;letter-spacing:.01em}
 .brand span{font-size:clamp(.52rem,1.6vw,.72rem);opacity:.5;direction:ltr;text-align:right}
 #x-social{position:absolute;z-index:35;right:0;top:100%;transform:none;direction:ltr;width:30px;height:30px}
-.icon-btn{
-  width:34px;height:34px;border-radius:50%;border:1px solid rgba(220,240,255,.14);
-  color:#fff;background:rgba(0,0,0,.28);backdrop-filter:blur(8px);
-  cursor:pointer;transition:.25s var(--ease);display:grid;place-items:center;
-}
+.icon-btn{position:fixed;top:18px;right:18px;z-index:10000;display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:1px solid rgba(255,255,255,.18);border-radius:50%;background:rgba(8,12,16,.62);backdrop-filter:blur(8px);color:#fff;text-decoration:none!important;cursor:pointer}
 .icon-btn:hover{background:rgba(40,130,210,.2);border-color:rgba(150,220,255,.5);transform:translateY(-1px)}
-.audio-toggle{font-size:.62rem;letter-spacing:-.08em;direction:ltr;white-space:nowrap}
 .topbar{gap:7px;display:flex;align-items:center;justify-content:flex-end;position:absolute;right:14px;top:12px;z-index:50}.topbar .icon-btn{position:static!important;transform:none!important}.topbar #x-social{text-decoration:none!important}.icon-btn:focus,.icon-btn:focus-visible,.lang-switch button:focus,.lang-switch button:focus-visible{outline:none;box-shadow:none}
 
 .orbit{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
@@ -217,7 +208,7 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 .ref-observer{position:absolute;left:10%;bottom:20%;width:15%;height:25%;background:linear-gradient(180deg,#130202,#050101);clip-path:polygon(50% 0,66% 18%,73% 49%,100% 100%,0 100%,27% 49%,34% 18%);filter:drop-shadow(0 0 8px rgba(0,0,0,.8))}
 .reference-head{position:absolute;z-index:4;top:5%;left:5%;right:5%;display:flex;align-items:center;justify-content:space-between;direction:rtl}.reference-title{text-shadow:0 2px 12px #000}.reference-title strong{display:block;font-size:clamp(.9rem,3.4vw,1.35rem)}.reference-title span{display:block;font-size:clamp(.48rem,1.6vw,.7rem);opacity:.58;direction:ltr}.reference-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,180,165,.3);background:rgba(20,0,0,.35);color:#fff;cursor:pointer;backdrop-filter:blur(8px)}
 .reference-actions{position:absolute;z-index:8;left:5%;right:5%;bottom:5.5%;display:grid;grid-template-columns:1fr 1fr;gap:9px;direction:rtl}.reference-action{min-height:62px;border:1px solid rgba(255,188,168,.34);border-radius:16px;background:linear-gradient(145deg,rgba(70,5,3,.72),rgba(12,0,0,.68));color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(9px);cursor:pointer;transition:transform .2s ease,filter .2s ease,border-color .2s ease;font-weight:800;font-size:clamp(.65rem,2.3vw,.9rem)}.reference-action:hover{transform:translateY(-2px);filter:brightness(1.18);border-color:rgba(255,220,205,.7)}.reference-action small{display:block;font-size:.62em;font-weight:500;opacity:.55;direction:ltr;margin-top:2px}.reference-action.games{cursor:not-allowed;opacity:.48}
-@media(max-width:520px){.reference-actions{bottom:4%;gap:7px}.reference-action{min-height:56px;border-radius:13px}.ref-castle{right:3%;width:48%;top:21%}.ref-platform.p1{right:4%;width:58%}.ref-observer{left:5%;bottom:21%}}
+@media(max-width:520px){.reference-actions{bottom:4%;gap:7px.icon-btn{top:12px;right:12px;width:36px;height:36px}}.reference-action{min-height:56px;border-radius:13px}.ref-castle{right:3%;width:48%;top:21%}.ref-platform.p1{right:4%;width:58%}.ref-observer{left:5%;bottom:21%}}
 @media(min-width:700px){.reference-actions{max-width:600px;margin:auto}.reference-page{border-radius:4px}}
 /* ===== Structure Hall page ===== */
 .structure-page{z-index:96;display:none;overflow:hidden;background:
@@ -251,7 +242,7 @@ linear-gradient(135deg,transparent 0 28%,rgba(30,95,154,.25) 29% 31%,transparent
 .structure-light{position:absolute;right:0;bottom:18%;width:44%;height:55%;background:radial-gradient(ellipse at 95% 52%,rgba(168,230,255,.95),rgba(70,164,255,.3) 30%,transparent 67%);filter:blur(3px)}
 .structure-spire{position:absolute;right:29%;top:15%;width:17%;height:31%;background:linear-gradient(180deg,rgba(9,34,62,.15),rgba(5,22,42,.95));clip-path:polygon(50% 0,59% 27%,72% 52%,88% 100%,12% 100%,28% 52%,41% 27%);filter:drop-shadow(0 0 12px rgba(70,171,255,.45))}
 .structure-head{position:absolute;z-index:5;top:5%;left:5%;right:5%;display:flex;justify-content:space-between;align-items:center;direction:rtl}.structure-title strong{display:block;font-size:clamp(1rem,3.5vw,1.4rem);text-shadow:0 2px 12px #000}.structure-title span{display:block;font-size:.62rem;opacity:.58;direction:ltr}.structure-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(190,225,255,.35);background:rgba(0,12,25,.42);color:#fff;cursor:pointer}
-@media(max-width:520px){.structure-column{width:10%}.structure-banner{top:35%;width:14%}.structure-banner.b2{top:41%;width:10%}.structure-spire{right:26%;width:22%}}
+@media(max-width:520px){.structure-column{width:10%.icon-btn{top:12px;right:12px;width:36px;height:36px}}.structure-banner{top:35%;width:14%}.structure-banner.b2{top:41%;width:10%}.structure-spire{right:26%;width:22%}}
 
 /* ===== Continuity of the Universe page ===== */
 .continuity-page{display:none;overflow:hidden;background:
@@ -348,7 +339,6 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 
   <section class="page home-page" id="home-page" aria-label="نگرش نوین">
     <header class="topbar">
-      <button class="icon-btn audio-toggle" id="audio-toggle" data-audio-toggle type="button" aria-pressed="true" aria-label="خاموش کردن صدا">◖))</button>
       <a class="icon-btn" id="x-social" href="https://x.com/_thekazem" target="_blank" rel="noopener noreferrer" title="X / Twitter" aria-label="X / Twitter">𝕏</a>
     </header>
 
@@ -921,8 +911,7 @@ function chooseUiLanguage(lang,event){
 document.getElementById('ui-zh').addEventListener('click',e=>chooseUiLanguage('zh',e));
 document.getElementById('ui-fa').addEventListener('click',e=>chooseUiLanguage('fa',e));
 document.getElementById('ui-en').addEventListener('click',e=>chooseUiLanguage('en',e));
-document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));
-document.getElementById('audio-toggle').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();SiteAudio.unlock();SiteAudio.toggle();});
+document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));e.stopPropagation();SiteAudio.unlock();SiteAudio.toggle();});
 document.addEventListener('DOMContentLoaded',()=>{
   const topbar=document.querySelector('.topbar'), lang=document.querySelector('.lang-switch');
   if(topbar&&lang&&!topbar.contains(lang))topbar.appendChild(lang);
