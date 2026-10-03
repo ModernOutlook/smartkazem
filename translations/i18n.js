@@ -41,6 +41,15 @@ function applyDom(data){
     btn.classList.toggle('active',btn.dataset.siteLang===current);
     btn.setAttribute('aria-pressed',btn.dataset.siteLang===current?'true':'false');
   });
+  // Any current or future component can bind directly to the central catalog.
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const value=String(get(el.dataset.i18n,''));
+    if(value!=='')el.textContent=value;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+    const value=String(get(el.dataset.i18nHtml,''));
+    if(value!=='')el.innerHTML=value;
+  });
   document.documentElement.lang=current;
   document.documentElement.dir=data.dir||((current==='fa'||current==='ar')?'rtl':'ltr');
   document.body.dataset.lang=current;
@@ -86,7 +95,19 @@ async function init(){
   }
 }
 window.SiteI18n=Object.freeze({SUPPORTED,DEFAULT,KEY,getLanguage,setLanguage,load,get:(path,fallback='')=>get(path,fallback),getCatalog:()=>cache[current]||null});
-document.addEventListener('DOMContentLoaded',()=>init(),{once:true});
+let observer=null;
+function installObserver(){
+  if(observer||!document.body)return;
+  observer=new MutationObserver(()=>{
+    const data=cache[current];
+    if(!data)return;
+    observer.disconnect();
+    applyDom(data);
+    observer.observe(document.body,{subtree:true,childList:true});
+  });
+  observer.observe(document.body,{subtree:true,childList:true});
+}
+document.addEventListener('DOMContentLoaded',()=>{init();installObserver()},{once:true});
 document.addEventListener('click',event=>{
   const btn=event.target.closest&&event.target.closest('[data-site-lang]');
   if(!btn)return;
