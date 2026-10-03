@@ -104,6 +104,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 
 #core{cursor:pointer;transition:transform .5s ease,filter .5s ease}
 #core:hover{filter:brightness(1.3) drop-shadow(0 0 30px white)}
+.logo-viewer{position:fixed;inset:0;z-index:500;display:none;place-items:center;background:rgba(0,0,0,.92);backdrop-filter:blur(14px);padding:5vh 5vw;cursor:zoom-out}.logo-viewer.open{display:grid}.logo-viewer img{display:block;width:min(82vw,82vh);height:min(82vw,82vh);max-width:900px;max-height:900px;object-fit:contain;border-radius:50%;box-shadow:0 0 80px rgba(255,215,0,.16);cursor:default}.logo-viewer-close{position:absolute;top:22px;right:22px;width:42px;height:42px;border:1px solid rgba(255,255,255,.3);border-radius:50%;background:rgba(0,0,0,.5);color:#fff;font-size:25px;line-height:1;cursor:pointer}.logo-viewer-close:hover{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.6)}
 @media(max-width:600px){.menu-svg{width:108vw;height:108vw}.realm-title{font-size:24px}}
 .info{
   position:absolute;z-index:30;left:50%;bottom:3vh;transform:translateX(-50%);
@@ -418,6 +419,8 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
       <p id="info-text"></p>
     </section>
   </section>
+
+  <div class="logo-viewer" id="logo-viewer" role="dialog" aria-modal="true" aria-label="نگرش نوین"><button class="logo-viewer-close" id="logo-viewer-close" type="button" aria-label="بستن">×</button><img src="modern-outlook-logo.svg" alt="نگرش نوین — Modern Outlook"></div>
 
   <section class="page share-page" id="share-page" aria-label="اقتصاد سهم">
 <div class="share-space" aria-hidden="true">
