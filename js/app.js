@@ -120,7 +120,7 @@ function renderHomeFromCatalog(){
     }
     q.setAttribute('aria-label',title||'');
   });
-  const refs=[['ref-forgers',pages.forgers],['ref-treatise',pages.treatise],['ref-observation',pages.observation]];
+  const refs=[['ref-forgers',pages.forgers],['ref-observation',pages.observation]];
   refs.forEach(([id,v])=>{const b=document.getElementById(id);if(b&&v){const sm=b.querySelector('small');b.firstChild.textContent=v;if(sm)sm.textContent=''}});
   const hs=document.getElementById('share-human-machines');
   const hm=catalog.pages?.humanMachines;
