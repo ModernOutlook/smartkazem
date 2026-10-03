@@ -155,15 +155,53 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 @keyframes corePulse{0%,100%{transform:translate(-50%,-50%) scale(.94);opacity:.9}50%{transform:translate(-50%,-50%) scale(1.06);opacity:1}}
 
 .ring-label{
-  position:absolute;left:50%;top:8.5%;transform:translateX(-50%);
-  width:80%;display:flex;flex-direction:column;align-items:center;gap:4px;
-  color:#fff;text-shadow:0 2px 10px #000,0 0 9px rgba(0,0,0,.95);
-  pointer-events:none;white-space:nowrap;
+  position:absolute;
+  top:50%;
+  width:max-content;
+  min-width:max-content;
+  transform:translateY(-50%);
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  gap:6px;
+  color:#fff;
+  text-shadow:0 2px 10px #000,0 0 9px rgba(0,0,0,.95);
+  pointer-events:none;
+  white-space:nowrap;
+  z-index:3;
 }
-.ring-label .label-icon{width:clamp(18px,4.2vw,30px);height:clamp(18px,4.2vw,30px);filter:drop-shadow(0 0 4px rgba(255,255,255,.5))}
-.ring-label span{font-size:clamp(.55rem,2.15vw,.9rem);font-weight:800;line-height:1.2}
-.ring-share .ring-label{top:7%}
-.ring-reference .ring-label{top:8%}
+.ring-label .label-icon{
+  width:clamp(18px,4.2vw,30px);
+  height:clamp(18px,4.2vw,30px);
+  flex:none;
+  filter:drop-shadow(0 0 4px rgba(255,255,255,.5));
+}
+.ring-label span{
+  font-size:clamp(.55rem,2.15vw,.9rem);
+  font-weight:800;
+  line-height:1.2;
+}
+
+/* Titles sit on the horizontal diameter, alternating left/right by territory. */
+.ring-structure .ring-label,
+.ring-experience .ring-label,
+.ring-share .ring-label{
+  right:calc(100% + 12px);
+}
+.ring-continuity .ring-label,
+.ring-reference .ring-label{
+  left:calc(100% + 12px);
+}
+.ring-structure .ring-label,
+.ring-experience .ring-label,
+.ring-share .ring-label{
+  flex-direction:row-reverse;
+}
+.ring-continuity .ring-label,
+.ring-reference .ring-label{
+  flex-direction:row;
+}
 
 .center-label{
   position:absolute;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);
