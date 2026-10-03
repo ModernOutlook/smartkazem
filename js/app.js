@@ -160,6 +160,7 @@ document.getElementById('ref-equivalence').addEventListener('click',()=>openPara
 document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
 document.getElementById('book-close').addEventListener('click',closeBook);
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&(logoViewer.classList.contains('open')||bookPage.style.display==='block'||paragraphPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block'||experiencePage.style.display==='block'||sharePage.style.display==='block'))emitSiteSound('back');
   if(e.key==='Escape'&&logoViewer.classList.contains('open')){closeLogoViewer();return;}
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
   if(e.key==='Escape'&&paragraphPage.style.display==='block'){closeParagraph();return;}
