@@ -363,7 +363,12 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 }
 .experience-actions .experience-action:hover{transform:translateY(-2px);filter:brightness(1.18);border-color:rgba(255,225,255,.7)}
 .reference-actions{
-  grid-template-columns:repeat(3,1fr);bottom:7.2%;gap:9px;
+  grid-template-columns:1fr 1fr;bottom:7.2%;gap:9px;
+}
+.reference-actions #reference-match{
+  grid-column:1 / -1;
+  justify-self:center;
+  width:calc(50% - 4.5px);
 }
 .reference-actions .reference-action{
   min-height:62px;padding:12px 14px;
@@ -374,6 +379,7 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
   .reference-actions{bottom:4%}
   .experience-actions .experience-action,.reference-actions .reference-action{min-height:58px;border-radius:13px;padding:10px 9px}
   .reference-actions{grid-template-columns:1fr}
+  .reference-actions #reference-match{grid-column:auto;width:100%}
 }
 @media(min-width:700px){
   .experience-actions,.reference-actions{max-width:600px;margin:auto}
