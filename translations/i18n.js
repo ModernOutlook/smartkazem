@@ -62,7 +62,8 @@ async function setLanguage(lang){
   current=lang;
   try{localStorage.setItem(KEY,lang);localStorage.setItem('modern-outlook.lang.v1',lang)}catch(_){}
   applyDom(data);
-  const pageKey=document.querySelector('meta[name="i18n-page"]')?.content;\n  document.title=pageKey?get('pages.'+pageKey+'.title',get('home.title',document.title)):get('home.title',document.title);
+  const pageKey=document.querySelector('meta[name="i18n-page"]')?.content;
+  document.title=pageKey?get('pages.'+pageKey+'.title',get('home.title',document.title)):get('home.title',document.title);
   document.dispatchEvent(new CustomEvent('site:languagechange',{detail:{lang,data}}));
   return lang;
 }
