@@ -911,7 +911,7 @@ function chooseUiLanguage(lang,event){
 document.getElementById('ui-zh').addEventListener('click',e=>chooseUiLanguage('zh',e));
 document.getElementById('ui-fa').addEventListener('click',e=>chooseUiLanguage('fa',e));
 document.getElementById('ui-en').addEventListener('click',e=>chooseUiLanguage('en',e));
-document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));e.stopPropagation();SiteAudio.unlock();SiteAudio.toggle();});
+document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));
 document.addEventListener('DOMContentLoaded',()=>{
   const topbar=document.querySelector('.topbar'), lang=document.querySelector('.lang-switch');
   if(topbar&&lang&&!topbar.contains(lang))topbar.appendChild(lang);
