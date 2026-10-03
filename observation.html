@@ -1,4 +1,4 @@
-<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; child-src 'none'; connect-src 'none'; img-src 'self' data:; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer"><meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()"><title>سرزمین مشاهده</title><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}
 html,body{margin:0;width:100%;height:100%;overflow:hidden}
@@ -30,7 +30,7 @@ body[data-mode=both] .book-body .pair .en{padding-left:0;border-left:0}
 html,body{width:100%;height:100%;min-height:100%;margin:0;background:#000}
 body{display:grid;place-items:center;overflow:hidden}
 .page{position:relative;inset:auto;width:min(100vw,75vh);height:min(133.333333vw,100vh);aspect-ratio:3/4;max-width:100vw;max-height:100vh;overflow:hidden;box-shadow:0 0 0 1px rgba(130,190,240,.12),0 30px 100px rgba(0,0,0,.9)}
-@media(min-width:700px){.page{border-radius:4px}}</style><meta name="language-source" content="global-home-switch"><style>body[data-mode="zh"] .book-title,body[data-mode="zh"] .book-tab{font-family:Vazirmatn,Tahoma,sans-serif}</style></head><body data-mode="fa"><section class="page">
+@media(min-width:700px){.page{border-radius:4px}} .global-lang{position:fixed;z-index:9999;top:12px;left:50%;transform:translateX(-50%);display:flex;gap:2px;padding:2px;border:1px solid rgba(220,240,255,.16);background:rgba(0,0,0,.3);border-radius:20px;backdrop-filter:blur(8px);direction:ltr}.global-lang button{border:0;background:transparent;color:rgba(255,255,255,.62);padding:5px 8px;border-radius:16px;cursor:pointer;font:800 .62rem/1 Vazirmatn,Tahoma,sans-serif}.global-lang button.active{background:rgba(255,255,255,.14);color:#fff}.global-lang button:focus,.global-lang button:focus-visible{outline:none;box-shadow:none}body[data-mode="zh"] .fa,body[data-mode="ar"] .fa{display:none!important}body[data-mode="zh"] .en,body[data-mode="ar"] .en{display:block!important} body[data-mode="zh"] .book-body,body[data-mode="ar"] .book-body{direction:rtl;text-align:right}@media(max-width:520px){.global-lang{top:10px;max-width:calc(100vw - 20px)}} </style><meta name="language-source" content="global-home-switch"><style>body[data-mode="zh"] .book-title,body[data-mode="zh"] .book-tab{font-family:Vazirmatn,Tahoma,sans-serif}</style></head><body data-mode="fa"><div class="global-lang" id="global-lang" aria-label="زبان سایت"><button data-lang="zh" type="button">中文</button><button data-lang="fa" type="button">فارسی</button><button data-lang="en" type="button">English</button><button data-lang="ar" type="button">العربية</button></div><section class="page">
 <header class="book-head"><div class="book-title">📖 سرزمین مشاهده</div><button class="book-close" id="close" aria-label="بستن">✕</button></header>
 <nav class="book-tabs" id="tabs"><button class="book-tab active" data-target="">سرزمین مشاهده</button></nav>
 <article class="book-body" id="body">
@@ -61,4 +61,22 @@ document.documentElement.lang=body.dataset.mode;
 document.documentElement.dir=body.dataset.mode==='fa'||body.dataset.mode==='zh'?'rtl':'ltr';
 document.getElementById('close').onclick=()=>{if(history.length>1)history.back();else location.href='index.html'};
 document.querySelectorAll('.book-tab').forEach(b=>b.onclick=()=>{const id=b.dataset.target;if(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}});
+</script><script>
+(function(){
+  const labels={"fa":{"title":"📖 سرزمین مشاهده","tab":"سرزمین مشاهده","close":"بستن"},"en":{"title":"📖 The Land of Observation","tab":"The Land of Observation","close":"Close"},"zh":{"title":"📖 观察之地","tab":"观察之地","close":"关闭"},"ar":{"title":"📖 أرض الملاحظة","tab":"أرض الملاحظة","close":"إغلاق"}};
+  function apply(lang){
+    if(!labels[lang])lang='fa';
+    try{localStorage.setItem('modern-outlook.lang.v1',lang)}catch(_){}
+    document.body.dataset.mode=lang;document.documentElement.lang=lang;document.documentElement.dir=lang==='en'?'ltr':'rtl';
+    document.querySelectorAll('.global-lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
+    const title=document.querySelector('.book-title'); if(title)title.textContent=labels[lang].title;
+    const close=document.getElementById('close');if(close)close.setAttribute('aria-label',labels[lang].close);
+    const tabs=[...document.querySelectorAll('.book-tab')];
+    if(Array.isArray(labels[lang].tabs))tabs.forEach((b,i)=>{if(labels[lang].tabs[i])b.textContent=labels[lang].tabs[i]});
+    else if(tabs[0])tabs[0].textContent=labels[lang].tab;
+  }
+  let lang='fa';try{const s=localStorage.getItem('modern-outlook.lang.v1');if(['zh','fa','en','ar'].includes(s))lang=s}catch(_){}
+  document.querySelectorAll('.global-lang button').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();apply(b.dataset.lang)}));
+  apply(lang);
+})();
 </script></body></html>
