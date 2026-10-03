@@ -1,0 +1,8 @@
+/* Provider-agnostic OpenAI-compatible client. API key remains local to this browser. */
+(function(){'use strict';
+const DEFAULTS={baseUrl:'https://openrouter.ai/api/v1',model:'google/gemma-4-26b-a4b-it:free'};
+function getSettings(){try{return{baseUrl:localStorage.getItem('pgm_baseUrl')||DEFAULTS.baseUrl,model:localStorage.getItem('pgm_model')||DEFAULTS.model,apiKey:localStorage.getItem('pgm_apiKey')||''}}catch(_){return{...DEFAULTS,apiKey:''}}}
+function saveSettings(s){try{localStorage.setItem('pgm_baseUrl',s.baseUrl||DEFAULTS.baseUrl);localStorage.setItem('pgm_model',s.model||DEFAULTS.model);if(s.apiKey)localStorage.setItem('pgm_apiKey',s.apiKey);else localStorage.removeItem('pgm_apiKey')}catch(_){}}
+async function complete(messages,options={}){const s={...getSettings(),...options};if(!s.apiKey)throw new Error('کلید اتصال به مدل تنظیم نشده است.');const res=await fetch(s.baseUrl.replace(/\/$/,'')+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.apiKey},body:JSON.stringify({model:s.model,messages,temperature:options.temperature??0.7,response_format:{type:'json_object'}})});if(!res.ok)throw new Error('خطای سرویس مدل ('+res.status+'): '+(await res.text()).slice(0,240));const data=await res.json();const content=data?.choices?.[0]?.message?.content;if(!content)throw new Error('پاسخ مدل خالی است.');return JSON.parse(String(content).replace(/^\`\`\`json\s*/,'').replace(/\`\`\`$/,'').trim())}
+window.ParagraphLLM=Object.freeze({DEFAULTS,getSettings,saveSettings,complete});
+})();
