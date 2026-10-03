@@ -81,6 +81,21 @@
   "Share Economy",
   "Postscript"
 ]
+    },
+    "forgers": {
+      "title": "The Forgers of Imitation",
+      "subtitle": "Ten Chapters",
+      "chapters": [
+        {
+          "title": "Chapter One: Origin",
+          "dot": "#ffffff",
+          "paragraphs": [
+            "In the ancient forest, no one knew who had first put on an act. They only knew that before that, each creature had simply been what it was, and in those days this was considered neither a virtue nor a flaw. The deer ran, the swans settled on the pond, and no one lacked anything in another that they needed to pretend to possess.",
+            "Then there appeared a myna that could imitate a wolf's voice. Perhaps for amusement, perhaps out of hunger. When the field mice heard the wolf, they froze where they stood. Not from fear of a wolf, because there was no wolf, but from astonishment. In that brief pause, the myna took their seeds and left.",
+            "The mice understood what had happened and, like any creature that understands something, drew the wrong conclusion. They said, “He wasn't stealing. He had skill.”",
+            "That sentence, still repeated throughout the forest, became a piece of wisdom among the mice three days later and a law a week after that. No one asked: if the myna had skill, why had their seeds disappeared?",
+            "In those early days, the free-spirited deer and white-winged swans were the only ones who laughed. They laughed because they could see an act for what it was. It was the last time anyone in the forest saw such a thing and the last time laughter came without a price."
+          ]
         },
         {
           "title": "Chapter Two: Formation",
