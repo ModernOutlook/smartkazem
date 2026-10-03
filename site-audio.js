@@ -140,7 +140,7 @@
       b.setAttribute('aria-label', 'صدا');
       b.setAttribute('aria-pressed', String(enabled));
       b.textContent = enabled ? '🔊' : '🔇';
-      b.style.cssText = 'position:fixed;z-index:2147483000;top:12px;inset-inline-end:62px;width:42px;height:42px;border:1px solid rgba(255,255,255,.25);border-radius:50%;background:rgba(8,12,16,.72);color:#fff;cursor:pointer;font-size:18px;line-height:1;';
+      b.style.cssText = 'position:fixed;z-index:2147483000;top:12px;inset-inline-end:62px;width:29px;height:29px;padding:0;border:1px solid rgba(255,150,150,.35);border-radius:50%;background:rgba(255,80,80,.10);box-shadow:0 4px 14px rgba(0,0,0,.28);color:#ffb0aa;cursor:pointer;font-size:16px;font-weight:700;line-height:27px;text-align:center;transition:transform .18s ease,background .18s ease,box-shadow .18s ease;';
       document.body.appendChild(b);
     } catch (_) {}
   }
