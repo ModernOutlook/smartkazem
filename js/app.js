@@ -13,6 +13,8 @@ function setInfo(id,show=true){
   realms.forEach(r=>r.classList.toggle('selected',r.dataset.id===id));
   const d=window.SiteI18n?.getCatalog?.()?.home?.realms?.[id];
   if(d){infoTitle.textContent=d.title||'';infoText.textContent=d.text||'';}
+  const accents={structure:'#0879b8',continuity:'#e1b72b',experience:'#b653ff',reference:'#e94d43',share:'#1bd58a',core:'#f6fbff'};
+  info.style.setProperty('--info-accent',accents[id]||accents.structure);
   info.classList.toggle('reference',id==='reference');
   if(show) info.classList.add('visible');
 }
@@ -115,8 +117,8 @@ function renderHomeFromCatalog(){
     const strong=q.querySelector('strong'), span=q.querySelector('span');
     if(strong&&title)strong.textContent=title;
     if(span){
-      const key=id.replace('-page','');
-      span.textContent=(title||'').split(' · ')[1]||title||'';
+      // Keep the secondary bilingual subtitle authored in the page markup.
+      // The primary heading is localized through SiteI18n and its catalog.
     }
     q.setAttribute('aria-label',title||'');
   });
@@ -125,8 +127,6 @@ function renderHomeFromCatalog(){
   const hs=document.getElementById('share-human-machines');
   const hm=catalog.pages?.humanMachines;
   if(hs&&hm){hs.firstChild.textContent=hm.title||labels.share;const sm=hs.querySelector('small');if(sm)sm.textContent=hm.title||''}
-  const g=document.getElementById('ref-games');
-  if(g&&pages.games){g.firstChild.textContent=pages.games;const sm=g.querySelector('small');if(sm)sm.textContent=pages.gamesEn||''}
   const back=labels.back||'';
   ['share-close','share-human-machines','experience-close','continuity-close','structure-close','reference-close','book-close','logo-viewer-close'].forEach(id=>{const b=document.getElementById(id);if(b&&back)b.setAttribute('aria-label',back)});
   const brand=document.querySelector('.brand strong'), brandAlt=document.querySelector('.brand span');
@@ -152,7 +152,7 @@ document.getElementById('reference-close').addEventListener('click',closeReferen
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference','forgers'));document.getElementById('share-human-machines').addEventListener('click',()=>openBook('share','humanMachines'));
 document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
-document.getElementById('ref-games').addEventListener('click',()=>{});
+document.getElementById('ref-equivalence').addEventListener('click',()=>openParagraph('reference'));
 document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
 document.getElementById('reference-match').addEventListener('click',()=>openParagraph('reference'));
 document.getElementById('book-close').addEventListener('click',closeBook);
