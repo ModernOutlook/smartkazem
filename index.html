@@ -183,34 +183,9 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 }
 @keyframes corePulse{0%,100%{transform:translate(-50%,-50%) scale(.94);opacity:.9}50%{transform:translate(-50%,-50%) scale(1.06);opacity:1}}
 
-.ring-label{
-  position:absolute;
-  top:50%;
-  width:max-content;
-  min-width:max-content;
-  transform:translateY(-50%);
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  justify-content:center;
-  gap:6px;
-  color:#fff;
-  text-shadow:0 2px 10px #000,0 0 9px rgba(0,0,0,.95);
-  pointer-events:none;
-  white-space:nowrap;
-  z-index:3;
-}
-.ring-label .label-icon{
-  width:clamp(18px,4.2vw,30px);
-  height:clamp(18px,4.2vw,30px);
-  flex:none;
-  filter:drop-shadow(0 0 4px rgba(255,255,255,.5));
-}
-.ring-label span{
-  font-size:clamp(.55rem,2.15vw,.9rem);
-  font-weight:800;
-  line-height:1.2;
-}
+.ring-label{display:none}
+
+
 
 .center-label{
   position:absolute;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);
@@ -300,12 +275,12 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .ring-experience{--size:55%;--c:#6c2990;--nebula:#dc76ff;--glow:rgba(164,67,219,.42);--z:3}
 .ring-reference{--size:32%;--c:#9b3d30;--nebula:#ff866d;--glow:rgba(208,76,57,.4);--z:4}
 .ring-share{--size:14%;--c:#0d8458;--nebula:#68ffc2;--glow:rgba(33,192,126,.42);--z:5}
-.ring-label{position:absolute;top:50%;width:clamp(30px,6.8vw,44px);height:clamp(30px,6.8vw,44px);padding:6px;min-width:0;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(2,8,15,.72);box-shadow:0 0 12px var(--glow),inset 0 0 8px rgba(255,255,255,.06);pointer-events:none;z-index:3}
-.ring-label span{display:none}
-.ring-label .label-icon{width:100%;height:100%;flex:none;filter:drop-shadow(0 0 3px rgba(255,255,255,.55))}
-.ring-structure .ring-label,.ring-experience .ring-label,.ring-share .ring-label{left:calc(50% - (var(--size) / 2));right:auto}
-.ring-continuity .ring-label,.ring-reference .ring-label{right:calc(50% - (var(--size) / 2));left:auto}
-.ring-share .ring-label{width:clamp(27px,6vw,38px);height:clamp(27px,6vw,38px)}
+.ring-label{display:none}
+
+
+
+.ring-continuity .ring-label,.ring-reference .ring-label{display:none}
+
 .core,.center-label{display:none}
 .info{background:linear-gradient(180deg,rgba(3,13,25,.64),rgba(1,6,13,.84));border-color:rgba(117,192,239,.15);box-shadow:0 14px 34px rgba(0,0,0,.4);backdrop-filter:none;height:15%;min-height:0;padding:clamp(10px,2.4%,16px) clamp(12px,3.4%,18px)}
 .info .kicker{margin-bottom:3px}
@@ -324,7 +299,7 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 .rings{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .ring{cursor:pointer;pointer-events:none;outline:none}
 .ring:focus-visible{outline:2px solid rgba(255,255,255,.9);outline-offset:4px}
-.ring-label{pointer-events:none}
+.ring-label{display:none}
 .icon-btn,.lang-switch button{touch-action:manipulation}
 .info{pointer-events:none}
 @media (max-width:520px){
@@ -357,36 +332,11 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 
     <div class="orbit">
       <div class="rings" id="rings">
-        <button class="ring ring-structure" data-id="structure" aria-label="ساختار تالار">
-          <span class="ring-label">
-            <svg class="label-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27h22M7 24h18M9 10v13M15 10v13M21 10v13M27 10v13M4 9h24L16 3 4 9Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg>
-            
-          </span>
-        </button>
-        <button class="ring ring-continuity" data-id="continuity" aria-label="تداوم عالم">
-          <span class="ring-label">
-            <span class="label-icon" style="font-size:1.7em;line-height:1">∞</span>
-            
-          </span>
-        </button>
-        <button class="ring ring-experience" data-id="experience" aria-label="قلمرو تجربه">
-          <span class="ring-label">
-            <svg class="label-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M17 25c-5 0-10-3-10-9 0-7 5-11 11-11 5 0 9 3 9 8 0 5-4 7-8 7l-2 5Z" fill="none" stroke="white" stroke-width="1.8"/><path d="M16 10c3-1 6 1 6 4M14 13c1-1 3-1 4 0M17 17c1 1 3 1 4 0" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
-            
-          </span>
-        </button>
-        <button class="ring ring-reference" data-id="reference" aria-label="مرجع تقلید">
-          <span class="ring-label">
-            <svg class="label-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 6h9c3 0 5 2 5 5v15c0-2-2-3-5-3H6V6ZM26 6h-6c-3 0-5 2-5 5v15c0-2 2-3 5-3h6V6Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg>
-            
-          </span>
-        </button>
-        <button class="ring ring-share" data-id="share" aria-label="اقتصاد سهم">
-          <span class="ring-label">
-            <svg class="label-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 25V16M13 25V12M20 25V8M27 25V4M4 25h25M21 8h6v6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            
-          </span>
-        </button>
+        <button class="ring ring-structure" data-id="structure" aria-label="ساختار تالار"></button>
+        <button class="ring ring-continuity" data-id="continuity" aria-label="تداوم عالم"></button>
+        <button class="ring ring-experience" data-id="experience" aria-label="قلمرو تجربه"></button>
+        <button class="ring ring-reference" data-id="reference" aria-label="مرجع تقلید"></button>
+        <button class="ring ring-share" data-id="share" aria-label="اقتصاد سهم"></button>
       </div>
     </div>
 
@@ -394,7 +344,6 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
       <div class="kicker">SELECT A LUMINOUS LAYER</div>
       <h1 id="info-title">ساختار تالار</h1>
       <p id="info-text">لایه‌ی بیرونی، چارچوب و ساختار کلی تالار را نمایندگی می‌کند.</p>
-      <span class="tap" id="info-tap">برای انتخاب، روی حلقه بزنید</span>
     </section>
   </section>
 
@@ -691,7 +640,7 @@ function setInfo(id){
   const d=copy[uiLang][id];
   infoTitle.textContent=d.title;
   infoText.textContent=d.text;
-  infoTap.textContent=d.tap;
+  if(infoTap) infoTap.textContent=d.tap;
   info.classList.toggle('reference',id==='reference');
   tone({structure:520,continuity:620,experience:720,reference:820,share:920,core:1040}[id]||620);
 }
@@ -770,7 +719,7 @@ function setUiLanguage(lang){
   const current=copy[lang][activeId];
   infoTitle.textContent=current.title;
   infoText.textContent=current.text;
-  infoTap.textContent=current.tap;
+  if(infoTap) infoTap.textContent=current.tap;
   if(lang==='en'){
     document.querySelector('.brand strong').textContent='Modern Outlook';
     document.querySelector('.brand span').textContent='نگرش نوین';
