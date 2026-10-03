@@ -1,85 +1,37 @@
-<!DOCTYPE html>
-<html lang="fa" dir="rtl">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>رساله فلسفی نگرش نوین · A Philosophical Treatise on the Modern Outlook</title>
-<style>
-:root{color-scheme:light dark;--bg:#fbfaf7;--fg:#1f1d1a;--mut:#6b665e;--line:#d9d4c9}
-@media (prefers-color-scheme:dark){:root{--bg:#171614;--fg:#e8e4dc;--mut:#a09a8f;--line:#3a3732}}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:Vazirmatn,Tahoma,"Noto Naskh Arabic","Segoe UI",serif;line-height:2;font-size:1.05rem}
-main{max-width:74rem;margin:0 auto;padding:1.5rem 1.2rem 4rem}
-h1{font-size:1.7rem;text-align:center;margin:1.5rem 0 .2rem}
-.sub{text-align:center;color:var(--mut);margin:0 0 2rem}
-h2{font-size:1.3rem;margin:2.6rem 0 .6rem;padding-top:1rem;border-top:1px solid var(--line)}
-h3{font-size:1.05rem;margin:1.8rem 0 .3rem;color:var(--mut)}
-p{margin:.5rem 0}
-.q{padding:.3rem 1rem;border-right:3px solid var(--line);color:var(--mut)}
-.f{text-align:center;direction:rtl}
-.tw{overflow-x:auto}
-table{border-collapse:collapse;width:100%;margin:1rem 0}
-th,td{border:1px solid var(--line);padding:.4rem .6rem;text-align:right}
-th{color:var(--mut)}
-
-:root{--sw:18rem}
-html{scroll-behavior:smooth}
-body{padding-top:3.4rem}
-.pair{display:grid;grid-template-columns:1fr;gap:.1rem 3rem;margin:0 0 .5rem}
-.pair[id]{scroll-margin-top:4rem}
-.pair .en{direction:ltr;text-align:left;font-family:Georgia,"Iowan Old Style","Times New Roman",serif;line-height:1.75;font-size:1rem;padding-left:.9rem;border-left:2px solid var(--line);margin-bottom:.9rem}
-.pair .en h1,.pair .en .sub{text-align:center}
-.pair .en h2{margin-top:.4rem;padding-top:.4rem;border-top:0}
-.pair .en .q{border-right:0;border-left:3px solid var(--line)}
-.pair .en .f{direction:ltr}
-.pair .en th,.pair .en td{text-align:left}
-@media (min-width:56rem) and (max-width:63.99rem),(min-width:80rem){
-.pair{grid-template-columns:1fr 1fr}
-.pair .en{padding-left:0;border-left:0;margin-bottom:0}
-.pair .en h2{margin-top:2.6rem;padding-top:1rem;border-top:1px solid var(--line)}
-.pair .en .q{padding-left:1rem}
-}
-#bar{position:fixed;top:0;inset-inline-start:0;inset-inline-end:0;height:3.4rem;display:flex;align-items:center;gap:.6rem;padding:0 .7rem;background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:20}
-#bar button,#ex{font:inherit;color:var(--fg);background:none;border:1px solid var(--line);border-radius:.5rem;min-width:2.2rem;height:2.2rem;cursor:pointer}
-#crumb{flex:1;min-width:0;line-height:1.3;font-size:.8rem}
-#crumb div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-#ce{color:var(--mut);font-family:Georgia,serif}
-.nb{display:flex;gap:.3rem}
-#prog{position:absolute;bottom:-1px;inset-inline-start:0;height:2px;width:0;background:var(--fg)}
-#toc{position:fixed;top:0;bottom:0;inset-inline-start:0;width:min(86vw,19rem);box-sizing:border-box;background:var(--bg);border-inline-end:1px solid var(--line);overflow-y:auto;z-index:40;padding:.8rem;transform:translateX(100%);transition:transform .25s}
-#toc.open{transform:none}
-#scrim{position:fixed;inset:0;background:#0006;z-index:30;display:none}
-#scrim.on{display:block}
-.th{display:flex;gap:.4rem;margin-bottom:.6rem}
-#q{flex:1;min-width:0;font:inherit;font-size:.9rem;padding:.35rem .6rem;border:1px solid var(--line);border-radius:.5rem;background:transparent;color:var(--fg)}
-#toc ul{list-style:none;margin:0;padding:0}
-#toc ul ul{display:none;padding-inline-start:1.4rem}
-#toc li.open>ul{display:block}
-#toc li.hide{display:none}
-.row{display:flex;align-items:flex-start}
-.tg{width:1.4rem;height:2rem;flex:none;border:0;background:none;color:var(--mut);cursor:pointer;padding:0}
-button.tg::before{content:"◂";display:inline-block;transition:transform .15s}
-.open>.row .tg::before{transform:rotate(-90deg)}
-#toc a{display:flex;gap:.4rem;flex:1;min-width:0;padding:.2rem .4rem;border-radius:.4rem;color:inherit;text-decoration:none;line-height:1.5}
-#toc a:hover,#toc a[aria-current]{background:color-mix(in srgb,var(--fg) 9%,transparent)}
-#toc a[aria-current]{font-weight:600}
-.n{min-width:1.9rem;color:var(--mut);font-size:.8rem;direction:ltr;text-align:center}
-.n:empty{display:none}
-.t{min-width:0}
-.t b{display:block;font-weight:inherit;font-size:.92rem}
-.t i{display:block;font-style:normal;font-size:.78rem;color:var(--mut);text-align:left;font-family:Georgia,serif}
-.kh{font-size:.72rem;color:var(--mut);margin:1rem 0 0}
-@media (min-width:64rem){
-body{padding-inline-start:var(--sw)}
-#bar{inset-inline-start:var(--sw)}
-#toc{transform:none;width:var(--sw);z-index:10}
-#menu,#scrim{display:none!important}
-}
-@media print{#bar,#toc,#scrim{display:none}body{padding:0}}
-</style>
-</head>
-<body>
-<header id="bar"><button id="menu" aria-label="Contents / فهرست">☰</button><div id="crumb"><div id="cf"></div><div id="ce" dir="ltr"></div></div><div class="nb"><button id="prev" aria-label="Previous / قبلی">›</button><button id="next" aria-label="Next / بعدی">‹</button></div><div id="prog"></div></header><nav id="toc" aria-label="Contents / فهرست"><div class="th"><input id="q" type="search" placeholder="جستجو · Search" aria-label="Search contents"><button id="ex" title="Expand / collapse all">⇅</button></div><ul><li class="r"><div class="row"><span class="tg"></span><a href="#preface"><span class="n"></span><span class="t"><b>پیش‌گفتار (نظم دوگانه شبکه)</b><i lang="en" dir="ltr">Preface (The Dual Order of the Network)</i></span></a></div></li><li class="r"><div class="row"><button class="tg" aria-expanded="false" aria-label="Expand / گسترش"></button><a href="#r1"><span class="n">1</span><span class="t"><b>ساختار تالار</b><i lang="en" dir="ltr">The Structure of the Hall</i></span></a></div><ul><li><a href="#s1-1"><span class="n">1.1</span><span class="t"><b>آغاز، پایان، مرکز</b><i lang="en" dir="ltr">Beginning, End, Center</i></span></a></li><li><a href="#s1-2"><span class="n">1.2</span><span class="t"><b>کانون فعلیت</b><i lang="en" dir="ltr">The Focus of Actuality</i></span></a></li><li><a href="#s1-3"><span class="n">1.3</span><span class="t"><b>هم‌گرایی و نشان‌گرها</b><i lang="en" dir="ltr">Convergence and Markers</i></span></a></li><li><a href="#s1-4"><span class="n">1.4</span><span class="t"><b>۱.۴ سرنوشت واگرایی و انتخاب</b><i lang="en" dir="ltr">The Fate of Divergence and Choice</i></span></a></li></ul></li><li class="r"><div class="row"><button class="tg" aria-expanded="false" aria-label="Expand / گسترش"></button><a href="#r2"><span class="n">2</span><span class="t"><b>تداوم عالم</b><i lang="en" dir="ltr">The Continuity of the World</i></span></a></div><ul><li><a href="#s2-1"><span class="n">2.1</span><span class="t"><b>وحدت، امکان، کثرت</b><i lang="en" dir="ltr">Unity, Possibility, Multiplicity</i></span></a></li><li><a href="#s2-2"><span class="n">2.2</span><span class="t"><b>انتخاب به‌مثابه تنگ‌شدن</b><i lang="en" dir="ltr">Choice as Narrowing</i></span></a></li><li><a href="#s2-3"><span class="n">2.3</span><span class="t"><b>جزء، کل و حدّ یقین</b><i lang="en" dir="ltr">Part, Whole, and the Limit of Certainty</i></span></a></li><li><a href="#s2-4"><span class="n">2.4</span><span class="t"><b>توپولوژی و هولوگرافی</b><i lang="en" dir="ltr">Topology and Holography</i></span></a></li></ul></li><li class="r"><div class="row"><button class="tg" aria-expanded="false" aria-label="Expand / گسترش"></button><a href="#r3"><span class="n">3</span><span class="t"><b>تجربه</b><i lang="en" dir="ltr">Experience</i></span></a></div><ul><li><a href="#s3-1"><span class="n">3.1</span><span class="t"><b>گذار و تعادل</b><i lang="en" dir="ltr">Transition and Equilibrium</i></span></a></li><li><a href="#s3-2"><span class="n">3.2</span><span class="t"><b>امضا</b><i lang="en" dir="ltr">Signature</i></span></a></li><li><a href="#s3-3"><span class="n">3.3</span><span class="t"><b>راز و برهنگی</b><i lang="en" dir="ltr">Secrecy and Exposure</i></span></a></li><li><a href="#s3-4"><span class="n">3.4</span><span class="t"><b>هنر یافتن</b><i lang="en" dir="ltr">The Art of Finding</i></span></a></li><li><a href="#s3-5"><span class="n">3.5</span><span class="t"><b>حقیقت و واقعیت</b><i lang="en" dir="ltr">Truth and Reality</i></span></a></li></ul></li><li class="r"><div class="row"><button class="tg" aria-expanded="false" aria-label="Expand / گسترش"></button><a href="#r4"><span class="n">4</span><span class="t"><b>اقتدار شبیه‌سازی</b><i lang="en" dir="ltr">The Authority of Simulation</i></span></a></div><ul><li><a href="#s4-1"><span class="n">4.1</span><span class="t"><b>شبیه‌سازی به‌مثابه دسترسی</b><i lang="en" dir="ltr">Simulation as Access</i></span></a></li><li><a href="#s4-2"><span class="n">4.2</span><span class="t"><b>انحلال تمایز</b><i lang="en" dir="ltr">The Dissolution of Distinction</i></span></a></li><li><a href="#s4-3"><span class="n">4.3</span><span class="t"><b>راه‌حل پیشنهادی</b><i lang="en" dir="ltr">The Proposed Resolution</i></span></a></li><li><a href="#s4-4"><span class="n">4.4</span><span class="t"><b>تکامل به‌مثابه بازترکیب</b><i lang="en" dir="ltr">Evolution as Recombination</i></span></a></li></ul></li><li class="r"><div class="row"><button class="tg" aria-expanded="false" aria-label="Expand / گسترش"></button><a href="#r5"><span class="n">5</span><span class="t"><b>اقتصاد سهم‌ها</b><i lang="en" dir="ltr">The Economy of Shares</i></span></a></div><ul><li><a href="#s5-1"><span class="n">5.1</span><span class="t"><b>دوگانگی بنیادی</b><i lang="en" dir="ltr">The Fundamental Duality</i></span></a></li><li><a href="#s5-2"><span class="n">5.2</span><span class="t"><b>دو افراط ساختاری</b><i lang="en" dir="ltr">Two Structural Extremes</i></span></a></li><li><a href="#s5-3"><span class="n">5.3</span><span class="t"><b>تراکم متناسب</b><i lang="en" dir="ltr">Proportional Density</i></span></a></li><li><a href="#s5-4"><span class="n">5.4</span><span class="t"><b>بازخوانی اجتماعی فقدان</b><i lang="en" dir="ltr">A Social Rereading of Lack</i></span></a></li></ul></li><li class="r"><div class="row"><span class="tg"></span><a href="#postscript"><span class="n"></span><span class="t"><b>پس‌گفتار (نظریه خود را کنار می‌کشد)</b><i lang="en" dir="ltr">Postscript (The Theory Steps Aside)</i></span></a></div></li></ul><p class="kh" dir="ltr">Keys: [ ] or J K = prev / next · / = search</p></nav><div id="scrim"></div>
-<main>
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>رساله فلسفی نگرش نوین</title><link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet"><style>*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden}
+body{background:#f3f4f2;color:#202321;font-family:Vazirmatn,Tahoma,sans-serif}
+.page{position:fixed;inset:0;display:flex;flex-direction:column;min-height:0;background:#f3f4f2;color:#202321;overflow:hidden}
+.book-head{flex:0 0 auto;background:linear-gradient(135deg,#101214,#351818);color:#ffd8a4;padding:14px 15px 12px;display:flex;align-items:center;gap:9px;border-bottom:2px solid #c93a33;direction:rtl}
+.book-head .book-title{font-weight:800;font-size:.83rem;flex:1}.book-head .book-lang{display:flex;gap:4px;direction:ltr}
+.book-head .book-lang button{background:rgba(255,255,255,.08);border:1px solid rgba(255,215,160,.25);color:#ffd8a4;padding:4px 7px;border-radius:12px;font-size:.62rem;font-weight:800;cursor:pointer}
+.book-head .book-lang button.active{background:#ffd8a4;color:#241414}
+.book-close{width:29px;height:29px;border-radius:50%;border:1px solid rgba(255,150,150,.35);background:rgba(255,80,80,.1);color:#ffb0aa;cursor:pointer}
+.book-tabs{display:flex;gap:5px;overflow-x:auto;flex:0 0 auto;padding:9px;background:#e5e7e3;border-bottom:1px solid #cdd1cc;direction:rtl}
+.book-tabs::-webkit-scrollbar{height:4px}.book-tabs::-webkit-scrollbar-thumb{background:#aaa;border-radius:5px}
+.book-tab{flex:0 0 auto;border:1px solid #c9cdc9;background:#fff;color:#5a5f5c;padding:6px 9px;border-radius:7px;font-size:.58rem;font-weight:800;cursor:pointer}
+.book-tab.active{background:#2f6fd0;color:#fff;border-color:#2f6fd0}
+.book-body{flex:1;min-height:0;overflow:auto;padding:22px 18px 40px;background:#f3f4f2;font-size:.82rem;line-height:2;color:#202321}
+.book-body .head{margin-bottom:22px}.book-body h1{font-size:1.55rem;line-height:1.3;margin:0 0 2px;font-weight:800}.book-body h2{font-size:1.02rem;line-height:1.5;margin:24px 0 7px;font-weight:800;color:#202321;border-top:1px solid #cdd1cc;padding-top:12px}.book-body h3{font-size:.9rem;margin:18px 0 5px;color:#4e5451}
+.book-body .sub{color:#626763;margin:0 0 22px;font-size:.8rem}.book-body p{margin:.55rem 0;text-align:justify}
+.book-body .pair{display:grid;grid-template-columns:1fr;gap:.1rem 3rem;margin:0 0 .6rem;padding:0}
+.book-body .pair .en{direction:ltr;text-align:left;font-family:Georgia,'Times New Roman',serif;line-height:1.75;font-size:.8rem;color:#303432;padding-left:.9rem;border-left:2px solid #cdd1cc}
+.book-body .pair .fa{direction:rtl;text-align:justify}
+.book-body .pair .en p{margin:.55rem 0}
+.book-body .q{padding:.3rem 1rem;border-right:3px solid #cdd1cc;color:#626763}
+.book-body table{border-collapse:collapse;width:100%;margin:1rem 0;font-size:.76rem}.book-body th,.book-body td{border:1px solid #cdd1cc;padding:.4rem .5rem}.book-body th{color:#626763}
+body[data-mode=fa] .en,body[data-mode=en] .fa{display:none}
+body[data-mode=en] .book-body{direction:ltr;text-align:left;font-family:Georgia,'Times New Roman',serif;line-height:1.75}
+body[data-mode=en] .book-body .fa{font-family:Vazirmatn,Tahoma,sans-serif}
+body[data-mode=both] .book-body .pair{grid-template-columns:1fr 1fr}
+body[data-mode=both] .book-body .pair .en{padding-left:0;border-left:0}
+@media(max-width:700px){body[data-mode=both] .book-body .pair{grid-template-columns:1fr}.book-body .pair .en{border-left:2px solid #cdd1cc;padding-left:.9rem}}
+.book-body a{color:#2f6fd0}.book-body img{max-width:100%;height:auto}
+.book-body .chapter{margin-bottom:28px}.book-body .moral{margin-top:30px;padding:14px;border:1px solid #cdd1cc;border-radius:10px;background:#e9ebe8}
+</style></head><body data-mode="both"><section class="page">
+<header class="book-head"><div class="book-title">📖 رساله فلسفی نگرش نوین</div><div class="book-lang"><button id="fa" class="active">فارسی</button><button id="both">Both</button><button id="en">English</button></div><button class="book-close" id="close" aria-label="بستن">✕</button></header>
+<nav class="book-tabs" id="tabs"><button class="book-tab active" data-target="preface">پیش‌گفتار</button><button class="book-tab" data-target="r1">ساختار تالار</button><button class="book-tab" data-target="r2">تداوم عالم</button><button class="book-tab" data-target="r3">تجربه</button><button class="book-tab" data-target="r4">اشتراک</button><button class="book-tab" data-target="r5">جمع‌بندی</button></nav>
+<article class="book-body" id="body">
 <div class="pair"><div class="fa"><h1>رساله فلسفی نگرش نوین</h1></div><div class="en" lang="en" dir="ltr"><h1>A Philosophical Treatise on the Modern Outlook</h1></div></div>
 <div class="pair"><div class="fa"><p class="sub">توصیف ۲۱ صحنه در ۵ قلمرو، از منظر نگرشی نوین.</p></div><div class="en" lang="en" dir="ltr"><p class="sub">A description of twenty-one scenes in five realms, from the standpoint of a modern outlook.</p></div></div>
 <div class="pair" id="preface" data-l="2"><div class="fa"><h2>پیش‌گفتار (نظم دوگانه شبکه)</h2></div><div class="en" lang="en" dir="ltr"><h2>Preface (The Dual Order of the Network)</h2></div></div>
@@ -248,69 +200,10 @@ body{padding-inline-start:var(--sw)}
 <div class="pair"><div class="fa"><p>در نهایت، رساله اصل خود را بر خودش اعمال می‌کند: یک نظریه نباید خود را در جایگاه حقیقت بنشاند. نظریه از معادله کنار می‌رود و تنها نقشی ابزاری برای خود قائل می‌شود. فراهم‌کردن امکان دیدن بهتر، نه مالک‌شدن حقیقت.</p></div><div class="en" lang="en" dir="ltr"><p>In the end, the treatise applies its own principle to itself: a theory must not set itself in the place of truth. The theory steps out of the equation and assigns itself only an instrumental role: to make better seeing possible, not to take possession of truth.</p></div></div>
 <div class="pair"><div class="fa"><p>پایان فرایند شناخت، تثبیت یک نظام بسته نیست، بلکه افزایش ظرفیت مشاهده، پرسش، اصلاح و همگرایی است.</p></div><div class="en" lang="en" dir="ltr"><p>The end of the process of knowing is not the fixing of a closed system but an increase in the capacity for observation, questioning, correction, and convergence.</p></div></div>
 <div class="pair"><div class="fa"><p>هیچ جزئی را نمی‌توان مستقل از رابطه‌اش با کل فهم کرد؛ و هیچ کلی جز از طریق تفاوت، سهم و تعامل اجزای خود بالفعل نمی‌شود.</p></div><div class="en" lang="en" dir="ltr"><p>No part can be understood independently of its relation to the whole; and no whole is actualized except through the difference, share, and interaction of its parts.</p></div></div>
-</main>
-<script>
-(()=>{
-const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const secs=$$('.pair[id]'),links=new Map($$('#toc a').map(a=>[a.hash.slice(1),a])),toc=$('#toc');
-let cur=-1,all=false;
-const setOpen=(li,o)=>{li.classList.toggle('open',o);const b=li.querySelector('button.tg');if(b)b.setAttribute('aria-expanded',o)};
-$$('#toc button.tg').forEach(b=>b.onclick=()=>{const li=b.closest('li');li.dataset.m='1';setOpen(li,!li.classList.contains('open'))});
-const lab=(a,k)=>a.querySelector('.t '+k).textContent;
-function active(){
- const y=innerHeight*.28;let k=0;
- for(let i=0;i<secs.length;i++){if(secs[i].getBoundingClientRect().top<=y)k=i;else break}
- if(k===cur)return;cur=k;
- const s=secs[k],a=links.get(s.id),li=a.closest('li.r');
- $$('#toc a[aria-current]').forEach(x=>x.removeAttribute('aria-current'));
- a.setAttribute('aria-current','location');
- $$('#toc li.r.open').forEach(x=>{if(x!==li&&!x.dataset.m&&!all)setOpen(x,false)});
- if(li.querySelector('ul'))setOpen(li,true);
- const rs=s.dataset.l==='2'?s:secs.slice(0,k+1).reverse().find(x=>x.dataset.l==='2'),ra=links.get(rs.id);
- const f=[lab(ra,'b')],e=[lab(ra,'i')];
- if(s!==rs){f.push(lab(a,'b'));e.push(a.querySelector('.n').textContent+' '+lab(a,'i'))}
- $('#cf').textContent=f.join(' › ');$('#ce').textContent=e.join(' › ');
- const r=a.getBoundingClientRect(),t=toc.getBoundingClientRect();
- if(r.top<t.top+60||r.bottom>t.bottom-40)toc.scrollTop+=r.top-t.top-t.height/3;
- try{history.replaceState(null,'','#'+s.id)}catch(_){}
-}
-let tk=false;
-const tick=()=>{tk=false;const h=document.documentElement;$('#prog').style.width=Math.min(100,scrollY/Math.max(1,h.scrollHeight-innerHeight)*100)+'%';active()};
-addEventListener('scroll',()=>{if(!tk){tk=true;requestAnimationFrame(tick)}},{passive:true});
-addEventListener('resize',tick);addEventListener('load',tick);
-function go(d){
- let k=cur<0?0:cur;
- if(d<0&&secs[k].getBoundingClientRect().top<-40)d=0;
- k=Math.max(0,Math.min(secs.length-1,k+d));
- secs[k].scrollIntoView({behavior:'smooth',block:'start'});
-}
-$('#prev').onclick=()=>go(-1);$('#next').onclick=()=>go(1);
-const drawer=o=>{toc.classList.toggle('open',o);$('#scrim').classList.toggle('on',o)};
-$('#menu').onclick=()=>drawer(!toc.classList.contains('open'));$('#scrim').onclick=()=>drawer(false);
-$$('#toc a').forEach(a=>a.addEventListener('click',()=>drawer(false)));
-$('#ex').onclick=()=>{all=!all;$$('#toc li.r').forEach(r=>{if(r.querySelector('ul')){setOpen(r,all);if(all)r.dataset.m='1';else delete r.dataset.m}});if(!all){cur=-1;active()}};
-$('#q').addEventListener('input',e=>{
- const q=e.target.value.trim().toLowerCase();
- $$('#toc li.r').forEach(r=>{
-  const kids=$$('#toc li.r').length&&[...r.querySelectorAll('ul li')],own=r.querySelector('.row a').textContent.toLowerCase().includes(q);
-  let any=false;
-  kids.forEach(k=>{const m=!q||own||k.textContent.toLowerCase().includes(q);k.classList.toggle('hide',!m);any=any||m});
-  r.classList.toggle('hide',!(own||any||!q));
-  if(r.querySelector('ul'))setOpen(r,q?(own||any):r.dataset.m?r.classList.contains('open'):false);
- });
- if(!q){cur=-1;active()}
-});
-$('#q').addEventListener('keydown',e=>{if(e.key==='Enter'){const a=$$('#toc a').find(x=>!x.closest('.hide'));if(a)a.click()}});
-addEventListener('keydown',e=>{
- if(e.target.matches('input')){if(e.key==='Escape')e.target.blur();return}
- if(e.ctrlKey||e.metaKey||e.altKey)return;
- if(e.key==='/'){e.preventDefault();drawer(true);$('#q').focus()}
- else if(e.key===']'||e.key==='j'||e.key==='J')go(1);
- else if(e.key==='['||e.key==='k'||e.key==='K')go(-1);
- else if(e.key==='Escape')drawer(false);
-});
-tick();
-})();
-</script>
-</body>
-</html>
+</article>
+</section><script>
+const body=document.body,bs=[...document.querySelectorAll('.book-lang button')];
+bs.forEach(b=>b.onclick=()=>{body.dataset.mode=b.id;bs.forEach(x=>x.classList.toggle('active',x===b));});
+document.getElementById('close').onclick=()=>{if(history.length>1)history.back();else location.href='index.html'};
+document.querySelectorAll('.book-tab').forEach(b=>b.onclick=()=>{const id=b.dataset.target;if(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}});
+</script></body></html>
