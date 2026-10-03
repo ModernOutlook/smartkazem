@@ -749,17 +749,6 @@ function setInfo(id,show=true){
   if(show) info.classList.add('visible');
 }
 
-function setInfo(id,show=true){
-  activeId=id;
-  realms.forEach(r=>r.classList.toggle('selected',r.dataset.id===id));
-  const d=copy[uiLang][id];
-  infoTitle.textContent=d.title;
-  infoText.textContent=d.text;
-  info.classList.toggle('reference',id==='reference');
-  if(show) info.classList.add('visible');
-  tone({structure:520,continuity:620,experience:720,reference:820,share:920,core:1040}[id]||620);
-}
-
 function clearInfo(){
   info.classList.remove('visible');
   realms.forEach(r=>r.classList.remove('selected'));
@@ -768,6 +757,7 @@ function clearInfo(){
 function selectRealm(id){
   if(id==='core'){
     setInfo('core');
+    SiteAudio.play('core.open');
     return;
   }
   const realm=realms.find(r=>r.dataset.id===id);
@@ -915,7 +905,7 @@ function selectChapter(i){
   bookBody.scrollTop=0;
 }
 
-function openShare(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';sharePage.style.display='block';clearInfo();SiteAudio.play('page.close');}
+function openShare(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';sharePage.style.display='block';clearInfo();SiteAudio.play('page.open');}
 function closeShare(){sharePage.style.display='none';home.style.display='block';setInfo('share');SiteAudio.play('page.close');}
 function openExperience(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='block';clearInfo();SiteAudio.play('page.open');}
 function closeExperience(){experiencePage.style.display='none';home.style.display='block';setInfo('experience');SiteAudio.play('page.close');}
@@ -923,7 +913,7 @@ function openContinuity(){home.style.display='none';referencePage.style.display=
 function closeContinuity(){continuityPage.style.display='none';home.style.display='block';setInfo('continuity');SiteAudio.play('page.close');}
 function openStructure(){window.clearTimeout(window.__structureOpenTimer);home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';continuityPage.style.display='none';structurePage.style.display='block';clearInfo();SiteAudio.play('page.open');}
 function closeStructure(){structurePage.style.display='none';home.style.display='block';setInfo('structure');SiteAudio.play('page.close');}
-function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';tone(820);}
+function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';SiteAudio.play('page.open');}
 function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');SiteAudio.play('page.close');}
 function openBook(from='home'){bookReturn=from;
   home.style.display='none';
@@ -931,21 +921,21 @@ function openBook(from='home'){bookReturn=from;
   bookPage.style.display='block';
   buildBookTabs(0);
   selectChapter(0);
-  tone(880);
+  SiteAudio.play('page.open');
 }
 
-function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';tone(560)}else{home.style.display='block';setInfo('reference');tone(560)}}
+function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';}else{home.style.display='block';setInfo('reference');}SiteAudio.play('page.close');}
 
-document.getElementById('share-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeShare();});
-document.getElementById('experience-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeExperience();});
-document.getElementById('continuity-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeContinuity();});
-document.getElementById('structure-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeStructure();});
-document.getElementById('reference-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeReference();});
+document.getElementById('share-close').addEventListener('click',closeShare);
+document.getElementById('experience-close').addEventListener('click',closeExperience);
+document.getElementById('continuity-close').addEventListener('click',closeContinuity);
+document.getElementById('structure-close').addEventListener('click',closeStructure);
+document.getElementById('reference-close').addEventListener('click',closeReference);
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference'));
 document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html'});
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html'});
 document.getElementById('ref-games').addEventListener('click',()=>{});
-document.getElementById('book-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeBook();});
+document.getElementById('book-close').addEventListener('click',closeBook);
 document.getElementById('book-fa').addEventListener('click',()=>{
   if(bookLang==='fa')return;
   const idx=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
