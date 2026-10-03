@@ -12,7 +12,6 @@
     "forgers": "《模仿的伪造者》",
     "treatise": "哲学论述",
     "observation": "观察之地",
-    "games": "游戏",
     "back": "返回",
     "close": "关闭",
     "comingSoon": "稍后推出",
@@ -56,9 +55,7 @@
     "pages": {
       "forgers": "《模仿的伪造者》",
       "treatise": "哲学论述",
-      "observation": "观察之地",
-      "games": "游戏",
-      "gamesEn": "稍后推出"
+      "observation": "观察之地"
     },
     "title": "现代视野 — Modern Outlook"
   },
@@ -73,14 +70,14 @@
       "close": "关闭",
       "titleEn": "哲学论述",
       "tabs": [
-  "序言",
-  "结构殿堂",
-  "世界的延续",
-  "经验",
-  "模拟的权威",
-  "份额经济",
-  "后记"
-]
+        "序言",
+        "结构殿堂",
+        "世界的延续",
+        "经验",
+        "模拟的权威",
+        "份额经济",
+        "后记"
+      ]
     },
     "forgers": {
       "title": "《模仿的伪造者》",
