@@ -272,5 +272,33 @@
       },
       "placeholder": ""
     }
+  },
+  "paragraphMachine": {
+    "title": "段落机器",
+    "subtitle": "段落生成与评估",
+    "detect": "识别",
+    "match": "匹配",
+    "internal": "核心始终以波斯语处理。",
+    "input": "用于匹配的文本",
+    "count": "段落数量",
+    "mode": "意图模式",
+    "settings": "连接设置",
+    "apiKey": "API 密钥",
+    "baseUrl": "服务地址",
+    "model": "模型",
+    "save": "保存设置",
+    "localOnly": "密钥仅保存在此浏览器中。",
+    "words": "词",
+    "chars": "字符",
+    "realm": "领域",
+    "status": "状态",
+    "reason": "原因",
+    "processing": "处理中……",
+    "empty": "请输入文本。",
+    "saved": "设置已保存。",
+    "referenceSource": "用户文本 → 波斯语翻译 → 评估",
+    "experienceSource": "波斯语生成 → 评估 → 翻译为网站语言",
+    "referenceDone": "文本已转为波斯语并由核心评估。",
+    "experienceDone": "核心以波斯语处理，并将结果翻译为网站语言。"
   }
 }
