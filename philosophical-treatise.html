@@ -206,7 +206,7 @@ body{display:grid;place-items:center;overflow:hidden}
 </section><script>
 const body=document.body;
 const savedLang=(()=>{try{return localStorage.getItem('modern-outlook.lang.v1')||'fa'}catch(_){return 'fa'}})();
-body.dataset.mode=['fa','en','zh'].includes(savedLang)?savedLang:'fa';
+body.dataset.mode=['fa','en','zh','ar'].includes(savedLang)?savedLang:'fa';
 document.documentElement.lang=body.dataset.mode;
 document.documentElement.dir=body.dataset.mode==='fa'||body.dataset.mode==='zh'?'rtl':'ltr';
 document.getElementById('close').onclick=()=>{if(history.length>1)history.back();else location.href='index.html'};
