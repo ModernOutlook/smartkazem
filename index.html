@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="google" content="notranslate"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="google" content="notranslate"><meta name="i18n-page" content="home"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; child-src 'none'; connect-src 'self'; img-src 'self' data:; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer"><meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()">
 <meta name="theme-color" content="#02060c">
@@ -827,43 +827,8 @@ const bookChaptersAr = [
 const bookMoralEn = "The one who displays a skill goes only as far as there are spectators; the one who practices a skill goes as far as they themselves can go. And a forest where everyone is a spectator eventually has nothing left to see but the act of watching itself.";
 const bookMoralFa = 'آنکه مهارت را نمایش می‌دهد، فقط تا آنجا می‌رود که تماشاگر دارد؛ آنکه مهارت را می‌ورزد، تا آنجا که خودش می‌رود. و جنگلی که همه در آن تماشاگرند، سرانجام جز خودِ تماشا چیزی برای دیدن ندارد.';
 
-const copy = {
-  fa:{
-    structure:{title:'ساختار تالار · HALL STRUCTURE',text:'ساختار تالار، بیرونی‌ترین قلمرو و بستر آغازین شبکه است؛ جایی که امکان‌ها و روابط بنیادی شکل می‌گیرند.'},
-    continuity:{title:'تداوم عالم · CONTINUITY OF THE WORLD',text:'تداوم عالم، جریان پیوسته‌ای است که ساختار را به امکان استمرار، تحول و پیدایش تجربه متصل می‌کند.'},
-    experience:{title:'قلمرو تجربه · REALM OF EXPERIENCE',text:'قلمرو تجربه جایی است که تداوم عالم به تجربه زیسته، ادراک، معنا و جهت‌گیری تبدیل می‌شود.'},
-    reference:{title:'مرجع تقلید · IMITATIVE AUTHORITY',text:'مرجع تقلید قلمروی است که تجربه، انسان را به سوی الگوها، منابع اعتبار و انتخاب آنچه باید از آن پیروی شود می‌برد.'},
-    share:{title:'اقتصاد سهم · ECONOMY OF SHARES',text:'اقتصاد سهم نزدیک‌ترین قلمرو به مرکز است؛ جایی که رقابت، توزیع، سهم و موقعیت افراد در شبکه آشکار می‌شود.'},
-    core:{title:'کانون فعلیت · ACTUALITY FOCUS',text:'مرکز سفید، نقطه همگرایی نهایی است؛ کانونی که از آغاز حاضر است اما محاسبه و تشخیص آن تنها با کامل شدن پیکربندی ممکن می‌شود.'}
-  },
-  en:{
-    structure:{title:'Hall Structure · HALL STRUCTURE',text:'The Hall Structure is the outermost realm and the starting ground of the network, where fundamental possibilities and relations take shape.'},
-    continuity:{title:'Continuity of the World · CONTINUITY OF THE WORLD',text:'Continuity of the World is the continuous flow connecting structure to persistence, transformation, and the emergence of experience.'},
-    experience:{title:'Realm of Experience · REALM OF EXPERIENCE',text:'The Realm of Experience is where continuity becomes lived experience, perception, meaning, and orientation.'},
-    reference:{title:'Imitative Authority · IMITATIVE AUTHORITY',text:'Imitative Authority is the realm where experience turns toward models, sources of authority, and choices about what should be followed.'},
-    share:{title:'Economy of Shares · ECONOMY OF SHARES',text:'The Economy of Shares is the realm closest to the center, where competition, distribution, shares, and positions within the network become visible.'},
-    core:{title:'Actuality Focus · ACTUALITY FOCUS',text:'The white center is the final point of convergence; a focus present from the beginning, whose calculation and recognition become possible only when the configuration is complete.'}
-  },
-  ar:{
-    structure:{title:'بنية القاعة · HALL STRUCTURE',text:'بنية القاعة هي المجال الخارجي والأساس الأولي للشبكة، حيث تتشكل الإمكانات والعلاقات الأساسية.'},
-    continuity:{title:'استمرارية العالم · CONTINUITY OF THE WORLD',text:'استمرارية العالم هي التدفق المتواصل الذي يربط البنية بالاستمرار والتحول وظهور التجربة.'},
-    experience:{title:'مجال التجربة · REALM OF EXPERIENCE',text:'مجال التجربة هو حيث تتحول الاستمرارية إلى تجربة معاشة وإدراك ومعنى واتجاه.'},
-    reference:{title:'سلطة التقليد · IMITATIVE AUTHORITY',text:'سلطة التقليد هي المجال الذي تتجه فيه التجربة إلى النماذج ومصادر السلطة والاختيارات المتعلقة بما ينبغي اتباعه.'},
-    share:{title:'اقتصاد الحصص · ECONOMY OF SHARES',text:'اقتصاد الحصص هو المجال الأقرب إلى المركز، حيث تظهر المنافسة والتوزيع والحصص والمواقع داخل الشبكة.'},
-    core:{title:'بؤرة الواقع · ACTUALITY FOCUS',text:'المركز الأبيض هو نقطة التقارب النهائية؛ وهو حاضر منذ البداية، ولا يصبح حسابه والتعرف إليه ممكنين إلا عند اكتمال التكوين.'}
-  },
-  zh:{
-    structure:{title:'结构殿堂 · HALL STRUCTURE',text:'结构殿堂是最外层的领域，也是网络的起始基础；基本的可能性与关系在这里形成。'},
-    continuity:{title:'世界的延续 · CONTINUITY OF THE WORLD',text:'世界的延续是连接结构、持续、变化与经验生成的连续流动。'},
-    experience:{title:'经验领域 · REALM OF EXPERIENCE',text:'经验领域是世界的延续转化为生活经验、感知、意义与方向的地方。'},
-    reference:{title:'模仿权威 · IMITATIVE AUTHORITY',text:'模仿权威是经验转向范式、权威来源以及选择应当追随何物的领域。'},
-    share:{title:'份额经济 · ECONOMY OF SHARES',text:'份额经济是最接近中心的领域，竞争、分配、份额以及网络中的位置在这里显现。'},
-    core:{title:'现实焦点 · ACTUALITY FOCUS',text:'白色中心是最终的汇聚点；它从一开始便存在，而只有当整体配置完成后，才能计算并识别它。'}
-  }
-};
 
-let uiLang='fa';
-let bookLang='fa';
+function currentSiteLang(){return window.SiteI18n?.getLanguage?.()||'fa';}
 let activeId='structure';
 
 const app=document.getElementById('app');
@@ -876,9 +841,8 @@ const core=document.getElementById('core');
 function setInfo(id,show=true){
   activeId=id;
   realms.forEach(r=>r.classList.toggle('selected',r.dataset.id===id));
-  const d=copy[uiLang][id];
-  infoTitle.textContent=d.title;
-  infoText.textContent=d.text;
+  const d=window.SiteI18n?.getCatalog?.()?.home?.realms?.[id];
+  if(d){infoTitle.textContent=d.title||'';infoText.textContent=d.text||'';}
   info.classList.toggle('reference',id==='reference');
   if(show) info.classList.add('visible');
 }
@@ -971,72 +935,59 @@ realms.forEach(realm=>{
   });
 });
 
-function localizeHomeUi(lang){
-  const t={
-    fa:{humanMachines:'انسان و ماشین‌هایش',humanMachinesEn:'Humanity and Its Machines',share:'اقتصاد سهم',experience:'قلمرو تجربه',continuity:'تداوم عالم',structure:'ساختار تالار',reference:'مرجع تقلید',shareEn:'Share Economy',experienceEn:'Realm of Experience',continuityEn:'Continuity of the Universe',structureEn:'Structure of the Hall',referenceEn:'Reference of Imitation',forgers:'جاعلان تقلید',treatise:'رساله فلسفی',observation:'سرزمین مشاهده',games:'بازی ها',gamesEn:'Games · Coming later',back:'بازگشت'},
-    en:{humanMachines:'Humanity and Its Machines',humanMachinesEn:'Humanity and Its Machines',share:'Share Economy',experience:'Realm of Experience',continuity:'Continuity of the Universe',structure:'Structure of the Hall',reference:'Reference of Imitation',shareEn:'Share Economy',experienceEn:'Realm of Experience',continuityEn:'Continuity of the Universe',structureEn:'Structure of the Hall',referenceEn:'Reference of Imitation',forgers:'The Forgers of Imitation',treatise:'A Philosophical Treatise',observation:'The Land of Observation',games:'Games',gamesEn:'Coming later',back:'Back'},
-    zh:{humanMachines:'人类与他们的机器',humanMachinesEn:'人类与他们的机器',share:'份额经济',experience:'经验领域',continuity:'世界的延续',structure:'结构殿堂',reference:'模仿权威',shareEn:'份额经济',experienceEn:'经验领域',continuityEn:'世界的延续',structureEn:'结构殿堂',referenceEn:'模仿权威',forgers:'《模仿的伪造者》',treatise:'哲学论述',observation:'观察之地',games:'游戏',gamesEn:'稍后推出',back:'返回'},
-    ar:{humanMachines:'الإنسان وآلاته',humanMachinesEn:'الإنسان وآلاته',share:'اقتصاد الحصص',experience:'مجال التجربة',continuity:'استمرارية العالم',structure:'بنية القاعة',reference:'سلطة التقليد',shareEn:'اقتصاد الحصص',experienceEn:'مجال التجربة',continuityEn:'استمرارية العالم',structureEn:'بنية القاعة',referenceEn:'سلطة التقليد',forgers:'مزوّرو التقليد',treatise:'رسالة فلسفية',observation:'أرض الملاحظة',games:'الألعاب',gamesEn:'لاحقًا',back:'عودة'}
-  }[lang]||null;if(!t)return;
-  const map={
-    'share-page':['.share-title strong','.share-title span'], 'experience-page':['.experience-title strong','.experience-title span'],
-    'continuity-page':['.continuity-title strong','.continuity-title span'],'structure-page':['.structure-title strong','.structure-title span'],
-    'reference-page':['.reference-title strong','.reference-title span']
+function renderHomeFromCatalog(){
+  const lang=currentSiteLang();
+  const catalog=window.SiteI18n?.getCatalog?.()||{};
+  const labels=catalog.labels||{};
+  const realms=catalog.home?.realms||{};
+  const pages=catalog.home?.pages||{};
+  const titleMap={
+    share:labels.share,experience:labels.experience,continuity:labels.continuity,
+    structure:labels.structure,reference:labels.reference
   };
-  [['share-page',t.share,t.shareEn],['experience-page',t.experience,t.experienceEn],['continuity-page',t.continuity,t.continuityEn],['structure-page',t.structure,t.structureEn],['reference-page',t.reference,t.referenceEn]].forEach(([id,a,b])=>{const q=document.getElementById(id);if(q){const ss=q.querySelectorAll('strong,span');if(ss[0])ss[0].textContent=a;if(ss[1])ss[1].textContent=b;q.setAttribute('aria-label',a)}});
-  const refs=[['ref-forgers',t.forgers],['ref-treatise',t.treatise],['ref-observation',t.observation]];
-  refs.forEach(([id,v])=>{const b=document.getElementById(id);if(b){const sm=b.querySelector('small');b.firstChild.textContent=v;if(sm)sm.textContent=''}});
-  const hs=document.getElementById('share-human-machines');if(hs){hs.firstChild.textContent=t.humanMachines;const sm=hs.querySelector('small');if(sm)sm.textContent=t.humanMachinesEn}
-  const g=document.getElementById('ref-games');if(g){g.firstChild.textContent=t.games;const sm=g.querySelector('small');if(sm)sm.textContent=t.gamesEn}
-  ['share-close','share-human-machines','experience-close','continuity-close','structure-close','reference-close','book-close','logo-viewer-close'].forEach(id=>{const b=document.getElementById(id);if(b)b.setAttribute('aria-label',t.back)});
-}
-function setUiLanguage(lang){
-  if(!['zh','fa','en','ar'].includes(lang)) lang='fa';
-  uiLang=lang;
-  document.documentElement.lang=lang;
-  document.documentElement.dir=(lang==='en'?'ltr':'rtl');
-  document.body.dataset.lang=lang;
-  document.getElementById('ui-zh').classList.toggle('active',lang==='zh');
-  document.getElementById('ui-fa').classList.toggle('active',lang==='fa');
-  document.getElementById('ui-en').classList.toggle('active',lang==='en');
-  document.getElementById('ui-ar').classList.toggle('active',lang==='ar');
-  document.querySelectorAll('[data-fa][data-en]').forEach(el=>{
-    const value=lang==='fa'?el.dataset.fa:(lang==='en'?el.dataset.en:(el.dataset.zh||el.dataset.en));
-    if(value!=null)el.textContent=value;
+  const englishMap={
+    share:'Share Economy',experience:'Realm of Experience',continuity:'Continuity of the World',
+    structure:'Hall Structure',reference:'Imitative Authority'
+  };
+  Object.entries(realms).forEach(([id,data])=>{
+    if(!data)return;
+    const title=data.title||titleMap[id]||id;
+    const text=data.text||'';
+    const realm=realmsEl.find?.(r=>r.dataset.id===id);
   });
-  const current=copy[lang]?.[activeId]||copy.fa[activeId];
-  infoTitle.textContent=current.title;
-  infoText.textContent=current.text;
-  const brand=document.querySelector('.brand strong');
-  const brandAlt=document.querySelector('.brand span');
-  if(lang==='zh'){
-    brand.textContent='现代视野';
-    brandAlt.textContent='Modern Outlook';
-  }else if(lang==='en'){
-    brand.textContent='Modern Outlook';
-    brandAlt.textContent='نگرش نوین';
-  }else if(lang==='ar'){
-    brand.textContent='النظرة الحديثة';
-    brandAlt.textContent='Modern Outlook';
-  }else{
-    brand.textContent='نگرش نوین';
-    brandAlt.textContent='Modern Outlook';
-  }
-  localizeHomeUi(lang);
-  document.title=lang==='zh'?'现代视野 — Modern Outlook':lang==='en'?'Modern Outlook — نگرش نوین':lang==='ar'?'النظرة الحديثة — Modern Outlook':'نگرش نوین — Modern Outlook';
-  // The book is part of this page, so it follows the same single global language control.
-  if(typeof bookLang!=='undefined'){
-    bookLang=lang;
-    const bt=document.getElementById('book-title');
-    if(bt){const meta=window.SiteI18n?.getCatalog?.().pages?.[activeBookKind];bt.textContent=meta?.title?('📖 '+meta.title+' — '+meta.subtitle):'📖 '+(activeBookKind==='humanMachines'?(lang==='en'?'Humanity and Its Machines':lang==='zh'?'人类与他们的机器':lang==='ar'?'الإنسان وآلاته':'انسان و ماشین‌هایش'):(lang==='en'?'The Forgers of Imitation — Ten Chapters':lang==='zh'?'《模仿的伪造者》— 十章':lang==='ar'?'مزوّرو التقليد — عشرة فصول':'جاعلان تقلید — در ده فصل'));}
-    if(typeof bookPage!=='undefined'&&bookPage.style.display==='block'){
-      const currentTab=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
-      buildBookTabs(currentTab);
-      selectChapter(currentTab);
+  [['share-page',labels.share],['experience-page',labels.experience],['continuity-page',labels.continuity],['structure-page',labels.structure],['reference-page',labels.reference]].forEach(([id,title])=>{
+    const q=document.getElementById(id); if(!q)return;
+    const ss=q.querySelectorAll('.share-title strong,.experience-title strong,.continuity-title strong,.structure-title strong,.reference-title strong');
+    const strong=q.querySelector('strong'), span=q.querySelector('span');
+    if(strong&&title)strong.textContent=title;
+    if(span){
+      const key=id.replace('-page','');
+      span.textContent=englishMap[key]||title||'';
     }
-  }
+    q.setAttribute('aria-label',title||'');
+  });
+  const refs=[['ref-forgers',pages.forgers],['ref-treatise',pages.treatise],['ref-observation',pages.observation]];
+  refs.forEach(([id,v])=>{const b=document.getElementById(id);if(b&&v){const sm=b.querySelector('small');b.firstChild.textContent=v;if(sm)sm.textContent=''}});
+  const hs=document.getElementById('share-human-machines');
+  const hm=catalog.pages?.humanMachines;
+  if(hs&&hm){hs.firstChild.textContent=hm.title||labels.share;const sm=hs.querySelector('small');if(sm)sm.textContent=hm.title||''}
+  const g=document.getElementById('ref-games');
+  if(g&&pages.games){g.firstChild.textContent=pages.games;const sm=g.querySelector('small');if(sm)sm.textContent=pages.gamesEn||''}
+  const back=labels.back||'';
+  ['share-close','share-human-machines','experience-close','continuity-close','structure-close','reference-close','book-close','logo-viewer-close'].forEach(id=>{const b=document.getElementById(id);if(b&&back)b.setAttribute('aria-label',back)});
+  const brand=document.querySelector('.brand strong'), brandAlt=document.querySelector('.brand span');
+  if(brand)brand.textContent=catalog.home?.brand||catalog.meta?.brand||brand.textContent;
+  if(brandAlt)brandAlt.textContent=catalog.home?.brandLatin||catalog.meta?.brandLatin||brandAlt.textContent;
+  const current=catalog.home?.realms?.[activeId];
+  if(current){infoTitle.textContent=current.title||'';infoText.textContent=current.text||'';}
 }
-document.addEventListener('site:languagechange',event=>{if(event.detail?.lang) setUiLanguage(event.detail.lang)});
+document.addEventListener('site:languagechange',()=>{
+  renderHomeFromCatalog();
+  if(typeof buildBookTabs==='function'&&typeof bookPage!=='undefined'&&bookPage.style.display==='block'){
+    const currentTab=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
+    buildBookTabs(currentTab); selectChapter(currentTab);
+  }
+});
 
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
@@ -1060,7 +1011,7 @@ function activeBookCatalog(){
 function activeChapters(){
   const p=activeBookCatalog();
   if(p)return p.chapters;
-  return bookLang==='fa'?bookChapters:(bookLang==='zh'?bookChaptersZh:(bookLang==='ar'?bookChaptersAr:bookChaptersEn));
+  return currentSiteLang()==='fa'?bookChapters:(currentSiteLang()==='zh'?bookChaptersZh:(currentSiteLang()==='ar'?bookChaptersAr:bookChaptersEn));
 }
 
 function buildBookTabs(active=0){
@@ -1081,20 +1032,20 @@ function selectChapter(i){
   let html='';
   const bookCatalog=activeBookCatalog();
   if(i===0){
-    const bookTitle=bookCatalog?.title||(activeBookKind==='humanMachines'?(bookLang==='en'?'Humanity and Its Machines':bookLang==='zh'?'人类与他们的机器':bookLang==='ar'?'الإنسان وآلاته':'انسان و ماشین‌هایش'):(bookLang==='en'?'The Forgers of Imitation':bookLang==='zh'?'《模仿的伪造者》':bookLang==='ar'?'مزوّرو التقليد':'جاعلان تقلید'));
-    const bookSubtitle=bookCatalog?.subtitle||(activeBookKind==='humanMachines'?(bookLang==='en'?'Seven Parts':bookLang==='zh'?'七个部分':bookLang==='ar'?'سبعة أجزاء':'هفت بخش'):(bookLang==='en'?'Ten Chapters':bookLang==='zh'?'十章':bookLang==='ar'?'عشرة فصول':'در ده فصل'));
+    const bookTitle=bookCatalog?.title||(activeBookKind==='humanMachines'?(currentSiteLang()==='en'?'Humanity and Its Machines':currentSiteLang()==='zh'?'人类与他们的机器':currentSiteLang()==='ar'?'الإنسان وآلاته':'انسان و ماشین‌هایش'):(currentSiteLang()==='en'?'The Forgers of Imitation':currentSiteLang()==='zh'?'《模仿的伪造者》':currentSiteLang()==='ar'?'مزوّرو التقليد':'جاعلان تقلید'));
+    const bookSubtitle=bookCatalog?.subtitle||(activeBookKind==='humanMachines'?(currentSiteLang()==='en'?'Seven Parts':currentSiteLang()==='zh'?'七个部分':currentSiteLang()==='ar'?'سبعة أجزاء':'هفت بخش'):(currentSiteLang()==='en'?'Ten Chapters':currentSiteLang()==='zh'?'十章':currentSiteLang()==='ar'?'عشرة فصول':'در ده فصل'));
     html+='<h1 class="book-h1">'+bookTitle+'</h1><p class="book-sub">'+bookSubtitle+'</p>';
   }
   html+='<div class="chapter" style="--dot:'+ch.dot+'"><h2><i></i>'+ch.title+'</h2>';
   ch.paragraphs.forEach(p=>html+='<p>'+p+'</p>');
   html+='</div>';
   if(i===chapters.length-1&&activeBookKind==='forgers'){
-    const moralTitle=bookLang==='en'?'Fable Wisdom':bookLang==='zh'?'寓言智慧':bookLang==='ar'?'حكمة الحكاية':'حکمت فابل';
-    const moralText=bookCatalog?.moral||(bookLang==='en'?bookMoralEn:bookLang==='zh'?'展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。':bookLang==='ar'?'من يعرض مهارة لا يذهب إلا بقدر ما لديه من متفرجين؛ ومن يمارس مهارة يذهب إلى أبعد ما يستطيع. والغابة التي يكون الجميع فيها متفرجين لا يبقى فيها في النهاية شيء يُرى سوى فعل المشاهدة نفسه.':bookMoralFa);
+    const moralTitle=currentSiteLang()==='en'?'Fable Wisdom':currentSiteLang()==='zh'?'寓言智慧':currentSiteLang()==='ar'?'حكمة الحكاية':'حکمت فابل';
+    const moralText=bookCatalog?.moral||(currentSiteLang()==='en'?bookMoralEn:currentSiteLang()==='zh'?'展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。':currentSiteLang()==='ar'?'من يعرض مهارة لا يذهب إلا بقدر ما لديه من متفرجين؛ ومن يمارس مهارة يذهب إلى أبعد ما يستطيع. والغابة التي يكون الجميع فيها متفرجين لا يبقى فيها في النهاية شيء يُرى سوى فعل المشاهدة نفسه.':bookMoralFa);
     html+='<div class="moral"><h2>'+moralTitle+'</h2><p>'+moralText+'</p></div>';
   }
-  bookBody.classList.toggle('lang-en',bookLang==='en');
-  bookBody.dir=bookLang==='en'?'ltr':'rtl';
+  bookBody.classList.toggle('lang-en',currentSiteLang()==='en');
+  bookBody.dir=currentSiteLang()==='en'?'ltr':'rtl';
   bookBody.innerHTML=html;
   bookBody.scrollTop=0;
 }
