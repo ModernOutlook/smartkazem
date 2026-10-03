@@ -12,6 +12,7 @@
     "forgers": "《模仿的伪造者》",
     "treatise": "哲学论述",
     "observation": "观察之地",
+    "games": "游戏",
     "back": "返回",
     "close": "关闭",
     "comingSoon": "稍后推出",
@@ -55,7 +56,9 @@
     "pages": {
       "forgers": "《模仿的伪造者》",
       "treatise": "哲学论述",
-      "observation": "观察之地"
+      "observation": "观察之地",
+      "games": "游戏",
+      "gamesEn": "稍后推出"
     },
     "title": "现代视野 — Modern Outlook"
   },
