@@ -1,0 +1,58 @@
+(function(){
+'use strict';
+const tabs=document.getElementById('observation25-tabs');
+const body=document.getElementById('observation25-body');
+const close=document.getElementById('observation25-close');
+
+function catalog(){return window.SiteI18n?.getCatalog?.()?.pages?.observation25||{}}
+function render(){
+  const data=catalog();
+  const sections=Array.isArray(data.sections)?data.sections:[];
+  const title=document.getElementById('observation25-title');
+  const subtitle=document.getElementById('observation25-subtitle');
+  if(title)title.textContent=data.title||'';
+  if(subtitle)subtitle.textContent=data.subtitle||'';
+  tabs.innerHTML='';
+  body.innerHTML='';
+  sections.forEach((label,index)=>{
+    const tab=document.createElement('button');
+    tab.type='button';
+    tab.className='observation25-tab'+(index===0?' active':'');
+    tab.dataset.index=String(index);
+    tab.textContent=label;
+    tabs.appendChild(tab);
+
+    const section=document.createElement('section');
+    section.className='observation25-section'+(index===0?' active':'');
+    section.id='observation25-section-'+index;
+    const h=document.createElement('h1');
+    const badge=document.createElement('span');
+    badge.className='section-number';
+    badge.textContent=String(index+1);
+    const text=document.createElement('span');
+    text.textContent=label;
+    h.appendChild(badge); h.appendChild(text);
+    section.appendChild(h);
+    const note=document.createElement('p');
+    note.className='section-note';
+    note.textContent=data.sectionNote||'';
+    section.appendChild(note);
+    body.appendChild(section);
+  });
+  if(!sections.length){
+    body.innerHTML='<p class="observation25-empty">—</p>';
+    return;
+  }
+  tabs.querySelectorAll('.observation25-tab').forEach(tab=>{
+    tab.addEventListener('click',()=>{
+      const index=Number(tab.dataset.index);
+      tabs.querySelectorAll('.observation25-tab').forEach(x=>x.classList.toggle('active',x===tab));
+      body.querySelectorAll('.observation25-section').forEach((x,i)=>x.classList.toggle('active',i===index));
+      body.scrollTop=0;
+    });
+  });
+}
+close.addEventListener('click',()=>{window.location.href='index.html';});
+document.addEventListener('site:languagechange',render);
+document.addEventListener('DOMContentLoaded',()=>setTimeout(render,0),{once:true});
+})();
