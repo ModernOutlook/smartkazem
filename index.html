@@ -92,8 +92,9 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .icon-btn:hover{background:rgba(40,130,210,.2);border-color:rgba(150,220,255,.5);transform:translateY(-1px)}
 
 .orbit{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
-.menu-svg{width:min(96vw,96vh);height:min(96vw,96vh);overflow:visible;position:relative;z-index:2}
-.realm{cursor:pointer;transition:opacity .35s ease,filter .35s ease,transform .35s ease;transform-origin:500px 500px;outline:none}
+.menu-svg{width:min(96vw,96vh);height:min(96vw,96vh);overflow:visible;position:relative;z-index:2outline:none;-webkit-tap-highlight-color:transparent}
+.realm{cursor:pointer;transition:opacity .35s ease,filter .35s ease,transform .35s ease;transform-origin:500px 500px;outline:noneoutline:none!important;-webkit-tap-highlight-color:transparent}
+.realm:focus,.realm:focus-visible{outline:none!important;box-shadow:none!important}
 .realm:hover{filter:brightness(1.35) drop-shadow(0 0 18px currentColor)}
 .realm-labels{pointer-events:none;position:relative;z-index:100}
 .realm-label{pointer-events:none}
@@ -250,33 +251,33 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
         </defs>
         <circle cx="500" cy="500" r="490" fill="#010405"/>
         <circle cx="500" cy="500" r="470" fill="none" stroke="#12384b" stroke-width="3" opacity=".25"/>
-        <g class="realm" data-id="structure" id="realm-structure" tabindex="0" role="button" aria-label="ساختار تالار">
+        <g class="realm" data-id="structure" id="realm-structure" role="button" aria-label="ساختار تالار">
           <circle cx="500" cy="500" r="445" fill="url(#blueGradient)" opacity=".94"/>
           <circle class="ring-border" cx="500" cy="500" r="445" stroke="#0879b8"/>
           <circle class="ring-border" cx="500" cy="500" r="438" stroke="#0c5d82" opacity=".35"/>
           
         </g>
-        <g class="realm" data-id="continuity" id="realm-continuity" tabindex="0" role="button" aria-label="تداوم عالم">
+        <g class="realm" data-id="continuity" id="realm-continuity" role="button" aria-label="تداوم عالم">
           <circle cx="500" cy="500" r="365" fill="url(#goldGradient)" opacity=".96"/>
           <circle class="ring-border" cx="500" cy="500" r="365" stroke="#e1b72b"/>
           
         </g>
-        <g class="realm" data-id="experience" id="realm-experience" tabindex="0" role="button" aria-label="قلمرو تجربه">
+        <g class="realm" data-id="experience" id="realm-experience" role="button" aria-label="قلمرو تجربه">
           <circle cx="500" cy="500" r="285" fill="url(#purpleGradient)" opacity=".97"/>
           <circle class="ring-border" cx="500" cy="500" r="285" stroke="#b653ff"/>
           
         </g>
-        <g class="realm" data-id="reference" id="realm-reference" tabindex="0" role="button" aria-label="مرجع تقلید">
+        <g class="realm" data-id="reference" id="realm-reference" role="button" aria-label="مرجع تقلید">
           <circle cx="500" cy="500" r="205" fill="url(#redGradient)" opacity=".98"/>
           <circle class="ring-border" cx="500" cy="500" r="205" stroke="#e94d43"/>
           
         </g>
-        <g class="realm" data-id="share" id="realm-share" tabindex="0" role="button" aria-label="اقتصاد سهم">
+        <g class="realm" data-id="share" id="realm-share" role="button" aria-label="اقتصاد سهم">
           <circle cx="500" cy="500" r="125" fill="url(#greenGradient)" opacity=".98"/>
           <circle class="ring-border" cx="500" cy="500" r="125" stroke="#1bd58a"/>
           
         </g>
-        <g id="core" tabindex="0" role="button" aria-label="نگرش نوین">
+        <g id="core" role="button" aria-label="نگرش نوین">
           <circle cx="500" cy="500" r="70" fill="url(#whiteCore)" filter="url(#glow)"/>
           <circle cx="500" cy="500" r="25" fill="#fff"/>
         </g>
@@ -654,12 +655,6 @@ function selectRealm(id){
 
 const realmGeometry=[['structure',445],['continuity',365],['experience',285],['reference',205],['share',125]];
 const universe=document.getElementById('universe');
-
-realms.forEach(realm=>{
-  realm.addEventListener('keydown',e=>{
-    if(e.key==='Enter'||e.key===' '){e.preventDefault();selectRealm(realm.dataset.id);}
-  });
-});
 
 function realmFromPoint(event){
   const rect=universe.getBoundingClientRect();
