@@ -20,5 +20,62 @@
   "meta": {
     "brand": "Modern Outlook",
     "brandNative": "نگرش نوین"
+  },
+  "home": {
+    "brand": "Modern Outlook",
+    "brandLatin": "Modern Outlook",
+    "realms": {
+      "structure": {
+        "title": "Hall Structure · HALL STRUCTURE",
+        "text": "The Hall Structure is the outermost realm and the starting ground of the network, where fundamental possibilities and relations take shape."
+      },
+      "continuity": {
+        "title": "Continuity of the World · CONTINUITY OF THE WORLD",
+        "text": "Continuity of the World is the continuous flow connecting structure to persistence, transformation, and the emergence of experience."
+      },
+      "experience": {
+        "title": "Realm of Experience · REALM OF EXPERIENCE",
+        "text": "The Realm of Experience is where continuity becomes lived experience, perception, meaning, and orientation."
+      },
+      "reference": {
+        "title": "Imitative Authority · IMITATIVE AUTHORITY",
+        "text": "Imitative Authority is the realm where experience turns toward models, sources of authority, and choices about what should be followed."
+      },
+      "share": {
+        "title": "Economy of Shares · ECONOMY OF SHARES",
+        "text": "The Economy of Shares is the realm closest to the center, where competition, distribution, shares, and positions within the network become visible."
+      },
+      "core": {
+        "title": "Actuality Focus · ACTUALITY FOCUS",
+        "text": "The white center is the final point of convergence; a focus present from the beginning, whose calculation and recognition become possible only when the configuration is complete."
+      }
+    },
+    "pages": {
+      "forgers": "The Forgers of Imitation",
+      "treatise": "A Philosophical Treatise",
+      "observation": "The Land of Observation",
+      "games": "Games",
+      "gamesEn": "Coming later"
+    },
+    "title": "Modern Outlook — نگرش نوین"
+  },
+  "pages": {
+    "observation": {
+      "title": "The Land of Observation",
+      "tab": "The Land of Observation",
+      "close": "Close"
+    },
+    "treatise": {
+      "title": "A Philosophical Treatise",
+      "close": "Close",
+      "tabs": [
+        "Preface",
+        "Hall Structure",
+        "Continuity of the World",
+        "Experience",
+        "Sharing",
+        "Conclusion"
+      ]
+    }
   }
 }
