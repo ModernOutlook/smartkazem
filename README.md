@@ -389,6 +389,10 @@ Core باید resultهای نامعتبر را رد کند.
 - API key را commit نکن.
 - متن‌های چندزبانه را خارج از i18n hard-code نکن مگر اینکه واقعاً محتوای غیر UI باشند.
 - برای یک behavior مشترک، implementationهای موازی نساز.
+
+### Site audio — mandatory integration rule
+
+Every new page, realm, ring, component, or interaction must integrate with the existing `site-audio.js` system and follow [AUDIO.md](AUDIO.md). Use standard semantic `<button>` and `<a href="…">` elements; use `data-sound` or the `site:sound` event for UI cues; use `data-sound-theme` and the existing realm-selection logic for theme changes; and register any new color/realm theme with `SiteAudio.registerTheme`. Keep the toggle label in the site's translation catalogs. **Never create a separate `AudioContext` or `<audio>` tag for UI sounds, and never edit `site-audio.js` directly** (extend only through `registerTheme`/`registerCue`). Audio failures must never interrupt site functionality.
 - فایل legacy را بدون بررسی حذف نکن.
 - قبل از تغییر، dependencyها را نخوانده refactor نکن.
 - موفقیت deploy را بدون بررسی workflow فرض نکن.
