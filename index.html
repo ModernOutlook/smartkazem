@@ -992,7 +992,6 @@ function localizeHomeUi(lang){
 function setUiLanguage(lang){
   if(!['zh','fa','en','ar'].includes(lang)) lang='fa';
   uiLang=lang;
-  try{localStorage.setItem('modern-outlook.lang.v1',lang)}catch(_){}
   document.documentElement.lang=lang;
   document.documentElement.dir=(lang==='en'?'ltr':'rtl');
   document.body.dataset.lang=lang;
@@ -1037,15 +1036,6 @@ function setUiLanguage(lang){
   }
 }
 document.addEventListener('site:languagechange',event=>{if(event.detail?.lang) setUiLanguage(event.detail.lang)});
-
-// Global language control: works on the home view and while the Forgers of Imitation book is open.
-document.querySelectorAll('[data-site-lang]').forEach(btn=>{
-  btn.addEventListener('click',event=>{
-    event.preventDefault();
-    event.stopPropagation();
-    if(window.SiteI18n) window.SiteI18n.setLanguage(btn.dataset.siteLang);
-  });
-});
 
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
@@ -1142,9 +1132,7 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&activeId==='reference')openReference();
 });
 
-let initialLang='fa';
-try{const saved=localStorage.getItem('modern-outlook.lang.v1');if(['zh','fa','en','ar'].includes(saved))initialLang=saved}catch(_){}
-setUiLanguage(initialLang);
+// Language state is owned exclusively by translations/i18n.js.
 setInfo('structure');
 </script>
 </body>
