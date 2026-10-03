@@ -15,10 +15,68 @@
     "games": "游戏",
     "back": "返回",
     "close": "关闭",
-    "comingSoon": "稍后推出"
+    "comingSoon": "稍后推出",
+    "language": "网站语言"
   },
   "meta": {
     "brand": "现代视野",
     "brandLatin": "Modern Outlook"
+  },
+  "home": {
+    "brand": "现代视野",
+    "brandLatin": "Modern Outlook",
+    "realms": {
+      "structure": {
+        "title": "结构殿堂 · HALL STRUCTURE",
+        "text": "结构殿堂是最外层的领域，也是网络的起始基础；基本的可能性与关系在这里形成。"
+      },
+      "continuity": {
+        "title": "世界的延续 · CONTINUITY OF THE WORLD",
+        "text": "世界的延续是连接结构、持续、变化与经验生成的连续流动。"
+      },
+      "experience": {
+        "title": "经验领域 · REALM OF EXPERIENCE",
+        "text": "经验领域是世界的延续转化为生活经验、感知、意义与方向的地方。"
+      },
+      "reference": {
+        "title": "模仿权威 · IMITATIVE AUTHORITY",
+        "text": "模仿权威是经验转向范式、权威来源以及选择应当追随何物的领域。"
+      },
+      "share": {
+        "title": "份额经济 · ECONOMY OF SHARES",
+        "text": "份额经济是最接近中心的领域，竞争、分配、份额以及网络中的位置在这里显现。"
+      },
+      "core": {
+        "title": "现实焦点 · ACTUALITY FOCUS",
+        "text": "白色中心是最终的汇聚点；它从一开始便存在，而只有当整体配置完成后，才能计算并识别它。"
+      }
+    },
+    "pages": {
+      "forgers": "《模仿的伪造者》",
+      "treatise": "哲学论述",
+      "observation": "观察之地",
+      "games": "游戏",
+      "gamesEn": "稍后推出"
+    },
+    "title": "现代视野 — Modern Outlook"
+  },
+  "pages": {
+    "observation": {
+      "title": "观察之地",
+      "tab": "观察之地",
+      "close": "关闭"
+    },
+    "treatise": {
+      "title": "哲学论述",
+      "close": "关闭",
+      "tabs": [
+        "序言",
+        "结构殿堂",
+        "世界的延续",
+        "经验",
+        "共享",
+        "总结"
+      ]
+    }
   }
 }
