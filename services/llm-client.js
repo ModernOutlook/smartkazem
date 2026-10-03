@@ -37,7 +37,9 @@ async function request(url,init){
 }
 async function complete(messages,options={}){
   const s={...getSettings(),...options};if(!s.apiKey)throw new Error('کلید اتصال به مدل تنظیم نشده است.');
-  const payload={model:String(s.model||DEFAULTS.model).trim(),messages,temperature:options.temperature??0.7,response_format:{type:'json_object'}};
+  const model=String(s.model||DEFAULTS.model).trim();
+  const payload={model,messages,temperature:options.temperature??0.7,response_format:{type:'json_object'}};
+  if(/^https:\/\/(?:www\.)?openrouter\.ai(?:\/|$)/i.test(normalizeBaseUrl(s.baseUrl))&&model!=='openrouter/free')payload.models=[model,'openrouter/free'];
   const res=await request(normalizeBaseUrl(s.baseUrl)+'/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.apiKey},body:JSON.stringify(payload)});
   let data;try{data=await res.json()}catch(_){throw new Error('پاسخ سرویس مدل JSON معتبر نیست.')}
   const content=data?.choices?.[0]?.message?.content;if(!content)throw new Error('پاسخ مدل خالی است.');
