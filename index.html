@@ -301,6 +301,23 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
   .rings{width:78%;transform:translateY(-13%)}
   .info{left:4.5%;right:4.5%;bottom:3.2%;height:15%;min-height:0;padding:10px 13px}
 }
+/* ===== Reference Realm page ===== */
+.reference-page{z-index:95;display:none;overflow:hidden;color:#fff;background:radial-gradient(ellipse at 50% 16%,rgba(255,100,85,.75),transparent 24%),radial-gradient(ellipse at 82% 42%,rgba(255,28,20,.72),transparent 34%),radial-gradient(ellipse at 24% 64%,rgba(180,10,8,.66),transparent 38%),radial-gradient(ellipse at 50% 76%,rgba(255,150,72,.46),transparent 32%),linear-gradient(180deg,#170000 0%,#4b0605 38%,#b91e13 70%,#250000 100%)}
+.reference-page::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.95;background:radial-gradient(circle at 12% 12%,#fff 0 1px,transparent 1.6px),radial-gradient(circle at 24% 27%,rgba(255,205,185,.9) 0 1px,transparent 1.7px),radial-gradient(circle at 42% 9%,rgba(255,240,225,.9) 0 1px,transparent 1.8px),radial-gradient(circle at 68% 18%,#fff 0 1px,transparent 1.7px),radial-gradient(circle at 86% 10%,rgba(255,220,200,.9) 0 1px,transparent 1.7px),radial-gradient(circle at 91% 48%,#fff 0 1px,transparent 1.6px),radial-gradient(circle at 9% 55%,rgba(255,215,195,.75) 0 1px,transparent 1.8px),radial-gradient(circle at 58% 48%,rgba(255,240,225,.8) 0 1px,transparent 1.6px),radial-gradient(circle at 38% 73%,rgba(255,220,190,.7) 0 1px,transparent 1.8px);background-size:97px 113px,137px 151px,149px 131px,127px 167px,171px 139px,113px 157px,163px 137px,151px 173px,139px 149px;mix-blend-mode:screen}
+.reference-page::after{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 78% 23%,transparent 0 8%,rgba(255,84,68,.5) 8.2% 8.5%,transparent 8.8% 11%,rgba(255,118,96,.4) 11.2% 11.5%,transparent 11.8% 14%),radial-gradient(circle at 34% 30%,transparent 0 7%,rgba(255,88,69,.55) 7.2% 7.5%,transparent 7.8% 10%,rgba(255,115,91,.42) 10.2% 10.5%,transparent 10.8% 13%),linear-gradient(180deg,transparent 0 61%,rgba(255,65,40,.12) 61.5% 62%,transparent 62.5%);opacity:.9}
+.reference-scene{position:absolute;inset:0;pointer-events:none}
+.ref-castle{position:absolute;right:7%;top:19%;width:38%;height:34%;background:linear-gradient(90deg,transparent 0 9%,#260303 9% 16%,transparent 16% 21%,#360504 21% 32%,transparent 32% 39%,#1b0202 39% 52%,transparent 52% 59%,#3d0705 59% 73%,transparent 73% 80%,#170202 80% 100%);clip-path:polygon(0 100%,8% 55%,15% 74%,22% 30%,29% 65%,39% 12%,47% 61%,55% 0,63% 63%,73% 25%,81% 67%,90% 43%,100% 100%);filter:drop-shadow(0 0 16px rgba(255,75,50,.5));opacity:.94}
+.ref-castle::after{content:"";position:absolute;left:38%;bottom:0;width:24%;height:45%;background:linear-gradient(180deg,#ff8d68,#6d0b08 38%,#190202);clip-path:polygon(50% 0,100% 25%,100% 100%,0 100%,0 25%);box-shadow:0 0 25px rgba(255,83,55,.6)}
+.ref-ring{position:absolute;border:2px solid rgba(255,111,86,.7);border-radius:50%;box-shadow:0 0 16px rgba(255,71,52,.65),inset 0 0 14px rgba(255,88,63,.22);transform:rotate(-8deg);filter:blur(.1px)}
+.ref-ring.r1{right:3%;top:8%;width:42%;height:17%}.ref-ring.r2{right:10%;top:12%;width:34%;height:14%}.ref-ring.r3{left:8%;top:25%;width:35%;height:16%}.ref-ring.r4{left:2%;top:28%;width:28%;height:12%}
+.ref-platform{position:absolute;background:linear-gradient(160deg,#2a0906,#090303);clip-path:polygon(7% 0,93% 0,100% 24%,79% 100%,21% 100%,0 24%);box-shadow:0 0 28px rgba(255,63,38,.3)}
+.ref-platform.p1{right:12%;top:47%;width:48%;height:18%}.ref-platform.p2{left:13%;top:53%;width:32%;height:12%}.ref-platform.p3{left:31%;top:69%;width:44%;height:14%}
+.ref-beam{position:absolute;width:3px;background:linear-gradient(180deg,rgba(255,245,205,.95),rgba(255,55,35,.05));box-shadow:0 0 14px rgba(255,80,55,.75);transform-origin:top}.ref-beam.b1{right:27%;top:48%;height:43%}.ref-beam.b2{left:27%;top:58%;height:29%}.ref-beam.b3{left:52%;top:68%;height:25%}
+.ref-observer{position:absolute;left:10%;bottom:20%;width:15%;height:25%;background:linear-gradient(180deg,#130202,#050101);clip-path:polygon(50% 0,66% 18%,73% 49%,100% 100%,0 100%,27% 49%,34% 18%);filter:drop-shadow(0 0 8px rgba(0,0,0,.8))}
+.reference-head{position:absolute;z-index:4;top:5%;left:5%;right:5%;display:flex;align-items:center;justify-content:space-between;direction:rtl}.reference-title{text-shadow:0 2px 12px #000}.reference-title strong{display:block;font-size:clamp(.9rem,3.4vw,1.35rem)}.reference-title span{display:block;font-size:clamp(.48rem,1.6vw,.7rem);opacity:.58;direction:ltr}.reference-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(255,180,165,.3);background:rgba(20,0,0,.35);color:#fff;cursor:pointer;backdrop-filter:blur(8px)}
+.reference-actions{position:absolute;z-index:8;left:5%;right:5%;bottom:5.5%;display:grid;grid-template-columns:1fr 1fr;gap:9px;direction:rtl}.reference-action{min-height:62px;border:1px solid rgba(255,188,168,.34);border-radius:16px;background:linear-gradient(145deg,rgba(70,5,3,.72),rgba(12,0,0,.68));color:#fff;box-shadow:0 10px 28px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(9px);cursor:pointer;transition:transform .2s ease,filter .2s ease,border-color .2s ease;font-weight:800;font-size:clamp(.65rem,2.3vw,.9rem)}.reference-action:hover{transform:translateY(-2px);filter:brightness(1.18);border-color:rgba(255,220,205,.7)}.reference-action small{display:block;font-size:.62em;font-weight:500;opacity:.55;direction:ltr;margin-top:2px}.reference-action.games{cursor:not-allowed;opacity:.48}
+@media(max-width:520px){.reference-actions{bottom:4%;gap:7px}.reference-action{min-height:56px;border-radius:13px}.ref-castle{right:3%;width:48%;top:21%}.ref-platform.p1{right:4%;width:58%}.ref-observer{left:5%;bottom:21%}}
+@media(min-width:700px){.reference-actions{max-width:600px;margin:auto}.reference-page{border-radius:4px}}
 </style>
 </head>
 <body>
@@ -338,6 +355,12 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
       <h1 id="info-title">ساختار تالار</h1>
       <p id="info-text">لایه‌ی بیرونی، چارچوب و ساختار کلی تالار را نمایندگی می‌کند.</p>
     </section>
+  </section>
+
+  <section class="page reference-page" id="reference-page" aria-label="مرجع تقلید">
+    <div class="reference-scene" aria-hidden="true"><div class="ref-ring r1"></div><div class="ref-ring r2"></div><div class="ref-ring r3"></div><div class="ref-ring r4"></div><div class="ref-castle"></div><div class="ref-platform p1"></div><div class="ref-platform p2"></div><div class="ref-platform p3"></div><div class="ref-beam b1"></div><div class="ref-beam b2"></div><div class="ref-beam b3"></div><div class="ref-observer"></div></div>
+    <header class="reference-head"><div class="reference-title"><strong>مرجع تقلید</strong><span>Reference of Imitation</span></div><button class="reference-close" id="reference-close" aria-label="بازگشت">✕</button></header>
+    <div class="reference-actions"><button class="reference-action" id="ref-forgers">جاعلان تقلید<small>The Forgers of Imitation</small></button><button class="reference-action" id="ref-treatise">رساله فلسفی<small>A Philosophical Treatise</small></button><button class="reference-action" id="ref-observation">سرزمین مشاهده<small>The Land of Observation</small></button><button class="reference-action games" id="ref-games" type="button" aria-disabled="true">بازی ها<small>Games · Coming later</small></button></div>
   </section>
 
   <section class="page book-page" id="book-page" aria-label="کتاب">
@@ -647,8 +670,8 @@ function selectRing(id){
   if(!ring) return;
   setInfo(id);
   if(id==='reference'){
-    window.clearTimeout(window.__bookOpenTimer);
-    window.__bookOpenTimer=window.setTimeout(openBook,220);
+    window.clearTimeout(window.__referenceOpenTimer);
+    window.__referenceOpenTimer=window.setTimeout(openReference,220);
   }
 }
 
@@ -725,7 +748,9 @@ document.getElementById('ui-fa').addEventListener('click',()=>setUiLanguage('fa'
 document.getElementById('ui-en').addEventListener('click',()=>setUiLanguage('en'));
 
 const home=document.getElementById('home-page');
+const referencePage=document.getElementById('reference-page');
 const bookPage=document.getElementById('book-page');
+let bookReturn='home';
 const bookTabs=document.getElementById('book-tabs');
 const bookBody=document.getElementById('book-body');
 
@@ -764,20 +789,18 @@ function selectChapter(i){
   bookBody.scrollTop=0;
 }
 
-function openBook(){
+function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';tone(820);}
+function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');tone(560);}
+function openBook(from='home'){bookReturn=from;
   home.style.display='none';
+  referencePage.style.display='none';
   bookPage.style.display='block';
   buildBookTabs(0);
   selectChapter(0);
   tone(880);
 }
 
-function closeBook(){
-  bookPage.style.display='none';
-  home.style.display='block';
-  setInfo('reference');
-  tone(560);
-}
+function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';tone(560)}else{home.style.display='block';setInfo('reference');tone(560)}}
 
 document.getElementById('book-close').addEventListener('click',closeBook);
 document.getElementById('book-fa').addEventListener('click',()=>{
@@ -801,7 +824,8 @@ document.getElementById('book-en').addEventListener('click',()=>{
 
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
-  if(bookPage.style.display==='block')return;
+  if(e.key==='Escape'&&referencePage.style.display==='block')closeReference();
+  if(bookPage.style.display==='block'||referencePage.style.display==='block')return;
   const order=['structure','continuity','experience','reference','share'];
   const idx=order.indexOf(activeId);
   if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
