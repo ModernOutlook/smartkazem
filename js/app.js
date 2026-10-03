@@ -120,7 +120,7 @@ function renderHomeFromCatalog(){
     }
     q.setAttribute('aria-label',title||'');
   });
-  const refs=[['ref-forgers',pages.forgers],['ref-observation',pages.observation]];
+  const refs=[['ref-observation',pages.observation],['reference-layer3',pages.layer3?.title]];
   refs.forEach(([id,v])=>{const b=document.getElementById(id);if(b&&v){const sm=b.querySelector('small');b.firstChild.textContent=v;if(sm)sm.textContent=''}});
   const hs=document.getElementById('share-human-machines');
   const hm=catalog.pages?.humanMachines;
@@ -148,9 +148,11 @@ document.getElementById('continuity-shahnameh').addEventListener('click',()=>{wi
 document.getElementById('structure-close').addEventListener('click',closeStructure);
 document.getElementById('structure-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
 document.getElementById('reference-close').addEventListener('click',closeReference);
-document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference','forgers'));document.getElementById('share-human-machines').addEventListener('click',()=>openBook('share','humanMachines'));
+document.getElementById('share-human-machines').addEventListener('click',()=>openBook('share','humanMachines'));
+document.getElementById('share-forgers').addEventListener('click',()=>openBook('share','forgers'));
 
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
+document.getElementById('reference-layer3').addEventListener('click',()=>{window.location.href='echo-layer3.html';});
 document.getElementById('experience-observation25').addEventListener('click',()=>{window.location.href='observation-25.html';});
 document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
 document.getElementById('reference-match').addEventListener('click',()=>openParagraph('reference'));
