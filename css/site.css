@@ -504,7 +504,12 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
   border-radius:12px;background:rgba(25,0,3,.38);color:rgba(255,247,244,.78);
   cursor:pointer;font-size:clamp(.58rem,1.85vw,.75rem);font-weight:700;text-align:right;
 }
-.layer3-tab.active{border-color:rgba(255,211,198,.72);background:rgba(112,22,26,.7);color:#fff;box-shadow:0 0 18px rgba(255,100,80,.18)}
+.layer3-chapter{
+  grid-column:1 / -1;min-height:34px;padding:7px 10px;margin-top:4px;
+  border-radius:10px;border:1px solid rgba(255,180,160,.18);
+  background:rgba(82,12,15,.38);color:#ffcfc2;font-weight:900;
+  font-size:clamp(.65rem,2vw,.8rem);text-align:center;
+}.layer3-tab.active{border-color:rgba(255,211,198,.72);background:rgba(112,22,26,.7);color:#fff;box-shadow:0 0 18px rgba(255,100,80,.18)}
 .layer3-body{
   position:absolute;z-index:5;left:5%;right:5%;bottom:5%;height:24%;
   overflow:auto;padding:15px 16px;border:1px solid rgba(255,203,190,.2);border-radius:18px;
