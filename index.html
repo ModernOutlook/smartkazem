@@ -824,6 +824,17 @@ function selectRealm(id){
   }
 }
 
+const core=document.getElementById('core');
+const logoViewer=document.getElementById('logo-viewer');
+const logoViewerClose=document.getElementById('logo-viewer-close');
+function openLogoViewer(){clearInfo();logoViewer.classList.add('open');}
+function closeLogoViewer(){logoViewer.classList.remove('open');}
+core.setAttribute('tabindex','0');
+core.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();openLogoViewer();});
+core.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openLogoViewer();}});
+logoViewerClose.addEventListener('click',event=>{event.stopPropagation();closeLogoViewer();});
+logoViewer.addEventListener('click',event=>{if(event.target===logoViewer)closeLogoViewer();});
+
 const realmShare=document.getElementById('realm-share');
 if(realmShare){
   realmShare.addEventListener('click',event=>{
@@ -995,13 +1006,14 @@ document.getElementById('book-en').addEventListener('click',()=>{
 });
 
 document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&logoViewer.classList.contains('open')){closeLogoViewer();return;}
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
   if(e.key==='Escape'&&sharePage.style.display==='block')closeShare();
   if(e.key==='Escape'&&experiencePage.style.display==='block')closeExperience();
   if(e.key==='Escape'&&continuityPage.style.display==='block')closeContinuity();
   if(e.key==='Escape'&&structurePage.style.display==='block')closeStructure();
   if(e.key==='Escape'&&referencePage.style.display==='block')closeReference();
-  if(bookPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block'||experiencePage.style.display==='block'||sharePage.style.display==='block')return;
+  if(logoViewer.classList.contains('open')||bookPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block'||experiencePage.style.display==='block'||sharePage.style.display==='block')return;
   const order=['structure','continuity','experience','reference','share'];
   const idx=order.indexOf(activeId);
   if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
