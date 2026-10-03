@@ -1038,6 +1038,15 @@ function setUiLanguage(lang){
 }
 document.addEventListener('site:languagechange',event=>{if(event.detail?.lang) setUiLanguage(event.detail.lang)});
 
+// Global language control: works on the home view and while the Forgers of Imitation book is open.
+document.querySelectorAll('[data-site-lang]').forEach(btn=>{
+  btn.addEventListener('click',event=>{
+    event.preventDefault();
+    event.stopPropagation();
+    if(window.SiteI18n) window.SiteI18n.setLanguage(btn.dataset.siteLang);
+  });
+});
+
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
 const experiencePage=document.getElementById('experience-page');
