@@ -5,7 +5,7 @@ const SUPPORTED=['fa','en','zh','ar'];
 const DEFAULT='fa';
 const KEY='modern-outlook.lang.v2';
 const cache=Object.create(null);
-const CATALOG_BASE=new URL('./',document.currentScript?.src||new URL('translations/i18n.js',document.baseURI).href);
+let humanMachinesCatalog=null;
 let current=DEFAULT;
 let serial=0;
 
@@ -37,10 +37,6 @@ function applyDom(data){
     const value=String(get(el.dataset.i18nTitle,''));
     if(value!=='')el.setAttribute('title',value);
   });
-  document.querySelectorAll('[data-i18n-lang]').forEach(el=>{
-    const lang=el.dataset.i18nLang;
-    el.hidden=lang!==current;
-  });
   document.querySelectorAll('[data-site-lang]').forEach(btn=>{
     btn.classList.toggle('active',btn.dataset.siteLang===current);
     btn.setAttribute('aria-pressed',btn.dataset.siteLang===current?'true':'false');
@@ -53,9 +49,19 @@ function applyDom(data){
 async function load(lang){
   lang=normalize(lang);
   if(cache[lang])return cache[lang];
-  const response=await fetch(new URL(lang+'.json',CATALOG_BASE),{cache:'no-store'});
+  const response=await fetch('translations/'+lang+'.json',{cache:'no-store'});
   if(!response.ok)throw new Error('Translation catalog unavailable: '+lang);
   const data=await response.json();
+  try{
+    if(!humanMachinesCatalog){
+      const hmResponse=await fetch('translations/human-machines.json',{cache:'no-store'});
+      if(hmResponse.ok)humanMachinesCatalog=await hmResponse.json();
+    }
+    if(humanMachinesCatalog&&humanMachinesCatalog[lang]){
+      data.pages=data.pages||{};
+      data.pages.humanMachines=humanMachinesCatalog[lang];
+    }
+  }catch(_){}
   cache[lang]=data;
   return data;
 }
