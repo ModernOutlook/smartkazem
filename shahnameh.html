@@ -10,7 +10,7 @@
 body{padding:24px}.wrap{max-width:1100px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.title h1{margin:0;font-size:clamp(1.5rem,4vw,2.4rem)}.title p{margin:6px 0 0;color:var(--muted)}
 .actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.back,.lang{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer}.lang.active{box-shadow:0 0 0 1px rgba(255,232,170,.55) inset}
 .parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;margin-bottom:18px}.part{border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--text);border-radius:10px;padding:10px 6px;cursor:pointer}.part.active{background:rgba(180,126,45,.22);box-shadow:0 0 0 1px rgba(255,220,130,.35) inset}
-.reader{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:clamp(18px,4vw,34px);min-height:360px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.reader h2{margin-top:0}.block{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.block h3{margin:0 0 10px;font-size:1rem}.placeholder{color:var(--muted);line-height:1.9}.verse{font-family:Georgia,"Times New Roman",serif;font-size:1.12rem;line-height:2.1}
+.reader{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:clamp(18px,4vw,34px);min-height:360px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.reader h2{margin-top:0}.block{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.block h3{margin:0 0 10px;font-size:1rem}.placeholder{color:var(--muted);line-height:1.9}.verse{font-family:Georgia,"Times New Roman",serif;font-size:1.12rem;line-height:2.1;white-space:pre-line}.prose{line-height:2.05;white-space:pre-line}
 @media(max-width:650px){body{padding:14px}.top{align-items:flex-start;flex-direction:column}.parts{grid-template-columns:repeat(5,1fr)}}
 </style>
 </head>
@@ -26,13 +26,28 @@ body{padding:24px}.wrap{max-width:1100px;margin:auto}.top{display:flex;align-ite
 <script src="translations/i18n.js"></script>
 <script>
 const parts=document.getElementById('parts'),reader=document.getElementById('reader');let selected=0;
+function esc(v){return String(v??'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
 function render(){
- const c=window.SiteI18n?.getCatalog?.()||{},m=c.pages?.shahnameh||{};
+ const c=window.SiteI18n?.getCatalog?.()||{},m=c.pages?.shahnameh||{},p=m.part1;
  parts.innerHTML='';
- for(let i=0;i<81;i++){const b=document.createElement('button');b.className='part'+(i===selected?' active':'');b.textContent=(m.part||'Part')+' '+(i+1);b.type='button';b.onclick=()=>{selected=i;render()};parts.appendChild(b)}
- reader.innerHTML='<h2>'+((m.part||'Part')+' '+(selected+1))+'</h2><div class="block"><h3>'+((m.originalVerse)||"Ferdowsi's Original Verse")+'</h3><p class="verse placeholder">'+(m.placeholder||'')+'</p></div><div class="block"><h3>'+((m.prose)||'Prose Translation')+'</h3><p class="placeholder">'+(m.placeholder||'')+'</p></div>';
+ for(let i=0;i<81;i++){
+   const btn=document.createElement('button');
+   btn.className='part'+(i===selected?' active':'');
+   btn.textContent=(m.part||'Part')+' '+(i+1);
+   btn.type='button';
+   btn.onclick=()=>{selected=i;render()};
+   parts.appendChild(btn);
+ }
+ if(selected===0 && p){
+   reader.innerHTML='<h2>'+esc(p.title)+'</h2>'
+     +'<div class="block"><h3>'+esc(m.originalVerse||'Original Verse')+'</h3><p class="verse">'+esc(p.originalVerse||'')+'</p></div>'
+     +'<div class="block"><h3>'+esc(m.prose||'Prose')+'</h3><p class="prose">'+esc(p.prose||'')+'</p></div>';
+ }else{
+   reader.innerHTML='<h2>'+esc((m.part||'Part')+' '+(selected+1))+'</h2><div class="block"><p class="placeholder">'+esc(m.placeholder||'Coming soon')+'</p></div>';
+ }
 }
 document.getElementById('back').onclick=()=>{window.location.href='index.html'};
-document.addEventListener('site:languagechange',render);document.addEventListener('DOMContentLoaded',render,{once:true});
-</script>
+document.addEventListener('site:languagechange',render);
+document.addEventListener('DOMContentLoaded',render,{once:true});
+</script></script>
 </body></html>
