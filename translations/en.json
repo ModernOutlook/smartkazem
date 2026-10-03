@@ -276,8 +276,8 @@
   "paragraphMachine": {
     "title": "Paragraph Machine",
     "subtitle": "Paragraph generation and evaluation",
-    "detect": "Detect",
-    "match": "Match",
+    "recognize": "Recognition",
+    "equivalence": "Equivalence",
     "internal": "The core always processes in Persian.",
     "input": "Text to match",
     "count": "Paragraph count",
