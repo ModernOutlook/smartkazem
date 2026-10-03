@@ -151,6 +151,7 @@ document.getElementById('reference-close').addEventListener('click',closeReferen
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference','forgers'));document.getElementById('share-human-machines').addEventListener('click',()=>openBook('share','humanMachines'));
 
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
+document.getElementById('experience-observation25').addEventListener('click',()=>{window.location.href='observation-25.html';});
 document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
 document.getElementById('reference-match').addEventListener('click',()=>openParagraph('reference'));
 document.getElementById('book-close').addEventListener('click',closeBook);
