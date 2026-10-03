@@ -941,20 +941,6 @@ function renderHomeFromCatalog(){
   const labels=catalog.labels||{};
   const realms=catalog.home?.realms||{};
   const pages=catalog.home?.pages||{};
-  const titleMap={
-    share:labels.share,experience:labels.experience,continuity:labels.continuity,
-    structure:labels.structure,reference:labels.reference
-  };
-  const englishMap={
-    share:'Share Economy',experience:'Realm of Experience',continuity:'Continuity of the World',
-    structure:'Hall Structure',reference:'Imitative Authority'
-  };
-  Object.entries(realms).forEach(([id,data])=>{
-    if(!data)return;
-    const title=data.title||titleMap[id]||id;
-    const text=data.text||'';
-    const realm=realmsEl.find?.(r=>r.dataset.id===id);
-  });
   [['share-page',labels.share],['experience-page',labels.experience],['continuity-page',labels.continuity],['structure-page',labels.structure],['reference-page',labels.reference]].forEach(([id,title])=>{
     const q=document.getElementById(id); if(!q)return;
     const ss=q.querySelectorAll('.share-title strong,.experience-title strong,.continuity-title strong,.structure-title strong,.reference-title strong');
