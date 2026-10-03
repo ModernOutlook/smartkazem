@@ -5,7 +5,6 @@ const SUPPORTED=['fa','en','zh','ar'];
 const DEFAULT='fa';
 const KEY='modern-outlook.lang.v2';
 const cache=Object.create(null);
-let humanMachinesCatalog=null;
 let current=DEFAULT;
 let serial=0;
 
@@ -49,19 +48,9 @@ function applyDom(data){
 async function load(lang){
   lang=normalize(lang);
   if(cache[lang])return cache[lang];
-  const response=await fetch('translations/'+lang+'.json',{cache:'no-store'});
+  const response=await fetch(new URL('./'+lang+'.json',document.currentScript?.src||location.href),{cache:'no-store'});
   if(!response.ok)throw new Error('Translation catalog unavailable: '+lang);
   const data=await response.json();
-  try{
-    if(!humanMachinesCatalog){
-      const hmResponse=await fetch('translations/human-machines.json',{cache:'no-store'});
-      if(hmResponse.ok)humanMachinesCatalog=await hmResponse.json();
-    }
-    if(humanMachinesCatalog&&humanMachinesCatalog[lang]){
-      data.pages=data.pages||{};
-      data.pages.humanMachines=humanMachinesCatalog[lang];
-    }
-  }catch(_){}
   cache[lang]=data;
   return data;
 }
