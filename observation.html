@@ -55,29 +55,16 @@ body{display:grid;place-items:center;overflow:hidden}
 </section><script src="translations/i18n.js"></script>
 <script>
 const body=document.body;
-const savedLang=(()=>{try{return localStorage.getItem('modern-outlook.lang.v1')||'fa'}catch(_){return 'fa'}})();
-body.dataset.mode=['fa','en','zh','ar'].includes(savedLang)?savedLang:'fa';
-document.documentElement.lang=body.dataset.mode;
-document.documentElement.dir=body.dataset.mode==='fa'||body.dataset.mode==='zh'?'rtl':'ltr';
 document.getElementById('close').onclick=()=>{if(history.length>1)history.back();else location.href='index.html'};
 document.querySelectorAll('.book-tab').forEach(b=>b.onclick=()=>{const id=b.dataset.target;if(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}});
 </script><script>
-document.addEventListener('site:languagechange',event=>{if(event.detail?.lang)apply(event.detail.lang)});
-(function(){
-  const labels={"fa":{"title":"📖 سرزمین مشاهده","tab":"سرزمین مشاهده","close":"بستن"},"en":{"title":"📖 The Land of Observation","tab":"The Land of Observation","close":"Close"},"zh":{"title":"📖 观察之地","tab":"观察之地","close":"关闭"},"ar":{"title":"📖 أرض الملاحظة","tab":"أرض الملاحظة","close":"إغلاق"}};
-  function apply(lang){
-    if(!labels[lang])lang='fa';
-    try{localStorage.setItem('modern-outlook.lang.v1',lang)}catch(_){}
-    document.body.dataset.mode=lang;document.documentElement.lang=lang;document.documentElement.dir=lang==='en'?'ltr':'rtl';
-    document.querySelectorAll('.global-lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
-    const title=document.querySelector('.book-title'); if(title)title.textContent=labels[lang].title;
-    const close=document.getElementById('close');if(close)close.setAttribute('aria-label',labels[lang].close);
-    const tabs=[...document.querySelectorAll('.book-tab')];
-    if(Array.isArray(labels[lang].tabs))tabs.forEach((b,i)=>{if(labels[lang].tabs[i])b.textContent=labels[lang].tabs[i]});
-    else if(tabs[0])tabs[0].textContent=labels[lang].tab;
-  }
-  let lang='fa';try{const s=localStorage.getItem('modern-outlook.lang.v1');if(['zh','fa','en','ar'].includes(s))lang=s}catch(_){}
-  document.querySelectorAll('.global-lang button').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();apply(b.dataset.lang)}));
-  apply(lang);
-})();
+function applyPageLanguage(lang){
+  const catalog=window.SiteI18n&&window.SiteI18n.getCatalog?window.SiteI18n.getCatalog():null;
+  const page=catalog&&catalog.pages&&catalog.pages.observation;
+  if(!page)return;
+  const title=document.querySelector('.book-title'); if(title)title.textContent='📖 '+page.title;
+  const close=document.getElementById('close'); if(close)close.setAttribute('aria-label',page.close||'');
+  const tab=document.querySelector('.book-tab'); if(tab&&page.tab)tab.textContent=page.tab;
+}
+document.addEventListener('site:languagechange',event=>applyPageLanguage(event.detail?.lang||'fa'));
 </script></body></html>
