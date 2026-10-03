@@ -1,0 +1,24 @@
+{
+  "code": "zh",
+  "name": "中文",
+  "dir": "ltr",
+  "source": false,
+  "labels": {
+    "share": "份额经济",
+    "experience": "经验领域",
+    "continuity": "世界的延续",
+    "structure": "结构殿堂",
+    "reference": "模仿权威",
+    "forgers": "《模仿的伪造者》",
+    "treatise": "哲学论述",
+    "observation": "观察之地",
+    "games": "游戏",
+    "back": "返回",
+    "close": "关闭",
+    "comingSoon": "稍后推出"
+  },
+  "meta": {
+    "brand": "现代视野",
+    "brandLatin": "Modern Outlook"
+  }
+}
