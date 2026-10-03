@@ -272,5 +272,33 @@
       },
       "placeholder": ""
     }
+  },
+  "paragraphMachine": {
+    "title": "Paragraph Machine",
+    "subtitle": "Paragraph generation and evaluation",
+    "detect": "Detect",
+    "match": "Match",
+    "internal": "The core always processes in Persian.",
+    "input": "Text to match",
+    "count": "Paragraph count",
+    "mode": "Intent mode",
+    "settings": "Connection settings",
+    "apiKey": "API key",
+    "baseUrl": "Service URL",
+    "model": "Model",
+    "save": "Save settings",
+    "localOnly": "The key is kept only in this browser.",
+    "words": "words",
+    "chars": "chars",
+    "realm": "Realm",
+    "status": "Status",
+    "reason": "Reason",
+    "processing": "Processing...",
+    "empty": "Enter some text.",
+    "saved": "Settings saved.",
+    "referenceSource": "User text → Persian translation → evaluation",
+    "experienceSource": "Persian generation → evaluation → site-language translation",
+    "referenceDone": "Text was moved to Persian and evaluated by the core.",
+    "experienceDone": "The core processed Persian and the result was translated to the site language."
   }
 }
