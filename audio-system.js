@@ -69,4 +69,11 @@ function toggle(){enabled=true;unlock();return true}
 function setVolume(v){volume=Math.max(0,Math.min(1,Number(v)||0));save();if(master&&ctx)master.gain.setTargetAtTime(enabled?volume:0,ctx.currentTime,.025)}
 function registerCue(name,definition){if(name&&definition)cues[name]={...definition}}
 function registerSample(name,url){if(name&&url)samples.set(name,{url,buffer:null})}
-function ui(){document.querySelectorAll('[data-audio-toggle]').forEach(b=>b.remove())})();
+function ui(){document.querySelectorAll('[data-audio-toggle]').forEach(b=>b.remove())}
+window.SiteAudio=Object.freeze({play,unlock,toggle,setEnabled,setVolume,registerCue,registerSample,isEnabled:()=>true,getVolume:()=>volume});
+document.addEventListener('pointerdown',()=>{unlock();},{capture:true,passive:true});
+document.addEventListener('touchstart',()=>{unlock();},{capture:true,passive:true});
+document.addEventListener('keydown',()=>{unlock();},{capture:true,passive:true});
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&ctx&&ctx.state==='suspended')unlock();});
+document.addEventListener('DOMContentLoaded',ui);
+})();
