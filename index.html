@@ -117,7 +117,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .info.reference{border-color:rgba(255,80,55,.26)}
 
 .lang-switch{
-  position:absolute;z-index:40;left:5%;top:4%;  display:flex;direction:ltr;border:1px solid rgba(220,240,255,.12);
+  position:absolute;z-index:1000;left:50%;top:12px;transform:translateX(-50%);  display:flex;direction:ltr;border:1px solid rgba(220,240,255,.12);
   background:rgba(0,0,0,.28);border-radius:20px;padding:2px;backdrop-filter:blur(8px);
 }
 .lang-switch button{border:0;background:transparent;color:rgba(255,255,255,.48);padding:5px 8px;border-radius:16px;cursor:pointer;font-size:.62rem;font-weight:800}
@@ -189,7 +189,7 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 @media (max-width:520px){
   .topbar{padding:12px 14px}
   #x-social{right:0;top:100%;transform:none;width:30px;height:30px}
-  .lang-switch{top:12px;left:14px}
+  .lang-switch{top:12px;left:50%;transform:translateX(-50%)}
   .menu-svg{width:108vw;height:108vw}
   .info{bottom:3vh;width:90%;padding:12px 15px}
 }
@@ -913,10 +913,6 @@ document.getElementById('ui-zh').addEventListener('click',e=>chooseUiLanguage('z
 document.getElementById('ui-fa').addEventListener('click',e=>chooseUiLanguage('fa',e));
 document.getElementById('ui-en').addEventListener('click',e=>chooseUiLanguage('en',e));
 document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));
-document.addEventListener('DOMContentLoaded',()=>{
-  const topbar=document.querySelector('.topbar'), lang=document.querySelector('.lang-switch');
-  if(topbar&&lang&&!topbar.contains(lang))topbar.appendChild(lang);
-});
 
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
@@ -929,7 +925,7 @@ let bookReturn='home';
 const bookTabs=document.getElementById('book-tabs');
 const bookBody=document.getElementById('book-body');
 
-function activeChapters(){return bookLang==='en'?bookChaptersEn:bookChapters}
+function activeChapters(){return (bookLang==='en'||bookLang==='ar')?bookChaptersEn:bookChapters}
 
 function buildBookTabs(active=0){
   bookTabs.innerHTML='';
