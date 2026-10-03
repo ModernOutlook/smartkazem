@@ -1,5 +1,6 @@
 function currentSiteLang(){return window.SiteI18n?.getLanguage?.()||'fa';}
 let activeId='structure';
+function emitSiteSound(cue){try{window.dispatchEvent(new CustomEvent('site:sound',{detail:cue}));}catch(_){}}
 
 const app=document.getElementById('app');
 const info=document.getElementById('info');
@@ -14,6 +15,8 @@ function setInfo(id,show=true){
   const d=window.SiteI18n?.getCatalog?.()?.home?.realms?.[id];
   if(d){infoTitle.textContent=d.title||'';infoText.textContent=d.text||'';}
   const accents={structure:'#0879b8',continuity:'#e1b72b',experience:'#b653ff',reference:'#e94d43',share:'#1bd58a',core:'#f6fbff'};
+  const selectedRealm=realms.find(r=>r.dataset.id===id);
+  if(selectedRealm?.dataset.soundTheme)document.documentElement.dataset.soundTheme=selectedRealm.dataset.soundTheme;
   info.style.setProperty('--info-accent',accents[id]||accents.structure);
   info.classList.toggle('reference',id==='reference');
   if(show) info.classList.add('visible');
@@ -34,6 +37,7 @@ function selectRealm(id){
   if(!realm) return;
   
   setInfo(id);
+  emitSiteSound('open');
   if(id==='share'){openShare();}
   if(id==='experience'){openExperience();}
   if(id==='continuity'){openContinuity();}
@@ -46,8 +50,8 @@ function selectRealm(id){
 
 const logoViewer=document.getElementById('logo-viewer');
 const logoViewerClose=document.getElementById('logo-viewer-close');
-function openLogoViewer(){clearInfo();logoViewer.classList.add('open');}
-function closeLogoViewer(){logoViewer.classList.remove('open');}
+function openLogoViewer(){clearInfo();logoViewer.classList.add('open');emitSiteSound('open');}
+function closeLogoViewer(){logoViewer.classList.remove('open');emitSiteSound('back');}
 core.setAttribute('tabindex','0');
 core.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();openLogoViewer();});
 core.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openLogoViewer();}});
@@ -59,12 +63,12 @@ if(realmShare){
   realmShare.addEventListener('click',event=>{
     event.preventDefault();
     event.stopPropagation();
-    openShare();
+    selectRealm(realmShare.dataset.id);
   });
   realmShare.addEventListener('keydown',event=>{
     if(event.key==='Enter'||event.key===' '){
       event.preventDefault();
-      openShare();
+      selectRealm(realmShare.dataset.id);
     }
   });
 }
