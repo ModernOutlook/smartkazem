@@ -276,8 +276,8 @@
   "paragraphMachine": {
     "title": "段落机器",
     "subtitle": "段落生成与评估",
-    "detect": "识别",
-    "match": "匹配",
+    "recognize": "识别",
+    "equivalence": "等价",
     "internal": "核心始终以波斯语处理。",
     "input": "用于匹配的文本",
     "count": "段落数量",
