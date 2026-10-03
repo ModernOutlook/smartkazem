@@ -24,37 +24,5 @@ body{padding:24px}.wrap{max-width:1100px;margin:auto}.top{display:flex;align-ite
 <section class="reader" id="reader"></section>
 </main>
 <script src="translations/i18n.js"></script>
-<script>
-const parts=document.getElementById('parts'),reader=document.getElementById('reader');let selected=0;
-function esc(v){return String(v??'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
-function render(){
- const c=window.SiteI18n?.getCatalog?.()||{},m=c.pages?.shahnameh||{},p=m.part1;
- parts.innerHTML='';
- for(let i=0;i<81;i++){
-   const btn=document.createElement('button');
-   btn.className='part'+(i===selected?' active':'');
-   btn.textContent=(m.part||'Part')+' '+(i+1);
-   btn.type='button';
-   btn.onclick=()=>{selected=i;render()};
-   parts.appendChild(btn);
- }
- if(selected===0 && p){
-   reader.innerHTML='<h2>'+esc(p.title)+'</h2>'
-     +'<div class="block"><h3>'+esc(m.originalVerse||'Original Verse')+'</h3><p class="verse">'+esc(p.originalVerse||'')+'</p></div>'
-     +'<div class="block"><h3>'+esc(m.prose||'Prose')+'</h3><p class="prose">'+esc(p.prose||'')+'</p></div>';
- }else{
-   reader.innerHTML='<h2>'+esc((m.part||'Part')+' '+(selected+1))+'</h2><div class="block"><p class="placeholder">'+esc(m.placeholder||'Coming soon')+'</p></div>';
- }
-}
-document.getElementById('back').onclick=()=>{window.location.href='index.html'};
-document.addEventListener('site:languagechange',render);
-document.addEventListener('DOMContentLoaded',async()=>{
-  try{
-    if(window.SiteI18n?.setLanguage){
-      await window.SiteI18n.setLanguage(window.SiteI18n.getLanguage());
-    }
-  }catch(_){}
-  render();
-},{once:true});
-</script></script>
+<script src="js/shahnameh-page.js" defer></script></script>
 </body></html>
