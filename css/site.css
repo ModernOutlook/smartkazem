@@ -102,7 +102,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .info p{font-size:clamp(.55rem,1.75vw,.78rem);line-height:1.8;color:var(--muted);max-width:95%;margin:auto}
 
 
-.info.reference{border-color:rgba(255,80,55,.26)}
+.info.reference{border-color:color-mix(in srgb,var(--info-accent) 56%,rgba(255,255,255,.15))}
 
 .lang-switch{
   position:absolute;z-index:1000;left:50%;top:12px;transform:translateX(-50%);  display:flex;direction:ltr;border:1px solid rgba(220,240,255,.12);
