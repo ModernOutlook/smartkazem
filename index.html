@@ -2,361 +2,328 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سیستم دایره‌ای + فایروال امنیتی</title>
-<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;800&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#02060c">
+<title>نگرش نوین — Modern Outlook</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    .ring, h1, .hint, .controls button, .ring-label {
-        user-select: none !important; -webkit-user-select: none !important;
-    }
-    .tab-content, .tab-content * { user-select: text !important; -webkit-user-select: text !important; }
-    body {
-        background: #000;
-        min-height: 100vh;
-        display: flex; flex-direction: column;
-        align-items: center; justify-content: center;
-        font-family: 'Vazirmatn', 'Tahoma', 'Segoe UI', sans-serif;
-        color: #fff; padding: 20px; overflow-x: hidden;
-        transition: background 0.5s ease;
-    }
-    body.theme-neon { background: radial-gradient(circle at 50% 50%, #0a0015 0%, #000 70%); }
-    #security-lock {
-        display: none; position: fixed; inset: 0; background: #000;
-        z-index: 99999; justify-content: center; align-items: center;
-        flex-direction: column; text-align: center; padding: 30px;
-    }
-    #security-lock h2 { color: #ff3030; font-size: 1.8rem; margin-bottom: 15px; }
-    #security-lock p { font-size: 1.1rem; opacity: 0.85; max-width: 500px; line-height: 1.7; }
-    h1 { margin-bottom: 15px; font-size: 1.4rem; text-align: center; opacity: 0.9; }
-    .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; justify-content: center; }
-    .controls button {
-        background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
-        color: #fff; padding: 8px 16px; border-radius: 20px; cursor: pointer;
-        font-family: inherit; font-size: 0.85rem; transition: all 0.25s ease;
-    }
-    .controls button:hover { background: rgba(0,212,255,0.2); border-color: #00d4ff; transform: translateY(-2px); }
-    .circle-container {
-        position: relative; width: min(92vw, 680px); height: min(92vw, 680px);
-        margin: 0 auto 35px;
-    }
-    .ring {
-        position: absolute; border-radius: 50%; top: 50%; left: 50%;
-        transform: translate(-50%, -50%); cursor: pointer;
-        transition: filter 0.35s ease, box-shadow 0.35s ease;
-        display: flex; align-items: flex-start; justify-content: center;
-        -webkit-tap-highlight-color: transparent;
-    }
-    .ring:hover { filter: brightness(1.25); }
-    .ring.active {
-        filter: brightness(1.5);
-        box-shadow: 0 0 50px rgba(255,255,255,0.35);
-        animation: pulse 2.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-        0%,100% { box-shadow: 0 0 50px rgba(255,255,255,0.35); }
-        50%     { box-shadow: 0 0 75px rgba(255,255,255,0.55); }
-    }
-    .ring-1 { animation: rotate 90s linear infinite; }
-    .ring-2 { animation: rotate 70s linear infinite reverse; }
-    .ring-3 { animation: rotate 55s linear infinite; }
-    .ring-4 { animation: rotate 40s linear infinite reverse; }
-    .ring-5 { animation: rotate 30s linear infinite; }
-    @keyframes rotate {
-        from { transform: translate(-50%, -50%) rotate(0deg); }
-        to   { transform: translate(-50%, -50%) rotate(360deg); }
-    }
-    .ring-label {
-        position: absolute; top: 7%; text-align: center;
-        font-size: clamp(0.65rem, 2vw, 0.9rem); font-weight: bold;
-        text-shadow: 0 0 8px rgba(0,0,0,0.9); line-height: 1.35; pointer-events: none;
-    }
-    .ring-label .icon { display: block; font-size: 1.35em; margin-bottom: 3px; }
-    .ring-1 .ring-label { animation: rotate 90s linear infinite reverse; }
-    .ring-2 .ring-label { animation: rotate 70s linear infinite; }
-    .ring-3 .ring-label { animation: rotate 55s linear infinite reverse; }
-    .ring-4 .ring-label { animation: rotate 40s linear infinite; }
-    .ring-5 .ring-label { animation: rotate 30s linear infinite reverse; }
-    .ring-firewall {
-        width: 100%; height: 100%;
-        background: radial-gradient(circle, transparent 78%, #0a0a12 79%, #1a1a2e 88%, #0d0d1a 100%);
-        box-shadow: 0 0 60px 10px rgba(0,150,255,0.15), inset 0 0 40px rgba(0,100,255,0.1);
-        z-index: 0;
-    }
-    .ring-1 { width: 84%; height: 84%; background: radial-gradient(circle, transparent 72%, #0a3d7a 73%, #1a6fd4 85%, #0a3d7a 100%); z-index: 1; }
-    .ring-2 { width: 66%; height: 66%; background: radial-gradient(circle, transparent 68%, #b8860b 69%, #ffd700 85%, #b8860b 100%); z-index: 2; }
-    .ring-3 { width: 50%; height: 50%; background: radial-gradient(circle, transparent 65%, #4b0082 66%, #9b30ff 85%, #4b0082 100%); z-index: 3; }
-    .ring-4 { width: 35%; height: 35%; background: radial-gradient(circle, transparent 60%, #8b0000 61%, #ff3030 85%, #8b0000 100%); z-index: 4; }
-    .ring-5 { width: 22%; height: 22%; background: radial-gradient(circle, transparent 50%, #006400 51%, #00c853 85%, #006400 100%); z-index: 5; }
-    .core {
-        position: absolute; width: 11%; height: 11%; top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        background: radial-gradient(circle, #fff 0%, #ffffcc 40%, transparent 70%);
-        border-radius: 50%; box-shadow: 0 0 40px 15px rgba(255,255,200,0.85);
-        z-index: 10; pointer-events: none;
-        animation: pulse 3s ease-in-out infinite;
-    }
-    .tab-content {
-        width: min(92vw, 680px); background: rgba(15,15,25,0.9);
-        border-radius: 16px; padding: 26px 22px; text-align: center;
-        border: 1px solid rgba(255,255,255,0.12); min-height: 150px;
-        box-shadow: 0 0 30px rgba(0,100,255,0.1); transition: all 0.35s ease;
-    }
-    .tab-content h2 { margin-bottom: 12px; font-size: 1.35rem; color: #00d4ff; }
-    .tab-content p { font-size: 1.02rem; line-height: 1.75; opacity: 0.92; }
-    .hint { margin-top: 18px; font-size: 0.88rem; opacity: 0.55; text-align: center; }
-    .hint kbd { background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 0.85em; }
-    /* ============ مودال عکس قرمز ============ */
-    #red-modal {
-        display: none; position: fixed; inset: 0; z-index: 5000;
-        background-color: #0a0000;
-        /* 👇 عکس قرمز خودت رو با نام red-bg.jpg کنار فایل HTML بذار */
-        background-image: url('red-bg.jpg');
-        background-size: cover;
-        background-position: center;
-        background-repeat: no-repeat;
-        justify-content: center; align-items: center;
-        flex-direction: column; padding: 20px;
-        animation: fadeIn 0.5s ease;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-    #red-modal .overlay {
-        position: absolute; inset: 0;
-        background: radial-gradient(circle at 50% 50%, rgba(120,0,0,0.35), rgba(0,0,0,0.75));
-        z-index: 1;
-    }
-    #red-modal .modal-content {
-        position: relative; z-index: 2;
-        display: flex; flex-direction: column;
-        align-items: center; justify-content: center;
-        text-align: center; max-width: 600px;
-        background: rgba(0,0,0,0.55);
-        border: 1px solid rgba(255,200,100,0.25);
-        border-radius: 20px;
-        padding: 40px 30px;
-        backdrop-filter: blur(6px);
-        -webkit-backdrop-filter: blur(6px);
-        box-shadow: 0 0 60px rgba(255,80,0,0.4);
-    }
-    #red-modal h2 {
-        font-size: clamp(1.4rem, 4vw, 2.2rem);
-        color: #ffd7a0; margin-bottom: 15px;
-        text-shadow: 0 0 25px rgba(255,80,0,0.9), 0 0 50px rgba(200,0,0,0.5);
-        font-weight: 800; line-height: 1.5;
-    }
-    .open-book-btn {
-        background: linear-gradient(135deg, #8b0000 0%, #c93a33 50%, #e3b422 100%);
-        border: 2px solid #ffd700;
-        color: #fff;
-        padding: 18px 45px;
-        border-radius: 50px;
-        font-size: 1.15rem; font-weight: 700;
-        font-family: inherit;
-        cursor: pointer;
-        box-shadow: 0 0 30px rgba(255,100,0,0.6), inset 0 0 20px rgba(255,215,0,0.3);
-        transition: all 0.3s ease;
-        text-shadow: 0 0 10px rgba(0,0,0,0.8);
-        margin-bottom: 25px;
-        display: flex; align-items: center; gap: 10px;
-    }
-    .open-book-btn:hover {
-        transform: scale(1.06);
-        box-shadow: 0 0 50px rgba(255,150,0,0.9), inset 0 0 30px rgba(255,215,0,0.5);
-    }
-    .open-book-btn .icon { font-size: 1.5em; }
-    .modal-hint { color: rgba(255,215,160,0.85); font-size: 0.9rem; margin-bottom: 20px; }
-    .close-modal-btn {
-        background: rgba(0,0,0,0.6); border: 1px solid rgba(255,200,100,0.4);
-        color: #ffd7a0; padding: 10px 24px; border-radius: 20px;
-        cursor: pointer; font-family: inherit; font-size: 0.95rem;
-        transition: all 0.3s ease;
-    }
-    .close-modal-btn:hover { background: rgba(255,215,0,0.15); border-color: #ffd700; }
-    /* ============ مودال فایل جاعلان تقلید ============ */
-    #book-modal {
-        display: none; position: fixed; inset: 0; z-index: 6000;
-        background: rgba(0,0,0,0.92);
-        justify-content: center; align-items: flex-start;
-        padding: 20px; overflow-y: auto;
-        animation: fadeIn 0.4s ease;
-    }
-    #book-modal .book-frame {
-        position: relative;
-        width: 100%; max-width: 900px;
-        background: #f2f3f1;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 0 80px rgba(255,100,0,0.4);
-        animation: slideUp 0.5s cubic-bezier(0.22,1,0.36,1);
-        min-height: 85vh;
-    }
-    @keyframes slideUp {
-        from { transform: translateY(60px); opacity: 0; }
-        to   { transform: translateY(0); opacity: 1; }
-    }
-    .book-frame .book-topbar {
-        background: linear-gradient(135deg, #111 0%, #2f1a1a 100%);
-        color: #ffd7a0; padding: 14px 20px;
-        display: flex; justify-content: space-between; align-items: center;
-        font-weight: 700; font-size: 1rem;
-        border-bottom: 2px solid #c93a33;
-    }
-    .book-topbar .title { display: flex; align-items: center; gap: 10px; }
-    .book-topbar .close-book {
-        background: rgba(255,80,80,0.2); border: 1px solid rgba(255,100,100,0.5);
-        color: #ffaaaa; width: 34px; height: 34px; border-radius: 50%;
-        cursor: pointer; font-size: 1.2rem; line-height: 1;
-        display: flex; align-items: center; justify-content: center;
-        transition: all 0.25s ease;
-    }
-    .book-topbar .close-book:hover { background: rgba(255,80,80,0.5); color: #fff; }
-    /* ============ تب‌های کتاب ============ */
-    .book-tabs {
-        display: flex; flex-wrap: wrap; gap: 6px;
-        padding: 14px 16px; background: #e6e8e4;
-        border-bottom: 2px solid #c9ccc8;
-    }
-    .book-tab {
-        background: #fff; border: 1px solid #c9ccc8;
-        padding: 8px 14px; border-radius: 8px;
-        cursor: pointer; font-family: inherit; font-size: 0.82rem;
-        color: #5d625f; font-weight: 700;
-        transition: all 0.25s ease; white-space: nowrap;
-    }
-    .book-tab:hover { background: #f8f9f6; color: #1d1f1e; transform: translateY(-1px); }
-    .book-tab.active {
-        background: linear-gradient(135deg, #2f6fd0 0%, #1a4a99 100%);
-        color: #fff; border-color: #2f6fd0;
-        box-shadow: 0 4px 14px rgba(47,111,208,0.4);
-    }
-    /* ============ محتوای کتاب ============ */
-    .book-body {
-        padding: 30px 26px 60px;
-        max-height: calc(85vh - 130px); overflow-y: auto;
-        background: #f2f3f1; color: #1d1f1e;
-        font-family: 'Vazirmatn', Tahoma, sans-serif;
-        font-size: 1.05rem; line-height: 2.1;
-    }
-    .book-body::-webkit-scrollbar { width: 10px; }
-    .book-body::-webkit-scrollbar-track { background: #e6e8e4; }
-    .book-body::-webkit-scrollbar-thumb { background: #8b908c; border-radius: 5px; }
-    .book-body .book-h1 {
-        font-size: 2rem; font-weight: 800; line-height: 1.4;
-        margin: 0 0 0.25rem; color: #1d1f1e;
-    }
-    .book-body .book-sub {
-        color: #5d625f; margin: 0 0 2rem; font-size: 1rem;
-    }
-    .chapter { margin: 0 0 2.5rem; animation: fadeIn 0.4s ease; }
-    .chapter h2 {
-        display: flex; align-items: center; gap: 0.75rem;
-        font-size: 1.3rem; font-weight: 700; line-height: 1.6;
-        margin: 0 0 1.25rem; color: #1d1f1e;
-    }
-    .chapter h2 i {
-        flex: none; width: 0.9rem; height: 0.9rem;
-        border-radius: 50%; background: var(--dot, #2f6fd0);
-        border: 1px solid #c9ccc8; display: inline-block;
-    }
-    .chapter p {
-        margin: 0 0 1.15rem; text-align: justify;
-        text-align-last: right; text-justify: inter-word;
-        hyphens: none; orphans: 2; widows: 2;
-    }
-    .moral {
-        border-top: 2px solid #1d1f1e; padding-top: 1.5rem; margin-top: 2.5rem;
-        background: rgba(47,111,208,0.05); padding: 1.5rem;
-        border-radius: 10px;
-    }
-    .moral h2 { color: #c93a33; }
-    .moral p { font-weight: 700; font-size: 1.15rem; }
-    @media (max-width: 600px) {
-        .book-body { padding: 20px 16px 40px; font-size: 1rem; }
-        .book-body .book-h1 { font-size: 1.6rem; }
-        .book-tab { padding: 6px 10px; font-size: 0.75rem; }
-        #red-modal .modal-content { padding: 28px 18px; }
-        .open-book-btn { padding: 14px 28px; font-size: 1rem; }
-    }
+:root{
+  --page-w:min(92vw, 72vh);
+  --page-h:calc(var(--page-w) * 1.3333333);
+  --white:#f6fbff;
+  --muted:rgba(226,239,250,.66);
+  --glass:rgba(4,10,18,.72);
+  --line:rgba(180,220,255,.15);
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:#000;color:var(--white)}
+body{
+  min-height:100vh;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  font-family:'Vazirmatn',Tahoma,sans-serif;
+  background:
+    radial-gradient(circle at 50% 45%,rgba(5,32,58,.55),transparent 34%),
+    radial-gradient(circle at 50% 50%,#03111d 0%,#000 66%);
+}
+button{font:inherit}
+button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 
-    .book-language { display:flex; gap:6px; align-items:center; margin-inline-start:auto; }
-    .book-language button { background:rgba(255,255,255,0.08); border:1px solid rgba(255,215,160,0.3); color:#ffd7a0; padding:6px 11px; border-radius:16px; cursor:pointer; font:700 0.78rem/1 inherit; transition:all .2s ease; }
-    .book-language button.active { background:#ffd7a0; color:#241414; border-color:#ffd7a0; }
-    .book-topbar { gap:12px; }
-    .book-body.lang-en { direction:ltr; text-align:left; font-family:Georgia, 'Times New Roman', 'Segoe UI', sans-serif; line-height:1.9; }
-    .book-body.lang-en .chapter p { text-align:justify; text-align-last:left; }
-    .book-body.lang-en .book-sub { text-align:left; }
-    .book-body.lang-en .chapter h2 { flex-direction:row; }
-    @media (max-width:600px) { .book-language button { padding:5px 9px; font-size:.72rem; } }
+.app{
+  position:relative;
+  width:var(--page-w);
+  height:var(--page-h);
+  max-width:100vw;
+  max-height:100vh;
+  aspect-ratio:3/4;
+  overflow:hidden;
+  isolation:isolate;
+  background:#01050a;
+  box-shadow:0 0 0 1px rgba(130,190,240,.12),0 30px 100px rgba(0,0,0,.9);
+}
+.app::before{
+  content:"";
+  position:absolute;inset:-15%;
+  z-index:-3;
+  background:
+    radial-gradient(circle at 50% 44%,rgba(5,50,82,.75) 0%,rgba(2,20,34,.58) 28%,transparent 52%),
+    radial-gradient(circle at 50% 50%,transparent 50%,rgba(0,0,0,.95) 79%);
+}
+.app::after{
+  content:"";
+  position:absolute;inset:0;
+  z-index:20;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 42%,transparent 35%,rgba(0,0,0,.14) 61%,rgba(0,0,0,.65) 100%),
+    linear-gradient(180deg,rgba(0,0,0,.16),transparent 22%,transparent 78%,rgba(0,0,0,.38));
+}
 
+.atmosphere{
+  position:absolute;inset:0;pointer-events:none;opacity:.72;
+  background:
+    radial-gradient(circle at 12% 28%,rgba(0,104,180,.16) 0 1px,transparent 2px),
+    radial-gradient(circle at 76% 18%,rgba(70,160,255,.13) 0 1px,transparent 2px),
+    radial-gradient(circle at 82% 69%,rgba(0,120,220,.12) 0 1px,transparent 2px),
+    radial-gradient(circle at 23% 78%,rgba(80,170,255,.1) 0 1px,transparent 2px);
+  background-size:110px 130px,150px 170px,130px 160px,180px 150px;
+  mix-blend-mode:screen;
+}
+
+.topbar{
+  position:absolute;z-index:30;top:0;left:0;right:0;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:clamp(12px,3.2%,24px) clamp(14px,4.5%,30px);
+  direction:rtl;
+}
+.brand{display:flex;flex-direction:column;gap:2px;text-shadow:0 2px 12px #000}
+.brand strong{font-size:clamp(.8rem,2.3vw,1.05rem);font-weight:800;letter-spacing:.01em}
+.brand span{font-size:clamp(.52rem,1.6vw,.72rem);opacity:.5;direction:ltr;text-align:right}
+.page-actions{display:flex;gap:7px}
+.icon-btn{
+  width:34px;height:34px;border-radius:50%;border:1px solid rgba(220,240,255,.14);
+  color:#fff;background:rgba(0,0,0,.28);backdrop-filter:blur(8px);
+  cursor:pointer;transition:.25s var(--ease);display:grid;place-items:center;
+}
+.icon-btn:hover{background:rgba(40,130,210,.2);border-color:rgba(150,220,255,.5);transform:translateY(-1px)}
+
+.orbit{
+  position:absolute;inset:0;display:grid;place-items:center;
+}
+.rings{
+  position:relative;
+  width:82%;
+  aspect-ratio:1;
+  transform:translateY(-1%);
+}
+.ring{
+  --c:#49a9ff;
+  position:absolute;left:50%;top:50%;
+  width:var(--size);height:var(--size);
+  transform:translate(-50%,-50%);
+  border:0;border-radius:50%;
+  cursor:pointer;
+  appearance:none;
+  -webkit-tap-highlight-color:transparent;
+  background:
+    radial-gradient(circle at 50% 50%,transparent 0 69%,rgba(0,0,0,.1) 69.5% 70%,transparent 70.5%),
+    radial-gradient(circle at 35% 28%,rgba(255,255,255,.14),transparent 17%),
+    radial-gradient(circle at 66% 72%,rgba(0,0,0,.35),transparent 36%),
+    repeating-radial-gradient(circle at 52% 48%,rgba(255,255,255,.035) 0 1px,transparent 1px 6px),
+    radial-gradient(circle,#00101d 55%,var(--c) 71%,#061321 76%,rgba(0,0,0,0) 78%);
+  box-shadow:0 0 0 1px rgba(255,255,255,.05),0 0 34px var(--glow),inset 0 0 18px rgba(255,255,255,.08);
+  transition:filter .3s var(--ease),transform .3s var(--ease),box-shadow .3s var(--ease);
+  z-index:var(--z);
+}
+.ring::before{
+  content:"";position:absolute;inset:4%;border-radius:50%;pointer-events:none;
+  background:
+    radial-gradient(circle at 50% 50%,transparent 0 58%,rgba(255,255,255,.07) 59% 60%,transparent 61%),
+    radial-gradient(circle at 20% 35%,rgba(255,255,255,.18) 0 1px,transparent 2px),
+    radial-gradient(circle at 72% 30%,rgba(255,255,255,.12) 0 1px,transparent 2px),
+    radial-gradient(circle at 63% 74%,rgba(255,255,255,.1) 0 1px,transparent 2px);
+  opacity:.75;
+}
+.ring::after{
+  content:"";position:absolute;inset:-4%;border-radius:50%;pointer-events:none;
+  border:1px solid color-mix(in srgb,var(--c) 58%,transparent);
+  box-shadow:0 0 20px var(--glow);
+  opacity:.72;
+}
+.ring:hover{filter:brightness(1.18) saturate(1.08)}
+.ring.active{
+  filter:brightness(1.24) saturate(1.08);
+  box-shadow:0 0 0 1px rgba(255,255,255,.1),0 0 50px var(--glow),inset 0 0 24px rgba(255,255,255,.13);
+}
+.ring-structure{--size:100%;--c:#1777bd;--glow:rgba(0,126,235,.52);--z:1}
+.ring-continuity{--size:81%;--c:#f2ad19;--glow:rgba(255,181,24,.5);--z:2}
+.ring-experience{--size:63%;--c:#8734d1;--glow:rgba(160,55,255,.5);--z:3}
+.ring-reference{--size:46%;--c:#c93628;--glow:rgba(255,57,42,.5);--z:4}
+.ring-share{--size:29%;--c:#00b65d;--glow:rgba(0,255,130,.5);--z:5}
+.core{
+  position:absolute;z-index:8;left:50%;top:50%;
+  width:11%;aspect-ratio:1;transform:translate(-50%,-50%);
+  border-radius:50%;border:0;cursor:pointer;
+  background:radial-gradient(circle,#fff 0 18%,#fffce1 35%,rgba(255,248,160,.55) 53%,transparent 72%);
+  box-shadow:0 0 24px 8px rgba(255,250,205,.7),0 0 62px 18px rgba(255,230,120,.28);
+  animation:corePulse 3.4s ease-in-out infinite;
+}
+@keyframes corePulse{0%,100%{transform:translate(-50%,-50%) scale(.94);opacity:.9}50%{transform:translate(-50%,-50%) scale(1.06);opacity:1}}
+
+.ring-label{
+  position:absolute;left:50%;top:8.5%;transform:translateX(-50%);
+  width:80%;display:flex;flex-direction:column;align-items:center;gap:4px;
+  color:#fff;text-shadow:0 2px 10px #000,0 0 9px rgba(0,0,0,.95);
+  pointer-events:none;white-space:nowrap;
+}
+.ring-label .label-icon{width:clamp(18px,4.2vw,30px);height:clamp(18px,4.2vw,30px);filter:drop-shadow(0 0 4px rgba(255,255,255,.5))}
+.ring-label span{font-size:clamp(.55rem,2.15vw,.9rem);font-weight:800;line-height:1.2}
+.ring-share .ring-label{top:7%}
+.ring-reference .ring-label{top:8%}
+
+.center-label{
+  position:absolute;z-index:10;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:34%;text-align:center;color:#fff;text-shadow:0 2px 9px #000;
+  pointer-events:none;opacity:0;transition:.25s;
+}
+.core.active + .center-label{opacity:1}
+.center-label strong{display:block;font-size:clamp(.55rem,1.9vw,.8rem)}
+.center-label small{display:block;opacity:.58;font-size:clamp(.45rem,1.3vw,.62rem);direction:ltr}
+
+.info{
+  position:absolute;z-index:30;left:5%;right:5%;bottom:5%;
+  min-height:15%;padding:clamp(12px,3.2%,20px) clamp(14px,4%,22px);
+  border:1px solid var(--line);border-radius:18px;
+  background:linear-gradient(180deg,rgba(4,13,23,.74),rgba(2,7,13,.82));
+  backdrop-filter:blur(12px);box-shadow:0 16px 40px rgba(0,0,0,.35);
+  text-align:center;transition:transform .35s var(--ease),opacity .25s;
+}
+.info .kicker{font-size:clamp(.5rem,1.6vw,.68rem);letter-spacing:.16em;opacity:.45;margin-bottom:4px;direction:ltr}
+.info h1{font-size:clamp(.9rem,3.2vw,1.35rem);margin-bottom:5px}
+.info p{font-size:clamp(.55rem,1.75vw,.78rem);line-height:1.8;color:var(--muted);max-width:95%;margin:auto}
+.info .tap{display:inline-block;margin-top:7px;font-size:.56rem;opacity:.35}
+.info.reference{border-color:rgba(255,80,55,.26)}
+.info.reference .tap{color:#ffb1a7;opacity:.7}
+
+.lang-switch{
+  position:absolute;z-index:40;left:5%;top:4%;
+  display:flex;direction:ltr;border:1px solid rgba(220,240,255,.12);
+  background:rgba(0,0,0,.28);border-radius:20px;padding:2px;backdrop-filter:blur(8px);
+}
+.lang-switch button{border:0;background:transparent;color:rgba(255,255,255,.48);padding:5px 8px;border-radius:16px;cursor:pointer;font-size:.62rem;font-weight:800}
+.lang-switch button.active{background:rgba(255,255,255,.12);color:#fff}
+
+.page{
+  position:absolute;inset:0;
+  width:100%;height:100%;aspect-ratio:3/4;
+}
+.page.book-page{z-index:100;display:none;background:#f3f4f2;color:#171918;overflow:hidden}
+.book-shell{position:absolute;inset:0;display:flex;flex-direction:column;min-height:0}
+.book-head{
+  flex:0 0 auto;background:linear-gradient(135deg,#101214,#351818);
+  color:#ffd8a4;padding:14px 15px 12px;display:flex;align-items:center;gap:9px;
+  border-bottom:2px solid #c93a33;direction:rtl;
+}
+.book-head .book-title{font-weight:800;font-size:.83rem;flex:1}
+.book-head .book-lang{display:flex;gap:4px;direction:ltr}
+.book-head .book-lang button{background:rgba(255,255,255,.08);border:1px solid rgba(255,215,160,.25);color:#ffd8a4;padding:4px 7px;border-radius:12px;font-size:.62rem;font-weight:800;cursor:pointer}
+.book-head .book-lang button.active{background:#ffd8a4;color:#241414}
+.book-close{width:29px;height:29px;border-radius:50%;border:1px solid rgba(255,150,150,.35);background:rgba(255,80,80,.1);color:#ffb0aa;cursor:pointer}
+.book-tabs{display:flex;gap:5px;overflow-x:auto;flex:0 0 auto;padding:9px;background:#e5e7e3;border-bottom:1px solid #cdd1cc}
+.book-tabs::-webkit-scrollbar{height:4px}.book-tabs::-webkit-scrollbar-thumb{background:#aaa;border-radius:5px}
+.book-tab{flex:0 0 auto;border:1px solid #c9cdc9;background:#fff;color:#5a5f5c;padding:6px 9px;border-radius:7px;font-size:.58rem;font-weight:800;cursor:pointer}
+.book-tab.active{background:#2f6fd0;color:#fff;border-color:#2f6fd0}
+.book-body{flex:1;min-height:0;overflow:auto;padding:22px 18px 40px;background:#f3f4f2;font-size:.82rem;line-height:2;color:#202321}
+.book-body.lang-en{direction:ltr;text-align:left;font-family:Georgia,'Times New Roman',serif;line-height:1.75}
+.book-body .book-h1{font-size:1.55rem;line-height:1.3;margin-bottom:2px;font-weight:800}
+.book-body .book-sub{color:#626763;margin-bottom:22px;font-size:.8rem}
+.chapter{margin-bottom:28px}
+.chapter h2{display:flex;align-items:center;gap:8px;font-size:1rem;line-height:1.5;margin-bottom:13px}
+.chapter h2 i{width:10px;height:10px;border-radius:50%;background:var(--dot,#2f6fd0);border:1px solid #bfc4bf;flex:none}
+.chapter p{margin-bottom:14px;text-align:justify;text-align-last:right}
+.book-body.lang-en .chapter p{text-align:justify;text-align-last:left}
+.moral{margin-top:25px;padding:16px;border-top:2px solid #1d1f1e;background:rgba(47,111,208,.06);border-radius:9px}
+.moral h2{color:#c93a33;margin-bottom:7px}
+.moral p{font-weight:700;font-size:.88rem}
+
+@media (max-width:520px){
+  :root{--page-w:100vw}
+  body{place-items:center}
+  .app{width:100vw;height:133.333vw;max-height:100vh}
+  .rings{width:80%}
+  .info{bottom:4.2%;min-height:14%}
+}
+@media (min-width:700px){
+  .app{border-radius:4px}
+}
 </style>
 </head>
 <body>
-<div id="security-lock">
-    <h2>🛡️ دسترسی مسدود شد</h2>
-    <p>تلاش برای دستکاری یا باز کردن ابزارهای توسعه‌دهنده تشخیص داده شد.<br>صفحه به دلایل امنیتی قفل شده است.</p>
-</div>
-<h1>سیستم دایره‌ای + فایروال امنیتی</h1>
-<div class="controls">
-    <button id="btn-fullscreen" title="تمام‌صفحه">⛶ تمام‌صفحه</button>
-    <button id="btn-theme" title="تغییر تم">🎨 تم</button>
-    <button id="btn-reset" title="بازگشت به فایروال">🔄 ریست</button>
-</div>
-<div class="circle-container" id="main-content">
-    <div class="ring ring-firewall" data-tab="firewall" role="button" tabindex="0" aria-label="فایروال">
-        <div class="ring-label"><span class="icon">🛡️</span>فایروال</div>
+<main class="app" id="app">
+  <div class="atmosphere"></div>
+
+  <section class="page home-page" id="home-page" aria-label="نگرش نوین">
+    <header class="topbar">
+      <div class="brand">
+        <strong>نگرش نوین</strong>
+        <span>Modern Outlook</span>
+      </div>
+      <div class="page-actions">
+        <button class="icon-btn" id="fullscreen" title="تمام صفحه" aria-label="تمام صفحه">⛶</button>
+      </div>
+    </header>
+
+    <div class="lang-switch" aria-label="زبان رابط">
+      <button id="ui-fa" class="active">FA</button>
+      <button id="ui-en">EN</button>
     </div>
-    <div class="ring ring-1" data-tab="1" role="button" tabindex="0" aria-label="ساختار تالار">
-        <div class="ring-label"><span class="icon">🏛️</span>ساختار تالار</div>
-    </div>
-    <div class="ring ring-2" data-tab="2" role="button" tabindex="0" aria-label="تداوم عالم">
-        <div class="ring-label"><span class="icon">∞</span>تداوم عالم</div>
-    </div>
-    <div class="ring ring-3" data-tab="3" role="button" tabindex="0" aria-label="قلمرو تجربه">
-        <div class="ring-label"><span class="icon">🧠</span>قلمرو تجربه</div>
-    </div>
-    <div class="ring ring-4" data-tab="4" role="button" tabindex="0" aria-label="مرجع تقلید">
-        <div class="ring-label"><span class="icon">📖</span>مرجع تقلید</div>
-    </div>
-    <div class="ring ring-5" data-tab="5" role="button" tabindex="0" aria-label="اقتصاد سهم">
-        <div class="ring-label"><span class="icon">📈</span>اقتصاد سهم</div>
-    </div>
-    <div class="core"></div>
-</div>
-<div class="tab-content" id="content">
-    <h2>فایروال</h2>
-    <p>لایه حفاظتی بیرونی سیستم. این فایروال از نفوذ تهدیدات خارجی جلوگیری می‌کند و امنیت کل ساختار را تضمین می‌نماید.</p>
-</div>
-<div class="hint">روی هر حلقه کلیک کنید — یا با <kbd>Tab</kbd> و <kbd>Enter</kbd> ناوبری کنید</div>
-<!-- ============ مودال عکس قرمز (مرجع تقلید) ============ -->
-<div id="red-modal">
-    <div class="overlay"></div>
-    <div class="modal-content">
-        <h2>📖 مرجع تقلید</h2>
-        <p class="modal-hint">برای مطالعه‌ی کامل، روی دکمه زیر کلیک کنید</p>
-        <button class="open-book-btn" id="open-book">
-            <span class="icon">📖</span>
-            باز کردن کتاب «جاعلان تقلید»
+
+    <div class="orbit">
+      <div class="rings" id="rings">
+        <button class="ring ring-structure" data-id="structure" aria-label="ساختار تالار">
+          <span class="ring-label">
+            <svg class="label-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M5 27h22M7 24h18M9 10v13M15 10v13M21 10v13M27 10v13M4 9h24L16 3 4 9Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <span data-fa="ساختار تالار" data-en="Hall Structure">ساختار تالار</span>
+          </span>
         </button>
-        <button class="close-modal-btn" id="close-red-modal">✕ بستن</button>
+        <button class="ring ring-continuity" data-id="continuity" aria-label="تداوم عالم">
+          <span class="ring-label">
+            <span class="label-icon" style="font-size:1.7em;line-height:1">∞</span>
+            <span data-fa="تداوم عالم" data-en="Continuity of the Universe">تداوم عالم</span>
+          </span>
+        </button>
+        <button class="ring ring-experience" data-id="experience" aria-label="قلمرو تجربه">
+          <span class="ring-label">
+            <svg class="label-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M17 25c-5 0-10-3-10-9 0-7 5-11 11-11 5 0 9 3 9 8 0 5-4 7-8 7l-2 5Z" fill="none" stroke="white" stroke-width="1.8"/><path d="M16 10c3-1 6 1 6 4M14 13c1-1 3-1 4 0M17 17c1 1 3 1 4 0" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+            <span data-fa="قلمرو تجربه" data-en="Realm of Experience">قلمرو تجربه</span>
+          </span>
+        </button>
+        <button class="ring ring-reference" data-id="reference" aria-label="مرجع تقلید">
+          <span class="ring-label">
+            <svg class="label-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 6h9c3 0 5 2 5 5v15c0-2-2-3-5-3H6V6ZM26 6h-6c-3 0-5 2-5 5v15c0-2 2-3 5-3h6V6Z" fill="none" stroke="white" stroke-width="1.8" stroke-linejoin="round"/></svg>
+            <span data-fa="مرجع تقلید" data-en="Reference of Imitation">مرجع تقلید</span>
+          </span>
+        </button>
+        <button class="ring ring-share" data-id="share" aria-label="اقتصاد سهم">
+          <span class="ring-label">
+            <svg class="label-icon" viewBox="0 0 32 32" aria-hidden="true"><path d="M6 25V16M13 25V12M20 25V8M27 25V4M4 25h25M21 8h6v6" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span data-fa="اقتصاد سهم" data-en="Share Economy">اقتصاد سهم</span>
+          </span>
+        </button>
+        <button class="core" id="core" aria-label="نگرش نوین"></button>
+        <div class="center-label" id="center-label"><strong>نگرش نوین</strong><small>Modern Outlook</small></div>
+      </div>
     </div>
-</div>
-<!-- ============ مودال کتاب (فایل جاعلان تقلید) ============ -->
-<div id="book-modal">
-    <div class="book-frame">
-        <div class="book-topbar">
-            <div class="title" id="book-title">📖 جاعلان تقلید — در ده فصل</div>
-            <div class="book-language" aria-label="Book language">
-                <button type="button" id="lang-fa" class="active">فارسی</button>
-                <button type="button" id="lang-en">English</button>
-            </div>
-            <button class="close-book" id="close-book" title="بستن">✕</button>
+
+    <section class="info" id="info">
+      <div class="kicker">SELECT A LUMINOUS LAYER</div>
+      <h1 id="info-title">ساختار تالار</h1>
+      <p id="info-text">لایه‌ی بیرونی، چارچوب و ساختار کلی تالار را نمایندگی می‌کند.</p>
+      <span class="tap" id="info-tap">برای انتخاب، روی حلقه بزنید</span>
+    </section>
+  </section>
+
+  <section class="page book-page" id="book-page" aria-label="کتاب">
+    <div class="book-shell">
+      <header class="book-head">
+        <div class="book-title" id="book-title">📖 جاعلان تقلید — در ده فصل</div>
+        <div class="book-lang">
+          <button id="book-fa" class="active">فارسی</button>
+          <button id="book-en">English</button>
         </div>
-        <div class="book-tabs" id="book-tabs"></div>
-        <div class="book-body" id="book-body"></div>
+        <button class="book-close" id="book-close" aria-label="بستن">✕</button>
+      </header>
+      <nav class="book-tabs" id="book-tabs" aria-label="فصل‌های کتاب"></nav>
+      <article class="book-body" id="book-body"></article>
     </div>
-</div>
+  </section>
+</main>
+
 <script>
-// ==================== محتوای فصل‌های کتاب ====================
 const bookChapters = [
     {
         title: "فصل اول: پیدایش", dot: "#ffffff",
@@ -463,6 +430,7 @@ const bookChapters = [
         ]
     }
 ];
+
 const bookChaptersEn = [
     {
         "title": "Chapter One: Origin",
@@ -579,232 +547,193 @@ const bookChaptersEn = [
         ]
     }
 ];
-let bookLanguage = 'fa';
-const bookMoralEn = "The one who displays a skill goes only as far as there are spectators; the one who practices a skill goes as far as they themselves can go. And a forest where everyone is a spectator eventually has nothing left to see but the act of watching itself.";
 
-// ==================== محتوای تب‌های دایره ====================
-const contents = {
-    firewall: { title: "فایروال", text: "لایه حفاظتی بیرونی سیستم. این فایروال از نفوذ تهدیدات خارجی جلوگیری می‌کند و امنیت کل ساختار را تضمین می‌نماید." },
-    1: { title: "ساختار تالار", text: "این لایه بیرونی‌ترین حلقه اصلی است و نمایانگر ساختار کلی، بنیان‌ها و چارچوب اصلی سیستم می‌باشد." },
-    2: { title: "تداوم عالم", text: "نماد بی‌نهایت و استمرار هستی. این حلقه به پیوستگی و تداوم جریان عالم اشاره دارد." },
-    3: { title: "قلمرو تجربه", text: "حوزه تجربه انسانی، آگاهی و دانش کسب‌شده از طریق زندگی و تعامل با جهان." },
-    4: { title: "مرجع تقلید", text: "لایه مرجعیت، الگوها و منابعی که از آن‌ها پیروی و الهام گرفته می‌شود. برای مطالعه‌ی کامل، روی حلقه کلیک کنید." },
-    5: { title: "اقتصاد سهم", text: "مرکز اقتصادی و سهم‌بندی منابع. این حلقه به مدیریت و توزیع عادلانه منابع اشاره دارد." }
+const bookMoralEn = "The one who displays a skill goes only as far as there are spectators; the one who practices a skill goes as far as they themselves can go. And a forest where everyone is a spectator eventually has nothing left to see but the act of watching itself.";
+const bookMoralFa = 'آنکه مهارت را نمایش می‌دهد، فقط تا آنجا می‌رود که تماشاگر دارد؛ آنکه مهارت را می‌ورزد، تا آنجا که خودش می‌رود. و جنگلی که همه در آن تماشاگرند، سرانجام جز خودِ تماشا چیزی برای دیدن ندارد.';
+
+const copy = {
+  fa:{
+    structure:{title:'ساختار تالار',text:'لایه‌ی بیرونی، چارچوب و ساختار کلی تالار را نمایندگی می‌کند.',tap:'برای انتخاب، روی حلقه بزنید'},
+    continuity:{title:'تداوم عالم',text:'حلقه‌ی طلایی، تداوم و پیوستگی جریان عالم را نمایندگی می‌کند.',tap:'برای انتخاب، روی حلقه بزنید'},
+    experience:{title:'قلمرو تجربه',text:'این لایه به تجربه، آگاهی و دانشی اشاره دارد که در مسیر زیستن شکل می‌گیرد.',tap:'برای انتخاب، روی حلقه بزنید'},
+    reference:{title:'مرجع تقلید',text:'مرجع الگوها و منابع تقلید. با انتخاب این حلقه، کتاب «جاعلان تقلید» باز می‌شود.',tap:'برای ورود به کتاب بزنید'},
+    share:{title:'اقتصاد سهم',text:'لایه‌ی مرکزیِ سهم و توزیع منابع؛ جایی که ارزش، مشارکت و سهم‌مندی به هم می‌رسند.',tap:'برای انتخاب، روی حلقه بزنید'},
+    core:{title:'نگرش نوین',text:'مرکز روشن ساختار؛ نقطه‌ی همگرایی همه‌ی لایه‌ها و نام این تجربه.',tap:'برای بازگشت به مرکز بزنید'}
+  },
+  en:{
+    structure:{title:'Hall Structure',text:'The outer layer represents the hall’s overall structure, framework, and foundations.',tap:'Tap a ring to select it'},
+    continuity:{title:'Continuity of the Universe',text:'The golden layer represents continuity and the ongoing flow of the universe.',tap:'Tap a ring to select it'},
+    experience:{title:'Realm of Experience',text:'This layer represents experience, awareness, and knowledge formed through living.',tap:'Tap a ring to select it'},
+    reference:{title:'Reference of Imitation',text:'The layer of models and sources of imitation. Select it to open “The Forgers of Imitation.”',tap:'Tap to enter the book'},
+    share:{title:'Share Economy',text:'The central layer of shares and distribution, where value, participation, and ownership meet.',tap:'Tap a ring to select it'},
+    core:{title:'Modern Outlook',text:'The luminous center where all layers converge — the name of this experience.',tap:'Tap to return to the center'}
+  }
 };
-// ==================== صدا ====================
-let audioCtx = null;
-function playClickSound(freq = 620) {
-    try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = 'sine';
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(freq * 1.6, audioCtx.currentTime + 0.08);
-        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.15);
-        osc.connect(gain).connect(audioCtx.destination);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.16);
-    } catch (e) {}
+
+let uiLang='fa';
+let bookLang='fa';
+let activeId='structure';
+
+const app=document.getElementById('app');
+const info=document.getElementById('info');
+const infoTitle=document.getElementById('info-title');
+const infoText=document.getElementById('info-text');
+const infoTap=document.getElementById('info-tap');
+const rings=[...document.querySelectorAll('.ring')];
+const core=document.getElementById('core');
+const centerLabel=document.getElementById('center-label');
+
+function tone(freq=620){
+  try{
+    if(!window.__audio) window.__audio=new (window.AudioContext||window.webkitAudioContext)();
+    const ctx=window.__audio;
+    if(ctx.state==='suspended') ctx.resume();
+    const o=ctx.createOscillator(),g=ctx.createGain();
+    o.type='sine';o.frequency.setValueAtTime(freq,ctx.currentTime);
+    o.frequency.exponentialRampToValueAtTime(freq*1.35,ctx.currentTime+.08);
+    g.gain.setValueAtTime(.035,ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.14);
+    o.connect(g).connect(ctx.destination);o.start();o.stop(ctx.currentTime+.15);
+  }catch(e){}
 }
-// ==================== ناوبری تب‌ها ====================
-const ringOrder = ['firewall', 1, 2, 3, 4, 5];
-function showTab(num) {
-    document.querySelectorAll('.ring').forEach(r => r.classList.remove('active'));
-    const sel = num === 'firewall' ? '.ring-firewall' : `.ring-${num}`;
-    const el = document.querySelector(sel);
-    if (el) el.classList.add('active');
-    const content = contents[num];
-    const box = document.getElementById('content');
-    box.style.opacity = '0';
-    setTimeout(() => {
-        box.innerHTML = `<h2>${content.title}</h2><p>${content.text}</p>`;
-        box.style.opacity = '1';
-    }, 120);
-    const freqMap = { firewall: 500, 1: 600, 2: 700, 3: 800, 4: 900, 5: 1000 };
-    playClickSound(freqMap[num] || 620);
-    // اگر مرجع تقلید بود، مودال عکس باز شود
-    if (num === 4 || num === '4') {
-        setTimeout(() => openRedModal(), 350);
-    }
+
+function setInfo(id){
+  activeId=id;
+  rings.forEach(r=>r.classList.toggle('active',r.dataset.id===id));
+  core.classList.toggle('active',id==='core');
+  const d=copy[uiLang][id];
+  infoTitle.textContent=d.title;
+  infoText.textContent=d.text;
+  infoTap.textContent=d.tap;
+  info.classList.toggle('reference',id==='reference');
+  centerLabel.style.opacity=id==='core'?'1':'0';
+  tone({structure:520,continuity:620,experience:720,reference:820,share:920,core:1040}[id]||620);
 }
-document.querySelectorAll('.ring').forEach(ring => {
-    ring.addEventListener('click', () => {
-        const tab = ring.dataset.tab;
-        showTab(tab === 'firewall' ? 'firewall' : parseInt(tab));
-    });
-    ring.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault(); ring.click();
-        }
-    });
+
+rings.forEach(r=>{
+  r.addEventListener('click',()=>{
+    const id=r.dataset.id;
+    setInfo(id);
+    if(id==='reference') setTimeout(openBook,220);
+  });
 });
-let currentIndex = 0;
-document.addEventListener('keydown', (e) => {
-    // اگر مودال باز است، فلش‌ها کار نکنند
-    if (document.getElementById('red-modal').style.display === 'flex' ||
-        document.getElementById('book-modal').style.display === 'flex') return;
-    if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight'].includes(e.key)) {
-        e.preventDefault();
-        if (e.key === 'ArrowUp' || e.key === 'ArrowRight') currentIndex = (currentIndex + 1) % ringOrder.length;
-        else currentIndex = (currentIndex - 1 + ringOrder.length) % ringOrder.length;
-        const target = ringOrder[currentIndex];
-        const sel = target === 'firewall' ? '.ring-firewall' : `.ring-${target}`;
-        document.querySelector(sel)?.focus();
-        showTab(target);
-    }
+
+core.addEventListener('click',()=>setInfo('core'));
+
+document.getElementById('fullscreen').addEventListener('click',()=>{
+  if(!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(()=>{});
+  else document.exitFullscreen?.().catch(()=>{});
 });
-// ==================== دکمه‌ها ====================
-document.getElementById('btn-fullscreen').addEventListener('click', () => {
-    if (!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(()=>{});
-    else document.exitFullscreen?.().catch(()=>{});
-});
-document.getElementById('btn-theme').addEventListener('click', () => {
-    document.body.classList.toggle('theme-neon');
-    playClickSound(450);
-});
-document.getElementById('btn-reset').addEventListener('click', () => {
-    currentIndex = 0; showTab('firewall');
-});
-// ==================== مودال عکس قرمز ====================
-const redModal = document.getElementById('red-modal');
-const bookModal = document.getElementById('book-modal');
-function openRedModal() {
-    redModal.style.display = 'flex';
-    playClickSound(700);
+
+function setUiLanguage(lang){
+  uiLang=lang;
+  document.documentElement.lang=lang;
+  document.documentElement.dir=lang==='fa'?'rtl':'ltr';
+  document.getElementById('ui-fa').classList.toggle('active',lang==='fa');
+  document.getElementById('ui-en').classList.toggle('active',lang==='en');
+  document.querySelectorAll('[data-fa][data-en]').forEach(el=>el.textContent=el.dataset[lang]);
+  const current=copy[lang][activeId];
+  infoTitle.textContent=current.title;
+  infoText.textContent=current.text;
+  infoTap.textContent=current.tap;
+  if(lang==='en'){
+    document.querySelector('.brand strong').textContent='Modern Outlook';
+    document.querySelector('.brand span').textContent='نگرش نوین';
+  }else{
+    document.querySelector('.brand strong').textContent='نگرش نوین';
+    document.querySelector('.brand span').textContent='Modern Outlook';
+  }
 }
-function closeRedModal() {
-    redModal.style.display = 'none';
+document.getElementById('ui-fa').addEventListener('click',()=>setUiLanguage('fa'));
+document.getElementById('ui-en').addEventListener('click',()=>setUiLanguage('en'));
+
+const home=document.getElementById('home-page');
+const bookPage=document.getElementById('book-page');
+const bookTabs=document.getElementById('book-tabs');
+const bookBody=document.getElementById('book-body');
+
+function activeChapters(){return bookLang==='en'?bookChaptersEn:bookChapters}
+
+function buildBookTabs(active=0){
+  bookTabs.innerHTML='';
+  activeChapters().forEach((ch,i)=>{
+    const b=document.createElement('button');
+    b.className='book-tab'+(i===active?' active':'');
+    b.textContent=ch.title;
+    b.addEventListener('click',()=>selectChapter(i));
+    bookTabs.appendChild(b);
+  });
 }
-document.getElementById('close-red-modal').addEventListener('click', closeRedModal);
-redModal.addEventListener('click', (e) => {
-    if (e.target === redModal || e.target.classList.contains('overlay')) closeRedModal();
-});
-// ==================== کتاب ====================
-const bookTabsEl = document.getElementById('book-tabs');
-const bookBodyEl = document.getElementById('book-body');
-function getActiveChapters() {
-    return bookLanguage === 'en' ? bookChaptersEn : bookChapters;
+
+function selectChapter(i){
+  const chapters=activeChapters();
+  document.querySelectorAll('.book-tab').forEach((b,n)=>b.classList.toggle('active',n===i));
+  const ch=chapters[i];
+  let html='';
+  if(i===0){
+    html+=bookLang==='en'
+      ? '<h1 class="book-h1">The Forgers of Imitation</h1><p class="book-sub">Ten Chapters</p>'
+      : '<h1 class="book-h1">جاعلان تقلید</h1><p class="book-sub">در ده فصل</p>';
+  }
+  html+='<div class="chapter" style="--dot:'+ch.dot+'"><h2><i></i>'+ch.title+'</h2>';
+  ch.paragraphs.forEach(p=>html+='<p>'+p+'</p>');
+  html+='</div>';
+  if(i===chapters.length-1){
+    html+='<div class="moral"><h2>'+(bookLang==='en'?'Fable Wisdom':'حکمت فابل')+'</h2><p>'+(bookLang==='en'?bookMoralEn:bookMoralFa)+'</p></div>';
+  }
+  bookBody.classList.toggle('lang-en',bookLang==='en');
+  bookBody.dir=bookLang==='en'?'ltr':'rtl';
+  bookBody.innerHTML=html;
+  bookBody.scrollTop=0;
 }
-function buildBookTabs(activeIdx = 0) {
-    bookTabsEl.innerHTML = '';
-    getActiveChapters().forEach((ch, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'book-tab' + (i === activeIdx ? ' active' : '');
-        btn.textContent = ch.title;
-        btn.addEventListener('click', () => selectChapter(i));
-        bookTabsEl.appendChild(btn);
-    });
+
+function openBook(){
+  home.style.display='none';
+  bookPage.style.display='block';
+  buildBookTabs(0);
+  selectChapter(0);
+  tone(880);
 }
-function selectChapter(idx) {
-    const chapters = getActiveChapters();
-    document.querySelectorAll('.book-tab').forEach((b, i) => {
-        b.classList.toggle('active', i === idx);
-    });
-    const ch = chapters[idx];
-    let html = '';
-    if (idx === 0) {
-        html += bookLanguage === 'en'
-            ? `<h1 class="book-h1">The Forgers of Imitation</h1><p class="book-sub">Ten Chapters</p>`
-            : `<h1 class="book-h1">جاعلان تقلید</h1><p class="book-sub">در ده فصل</p>`;
-    }
-    html += `<div class="chapter" style="--dot:${ch.dot}"><h2><i></i>${ch.title}</h2>`;
-    ch.paragraphs.forEach(p => { html += `<p>${p}</p>`; });
-    html += `</div>`;
-    if (idx === chapters.length - 1) {
-        html += `
-        <div class="moral">
-            <h2>${bookLanguage === 'en' ? 'Fable Wisdom' : 'حکمت فابل'}</h2>
-            <p>${bookLanguage === 'en' ? bookMoralEn : 'آنکه مهارت را نمایش می‌دهد، فقط تا آنجا می‌رود که تماشاگر دارد؛ آنکه مهارت را می‌ورزد، تا آنجا که خودش می‌رود. و جنگلی که همه در آن تماشاگرند، سرانجام جز خودِ تماشا چیزی برای دیدن ندارد.'}</p>
-        </div>`;
-    }
-    bookBodyEl.classList.toggle('lang-en', bookLanguage === 'en');
-    bookBodyEl.dir = bookLanguage === 'en' ? 'ltr' : 'rtl';
-    bookBodyEl.innerHTML = html;
-    bookBodyEl.scrollTop = 0;
-    playClickSound(650);
+
+function closeBook(){
+  bookPage.style.display='none';
+  home.style.display='block';
+  setInfo('reference');
+  tone(560);
 }
-document.getElementById('lang-fa').addEventListener('click', () => {
-    if (bookLanguage === 'fa') return;
-    const idx = Math.max(0, [...document.querySelectorAll('.book-tab')].findIndex(b => b.classList.contains('active')));
-    bookLanguage = 'fa';
-    document.getElementById('lang-fa').classList.add('active');
-    document.getElementById('lang-en').classList.remove('active');
-    document.getElementById('book-title').textContent = '📖 جاعلان تقلید — در ده فصل';
-    buildBookTabs(idx);
-    selectChapter(idx);
+
+document.getElementById('book-close').addEventListener('click',closeBook);
+document.getElementById('book-fa').addEventListener('click',()=>{
+  if(bookLang==='fa')return;
+  const idx=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
+  bookLang='fa';
+  document.getElementById('book-fa').classList.add('active');
+  document.getElementById('book-en').classList.remove('active');
+  document.getElementById('book-title').textContent='📖 جاعلان تقلید — در ده فصل';
+  buildBookTabs(idx);selectChapter(idx);
 });
-document.getElementById('lang-en').addEventListener('click', () => {
-    if (bookLanguage === 'en') return;
-    const idx = Math.max(0, [...document.querySelectorAll('.book-tab')].findIndex(b => b.classList.contains('active')));
-    bookLanguage = 'en';
-    document.getElementById('lang-en').classList.add('active');
-    document.getElementById('lang-fa').classList.remove('active');
-    document.getElementById('book-title').textContent = '📖 The Forgers of Imitation — Ten Chapters';
-    buildBookTabs(idx);
-    selectChapter(idx);
+document.getElementById('book-en').addEventListener('click',()=>{
+  if(bookLang==='en')return;
+  const idx=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
+  bookLang='en';
+  document.getElementById('book-en').classList.add('active');
+  document.getElementById('book-fa').classList.remove('active');
+  document.getElementById('book-title').textContent='📖 The Forgers of Imitation — Ten Chapters';
+  buildBookTabs(idx);selectChapter(idx);
 });
-document.getElementById('open-book').addEventListener('click', () => {
-    closeRedModal();
-    bookModal.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    buildBookTabs(0);
-    selectChapter(0);
-    playClickSound(800);
+
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
+  if(bookPage.style.display==='block')return;
+  const order=['structure','continuity','experience','reference','share','core'];
+  const idx=order.indexOf(activeId);
+  if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
+  if(['ArrowUp','ArrowLeft'].includes(e.key)){e.preventDefault();setInfo(order[(idx-1+order.length)%order.length])}
+  if(e.key==='Enter'&&activeId==='reference')openBook();
 });
-document.getElementById('close-book').addEventListener('click', () => {
-    bookModal.style.display = 'none';
-    document.body.style.overflow = '';
-});
-bookModal.addEventListener('click', (e) => {
-    if (e.target === bookModal) {
-        bookModal.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-});
-// ESC برای بستن مودال‌ها
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        if (bookModal.style.display === 'flex') {
-            bookModal.style.display = 'none';
-            document.body.style.overflow = '';
-        } else if (redModal.style.display === 'flex') {
-            closeRedModal();
-        }
-    }
-});
-// ==================== محافظت‌های امنیتی ====================
-document.addEventListener('contextmenu', e => e.preventDefault());
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'F12') { e.preventDefault(); return false; }
-    if (e.ctrlKey && e.shiftKey && ['I','J','C','i','j','c'].includes(e.key)) { e.preventDefault(); return false; }
-    if (e.ctrlKey && ['u','U','s','S'].includes(e.key)) { e.preventDefault(); return false; }
-});
-(function detectDevTools() {
-    const threshold = 200;
-    let devtoolsOpen = false;
-    let isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
-    const check = () => {
-        if (isMobile) return;
-        const w = window.outerWidth - window.innerWidth;
-        const h = window.outerHeight - window.innerHeight;
-        const reallyOpen = w > threshold || h > threshold;
-        if (reallyOpen && !devtoolsOpen) { devtoolsOpen = true; lockPage(); }
-        else if (!reallyOpen) devtoolsOpen = false;
-    };
-    setInterval(check, 1500);
-})();
-function lockPage() {
-    document.getElementById('security-lock').style.display = 'flex';
-    ['main-content','content'].forEach(id => document.getElementById(id).style.display = 'none');
-    document.querySelector('h1').style.display = 'none';
-    document.querySelector('.hint').style.display = 'none';
-    document.querySelector('.controls').style.display = 'none';
-}
-document.addEventListener('dragstart', e => e.preventDefault());
-// ==================== شروع ====================
-showTab('firewall');
+
+setUiLanguage('fa');
+setInfo('structure');
 </script>
 </body>
 </html>
