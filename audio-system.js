@@ -4,7 +4,7 @@
 const KEY='modern-outlook.audio.v1';
 const AC=window.AudioContext||window.webkitAudioContext;
 let ctx=null,master=null,enabled=true,volume=.34,last={}; const samples=new Map(); const sampleLoads=new Map();
-try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');if(typeof s.enabled==='boolean')enabled=s.enabled;if(Number.isFinite(s.volume))volume=Math.max(0,Math.min(1,s.volume))}catch(_){}
+try{const s=JSON.parse(localStorage.getItem(KEY)||'{}');enabled=true;if(Number.isFinite(s.volume))volume=Math.max(0,Math.min(1,s.volume))}catch(_){}
 const cues={
 'ui.click':{f:680,d:.11,v:.20,t:'triangle',g:1.18},
 'ui.back':{f:430,d:.14,v:.18,t:'sine',g:.82},
@@ -64,23 +64,9 @@ async function play(name,opt={}){
  const c=unlock();if(!c)return false;const now=c.currentTime+.005;
  if(q.n)playNoise(c,{...q,...opt},now);else if(q.c)playChord(c,{...q,...opt},now);else playTone(c,{...q,...opt},now);return true
 }
-function setEnabled(v){enabled=!!v;save();if(master&&ctx)master.gain.setTargetAtTime(enabled?volume:0,ctx.currentTime,.025);ui()}
-function toggle(){
- setEnabled(!enabled);
- if(enabled){
-  unlock();
-  play('ui.click',{cooldown:0});
- }
- return enabled
-}
+function setEnabled(v){enabled=true;save();if(master&&ctx)master.gain.setTargetAtTime(volume,ctx.currentTime,.025);ui()}
+function toggle(){enabled=true;unlock();return true}
 function setVolume(v){volume=Math.max(0,Math.min(1,Number(v)||0));save();if(master&&ctx)master.gain.setTargetAtTime(enabled?volume:0,ctx.currentTime,.025)}
 function registerCue(name,definition){if(name&&definition)cues[name]={...definition}}
 function registerSample(name,url){if(name&&url)samples.set(name,{url,buffer:null})}
-function ui(){document.querySelectorAll('[data-audio-toggle]').forEach(b=>{b.setAttribute('aria-pressed',String(enabled));b.setAttribute('aria-label',enabled?'خاموش کردن صدا':'روشن کردن صدا');b.textContent=enabled?'◖))':'×))'})}
-window.SiteAudio=Object.freeze({play,unlock,toggle,setEnabled,setVolume,registerCue,registerSample,isEnabled:()=>enabled,getVolume:()=>volume});
-document.addEventListener('pointerdown',()=>{unlock();},{capture:true,passive:true});
-document.addEventListener('touchstart',()=>{unlock();},{capture:true,passive:true});
-document.addEventListener('keydown',()=>{unlock();},{capture:true,passive:true});
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&ctx&&ctx.state==='suspended')unlock();});
-document.addEventListener('DOMContentLoaded',ui);
-})();
+function ui(){document.querySelectorAll('[data-audio-toggle]').forEach(b=>b.remove())})();
