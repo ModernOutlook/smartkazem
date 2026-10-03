@@ -802,6 +802,11 @@ function openBook(from='home'){bookReturn=from;
 
 function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';tone(560)}else{home.style.display='block';setInfo('reference');tone(560)}}
 
+document.getElementById('reference-close').addEventListener('click',closeReference);
+document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference'));
+document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html'});
+document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html'});
+document.getElementById('ref-games').addEventListener('click',()=>{});
 document.getElementById('book-close').addEventListener('click',closeBook);
 document.getElementById('book-fa').addEventListener('click',()=>{
   if(bookLang==='fa')return;
@@ -830,7 +835,7 @@ document.addEventListener('keydown',e=>{
   const idx=order.indexOf(activeId);
   if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
   if(['ArrowUp','ArrowLeft'].includes(e.key)){e.preventDefault();setInfo(order[(idx-1+order.length)%order.length])}
-  if(e.key==='Enter'&&activeId==='reference')openBook();
+  if(e.key==='Enter'&&activeId==='reference')openReference();
 });
 
 setUiLanguage('fa');
