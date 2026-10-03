@@ -37,53 +37,109 @@ window.EchoLayer3Content = {
   'use strict';
   function render(){
     const c=window.EchoLayer3Content;
-    if(!c)return;
     const tabs=document.getElementById('tabs');
     const body=document.getElementById('body');
-    if(!tabs||!body)return;
+    const titleEl=document.getElementById('book-title');
+    if(!tabs||!body||!titleEl)return;
+
     tabs.innerHTML='';
     body.innerHTML='';
-    document.getElementById('book-title').textContent=c.title;
-    const head=document.createElement('div');
-    head.className='head';
-    const h1=document.createElement('h1');
-    h1.textContent=c.title;
-    const sub=document.createElement('p');
-    sub.className='sub';
-    sub.textContent=c.subtitle;
-    head.append(h1,sub);
-    body.appendChild(head);
-    let first=true;
-    c.chapters.forEach(ch=>{
-      const lab=document.createElement('span');
-      lab.className='chapter-label';
-      lab.textContent=ch.title;
-      tabs.appendChild(lab);
-      ch.parts.forEach(part=>{
-        const b=document.createElement('button');
-        b.className='book-tab'+(first?' active':'');
-        b.type='button';
-        b.textContent=part.title;
-        b.dataset.target=part.id;
-        tabs.appendChild(b);
-        const sec=document.createElement('section');
-        sec.className='story-part';
-        sec.id=part.id;
-        const title=document.createElement('h2');
-        title.textContent=part.title;
-        sec.appendChild(title);
-        part.text.forEach(paragraph=>{
-          const p=document.createElement('p');
-          p.textContent=paragraph;
-          sec.appendChild(p);
+
+    try{
+      if(!c||c.language!=='fa'||!Array.isArray(c.chapters)){
+        throw new Error('Invalid story content');
+      }
+
+      const currentLang=window.SiteI18n?.getLanguage?.()||'fa';
+      const localizedTitle=window.SiteI18n?.get?.('pages.layer3.title','')||'';
+      const localizedClose=window.SiteI18n?.get?.('pages.layer3.close','')||'';
+      const displayTitle=localizedTitle||c.title;
+
+      titleEl.textContent=displayTitle;
+      titleEl.setAttribute('title',displayTitle);
+      document.getElementById('close')?.setAttribute('aria-label',localizedClose||'بازگشت');
+
+      // The canonical story currently exists in Persian only. Keep its
+      // reading direction RTL even when the site chrome is switched to LTR.
+      body.dir='rtl';
+      body.lang='fa';
+      body.dataset.sourceLanguage='fa';
+      body.dataset.currentLanguage=currentLang;
+
+      const head=document.createElement('div');
+      head.className='head';
+      const h1=document.createElement('h1');
+      h1.textContent=c.title;
+      const sub=document.createElement('p');
+      sub.className='sub';
+      sub.textContent=c.subtitle;
+      head.append(h1,sub);
+      body.appendChild(head);
+
+      let first=true;
+      c.chapters.forEach((ch,chapterIndex)=>{
+        if(!ch||typeof ch.title!=='string'||!Array.isArray(ch.parts))return;
+
+        const lab=document.createElement('span');
+        lab.className='chapter-label';
+        lab.textContent=ch.title;
+        lab.dataset.chapter=String(chapterIndex);
+        tabs.appendChild(lab);
+
+        ch.parts.forEach((part,partIndex)=>{
+          if(!part||typeof part.id!=='string'||typeof part.title!=='string'||!Array.isArray(part.text))return;
+
+          const b=document.createElement('button');
+          b.className='book-tab'+(first?' active':'');
+          b.type='button';
+          b.textContent=part.title;
+          b.dataset.target=part.id;
+          b.dataset.chapter=String(chapterIndex);
+          b.dataset.part=String(partIndex);
+          tabs.appendChild(b);
+
+          const sec=document.createElement('section');
+          sec.className='story-part';
+          sec.id=part.id;
+          sec.dir='rtl';
+          sec.lang='fa';
+
+          const title=document.createElement('h2');
+          title.textContent=part.title;
+          sec.appendChild(title);
+
+          part.text.forEach(paragraph=>{
+            if(typeof paragraph!=='string')return;
+            const p=document.createElement('p');
+            p.textContent=paragraph;
+            sec.appendChild(p);
+          });
+
+          body.appendChild(sec);
+          first=false;
         });
-        body.appendChild(sec);
-        first=false;
       });
-    });
-    tabs.querySelectorAll('.book-tab').forEach(b=>b.addEventListener('click',()=>{
-      document.getElementById(b.dataset.target)?.scrollIntoView({behavior:'smooth',block:'start'});
-    }));
+
+      const buttons=[...tabs.querySelectorAll('.book-tab')];
+      if(!buttons.length){
+        throw new Error('No readable story parts found');
+      }
+
+      buttons.forEach(b=>b.addEventListener('click',()=>{
+        const target=document.getElementById(b.dataset.target);
+        if(!target)return;
+        buttons.forEach(x=>x.classList.toggle('active',x===b));
+        target.scrollIntoView({behavior:'smooth',block:'start'});
+      }));
+    }catch(error){
+      console.error('[EchoLayer3] Render failed:',error);
+      tabs.innerHTML='';
+      body.innerHTML='';
+      const empty=document.createElement('div');
+      empty.className='empty';
+      empty.textContent='محتوای این صفحه در حال حاضر قابل نمایش نیست.';
+      body.appendChild(empty);
+    }
   }
   document.addEventListener('site:languagechange',render);
   document.addEventListener('DOMContentLoaded',render,{once:true});
