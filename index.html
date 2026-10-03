@@ -90,6 +90,8 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   cursor:pointer;transition:.25s var(--ease);display:grid;place-items:center;
 }
 .icon-btn:hover{background:rgba(40,130,210,.2);border-color:rgba(150,220,255,.5);transform:translateY(-1px)}
+.audio-toggle{font-size:.62rem;letter-spacing:-.08em;direction:ltr;white-space:nowrap}
+.topbar{gap:7px}
 
 .orbit{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
 .menu-svg{width:min(96vw,96vh);height:min(96vw,96vh);overflow:visible;position:relative;z-index:2outline:none;-webkit-tap-highlight-color:transparent}
@@ -100,7 +102,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .realm-label{pointer-events:none}
 .realm.selected{filter:brightness(1.45) drop-shadow(0 0 25px currentColor)}
 .ring-border{fill:none;stroke-width:2;vector-effect:non-scaling-stroke;opacity:.95}
-.realm-title{fill:#fff;font-size:28px;font-weight:600;text-anchor:middle;pointer-events:none;paint-order:stroke;stroke:rgba(0,0,0,.65);stroke-width:5px;stroke-linejoin:round}
+.realm-title{display:none}
 
 #core{cursor:pointer;transition:transform .5s ease,filter .5s ease}
 #core:hover{filter:brightness(1.3) drop-shadow(0 0 30px white)}
@@ -171,6 +173,8 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 @media (min-width:700px){
   .app{border-radius:4px}
 }
+
+.home-page .info{display:none}
 
 /* ===== Modern Outlook — Optimized Cosmic Territory System ===== */
 .home-page{background:radial-gradient(ellipse at 50% 45%,rgba(22,111,173,.16),transparent 58%),radial-gradient(circle at 15% 25%,rgba(103,62,220,.13),transparent 27%),radial-gradient(circle at 86% 26%,rgba(224,170,54,.12),transparent 27%),radial-gradient(circle at 14% 79%,rgba(207,69,48,.11),transparent 28%),radial-gradient(circle at 86% 80%,rgba(34,177,121,.12),transparent 28%),linear-gradient(145deg,#01040b 0%,#031426 40%,#020914 72%,#010308 100%)}
@@ -348,10 +352,7 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 
   <section class="page home-page" id="home-page" aria-label="نگرش نوین">
     <header class="topbar">
-      <div class="brand">
-        <strong>نگرش نوین</strong>
-        <span>Modern Outlook</span>
-      </div>
+      <button class="icon-btn audio-toggle" id="audio-toggle" data-audio-toggle type="button" aria-pressed="true" aria-label="خاموش کردن صدا">◖))</button>
       <a class="icon-btn" id="x-social" href="https://x.com/_thekazem" target="_blank" rel="noopener noreferrer" title="X / Twitter" aria-label="X / Twitter">𝕏</a>
     </header>
 
@@ -403,14 +404,7 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
           <circle cx="500" cy="500" r="70" fill="url(#whiteCore)" filter="url(#glow)"/>
           <circle cx="500" cy="500" r="25" fill="#fff"/>
         </g>
-      <g class="realm-labels" aria-hidden="true">
-  <!-- Each title sits on the vertical centerline at the midpoint of its realm's radial thickness. -->
-  <g class="realm-label realm-label-structure"><text class="realm-title" x="500" y="95">ساختار تالار</text></g>
-  <g class="realm-label realm-label-continuity"><text class="realm-title" x="500" y="175">تداوم عالم</text></g>
-  <g class="realm-label realm-label-experience"><text class="realm-title" x="500" y="255">قلمرو تجربه</text></g>
-  <g class="realm-label realm-label-reference"><text class="realm-title" x="500" y="335">مرجع تقلید</text></g>
-  <g class="realm-label realm-label-share"><text class="realm-title" x="500" y="403">اقتصاد سهم</text></g>
-</g></svg>
+      </svg>
     </div>
 
     <section class="info" id="info">
@@ -487,6 +481,7 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
   </section>
 </main>
 
+<script src="audio-system.js"></script>
 <script>
 const bookChapters = [
     {
@@ -744,50 +739,9 @@ const infoText=document.getElementById('info-text');
 const realms=[...document.querySelectorAll('.realm')];
 const core=document.getElementById('core');
 
-let lastToneAt=0;
 function tone(freq=620){
-  const nowMs=performance.now();
-  if(nowMs-lastToneAt<120)return;
-  lastToneAt=nowMs;
-  try{
-    if(!window.__audio) window.__audio=new (window.AudioContext||window.webkitAudioContext)();
-    const ctx=window.__audio;
-    if(ctx.state==='suspended') ctx.resume();
-    const now=ctx.currentTime;
-    const master=ctx.createGain();
-    master.gain.setValueAtTime(.0001,now);
-    master.gain.exponentialRampToValueAtTime(.055,now+.008);
-    master.gain.exponentialRampToValueAtTime(.0001,now+.32);
-    master.connect(ctx.destination);
-
-    const osc=ctx.createOscillator(), shimmer=ctx.createOscillator(), sub=ctx.createOscillator();
-    const filter=ctx.createBiquadFilter();
-    const shimmerGain=ctx.createGain(), subGain=ctx.createGain();
-
-    osc.type='sine';
-    osc.frequency.setValueAtTime(freq*.72,now);
-    osc.frequency.exponentialRampToValueAtTime(freq*1.08,now+.22);
-
-    shimmer.type='triangle';
-    shimmer.frequency.setValueAtTime(freq*2.04,now);
-    shimmer.frequency.exponentialRampToValueAtTime(freq*1.55,now+.18);
-    shimmerGain.gain.value=.12;
-
-    sub.type='sine';
-    sub.frequency.setValueAtTime(freq*.24,now);
-    subGain.gain.value=.32;
-
-    filter.type='lowpass';
-    filter.frequency.setValueAtTime(2600,now);
-    filter.frequency.exponentialRampToValueAtTime(700,now+.3);
-    filter.Q.value=1.2;
-
-    osc.connect(filter).connect(master);
-    shimmer.connect(shimmerGain).connect(master);
-    sub.connect(subGain).connect(master);
-    osc.start(now);shimmer.start(now);sub.start(now);
-    osc.stop(now+.34);shimmer.stop(now+.24);sub.stop(now+.3);
-  }catch(e){}
+  const map={520:'ui.click',560:'page.open',600:'page.open',620:'page.open',680:'page.open',720:'realm.select',820:'page.open',880:'page.open',920:'realm.select',1040:'core.open'};
+  SiteAudio.play(map[freq]||'ui.click');
 }
 
 function setInfo(id,show=true){
@@ -826,8 +780,8 @@ function selectRealm(id){
 
 const logoViewer=document.getElementById('logo-viewer');
 const logoViewerClose=document.getElementById('logo-viewer-close');
-function openLogoViewer(){clearInfo();logoViewer.classList.add('open');}
-function closeLogoViewer(){logoViewer.classList.remove('open');}
+function openLogoViewer(){clearInfo();logoViewer.classList.add('open');SiteAudio.play('core.open',{cooldown:0});}
+function closeLogoViewer(){logoViewer.classList.remove('open');SiteAudio.play('page.close',{cooldown:0});}
 core.setAttribute('tabindex','0');
 core.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();openLogoViewer();});
 core.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openLogoViewer();}});
@@ -905,8 +859,9 @@ function setUiLanguage(lang){
     document.querySelector('.brand span').textContent='Modern Outlook';
   }
 }
-document.getElementById('ui-fa').addEventListener('click',()=>setUiLanguage('fa'));
-document.getElementById('ui-en').addEventListener('click',()=>setUiLanguage('en'));
+document.getElementById('ui-fa').addEventListener('click',()=>{SiteAudio.play('ui.click');setUiLanguage('fa')});
+document.getElementById('ui-en').addEventListener('click',()=>{SiteAudio.play('ui.click');setUiLanguage('en')});
+document.getElementById('audio-toggle').addEventListener('click',()=>SiteAudio.toggle());
 
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
@@ -975,16 +930,16 @@ function openBook(from='home'){bookReturn=from;
 
 function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';tone(560)}else{home.style.display='block';setInfo('reference');tone(560)}}
 
-document.getElementById('share-close').addEventListener('click',closeShare);
-document.getElementById('experience-close').addEventListener('click',closeExperience);
-document.getElementById('continuity-close').addEventListener('click',closeContinuity);
-document.getElementById('structure-close').addEventListener('click',closeStructure);
-document.getElementById('reference-close').addEventListener('click',closeReference);
+document.getElementById('share-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeShare();});
+document.getElementById('experience-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeExperience();});
+document.getElementById('continuity-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeContinuity();});
+document.getElementById('structure-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeStructure();});
+document.getElementById('reference-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeReference();});
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference'));
 document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html'});
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html'});
 document.getElementById('ref-games').addEventListener('click',()=>{});
-document.getElementById('book-close').addEventListener('click',closeBook);
+document.getElementById('book-close').addEventListener('click',()=>{SiteAudio.play('page.close');closeBook();});
 document.getElementById('book-fa').addEventListener('click',()=>{
   if(bookLang==='fa')return;
   const idx=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
