@@ -1,7 +1,9 @@
 const parts=document.getElementById('parts'),reader=document.getElementById('reader');let selected=0;
 function esc(v){return String(v??'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
 function render(){
- const c=window.SiteI18n?.getCatalog?.()||{},m=c.pages?.shahnameh||{},p=m.part1;
+ const lang=window.SiteI18n?.getLanguage?.()||'fa';
+ const c=lang==='fa'?{pages:{shahnameh:shahnamehFaCatalog}}:(window.SiteI18n?.getCatalog?.()||{});
+ const m=c.pages?.shahnameh||{},p=m.part1;
  parts.innerHTML='';
  for(let i=0;i<81;i++){
    const btn=document.createElement('button');btn.className='part'+(i===selected?' active':'');btn.textContent=(m.part||'Part')+' '+(i+1);btn.type='button';btn.onclick=()=>{selected=i;render()};parts.appendChild(btn);
