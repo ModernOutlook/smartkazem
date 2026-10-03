@@ -91,7 +91,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 }
 .icon-btn:hover{background:rgba(40,130,210,.2);border-color:rgba(150,220,255,.5);transform:translateY(-1px)}
 .audio-toggle{font-size:.62rem;letter-spacing:-.08em;direction:ltr;white-space:nowrap}
-.topbar{gap:7px;display:flex;align-items:center}.topbar .icon-btn{position:static!important;transform:none!important}.topbar #x-social{text-decoration:none}.icon-btn:focus,.icon-btn:focus-visible,.lang-switch button:focus,.lang-switch button:focus-visible{outline:none;box-shadow:none}
+.topbar{gap:7px;display:flex;align-items:center;justify-content:flex-end;position:absolute;right:14px;top:12px;z-index:50}.topbar .icon-btn{position:static!important;transform:none!important}.topbar #x-social{text-decoration:none!important}.icon-btn:focus,.icon-btn:focus-visible,.lang-switch button:focus,.lang-switch button:focus-visible{outline:none;box-shadow:none}
 
 .orbit{position:absolute;inset:0;display:grid;place-items:center;z-index:2}
 .menu-svg{width:min(96vw,96vh);height:min(96vw,96vh);overflow:visible;position:relative;z-index:2outline:none;-webkit-tap-highlight-color:transparent}
@@ -847,6 +847,24 @@ realms.forEach(realm=>{
   });
 });
 
+function localizeHomeUi(lang){
+  const t={
+    fa:{share:'اقتصاد سهم',experience:'قلمرو تجربه',continuity:'تداوم عالم',structure:'ساختار تالار',reference:'مرجع تقلید',shareEn:'Share Economy',experienceEn:'Realm of Experience',continuityEn:'Continuity of the Universe',structureEn:'Structure of the Hall',referenceEn:'Reference of Imitation',forgers:'جاعلان تقلید',treatise:'رساله فلسفی',observation:'سرزمین مشاهده',games:'بازی ها',gamesEn:'Games · Coming later',back:'بازگشت'},
+    en:{share:'Share Economy',experience:'Realm of Experience',continuity:'Continuity of the Universe',structure:'Structure of the Hall',reference:'Reference of Imitation',shareEn:'Share Economy',experienceEn:'Realm of Experience',continuityEn:'Continuity of the Universe',structureEn:'Structure of the Hall',referenceEn:'Reference of Imitation',forgers:'The Forgers of Imitation',treatise:'A Philosophical Treatise',observation:'The Land of Observation',games:'Games',gamesEn:'Coming later',back:'Back'},
+    zh:{share:'份额经济',experience:'经验领域',continuity:'世界的延续',structure:'结构殿堂',reference:'模仿权威',shareEn:'份额经济',experienceEn:'经验领域',continuityEn:'世界的延续',structureEn:'结构殿堂',referenceEn:'模仿权威',forgers:'《模仿的伪造者》',treatise:'哲学论述',observation:'观察之地',games:'游戏',gamesEn:'稍后推出',back:'返回'},
+    ar:{share:'اقتصاد الحصص',experience:'مجال التجربة',continuity:'استمرارية العالم',structure:'بنية القاعة',reference:'سلطة التقليد',shareEn:'اقتصاد الحصص',experienceEn:'مجال التجربة',continuityEn:'استمرارية العالم',structureEn:'بنية القاعة',referenceEn:'سلطة التقليد',forgers:'مزوّرو التقليد',treatise:'رسالة فلسفية',observation:'أرض الملاحظة',games:'الألعاب',gamesEn:'لاحقًا',back:'عودة'}
+  }[lang]||null;if(!t)return;
+  const map={
+    'share-page':['.share-title strong','.share-title span'], 'experience-page':['.experience-title strong','.experience-title span'],
+    'continuity-page':['.continuity-title strong','.continuity-title span'],'structure-page':['.structure-title strong','.structure-title span'],
+    'reference-page':['.reference-title strong','.reference-title span']
+  };
+  [['share-page',t.share,t.shareEn],['experience-page',t.experience,t.experienceEn],['continuity-page',t.continuity,t.continuityEn],['structure-page',t.structure,t.structureEn],['reference-page',t.reference,t.referenceEn]].forEach(([id,a,b])=>{const q=document.getElementById(id);if(q){const ss=q.querySelectorAll('strong,span');if(ss[0])ss[0].textContent=a;if(ss[1])ss[1].textContent=b;q.setAttribute('aria-label',a)}});
+  const refs=[['ref-forgers',t.forgers],['ref-treatise',t.treatise],['ref-observation',t.observation]];
+  refs.forEach(([id,v])=>{const b=document.getElementById(id);if(b){const sm=b.querySelector('small');b.firstChild.textContent=v;if(sm)sm.textContent=''}});
+  const g=document.getElementById('ref-games');if(g){g.firstChild.textContent=t.games;const sm=g.querySelector('small');if(sm)sm.textContent=t.gamesEn}
+  ['share-close','experience-close','continuity-close','structure-close','reference-close','book-close','logo-viewer-close'].forEach(id=>{const b=document.getElementById(id);if(b)b.setAttribute('aria-label',t.back)});
+}
 function setUiLanguage(lang){
   if(!['zh','fa','en','ar'].includes(lang)) lang='fa';
   uiLang=lang;
@@ -880,6 +898,7 @@ function setUiLanguage(lang){
     brand.textContent='نگرش نوین';
     brandAlt.textContent='Modern Outlook';
   }
+  localizeHomeUi(lang);
   document.title=lang==='zh'?'现代视野 — Modern Outlook':lang==='en'?'Modern Outlook — نگرش نوین':lang==='ar'?'النظرة الحديثة — Modern Outlook':'نگرش نوین — Modern Outlook';
   // The book is part of this page, so it follows the same single global language control.
   if(typeof bookLang!=='undefined'){
@@ -904,6 +923,10 @@ document.getElementById('ui-fa').addEventListener('click',e=>chooseUiLanguage('f
 document.getElementById('ui-en').addEventListener('click',e=>chooseUiLanguage('en',e));
 document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));
 document.getElementById('audio-toggle').addEventListener('click',e=>{e.preventDefault();e.stopPropagation();SiteAudio.unlock();SiteAudio.toggle();});
+document.addEventListener('DOMContentLoaded',()=>{
+  const topbar=document.querySelector('.topbar'), lang=document.querySelector('.lang-switch');
+  if(topbar&&lang&&!topbar.contains(lang))topbar.appendChild(lang);
+});
 
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
