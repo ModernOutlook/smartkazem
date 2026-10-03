@@ -336,18 +336,18 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 <body>
 <main class="app" id="app">
   <div class="atmosphere"></div>
-
-  <section class="page home-page" id="home-page" aria-label="نگرش نوین">
-    <header class="topbar">
-      <a class="icon-btn" id="x-social" href="https://x.com/_thekazem" target="_blank" rel="noopener noreferrer" title="X / Twitter" aria-label="X / Twitter">𝕏</a>
-    </header>
-
     <div class="lang-switch" aria-label="زبان رابط">
       <button id="ui-zh" data-site-lang="zh" type="button">中文</button>
       <button id="ui-fa" data-site-lang="fa" class="active" type="button">فارسی</button>
       <button id="ui-en" data-site-lang="en" type="button">English</button>
       <button id="ui-ar" data-site-lang="ar" type="button">العربية</button>
     </div>
+
+
+  <section class="page home-page" id="home-page" aria-label="نگرش نوین">
+    <header class="topbar">
+      <a class="icon-btn" id="x-social" href="https://x.com/_thekazem" target="_blank" rel="noopener noreferrer" title="X / Twitter" aria-label="X / Twitter">𝕏</a>
+    </header>
 
     <div class="orbit" aria-label="پنج قلمرو">
       <svg class="menu-svg" id="universe" viewBox="0 0 1000 1000" role="group" aria-label="پنج قلمرو">
@@ -877,7 +877,7 @@ const core=document.getElementById('core');
 function setInfo(id,show=true){
   activeId=id;
   realms.forEach(r=>r.classList.toggle('selected',r.dataset.id===id));
-  const d=copy[uiLang][id];
+  const d=SiteI18n.get('home.realms.'+id,null)||copy[uiLang]?.[id]||copy.fa[id];
   infoTitle.textContent=d.title;
   infoText.textContent=d.text;
   info.classList.toggle('reference',id==='reference');
@@ -972,81 +972,55 @@ realms.forEach(realm=>{
   });
 });
 
-function localizeHomeUi(lang){
-  const t={
-    fa:{share:'اقتصاد سهم',experience:'قلمرو تجربه',continuity:'تداوم عالم',structure:'ساختار تالار',reference:'مرجع تقلید',shareEn:'Share Economy',experienceEn:'Realm of Experience',continuityEn:'Continuity of the Universe',structureEn:'Structure of the Hall',referenceEn:'Reference of Imitation',forgers:'جاعلان تقلید',treatise:'رساله فلسفی',observation:'سرزمین مشاهده',games:'بازی ها',gamesEn:'Games · Coming later',back:'بازگشت'},
-    en:{share:'Share Economy',experience:'Realm of Experience',continuity:'Continuity of the Universe',structure:'Structure of the Hall',reference:'Reference of Imitation',shareEn:'Share Economy',experienceEn:'Realm of Experience',continuityEn:'Continuity of the Universe',structureEn:'Structure of the Hall',referenceEn:'Reference of Imitation',forgers:'The Forgers of Imitation',treatise:'A Philosophical Treatise',observation:'The Land of Observation',games:'Games',gamesEn:'Coming later',back:'Back'},
-    zh:{share:'份额经济',experience:'经验领域',continuity:'世界的延续',structure:'结构殿堂',reference:'模仿权威',shareEn:'份额经济',experienceEn:'经验领域',continuityEn:'世界的延续',structureEn:'结构殿堂',referenceEn:'模仿权威',forgers:'《模仿的伪造者》',treatise:'哲学论述',observation:'观察之地',games:'游戏',gamesEn:'稍后推出',back:'返回'},
-    ar:{share:'اقتصاد الحصص',experience:'مجال التجربة',continuity:'استمرارية العالم',structure:'بنية القاعة',reference:'سلطة التقليد',shareEn:'اقتصاد الحصص',experienceEn:'مجال التجربة',continuityEn:'استمرارية العالم',structureEn:'بنية القاعة',referenceEn:'سلطة التقليد',forgers:'مزوّرو التقليد',treatise:'رسالة فلسفية',observation:'أرض الملاحظة',games:'الألعاب',gamesEn:'لاحقًا',back:'عودة'}
-  }[lang]||null;if(!t)return;
-  const map={
-    'share-page':['.share-title strong','.share-title span'], 'experience-page':['.experience-title strong','.experience-title span'],
-    'continuity-page':['.continuity-title strong','.continuity-title span'],'structure-page':['.structure-title strong','.structure-title span'],
-    'reference-page':['.reference-title strong','.reference-title span']
-  };
-  [['share-page',t.share,t.shareEn],['experience-page',t.experience,t.experienceEn],['continuity-page',t.continuity,t.continuityEn],['structure-page',t.structure,t.structureEn],['reference-page',t.reference,t.referenceEn]].forEach(([id,a,b])=>{const q=document.getElementById(id);if(q){const ss=q.querySelectorAll('strong,span');if(ss[0])ss[0].textContent=a;if(ss[1])ss[1].textContent=b;q.setAttribute('aria-label',a)}});
-  const refs=[['ref-forgers',t.forgers],['ref-treatise',t.treatise],['ref-observation',t.observation]];
-  refs.forEach(([id,v])=>{const b=document.getElementById(id);if(b){const sm=b.querySelector('small');b.firstChild.textContent=v;if(sm)sm.textContent=''}});
-  const g=document.getElementById('ref-games');if(g){g.firstChild.textContent=t.games;const sm=g.querySelector('small');if(sm)sm.textContent=t.gamesEn}
-  ['share-close','experience-close','continuity-close','structure-close','reference-close','book-close','logo-viewer-close'].forEach(id=>{const b=document.getElementById(id);if(b)b.setAttribute('aria-label',t.back)});
-}
-function setUiLanguage(lang){
-  if(!['zh','fa','en','ar'].includes(lang)) lang='fa';
+function renderUiLanguage(lang){
   uiLang=lang;
-  try{localStorage.setItem('modern-outlook.lang.v1',lang)}catch(_){}
-  document.documentElement.lang=lang;
-  document.documentElement.dir=(lang==='en'?'ltr':'rtl');
-  document.body.dataset.lang=lang;
-  document.getElementById('ui-zh').classList.toggle('active',lang==='zh');
-  document.getElementById('ui-fa').classList.toggle('active',lang==='fa');
-  document.getElementById('ui-en').classList.toggle('active',lang==='en');
-  document.getElementById('ui-ar').classList.toggle('active',lang==='ar');
-  document.querySelectorAll('[data-fa][data-en]').forEach(el=>{
-    const value=lang==='fa'?el.dataset.fa:(lang==='en'?el.dataset.en:(el.dataset.zh||el.dataset.en));
-    if(value!=null)el.textContent=value;
-  });
-  const current=copy[lang]?.[activeId]||copy.fa[activeId];
-  infoTitle.textContent=current.title;
-  infoText.textContent=current.text;
+  const t=SiteI18n.getCatalog()||{};
+  const homeText=t.home||{};
+  const labels=t.labels||{};
+  document.querySelectorAll('[data-site-lang]').forEach(b=>b.classList.toggle('active',b.dataset.siteLang===lang));
+  const current=homeText.realms?.[activeId]||copy[lang]?.[activeId]||copy.fa[activeId];
+  if(current){infoTitle.textContent=current.title;infoText.textContent=current.text;}
   const brand=document.querySelector('.brand strong');
   const brandAlt=document.querySelector('.brand span');
-  if(lang==='zh'){
-    brand.textContent='现代视野';
-    brandAlt.textContent='Modern Outlook';
-  }else if(lang==='en'){
-    brand.textContent='Modern Outlook';
-    brandAlt.textContent='نگرش نوین';
-  }else if(lang==='ar'){
-    brand.textContent='النظرة الحديثة';
-    brandAlt.textContent='Modern Outlook';
-  }else{
-    brand.textContent='نگرش نوین';
-    brandAlt.textContent='Modern Outlook';
-  }
-  localizeHomeUi(lang);
-  document.title=lang==='zh'?'现代视野 — Modern Outlook':lang==='en'?'Modern Outlook — نگرش نوین':lang==='ar'?'النظرة الحديثة — Modern Outlook':'نگرش نوین — Modern Outlook';
-  // The book is part of this page, so it follows the same single global language control.
+  if(brand)brand.textContent=homeText.brand||labels.brand||brand.textContent;
+  if(brandAlt)brandAlt.textContent=homeText.brandLatin||'Modern Outlook';
+  const map=[
+    ['share-page','share'],['experience-page','experience'],['continuity-page','continuity'],
+    ['structure-page','structure'],['reference-page','reference']
+  ];
+  map.forEach(([id,key])=>{
+    const page=document.getElementById(id), data=homeText.realms?.[key];
+    if(!page||!data)return;
+    const title=page.querySelector('strong'), sub=page.querySelector('span');
+    if(title)title.textContent=(data.title||'').split(' · ')[0];
+    if(sub)sub.textContent=(data.title||'').split(' · ')[1]||'';
+    page.setAttribute('aria-label',(data.title||'').split(' · ')[0]);
+  });
+  const pageMap=[['ref-forgers','forgers'],['ref-treatise','treatise'],['ref-observation','observation'],['ref-games','games']];
+  pageMap.forEach(([id,key])=>{const el=document.getElementById(id);if(el&&homeText.pages?.[key]){el.firstChild.textContent=homeText.pages[key];}});
+  const games=document.getElementById('ref-games');
+  if(games){const sm=games.querySelector('small');if(sm)sm.textContent=homeText.pages?.gamesEn||'';}
+  ['share-close','experience-close','continuity-close','structure-close','reference-close','book-close','logo-viewer-close'].forEach(id=>{
+    const b=document.getElementById(id);if(b)b.setAttribute('aria-label',labels.back||labels.close||'');
+  });
+  document.title=homeText.title||document.title;
   if(typeof bookLang!=='undefined'){
     bookLang=lang;
     const bt=document.getElementById('book-title');
-    if(bt) bt.textContent=lang==='en'?'📖 The Forgers of Imitation — Ten Chapters':lang==='zh'?'📖 《模仿的伪造者》— 十章':lang==='ar'?'📖 مزوّرو التقليد — عشرة فصول':'📖 جاعلان تقلید — در ده فصل';
+    if(bt)bt.textContent=lang==='en'?'📖 The Forgers of Imitation — Ten Chapters':lang==='zh'?'📖 《模仿的伪造者》— 十章':lang==='ar'?'📖 مزوّرو التقليد — عشرة فصول':'📖 جاعلان تقلید — در ده فصل';
     if(typeof bookPage!=='undefined'&&bookPage.style.display==='block'){
       const currentTab=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
-      buildBookTabs(currentTab);
-      selectChapter(currentTab);
+      buildBookTabs(currentTab);selectChapter(currentTab);
     }
   }
 }
+document.addEventListener('site:languagechange',event=>renderUiLanguage(event.detail.lang));
 function chooseUiLanguage(lang,event){
   if(event){event.preventDefault();event.stopPropagation();}
   SiteAudio.unlock();
   SiteAudio.play('ui.click',{cooldown:0});
-  setUiLanguage(lang);
+  SiteI18n.setLanguage(lang);
 }
-document.getElementById('ui-zh').addEventListener('click',e=>chooseUiLanguage('zh',e));
-document.getElementById('ui-fa').addEventListener('click',e=>chooseUiLanguage('fa',e));
-document.getElementById('ui-en').addEventListener('click',e=>chooseUiLanguage('en',e));
-document.getElementById('ui-ar').addEventListener('click',e=>chooseUiLanguage('ar',e));
 
 const home=document.getElementById('home-page');
 const sharePage=document.getElementById('share-page');
@@ -1143,10 +1117,8 @@ document.addEventListener('keydown',e=>{
   if(e.key==='Enter'&&activeId==='reference')openReference();
 });
 
-let initialLang='fa';
-try{const saved=localStorage.getItem('modern-outlook.lang.v1');if(['zh','fa','en','ar'].includes(saved))initialLang=saved}catch(_){}
-setUiLanguage(initialLang);
 setInfo('structure');
+renderUiLanguage(SiteI18n.getLanguage());
 </script>
 </body>
 </html>
