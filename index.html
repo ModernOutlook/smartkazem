@@ -81,7 +81,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .brand{display:flex;flex-direction:column;gap:2px;text-shadow:0 2px 12px #000}
 .brand strong{font-size:clamp(.8rem,2.3vw,1.05rem);font-weight:800;letter-spacing:.01em}
 .brand span{font-size:clamp(.52rem,1.6vw,.72rem);opacity:.5;direction:ltr;text-align:right}
-#x-social{position:absolute;z-index:35;left:50%;top:50%;transform:translate(-50%,-50%);direction:ltr}
+#x-social{position:absolute;z-index:35;right:0;top:100%;transform:none;direction:ltr;width:30px;height:30px}
 .icon-btn{
   width:34px;height:34px;border-radius:50%;border:1px solid rgba(220,240,255,.14);
   color:#fff;background:rgba(0,0,0,.28);backdrop-filter:blur(8px);
@@ -297,8 +297,7 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 .info{pointer-events:none}
 @media (max-width:520px){
   .topbar{padding:12px 14px}
-  #fullscreen{left:14px!important;top:58px!important}
-  #x-social{left:50%;top:50%;transform:translate(-50%,-50%)}
+  #x-social{right:0;top:100%;transform:none;width:30px;height:30px}
   .lang-switch{top:12px;left:14px}
   .rings{width:78%;transform:translateY(-13%)}
   .info{left:4.5%;right:4.5%;bottom:3.2%;height:15%;min-height:0;padding:10px 13px}
@@ -334,8 +333,6 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
       </div>
       <a class="icon-btn" id="x-social" href="https://x.com/_thekazem" target="_blank" rel="noopener noreferrer" title="X / Twitter" aria-label="X / Twitter">𝕏</a>
     </header>
-
-    <button class="icon-btn" id="fullscreen" title="تمام صفحه" aria-label="تمام صفحه" style="position:absolute;z-index:41;left:5%;top:12%;">⛶</button>
 
     <div class="lang-switch" aria-label="زبان رابط">
       <button id="ui-fa" class="active">FA</button>
@@ -722,10 +719,6 @@ ringHost.addEventListener('pointerleave',()=>{
 
 
 
-document.getElementById('fullscreen').addEventListener('click',()=>{
-  if(!document.fullscreenElement) document.documentElement.requestFullscreen?.().catch(()=>{});
-  else document.exitFullscreen?.().catch(()=>{});
-});
 
 function setUiLanguage(lang){
   uiLang=lang;
