@@ -125,6 +125,8 @@ function renderHomeFromCatalog(){
   const hs=document.getElementById('share-human-machines');
   const hm=catalog.pages?.humanMachines;
   if(hs&&hm){hs.firstChild.textContent=hm.title||labels.share;const sm=hs.querySelector('small');if(sm)sm.textContent=hm.title||''}
+  const g=document.getElementById('ref-games');
+  if(g&&pages.games){g.firstChild.textContent=pages.games;const sm=g.querySelector('small');if(sm)sm.textContent=pages.gamesEn||''}
   const back=labels.back||'';
   ['share-close','share-human-machines','experience-close','continuity-close','structure-close','reference-close','book-close','logo-viewer-close'].forEach(id=>{const b=document.getElementById(id);if(b&&back)b.setAttribute('aria-label',back)});
   const brand=document.querySelector('.brand strong'), brandAlt=document.querySelector('.brand span');
@@ -151,6 +153,7 @@ document.getElementById('reference-close').addEventListener('click',closeReferen
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference','forgers'));document.getElementById('share-human-machines').addEventListener('click',()=>openBook('share','humanMachines'));
 
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
+document.getElementById('ref-games').addEventListener('click',()=>{});
 document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
 document.getElementById('reference-match').addEventListener('click',()=>openParagraph('reference'));
 document.getElementById('book-close').addEventListener('click',closeBook);

@@ -347,28 +347,3 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 /* ===== Philosophical Treatise entry in Hall Structure ===== */
 .structure-actions{position:absolute;z-index:12;left:50%;bottom:7%;transform:translateX(-50%);display:flex;justify-content:center;width:min(92%,620px)}
 .structure-action{min-width:230px;padding:13px 22px;border:1px solid rgba(125,202,255,.55);border-radius:16px;background:linear-gradient(145deg,rgba(7,53,78,.82),rgba(2,20,32,.82));color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(9px);cursor:pointer;font-weight:800;font-size:clamp(.72rem,2.5vw,.95rem);transition:transform .2s ease,filter .2s ease}.structure-action:hover{transform:translateY(-2px);filter:brightness(1.14)}.structure-action span,.structure-action small{display:block}.structure-action small{margin-top:3px;font-size:.62em;font-weight:500;opacity:.62;direction:ltr}
-
-/* ===== Unified internal realm system ===== */
-.realm-page{
-  --realm-accent:#5ab7ff;--realm-soft:rgba(90,183,255,.24);
-  --realm-deep:rgba(8,24,38,.94);--realm-mid:rgba(18,55,78,.78);
-  background:radial-gradient(ellipse at 50% 38%,var(--realm-soft),transparent 32%),radial-gradient(ellipse at 50% 100%,rgba(255,255,255,.05),transparent 44%),linear-gradient(180deg,#02060c 0%,#071421 52%,#03080e 100%) !important;color:#fff;
-}
-.realm-page::before{opacity:.5 !important;background:radial-gradient(circle at 12% 12%,rgba(255,255,255,.9) 0 1px,transparent 2px),radial-gradient(circle at 74% 17%,rgba(255,255,255,.55) 0 1px,transparent 2px),radial-gradient(circle at 86% 72%,rgba(255,255,255,.42) 0 1px,transparent 2px);background-size:137px 151px,173px 139px,151px 167px !important}
-.realm-page::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:2;background:radial-gradient(ellipse at 50% 48%,transparent 28%,rgba(0,0,0,.12) 62%,rgba(0,0,0,.6) 100%),linear-gradient(180deg,rgba(0,0,0,.12),transparent 25%,transparent 75%,rgba(0,0,0,.28))}
-.realm-page .realm-head{position:absolute;z-index:30;top:5%;left:5%;right:5%;display:flex;align-items:flex-start;justify-content:space-between;direction:rtl}
-.realm-page .realm-title{text-shadow:0 2px 12px #000}.realm-page .realm-title strong{display:block;font-size:clamp(.9rem,3.4vw,1.35rem)}.realm-page .realm-title span{display:block;font-size:clamp(.48rem,1.6vw,.7rem);opacity:.58;direction:ltr}
-.realm-page .realm-tools{display:flex;align-items:center;gap:8px;direction:ltr}
-.realm-page .realm-action{min-width:150px;min-height:42px;padding:8px 14px;border:1px solid color-mix(in srgb,var(--realm-accent) 55%,white 10%);border-radius:12px;background:linear-gradient(145deg,var(--realm-mid),var(--realm-deep));color:#fff;box-shadow:0 8px 24px rgba(0,0,0,.34),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(9px);cursor:pointer;font-weight:800;font-size:clamp(.62rem,2.15vw,.84rem);transition:transform .2s ease,filter .2s ease,border-color .2s ease}
-.realm-page .realm-action:hover{transform:translateY(-2px);filter:brightness(1.14);border-color:var(--realm-accent)}.realm-page .realm-action span,.realm-page .realm-action small{display:block}.realm-page .realm-action small{margin-top:2px;font-size:.62em;font-weight:500;opacity:.58;direction:ltr}
-.realm-page .realm-close{width:36px;height:36px;flex:0 0 36px;border-radius:50%;border:1px solid color-mix(in srgb,var(--realm-accent) 42%,white 5%);background:rgba(2,8,15,.48);color:#fff;cursor:pointer;backdrop-filter:blur(8px)}.realm-page .realm-close:hover{filter:brightness(1.15);transform:translateY(-1px)}
-.realm-page .realm-actions,.realm-page .continuity-actions,.realm-page .structure-actions{display:none !important}
-.realm-page .reference-actions{position:absolute;z-index:30;left:5%;right:5%;bottom:5.5%;display:grid;grid-template-columns:1fr 1fr;gap:9px;direction:rtl}.realm-page .reference-actions .realm-action{min-height:62px;width:100%}
-.realm-page .realm-share .share-story-action,.realm-page .realm-continuity .continuity-action,.realm-page .realm-structure .structure-action{position:static;min-width:150px;transform:none;margin:0}.realm-page .realm-share .share-story-action:hover,.realm-page .realm-continuity .continuity-action:hover,.realm-page .realm-structure .structure-action:hover{transform:translateY(-2px)}
-.realm-structure{--realm-accent:#1597dc;--realm-soft:rgba(21,151,220,.24);--realm-mid:rgba(7,53,78,.82);--realm-deep:rgba(2,20,32,.9)}
-.realm-continuity{--realm-accent:#e1b72b;--realm-soft:rgba(225,183,43,.23);--realm-mid:rgba(67,45,9,.82);--realm-deep:rgba(23,15,4,.92)}
-.realm-experience{--realm-accent:#b653ff;--realm-soft:rgba(182,83,255,.23);--realm-mid:rgba(44,12,68,.82);--realm-deep:rgba(12,3,22,.92)}
-.realm-reference{--realm-accent:#e94d43;--realm-soft:rgba(233,77,67,.23);--realm-mid:rgba(70,5,3,.82);--realm-deep:rgba(18,0,0,.92)}
-.realm-share{--realm-accent:#1bd58a;--realm-soft:rgba(27,213,138,.23);--realm-mid:rgba(5,67,43,.82);--realm-deep:rgba(0,26,18,.92)}
-.realm-page .structure-space,.realm-page .continuity-space,.realm-page .experience-space,.realm-page .reference-scene,.realm-page .share-space{opacity:.28;filter:saturate(.72) brightness(.7)}
-@media(max-width:520px){.realm-page .realm-head{top:4%;left:4%;right:4%}.realm-page .realm-tools{gap:6px}.realm-page .realm-action{min-width:128px;min-height:38px;padding:7px 10px;border-radius:10px}.realm-page .realm-close{width:34px;height:34px;flex-basis:34px}.realm-page .reference-actions{bottom:4%;gap:7px}.realm-page .reference-actions .realm-action{min-height:56px}}

@@ -12,6 +12,7 @@
     "forgers": "The Forgers of Imitation",
     "treatise": "A Philosophical Treatise",
     "observation": "The Land of Observation",
+    "games": "Games",
     "back": "Back",
     "close": "Close",
     "comingSoon": "Coming later",
@@ -55,7 +56,9 @@
     "pages": {
       "forgers": "The Forgers of Imitation",
       "treatise": "A Philosophical Treatise",
-      "observation": "The Land of Observation"
+      "observation": "The Land of Observation",
+      "games": "Games",
+      "gamesEn": "Coming later"
     },
     "title": "Modern Outlook — نگرش نوین"
   },
