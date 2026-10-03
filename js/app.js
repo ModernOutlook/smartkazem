@@ -120,7 +120,7 @@ function renderHomeFromCatalog(){
     }
     q.setAttribute('aria-label',title||'');
   });
-  const refs=[['ref-forgers',pages.forgers],['ref-treatise',pages.treatise],['ref-observation',pages.observation]];
+  const refs=[['ref-forgers',pages.forgers],['ref-observation',pages.observation]];
   refs.forEach(([id,v])=>{const b=document.getElementById(id);if(b&&v){const sm=b.querySelector('small');b.firstChild.textContent=v;if(sm)sm.textContent=''}});
   const hs=document.getElementById('share-human-machines');
   const hm=catalog.pages?.humanMachines;
@@ -148,9 +148,10 @@ document.getElementById('experience-close').addEventListener('click',closeExperi
 document.getElementById('continuity-close').addEventListener('click',closeContinuity);
 document.getElementById('continuity-shahnameh').addEventListener('click',()=>{window.location.href='shahnameh.html';});
 document.getElementById('structure-close').addEventListener('click',closeStructure);
+document.getElementById('structure-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
 document.getElementById('reference-close').addEventListener('click',closeReference);
 document.getElementById('ref-forgers').addEventListener('click',()=>openBook('reference','forgers'));document.getElementById('share-human-machines').addEventListener('click',()=>openBook('share','humanMachines'));
-document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
+
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
 document.getElementById('ref-games').addEventListener('click',()=>{});
 document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));

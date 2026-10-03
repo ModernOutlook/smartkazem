@@ -8,17 +8,18 @@
 :root{color-scheme:dark;--bg:#090a0f;--panel:rgba(22,19,13,.82);--line:rgba(255,232,170,.22);--text:#f7f0df;--muted:rgba(247,240,223,.62)}
 *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:radial-gradient(circle at 50% 0%,#38230d 0,#120f0b 34%,#090a0f 75%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
 body{padding:24px}.wrap{max-width:1100px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.title h1{margin:0;font-size:clamp(1.5rem,4vw,2.4rem)}.title p{margin:6px 0 0;color:var(--muted)}
-.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.back,.lang{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer}.lang.active{box-shadow:0 0 0 1px rgba(255,232,170,.55) inset}
+.actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.back{border:1px solid var(--line);background:var(--panel);color:var(--text);border-radius:12px;padding:9px 13px;cursor:pointer}.global-lang{position:fixed;z-index:1000;top:14px;left:50%;transform:translateX(-50%);display:flex;direction:ltr;gap:2px;padding:3px;border:1px solid rgba(255,232,170,.22);border-radius:22px;background:rgba(8,8,10,.72);backdrop-filter:blur(10px)}.global-lang button{border:0;background:transparent;color:rgba(255,255,255,.62);padding:6px 9px;border-radius:17px;cursor:pointer;font-size:.62rem;font-weight:800}.global-lang button.active{background:rgba(255,255,255,.14);color:#fff}
 .parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:8px;margin-bottom:18px}.part{border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--text);border-radius:10px;padding:10px 6px;cursor:pointer}.part.active{background:rgba(180,126,45,.22);box-shadow:0 0 0 1px rgba(255,220,130,.35) inset}
 .reader{border:1px solid var(--line);background:var(--panel);border-radius:20px;padding:clamp(18px,4vw,34px);min-height:360px;box-shadow:0 20px 60px rgba(0,0,0,.25)}.reader h2{margin-top:0}.block{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}.block h3{margin:0 0 10px;font-size:1rem}.placeholder{color:var(--muted);line-height:1.9}.verse{font-family:Georgia,"Times New Roman",serif;font-size:1.12rem;line-height:2.1;white-space:pre-line}.prose{line-height:2.05;white-space:pre-line}
 @media(max-width:650px){body{padding:14px}.top{align-items:flex-start;flex-direction:column}.parts{grid-template-columns:repeat(5,1fr)}}
 </style>
 </head>
 <body>
+<div class="global-lang" id="global-lang" aria-label="زبان سایت"><button data-site-lang="zh" type="button">中文</button><button data-site-lang="fa" type="button">فارسی</button><button data-site-lang="en" type="button">English</button><button data-site-lang="ar" type="button">العربية</button></div>
 <main class="wrap">
 <header class="top">
 <div class="title"><h1 data-i18n="pages.shahnameh.title">شاهنامه‌خوانی</h1><p data-i18n="pages.shahnameh.subtitle">۸۱ قسمت · نظم اصیل فردوسی و نثر چهارزبانه</p></div>
-<div class="actions"><button class="back" id="back" data-i18n="labels.back">بازگشت</button><button class="lang" data-site-lang="fa">فا</button><button class="lang" data-site-lang="en">EN</button><button class="lang" data-site-lang="zh">中</button><button class="lang" data-site-lang="ar">ع</button></div>
+<div class="actions"><button class="back" id="back" data-i18n="labels.back">بازگشت</button></div>
 </header>
 <nav class="parts" id="parts"></nav>
 <section class="reader" id="reader"></section>

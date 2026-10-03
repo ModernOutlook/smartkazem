@@ -71,14 +71,16 @@
     "treatise": {
       "title": "A Philosophical Treatise",
       "close": "Close",
+      "titleEn": "A Philosophical Treatise",
       "tabs": [
-        "Preface",
-        "Hall Structure",
-        "Continuity of the World",
-        "Experience",
-        "Sharing",
-        "Conclusion"
-      ]
+  "Preface",
+  "Hall Structure",
+  "Continuity of the World",
+  "Experience",
+  "The Authority of Simulation",
+  "Share Economy",
+  "Postscript"
+]
     },
     "forgers": {
       "title": "The Forgers of Imitation",
