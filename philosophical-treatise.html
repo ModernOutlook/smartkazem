@@ -214,29 +214,17 @@ body[data-mode="en"] .book-body{direction:ltr;text-align:left}
 </style>
 <script>
 const body=document.body;
-const savedLang=(()=>{try{return localStorage.getItem('modern-outlook.lang.v1')||'fa'}catch(_){return 'fa'}})();
-body.dataset.mode=['fa','en','zh','ar'].includes(savedLang)?savedLang:'fa';
-document.documentElement.lang=body.dataset.mode;
-document.documentElement.dir=body.dataset.mode==='fa'||body.dataset.mode==='zh'?'rtl':'ltr';
 document.getElementById('close').onclick=()=>{if(history.length>1)history.back();else location.href='index.html'};
 document.querySelectorAll('.book-tab').forEach(b=>b.onclick=()=>{const id=b.dataset.target;if(id){const el=document.getElementById(id);if(el)el.scrollIntoView({behavior:'smooth',block:'start'})}});
 </script><script>
-document.addEventListener('site:languagechange',event=>{if(event.detail?.lang)apply(event.detail.lang)});
-(function(){
-  const labels={"fa":{"title":"📖 رساله فلسفی نگرش نوین","tabs":["پیش‌گفتار","ساختار تالار","تداوم عالم","تجربه","اشتراک","جمع‌بندی"],"close":"بستن"},"en":{"title":"📖 A Philosophical Treatise on the Modern Outlook","tabs":["Preface","Hall Structure","Continuity of the World","Experience","Sharing","Conclusion"],"close":"Close"},"zh":{"title":"📖 现代视野哲学论述","tabs":["序言","结构殿堂","世界的延续","经验","共享","总结"],"close":"关闭"},"ar":{"title":"📖 رسالة فلسفية عن النظرة الحديثة","tabs":["المقدمة","بنية القاعة","استمرارية العالم","التجربة","المشاركة","الخلاصة"],"close":"إغلاق"}};
-  function apply(lang){
-    if(!labels[lang])lang='fa';
-    try{localStorage.setItem('modern-outlook.lang.v1',lang)}catch(_){}
-    document.body.dataset.mode=lang;document.documentElement.lang=lang;document.documentElement.dir=lang==='en'?'ltr':'rtl';
-    document.querySelectorAll('.global-lang button').forEach(b=>b.classList.toggle('active',b.dataset.lang===lang));
-    const title=document.querySelector('.book-title'); if(title)title.textContent=labels[lang].title;
-    const close=document.getElementById('close');if(close)close.setAttribute('aria-label',labels[lang].close);
-    const tabs=[...document.querySelectorAll('.book-tab')];
-    if(Array.isArray(labels[lang].tabs))tabs.forEach((b,i)=>{if(labels[lang].tabs[i])b.textContent=labels[lang].tabs[i]});
-    else if(tabs[0])tabs[0].textContent=labels[lang].tab;
-  }
-  let lang='fa';try{const s=localStorage.getItem('modern-outlook.lang.v1');if(['zh','fa','en','ar'].includes(s))lang=s}catch(_){}
-  document.querySelectorAll('.global-lang button').forEach(b=>b.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();apply(b.dataset.lang)}));
-  apply(lang);
-})();
+function applyPageLanguage(lang){
+  const catalog=window.SiteI18n&&window.SiteI18n.getCatalog?window.SiteI18n.getCatalog():null;
+  const page=catalog&&catalog.pages&&catalog.pages.treatise;
+  if(!page)return;
+  const title=document.querySelector('.book-title'); if(title)title.textContent='📖 '+page.title;
+  const close=document.getElementById('close'); if(close)close.setAttribute('aria-label',page.close||'');
+  const tabs=[...document.querySelectorAll('.book-tab')];
+  if(Array.isArray(page.tabs))tabs.forEach((b,i)=>{if(page.tabs[i])b.textContent=page.tabs[i]});
+}
+document.addEventListener('site:languagechange',event=>applyPageLanguage(event.detail?.lang||'fa'));
 </script></body></html>
