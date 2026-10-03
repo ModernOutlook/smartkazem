@@ -153,16 +153,19 @@ document.getElementById('ref-forgers').addEventListener('click',()=>openBook('re
 document.getElementById('ref-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
 document.getElementById('ref-games').addEventListener('click',()=>{});
+document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
+document.getElementById('reference-match').addEventListener('click',()=>openParagraph('reference'));
 document.getElementById('book-close').addEventListener('click',closeBook);
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&logoViewer.classList.contains('open')){closeLogoViewer();return;}
   if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
+  if(e.key==='Escape'&&paragraphPage.style.display==='block'){closeParagraph();return;}
   if(e.key==='Escape'&&sharePage.style.display==='block')closeShare();
   if(e.key==='Escape'&&experiencePage.style.display==='block')closeExperience();
   if(e.key==='Escape'&&continuityPage.style.display==='block')closeContinuity();
   if(e.key==='Escape'&&structurePage.style.display==='block')closeStructure();
   if(e.key==='Escape'&&referencePage.style.display==='block')closeReference();
-  if(logoViewer.classList.contains('open')||bookPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block'||experiencePage.style.display==='block'||sharePage.style.display==='block')return;
+  if(logoViewer.classList.contains('open')||bookPage.style.display==='block'||paragraphPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block'||experiencePage.style.display==='block'||sharePage.style.display==='block')return;
   const order=['structure','continuity','experience','reference','share'];
   const idx=order.indexOf(activeId);
   if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
