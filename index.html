@@ -343,10 +343,10 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
     </header>
 
     <div class="lang-switch" aria-label="زبان رابط">
-      <button id="ui-zh" type="button">中文</button>
-      <button id="ui-fa" class="active" type="button">فارسی</button>
-      <button id="ui-en" type="button">English</button>
-      <button id="ui-ar" type="button">العربية</button>
+      <button id="ui-zh" data-site-lang="zh" type="button">中文</button>
+      <button id="ui-fa" data-site-lang="fa" class="active" type="button">فارسی</button>
+      <button id="ui-en" data-site-lang="en" type="button">English</button>
+      <button id="ui-ar" data-site-lang="ar" type="button">العربية</button>
     </div>
 
     <div class="orbit" aria-label="پنج قلمرو">
@@ -465,6 +465,7 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
   </section>
 </main>
 
+<script src="translations/i18n.js"></script>
 <script src="audio-system.js"></script>
 <script>
 const bookChapters = [
