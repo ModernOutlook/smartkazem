@@ -154,7 +154,6 @@ document.getElementById('ref-treatise').addEventListener('click',()=>{window.loc
 document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
 document.getElementById('ref-equivalence').addEventListener('click',()=>openParagraph('reference'));
 document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
-document.getElementById('reference-match').addEventListener('click',()=>openParagraph('reference'));
 document.getElementById('book-close').addEventListener('click',closeBook);
 document.addEventListener('keydown',e=>{
   if(e.key==='Escape'&&logoViewer.classList.contains('open')){closeLogoViewer();return;}
