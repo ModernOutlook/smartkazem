@@ -39,8 +39,18 @@ function playNoise(c,q,now){
  const b=c.createBuffer(1,Math.max(1,Math.floor(c.sampleRate*q.d)),c.sampleRate),a=b.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=(Math.random()*2-1)*(1-i/a.length);
  const s=c.createBufferSource(),f=c.createBiquadFilter(),g=c.createGain();s.buffer=b;f.type='bandpass';f.frequency.value=2600;env(g,now,q.v||.1,q.d);s.connect(f).connect(g).connect(master);s.start(now);s.stop(now+q.d+.02)
 }
+async function playSample(name,opt={}){
+ const e=state.samples.get(name);if(!e)return false;const c=await unlock();if(!c)return false;
+ try{
+  if(!e.buffer){
+   if(!state.sampleLoads.has(name))state.sampleLoads.set(name,fetch(e.url,{cache:'force-cache'}).then(r=>{if(!r.ok)throw Error('audio');return r.arrayBuffer()}).then(b=>c.decodeAudioData(b)).then(b=>{e.buffer=b;return b}).finally(()=>state.sampleLoads.delete(name)));
+   await state.sampleLoads.get(name);
+  }
+  const src=c.createBufferSource(),g=c.createGain();src.buffer=e.buffer;src.loop=!!opt.loop;g.gain.value=Math.max(0,Math.min(1,(opt.volume??1)*volume));src.connect(g).connect(master);src.start(c.currentTime,Math.max(0,opt.offset||0));if(opt.duration)src.stop(c.currentTime+opt.duration);return true;
+ }catch(_){return false}
+}
 async function play(name,opt={}){
- if(!enabled)return false;const q=cues[name];if(!q)return false;const t=performance.now();if(t-(last[name]||0)<(opt.cooldown??25))return false;last[name]=t;
+ if(!enabled)return false;const q=cues[name];if(!q&&state.samples.has(name))return playSample(name,opt);if(!q)return false;const t=performance.now();if(t-(last[name]||0)<(opt.cooldown??25))return false;last[name]=t;
  const c=await unlock();if(!c)return false;const now=c.currentTime+.005;
  if(q.n)playNoise(c,{...q,...opt},now);else if(q.c)playChord(c,{...q,...opt},now);else playTone(c,{...q,...opt},now);return true
 }
@@ -48,8 +58,9 @@ function setEnabled(v){enabled=!!v;save();if(master&&ctx)master.gain.setTargetAt
 function toggle(){setEnabled(!enabled);if(enabled)play('ui.click',{cooldown:0});return enabled}
 function setVolume(v){volume=Math.max(0,Math.min(1,Number(v)||0));save();if(master&&ctx)master.gain.setTargetAtTime(enabled?volume:0,ctx.currentTime,.025)}
 function registerCue(name,definition){if(name&&definition)cues[name]={...definition}}
+function registerSample(name,url){if(name&&url)state.samples.set(name,{url,buffer:null})}
 function ui(){document.querySelectorAll('[data-audio-toggle]').forEach(b=>{b.setAttribute('aria-pressed',String(enabled));b.setAttribute('aria-label',enabled?'خاموش کردن صدا':'روشن کردن صدا');b.textContent=enabled?'◖))':'×))'})}
-window.SiteAudio=Object.freeze({play,unlock,toggle,setEnabled,setVolume,registerCue,isEnabled:()=>enabled,getVolume:()=>volume});
+window.SiteAudio=Object.freeze({play,unlock,toggle,setEnabled,setVolume,registerCue,registerSample,isEnabled:()=>enabled,getVolume:()=>volume});
 document.addEventListener('pointerdown',()=>unlock(),{capture:true,passive:true});
 document.addEventListener('keydown',()=>unlock(),{capture:true,passive:true});
 document.addEventListener('DOMContentLoaded',ui);
