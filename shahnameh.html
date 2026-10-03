@@ -48,6 +48,13 @@ function render(){
 }
 document.getElementById('back').onclick=()=>{window.location.href='index.html'};
 document.addEventListener('site:languagechange',render);
-document.addEventListener('DOMContentLoaded',render,{once:true});
+document.addEventListener('DOMContentLoaded',async()=>{
+  try{
+    if(window.SiteI18n?.setLanguage){
+      await window.SiteI18n.setLanguage(window.SiteI18n.getLanguage());
+    }
+  }catch(_){}
+  render();
+},{once:true});
 </script></script>
 </body></html>
