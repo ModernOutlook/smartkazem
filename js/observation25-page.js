@@ -37,6 +37,20 @@ function render(){
     note.className='section-note';
     note.textContent=data.sectionNote||'';
     section.appendChild(note);
+
+    const contents=Array.isArray(data.contents)?data.contents:[];
+    const sectionContent=contents[index];
+    if(sectionContent){
+      const article=document.createElement('div');
+      article.className='observation25-content';
+      sectionContent.split(/\n\n+/).forEach(paragraph=>{
+        if(!paragraph.trim()) return;
+        const p=document.createElement('p');
+        p.textContent=paragraph.trim();
+        article.appendChild(p);
+      });
+      section.appendChild(article);
+    }
     body.appendChild(section);
   });
   if(!sections.length){
