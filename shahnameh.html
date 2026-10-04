@@ -2,7 +2,7 @@
 <html lang="fa" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="google" content="notranslate"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="i18n-page" content="shahnameh"><meta name="format-detection" content="telephone=no">
+<meta name="i18n-page" content="shahnameh"><meta name="format-detection" content="telephone=no"><meta http-equiv="Content-Language" content="fa">
 <title>شاهنامه‌خوانی — Modern Outlook</title>
 <style>
 :root{color-scheme:dark;--bg:#090a0f;--panel:rgba(22,19,13,.82);--line:rgba(255,232,170,.22);--text:#f7f0df;--muted:rgba(247,240,223,.62)}
@@ -26,18 +26,34 @@ body{display:grid;place-items:center;overflow:hidden}
 </style>
 </head>
 <body class="notranslate" translate="no">
-<div class="global-lang" id="global-lang" aria-label="زبان سایت"><button data-site-lang="zh" type="button">中文</button><button data-site-lang="fa" type="button">فارسی</button><button data-site-lang="en" type="button">English</button><button data-site-lang="ar" type="button">العربية</button></div>
+<div class="global-lang notranslate" id="global-lang" aria-label="زبان سایت" translate="no"><button data-site-lang="zh" type="button">中文</button><button data-site-lang="fa" type="button">فارسی</button><button data-site-lang="en" type="button">English</button><button data-site-lang="ar" type="button">العربية</button></div>
 <main class="wrap notranslate" translate="no">
 <header class="top">
 <div class="title"><h1 data-i18n="pages.shahnameh.title">شاهنامه‌خوانی</h1><p data-i18n="pages.shahnameh.subtitle">۸۱ قسمت · نظم اصیل فردوسی و نثر چهارزبانه</p></div>
 <div class="actions"><button class="back" id="back" data-i18n="labels.back">بازگشت</button></div>
 </header>
-<nav class="parts" id="parts"></nav>
-<section class="reader" id="reader"></section>
+<nav class="parts notranslate" id="parts" translate="no"></nav>
+<section class="reader notranslate" id="reader" translate="no"></section>
 </main>
-<script src="translations/i18n.js"></script>
 <script src="content/shahnameh.js?v=20261004-2"></script>
-<script src="js/shahnameh-page.js?v=20261004-2" defer></script>
+<script src="js/shahnameh-page.js?v=20261004-3" defer></script>
+<script>
+(function(){
+  const KEY='modern-outlook.lang.v2';
+  const buttons=document.querySelectorAll('[data-site-lang]');
+  function sync(){
+    let lang='fa';
+    try{lang=localStorage.getItem(KEY)||'fa'}catch(_){}
+    buttons.forEach(b=>{const active=b.dataset.siteLang===lang;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active?'true':'false');});
+  }
+  buttons.forEach(b=>b.addEventListener('click',function(e){
+    e.preventDefault();e.stopPropagation();
+    try{localStorage.setItem(KEY,b.dataset.siteLang);localStorage.setItem('modern-outlook.lang.v1',b.dataset.siteLang)}catch(_){}
+    sync();
+  }));
+  sync();
+})();
+</script>
 <script src="site-audio.js" defer></script>
 <script>document.documentElement.classList.add("notranslate");document.documentElement.setAttribute("translate","no");document.body.classList.add("notranslate");document.body.setAttribute("translate","no");</script>
 </body></html>
