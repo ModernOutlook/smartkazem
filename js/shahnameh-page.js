@@ -2,28 +2,18 @@ const parts=document.getElementById('parts'),reader=document.getElementById('rea
 function esc(v){return String(v??'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
 function render(){
  const lang=window.SiteI18n?.getLanguage?.()||'fa';
- const m=shahnamehFaCatalog;
- const title=lang==='fa'?(m.title||'شاهنامه‌خوانی'):(window.SiteI18n?.get?.('pages.shahnameh.title', 'Shahnameh Reading')||'Shahnameh Reading');
- const partLabel=lang==='fa'?(m.part||'قسمت'):(window.SiteI18n?.get?.('pages.shahnameh.part','Part')||'Part');
- const originalLabel=lang==='fa'?(m.originalVerse||'بیت‌های اصلی'):(window.SiteI18n?.get?.('pages.shahnameh.originalVerse','Original Verse')||'Original Verse');
- const proseLabel=lang==='fa'?(m.prose||'نثر'):(window.SiteI18n?.get?.('pages.shahnameh.prose','Prose')||'Prose');
+ const c=lang==='fa'?{pages:{shahnameh:shahnamehFaCatalog}}:(window.SiteI18n?.getCatalog?.()||{});
+ const m=c.pages?.shahnameh||{};
  parts.innerHTML='';
  for(let i=0;i<81;i++){
-   const p=m['part'+(i+1)];
-   const btn=document.createElement('button');
-   btn.className='part'+(i===selected?' active':'');
-   btn.textContent=partLabel+' '+(i+1);
-   btn.type='button';
-   btn.disabled=false;
-   btn.setAttribute('aria-disabled','false');
-   btn.onclick=()=>{selected=i;render()};
-   parts.appendChild(btn);
+   const key='part'+(i+1),p=m[key];
+   const btn=document.createElement('button');btn.className='part'+(i===selected?' active':'');btn.textContent=(m.part||'Part')+' '+(i+1);btn.type='button';btn.onclick=()=>{selected=i;render()};parts.appendChild(btn);
  }
  const p=m['part'+(selected+1)];
  if(p){
-   reader.innerHTML='<h2>'+esc(p.title)+'</h2><div class="block"><h3>'+esc(originalLabel)+'</h3><p class="verse">'+esc(p.originalVerse||'')+'</p></div><div class="block"><h3>'+esc(proseLabel)+'</h3><p class="prose">'+esc(p.prose||'')+'</p></div>';
+   reader.innerHTML='<h2>'+esc(p.title)+'</h2><div class="block"><h3>'+esc(m.originalVerse||'Original Verse')+'</h3><p class="verse">'+esc(p.originalVerse||'')+'</p></div><div class="block"><h3>'+esc(m.prose||'Prose')+'</h3><p class="prose">'+esc(p.prose||'')+'</p></div>';
  }else{
-   reader.innerHTML='<h2>'+esc(partLabel+' '+(selected+1))+'</h2><div class="block"><p class="placeholder">'+esc(m.placeholder||'متن این قسمت هنوز افزوده نشده است.')+'</p></div>';
+   reader.innerHTML='<h2>'+esc((m.part||'Part')+' '+(selected+1))+'</h2><div class="block"><p class="placeholder">'+esc(m.placeholder||'Coming soon')+'</p></div>';
  }
 }
 document.getElementById('back').onclick=()=>{window.location.href='index.html'};
