@@ -35,7 +35,7 @@
 
 - `content/forgers.js` — «جاعلان تقلید»
 - `content/human-machines.js` — «انسان و ماشین‌هایش»
-- `content/shahnameh.js` — محتوای فارسی شاهنامه‌خوانی
+- `content/shahnameh-series.js` — محتوای فارسی شاهنامه‌خوانی
 
 بنابراین در حالت فارسی، نباید برای نمایش کتاب‌ها یک دور غیرضروری از مسیر ترجمه انجام شود.
 
@@ -76,11 +76,11 @@
 
 منبع فارسی آن:
 
-`content/shahnameh.js`
+`content/shahnameh-series.js`
 
 و منطق نمایش آن در:
 
-`js/shahnameh-page.js`
+`js/shahnameh-series-page.js`
 
 قرار دارد.
 
@@ -335,9 +335,9 @@ paragraph-machine.html یک ابزار مستقل/قدیمی‌تر با راب�
 | `translations/fa.json` | کاتالوگ فارسی رابط و مرجع ترجمه |
 | `content/forgers.js` | منبع مستقل فارسی جاعلان تقلید |
 | `content/human-machines.js` | منبع مستقل فارسی انسان و ماشین‌هایش |
-| `content/shahnameh.js` | منبع مستقل فارسی شاهنامه |
+| `content/shahnameh-series.js` | منبع مستقل فارسی شاهنامه |
 | `js/books.js` | نمایش و پیمایش کتاب‌های صفحهٔ اصلی |
-| `js/shahnameh-page.js` | منطق نمایش شاهنامه |
+| `js/shahnameh-series-page.js` | منطق نمایش شاهنامه |
 | `css/site.css` | سبک‌های اصلی سایت |
 | `services/translation-bridge.js` | پل سرویس‌های ترجمه |
 | `engine/paragraph-engine.js` | موتور پاراگراف |
