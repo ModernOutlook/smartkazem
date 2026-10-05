@@ -48,11 +48,13 @@ jobs:
               dup=sorted({x for x in ids if ids.count(x)>1})
               if dup: bad.append(f'{p}: duplicate ids: {dup}')
               for attr in ('src','href'):
-                  for ref in re.findall(r"\\b"+attr+r"=[\"']([^\"'#?]+)",s):
+                  for ref in re.findall(r"\b"+attr+r"=[\"']([^\"'#?]+)",s):
                       if ref.startswith(('http://','https://','data:','mailto:','#')): continue
                       if not (p.parent/ref).exists(): bad.append(f'{p}: missing {attr}={ref}')
-              if re.search(r'<script(?![^>]*\bsrc=)[^>]*>\s*[^\s<][\s\S]*?</script>',s,re.I):
+              if re.search(r'<script(?![^>]*\bsrc=)[^>]*>\s*[^\s<][\s\S]*?</script>', s, re.I):
                   bad.append(f'{p}: inline script detected')
+              if re.search(r'\bon[a-z]+\s*=', s, re.I):
+                  bad.append(f'{p}: inline event handler detected')
           if bad:
               print('\n'.join(bad)); sys.exit(1)
           print('HTML checks passed')
