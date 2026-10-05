@@ -342,7 +342,8 @@
         "empty": "قسمتی با این مشخصات پیدا نشد.",
         "imageMissing": "تصویر این قسمت یافت نشد.",
         "imagePrevious": "تصویر قبل",
-        "imageNext": "تصویر بعد"
+        "imageNext": "تصویر بعد",
+        "part": "قسمت"
       }
     },
     "observation25": {
