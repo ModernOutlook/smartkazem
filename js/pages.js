@@ -44,7 +44,7 @@
 
   function closeParagraph() {
     window.ParagraphPage?.close();
-    returnHome(paragraphOrigin);
+    showPage(paragraphOrigin);
   }
 
   function openShare() {
