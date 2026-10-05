@@ -97,7 +97,7 @@
 
     const title = document.createElement('span');
     title.className = 't';
-    title.textContent = episode.title;
+    title.textContent = getLocalizedEpisode(episode).title;
 
     button.append(number, title);
     button.addEventListener('click', () => {
