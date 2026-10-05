@@ -1,38 +1,45 @@
-const REALM_ORDER = Object.freeze(['structure', 'continuity', 'experience', 'reference', 'share']);
-const REALM_GEOMETRY = Object.freeze([
+(() => {
+  'use strict';
+
+  const PageNavigation = window.SitePages;
+  const PAGE_IDS = PageNavigation.IDS;
+  const BookNavigation = window.BookNavigation;
+
+  const REALM_ORDER = Object.freeze(['structure', 'continuity', 'experience', 'reference', 'share']);
+  const REALM_GEOMETRY = Object.freeze([
   ['structure', 365, 445],
   ['continuity', 285, 365],
   ['experience', 205, 285],
   ['reference', 125, 205],
   ['share', 70, 125]
 ]);
-const ESCAPE_HANDLERS = Object.freeze({
-  book: closeBook,
-  paragraph: closeParagraph,
-  share: closeShare,
-  experience: closeExperience,
-  continuity: closeContinuity,
-  structure: closeStructure,
-  reference: closeReference
-});
+  const ESCAPE_HANDLERS = Object.freeze({
+    book: BookNavigation.closeBook,
+    paragraph: PageNavigation.closeParagraph,
+    share: PageNavigation.closeShare,
+    experience: PageNavigation.closeExperience,
+    continuity: PageNavigation.closeContinuity,
+    structure: PageNavigation.closeStructure,
+    reference: PageNavigation.closeReference
+  });
 
-let activeId = 'structure';
-let lastSelectionAt = 0;
+  let activeId = 'structure';
+  let lastSelectionAt = 0;
 
-const info = document.getElementById('info');
-const infoTitle = document.getElementById('info-title');
-const infoText = document.getElementById('info-text');
-const realms = [...document.querySelectorAll('.realm')];
-const core = document.getElementById('core');
-const universe = document.getElementById('universe');
-const logoViewer = document.getElementById('logo-viewer');
-const logoViewerClose = document.getElementById('logo-viewer-close');
+  const info = document.getElementById('info');
+  const infoTitle = document.getElementById('info-title');
+  const infoText = document.getElementById('info-text');
+  const realms = [...document.querySelectorAll('.realm')];
+  const core = document.getElementById('core');
+  const universe = document.getElementById('universe');
+  const logoViewer = document.getElementById('logo-viewer');
+  const logoViewerClose = document.getElementById('logo-viewer-close');
 
-function currentSiteLang() {
+  function currentSiteLang() {
   return window.SiteI18n?.getLanguage?.() || 'fa';
 }
 
-function setInfo(id, show = true) {
+  function setInfo(id, show = true) {
   activeId = id;
 
   realms.forEach((realm) => {
@@ -49,12 +56,12 @@ function setInfo(id, show = true) {
   info.classList.toggle('visible', show);
 }
 
-function clearInfo() {
+  function clearInfo() {
   info.classList.remove('visible');
   realms.forEach((realm) => realm.classList.remove('selected'));
 }
 
-function selectRealm(id) {
+  function selectRealm(id) {
   if (id === 'core') {
     setInfo('core');
     return;
@@ -78,26 +85,26 @@ function selectRealm(id) {
 
   if (id === 'reference') {
     window.clearTimeout(window.__referenceOpenTimer);
-    window.__referenceOpenTimer = window.setTimeout(openReference, 220);
+    window.__referenceOpenTimer = window.setTimeout(PageNavigation.openReference, 220);
   }
 }
 
-function openLogoViewer() {
+  function openLogoViewer() {
   clearInfo();
   logoViewer.classList.add('open');
 }
 
-function closeLogoViewer() {
+  function closeLogoViewer() {
   logoViewer.classList.remove('open');
 }
 
-function handleActivation(event, callback) {
+  function handleActivation(event, callback) {
   if (event.key !== 'Enter' && event.key !== ' ') return;
   event.preventDefault();
   callback();
 }
 
-function renderHomeFromCatalog() {
+  function renderHomeFromCatalog() {
   const catalog = window.SiteI18n?.getCatalog?.() || {};
   const labels = catalog.labels || {};
   const pageLabels = catalog.home?.pages || {};
@@ -167,23 +174,23 @@ function renderHomeFromCatalog() {
   }
 }
 
-function handleLanguageChange() {
+  function handleLanguageChange() {
   renderHomeFromCatalog();
 
   const bookPage = document.getElementById('book-page');
   if (
-    typeof buildBookTabs === 'function' &&
+    typeof BookNavigation?.buildBookTabs === 'function' &&
     bookPage?.style.display === 'block'
   ) {
     const activeTab = [...document.querySelectorAll('.book-tab')]
       .findIndex((button) => button.classList.contains('active'));
     const currentTab = Math.max(0, activeTab);
-    buildBookTabs(currentTab);
-    selectChapter(currentTab);
+    BookNavigation.buildBookTabs(currentTab);
+    BookNavigation.selectChapter(currentTab);
   }
 }
 
-function handleEscape(event) {
+  function handleEscape(event) {
   if (event.key !== 'Escape') return;
 
   if (logoViewer.classList.contains('open')) {
@@ -212,7 +219,7 @@ function handleEscape(event) {
     setInfo(REALM_ORDER[(index - 1 + REALM_ORDER.length) % REALM_ORDER.length]);
   }
 
-  if (event.key === 'Enter' && activeId === 'reference') openReference();
+  if (event.key === 'Enter' && activeId === 'reference') PageNavigation.openReference();
 }
 
 core.setAttribute('tabindex', '0');
@@ -250,12 +257,12 @@ realms.forEach((realm) => {
 
 document.addEventListener('site:languagechange', handleLanguageChange);
 
-document.getElementById('share-close').addEventListener('click', closeShare);
-document.getElementById('experience-close').addEventListener('click', closeExperience);
-document.getElementById('continuity-close').addEventListener('click', closeContinuity);
-document.getElementById('structure-close').addEventListener('click', closeStructure);
-document.getElementById('reference-close').addEventListener('click', closeReference);
-document.getElementById('book-close').addEventListener('click', closeBook);
+document.getElementById('share-close').addEventListener('click', PageNavigation.closeShare);
+document.getElementById('experience-close').addEventListener('click', PageNavigation.closeExperience);
+document.getElementById('continuity-close').addEventListener('click', PageNavigation.closeContinuity);
+document.getElementById('structure-close').addEventListener('click', PageNavigation.closeStructure);
+document.getElementById('reference-close').addEventListener('click', PageNavigation.closeReference);
+document.getElementById('book-close').addEventListener('click', BookNavigation.closeBook);
 
 document.getElementById('continuity-shahnameh').addEventListener('click', () => {
   window.location.href = 'shahnameh.html';
@@ -263,8 +270,8 @@ document.getElementById('continuity-shahnameh').addEventListener('click', () => 
 document.getElementById('structure-treatise').addEventListener('click', () => {
   window.location.href = 'philosophical-treatise.html';
 });
-document.getElementById('share-human-machines').addEventListener('click', () => openBook('share', 'humanMachines'));
-document.getElementById('share-forgers').addEventListener('click', () => openBook('share', 'forgers'));
+document.getElementById('share-human-machines').addEventListener('click', () => BookNavigation.openBook('share', 'humanMachines'));
+document.getElementById('share-forgers').addEventListener('click', () => BookNavigation.openBook('share', 'forgers'));
 document.getElementById('ref-observation').addEventListener('click', () => {
   window.location.href = 'observation.html';
 });
@@ -274,11 +281,14 @@ document.getElementById('reference-layer3').addEventListener('click', () => {
 document.getElementById('experience-observation25').addEventListener('click', () => {
   window.location.href = 'observation-25.html';
 });
-document.getElementById('experience-detect').addEventListener('click', () => openParagraph('experience'));
-document.getElementById('reference-match').addEventListener('click', () => openParagraph('reference'));
+document.getElementById('experience-detect').addEventListener('click', () => PageNavigation.openParagraph('experience'));
+document.getElementById('reference-match').addEventListener('click', () => PageNavigation.openParagraph('reference'));
 
 document.addEventListener('keydown', handleEscape);
 
 // Language state is owned exclusively by translations/i18n.js.
-setInfo('structure');
+PageNavigation.setHomeController({ setInfo, clearInfo });
+  setInfo('structure');
 
+
+})();
