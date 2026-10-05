@@ -350,6 +350,13 @@
     const splash = document.getElementById('splash');
     if (!splash) return;
 
+    if (!ctx) {
+      splash.classList.add('is-ready');
+      splash.setAttribute('aria-hidden', 'true');
+      window.setTimeout(() => { splash.hidden = true; }, 360);
+      return;
+    }
+
     const enable = splash.querySelector('[data-audio-enable]');
     const skip = splash.querySelector('[data-audio-continue]');
     const status = splash.querySelector('[data-audio-status]');
