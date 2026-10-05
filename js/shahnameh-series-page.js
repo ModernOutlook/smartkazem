@@ -24,21 +24,22 @@
   let catalog = null;
 
   const translate = (path, fallback = '') => {
-    const value = catalog?.[path];
+    const pageCatalog = catalog?.pages?.shahnameh || {};
+    const value = pageCatalog?.[path] ?? catalog?.[path] ?? catalog?.labels?.[path];
     return value == null ? fallback : value;
   };
 
   function getEpisodeView(episode) {
-    const page = catalog || {};
+    const page = catalog?.pages?.shahnameh || {};
     const title = page.titles?.[episode.id - 1] || episode.title;
     const section = page.sections?.[episode.section] || episode.section;
-    if (episode.id === 1 && catalog?.part1) {
+    if (episode.id === 1 && page.part1) {
       return {
         ...episode,
-        title: catalog.part1.title || title,
+        title: page.part1.title || title,
         section,
-        prose: catalog.part1.prose || episode.prose,
-        verse: catalog.part1.originalVerse || episode.verse
+        prose: page.part1.prose || episode.prose,
+        verse: page.part1.originalVerse || episode.verse
       };
     }
     return { ...episode, title, section };
