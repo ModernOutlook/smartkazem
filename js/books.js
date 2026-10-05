@@ -52,7 +52,7 @@
 
 function activeChapters() {
   if (getCurrentLanguage() === 'fa') {
-    if (activeBookKind === BOOK_KINDS.FORGERS) return bookChapters;
+    if (activeBookKind === BOOK_KINDS.FORGERS) return window.ForgersCatalog;
     if (
       activeBookKind === BOOK_KINDS.HUMAN_MACHINES &&
       Array.isArray(window.HumanMachinesCatalog?.chapters)
@@ -65,12 +65,12 @@ function activeChapters() {
   if (catalog) return catalog.chapters;
 
   const catalogsByLanguage = {
-    zh: bookChaptersZh,
-    ar: bookChaptersAr,
-    en: bookChaptersEn
+    zh: window.ForgersCatalogZh,
+    ar: window.ForgersCatalogAr,
+    en: window.ForgersCatalogEn
   };
 
-  return catalogsByLanguage[getCurrentLanguage()] || bookChaptersEn;
+  return catalogsByLanguage[getCurrentLanguage()] || window.ForgersCatalogEn;
 }
 
 function getBookTitle() {
