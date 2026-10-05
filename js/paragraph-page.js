@@ -235,7 +235,7 @@
   elements.action.addEventListener('click', run);
   document.getElementById('paragraph-close').addEventListener(
     'click',
-    () => window.closeParagraph?.()
+    () => window.SitePages?.closeParagraph?.()
   );
   document.getElementById('paragraph-settings-toggle').addEventListener(
     'click',
