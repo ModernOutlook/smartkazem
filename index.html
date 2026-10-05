@@ -27,22 +27,22 @@
 <script src="ui/bootstrap.js" defer></script>
 </head>
 <body>
-<a class="skip-link" href="#app" data-i18n="audio.skipToContent">پرش به محتوای اصلی</a>
-<div id="audio-controls" aria-label="کنترل صوت" data-i18n-aria="audio.controls">
-  <button type="button" data-audio-toggle data-i18n="audio.toggleText" data-i18n-aria="audio.toggle" aria-pressed="true">صدا</button>
-  <button type="button" data-audio-stop data-i18n="audio.stopText" data-i18n-aria="audio.stop">توقف</button>
-  <button type="button" data-audio-mute data-i18n="audio.muteText" data-i18n-aria="audio.mute" aria-pressed="false">بی‌صدا</button>
+<a class="skip-link" href="#app" data-i18n="labels.audio.skipToContent">پرش به محتوای اصلی</a>
+<div id="audio-controls" aria-label="کنترل صوت" data-i18n-aria="labels.audio.controls">
+  <button type="button" data-audio-toggle data-i18n="labels.audio.toggleText" data-i18n-aria="labels.audio.toggle" aria-pressed="true">صدا</button>
+  <button type="button" data-audio-stop data-i18n="labels.audio.stopText" data-i18n-aria="labels.audio.stop">توقف</button>
+  <button type="button" data-audio-mute data-i18n="labels.audio.muteText" data-i18n-aria="labels.audio.mute" aria-pressed="false">بی‌صدا</button>
   <label>
-    <span class="sr-only" data-i18n="audio.volumeLabel">بلندی صدا</span>
-    <input type="range" data-audio-volume min="0" max="100" value="18" step="1" data-i18n-aria="audio.volume">
+    <span class="sr-only" data-i18n="labels.audio.volumeLabel">بلندی صدا</span>
+    <input type="range" data-audio-volume min="0" max="100" value="18" step="1" data-i18n-aria="labels.audio.volume">
   </label>
 </div>
 <div id="audio-status" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="splash" aria-hidden="false" tabindex="-1">
   <img src="startsmart.jpg" alt="" fetchpriority="high" decoding="async">
   <div class="audio-gate">
-    <button type="button" data-audio-enable data-i18n="audio.enable">فعال‌سازی صدا</button>
-    <button type="button" data-audio-continue data-i18n="audio.continueSilent">ادامه بدون صدا</button>
+    <button type="button" data-audio-enable data-i18n="labels.audio.enable">فعال‌سازی صدا</button>
+    <button type="button" data-audio-continue data-i18n="labels.audio.continueSilent">ادامه بدون صدا</button>
     <div data-audio-status role="status" aria-live="polite" aria-atomic="true"></div>
   </div>
 </div>
