@@ -1,20 +1,28 @@
 /*
  * SmartKazem mobile presentation layer.
- * Shared content, translation, engine, service and adapter logic remains untouched.
+ *
+ * The mobile layer follows the same structural layout model as desktop:
+ * flexible viewport shell, explicit alignment tracks, bounded reading widths,
+ * and component-local scrolling. It changes presentation only; shared
+ * content, translation, engine, service, adapter and navigation logic remain
+ * untouched.
  */
 
 @media (max-width: 1023px) {
   html,
   body {
+    width: 100%;
     max-width: 100%;
+    min-width: 320px;
     overflow-x: hidden;
   }
 
   body {
-    min-width: 320px;
+    min-height: 100dvh;
   }
 
-  .app {
+  .app,
+  .page {
     width: 100vw;
     min-width: 320px;
     max-width: none;
@@ -22,6 +30,68 @@
     min-height: 100dvh;
     max-height: none;
     aspect-ratio: auto;
+  }
+
+  .app {
+    border-radius: 0;
+  }
+
+  .home-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+    align-items: stretch;
+    gap: var(--ui-space-4);
+    padding:
+      calc(var(--ui-space-4) + var(--ui-safe-top))
+      calc(var(--ui-space-4) + var(--ui-safe-right))
+      calc(var(--ui-space-4) + var(--ui-safe-bottom))
+      calc(var(--ui-space-4) + var(--ui-safe-left));
+  }
+
+  .orbit {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .menu-svg {
+    width: min(94vw, 78dvh);
+    height: min(94vw, 78dvh);
+    max-width: 620px;
+    max-height: 620px;
+  }
+
+  .info {
+    position: relative;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    width: min(100%, 650px);
+    max-height: min(28dvh, 240px);
+    margin: 0 auto;
+    transform: none;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 14px 18px calc(14px + var(--ui-safe-bottom));
+  }
+
+  .topbar {
+    top: var(--ui-safe-top);
+    right: calc(12px + var(--ui-safe-right));
+    padding: 8px;
+  }
+
+  .icon-btn,
+  .logo-viewer-close {
+    width: var(--ui-touch-target);
+    height: var(--ui-touch-target);
+    min-width: var(--ui-touch-target);
+    min-height: var(--ui-touch-target);
   }
 
   .lang-switch {
@@ -36,16 +106,27 @@
   }
 
   .paragraph-page {
-    padding-top: var(--ui-safe-top);
-    padding-right: var(--ui-safe-right);
-    padding-bottom: var(--ui-safe-bottom);
-    padding-left: var(--ui-safe-left);
+    padding:
+      var(--ui-safe-top)
+      var(--ui-safe-right)
+      var(--ui-safe-bottom)
+      var(--ui-safe-left);
   }
 
   .paragraph-workspace {
-    width: min(100% - 24px, 960px);
+    width: min(calc(100% - 24px), 960px);
+    height: auto;
+    min-height: calc(100dvh - var(--ui-safe-top) - var(--ui-safe-bottom));
+    margin-inline: auto;
     padding-top: 16px;
     padding-bottom: calc(32px + var(--ui-safe-bottom));
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .paragraph-head {
+    align-items: center;
+    gap: var(--ui-space-3);
   }
 
   .paragraph-head button {
@@ -53,6 +134,15 @@
     height: var(--ui-touch-target);
     min-width: var(--ui-touch-target);
     min-height: var(--ui-touch-target);
+  }
+
+  .paragraph-context,
+  .pm-input-panel,
+  .pm-output,
+  .pm-controls,
+  .pm-settings,
+  .pm-error {
+    min-width: 0;
   }
 
   .pm-controls {
@@ -73,11 +163,48 @@
   .pm-input-panel textarea,
   .pm-controls select,
   .pm-settings-body input {
+    width: 100%;
     min-height: var(--ui-control-height);
   }
 
+  .pm-output {
+    overflow: visible;
+  }
+
+  .pm-card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .pm-card table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .book-shell {
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+  }
+
+  .book-head {
+    padding-top: calc(12px + var(--ui-safe-top));
+    padding-right: calc(12px + var(--ui-safe-right));
+    padding-left: calc(12px + var(--ui-safe-left));
+  }
+
+  .book-title {
+    min-width: 0;
+  }
+
   .book-tabs {
+    flex: 0 0 auto;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
     overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
   }
 
@@ -99,6 +226,76 @@
     padding: 8px;
   }
 
+  .book-body {
+    min-width: 0;
+    width: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding:
+      18px
+      max(14px, var(--ui-safe-right))
+      calc(34px + var(--ui-safe-bottom))
+      max(14px, var(--ui-safe-left));
+  }
+
+  .global-lang {
+    top: calc(8px + var(--ui-safe-top));
+    max-width: calc(100vw - 20px);
+  }
+
+  .global-lang button {
+    min-width: var(--ui-touch-target);
+    min-height: var(--ui-touch-target);
+    padding: 8px 9px;
+  }
+
+  .observation25-page {
+    width: 100vw;
+    height: 100dvh;
+    min-width: 320px;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+
+  .observation25-head {
+    top: calc(4% + var(--ui-safe-top));
+    left: calc(4% + var(--ui-safe-left));
+    right: calc(4% + var(--ui-safe-right));
+  }
+
+  .observation25-close {
+    width: var(--ui-touch-target);
+    height: var(--ui-touch-target);
+    min-width: var(--ui-touch-target);
+    min-height: var(--ui-touch-target);
+  }
+
+  .observation25-shell {
+    left: max(4%, var(--ui-safe-left));
+    right: max(4%, var(--ui-safe-right));
+    top: 15%;
+    bottom: max(3%, var(--ui-safe-bottom));
+    min-width: 0;
+  }
+
+  .observation25-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .observation25-tab {
+    min-height: var(--ui-touch-target);
+  }
+
+  .observation25-body {
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
   .reference-action,
   .experience-action,
   .share-story-action,
@@ -112,14 +309,57 @@
   }
 }
 
-@media (max-width: 1023px) {
-  .page { width:100%; height:100%; aspect-ratio:auto; }
-  .app { border-radius:0; }
-  .pm-controls { grid-template-columns:1fr; }
-  .pm-controls > div { min-width:0; }
-  .book-tabs { overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
-  .observation25-tabs { overflow-x:auto; overscroll-behavior-x:contain; -webkit-overflow-scrolling:touch; }
+@media (min-width: 640px) and (max-width: 1023px) {
+  .home-page {
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 34vw);
+    grid-template-rows: minmax(0, 1fr);
+    gap: var(--ui-space-5);
+    padding:
+      calc(var(--ui-space-4) + var(--ui-safe-top))
+      calc(var(--ui-space-5) + var(--ui-safe-right))
+      calc(var(--ui-space-4) + var(--ui-safe-bottom))
+      calc(var(--ui-space-5) + var(--ui-safe-left));
+  }
+
+  .info {
+    align-self: center;
+    max-height: min(72dvh, 420px);
+  }
+
+  .menu-svg {
+    width: min(72vw, 78dvh);
+    height: min(72vw, 78dvh);
+  }
 }
+
+@media (max-width: 359px) {
+  .home-page {
+    padding-inline: 10px;
+  }
+
+  .menu-svg {
+    width: min(94vw, 72dvh);
+    height: min(94vw, 72dvh);
+  }
+
+  .lang-switch {
+    max-width: calc(100vw - 18px);
+  }
+
+  .lang-switch button {
+    min-width: 42px;
+    padding-inline: 7px;
+    font-size: .6rem;
+  }
+
+  .paragraph-workspace {
+    width: calc(100% - 18px);
+  }
+}
+
 @media (orientation: landscape) and (max-width: 1023px) {
-  .menu-svg { width:min(62vh,72vw); height:min(62vh,72vw); }
+  .menu-svg {
+    width: min(72vw, 62dvh);
+    height: min(72vw, 62dvh);
+  }
 }
