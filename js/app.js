@@ -97,21 +97,6 @@ function handleActivation(event, callback) {
   callback();
 }
 
-function realmFromPoint(event) {
-  const rect = universe.getBoundingClientRect();
-  const x = ((event.clientX - rect.left) / rect.width) * 1000;
-  const y = ((event.clientY - rect.top) / rect.height) * 1000;
-  const radius = Math.hypot(x - 500, y - 500);
-
-  if (radius <= 70) return 'core';
-
-  for (const [id, inner, outer] of REALM_GEOMETRY) {
-    if (radius > inner && radius <= outer) return id;
-  }
-
-  return null;
-}
-
 function renderHomeFromCatalog() {
   const catalog = window.SiteI18n?.getCatalog?.() || {};
   const labels = catalog.labels || {};
@@ -297,4 +282,3 @@ document.addEventListener('keydown', handleEscape);
 // Language state is owned exclusively by translations/i18n.js.
 setInfo('structure');
 
-window.HomeNavigation = Object.freeze({ currentSiteLang, realmFromPoint });
