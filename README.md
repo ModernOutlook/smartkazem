@@ -1,359 +1,1472 @@
-# SmartKazem — Modern Outlook
+# SmartKazem — AI Maintenance & Architecture Guide
 
-وب‌سایت **Modern Outlook / SmartKazem** یک سایت ایستای چندبخشی است که با HTML، CSS و JavaScript خالص ساخته شده و روی GitHub Pages اجرا می‌شود.
+> **Repository:** ModernOutlook/smartkazem  
+> **Deployment:** GitHub Pages  
+> **Runtime:** Browser-native HTML/CSS/JavaScript  
+> **Framework:** None  
+> **Build step:** None required  
+> **Default branch:** main  
+> **Languages:** fa, en, zh, ar
 
-## معماری کلی
+This README is the **engineering handoff document for future human and AI/ChatGPT maintenance**.
 
-پروژه عمداً بدون فریم‌ورک سنگین و بدون build step اجباری طراحی شده است. ساختار اصلی به چند لایه تقسیم شده است:
+It describes the architecture that exists now, the boundaries that must be preserved, the known clean-code debt, and the safest procedure for making future changes.
 
-- `index.html` — صفحهٔ اصلی و نقطهٔ ورود رابط کاربری
-- `css/` — سبک‌ها و ظاهر سایت
-- `js/` — منطق صفحات، کتاب‌ها و تعاملات
-- `content/` — محتوای اصلی و منابع مستقل فارسی
-- `translations/` — کاتالوگ‌های ترجمهٔ رابط و محتوای زبان‌های ترجمه‌شده
-- `engine/` — موتورهای پردازش
-- `services/` — سرویس‌ها و ارتباط با مدل‌های زبانی
-- `adapters/` — آداپتورهای اتصال رابط به سرویس‌ها
-- فایل‌های HTML مستقل مانند `shahnameh.html`، `observation.html` و `paragraph-machine.html`
+---
 
-## معماری زبان‌ها
+## 1. Project Purpose
 
-سایت چهار زبان دارد:
+SmartKazem is a content-oriented, multilingual static web application built with browser-native technologies.
 
-- فارسی: `fa`
-- انگلیسی: `en`
-- چینی: `zh`
-- عربی: `ar`
+The project intentionally avoids a heavy framework and build pipeline. The application is served directly from the repository and must remain functional as a static GitHub Pages site.
 
-اما **فارسی از نظر محتوای اصلی با سه زبان دیگر یکسان‌سازی نشده است**.
+The project contains:
 
-### فارسی، زبان مرجع و منبع اصلی
+- a five-realm interactive home experience;
+- multilingual content and interface;
+- independent secondary pages;
+- book/reading experiences;
+- Shahnameh reading;
+- observation pages;
+- the Paragraph Machine workspace;
+- a Persian philosophical content model;
+- browser-side model/API integration for Paragraph Machine;
+- responsive mobile and desktop presentation layers.
 
-متن فارسی برای نمایش مستقیم از مخزن محتوای فارسی خوانده می‌شود. این محتوا منبع مرجع برای تهیه و تکمیل ترجمه‌های سه زبان دیگر است.
+The most important engineering principle is:
 
-نمونه‌های اصلی:
+> **Preserve existing behavior and architecture while making the smallest correct change necessary.**
 
-- `content/forgers.js` — «جاعلان تقلید»
-- `content/human-machines.js` — «انسان و ماشین‌هایش»
-- `content/shahnameh-series.js` — محتوای فارسی شاهنامه‌خوانی
+---
 
-بنابراین در حالت فارسی، نباید برای نمایش کتاب‌ها یک دور غیرضروری از مسیر ترجمه انجام شود.
+# 2. Current Architectural Status
 
-### کاتالوگ‌های ترجمه
+The codebase is **substantially modularized, but not fully Clean Code**.
 
-`translations/` کاتالوگ‌های زبان‌ها را نگهداری می‌کند. `translations/i18n.js` مسئول:
+### What is already good
 
-- تشخیص زبان فعلی
-- بارگذاری کاتالوگ زبان
-- اعمال `data-i18n` و انواع وابسته
-- تنظیم `lang` و `dir` صفحه
-- ذخیرهٔ انتخاب زبان
-- اعلام رویداد تغییر زبان به سایر ماژول‌ها
+- Core processing, services, adapters, page logic, content, translations, and presentation have recognizable boundaries.
+- Paragraph Machine has a clear core → service → adapter → UI flow.
+- Translation is centralized in translations/i18n.js.
+- Persian source content is separated from translated catalogs.
+- HTML is mostly free of inline event handlers and inline scripts.
+- A CI quality gate validates JavaScript syntax, JSON catalogs, HTML structure, local assets, inline scripts, and inline event handlers.
+- Recent UI fixes have generally been implemented as small targeted changes.
 
-**اصل معماری:** فارسی منبع مرجع محتواست؛ EN/ZH/AR نسخه‌های ترجمه‌شده برای نمایش هستند.
+### Known clean-code debt
 
-## کتاب‌ها
+1. Several modules communicate through mutable/global window.* objects.
+2. Page navigation changes presentation with direct style.display operations.
+3. Some page logic reads presentation state through element.style.display, coupling behavior to DOM implementation.
+4. css/site.css remains a large presentation monolith, with desktop/mobile/shared layers around it.
+5. JavaScript formatting is inconsistent across older and newer modules.
+6. Some content and fallback translations are embedded directly in JavaScript rather than living exclusively in content/catalog data.
+7. Some page modules use innerHTML for local DOM rebuilding; textContent/DOM construction should be preferred when practical.
+8. Static HTML contains substantial page structure, so markup ownership and runtime behavior must remain distinct.
+9. There are two overlapping GitHub Pages deployment workflows.
+10. The quality workflow is useful but does not yet enforce a complete formatter/linter/type system.
 
-### جاعلان تقلید
+**Conclusion:** describe the project as **layered and maintainable, with identified cleanup boundaries**, not as “fully Clean Code”.
 
-کتاب در صفحهٔ اصلی نمایش داده می‌شود و محتوای فارسی آن از `content/forgers.js` می‌آید. نسخه‌های انگلیسی، چینی و عربی از کاتالوگ‌های ترجمه استفاده می‌کنند.
+---
 
-### انسان و ماشین‌هایش
+# 3. Repository Structure
 
-این مجموعه شامل **۷ بخش** است.
+~~~text
+/
+├── index.html
+├── shahnameh.html
+├── observation.html
+├── observation-25.html
+├── echo-layer3.html
+├── philosophical-treatise.html
+├── paragraph-machine.html
+│
+├── css/
+│   ├── site.css
+│   ├── desktop.css
+│   └── splash.css
+│
+├── ui/
+│   ├── bootstrap.js
+│   ├── mobile/
+│   │   └── mobile.css
+│   └── shared/
+│       └── layout-spec.css
+│
+├── js/
+│   ├── app.js
+│   ├── pages.js
+│   ├── books.js
+│   ├── paragraph-page.js
+│   ├── shahnameh-series-page.js
+│   ├── observation25-page.js
+│   ├── reading-page.js
+│   └── splash.js
+│
+├── engine/
+│   └── paragraph-engine.js
+│
+├── services/
+│   ├── llm-client.js
+│   └── translation-bridge.js
+│
+├── adapters/
+│   └── paragraph-workspace.js
+│
+├── content/
+│   ├── forgers.js
+│   ├── human-machines.js
+│   ├── shahnameh-series.js
+│   ├── echo-layer3.js
+│   └── images 01.jpg ... 81.jpg
+│
+├── translations/
+│   ├── fa.json
+│   ├── en.json
+│   ├── zh.json
+│   ├── ar.json
+│   ├── observation.json
+│   └── i18n.js
+│
+├── .github/workflows/
+│   ├── quality.yml
+│   ├── deploy.yml
+│   └── deploy-pages.yml
+│
+├── site-audio.js
+├── Structure.txt
+└── README.md
+~~~
 
-محتوای فارسی در:
+Large binary/content assets are not application logic.
 
-`content/human-machines.js`
+---
 
-نگهداری می‌شود و در حالت فارسی مستقیماً از همین منبع نمایش داده می‌شود. ترجمه‌های سایر زبان‌ها در کاتالوگ‌های ترجمه قرار می‌گیرند.
+# 4. Layer Responsibilities
 
-### شاهنامه‌خوانی
+## 4.1 HTML — Structure and semantic ownership
 
-صفحهٔ مستقل:
+HTML owns:
 
-`shahnameh.html`
+- page containers;
+- stable IDs used as integration points;
+- semantic controls;
+- accessibility labels;
+- static page structure;
+- script loading order.
 
-منبع فارسی آن:
+HTML should not own application behavior through inline JavaScript.
 
-`content/shahnameh-series.js`
+Do not introduce:
 
-و منطق نمایش آن در:
+~~~html
+onclick="..."
+onchange="..."
+<script>
+  ...
+</script>
+~~~
 
-`js/shahnameh-series-page.js`
+unless there is an exceptional, documented reason.
 
-قرار دارد.
+---
 
-## تکمیل مخزن ترجمه
+## 4.2 CSS — Presentation only
 
-فرآیند ترجمه باید بر اساس این رابطه در نظر گرفته شود:
+### css/site.css
 
-```
-مخزن محتوای فارسی
-        │
-        │  مرجع ترجمه
-        ▼
- ┌──────┼──────┐
- ▼      ▼      ▼
- EN     ZH     AR
-```
+Primary visual system and shared site presentation.
 
-بنابراین هنگام دستور **«تکمیل مخزن ترجمه»**، متن فارسی مرجع است و باید برای تکمیل نسخه‌های انگلیسی، چینی و عربی استفاده شود.
+### css/desktop.css
 
-در مقابل، تکمیل یا تغییر ترجمه‌ها نباید باعث شود متن فارسیِ مستقل برای نمایش دوباره از مسیر ترجمه عبور کند.
+Desktop-specific presentation layer.
 
+### ui/mobile/mobile.css
 
-## ماشین پاراگراف و صفحهٔ «هم‌سنگی / بازشناسی»
+Mobile-specific presentation layer.
 
-در صفحهٔ اصلی، ماشین پاراگراف بخشی از معماری پنج‌قلمرو است و از **قلمرو تجربه** و **مرجع تقلید** قابل ورود است. این بخش یک workspace مشترک دارد و بسته به مسیر ورود، دو رفتار متفاوت ارائه می‌کند:
+### ui/shared/layout-spec.css
 
-- دکمهٔ **«بازشناسی»** از experience-detect در صفحهٔ «قلمرو تجربه» وارد می‌شود.
-- دکمهٔ **«هم‌سنگی»** از reference-match در صفحهٔ «مرجع تقلید» وارد می‌شود.
-- هر دو مسیر در js/pages.js با openParagraph(kind) صفحهٔ paragraph-page را باز می‌کنند و سپس ParagraphPage.open(kind) را فراخوانی می‌کنند.
-- نوع ورود در workspace نگه داشته می‌شود؛ بنابراین دو دکمه یک موتور مشترک دارند ولی قرارداد ورودی و خروجی متفاوت است.
+Small shared layout contract.
 
-### ساختار workspace
+### css/splash.css
 
-بدنهٔ paragraph-page در index.html شامل این اجزاست:
+Splash/loading presentation.
 
-1. **سربرگ** — عنوان «ماشین پاراگراف»، زیرعنوان «تولید و سنجش پاراگراف» و دکمهٔ بستن.
-2. **زمینهٔ پردازش** — مسیر فعلی و توضیح اینکه هسته همیشه به فارسی پردازش می‌کند.
-3. **ورودی متن** — برای «هم‌سنگی» فعال و برای «بازشناسی» غیرفعال است.
-4. **تعداد پاراگراف** — برای «بازشناسی» فعال است؛ گزینه‌های ۱، ۳، ۵ و ۱۰.
-5. **حالت نیّت** — برای «بازشناسی» فعال است: mixed، all-ok، all-bad، all-warn و cross.
-6. **تنظیمات اتصال** — کلید API، نشانی سرویس و مدل؛ این تنظیمات در localStorage مرورگر نگهداری می‌شوند.
-7. **خروجی** — کارت پاراگراف، شمارندهٔ کلمات و حروف و ماتریس داوری پنج‌قلمرویی.
-8. **خطا و وضعیت پردازش** — خطاهای ورودی، سرویس یا پاسخ نامعتبر را در همان workspace نمایش می‌دهد.
+### CSS rule
 
-### مسیر «هم‌سنگی»
+Do not put business logic in CSS.
 
-وقتی کاربر از «مرجع تقلید» وارد می‌شود:
+When changing layout:
 
-    متن کاربر
-       │
-       ▼
-    ترجمه به فارسی در صورت نیاز
-       │
-       ▼
-    ParagraphWorkspaceAdapter.evaluatePersian()
-       │
-       ▼
-    Paragraph Machine Core
-       │
-       ▼
-    داوری پنج قلمرو
-       │
-       ▼
-    نمایش نتیجه به زبان سایت
+1. inspect shared CSS first;
+2. determine whether the rule belongs to base, desktop, mobile, or shared layout;
+3. avoid duplicating the same selector across layers;
+4. preserve desktop and mobile behavior;
+5. test RTL and LTR.
 
-- در زبان غیر فارسی، ParagraphTranslation.toPersian() متن را به فارسی منتقل می‌کند.
-- evaluatePersian() در adapters/paragraph-workspace.js همان SYSTEM_PROMPT هسته را به مدل می‌دهد و با task: 'evaluate' از مدل می‌خواهد متن را ارزیابی کند و پاراگراف جدید تولید نکند.
-- نتیجه با validateResult() اعتبارسنجی می‌شود.
-- اگر زبان سایت غیر فارسی باشد، نتیجه با fromPersian() به زبان نمایش برگردانده می‌شود.
+---
 
-بنابراین **زبان رابط و زبان هسته از هم جدا هستند**؛ هسته همیشه فارسی است.
+# 5. JavaScript Architecture
 
-### مسیر «بازشناسی»
+## 5.1 js/app.js
 
-وقتی کاربر از «قلمرو تجربه» وارد می‌شود:
+Main home-page controller.
 
-    انتخاب تعداد + حالت نیّت
-       │
-       ▼
-    generatePersian()
-       │
-       ▼
-    تولید پاراگراف فارسی
-       │
-       ▼
-    داوری S/T/E/R/C
-       │
-       ▼
-    اعتبارسنجی و اعمال محدودیت‌ها
-       │
-       ▼
-    ترجمهٔ خروجی برای زبان سایت
-       │
-       ▼
-    نمایش کارت‌ها
+Responsibilities:
 
-در این حالت ورودی متنی لازم نیست. کاربر تعداد و حالت نیّت را تعیین می‌کند و generatePersian() مجموعهٔ پاراگراف‌های فارسی را از هسته می‌گیرد.
+- five-realm selection;
+- home information panel;
+- keyboard interaction;
+- logo viewer;
+- home-level navigation bindings;
+- reaction to language changes.
 
-### هستهٔ Paragraph Machine
+It should not become the place for:
 
-فایل: engine/paragraph-engine.js
+- translation implementation;
+- model API calls;
+- Paragraph Machine business rules;
+- large content datasets;
+- generic CSS/layout calculations.
 
-هسته مستقل از رابط کاربری نگه داشته شده و API عمومی آن با window.ParagraphMachineCore ارائه می‌شود. مسئولیت‌های اصلی:
+---
 
-#### ۱. قواعد نظری و ماتریس داوری
+## 5.2 js/pages.js
 
-هر پاراگراف در پنج قلمرو بررسی می‌شود:
+Central page-navigation controller.
 
-| کد | قلمرو | محور داوری |
+Public API:
+
+~~~text
+SitePages
+├── IDS
+├── showPage()
+├── returnHome()
+├── openParagraph()
+├── closeParagraph()
+├── openShare()
+├── closeShare()
+├── openExperience()
+├── closeExperience()
+├── openContinuity()
+├── closeContinuity()
+├── openStructure()
+├── closeStructure()
+├── openReference()
+├── closeReference()
+└── setHomeController()
+~~~
+
+This module currently changes page visibility with direct style.display. That works, but it is a known presentation coupling.
+
+A future refactor may replace it with semantic state/classes, but do not perform that refactor as part of an unrelated UI fix.
+
+---
+
+## 5.3 js/books.js
+
+Shared book navigation for the home-page reading workspace.
+
+Responsibilities:
+
+- book selection;
+- chapter tabs;
+- chapter rendering;
+- book title/subtitle selection;
+- Persian source selection;
+- translated catalog selection;
+- return navigation.
+
+Book data should remain separate from navigation logic.
+
+---
+
+# 6. Internationalization Architecture
+
+Supported languages:
+
+| Code | Language | Direction |
 |---|---|---|
-| S | ساختار تالار | آغاز، پایان، مرکز، شتاب و واگرایی |
-| T | تداوم عالم | ظرفیت/تحقق، محدودشدن امکان، یقین و دور هرمنوتیکی |
-| E | قلمرو تجربه | تعادل، گذار، برهم‌نهی، هم‌راستایی، راز و حقیقت |
-| R | مرجع تقلید | افق مرجع، مشروعیت، اصالت و تغییر قواعد تولید گزینه |
-| C | اقتصاد سهم | کثرت/فردیت، سهم، جایگاه حقیقی و فقدان اجتماعی |
+| fa | Persian | RTL |
+| en | English | LTR |
+| zh | Chinese | LTR |
+| ar | Arabic | RTL |
 
-وضعیت هر قلمرو یکی از این سه مقدار است:
+## 6.1 Single i18n runtime
 
-- ok → **منطبق**
-- warn → **مبهم**
-- bad → **متناقض**
+File:
 
-برای هر پنج قلمرو، مدل علاوه بر وضعیت، دلیل یا ارجاع ارائه می‌کند.
+~~~text
+translations/i18n.js
+~~~
 
-#### ۲. قرارداد سخت خروجی
+Public runtime:
 
-مدل باید فقط JSON معتبر با آرایهٔ paragraphs برگرداند. هر پاراگراف شامل text و داوری پنج‌گانهٔ S/T/E/R/C است.
+~~~text
+window.SiteI18n
+~~~
 
-validateJudgment() وضعیت هر پنج قلمرو را کنترل می‌کند و validateResult() علاوه بر ساختار، تعداد پاراگراف‌های برگشتی را با تعداد درخواستی مقایسه می‌کند.
+Responsibilities:
 
-#### ۳. محدودیت‌های فیزیکی متن
+- supported-language validation;
+- language persistence;
+- catalog loading;
+- data-i18n application;
+- lang / dir updates;
+- active language button state;
+- language-change event dispatch.
 
-هسته سه سقف سخت دارد:
+The event is:
 
-- حداکثر **۱۴۴ کلمه** در هر پاراگراف
-- حداکثر **۳۴ حرف** برای هر کلمه
-- حداکثر **۹۰۰ حرف** برای کل پاراگراف
+~~~text
+site:languagechange
+~~~
 
-processText() متن را نرمال می‌کند، کلمات بلند را پیدا می‌کند، در صورت نیاز آنها را می‌شکند، سقف کلمات و سپس سقف حروف را اعمال می‌کند و در پایان دوباره نتیجه را می‌سنجد.
+Modules with language-sensitive runtime rendering may subscribe to it.
 
-پس این محدودیت‌ها فقط در prompt مدل نیستند؛ **هستهٔ JavaScript نیز پاسخ مدل را پس از دریافت پردازش و کنترل می‌کند.**
+---
 
-#### ۴. حالت‌های تولید
+## 6.2 Language source-of-truth rule
 
-MODE_INSTRUCTIONS پنج رفتار تولید دارد:
+**Persian is the authoritative source for primary philosophical/content material.**
 
-- mixed — ترکیبی از منطبق، مبهم و متناقض
-- all-ok — همهٔ قلمروها منطبق
-- all-bad — همهٔ قلمروها متناقض ولی متن درونی منسجم
-- all-warn — همهٔ قلمروها مبهم
-- cross — ترکیبی از انطباق و تناقض میان قلمروها
+For the main books:
 
-### لایهٔ Adapter
+~~~text
+Persian source content
+        │
+        ├── fa → direct source display
+        │
+        ├── en → translated catalog
+        ├── zh → translated catalog
+        └── ar → translated catalog
+~~~
 
-فایل: adapters/paragraph-workspace.js
+Do not create a new translation pipeline for Persian.
 
-این فایل تنها اتصال workspace به هسته و سرویس مدل است:
+Do not translate Persian into Persian.
 
-- evaluatePersian(text) برای **هم‌سنگی**
-- generatePersian(count, mode) برای **بازشناسی**
+Do not duplicate the same Persian content into translation JSON merely to make it available to the Persian UI.
 
-در نتیجه UI مستقیماً با prompt یا جزئیات داخلی موتور درگیر نیست.
+---
 
-### سرویس مدل
+## 6.3 Translation ownership
 
-فایل: services/llm-client.js
+Use:
 
-این لایه یک کلاینت OpenAI-compatible است و:
+~~~text
+translations/*.json
+~~~
 
-- endpoint /chat/completions را فراخوانی می‌کند؛
-- کلید API را فقط در مرورگر نگه می‌دارد؛
-- URL سرویس را به HTTPS محدود می‌کند؛
-- timeout سی‌ثانیه‌ای دارد؛
-- برای برخی خطاهای موقت تا سه بار retry می‌کند؛
-- پاسخ را به JSON تبدیل می‌کند؛
-- پاسخ JSON نامعتبر یا خالی را خطا اعلام می‌کند.
+for translated interface/content catalogs.
 
-endpoint و مدل از داخل workspace قابل تنظیم هستند.
+Use:
 
-### پل ترجمه
+~~~text
+content/*.js
+~~~
 
-فایل: services/translation-bridge.js
+for authoritative content datasets.
 
-این لایه مرز زبانی را مدیریت می‌کند:
+Avoid adding large translated prose directly to UI/controller modules.
 
-    زبان سایت ←→ فارسیِ هسته
+---
 
-- toPersian() برای ورود متن غیر فارسی به هسته
-- fromPersian() و fromPersianBatch() برای خروجی هسته به زبان سایت
+# 7. Five Realms
 
-ترجمه با دستور صریحِ بدون خلاصه‌سازی، تفسیر یا افزودن معنا انجام می‌شود؛ در حالت batch نیز تعداد ترجمه‌ها باید دقیقاً با تعداد ورودی‌ها برابر باشد.
+The application is organized around five conceptual realms:
 
-### ترتیب بارگذاری
+| Code | Realm | Paragraph Machine domain |
+|---|---|---|
+| S | ساختار تالار | Structure of the Hall |
+| T | تداوم عالم | Continuity of the Universe |
+| E | قلمرو تجربه | Realm of Experience |
+| R | مرجع تقلید | Reference of Imitation |
+| C | اقتصاد سهم | Share Economy |
 
-در index.html وابستگی‌های ماشین پاراگراف عمداً با این ترتیب بارگذاری می‌شوند:
+The order is significant:
 
-    translations/i18n.js
-            │
-            ├── engine/paragraph-engine.js
-            ├── services/llm-client.js
-            ├── services/translation-bridge.js
-            │
-            └── adapters/paragraph-workspace.js
-                        │
-                        ▼
-                 js/paragraph-page.js
-                        │
-                        ▼
-                     js/app.js
+~~~text
+S → T → E → R → C
+~~~
 
-هسته باید پیش از adapter و صفحهٔ workspace بارگذاری شود و adapter پس از کلاینت مدل و پل ترجمه در دسترس باشد.
+Do not reorder these domains without checking Paragraph Machine, translations, UI navigation, generated judgments, and related documentation.
 
-### تفاوت با paragraph-machine.html
+---
 
-paragraph-machine.html یک ابزار مستقل/قدیمی‌تر با رابط جداگانه است و مسیر اصلی workspace داخل index.html نیست. معماری فعلی ماشین پاراگراف در صفحهٔ اصلی بر چهار جزء تکیه دارد:
+# 8. Paragraph Machine Architecture
 
-- engine/paragraph-engine.js — منطق هسته
-- services/llm-client.js — ارتباط مدل
-- services/translation-bridge.js — مرز زبان
-- adapters/paragraph-workspace.js و js/paragraph-page.js — اتصال هسته به UI
+The Paragraph Machine is deliberately separated into four layers.
 
-هنگام توسعه، اولویت با همین معماری مشترک است و منطق آن نباید بدون ضرورت با ابزار standalone مخلوط شود.
+~~~text
+UI
+│
+▼
+js/paragraph-page.js
+│
+▼
+adapters/paragraph-workspace.js
+│
+├──► services/translation-bridge.js
+│
+├──► services/llm-client.js
+│
+▼
+engine/paragraph-engine.js
+~~~
 
-### اصول نگهداری ماشین پاراگراف
+The engine itself is independent of the DOM.
 
-1. منطق پنج قلمرو و محدودیت‌های متن در engine/paragraph-engine.js بماند.
-2. ارتباط با مدل فقط از services/llm-client.js انجام شود.
-3. ترجمه فقط از services/translation-bridge.js عبور کند.
-4. تفاوت «هم‌سنگی» و «بازشناسی» در adapter/page مدیریت شود، نه با دو موتور جدا.
-5. قرارداد JSON خروجی مدل بدون به‌روزرسانی هم‌زمان validator و renderer تغییر نکند.
-6. پردازش هسته همچنان فارسی بماند؛ زبان نمایش می‌تواند fa/en/zh/ar باشد.
-7. سقف‌های ۱۴۴ کلمه، ۳۴ حرف برای هر کلمه و ۹۰۰ حرف حفظ شوند.
-8. تغییرات UI نباید هسته را به DOM وابسته کند.
+---
 
-## نکتهٔ مهم برای توسعه
+## 8.1 Engine
 
-هنگام ویرایش سایت:
+File:
 
-1. **محتوای فارسی را از محتوای ترجمه‌شده جدا نگه دارید.**
-2. قبل از تغییر `translations/i18n.js`، مسیر نمایش فارسی را بررسی کنید.
-3. تغییرات مربوط به یک زبان نباید مسیر سه زبان دیگر را خراب کند.
-4. محتوای کتاب‌ها را بدون ضرورت داخل منطق عمومی i18n کپی نکنید.
-5. در تغییرات بزرگ، اعتبار JSON فایل‌های `translations/*.json` را بررسی کنید.
-6. از تغییر هم‌زمان CSS، منطق زبان و محتوای کتاب خودداری کنید؛ تغییرات کوچک و قابل بازگشت ترجیح دارند.
+~~~text
+engine/paragraph-engine.js
+~~~
 
-## فایل‌های مهم
+Responsibilities:
 
-| فایل | نقش |
+- philosophical/system rules;
+- five-domain judgment model;
+- output validation;
+- text normalization;
+- word/character constraints;
+- generation modes;
+- prompt construction.
+
+Hard limits:
+
+~~~text
+MAX_WORDS       = 144
+MAX_WORD_LENGTH = 34
+MAX_CHARS       = 900
+~~~
+
+These are application invariants. They must not be silently changed.
+
+---
+
+## 8.2 Five-domain judgment contract
+
+Every result contains:
+
+~~~text
+S
+T
+E
+R
+C
+~~~
+
+Each domain has:
+
+~~~text
+status: ok | warn | bad
+reason: non-empty string
+~~~
+
+Meaning:
+
+~~~text
+ok   = منطبق
+warn = مبهم
+bad  = متناقض
+~~~
+
+If the JSON contract changes, update all of:
+
+1. engine validation;
+2. adapter contract;
+3. renderer;
+4. translations;
+5. documentation when the public contract changes.
+
+---
+
+# 9. Paragraph Machine Entry Modes
+
+## 9.1 Reference / Equivalence — «هم‌سنگی»
+
+Entry:
+
+~~~text
+مرجع تقلید → هم‌سنگی
+~~~
+
+Flow:
+
+~~~text
+User text
+   │
+   ▼
+translation-bridge.toPersian()
+   │
+   ▼
+ParagraphWorkspaceAdapter.evaluatePersian()
+   │
+   ▼
+Paragraph Machine core
+   │
+   ▼
+five-domain judgment
+   │
+   ▼
+translate result to UI language
+   │
+   ▼
+render
+~~~
+
+This path evaluates the supplied text. It must not accidentally switch to generation.
+
+---
+
+## 9.2 Experience / Recognition — «بازشناسی»
+
+Entry:
+
+~~~text
+قلمرو تجربه → بازشناسی
+~~~
+
+Flow:
+
+~~~text
+count + mode
+   │
+   ▼
+generatePersian()
+   │
+   ▼
+Paragraph Machine core
+   │
+   ▼
+generated Persian paragraphs
+   │
+   ▼
+five-domain judgment
+   │
+   ▼
+translate for UI language
+   │
+   ▼
+render cards
+~~~
+
+This path generates paragraphs.
+
+---
+
+# 10. LLM Service Boundary
+
+File:
+
+~~~text
+services/llm-client.js
+~~~
+
+This is the generic model-service boundary for Paragraph Machine.
+
+Current responsibilities:
+
+- OpenAI-compatible /chat/completions;
+- HTTPS-only endpoint validation;
+- browser-local API-key storage;
+- timeout;
+- retry handling;
+- JSON response parsing;
+- model/base URL configuration.
+
+UI code should not call fetch() directly for the model.
+
+Adapters should not implement their own retry logic.
+
+Translation should not create another model client.
+
+---
+
+# 11. Translation Boundary for Paragraph Machine
+
+File:
+
+~~~text
+services/translation-bridge.js
+~~~
+
+This is the language boundary around the Persian core:
+
+~~~text
+UI language
+    ⇅
+Persian core
+~~~
+
+Public operations:
+
+~~~text
+toPersian()
+fromPersian()
+fromPersianBatch()
+~~~
+
+The batch contract requires:
+
+~~~text
+number of outputs === number of inputs
+~~~
+
+Do not change this invariant without updating the UI and validation behavior together.
+
+---
+
+# 12. Standalone Paragraph Machine Page
+
+File:
+
+~~~text
+paragraph-machine.html
+~~~
+
+This is a separate/legacy standalone tool.
+
+It is not the primary implementation of the shared home-page Paragraph Machine workspace.
+
+Primary architecture:
+
+~~~text
+engine/paragraph-engine.js
+services/llm-client.js
+services/translation-bridge.js
+adapters/paragraph-workspace.js
+js/paragraph-page.js
+~~~
+
+Do not merge standalone-page behavior into the shared workspace merely because the names are similar.
+
+---
+
+# 13. Content Architecture
+
+Important authoritative content modules:
+
+~~~text
+content/forgers.js
+content/human-machines.js
+content/shahnameh-series.js
+content/echo-layer3.js
+~~~
+
+These modules are data/content sources.
+
+They should not become general-purpose UI controllers.
+
+Large prose should not be copied into:
+
+- js/app.js;
+- js/pages.js;
+- js/books.js;
+- CSS;
+- generic translation utilities.
+
+---
+
+# 14. Shahnameh Architecture
+
+Primary page:
+
+~~~text
+shahnameh.html
+~~~
+
+Controller:
+
+~~~text
+js/shahnameh-series-page.js
+~~~
+
+Source content:
+
+~~~text
+content/shahnameh-series.js
+~~~
+
+Shared language runtime:
+
+~~~text
+translations/i18n.js
+~~~
+
+The page has its own reader/rendering logic but uses the shared language system.
+
+Important rule:
+
+> Fix Shahnameh-specific layout problems in Shahnameh-specific presentation/controller code first. Do not alter the global i18n runtime unless the defect is demonstrably global.
+
+---
+
+# 15. Other Standalone Pages
+
+| Page | Primary purpose |
 |---|---|
-| `index.html` | صفحهٔ اصلی و رابط کتاب‌ها |
-| `translations/i18n.js` | هستهٔ سیستم زبان |
-| `translations/fa.json` | کاتالوگ فارسی رابط و مرجع ترجمه |
-| `content/forgers.js` | منبع مستقل فارسی جاعلان تقلید |
-| `content/human-machines.js` | منبع مستقل فارسی انسان و ماشین‌هایش |
-| `content/shahnameh-series.js` | منبع مستقل فارسی شاهنامه |
-| `js/books.js` | نمایش و پیمایش کتاب‌های صفحهٔ اصلی |
-| `js/shahnameh-series-page.js` | منطق نمایش شاهنامه |
-| `css/site.css` | سبک‌های اصلی سایت |
-| `services/translation-bridge.js` | پل سرویس‌های ترجمه |
-| `engine/paragraph-engine.js` | موتور پاراگراف |
-| `site-audio.js` | قابلیت‌های صوتی سایت |
+| observation.html | Observation experience |
+| observation-25.html | Observation 25 experience |
+| echo-layer3.html | Echo / third-layer experience |
+| philosophical-treatise.html | Philosophical treatise |
+| shahnameh.html | Shahnameh reading |
+| paragraph-machine.html | Standalone Paragraph Machine |
 
-## اصل نگهداری پروژه
+Every standalone page should be treated as an independent surface with explicit dependencies.
 
-این پروژه یک سایت محتوایی است؛ بنابراین **محتوا و معماری محتوا به اندازهٔ کد اهمیت دارند**.
+Do not assume a script loaded on index.html is available on another page.
 
-در هر تغییر، هدف این است که:
+---
 
-- متن‌های موجود از بین نروند؛
-- ساختار فصل‌ها و بخش‌ها حفظ شود؛
-- فارسی به‌عنوان منبع مرجع باقی بماند؛
-- ترجمه‌ها مستقل از منبع فارسی قابل توسعه باشند؛
-- و اصلاح یک قابلیت، سایر قابلیت‌های سایت را تحت تأثیر قرار ندهد.
+# 16. Script Loading and Dependency Rules
+
+The home page intentionally loads scripts in dependency order.
+
+Conceptually:
+
+~~~text
+i18n
+  ↓
+content
+  ↓
+navigation / books
+  ↓
+paragraph engine
+  ↓
+LLM service
+  ↓
+translation bridge
+  ↓
+workspace adapter
+  ↓
+paragraph page
+  ↓
+application controller
+~~~
+
+Do not reorder these scripts casually.
+
+If a module depends on another global module, document the dependency or, preferably in a future refactor, replace the implicit dependency with a clearer module boundary.
+
+---
+
+# 17. Global Namespace Policy
+
+The current static architecture exposes several services through window:
+
+~~~text
+window.SiteI18n
+window.SitePages
+window.BookNavigation
+window.ParagraphMachineCore
+window.ParagraphLLM
+window.ParagraphTranslation
+window.ParagraphWorkspaceAdapter
+window.ParagraphPage
+~~~
+
+This is a compatibility mechanism for the no-bundler static site.
+
+### Future rule
+
+Do not add arbitrary new globals.
+
+If a new shared capability is required:
+
+1. determine whether an existing public API can be extended;
+2. keep the API small;
+3. expose only stable operations;
+4. avoid leaking internal state;
+5. document the dependency.
+
+A future ES-module migration may reduce this global surface, but it must be a dedicated refactor.
+
+---
+
+# 18. Clean-Code Rules for Future AI Changes
+
+## Rule 1 — Single responsibility
+
+A file should have one dominant reason to change.
+
+Bad:
+
+~~~text
+app.js
+  + navigation
+  + translation
+  + model API
+  + content dataset
+  + paragraph validation
+~~~
+
+Good:
+
+~~~text
+app.js
+pages.js
+i18n.js
+llm-client.js
+paragraph-engine.js
+content/*.js
+~~~
+
+## Rule 2 — Do not duplicate logic
+
+Before creating a helper, search for an existing implementation.
+
+Especially check:
+
+- language handling;
+- page navigation;
+- DOM escaping;
+- paragraph constraints;
+- model calls;
+- translation;
+- mobile/desktop layout behavior.
+
+## Rule 3 — Keep business rules out of UI
+
+UI code may collect input, call an adapter, render a result, and update presentation state.
+
+UI code should not own philosophical rules or model protocol definitions.
+
+## Rule 4 — Keep services out of content modules
+
+Content modules should not call the LLM, modify navigation, or manipulate page layout.
+
+## Rule 5 — Prefer data-driven rendering
+
+When several UI elements share a structure, prefer arrays/configuration and one rendering function over many nearly identical blocks.
+
+## Rule 6 — Prefer explicit names
+
+Use domain-specific names such as:
+
+~~~text
+evaluatePersian()
+generatePersian()
+fromPersianBatch()
+renderEpisodeList()
+openParagraph()
+~~~
+
+## Rule 7 — Avoid unnecessary abstraction
+
+Do not introduce a framework, state manager, router, utility library, or build system merely because it is theoretically cleaner.
+
+This is a static site. The simplest correct solution is preferred.
+
+## Rule 8 — Do not refactor unrelated code during a bug fix
+
+A UI bug fix should normally touch the affected page, its relevant CSS, and its direct controller. Shared code should change only when the defect is demonstrably shared.
+
+---
+
+# 19. DOM Safety Rules
+
+Prefer:
+
+~~~js
+element.textContent = value;
+element.replaceChildren(...);
+element.setAttribute(...);
+~~~
+
+over dynamically assembled HTML whenever possible.
+
+If innerHTML is unavoidable:
+
+- ensure the source is trusted or escaped;
+- never interpolate user/model text without escaping;
+- document the reason when the operation is non-obvious.
+
+The Paragraph Machine renderer uses an explicit HTML-escaping boundary for model text before inserting generated markup. Preserve that safety boundary.
+
+---
+
+# 20. Navigation Rules
+
+Navigation is intentionally lightweight.
+
+Do not introduce a client-side router unless there is a demonstrated need.
+
+For a new page:
+
+1. create the HTML surface;
+2. define its own controller;
+3. define its CSS ownership;
+4. wire it through the existing navigation boundary if it belongs to the home application;
+5. add translation catalog entries;
+6. add validation if the page introduces a new contract.
+
+---
+
+# 21. Responsive Design Rules
+
+The project supports:
+
+~~~text
+Mobile
+Desktop
+~~~
+
+Desktop presentation:
+
+~~~text
+css/desktop.css
+~~~
+
+Mobile presentation:
+
+~~~text
+ui/mobile/mobile.css
+~~~
+
+Shared layout contracts:
+
+~~~text
+ui/shared/layout-spec.css
+~~~
+
+### Required testing dimensions
+
+Any layout change should be considered in at least:
+
+- mobile portrait;
+- mobile landscape;
+- desktop;
+- RTL;
+- LTR;
+- short and long translated labels.
+
+Do not assume English layout proves Persian layout is correct.
+
+Language controls are particularly sensitive to long labels, RTL direction, narrow portrait widths, fixed/absolute positioning, and header title width.
+
+---
+
+# 22. Accessibility Rules
+
+Preserve:
+
+- semantic buttons;
+- type="button" where appropriate;
+- keyboard activation;
+- aria-label;
+- aria-pressed;
+- aria-live for asynchronous output;
+- visible focus styles;
+- correct lang and dir.
+
+The home realm SVG uses keyboard activation in addition to pointer interaction.
+
+Do not remove keyboard behavior while changing click behavior.
+
+---
+
+# 23. Security Boundaries
+
+The repository currently applies several browser-side security measures, including:
+
+- Content Security Policy;
+- HTTPS-only model endpoints;
+- no object/frame embedding;
+- restricted browser permissions;
+- noopener/noreferrer on external target links;
+- local browser storage for the Paragraph Machine API key.
+
+Important limitation:
+
+> A browser-side API key is never equivalent to a server-side secret.
+
+Do not describe local API-key storage as secure secret storage.
+
+Never commit:
+
+- API keys;
+- access tokens;
+- passwords;
+- private credentials;
+- provider secrets.
+
+---
+
+# 24. CI / Quality Gate
+
+Current quality workflow:
+
+~~~text
+.github/workflows/quality.yml
+~~~
+
+It checks:
+
+1. JavaScript syntax with Node;
+2. JSON catalog validity;
+3. duplicate HTML IDs;
+4. missing local HTML assets;
+5. inline scripts;
+6. inline event handlers.
+
+This is a useful baseline.
+
+It is not a complete linter or formatter.
+
+A future quality improvement may add:
+
+- ESLint;
+- Prettier;
+- HTML validation;
+- CSS linting;
+- accessibility checks;
+- link checking;
+- automated smoke tests.
+
+Add these incrementally.
+
+---
+
+# 25. Deployment
+
+The project is deployed to GitHub Pages.
+
+Current repository state contains two deployment workflow definitions:
+
+~~~text
+.github/workflows/deploy.yml
+.github/workflows/deploy-pages.yml
+~~~
+
+They overlap in purpose.
+
+### Future cleanup recommendation
+
+Consolidate deployment into one workflow after confirming which workflow is authoritative.
+
+This should be a dedicated infrastructure change.
+
+Do not delete one during an unrelated feature fix.
+
+---
+
+# 26. Documentation Duplication
+
+The repository also contains:
+
+~~~text
+Structure.txt
+~~~
+
+It overlaps significantly with README-level architecture documentation.
+
+Current policy:
+
+- README.md is the primary AI/human engineering handoff.
+- Structure.txt should not become a second competing architecture specification.
+- If its information becomes obsolete, update or retire it deliberately in a documentation-only change.
+
+---
+
+# 27. Known Clean-Code Debt Register
+
+| Area | Current state | Priority |
+|---|---|---|
+| Global window.* APIs | Functional compatibility mechanism | Medium |
+| style.display page navigation | Presentation coupling | Medium |
+| style.display used as state detection | Tight UI coupling | Medium |
+| Large site.css | Monolithic presentation layer | Medium |
+| Inconsistent JS formatting | Readability issue | Medium |
+| Inline fallback prose in JS | Data/logic mixing | Medium |
+| Some innerHTML rendering | Controlled but improvable | Low/Medium |
+| Duplicate deployment workflows | Infrastructure duplication | Medium |
+| No formatter/linter enforcement | Quality gap | Medium |
+| No automated browser smoke tests | Regression risk | Medium |
+| Structure.txt overlap | Documentation duplication | Low |
+
+This register is intentionally descriptive.
+
+**Do not attempt all of these cleanups in one change.**
+
+---
+
+# 28. Recommended Refactoring Order
+
+When a future cleanup cycle is explicitly requested, use this order:
+
+### Phase 1 — Documentation and contracts
+
+- keep README accurate;
+- document public APIs;
+- document page ownership;
+- remove contradictory documentation.
+
+### Phase 2 — Formatting consistency
+
+- normalize JavaScript formatting;
+- normalize CSS formatting where safe;
+- do not change runtime behavior.
+
+### Phase 3 — Navigation state
+
+Replace direct presentation-state coupling:
+
+~~~text
+style.display
+~~~
+
+with a stable page-state mechanism.
+
+### Phase 4 — CSS architecture
+
+Gradually separate:
+
+~~~text
+base
+shared components
+page-specific
+mobile
+desktop
+~~~
+
+without changing visual behavior.
+
+### Phase 5 — Global namespace reduction
+
+Migrate stable modules toward ES modules if the deployment environment and page structure support it.
+
+### Phase 6 — Automated browser testing
+
+Add smoke tests for:
+
+- language switching;
+- page opening/closing;
+- book navigation;
+- Paragraph Machine modes;
+- mobile/desktop visibility.
+
+### Phase 7 — Deployment cleanup
+
+Consolidate overlapping Pages deployment workflows.
+
+---
+
+# 29. AI / ChatGPT Change Protocol
+
+This is the most important section for future AI maintenance.
+
+## Before editing
+
+### Step A — Identify the exact surface
+
+Determine whether the request concerns:
+
+- home;
+- one realm;
+- book reader;
+- Shahnameh;
+- observation;
+- Paragraph Machine;
+- translations;
+- mobile;
+- desktop;
+- deployment;
+- documentation.
+
+### Step B — Inspect the owning files
+
+Do not guess.
+
+Trace:
+
+~~~text
+HTML
+→ controller
+→ shared service
+→ CSS
+→ translation
+~~~
+
+only as far as required.
+
+### Step C — Check shared dependencies
+
+Before changing shared files, search for all callers.
+
+Especially before changing:
+
+~~~text
+translations/i18n.js
+js/pages.js
+css/site.css
+engine/paragraph-engine.js
+services/llm-client.js
+~~~
+
+### Step D — Preserve invariants
+
+Check:
+
+- four languages;
+- RTL/LTR;
+- five realm order;
+- Paragraph Machine limits;
+- JSON output contract;
+- page navigation;
+- accessibility;
+- mobile and desktop behavior.
+
+---
+
+## During editing
+
+### Prefer the smallest patch
+
+A good AI patch should:
+
+- solve the requested problem;
+- preserve unrelated behavior;
+- avoid speculative refactoring;
+- avoid copying logic;
+- avoid changing public contracts unnecessarily.
+
+### Do not rewrite working architecture merely for style
+
+For example, do not convert the static site to React/Vue simply because component architecture would look cleaner.
+
+That would violate the project's deployment simplicity and established architecture.
+
+---
+
+## After editing
+
+Run or verify:
+
+~~~text
+JavaScript syntax
+JSON validity
+HTML structure
+local asset references
+affected page behavior
+language switching
+mobile layout
+desktop layout
+~~~
+
+If the change touches Paragraph Machine, additionally verify:
+
+~~~text
+evaluate path
+generate path
+JSON validation
+five-domain judgment
+144-word limit
+34-character word limit
+900-character paragraph limit
+translation boundary
+~~~
+
+---
+
+# 30. AI Decision Rules
+
+### “Fix this page”
+
+Modify the page-specific implementation first.
+
+### “Fix all pages”
+
+Inspect shared code before duplicating a page-specific fix.
+
+### “Fix language switching”
+
+Start with:
+
+~~~text
+translations/i18n.js
+~~~
+
+then inspect the affected page's language-change listener and layout.
+
+### “Fix mobile”
+
+Start with:
+
+~~~text
+ui/mobile/mobile.css
+~~~
+
+and the affected page's own CSS before changing global layout.
+
+### “Fix desktop”
+
+Start with:
+
+~~~text
+css/desktop.css
+~~~
+
+and shared layout contracts before changing page-specific HTML.
+
+### “Clean the code”
+
+Do not perform a massive rewrite.
+
+Use staged refactoring with explicit boundaries and preserve behavior after each stage.
+
+### “Update translations”
+
+Treat Persian as the authoritative source for primary content and update only the required language catalogs.
+
+---
+
+# 31. What Must Not Be Changed Casually
+
+The following are architectural invariants unless the user explicitly requests a redesign:
+
+~~~text
+1. Static GitHub Pages deployment
+2. No mandatory build system
+3. Four supported languages: fa/en/zh/ar
+4. Persian as authoritative primary content language
+5. Five-domain order: S/T/E/R/C
+6. Paragraph Machine Persian internal processing
+7. Paragraph limits: 144 / 34 / 900
+8. Shared Paragraph Machine core
+9. Shared translation boundary
+10. Browser-local model settings
+11. Mobile + desktop responsive support
+12. Keyboard accessibility
+13. Existing page-specific language switching
+~~~
+
+---
+
+# 32. Change Scope Discipline
+
+Use these scopes where possible:
+
+~~~text
+fix:
+feat:
+refactor:
+style:
+docs:
+test:
+chore:
+~~~
+
+Examples:
+
+~~~text
+fix: contain language switcher on Shahnameh mobile
+fix: align reference realm header
+refactor: isolate page visibility state
+style: normalize paragraph workspace spacing
+docs: update AI maintenance guide
+test: validate multilingual page contracts
+chore: consolidate Pages deployment workflow
+~~~
+
+Avoid vague messages such as:
+
+~~~text
+update stuff
+fix website
+cleanup
+changes
+~~~
+
+---
+
+# 33. Practical Dependency Map
+
+~~~text
+HOME
+│
+├── js/app.js
+│   ├── js/pages.js
+│   ├── js/books.js
+│   └── translations/i18n.js
+│
+├── BOOKS
+│   ├── js/books.js
+│   ├── content/forgers.js
+│   ├── content/human-machines.js
+│   └── translations/*.json
+│
+├── PARAGRAPH WORKSPACE
+│   ├── js/paragraph-page.js
+│   ├── adapters/paragraph-workspace.js
+│   ├── engine/paragraph-engine.js
+│   ├── services/llm-client.js
+│   └── services/translation-bridge.js
+│
+├── SHAHNAMEH
+│   ├── shahnameh.html
+│   ├── js/shahnameh-series-page.js
+│   ├── content/shahnameh-series.js
+│   └── translations/*.json
+│
+└── PRESENTATION
+    ├── css/site.css
+    ├── css/desktop.css
+    ├── ui/mobile/mobile.css
+    ├── ui/shared/layout-spec.css
+    └── css/splash.css
+~~~
+
+---
+
+# 34. Final Engineering Principle
+
+SmartKazem should evolve as a **small, explicit, understandable browser application**, not as an increasingly complicated framework.
+
+The preferred direction is:
+
+~~~text
+clear ownership
+      +
+small interfaces
+      +
+stable contracts
+      +
+data/content separation
+      +
+shared i18n boundary
+      +
+isolated processing core
+      +
+minimal changes
+      =
+safe AI-assisted maintenance
+~~~
+
+When in doubt:
+
+> **Inspect first. Change the smallest responsible layer. Preserve existing behavior. Validate the affected contracts.**
+
+---
+
+## Repository Reference
+
+Canonical repository:
+
+ModernOutlook/smartkazem
+
+Primary branch:
+
+main
+
+Current architecture should always be verified against the actual repository before a future AI change. This README is a guide, **not a substitute for inspecting the current code**.
 
 ---
 
