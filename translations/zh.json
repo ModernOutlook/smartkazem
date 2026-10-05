@@ -29,6 +29,7 @@
     "muteText": "静音",
     "volume": "音量",
     "volumeLabel": "音量",
+    "resumeFailed": "无法自动启用声音。",
     "shahnameh": "《列王纪》诵读",
     "shahnamehEn": "Shahnameh Reading"
   },
