@@ -29,6 +29,7 @@
     "muteText": "Mute",
     "volume": "Audio volume",
     "volumeLabel": "Audio volume",
+    "resumeFailed": "Sound could not be enabled automatically.",
     "shahnameh": "Shahnameh Reading",
     "shahnamehEn": "Shahnameh Reading"
   },
