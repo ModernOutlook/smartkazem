@@ -794,6 +794,29 @@
           "prose": "The Shahnameh does not truly end with the end of ancient Iranian history. Its real ending comes when the reader closes the book and asks which part of these stories is still alive in his or her own life.\n\nFrom Kayumars to Yazdegerd, from Rustam to Siavash, from love and war to justice and wisdom, each story reflects part of human experience. The Shahnameh is not only the past; it is a mirror in which to see today’s choices. The final episode therefore does not close the story so much as return the reader to the beginning, to the question of what makes a person, a land, and a culture endure.",
           "originalVerse": "When the book is closed, the road is not closed;\nthe ending of this tale is not an ending.\nWhoever has taken something from the story\nwill entrust another chapter to the world.\nThis is the lasting lesson of the Shahnameh:\nlet a human being remain through the work of his deeds."
         }
+      },
+      "eyebrow": "Modern Outlook · Shahnameh",
+      "ui": {
+        "eyebrow": "Modern Outlook · Shahnameh",
+        "all": "All",
+        "episodeCount": "Projected episodes",
+        "readingUnit": "Reading unit",
+        "referenceSource": "Reference source",
+        "mainEpisodes": "Main episodes",
+        "adaptations": "Adaptations",
+        "aspectRatio": "Aspect ratio",
+        "ready": "Full text",
+        "pending": "In preparation",
+        "prose": "Full narrative",
+        "verse": "Verses",
+        "editionNote": "Edition note",
+        "previous": "Previous episode",
+        "next": "Next episode",
+        "empty": "No episode matches these criteria.",
+        "imageMissing": "Image not found for this episode.",
+        "imagePrevious": "Previous image",
+        "imageNext": "Next image",
+        "part": "Part"
       }
     },
     "observation25": {
