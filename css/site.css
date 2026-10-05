@@ -353,13 +353,6 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 @media(max-width:520px){.paragraph-workspace{width:min(100% - 18px,960px);padding-top:16px}.paragraph-head strong{font-size:1.05rem}.pm-controls>div{min-width:120px}.pm-card{padding:14px}.pm-text{font-size:.96rem}}
 
 
-/* ===== Book language controls ===== */
-.book-head{position:relative}
-.book-lang-switch{display:flex;direction:ltr;gap:3px;flex:0 0 auto}
-.book-lang-switch button{border:1px solid rgba(255,216,164,.24);background:rgba(255,255,255,.05);color:rgba(255,216,164,.7);border-radius:6px;padding:4px 6px;font-size:.56rem;font-weight:800;cursor:pointer}
-.book-lang-switch button.active{background:rgba(255,216,164,.16);color:#ffd8a4;border-color:rgba(255,216,164,.45)}
-@media(max-width:520px){.book-head{gap:6px}.book-lang-switch button{padding:4px 5px}}
-
 /* ===== Philosophical Treatise entry in Hall Structure ===== */
 .structure-actions{position:absolute;z-index:12;left:50%;bottom:7%;transform:translateX(-50%);display:flex;justify-content:center;width:min(92%,620px)}
 .structure-action{min-width:230px;padding:13px 22px;border:1px solid rgba(125,202,255,.55);border-radius:16px;background:linear-gradient(145deg,rgba(7,53,78,.82),rgba(2,20,32,.82));color:#fff;box-shadow:0 10px 30px rgba(0,0,0,.38),inset 0 1px rgba(255,255,255,.08);backdrop-filter:blur(9px);cursor:pointer;font-weight:800;font-size:clamp(.72rem,2.5vw,.95rem);transition:transform .2s ease,filter .2s ease}.structure-action:hover{transform:translateY(-2px);filter:brightness(1.14)}.structure-action span,.structure-action small{display:block}.structure-action small{margin-top:3px;font-size:.62em;font-weight:500;opacity:.62;direction:ltr}
