@@ -51,9 +51,9 @@ jobs:
                   for ref in re.findall(r"\b"+attr+r"=[\"']([^\"'#?]+)",s):
                       if ref.startswith(('http://','https://','data:','mailto:','#')): continue
                       if not (p.parent/ref).exists(): bad.append(f'{p}: missing {attr}={ref}')
-              inline_scripts = re.findall(r'<script(?![^>]*\\bsrc=)[^>]*>\\s*[^\\s<][\\s\\S]*?</script>', s, re.I)
+              inline_scripts = re.findall(r'<script(?![^>]*\bsrc=)[^>]*>\s*[^\s<][\s\S]*?</script>', s, re.I)
               for inline_script in inline_scripts:
-                  if not re.match(r'<script\\s+data-audio-bootstrap(?:\\s[^>]*)?>', inline_script, re.I):
+                  if not re.match(r'<script\s+data-audio-bootstrap(?:\s[^>]*)?>', inline_script, re.I):
                       bad.append(f'{p}: inline script detected')
               if re.search(r'\bon[a-z]+\s*=', s, re.I):
                   bad.append(f'{p}: inline event handler detected')
