@@ -24,20 +24,26 @@
   let catalog = null;
 
   const translate = (path, fallback = '') => {
-    const value = catalog?.[path];
+    const pageCatalog = catalog?.pages?.shahnameh || {};
+    const value = pageCatalog?.[path] ?? catalog?.[path] ?? catalog?.labels?.[path];
     return value == null ? fallback : value;
   };
 
   function getEpisodeView(episode) {
-    if (episode.id === 1 && catalog?.part1) {
+    const page = catalog?.pages?.shahnameh || {};
+    const title = page.titles?.[episode.id - 1] || episode.title;
+    const section = page.sections?.[episode.section] || episode.section;
+    const localized = page.episodes?.[String(episode.id)] || (episode.id === 1 ? page.part1 : null);
+    if (localized) {
       return {
         ...episode,
-        title: catalog.part1.title || episode.title,
-        prose: catalog.part1.prose || episode.prose,
-        verse: catalog.part1.originalVerse || episode.verse
+        title: localized.title || title,
+        section,
+        prose: localized.prose || episode.prose,
+        verse: localized.originalVerse || episode.verse
       };
     }
-    return episode;
+    return { ...episode, title, section };
   }
 
   const toPersianNumber = (value) => new Intl.NumberFormat('fa-IR').format(value);
@@ -263,6 +269,7 @@
     if (search) search.placeholder = page.searchPlaceholder || search.placeholder;
     if (visualLabel) visualLabel.textContent = page.visualLabel || visualLabel.textContent;
     if (storyLabel) storyLabel.textContent = page.visualAlbum || storyLabel.textContent;
+    document.querySelectorAll('.stat span')[0]?.replaceChildren(document.createTextNode(page.stats?.episodes || document.querySelectorAll('.stat span')[0].textContent));
     if (back) back.textContent = labels.back || back.textContent;
     if (page) page.content = 'shahnameh';
 
