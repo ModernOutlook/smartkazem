@@ -37,6 +37,17 @@ jobs:
               print('OK', p)
           PY
 
+      - name: Check semantic page-state usage
+        run: |
+          if grep -RIn --include='*.js' --exclude-dir='.git' '\.style\.display' .; then
+            echo 'Direct style.display usage is not allowed in application JavaScript.'
+            exit 1
+          fi
+          if grep -RIn --include='*.html' --exclude-dir='.git' ' style=' .; then
+            echo 'Inline style attributes are not allowed in HTML.'
+            exit 1
+          fi
+
       - name: Check HTML structure and local assets
         run: |
           python3 - <<'PY'

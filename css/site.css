@@ -525,3 +525,24 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
   .layer3-close{width:36px;height:36px}
 }
 @media(min-width:700px){.layer3-page{border-radius:4px}.layer3-tabs,.layer3-body{max-width:600px;margin-left:auto;margin-right:auto}}
+
+
+/*
+ * Page state is controlled by SitePages through a semantic class.
+ * Presentation remains in CSS; navigation no longer mutates inline styles.
+ */
+.page:not(.is-active) {
+  display: none;
+}
+
+.page.is-active {
+  display: block;
+}
+
+.page.home-page.is-active {
+  display: grid;
+}
+
+.page.book-page.is-active {
+  display: block;
+}

@@ -20,9 +20,9 @@
     try {
       return normalizeLanguage(
         localStorage.getItem(STORAGE_KEY) ||
-        localStorage.getItem(LEGACY_STORAGE_KEY) ||
-        document.documentElement.lang ||
-        DEFAULT_LANGUAGE
+          localStorage.getItem(LEGACY_STORAGE_KEY) ||
+          document.documentElement.lang ||
+          DEFAULT_LANGUAGE
       );
     } catch (_) {
       return normalizeLanguage(document.documentElement.lang);
@@ -92,7 +92,10 @@
 
   async function load(language) {
     const normalizedLanguage = normalizeLanguage(language);
-    if (catalogs[normalizedLanguage]) return catalogs[normalizedLanguage];
+
+    if (catalogs[normalizedLanguage]) {
+      return catalogs[normalizedLanguage];
+    }
 
     const response = await fetch(
       'translations/' + normalizedLanguage + '.json',
@@ -124,9 +127,7 @@
 
     applyDom(catalog);
 
-    const pageKey = document.querySelector(
-      'meta[name="i18n-page"]'
-    )?.content;
+    const pageKey = document.querySelector('meta[name="i18n-page"]')?.content;
 
     document.title = pageKey
       ? get('pages.' + pageKey + '.title', get('home.title', document.title))
@@ -193,6 +194,7 @@
   document.addEventListener('click', (event) => {
     const button =
       event.target.closest && event.target.closest('[data-site-lang]');
+
     if (!button) return;
 
     event.preventDefault();
@@ -206,7 +208,7 @@
     } catch (_) {}
 
     const homePage = document.getElementById('home-page');
-    const homeVisible = homePage && homePage.style.display !== 'none';
+    const homeVisible = homePage?.classList.contains('is-active');
 
     if (homeVisible) {
       window.location.reload();
