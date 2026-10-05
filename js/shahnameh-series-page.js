@@ -8,7 +8,6 @@
     search: document.getElementById('search'),
     filters: [...document.querySelectorAll('.filter')],
     back: document.getElementById('back'),
-    episodeCount: document.getElementById('episode-count'),
     artFrame: document.getElementById('art-frame'),
     artCaption: document.getElementById('art-caption'),
     artIndex: document.getElementById('art-index'),
@@ -208,6 +207,7 @@
     title.textContent = episode.title;
     headingGroup.append(eyebrow, title);
 
+    header.appendChild(headingGroup);
     elements.reader.appendChild(header);
 
     elements.reader.append(
@@ -252,8 +252,6 @@
     const search = elements.search;
     const visualLabel = document.querySelector('.visual .story-label');
     const back = elements.back;
-    const stats = document.querySelectorAll('.stat span');
-    const visualStats = document.querySelectorAll('.visual-stats span');
     const eyebrow = document.querySelector('.title .eyebrow');
 
     if (eyebrow) eyebrow.textContent = page.eyebrow || eyebrow.textContent;
@@ -269,14 +267,6 @@
       button.textContent = key === 'all' ? (ui.all || 'All') : localizedSection(key);
     });
 
-    const statSpans = document.querySelectorAll('.stat span');
-    if (statSpans[0]) statSpans[0].textContent = ui.episodeCount || statSpans[0].textContent;
-    if (statSpans[1]) statSpans[1].textContent = ui.readingUnit || statSpans[1].textContent;
-    if (statSpans[2]) statSpans[2].textContent = ui.referenceSource || statSpans[2].textContent;
-
-    if (visualStats[0]) visualStats[0].textContent = ui.mainEpisodes || visualStats[0].textContent;
-    if (visualStats[1]) visualStats[1].textContent = ui.adaptations || visualStats[1].textContent;
-    if (visualStats[2]) visualStats[2].textContent = ui.aspectRatio || visualStats[2].textContent;
 
     renderEpisodeList();
     renderReader();
@@ -305,7 +295,6 @@
 
   function init() {
     catalog = window.SiteI18n?.getCatalog?.() || null;
-    elements.episodeCount.textContent = toSiteNumber(data.meta.totalEpisodes);
     bindEvents();
     document.addEventListener('site:languagechange', applyLanguage);
     renderEpisodeList();
