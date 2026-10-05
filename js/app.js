@@ -40,6 +40,16 @@
     infoText.textContent = realm.text || '';
   }
 
+  info.classList.remove(
+    'realm-structure',
+    'realm-continuity',
+    'realm-experience',
+    'realm-reference',
+    'realm-share',
+    'realm-core'
+  );
+  info.classList.add('realm-' + id);
+  info.dataset.realm = id;
   info.classList.toggle('reference', id === 'reference');
   info.classList.toggle('visible', show);
 }
