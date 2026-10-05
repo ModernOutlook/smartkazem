@@ -29,6 +29,7 @@
     "muteText": "بی‌صدا",
     "volume": "بلندی صدا",
     "volumeLabel": "بلندی صدا",
+    "resumeFailed": "فعال‌سازی خودکار صدا ممکن نشد.",
     "shahnameh": "شاهنامه‌خوانی",
     "shahnamehEn": "Shahnameh Reading"
   },
