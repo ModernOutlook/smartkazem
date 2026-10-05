@@ -336,6 +336,10 @@
     sync();
   }
 
+  function label(path, fallback) {
+    return window.SiteI18n?.get?.(path, fallback) || fallback;
+  }
+
   function wireSplashGate() {
     const splash = document.getElementById('splash');
     if (!splash) return;
@@ -365,7 +369,7 @@
         splash.classList.add('audio-blocked');
         splash.setAttribute('aria-hidden', 'false');
         if (enable) enable.hidden = false;
-        setStatus('Audio could not be enabled automatically.');
+        setStatus(label('labels.audio.resumeFailed', 'Sound could not be enabled automatically.'));
       }
       return ok;
     });
