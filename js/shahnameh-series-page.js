@@ -235,13 +235,13 @@
   }
 
   function applyLanguage() {
-    catalog = window.SiteI18n?.getCatalog?.()?.pages || null;
+    catalog = window.SiteI18n?.getCatalog?.() || null;
     if (!catalog) return;
 
-    const labels = window.SiteI18n?.getCatalog?.()?.labels || {};
-    const page = document.querySelector('meta[name="i18n-page"]');
+    const labels = catalog?.labels || {};
+    const page = catalog?.pages?.shahnameh || catalog?.pages?.part1 || {};
 
-    document.title = catalog.title || document.title;
+    document.title = labels.shahnameh || document.title;
 
     const title = document.querySelector('.title h1');
     const subtitle = document.querySelector('.title p');
@@ -256,13 +256,13 @@
     const visualStats = document.querySelectorAll('.visual-stats span');
 
     if (title) title.textContent = labels.shahnameh || title.textContent;
-    if (subtitle) subtitle.textContent = catalog.subtitle || subtitle.textContent;
-    if (heroTitle) heroTitle.textContent = catalog.heroTitle || heroTitle.textContent;
-    if (heroText) heroText.textContent = catalog.heroText || heroText.textContent;
-    if (findTitle) findTitle.textContent = catalog.findTitle || findTitle.textContent;
-    if (search) search.placeholder = catalog.searchPlaceholder || search.placeholder;
-    if (visualLabel) visualLabel.textContent = catalog.visualLabel || visualLabel.textContent;
-    if (storyLabel) storyLabel.textContent = catalog.visualAlbum || storyLabel.textContent;
+    if (subtitle) subtitle.textContent = page.subtitle || subtitle.textContent;
+    if (heroTitle) heroTitle.textContent = page.heroTitle || heroTitle.textContent;
+    if (heroText) heroText.textContent = page.heroText || heroText.textContent;
+    if (findTitle) findTitle.textContent = page.findTitle || findTitle.textContent;
+    if (search) search.placeholder = page.searchPlaceholder || search.placeholder;
+    if (visualLabel) visualLabel.textContent = page.visualLabel || visualLabel.textContent;
+    if (storyLabel) storyLabel.textContent = page.visualAlbum || storyLabel.textContent;
     if (back) back.textContent = labels.back || back.textContent;
     if (page) page.content = 'shahnameh';
 
@@ -292,7 +292,7 @@
   }
 
   function init() {
-    catalog = window.SiteI18n?.getCatalog?.()?.pages || null;
+    catalog = window.SiteI18n?.getCatalog?.() || null;
     elements.episodeCount.textContent = toPersianNumber(data.meta.totalEpisodes);
     bindEvents();
     document.addEventListener('site:languagechange', applyLanguage);
