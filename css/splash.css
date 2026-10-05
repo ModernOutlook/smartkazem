@@ -1,0 +1,21 @@
+/* SmartKazem splash presentation. */
+#splash {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: #000;
+  opacity: 1;
+  transition: opacity .35s linear;
+  pointer-events: auto;
+}
+
+#splash img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+noscript #splash {
+  display: none;
+}
