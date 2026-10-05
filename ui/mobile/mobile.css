@@ -284,23 +284,6 @@
     overflow-y: auto;
   }
 
-  /* Realm headers: keep the title below the global language control in portrait. */
-  .experience-head {
-    top: calc(56px + var(--ui-safe-top));
-    left: calc(12px + var(--ui-safe-left));
-    right: calc(12px + var(--ui-safe-right));
-  }
-
-  .experience-title {
-    min-width: 0;
-    max-width: calc(100% - var(--ui-touch-target) - var(--ui-space-3));
-  }
-
-  .experience-title strong,
-  .experience-title span {
-    overflow-wrap: anywhere;
-  }
-
   .reference-action,
   .experience-action,
   .share-story-action,
@@ -354,6 +337,41 @@
   }
 
   .paragraph-workspace { width: calc(100% - 18px); }
+}
+
+/* Realm headers: keep all realm titles clear of the language control in mobile portrait. */
+@media (orientation: portrait) and (max-width: 1023px) {
+  .structure-head,
+  .continuity-head,
+  .experience-head,
+  .reference-head,
+  .share-head {
+    top: calc(56px + var(--ui-safe-top));
+    left: calc(12px + var(--ui-safe-left));
+    right: calc(12px + var(--ui-safe-right));
+  }
+
+  .structure-title,
+  .continuity-title,
+  .experience-title,
+  .reference-title,
+  .share-title {
+    min-width: 0;
+    max-width: calc(100% - var(--ui-touch-target) - var(--ui-space-3));
+  }
+
+  .structure-title strong,
+  .structure-title span,
+  .continuity-title strong,
+  .continuity-title span,
+  .experience-title strong,
+  .experience-title span,
+  .reference-title strong,
+  .reference-title span,
+  .share-title strong,
+  .share-title span {
+    overflow-wrap: anywhere;
+  }
 }
 
 @media (orientation: landscape) and (max-width: 1023px) {
