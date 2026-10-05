@@ -12,7 +12,6 @@
     artFrame: document.getElementById('art-frame'),
     artCaption: document.getElementById('art-caption'),
     artIndex: document.getElementById('art-index'),
-    visualTitle: document.getElementById('visual-title'),
     artPrevious: document.getElementById('art-prev'),
     artNext: document.getElementById('art-next')
   };
@@ -133,7 +132,6 @@
       `${toSiteNumber(episode.id).padStart(2, '۰')} / ۸۱`;
     elements.artCaption.textContent =
       `${translate('part', 'قسمت')} ${toSiteNumber(episode.id)} · ${episode.title}`;
-    elements.visualTitle.textContent = episode.title;
 
     elements.artFrame.replaceChildren();
 
@@ -210,39 +208,12 @@
     title.textContent = episode.title;
     headingGroup.append(eyebrow, title);
 
-    const badge = document.createElement('span');
-    badge.className = 'badge';
-    badge.textContent = episode.status === 'ready' ? translate('ready', 'متن کامل') : translate('pending', 'در صف تدوین');
-
-    header.append(headingGroup, badge);
     elements.reader.appendChild(header);
 
-    if (episode.status === 'ready') {
-      elements.reader.append(
-        createReaderSection(translate('prose', 'روایت کامل'), episode.prose, 'prose'),
-        createReaderSection(translate('verse', 'ابیات'), episode.verse, 'verse')
-      );
-    } else {
-      const section = document.createElement('section');
-      section.className = 'block';
-
-      const placeholder = document.createElement('div');
-      placeholder.className = 'placeholder';
-      placeholder.textContent =
-        translate('placeholder', 'ساختار این قسمت آماده است. متن کامل روایت و ابیات پس از تعیین و درج نسخهٔ مرجع در همین واحد قرار می‌گیرد؛ رابط خوانش برای آن از پیش آماده است.');
-
-      section.appendChild(placeholder);
-      elements.reader.appendChild(section);
-    }
-
-    const source = document.createElement('section');
-    source.className = 'block';
-
-    const sourceNote = document.createElement('p');
-    sourceNote.className = 'source';
-    sourceNote.textContent = `${translate('editionNote', 'یادداشت نسخه')}: ${data.meta.editionNote}`;
-    source.appendChild(sourceNote);
-    elements.reader.appendChild(source);
+    elements.reader.append(
+      createReaderSection(translate('prose', 'روایت کامل'), episode.prose, 'prose'),
+      createReaderSection(translate('verse', 'ابیات'), episode.verse, 'verse')
+    );
 
     const navigation = document.createElement('div');
     navigation.className = 'navrow';
@@ -277,12 +248,9 @@
 
     const title = document.querySelector('.title h1');
     const subtitle = document.querySelector('.title p');
-    const heroTitle = document.querySelector('.hero-card h2');
-    const heroText = document.querySelector('.hero-card p');
     const findTitle = document.querySelector('.controls h3');
     const search = elements.search;
     const visualLabel = document.querySelector('.visual .story-label');
-    const storyLabel = document.querySelector('.story-card .story-label');
     const back = elements.back;
     const stats = document.querySelectorAll('.stat span');
     const visualStats = document.querySelectorAll('.visual-stats span');
@@ -291,12 +259,9 @@
     if (eyebrow) eyebrow.textContent = page.eyebrow || eyebrow.textContent;
     if (title) title.textContent = labels.shahnameh || title.textContent;
     if (subtitle) subtitle.textContent = page.subtitle || subtitle.textContent;
-    if (heroTitle) heroTitle.textContent = page.heroTitle || heroTitle.textContent;
-    if (heroText) heroText.textContent = page.heroText || heroText.textContent;
     if (findTitle) findTitle.textContent = page.findTitle || findTitle.textContent;
     if (search) search.placeholder = page.searchPlaceholder || search.placeholder;
     if (visualLabel) visualLabel.textContent = page.visualLabel || visualLabel.textContent;
-    if (storyLabel) storyLabel.textContent = page.visualAlbum || storyLabel.textContent;
     if (back) back.textContent = labels.back || back.textContent;
 
     elements.filters.forEach((button) => {
