@@ -24,15 +24,14 @@
 
   function showPage(pageKey) {
     Object.values(pages).forEach((page) => {
-      if (page) page.style.display = 'none';
+      page?.classList.remove('is-active');
     });
 
-    const page = pages[pageKey];
-    if (page) page.style.display = 'block';
+    pages[pageKey]?.classList.add('is-active');
   }
 
   function returnHome() {
-    window.location.reload();
+    showPage('home');
   }
 
   function openParagraph(kind) {
@@ -53,7 +52,7 @@
   }
 
   function closeShare() {
-    returnHome('share');
+    returnHome();
   }
 
   function openExperience() {
@@ -62,7 +61,7 @@
   }
 
   function closeExperience() {
-    returnHome('experience');
+    returnHome();
   }
 
   function openContinuity() {
@@ -71,7 +70,7 @@
   }
 
   function closeContinuity() {
-    returnHome('continuity');
+    returnHome();
   }
 
   function openStructure() {
@@ -81,15 +80,16 @@
   }
 
   function closeStructure() {
-    returnHome('structure');
+    returnHome();
   }
 
   function openReference() {
     showPage('reference');
+    homeController.clearInfo();
   }
 
   function closeReference() {
-    returnHome('reference');
+    returnHome();
   }
 
   function setHomeController(controller) {
