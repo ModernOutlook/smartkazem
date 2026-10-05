@@ -130,5 +130,5 @@ window.EchoLayer3Content={
  document.addEventListener("site:languagechange",render);
  document.addEventListener("DOMContentLoaded",render,{once:true});
  if(document.readyState!=="loading")render();
- $("close").addEventListener("click",()=>{window.location.href="index.html"});
+ $("close").addEventListener("click",()=>{if(history.length>1) history.back(); else window.location.href="index.html"});
 })();
