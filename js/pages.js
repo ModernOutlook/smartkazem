@@ -1,22 +1,87 @@
-const home=document.getElementById('home-page');
-const sharePage=document.getElementById('share-page');
-const experiencePage=document.getElementById('experience-page');
-const continuityPage=document.getElementById('continuity-page');
-const structurePage=document.getElementById('structure-page');
-const referencePage=document.getElementById('reference-page');
-const bookPage=document.getElementById('book-page');
-const paragraphPage=document.getElementById('paragraph-page');
-let paragraphOrigin='experience';
+const PAGE_IDS = Object.freeze({
+  home: 'home-page',
+  share: 'share-page',
+  experience: 'experience-page',
+  continuity: 'continuity-page',
+  structure: 'structure-page',
+  reference: 'reference-page',
+  book: 'book-page',
+  paragraph: 'paragraph-page'
+});
 
-function openParagraph(kind){paragraphOrigin=kind;home.style.display='none';sharePage.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';paragraphPage.style.display='block';window.ParagraphPage?.open(kind);clearInfo();}
-function closeParagraph(){window.ParagraphPage?.close();paragraphPage.style.display='none';home.style.display='block';setInfo(paragraphOrigin);}
-function openShare(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';sharePage.style.display='block';clearInfo();}
-function closeShare(){sharePage.style.display='none';home.style.display='block';setInfo('share');}
-function openExperience(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='block';clearInfo();}
-function closeExperience(){experiencePage.style.display='none';home.style.display='block';setInfo('experience');}
-function openContinuity(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';experiencePage.style.display='none';continuityPage.style.display='block';clearInfo();}
-function closeContinuity(){continuityPage.style.display='none';home.style.display='block';setInfo('continuity');}
-function openStructure(){window.clearTimeout(window.__structureOpenTimer);home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';continuityPage.style.display='none';structurePage.style.display='block';clearInfo();}
-function closeStructure(){structurePage.style.display='none';home.style.display='block';setInfo('structure');}
-function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';}
-function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');}
+const pages = Object.fromEntries(
+  Object.entries(PAGE_IDS).map(([key, id]) => [key, document.getElementById(id)])
+);
+
+let paragraphOrigin = 'experience';
+
+function showPage(pageKey) {
+  Object.values(pages).forEach((page) => {
+    if (page) page.style.display = 'none';
+  });
+
+  const page = pages[pageKey];
+  if (page) page.style.display = 'block';
+}
+
+function returnHome(realmId) {
+  showPage('home');
+  setInfo(realmId);
+}
+
+function openParagraph(kind) {
+  paragraphOrigin = kind;
+  showPage('paragraph');
+  window.ParagraphPage?.open(kind);
+  clearInfo();
+}
+
+function closeParagraph() {
+  window.ParagraphPage?.close();
+  returnHome(paragraphOrigin);
+}
+
+function openShare() {
+  showPage('share');
+  clearInfo();
+}
+
+function closeShare() {
+  returnHome('share');
+}
+
+function openExperience() {
+  showPage('experience');
+  clearInfo();
+}
+
+function closeExperience() {
+  returnHome('experience');
+}
+
+function openContinuity() {
+  showPage('continuity');
+  clearInfo();
+}
+
+function closeContinuity() {
+  returnHome('continuity');
+}
+
+function openStructure() {
+  window.clearTimeout(window.__structureOpenTimer);
+  showPage('structure');
+  clearInfo();
+}
+
+function closeStructure() {
+  returnHome('structure');
+}
+
+function openReference() {
+  showPage('reference');
+}
+
+function closeReference() {
+  returnHome('reference');
+}
