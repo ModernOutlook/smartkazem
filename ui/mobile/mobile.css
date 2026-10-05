@@ -339,6 +339,31 @@
   .paragraph-workspace { width: calc(100% - 18px); }
 }
 
+/* Secondary page headers: reserve the language-control area in mobile portrait. */
+@media (orientation: portrait) and (max-width: 1023px) {
+  .book-head {
+    padding-top: calc(56px + var(--ui-safe-top));
+  }
+
+  .observation25-head {
+    top: calc(56px + var(--ui-safe-top));
+    left: calc(12px + var(--ui-safe-left));
+    right: calc(12px + var(--ui-safe-right));
+  }
+
+  .observation25-title,
+  .book-title {
+    min-width: 0;
+    max-width: calc(100% - var(--ui-touch-target) - var(--ui-space-3));
+  }
+
+  .observation25-title strong,
+  .observation25-title span,
+  .book-title {
+    overflow-wrap: anywhere;
+  }
+}
+
 /* Realm headers: keep all realm titles clear of the language control in mobile portrait. */
 @media (orientation: portrait) and (max-width: 1023px) {
   .structure-head,
