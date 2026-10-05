@@ -1,0 +1,164 @@
+/*
+ SmartKazem Desktop Experience Layer
+ Progressive enhancement only.
+ Mobile CSS remains untouched.
+*/
+
+
+@media (min-width:1024px){
+
+    html,
+    body{
+        width:100%;
+        height:100%;
+        overflow:hidden;
+    }
+
+
+    /*
+      Application canvas
+    */
+
+    .app{
+        width:100vw;
+        height:100dvh;
+        max-width:none;
+        max-height:none;
+        aspect-ratio:auto;
+    }
+
+
+    /*
+      Home / Five Realms
+    */
+
+    .home-page{
+
+        display:grid;
+
+        grid-template-columns:
+            minmax(520px,1fr)
+            420px;
+
+        align-items:center;
+
+        gap:3rem;
+
+        padding:
+            2rem
+            4rem;
+    }
+
+
+    .orbit{
+
+        position:relative;
+
+        inset:auto;
+
+        width:100%;
+
+        height:100%;
+    }
+
+
+    .menu-svg{
+
+        width:min(78vh,900px);
+
+        height:min(78vh,900px);
+    }
+
+
+    .info{
+
+        position:relative;
+
+        inset:auto;
+
+        width:420px;
+
+        transform:none;
+
+        text-align:right;
+    }
+
+
+
+    /*
+      Book reader
+    */
+
+    .book-shell{
+
+        display:grid;
+
+        grid-template-columns:
+            240px
+            minmax(0,1fr);
+
+        grid-template-rows:
+            auto
+            1fr;
+    }
+
+
+    .book-head{
+
+        grid-column:
+            1 / -1;
+    }
+
+
+    .book-tabs{
+
+        flex-direction:column;
+
+        overflow-y:auto;
+
+        overflow-x:hidden;
+    }
+
+
+    .book-body{
+
+        max-width:900px;
+
+        margin:auto;
+    }
+
+
+
+    /*
+      Paragraph Machine
+    */
+
+    .paragraph-workspace{
+
+        display:grid;
+
+        grid-template-columns:
+            360px
+            minmax(0,1fr);
+
+        gap:2rem;
+
+        height:
+            calc(100dvh - 80px);
+    }
+
+
+    .pm-sidebar{
+
+        position:sticky;
+
+        top:1rem;
+    }
+
+
+    .pm-results{
+
+        overflow-y:auto;
+    }
+
+}
