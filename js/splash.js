@@ -1,61 +1,102 @@
-(function(){
-  const splash=document.getElementById('splash');
-  if(!splash)return;
-  const root=document.documentElement;
-  const waitForApp=root.hasAttribute('data-splash-wait');
-  let dom=0,load=0,imgT=0,imgD=0,last=0,done=false,appReady=0;
+(() => {
+  'use strict';
 
-  function paint(){
-    if(done)return;
-    let p=Math.min(1,.15*dom+.25*load+(dom?.6*(imgT?(imgD/imgT):1):0));
-    if(p<last)p=last;
-    last=p;
-    splash.style.opacity=String(1-p);
-    if(p>=.999)finish();
+  const splash = document.getElementById('splash');
+  if (!splash) return;
+
+  const root = document.documentElement;
+  const waitForApp = root.hasAttribute('data-splash-wait');
+
+  let domReady = false;
+  let windowReady = false;
+  let imagesTotal = 0;
+  let imagesLoaded = 0;
+  let progress = 0;
+  let finished = false;
+  let appReady = false;
+
+  function paint() {
+    if (finished) return;
+
+    const imageProgress = imagesTotal
+      ? imagesLoaded / imagesTotal
+      : 1;
+
+    let nextProgress =
+      0.15 * Number(domReady) +
+      0.25 * Number(windowReady) +
+      (domReady ? 0.6 * imageProgress : 0);
+
+    nextProgress = Math.min(1, Math.max(progress, nextProgress));
+    progress = nextProgress;
+    splash.style.opacity = String(1 - progress);
+
+    if (progress >= 0.999) finish();
   }
 
-  function finish(){
-    if(done)return;
-    done=true;
-    splash.style.opacity='0';
-    const remove=()=>splash.remove();
-    splash.addEventListener('transitionend',remove,{once:true});
-    setTimeout(remove,700);
+  function finish() {
+    if (finished) return;
+
+    finished = true;
+    splash.style.opacity = '0';
+
+    const remove = () => splash.remove();
+    splash.addEventListener('transitionend', remove, { once: true });
+    window.setTimeout(remove, 700);
   }
 
-  function trackImages(){
-    const images=[...document.images].filter(img=>img!==splash.querySelector('img')&&!img.loading?.toLowerCase?.().includes('lazy'));
-    imgT=images.length;
-    imgD=images.filter(img=>img.complete).length;
-    images.forEach(img=>{
-      if(img.complete)return;
-      img.addEventListener('load',()=>{imgD++;paint()},{once:true});
-      img.addEventListener('error',()=>{imgD++;paint()},{once:true});
+  function trackImages() {
+    const splashImage = splash.querySelector('img');
+    const images = [...document.images].filter((image) => {
+      const lazy = image.loading?.toLowerCase?.() === 'lazy';
+      return image !== splashImage && !lazy;
     });
+
+    imagesTotal = images.length;
+    imagesLoaded = images.filter((image) => image.complete).length;
+
+    images.forEach((image) => {
+      if (image.complete) return;
+
+      const markLoaded = () => {
+        imagesLoaded += 1;
+        paint();
+      };
+
+      image.addEventListener('load', markLoaded, { once: true });
+      image.addEventListener('error', markLoaded, { once: true });
+    });
+
     paint();
   }
 
-  function domReady(){
-    dom=1;
+  function handleDomReady() {
+    if (domReady) return;
+    domReady = true;
     trackImages();
     paint();
   }
 
-  function windowReady(){
-    (document.fonts?.ready||Promise.resolve()).then(()=>{
-      load=1;
-      if(!waitForApp||appReady)paint();
+  function handleWindowReady() {
+    if (windowReady) return;
+
+    const fontsReady = document.fonts?.ready || Promise.resolve();
+    fontsReady.then(() => {
+      windowReady = true;
+      if (!waitForApp || appReady) paint();
     });
   }
 
-  document.addEventListener('DOMContentLoaded',domReady,{once:true});
-  window.addEventListener('load',windowReady,{once:true});
-  document.addEventListener('app-ready',()=>{
-    appReady=1;
-    if(load)paint();
+  document.addEventListener('DOMContentLoaded', handleDomReady, { once: true });
+  window.addEventListener('load', handleWindowReady, { once: true });
+
+  document.addEventListener('app-ready', () => {
+    appReady = true;
+    if (windowReady) paint();
   });
 
-  if(document.readyState!=='loading')domReady();
-  if(document.readyState==='complete')windowReady();
-  setTimeout(finish,15000);
+  if (document.readyState !== 'loading') handleDomReady();
+  if (document.readyState === 'complete') handleWindowReady();
+
+  window.setTimeout(finish, 15000);
 })();
