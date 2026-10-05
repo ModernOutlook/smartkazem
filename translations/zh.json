@@ -815,7 +815,8 @@
         "empty": "没有符合条件的章节。",
         "imageMissing": "未找到本章节图片。",
         "imagePrevious": "上一张图片",
-        "imageNext": "下一张图片"
+        "imageNext": "下一张图片",
+        "part": "第"
       }
     },
     "observation25": {
