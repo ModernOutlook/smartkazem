@@ -173,6 +173,8 @@
     const activeTab = [...document.querySelectorAll('.book-tab')]
       .findIndex((button) => button.classList.contains('active'));
     const currentTab = Math.max(0, activeTab);
+    // The fixed site-level language selector is the single language control.
+    // Rebuild the active book from the newly selected SiteI18n catalog.
     BookNavigation.buildBookTabs(currentTab);
     BookNavigation.selectChapter(currentTab);
   }
