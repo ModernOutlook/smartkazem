@@ -1081,13 +1081,13 @@ Current policy:
 | Area | Current state | Priority |
 |---|---|---|
 | Global window.* APIs | Functional compatibility mechanism | Medium |
-| style.display page navigation | Presentation coupling | Medium |
-| style.display used as state detection | Tight UI coupling | Medium |
+| style.display page navigation | **Resolved** — semantic page-state classes | ~~Medium~~ |
+| style.display used as state detection | **Resolved** — class-based state detection | ~~Medium~~ |
 | Large site.css | Monolithic presentation layer | Medium |
 | Inconsistent JS formatting | Readability issue | Medium |
 | Inline fallback prose in JS | Data/logic mixing | Medium |
 | Some innerHTML rendering | Controlled but improvable | Low/Medium |
-| Duplicate deployment workflows | Infrastructure duplication | Medium |
+| Duplicate deployment workflows | **Resolved** — one authoritative Pages workflow | ~~Medium~~ |
 | No formatter/linter enforcement | Quality gap | Medium |
 | No automated browser smoke tests | Regression risk | Medium |
 | Structure.txt overlap | Documentation duplication | Low |
