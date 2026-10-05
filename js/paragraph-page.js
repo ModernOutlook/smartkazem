@@ -80,9 +80,18 @@
     elements.page.classList.add('open');
     elements.page.dataset.entry = kind;
 
-    elements.input.disabled = kind !== ENTRY_MODES.REFERENCE;
-    elements.count.disabled = kind !== ENTRY_MODES.EXPERIENCE;
-    elements.mode.disabled = kind !== ENTRY_MODES.EXPERIENCE;
+    const experienceMode = kind === ENTRY_MODES.EXPERIENCE;
+    elements.input.disabled = !experienceMode;
+    elements.count.disabled = !experienceMode;
+    elements.mode.disabled = !experienceMode;
+
+    if (experienceMode) {
+      elements.count.removeAttribute('disabled');
+      elements.mode.removeAttribute('disabled');
+    } else {
+      elements.count.setAttribute('disabled', '');
+      elements.mode.setAttribute('disabled', '');
+    }
     elements.action.textContent = getActionLabel(kind);
     elements.source.textContent = getSourceLabel(kind);
 
@@ -235,7 +244,7 @@
   elements.action.addEventListener('click', run);
   document.getElementById('paragraph-close').addEventListener(
     'click',
-    () => window.closeParagraph?.()
+    () => window.SitePages?.closeParagraph?.()
   );
   document.getElementById('paragraph-settings-toggle').addEventListener(
     'click',
