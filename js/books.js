@@ -1,9 +1,9 @@
-const BOOK_KINDS = Object.freeze({
+(() => {\n  'use strict';\n\n  const BOOK_KINDS = Object.freeze({
   FORGERS: 'forgers',
   HUMAN_MACHINES: 'humanMachines'
 });
 
-const BOOK_TITLES = Object.freeze({
+  const BOOK_TITLES = Object.freeze({
   [BOOK_KINDS.FORGERS]: {
     fa: ['جاعلان تقلید', 'در ده فصل'],
     en: ['The Forgers of Imitation', 'Ten Chapters'],
@@ -18,22 +18,22 @@ const BOOK_TITLES = Object.freeze({
   }
 });
 
-const FABLE_TITLES = Object.freeze({
+  const FABLE_TITLES = Object.freeze({
   fa: 'حکمت فابل',
   en: 'Fable Wisdom',
   zh: '寓言智慧',
   ar: 'حكمة الحكاية'
 });
 
-let bookReturn = 'home';
-let activeBookKind = BOOK_KINDS.FORGERS;
+  let bookReturn = 'home';
+  let activeBookKind = BOOK_KINDS.FORGERS;
 
-const bookTabs = document.getElementById('book-tabs');
-const bookBody = document.getElementById('book-body');
-const bookTitle = document.getElementById('book-title');
+  const bookTabs = document.getElementById('book-tabs');
+  const bookBody = document.getElementById('book-body');
+  const bookTitle = document.getElementById('book-title');
 
-function activeBookCatalog() {
-  if (currentSiteLang() === 'fa') return null;
+  function getCurrentLanguage() {\n    return window.SiteI18n?.getLanguage?.() || 'fa';\n  }\n\n  function activeBookCatalog() {
+  if (getCurrentLanguage() === 'fa') return null;
 
   try {
     const catalog = window.SiteI18n?.getCatalog?.()?.pages?.[activeBookKind];
@@ -44,7 +44,7 @@ function activeBookCatalog() {
 }
 
 function activeChapters() {
-  if (currentSiteLang() === 'fa') {
+  if (getCurrentLanguage() === 'fa') {
     if (activeBookKind === BOOK_KINDS.FORGERS) return bookChapters;
     if (
       activeBookKind === BOOK_KINDS.HUMAN_MACHINES &&
@@ -63,11 +63,11 @@ function activeChapters() {
     en: bookChaptersEn
   };
 
-  return catalogsByLanguage[currentSiteLang()] || bookChaptersEn;
+  return catalogsByLanguage[getCurrentLanguage()] || bookChaptersEn;
 }
 
 function getBookTitle() {
-  const language = currentSiteLang();
+  const language = getCurrentLanguage();
   const fallback = BOOK_TITLES[activeBookKind]?.[language] || BOOK_TITLES[activeBookKind].fa;
   const catalog = activeBookCatalog();
 
@@ -130,7 +130,7 @@ function renderBookHeader(chapterIndex, chapter) {
 function renderFableWisdom(catalog) {
   if (activeBookKind !== BOOK_KINDS.FORGERS) return null;
 
-  const language = currentSiteLang();
+  const language = getCurrentLanguage();
   const moralTextByLanguage = {
     fa: bookMoralFa,
     en: bookMoralEn,
@@ -159,8 +159,8 @@ function selectChapter(index) {
     if (moral) fragment.appendChild(moral);
   }
 
-  bookBody.classList.toggle('lang-en', currentSiteLang() === 'en');
-  bookBody.dir = currentSiteLang() === 'en' ? 'ltr' : 'rtl';
+  bookBody.classList.toggle('lang-en', getCurrentLanguage() === 'en');
+  bookBody.dir = getCurrentLanguage() === 'en' ? 'ltr' : 'rtl';
   bookBody.replaceChildren(fragment);
   bookBody.scrollTop = 0;
 }
@@ -177,24 +177,24 @@ function openBook(from = 'home', kind = BOOK_KINDS.FORGERS) {
     bookTitle.textContent = `📖 ${title} — ${subtitle}`;
   }
 
-  showPage('book');
+  window.SitePages?.showPage('book');
   buildBookTabs(0);
   selectChapter(0);
 }
 
 function closeBook() {
   if (bookReturn === 'reference') {
-    showPage('reference');
+    window.SitePages?.showPage('reference');
     return;
   }
 
   if (bookReturn === 'share') {
-    showPage('share');
+    window.SitePages?.showPage('share');
     return;
   }
 
-  showPage('home');
-  setInfo('reference');
+  window.SitePages?.returnHome('reference');
 }
 
-window.BookNavigation = Object.freeze({ buildBookTabs, selectChapter, openBook, closeBook });
+  window.BookNavigation = Object.freeze({ buildBookTabs, selectChapter, openBook, closeBook });
+})();
