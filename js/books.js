@@ -1,4 +1,7 @@
-(() => {\n  'use strict';\n\n  const BOOK_KINDS = Object.freeze({
+(() => {
+  'use strict';
+
+  const BOOK_KINDS = Object.freeze({
   FORGERS: 'forgers',
   HUMAN_MACHINES: 'humanMachines'
 });
@@ -32,7 +35,11 @@
   const bookBody = document.getElementById('book-body');
   const bookTitle = document.getElementById('book-title');
 
-  function getCurrentLanguage() {\n    return window.SiteI18n?.getLanguage?.() || 'fa';\n  }\n\n  function activeBookCatalog() {
+  function getCurrentLanguage() {
+    return window.SiteI18n?.getLanguage?.() || 'fa';
+  }
+
+  function activeBookCatalog() {
   if (getCurrentLanguage() === 'fa') return null;
 
   try {
