@@ -205,6 +205,14 @@
       localStorage.setItem(LEGACY_STORAGE_KEY, language);
     } catch (_) {}
 
-    window.location.reload();
+    const homePage = document.getElementById('home-page');
+    const homeVisible = homePage && homePage.style.display !== 'none';
+
+    if (homeVisible) {
+      window.location.reload();
+      return;
+    }
+
+    setLanguage(language);
   });
 })();
