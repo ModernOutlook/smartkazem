@@ -1,178 +1,300 @@
-function currentSiteLang(){return window.SiteI18n?.getLanguage?.()||'fa';}
-let activeId='structure';
+const REALM_ORDER = Object.freeze(['structure', 'continuity', 'experience', 'reference', 'share']);
+const REALM_GEOMETRY = Object.freeze([
+  ['structure', 365, 445],
+  ['continuity', 285, 365],
+  ['experience', 205, 285],
+  ['reference', 125, 205],
+  ['share', 70, 125]
+]);
+const ESCAPE_HANDLERS = Object.freeze({
+  book: closeBook,
+  paragraph: closeParagraph,
+  share: closeShare,
+  experience: closeExperience,
+  continuity: closeContinuity,
+  structure: closeStructure,
+  reference: closeReference
+});
 
-const app=document.getElementById('app');
-const info=document.getElementById('info');
-const infoTitle=document.getElementById('info-title');
-const infoText=document.getElementById('info-text');
-const realms=[...document.querySelectorAll('.realm')];
-const core=document.getElementById('core');
+let activeId = 'structure';
+let lastSelectionAt = 0;
 
-function setInfo(id,show=true){
-  activeId=id;
-  realms.forEach(r=>r.classList.toggle('selected',r.dataset.id===id));
-  const d=window.SiteI18n?.getCatalog?.()?.home?.realms?.[id];
-  if(d){infoTitle.textContent=d.title||'';infoText.textContent=d.text||'';}
-  info.classList.toggle('reference',id==='reference');
-  if(show) info.classList.add('visible');
+const info = document.getElementById('info');
+const infoTitle = document.getElementById('info-title');
+const infoText = document.getElementById('info-text');
+const realms = [...document.querySelectorAll('.realm')];
+const core = document.getElementById('core');
+const universe = document.getElementById('universe');
+const logoViewer = document.getElementById('logo-viewer');
+const logoViewerClose = document.getElementById('logo-viewer-close');
+
+function currentSiteLang() {
+  return window.SiteI18n?.getLanguage?.() || 'fa';
 }
 
-function clearInfo(){
+function setInfo(id, show = true) {
+  activeId = id;
+
+  realms.forEach((realm) => {
+    realm.classList.toggle('selected', realm.dataset.id === id);
+  });
+
+  const realm = window.SiteI18n?.getCatalog?.()?.home?.realms?.[id];
+  if (realm) {
+    infoTitle.textContent = realm.title || '';
+    infoText.textContent = realm.text || '';
+  }
+
+  info.classList.toggle('reference', id === 'reference');
+  info.classList.toggle('visible', show);
+}
+
+function clearInfo() {
   info.classList.remove('visible');
-  realms.forEach(r=>r.classList.remove('selected'));
+  realms.forEach((realm) => realm.classList.remove('selected'));
 }
 
-function selectRealm(id){
-  if(id==='core'){
+function selectRealm(id) {
+  if (id === 'core') {
     setInfo('core');
-    
     return;
   }
-  const realm=realms.find(r=>r.dataset.id===id);
-  if(!realm) return;
-  
+
+  if (!realms.some((realm) => realm.dataset.id === id)) return;
+
   setInfo(id);
-  if(id==='share'){openShare();}
-  if(id==='experience'){openExperience();}
-  if(id==='continuity'){openContinuity();}
-  if(id==='structure'){window.clearTimeout(window.__structureOpenTimer);openStructure();}
-  if(id==='reference'){
+
+  const openers = {
+    share: openShare,
+    experience: openExperience,
+    continuity: openContinuity,
+    structure: openStructure
+  };
+
+  if (openers[id]) {
+    openers[id]();
+    return;
+  }
+
+  if (id === 'reference') {
     window.clearTimeout(window.__referenceOpenTimer);
-    window.__referenceOpenTimer=window.setTimeout(openReference,220);
+    window.__referenceOpenTimer = window.setTimeout(openReference, 220);
   }
 }
 
-const logoViewer=document.getElementById('logo-viewer');
-const logoViewerClose=document.getElementById('logo-viewer-close');
-function openLogoViewer(){clearInfo();logoViewer.classList.add('open');}
-function closeLogoViewer(){logoViewer.classList.remove('open');}
-core.setAttribute('tabindex','0');
-core.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();openLogoViewer();});
-core.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();openLogoViewer();}});
-logoViewerClose.addEventListener('click',event=>{event.stopPropagation();closeLogoViewer();});
-logoViewer.addEventListener('click',event=>{if(event.target===logoViewer)closeLogoViewer();});
-
-const realmShare=document.getElementById('realm-share');
-if(realmShare){
-  realmShare.addEventListener('click',event=>{
-    event.preventDefault();
-    event.stopPropagation();
-    openShare();
-  });
-  realmShare.addEventListener('keydown',event=>{
-    if(event.key==='Enter'||event.key===' '){
-      event.preventDefault();
-      openShare();
-    }
-  });
+function openLogoViewer() {
+  clearInfo();
+  logoViewer.classList.add('open');
 }
 
-const realmGeometry=[
-  ['structure',365,445],
-  ['continuity',285,365],
-  ['experience',205,285],
-  ['reference',125,205],
-  ['share',70,125]
-];
-const universe=document.getElementById('universe');
+function closeLogoViewer() {
+  logoViewer.classList.remove('open');
+}
 
-function realmFromPoint(event){
-  const rect=universe.getBoundingClientRect();
-  const x=(event.clientX-rect.left)/rect.width*1000;
-  const y=(event.clientY-rect.top)/rect.height*1000;
-  const radius=Math.hypot(x-500,y-500);
-  if(radius<=70)return 'core';
-  for(const [id,inner,outer] of realmGeometry){
-    if(radius>inner && radius<=outer)return id;
+function handleActivation(event, callback) {
+  if (event.key !== 'Enter' && event.key !== ' ') return;
+  event.preventDefault();
+  callback();
+}
+
+function realmFromPoint(event) {
+  const rect = universe.getBoundingClientRect();
+  const x = ((event.clientX - rect.left) / rect.width) * 1000;
+  const y = ((event.clientY - rect.top) / rect.height) * 1000;
+  const radius = Math.hypot(x - 500, y - 500);
+
+  if (radius <= 70) return 'core';
+
+  for (const [id, inner, outer] of REALM_GEOMETRY) {
+    if (radius > inner && radius <= outer) return id;
   }
+
   return null;
 }
-let lastSelectionAt=0;
-realms.forEach(realm=>{
-  realm.addEventListener('click',event=>{
+
+function renderHomeFromCatalog() {
+  const catalog = window.SiteI18n?.getCatalog?.() || {};
+  const labels = catalog.labels || {};
+  const pageLabels = catalog.home?.pages || {};
+
+  [
+    ['share-page', labels.share],
+    ['experience-page', labels.experience],
+    ['continuity-page', labels.continuity],
+    ['structure-page', labels.structure],
+    ['reference-page', labels.reference]
+  ].forEach(([id, title]) => {
+    const page = document.getElementById(id);
+    if (!page) return;
+
+    const strong = page.querySelector('strong');
+    const span = page.querySelector('span');
+
+    if (strong && title) strong.textContent = title;
+    if (span) span.textContent = (title || '').split(' · ')[1] || title || '';
+    page.setAttribute('aria-label', title || '');
+  });
+
+  [
+    ['ref-observation', pageLabels.observation],
+    ['reference-layer3', pageLabels.layer3?.title]
+  ].forEach(([id, value]) => {
+    const button = document.getElementById(id);
+    if (!button || !value) return;
+
+    const small = button.querySelector('small');
+    button.firstChild.textContent = value;
+    if (small) small.textContent = '';
+  });
+
+  const humanMachinesButton = document.getElementById('share-human-machines');
+  const humanMachines = catalog.pages?.humanMachines;
+  if (humanMachinesButton && humanMachines) {
+    humanMachinesButton.firstChild.textContent = humanMachines.title || labels.share;
+    const small = humanMachinesButton.querySelector('small');
+    if (small) small.textContent = humanMachines.title || '';
+  }
+
+  const backLabel = labels.back || '';
+  [
+    'share-close',
+    'share-human-machines',
+    'experience-close',
+    'continuity-close',
+    'structure-close',
+    'reference-close',
+    'book-close',
+    'logo-viewer-close'
+  ].forEach((id) => {
+    const button = document.getElementById(id);
+    if (button && backLabel) button.setAttribute('aria-label', backLabel);
+  });
+
+  const brand = document.querySelector('.brand strong');
+  const brandAlt = document.querySelector('.brand span');
+  if (brand) brand.textContent = catalog.home?.brand || catalog.meta?.brand || brand.textContent;
+  if (brandAlt) brandAlt.textContent = catalog.home?.brandLatin || catalog.meta?.brandLatin || brandAlt.textContent;
+
+  const currentRealm = catalog.home?.realms?.[activeId];
+  if (currentRealm) {
+    infoTitle.textContent = currentRealm.title || '';
+    infoText.textContent = currentRealm.text || '';
+  }
+}
+
+function handleLanguageChange() {
+  renderHomeFromCatalog();
+
+  const bookPage = document.getElementById('book-page');
+  if (
+    typeof buildBookTabs === 'function' &&
+    bookPage?.style.display === 'block'
+  ) {
+    const activeTab = [...document.querySelectorAll('.book-tab')]
+      .findIndex((button) => button.classList.contains('active'));
+    const currentTab = Math.max(0, activeTab);
+    buildBookTabs(currentTab);
+    selectChapter(currentTab);
+  }
+}
+
+function handleEscape(event) {
+  if (event.key !== 'Escape') return;
+
+  if (logoViewer.classList.contains('open')) {
+    closeLogoViewer();
+    return;
+  }
+
+  const openPage = Object.keys(ESCAPE_HANDLERS).find((key) => {
+    const page = document.getElementById(PAGE_IDS[key]);
+    return page?.style.display === 'block';
+  });
+
+  if (openPage) {
+    ESCAPE_HANDLERS[openPage]();
+    return;
+  }
+
+  const index = REALM_ORDER.indexOf(activeId);
+  if (['ArrowDown', 'ArrowRight'].includes(event.key)) {
+    event.preventDefault();
+    setInfo(REALM_ORDER[(index + 1) % REALM_ORDER.length]);
+  }
+
+  if (['ArrowUp', 'ArrowLeft'].includes(event.key)) {
+    event.preventDefault();
+    setInfo(REALM_ORDER[(index - 1 + REALM_ORDER.length) % REALM_ORDER.length]);
+  }
+
+  if (event.key === 'Enter' && activeId === 'reference') openReference();
+}
+
+core.setAttribute('tabindex', '0');
+core.addEventListener('click', (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  openLogoViewer();
+});
+core.addEventListener('keydown', (event) => handleActivation(event, openLogoViewer));
+
+logoViewerClose.addEventListener('click', (event) => {
+  event.stopPropagation();
+  closeLogoViewer();
+});
+logoViewer.addEventListener('click', (event) => {
+  if (event.target === logoViewer) closeLogoViewer();
+});
+
+realms.forEach((realm) => {
+  realm.addEventListener('click', (event) => {
     event.preventDefault();
     event.stopPropagation();
-    const now=performance.now();
-    if(now-lastSelectionAt<90)return;
-    lastSelectionAt=now;
+
+    const now = performance.now();
+    if (now - lastSelectionAt < 90) return;
+
+    lastSelectionAt = now;
     selectRealm(realm.dataset.id);
   });
-  realm.addEventListener('keydown',event=>{
-    if(event.key==='Enter'||event.key===' '){
-      event.preventDefault();
-      selectRealm(realm.dataset.id);
-    }
+
+  realm.addEventListener('keydown', (event) => {
+    handleActivation(event, () => selectRealm(realm.dataset.id));
   });
 });
 
-function renderHomeFromCatalog(){
-  const catalog=window.SiteI18n?.getCatalog?.()||{};
-  const labels=catalog.labels||{};
-  const pages=catalog.home?.pages||{};
-  [['share-page',labels.share],['experience-page',labels.experience],['continuity-page',labels.continuity],['structure-page',labels.structure],['reference-page',labels.reference]].forEach(([id,title])=>{
-    const q=document.getElementById(id); if(!q)return;
-    const ss=q.querySelectorAll('.share-title strong,.experience-title strong,.continuity-title strong,.structure-title strong,.reference-title strong');
-    const strong=q.querySelector('strong'), span=q.querySelector('span');
-    if(strong&&title)strong.textContent=title;
-    if(span){
-      const key=id.replace('-page','');
-      span.textContent=(title||'').split(' · ')[1]||title||'';
-    }
-    q.setAttribute('aria-label',title||'');
-  });
-  const refs=[['ref-observation',pages.observation],['reference-layer3',pages.layer3?.title]];
-  refs.forEach(([id,v])=>{const b=document.getElementById(id);if(b&&v){const sm=b.querySelector('small');b.firstChild.textContent=v;if(sm)sm.textContent=''}});
-  const hs=document.getElementById('share-human-machines');
-  const hm=catalog.pages?.humanMachines;
-  if(hs&&hm){hs.firstChild.textContent=hm.title||labels.share;const sm=hs.querySelector('small');if(sm)sm.textContent=hm.title||''}
-  const back=labels.back||'';
-  ['share-close','share-human-machines','experience-close','continuity-close','structure-close','reference-close','book-close','logo-viewer-close'].forEach(id=>{const b=document.getElementById(id);if(b&&back)b.setAttribute('aria-label',back)});
-  const brand=document.querySelector('.brand strong'), brandAlt=document.querySelector('.brand span');
-  if(brand)brand.textContent=catalog.home?.brand||catalog.meta?.brand||brand.textContent;
-  if(brandAlt)brandAlt.textContent=catalog.home?.brandLatin||catalog.meta?.brandLatin||brandAlt.textContent;
-  const current=catalog.home?.realms?.[activeId];
-  if(current){infoTitle.textContent=current.title||'';infoText.textContent=current.text||'';}
-}
-document.addEventListener('site:languagechange',()=>{
-  renderHomeFromCatalog();
-  if(typeof buildBookTabs==='function'&&typeof bookPage!=='undefined'&&bookPage.style.display==='block'){
-    const currentTab=Math.max(0,[...document.querySelectorAll('.book-tab')].findIndex(b=>b.classList.contains('active')));
-    buildBookTabs(currentTab); selectChapter(currentTab);
-  }
-});
+document.addEventListener('site:languagechange', handleLanguageChange);
 
-document.getElementById('share-close').addEventListener('click',closeShare);
-document.getElementById('experience-close').addEventListener('click',closeExperience);
-document.getElementById('continuity-close').addEventListener('click',closeContinuity);
-document.getElementById('continuity-shahnameh').addEventListener('click',()=>{window.location.href='shahnameh.html';});
-document.getElementById('structure-close').addEventListener('click',closeStructure);
-document.getElementById('structure-treatise').addEventListener('click',()=>{window.location.href='philosophical-treatise.html';});
-document.getElementById('reference-close').addEventListener('click',closeReference);
-document.getElementById('share-human-machines').addEventListener('click',()=>openBook('share','humanMachines'));
-document.getElementById('share-forgers').addEventListener('click',()=>openBook('share','forgers'));
+document.getElementById('share-close').addEventListener('click', closeShare);
+document.getElementById('experience-close').addEventListener('click', closeExperience);
+document.getElementById('continuity-close').addEventListener('click', closeContinuity);
+document.getElementById('structure-close').addEventListener('click', closeStructure);
+document.getElementById('reference-close').addEventListener('click', closeReference);
+document.getElementById('book-close').addEventListener('click', closeBook);
 
-document.getElementById('ref-observation').addEventListener('click',()=>{window.location.href='observation.html';});
-document.getElementById('reference-layer3').addEventListener('click',()=>{window.location.href='echo-layer3.html';});
-document.getElementById('experience-observation25').addEventListener('click',()=>{window.location.href='observation-25.html';});
-document.getElementById('experience-detect').addEventListener('click',()=>openParagraph('experience'));
-document.getElementById('reference-match').addEventListener('click',()=>openParagraph('reference'));
-document.getElementById('book-close').addEventListener('click',closeBook);
-document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'&&logoViewer.classList.contains('open')){closeLogoViewer();return;}
-  if(e.key==='Escape'&&bookPage.style.display==='block')closeBook();
-  if(e.key==='Escape'&&paragraphPage.style.display==='block'){closeParagraph();return;}
-  if(e.key==='Escape'&&sharePage.style.display==='block')closeShare();
-  if(e.key==='Escape'&&experiencePage.style.display==='block')closeExperience();
-  if(e.key==='Escape'&&continuityPage.style.display==='block')closeContinuity();
-  if(e.key==='Escape'&&structurePage.style.display==='block')closeStructure();
-  if(e.key==='Escape'&&referencePage.style.display==='block')closeReference();
-  if(logoViewer.classList.contains('open')||bookPage.style.display==='block'||paragraphPage.style.display==='block'||referencePage.style.display==='block'||structurePage.style.display==='block'||continuityPage.style.display==='block'||experiencePage.style.display==='block'||sharePage.style.display==='block')return;
-  const order=['structure','continuity','experience','reference','share'];
-  const idx=order.indexOf(activeId);
-  if(['ArrowDown','ArrowRight'].includes(e.key)){e.preventDefault();setInfo(order[(idx+1)%order.length])}
-  if(['ArrowUp','ArrowLeft'].includes(e.key)){e.preventDefault();setInfo(order[(idx-1+order.length)%order.length])}
-  if(e.key==='Enter'&&activeId==='reference')openReference();
+document.getElementById('continuity-shahnameh').addEventListener('click', () => {
+  window.location.href = 'shahnameh.html';
 });
+document.getElementById('structure-treatise').addEventListener('click', () => {
+  window.location.href = 'philosophical-treatise.html';
+});
+document.getElementById('share-human-machines').addEventListener('click', () => openBook('share', 'humanMachines'));
+document.getElementById('share-forgers').addEventListener('click', () => openBook('share', 'forgers'));
+document.getElementById('ref-observation').addEventListener('click', () => {
+  window.location.href = 'observation.html';
+});
+document.getElementById('reference-layer3').addEventListener('click', () => {
+  window.location.href = 'echo-layer3.html';
+});
+document.getElementById('experience-observation25').addEventListener('click', () => {
+  window.location.href = 'observation-25.html';
+});
+document.getElementById('experience-detect').addEventListener('click', () => openParagraph('experience'));
+document.getElementById('reference-match').addEventListener('click', () => openParagraph('reference'));
+
+document.addEventListener('keydown', handleEscape);
 
 // Language state is owned exclusively by translations/i18n.js.
 setInfo('structure');
+
+window.HomeNavigation = Object.freeze({ currentSiteLang, realmFromPoint });
