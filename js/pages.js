@@ -32,6 +32,8 @@
 
   function returnHome() {
     showPage('home');
+    // Restore the selected realm information panel when returning home.
+    homeController.setInfo();
   }
 
   function openParagraph(kind) {
