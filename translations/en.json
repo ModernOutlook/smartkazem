@@ -305,7 +305,14 @@
         "درونمایه": "Themes",
         "فردوسی": "Ferdowsi",
         "اقتباسی": "Adaptations"
-      }
+      },
+      "subtitle": "A continuous reading of the Shahnameh, episode by episode",
+      "heroTitle": "From the First King to the End of the Tale",
+      "heroText": "Read the complete episodes of the Shahnameh as a continuous literary journey. Each episode contains its narrative, selected verses, and edition information.",
+      "findTitle": "Find an episode",
+      "searchPlaceholder": "Episode title or number…",
+      "visualLabel": "EPISODE ART",
+      "visualAlbum": "VISUAL ALBUM · 81"
     },
     "observation25": {
       "title": "The Land of Observation; 25 Times Reaching",
