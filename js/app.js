@@ -6,13 +6,6 @@
   const BookNavigation = window.BookNavigation;
 
   const REALM_ORDER = Object.freeze(['structure', 'continuity', 'experience', 'reference', 'share']);
-  const REALM_GEOMETRY = Object.freeze([
-  ['structure', 365, 445],
-  ['continuity', 285, 365],
-  ['experience', 205, 285],
-  ['reference', 125, 205],
-  ['share', 70, 125]
-]);
   const ESCAPE_HANDLERS = Object.freeze({
     book: BookNavigation.closeBook,
     paragraph: PageNavigation.closeParagraph,
@@ -31,13 +24,8 @@
   const infoText = document.getElementById('info-text');
   const realms = [...document.querySelectorAll('.realm')];
   const core = document.getElementById('core');
-  const universe = document.getElementById('universe');
   const logoViewer = document.getElementById('logo-viewer');
   const logoViewerClose = document.getElementById('logo-viewer-close');
-
-  function currentSiteLang() {
-  return window.SiteI18n?.getLanguage?.() || 'fa';
-}
 
   function setInfo(id, show = true) {
   activeId = id;
@@ -72,10 +60,10 @@
   setInfo(id);
 
   const openers = {
-    share: openShare,
-    experience: openExperience,
-    continuity: openContinuity,
-    structure: openStructure
+    share: PageNavigation.openShare,
+    experience: PageNavigation.openExperience,
+    continuity: PageNavigation.openContinuity,
+    structure: PageNavigation.openStructure
   };
 
   if (openers[id]) {
