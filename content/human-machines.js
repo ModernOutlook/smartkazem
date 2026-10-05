@@ -1,8 +1,8 @@
 (() => {
   'use strict';
 
-  const humanMachinesFaCatalog = // Persian source catalog — displayed directly in Persian; used as translation reference.
-const humanMachinesFaCatalog = {
+  // Persian source catalog — displayed directly in Persian; used as translation reference.
+  const humanMachinesFaCatalog = {
   "title": "انسان و ماشین‌هایش",
   "subtitle": "هفت بخش",
   "chapters": [
