@@ -66,7 +66,7 @@ function render(){
     });
   });
 }
-close.addEventListener('click',()=>{window.location.href='index.html';});
+close.addEventListener('click',()=>{if(history.length>1) history.back(); else window.location.href='index.html';});
 document.addEventListener('site:languagechange',render);
 document.addEventListener('DOMContentLoaded',()=>setTimeout(render,0),{once:true});
 })();
