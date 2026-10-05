@@ -92,7 +92,6 @@
         o.stop(end + 0.03);
       });
 
-      // A very quiet high harmonic gives the interface a glassy, mysterious tail.
       if (cue === 'open' || cue === 'success') {
         const shimmer = c.createOscillator();
         const sg = c.createGain();
@@ -109,54 +108,14 @@
     } catch (_) {}
   }
 
-  function save() {
-    try { localStorage.setItem(KEY, enabled ? '1' : '0'); } catch (_) {}
-  }
-
-  function syncButton() {
-    try {
-      document.querySelectorAll('[data-sound-toggle]').forEach((b) => {
-        b.setAttribute('aria-pressed', String(enabled));
-        b.textContent = enabled ? '🔊' : '🔇';
-        b.title = enabled ? 'صدا: روشن' : 'صدا: خاموش';
-      });
-    } catch (_) {}
-  }
-
-  function toggle() {
-    enabled = !enabled;
-    save();
-    if (enabled) unlock();
-    syncButton();
-    if (enabled) setTimeout(() => play('open'), 40);
-  }
-
-  function injectButton() {
-    try {
-      if (!document.body || document.querySelector('[data-sound-toggle]')) return;
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.setAttribute('data-sound-toggle', '');
-      b.setAttribute('aria-label', 'صدا');
-      b.setAttribute('aria-pressed', String(enabled));
-      b.textContent = enabled ? '🔊' : '🔇';
-      b.style.cssText = 'position:fixed;z-index:2147483000;top:12px;inset-inline-end:62px;width:29px;height:29px;padding:0;border:1px solid rgba(255,150,150,.35);border-radius:50%;background:rgba(255,80,80,.10);box-shadow:0 4px 14px rgba(0,0,0,.28);color:#ffb0aa;cursor:pointer;font-size:16px;font-weight:700;line-height:27px;text-align:center;transition:transform .18s ease,background .18s ease,box-shadow .18s ease;';
-      document.body.appendChild(b);
-    } catch (_) {}
-  }
-
   function init() {
     try {
-      injectButton();
-      syncButton();
-
       document.addEventListener('pointerdown', unlock, { capture: true, passive: true });
       document.addEventListener('touchstart', unlock, { capture: true, passive: true });
       document.addEventListener('click', (e) => {
         try {
           const t = e.target;
           if (!t || !t.closest) return;
-          if (t.closest('[data-sound-toggle]')) { toggle(); return; }
           const el = t.closest('button,a,[role="button"],summary');
           if (el && !el.disabled && el.getAttribute('aria-disabled') !== 'true') play(el.dataset.sound || 'tap');
         } catch (_) {}
@@ -173,9 +132,8 @@
 
   window.SiteAudio = {
     play,
-    enable() { enabled = true; save(); unlock(); syncButton(); },
-    disable() { enabled = false; save(); syncButton(); },
-    toggle,
+    enable() { enabled = true; unlock(); },
+    disable() { enabled = false; },
     get enabled() { return enabled; }
   };
 

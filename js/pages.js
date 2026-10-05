@@ -31,9 +31,8 @@
     if (page) page.style.display = 'block';
   }
 
-  function returnHome(realmId) {
-    showPage('home');
-    homeController.setInfo(realmId);
+  function returnHome() {
+    window.location.reload();
   }
 
   function openParagraph(kind) {

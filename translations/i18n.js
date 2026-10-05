@@ -197,6 +197,14 @@
 
     event.preventDefault();
     event.stopPropagation();
-    setLanguage(button.dataset.siteLang);
+
+    const language = normalizeLanguage(button.dataset.siteLang);
+
+    try {
+      localStorage.setItem(STORAGE_KEY, language);
+      localStorage.setItem(LEGACY_STORAGE_KEY, language);
+    } catch (_) {}
+
+    window.location.reload();
   });
 })();
