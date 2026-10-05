@@ -12,13 +12,40 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/splash.css">
+<link rel="stylesheet" href="css/audio.css">
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="ui/shared/layout-spec.css">
 <link rel="stylesheet" href="ui/mobile/mobile.css">
 <link rel="stylesheet" href="css/desktop.css">
+<script data-audio-bootstrap>
+(()=>{const w=window;if(w.__SmartKazemAudioBootstrap)return;const AC=w.AudioContext||w.webkitAudioContext;const fail=()=>{w.__SmartKazemAudioBootstrap={supported:false,ready:true};};if(!AC){fail();return;}try{const context=new AC();const ambient=context.createGain();const cues=context.createGain();const duck=context.createGain();const master=context.createGain();ambient.gain.value=1;cues.gain.value=0;duck.gain.value=1;master.gain.value=0;ambient.connect(duck);cues.connect(duck);duck.connect(master);master.connect(context.destination);w.__SmartKazemAudioBootstrap={supported:true,ready:true,context,ambient,cues,duck,master};}catch(_){fail();}})();
+</script>
+<script src="audio-engine.js"></script>
+<script src="translations/i18n.js"></script>
+<script src="js/pages.js"></script>
+<script src="site-audio.js" defer></script>
 <script src="ui/bootstrap.js" defer></script>
 </head>
-<body><div id="splash" aria-hidden="true"><img src="startsmart.jpg" alt="" fetchpriority="high" decoding="async"></div>
+<body>
+<a class="skip-link" href="#app" data-i18n="audio.skipToContent">پرش به محتوای اصلی</a>
+<div id="audio-controls" aria-label="کنترل صوت" data-i18n-aria="audio.controls">
+  <button type="button" data-audio-toggle data-i18n-aria="audio.toggle" aria-pressed="true"></button>
+  <button type="button" data-audio-stop data-i18n-aria="audio.stop"></button>
+  <button type="button" data-audio-mute data-i18n-aria="audio.mute" aria-pressed="false"></button>
+  <label>
+    <span class="sr-only" data-i18n="audio.volumeLabel">بلندی صدا</span>
+    <input type="range" data-audio-volume min="0" max="100" value="18" step="1" data-i18n-aria="audio.volume">
+  </label>
+</div>
+<div id="audio-status" role="status" aria-live="polite" aria-atomic="true"></div>
+<div id="splash" aria-hidden="false" tabindex="-1">
+  <img src="startsmart.jpg" alt="" fetchpriority="high" decoding="async">
+  <div class="audio-gate">
+    <button type="button" data-audio-enable data-i18n="audio.enable">فعال‌سازی صدا</button>
+    <button type="button" data-audio-continue data-i18n="audio.continueSilent">ادامه بدون صدا</button>
+    <div data-audio-status role="status" aria-live="polite" aria-atomic="true"></div>
+  </div>
+</div>
 <main class="app" id="app">
   <div class="atmosphere"></div>
 
