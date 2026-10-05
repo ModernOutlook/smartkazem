@@ -19,6 +19,7 @@
 
   let filter = 'all';
   let activeEpisode = 1;
+  let artworkEpisode = 1;
   let catalog = null;
 
   const getPage = () => catalog?.pages?.shahnameh || {};
@@ -91,15 +92,12 @@
 
     const number = document.createElement('span');
     number.className = 'n';
-    number.textContent = `${translate('part', 'قسمت')} ${toSiteNumber(episode.id)}`;
+    number.textContent = toSiteNumber(episode.id);
 
-    const title = document.createElement('span');
-    title.className = 't';
-    title.textContent = getLocalizedEpisode(episode).title;
-
-    button.append(number, title);
+    button.append(number);
     button.addEventListener('click', () => {
       activeEpisode = episode.id;
+      artworkEpisode = episode.id;
       renderEpisodeList();
       renderReader();
       syncArtwork();
@@ -124,7 +122,7 @@
   }
 
   function syncArtwork() {
-    const episode = getEpisodeView(data.getEpisode(activeEpisode));
+    const episode = getEpisodeView(data.getEpisode(artworkEpisode));
     if (!episode || !elements.artFrame) return;
 
     elements.artIndex.textContent =
@@ -169,24 +167,14 @@
     return section;
   }
 
-  function move(offset) {
-    const index = data.episodes.findIndex((episode) => episode.id === activeEpisode);
+  function moveArtwork(offset) {
+    const index = data.episodes.findIndex((episode) => episode.id === artworkEpisode);
     const nextEpisode = data.episodes[index + offset];
 
     if (!nextEpisode) return;
 
-    activeEpisode = nextEpisode.id;
-    renderEpisodeList();
-    renderReader();
+    artworkEpisode = nextEpisode.id;
     syncArtwork();
-
-    const main = document.querySelector('.main');
-    if (main) {
-      window.scrollTo({
-        top: main.offsetTop - 10,
-        behavior: 'smooth'
-      });
-    }
   }
 
   function renderReader() {
@@ -289,8 +277,8 @@
       else window.location.href = 'index.html';
     });
 
-    elements.artPrevious?.addEventListener('click', () => move(-1));
-    elements.artNext?.addEventListener('click', () => move(1));
+    elements.artPrevious?.addEventListener('click', () => moveArtwork(-1));
+    elements.artNext?.addEventListener('click', () => moveArtwork(1));
   }
 
   function init() {
