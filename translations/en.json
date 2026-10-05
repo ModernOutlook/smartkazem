@@ -815,7 +815,8 @@
         "empty": "No episode matches these criteria.",
         "imageMissing": "Image not found for this episode.",
         "imagePrevious": "Previous image",
-        "imageNext": "Next image"
+        "imageNext": "Next image",
+        "part": "Part"
       }
     },
     "observation25": {
