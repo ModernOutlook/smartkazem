@@ -14,17 +14,27 @@
     input: document.getElementById('paragraph-input'),
     count: document.getElementById('paragraph-count'),
     mode: document.getElementById('paragraph-mode'),
-    action: document.getElementById('paragraph-action'),
+    action: document.getElementById('paragraph-recognize'),
     output: document.getElementById('paragraph-output'),
     error: document.getElementById('paragraph-error'),
     source: document.getElementById('paragraph-source'),
     settings: document.getElementById('paragraph-settings'),
     key: document.getElementById('paragraph-api-key'),
     base: document.getElementById('paragraph-base-url'),
-    model: document.getElementById('paragraph-model')
+    model: document.getElementById('paragraph-model'),
+    generationControls: document.getElementById('paragraph-generation-controls'),
+    choices: [...document.querySelectorAll('.pm-realm-choice')],
+    popover: document.getElementById('pm-judgment-popover')
   };
 
   let entryMode = ENTRY_MODES.EXPERIENCE;
+  let currentResults = [];
+  const userJudgments = Object.create(null);
+  const STATUS_OPTIONS = Object.freeze([
+    ['ok', 'مطابق'],
+    ['warn', 'مبهم'],
+    ['bad', 'متناقض']
+  ]);
 
   function getLanguage() {
     return window.SiteI18n?.getLanguage?.() || 'fa';
@@ -96,6 +106,13 @@
     elements.source.textContent = getSourceLabel(kind);
 
     elements.input.value = '';
+    currentResults = [];
+    DOMAIN_ORDER.forEach((domain) => delete userJudgments[domain]);
+    elements.choices.forEach((choice) => {
+      choice.classList.remove('judgment-ok', 'judgment-warn', 'judgment-bad');
+      delete choice.dataset.judgment;
+    });
+    closeJudgmentPopover();
     elements.output.replaceChildren();
     elements.error.textContent = '';
 
@@ -124,12 +141,14 @@
   }
 
   function renderCard(paragraph, index, displayedText) {
+    const evaluation = paragraph.userEvaluation || '';
+    const evaluationClass = evaluation ? ' pm-user-' + evaluation : '';
     const processed = window.ParagraphMachineCore.processText(paragraph.text);
 
     return (
       '<article class="pm-card">' +
       '<div class="pm-index">' + (index + 1) + '</div>' +
-      '<div class="pm-text">' + escapeHtml(displayedText || processed.text) + '</div>' +
+      '<div class="pm-text' + evaluationClass + '">' + escapeHtml(displayedText || processed.text) + '</div>' +
       '<div class="pm-meta">' +
       '<span>' +
       processed.finalWordCount +
@@ -202,6 +221,60 @@
     return results;
   }
 
+  function closeJudgmentPopover() {
+    if (!elements.popover) return;
+    elements.popover.hidden = true;
+    elements.popover.replaceChildren();
+  }
+
+  function openJudgmentPopover(button) {
+    const domain = button.dataset.domain;
+    const name = button.querySelector('span')?.textContent || '';
+    elements.popover.className = 'pm-judgment-popover pm-domain-' + domain;
+    elements.popover.innerHTML =
+      '<strong>' + escapeHtml(name) + '</strong>' +
+      '<div class="pm-judgment-options">' +
+      STATUS_OPTIONS.map(([value, label]) =>
+        '<button type="button" data-status="' + value + '" class="pm-choice-' + value + '">' + label + '</button>'
+      ).join('') +
+      '</div>';
+    elements.popover.hidden = false;
+    elements.popover.querySelectorAll('[data-status]').forEach((option) => {
+      option.addEventListener('click', () => {
+        userJudgments[domain] = option.dataset.status;
+        button.dataset.judgment = option.dataset.status;
+        button.classList.remove('judgment-ok', 'judgment-warn', 'judgment-bad');
+        button.classList.add('judgment-' + option.dataset.status);
+        closeJudgmentPopover();
+      });
+    });
+  }
+
+  function evaluateUserJudgments() {
+    if (!currentResults.length) throw new Error(translate('paragraphMachine.noParagraph', 'ابتدا یک پاراگراف تولید یا نمایش دهید.'));
+    const missing = DOMAIN_ORDER.filter((domain) => !userJudgments[domain]);
+    if (missing.length) throw new Error(translate('paragraphMachine.judgeAll', 'برای هر پنج قلمرو یک قضاوت انتخاب کنید.'));
+
+    currentResults.forEach((paragraph) => {
+      const correct = DOMAIN_ORDER.every((domain) => userJudgments[domain] === paragraph.judgment?.[domain]?.status);
+      paragraph.userEvaluation = correct ? 'correct' : 'incorrect';
+    });
+
+    elements.output.innerHTML = currentResults
+      .map((paragraph, index) => renderCard(paragraph, index, paragraph.displayedText))
+      .join('');
+    elements.source.textContent = translate(
+      correctSourceKey(currentResults),
+      'نتیجه قضاوت شما با قضاوت ماشین پاراگراف مقایسه شد.'
+    );
+  }
+
+  function correctSourceKey(results) {
+    return results.every((paragraph) => paragraph.userEvaluation === 'correct')
+      ? 'paragraphMachine.recognitionCorrect'
+      : 'paragraphMachine.recognitionIncorrect';
+  }
+
   async function run() {
     elements.error.textContent = '';
     elements.output.innerHTML =
@@ -211,17 +284,23 @@
     elements.action.disabled = true;
 
     try {
-      const results = entryMode === ENTRY_MODES.REFERENCE
+      if (currentResults.length) {
+        evaluateUserJudgments();
+        return;
+      }
+
+      currentResults = entryMode === ENTRY_MODES.REFERENCE
         ? await evaluateReference()
         : await generateExperience();
 
-      elements.output.innerHTML = results
-        .map((paragraph, index) => renderCard(
-          paragraph,
-          index,
-          paragraph.displayedText
-        ))
+      elements.output.innerHTML = currentResults
+        .map((paragraph, index) => renderCard(paragraph, index, paragraph.displayedText))
         .join('');
+
+      elements.source.textContent = translate(
+        'paragraphMachine.judgmentReady',
+        'پاراگراف آماده قضاوت پنج‌قلمرویی است.'
+      );
     } catch (error) {
       elements.error.textContent = error.message || String(error);
     } finally {
@@ -242,6 +321,18 @@
   }
 
   elements.action.addEventListener('click', run);
+  elements.choices.forEach((choice) => {
+    choice.addEventListener('click', (event) => {
+      event.stopPropagation();
+      openJudgmentPopover(choice);
+    });
+  });
+  document.addEventListener('click', (event) => {
+    if (!elements.popover || elements.popover.hidden) return;
+    if (!elements.popover.contains(event.target) && !event.target.closest('.pm-realm-choice')) {
+      closeJudgmentPopover();
+    }
+  });
   document.getElementById('paragraph-close').addEventListener(
     'click',
     () => window.SitePages?.closeParagraph?.()
