@@ -23,39 +23,62 @@
   let activeEpisode = 1;
   let catalog = null;
 
+  const getPage = () => catalog?.pages?.shahnameh || {};
+  const getUi = () => getPage().ui || {};
+  const getLanguage = () => window.SiteI18n?.getLanguage?.() || document.documentElement.lang || 'fa';
+
   const translate = (path, fallback = '') => {
-    const pageCatalog = catalog?.pages?.shahnameh || {};
-    const value = pageCatalog?.[path] ?? catalog?.[path] ?? catalog?.labels?.[path];
+    const pageCatalog = getPage();
+    const ui = getUi();
+    const value =
+      ui?.[path] ??
+      pageCatalog?.[path] ??
+      catalog?.[path] ??
+      catalog?.labels?.[path];
     return value == null ? fallback : value;
   };
 
-  function getEpisodeView(episode) {
-    const page = catalog?.pages?.shahnameh || {};
-    const title = page.titles?.[episode.id - 1] || episode.title;
-    const section = page.sections?.[episode.section] || episode.section;
+  const localizedSection = (section) =>
+    getPage().sections?.[section] || section;
+
+  const localizedTitle = (episode) =>
+    getPage().titles?.[episode.id - 1] || episode.title;
+
+  const getLocalizedEpisode = (episode) => {
+    if (!episode) return null;
+    const page = getPage();
     const localized = page.episodes?.[String(episode.id)] || (episode.id === 1 ? page.part1 : null);
-    if (localized) {
-      return {
-        ...episode,
-        title: localized.title || title,
-        section,
-        prose: localized.prose || episode.prose,
-        verse: localized.originalVerse || episode.verse
-      };
-    }
-    return { ...episode, title, section };
+    return {
+      ...episode,
+      title: localized?.title || localizedTitle(episode),
+      section: localizedSection(episode.section),
+      prose: localized?.prose || episode.prose,
+      verse: localized?.originalVerse || episode.verse
+    };
+  };
+
+  function getEpisodeView(episode) {
+    return getLocalizedEpisode(episode);
   }
 
-  const toPersianNumber = (value) => new Intl.NumberFormat('fa-IR').format(value);
+  const toSiteNumber = (value) => {
+    try {
+      return new Intl.NumberFormat(getLanguage()).format(value);
+    } catch (_) {
+      return String(value);
+    }
+  };
 
   function getVisibleEpisodes() {
     const query = (elements.search?.value || '').trim().toLowerCase();
 
     return data.episodes.filter((episode) => {
+      const localized = getLocalizedEpisode(episode);
       const matchesFilter = filter === 'all' || episode.section === filter;
       const matchesSearch =
         !query ||
         String(episode.id).includes(query) ||
+        localized.title.toLowerCase().includes(query) ||
         episode.title.toLowerCase().includes(query);
 
       return matchesFilter && matchesSearch;
@@ -70,7 +93,7 @@
 
     const number = document.createElement('span');
     number.className = 'n';
-    number.textContent = `${translate('part', 'قسمت')} ${toPersianNumber(episode.id)}`;
+    number.textContent = `${translate('part', 'قسمت')} ${toSiteNumber(episode.id)}`;
 
     const title = document.createElement('span');
     title.className = 't';
@@ -107,16 +130,16 @@
     if (!episode || !elements.artFrame) return;
 
     elements.artIndex.textContent =
-      `${toPersianNumber(episode.id).padStart(2, '۰')} / ۸۱`;
+      `${toSiteNumber(episode.id).padStart(2, '۰')} / ۸۱`;
     elements.artCaption.textContent =
-      `${translate('part', 'قسمت')} ${toPersianNumber(episode.id)} · ${episode.title}`;
+      `${translate('part', 'قسمت')} ${toSiteNumber(episode.id)} · ${episode.title}`;
     elements.visualTitle.textContent = episode.title;
 
     elements.artFrame.replaceChildren();
 
     const image = document.createElement('img');
     image.src = episode.image;
-    image.alt = `${translate('part', 'قسمت')} ${toPersianNumber(episode.id)}`;
+    image.alt = `${translate('part', 'قسمت')} ${toSiteNumber(episode.id)}`;
     image.loading = 'lazy';
 
     image.addEventListener('error', () => {
@@ -124,7 +147,7 @@
       const empty = document.createElement('div');
       empty.className = 'art-empty';
       empty.textContent =
-        `تصویر ${toPersianNumber(episode.id)} در مسیر content/${String(episode.id).padStart(2, '0')}.jpg یافت نشد.`;
+        `تصویر ${toSiteNumber(episode.id)} در مسیر content/${String(episode.id).padStart(2, '0')}.jpg یافت نشد.`;
       elements.artFrame.appendChild(empty);
     }, { once: true });
 
@@ -179,7 +202,7 @@
     const headingGroup = document.createElement('div');
     const eyebrow = document.createElement('div');
     eyebrow.className = 'eyebrow';
-    eyebrow.textContent = `${translate('part', 'قسمت')} ${toPersianNumber(episode.id)} · ${episode.section}`;
+    eyebrow.textContent = `${translate('part', 'قسمت')} ${toSiteNumber(episode.id)} · ${episode.section}`;
 
     const title = document.createElement('h2');
     title.textContent = episode.title;
@@ -245,7 +268,8 @@
     if (!catalog) return;
 
     const labels = catalog?.labels || {};
-    const page = catalog?.pages?.shahnameh || catalog?.pages?.part1 || {};
+    const page = getPage();
+    const ui = getUi();
 
     document.title = labels.shahnameh || document.title;
 
@@ -260,7 +284,9 @@
     const back = elements.back;
     const stats = document.querySelectorAll('.stat span');
     const visualStats = document.querySelectorAll('.visual-stats span');
+    const eyebrow = document.querySelector('.title .eyebrow');
 
+    if (eyebrow) eyebrow.textContent = page.eyebrow || eyebrow.textContent;
     if (title) title.textContent = labels.shahnameh || title.textContent;
     if (subtitle) subtitle.textContent = page.subtitle || subtitle.textContent;
     if (heroTitle) heroTitle.textContent = page.heroTitle || heroTitle.textContent;
@@ -269,9 +295,21 @@
     if (search) search.placeholder = page.searchPlaceholder || search.placeholder;
     if (visualLabel) visualLabel.textContent = page.visualLabel || visualLabel.textContent;
     if (storyLabel) storyLabel.textContent = page.visualAlbum || storyLabel.textContent;
-    document.querySelectorAll('.stat span')[0]?.replaceChildren(document.createTextNode(page.stats?.episodes || document.querySelectorAll('.stat span')[0].textContent));
     if (back) back.textContent = labels.back || back.textContent;
-    if (page) page.content = 'shahnameh';
+
+    elements.filters.forEach((button) => {
+      const key = button.dataset.filter;
+      button.textContent = key === 'all' ? (ui.all || 'All') : localizedSection(key);
+    });
+
+    const statSpans = document.querySelectorAll('.stat span');
+    if (statSpans[0]) statSpans[0].textContent = ui.episodeCount || statSpans[0].textContent;
+    if (statSpans[1]) statSpans[1].textContent = ui.readingUnit || statSpans[1].textContent;
+    if (statSpans[2]) statSpans[2].textContent = ui.referenceSource || statSpans[2].textContent;
+
+    if (visualStats[0]) visualStats[0].textContent = ui.mainEpisodes || visualStats[0].textContent;
+    if (visualStats[1]) visualStats[1].textContent = ui.adaptations || visualStats[1].textContent;
+    if (visualStats[2]) visualStats[2].textContent = ui.aspectRatio || visualStats[2].textContent;
 
     renderEpisodeList();
     renderReader();
@@ -300,7 +338,7 @@
 
   function init() {
     catalog = window.SiteI18n?.getCatalog?.() || null;
-    elements.episodeCount.textContent = toPersianNumber(data.meta.totalEpisodes);
+    elements.episodeCount.textContent = toSiteNumber(data.meta.totalEpisodes);
     bindEvents();
     document.addEventListener('site:languagechange', applyLanguage);
     renderEpisodeList();
