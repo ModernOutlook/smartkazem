@@ -1,71 +1,207 @@
-let bookReturn='home';
-let activeBookKind='forgers';
-const bookTabs=document.getElementById('book-tabs');
-const bookBody=document.getElementById('book-body');
+(() => {
+  'use strict';
 
-function activeBookCatalog(){
-  if(currentSiteLang()==='fa')return null;
-  try{
-    const p=window.SiteI18n&&window.SiteI18n.getCatalog?window.SiteI18n.getCatalog().pages?.[activeBookKind]:null;
-    if(p&&Array.isArray(p.chapters)&&p.chapters.length)return p;
-  }catch(_){}
-  return null;
-}
-function activeChapters(){
-  if(currentSiteLang()==='fa'){
-    if(activeBookKind==='forgers')return bookChapters;
-    if(activeBookKind==='humanMachines'&&Array.isArray(humanMachinesFaCatalog?.chapters))return humanMachinesFaCatalog.chapters;
+  const BOOK_KINDS = Object.freeze({
+  FORGERS: 'forgers',
+  HUMAN_MACHINES: 'humanMachines'
+});
+
+  const BOOK_TITLES = Object.freeze({
+  [BOOK_KINDS.FORGERS]: {
+    fa: ['جاعلان تقلید', 'در ده فصل'],
+    en: ['The Forgers of Imitation', 'Ten Chapters'],
+    zh: ['《模仿的伪造者》', '十章'],
+    ar: ['مزوّرو التقليد', 'عشرة فصول']
+  },
+  [BOOK_KINDS.HUMAN_MACHINES]: {
+    fa: ['انسان و ماشین‌هایش', 'هفت بخش'],
+    en: ['Humanity and Its Machines', 'Seven Parts'],
+    zh: ['人类与他们的机器', '七个部分'],
+    ar: ['الإنسان وآلاته', 'سبعة أجزاء']
   }
-  const p=activeBookCatalog();
-  if(p)return p.chapters;
-  return currentSiteLang()==='zh'?bookChaptersZh:(currentSiteLang()==='ar'?bookChaptersAr:bookChaptersEn);
+});
+
+  const FABLE_TITLES = Object.freeze({
+  fa: 'حکمت فابل',
+  en: 'Fable Wisdom',
+  zh: '寓言智慧',
+  ar: 'حكمة الحكاية'
+});
+
+  let bookReturn = 'home';
+  let activeBookKind = BOOK_KINDS.FORGERS;
+
+  const bookTabs = document.getElementById('book-tabs');
+  const bookBody = document.getElementById('book-body');
+  const bookTitle = document.getElementById('book-title');
+
+  function getCurrentLanguage() {
+    return window.SiteI18n?.getLanguage?.() || 'fa';
+  }
+
+  function activeBookCatalog() {
+  if (getCurrentLanguage() === 'fa') return null;
+
+  try {
+    const catalog = window.SiteI18n?.getCatalog?.()?.pages?.[activeBookKind];
+    return catalog?.chapters?.length ? catalog : null;
+  } catch (_) {
+    return null;
+  }
 }
-function buildBookTabs(active=0){
-  bookTabs.innerHTML='';
-  activeChapters().forEach((ch,i)=>{
-    const b=document.createElement('button');
-    b.className='book-tab'+(i===active?' active':'');
-    b.textContent=ch.title;
-    b.addEventListener('click',()=>selectChapter(i));
-    bookTabs.appendChild(b);
+
+function activeChapters() {
+  if (getCurrentLanguage() === 'fa') {
+    if (activeBookKind === BOOK_KINDS.FORGERS) return window.ForgersCatalog;
+    if (
+      activeBookKind === BOOK_KINDS.HUMAN_MACHINES &&
+      Array.isArray(window.HumanMachinesCatalog?.chapters)
+    ) {
+      return window.HumanMachinesCatalog.chapters;
+    }
+  }
+
+  const catalog = activeBookCatalog();
+  if (catalog) return catalog.chapters;
+
+  const catalogsByLanguage = {
+    zh: window.ForgersCatalogZh,
+    ar: window.ForgersCatalogAr,
+    en: window.ForgersCatalogEn
+  };
+
+  return catalogsByLanguage[getCurrentLanguage()] || window.ForgersCatalogEn;
+}
+
+function getBookTitle() {
+  const language = getCurrentLanguage();
+  const fallback = BOOK_TITLES[activeBookKind]?.[language] || BOOK_TITLES[activeBookKind].fa;
+  const catalog = activeBookCatalog();
+
+  return {
+    title: catalog?.title || fallback[0],
+    subtitle: catalog?.subtitle || fallback[1]
+  };
+}
+
+function createElement(tag, className, text) {
+  const element = document.createElement(tag);
+  if (className) element.className = className;
+  if (text !== undefined) element.textContent = text;
+  return element;
+}
+
+function buildBookTabs(activeIndex = 0) {
+  bookTabs.replaceChildren();
+
+  activeChapters().forEach((chapter, index) => {
+    const button = createElement(
+      'button',
+      `book-tab${index === activeIndex ? ' active' : ''}`,
+      chapter.title
+    );
+
+    button.type = 'button';
+    button.addEventListener('click', () => selectChapter(index));
+    bookTabs.appendChild(button);
   });
 }
 
-function selectChapter(i){
-  const chapters=activeChapters();
-  document.querySelectorAll('.book-tab').forEach((b,n)=>b.classList.toggle('active',n===i));
-  const ch=chapters[i];
-  let html='';
-  const bookCatalog=activeBookCatalog();
-  if(i===0){
-    const bookTitle=bookCatalog?.title||(activeBookKind==='humanMachines'?(currentSiteLang()==='en'?'Humanity and Its Machines':currentSiteLang()==='zh'?'人类与他们的机器':currentSiteLang()==='ar'?'الإنسان وآلاته':'انسان و ماشین‌هایش'):(currentSiteLang()==='en'?'The Forgers of Imitation':currentSiteLang()==='zh'?'《模仿的伪造者》':currentSiteLang()==='ar'?'مزوّرو التقليد':'جاعلان تقلید'));
-    const bookSubtitle=bookCatalog?.subtitle||(activeBookKind==='humanMachines'?(currentSiteLang()==='en'?'Seven Parts':currentSiteLang()==='zh'?'七个部分':currentSiteLang()==='ar'?'سبعة أجزاء':'هفت بخش'):(currentSiteLang()==='en'?'Ten Chapters':currentSiteLang()==='zh'?'十章':currentSiteLang()==='ar'?'عشرة فصول':'در ده فصل'));
-    html+='<h1 class="book-h1">'+bookTitle+'</h1><p class="book-sub">'+bookSubtitle+'</p>';
+function renderBookHeader(chapterIndex, chapter) {
+  const fragment = document.createDocumentFragment();
+
+  if (chapterIndex === 0) {
+    const { title, subtitle } = getBookTitle();
+    fragment.append(
+      createElement('h1', 'book-h1', title),
+      createElement('p', 'book-sub', subtitle)
+    );
   }
-  html+='<div class="chapter" style="--dot:'+ch.dot+'"><h2><i></i>'+ch.title+'</h2>';
-  ch.paragraphs.forEach(p=>html+='<p>'+p+'</p>');
-  html+='</div>';
-  if(i===chapters.length-1&&activeBookKind==='forgers'){
-    const moralTitle=currentSiteLang()==='en'?'Fable Wisdom':currentSiteLang()==='zh'?'寓言智慧':currentSiteLang()==='ar'?'حكمة الحكاية':'حکمت فابل';
-    const moralText=bookCatalog?.moral||(currentSiteLang()==='en'?bookMoralEn:currentSiteLang()==='zh'?'展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。':currentSiteLang()==='ar'?'من يعرض مهارة لا يذهب إلا بقدر ما لديه من متفرجين؛ ومن يمارس مهارة يذهب إلى أبعد ما يستطيع. والغابة التي يكون الجميع فيها متفرجين لا يبقى فيها في النهاية شيء يُرى سوى فعل المشاهدة نفسه.':bookMoralFa);
-    html+='<div class="moral"><h2>'+moralTitle+'</h2><p>'+moralText+'</p></div>';
-  }
-  bookBody.classList.toggle('lang-en',currentSiteLang()==='en');
-  bookBody.dir=currentSiteLang()==='en'?'ltr':'rtl';
-  bookBody.innerHTML=html;
-  bookBody.scrollTop=0;
+
+  const chapterElement = createElement('div', 'chapter');
+  chapterElement.style.setProperty('--dot', chapter.dot);
+
+  const heading = createElement('h2');
+  heading.appendChild(createElement('i'));
+  heading.appendChild(document.createTextNode(chapter.title));
+  chapterElement.appendChild(heading);
+
+  chapter.paragraphs.forEach((paragraph) => {
+    chapterElement.appendChild(createElement('p', '', paragraph));
+  });
+
+  fragment.appendChild(chapterElement);
+  return fragment;
 }
 
-function openBook(from='home',kind='forgers'){bookReturn=from;activeBookKind=kind;
-  const meta=window.SiteI18n?.getCatalog?.().pages?.[activeBookKind];
-  const bt=document.getElementById('book-title');
-  if(bt&&meta?.title)bt.textContent='📖 '+meta.title+' — '+meta.subtitle;
-  home.style.display='none';
-  referencePage.style.display='none';
-  bookPage.style.display='block';
+function renderFableWisdom(catalog) {
+  if (activeBookKind !== BOOK_KINDS.FORGERS) return null;
+
+  const language = getCurrentLanguage();
+  const moralTextByLanguage = {
+    fa: bookMoralFa,
+    en: bookMoralEn,
+    zh: '展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。',
+    ar: 'من يعرض مهارة لا يذهب إلا بقدر ما لديه من متفرجين؛ ومن يمارس مهارة يذهب إلى أبعد ما يستطيع. والغابة التي يكون الجميع فيها متفرجين لا يبقى فيها في النهاية شيء يُرى سوى فعل المشاهدة نفسها.'
+  };
+
+  const moral = createElement('div', 'moral');
+  moral.appendChild(createElement('h2', '', FABLE_TITLES[language] || FABLE_TITLES.fa));
+  moral.appendChild(createElement('p', '', catalog?.moral || moralTextByLanguage[language] || moralTextByLanguage.fa));
+  return moral;
+}
+
+function selectChapter(index) {
+  const chapters = activeChapters();
+  const chapter = chapters[index];
+  if (!chapter) return;
+
+  document.querySelectorAll('.book-tab').forEach((button, buttonIndex) => {
+    button.classList.toggle('active', buttonIndex === index);
+  });
+
+  const fragment = renderBookHeader(index, chapter);
+  if (index === chapters.length - 1) {
+    const moral = renderFableWisdom(activeBookCatalog());
+    if (moral) fragment.appendChild(moral);
+  }
+
+  bookBody.classList.toggle('lang-en', getCurrentLanguage() === 'en');
+  bookBody.dir = getCurrentLanguage() === 'en' ? 'ltr' : 'rtl';
+  bookBody.replaceChildren(fragment);
+  bookBody.scrollTop = 0;
+}
+
+function openBook(from = 'home', kind = BOOK_KINDS.FORGERS) {
+  bookReturn = from;
+  activeBookKind = kind;
+
+  const catalog = window.SiteI18n?.getCatalog?.()?.pages?.[activeBookKind];
+  if (catalog?.title) {
+    bookTitle.textContent = `📖 ${catalog.title} — ${catalog.subtitle || ''}`;
+  } else {
+    const { title, subtitle } = getBookTitle();
+    bookTitle.textContent = `📖 ${title} — ${subtitle}`;
+  }
+
+  window.SitePages?.showPage('book');
   buildBookTabs(0);
   selectChapter(0);
-  
 }
 
-function closeBook(){bookPage.style.display='none';if(bookReturn==='reference'){referencePage.style.display='block';}else if(bookReturn==='share'){sharePage.style.display='block';}else{home.style.display='block';setInfo('reference');}}
+function closeBook() {
+  if (bookReturn === 'reference') {
+    window.SitePages?.showPage('reference');
+    return;
+  }
+
+  if (bookReturn === 'share') {
+    window.SitePages?.showPage('share');
+    return;
+  }
+
+  window.SitePages?.returnHome('reference');
+}
+
+  window.BookNavigation = Object.freeze({ buildBookTabs, selectChapter, openBook, closeBook });
+})();

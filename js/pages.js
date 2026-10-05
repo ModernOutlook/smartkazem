@@ -1,22 +1,127 @@
-const home=document.getElementById('home-page');
-const sharePage=document.getElementById('share-page');
-const experiencePage=document.getElementById('experience-page');
-const continuityPage=document.getElementById('continuity-page');
-const structurePage=document.getElementById('structure-page');
-const referencePage=document.getElementById('reference-page');
-const bookPage=document.getElementById('book-page');
-const paragraphPage=document.getElementById('paragraph-page');
-let paragraphOrigin='experience';
+(() => {
+  'use strict';
 
-function openParagraph(kind){paragraphOrigin=kind;home.style.display='none';sharePage.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';paragraphPage.style.display='block';window.ParagraphPage?.open(kind);clearInfo();}
-function closeParagraph(){window.ParagraphPage?.close();paragraphPage.style.display='none';home.style.display='block';setInfo(paragraphOrigin);}
-function openShare(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='none';sharePage.style.display='block';clearInfo();}
-function closeShare(){sharePage.style.display='none';home.style.display='block';setInfo('share');}
-function openExperience(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';continuityPage.style.display='none';experiencePage.style.display='block';clearInfo();}
-function closeExperience(){experiencePage.style.display='none';home.style.display='block';setInfo('experience');}
-function openContinuity(){home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';structurePage.style.display='none';experiencePage.style.display='none';continuityPage.style.display='block';clearInfo();}
-function closeContinuity(){continuityPage.style.display='none';home.style.display='block';setInfo('continuity');}
-function openStructure(){window.clearTimeout(window.__structureOpenTimer);home.style.display='none';referencePage.style.display='none';bookPage.style.display='none';continuityPage.style.display='none';structurePage.style.display='block';clearInfo();}
-function closeStructure(){structurePage.style.display='none';home.style.display='block';setInfo('structure');}
-function openReference(){home.style.display='none';bookPage.style.display='none';referencePage.style.display='block';}
-function closeReference(){referencePage.style.display='none';home.style.display='block';setInfo('reference');}
+  const PAGE_IDS = Object.freeze({
+    home: 'home-page',
+    share: 'share-page',
+    experience: 'experience-page',
+    continuity: 'continuity-page',
+    structure: 'structure-page',
+    reference: 'reference-page',
+    book: 'book-page',
+    paragraph: 'paragraph-page'
+  });
+
+  const pages = Object.fromEntries(
+    Object.entries(PAGE_IDS).map(([key, id]) => [key, document.getElementById(id)])
+  );
+
+  let paragraphOrigin = 'experience';
+  let homeController = {
+    setInfo: () => {},
+    clearInfo: () => {}
+  };
+
+  function showPage(pageKey) {
+    Object.values(pages).forEach((page) => {
+      if (page) page.style.display = 'none';
+    });
+
+    const page = pages[pageKey];
+    if (page) page.style.display = 'block';
+  }
+
+  function returnHome(realmId) {
+    showPage('home');
+    homeController.setInfo(realmId);
+  }
+
+  function openParagraph(kind) {
+    paragraphOrigin = kind;
+    showPage('paragraph');
+    window.ParagraphPage?.open(kind);
+    homeController.clearInfo();
+  }
+
+  function closeParagraph() {
+    window.ParagraphPage?.close();
+    returnHome(paragraphOrigin);
+  }
+
+  function openShare() {
+    showPage('share');
+    homeController.clearInfo();
+  }
+
+  function closeShare() {
+    returnHome('share');
+  }
+
+  function openExperience() {
+    showPage('experience');
+    homeController.clearInfo();
+  }
+
+  function closeExperience() {
+    returnHome('experience');
+  }
+
+  function openContinuity() {
+    showPage('continuity');
+    homeController.clearInfo();
+  }
+
+  function closeContinuity() {
+    returnHome('continuity');
+  }
+
+  function openStructure() {
+    window.clearTimeout(window.__structureOpenTimer);
+    showPage('structure');
+    homeController.clearInfo();
+  }
+
+  function closeStructure() {
+    returnHome('structure');
+  }
+
+  function openReference() {
+    showPage('reference');
+  }
+
+  function closeReference() {
+    returnHome('reference');
+  }
+
+  function setHomeController(controller) {
+    if (!controller) return;
+
+    homeController = {
+      setInfo: typeof controller.setInfo === 'function'
+        ? controller.setInfo
+        : () => {},
+      clearInfo: typeof controller.clearInfo === 'function'
+        ? controller.clearInfo
+        : () => {}
+    };
+  }
+
+  window.SitePages = Object.freeze({
+    IDS: PAGE_IDS,
+    showPage,
+    returnHome,
+    openParagraph,
+    closeParagraph,
+    openShare,
+    closeShare,
+    openExperience,
+    closeExperience,
+    openContinuity,
+    closeContinuity,
+    openStructure,
+    closeStructure,
+    openReference,
+    closeReference,
+    setHomeController
+  });
+})();

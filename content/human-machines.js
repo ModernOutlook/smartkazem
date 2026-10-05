@@ -1,5 +1,8 @@
-// Persian source catalog — displayed directly in Persian; used as translation reference.
-const humanMachinesFaCatalog = {
+(() => {
+  'use strict';
+
+  // Persian source catalog — displayed directly in Persian; used as translation reference.
+  const humanMachinesFaCatalog = {
   "title": "انسان و ماشین‌هایش",
   "subtitle": "هفت بخش",
   "chapters": [
@@ -113,3 +116,6 @@ const humanMachinesFaCatalog = {
     }
   ]
 };
+
+  window.HumanMachinesCatalog = Object.freeze(humanMachinesFaCatalog);
+})();
