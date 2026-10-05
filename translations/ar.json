@@ -29,6 +29,7 @@
     "muteText": "كتم",
     "volume": "مستوى الصوت",
     "volumeLabel": "مستوى الصوت",
+    "resumeFailed": "تعذر تفعيل الصوت تلقائيًا.",
     "shahnameh": "قراءة الشاهنامة",
     "shahnamehEn": "Shahnameh Reading"
   },
