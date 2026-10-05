@@ -120,7 +120,7 @@
     if (!elements.episodeList.children.length) {
       const empty = document.createElement('div');
       empty.className = 'placeholder';
-      empty.textContent = translate('labels.empty', 'قسمتی با این مشخصات پیدا نشد.');
+      empty.textContent = translate('empty', 'قسمتی با این مشخصات پیدا نشد.');
       elements.episodeList.appendChild(empty);
     }
   }
@@ -146,8 +146,10 @@
       elements.artFrame.replaceChildren();
       const empty = document.createElement('div');
       empty.className = 'art-empty';
-      empty.textContent =
-        `تصویر ${toSiteNumber(episode.id)} در مسیر content/${String(episode.id).padStart(2, '0')}.jpg یافت نشد.`;
+      empty.textContent = translate(
+        'imageMissing',
+        'Image not found for this episode.'
+      );
       elements.artFrame.appendChild(empty);
     }, { once: true });
 
@@ -210,15 +212,15 @@
 
     const badge = document.createElement('span');
     badge.className = 'badge';
-    badge.textContent = episode.status === 'ready' ? translate('labels.ready', 'متن کامل') : translate('labels.pending', 'در صف تدوین');
+    badge.textContent = episode.status === 'ready' ? translate('ready', 'متن کامل') : translate('pending', 'در صف تدوین');
 
     header.append(headingGroup, badge);
     elements.reader.appendChild(header);
 
     if (episode.status === 'ready') {
       elements.reader.append(
-        createReaderSection(translate('labels.prose', 'روایت کامل'), episode.prose, 'prose'),
-        createReaderSection(translate('labels.verse', 'ابیات'), episode.verse, 'verse')
+        createReaderSection(translate('prose', 'روایت کامل'), episode.prose, 'prose'),
+        createReaderSection(translate('verse', 'ابیات'), episode.verse, 'verse')
       );
     } else {
       const section = document.createElement('section');
@@ -238,7 +240,7 @@
 
     const sourceNote = document.createElement('p');
     sourceNote.className = 'source';
-    sourceNote.textContent = `${translate('labels.editionNote', 'یادداشت نسخه')}: ${data.meta.editionNote}`;
+    sourceNote.textContent = `${translate('editionNote', 'یادداشت نسخه')}: ${data.meta.editionNote}`;
     source.appendChild(sourceNote);
     elements.reader.appendChild(source);
 
@@ -249,14 +251,14 @@
     previous.type = 'button';
     previous.className = 'btn';
     previous.id = 'prev';
-    previous.textContent = translate('labels.previous', 'قسمت پیشین');
+    previous.textContent = translate('previous', 'قسمت پیشین');
     previous.addEventListener('click', () => move(-1));
 
     const next = document.createElement('button');
     next.type = 'button';
     next.className = 'btn';
     next.id = 'next';
-    next.textContent = translate('labels.next', 'قسمت بعد');
+    next.textContent = translate('next', 'قسمت بعد');
     next.addEventListener('click', () => move(1));
 
     navigation.append(previous, next);
