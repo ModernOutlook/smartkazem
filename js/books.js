@@ -55,9 +55,9 @@ function activeChapters() {
     if (activeBookKind === BOOK_KINDS.FORGERS) return bookChapters;
     if (
       activeBookKind === BOOK_KINDS.HUMAN_MACHINES &&
-      Array.isArray(humanMachinesFaCatalog?.chapters)
+      Array.isArray(window.HumanMachinesCatalog?.chapters)
     ) {
-      return humanMachinesFaCatalog.chapters;
+      return window.HumanMachinesCatalog.chapters;
     }
   }
 
