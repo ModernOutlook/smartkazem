@@ -284,6 +284,23 @@
     overflow-y: auto;
   }
 
+  /* Realm headers: keep the title below the global language control in portrait. */
+  .experience-head {
+    top: calc(56px + var(--ui-safe-top));
+    left: calc(12px + var(--ui-safe-left));
+    right: calc(12px + var(--ui-safe-right));
+  }
+
+  .experience-title {
+    min-width: 0;
+    max-width: calc(100% - var(--ui-touch-target) - var(--ui-space-3));
+  }
+
+  .experience-title strong,
+  .experience-title span {
+    overflow-wrap: anywhere;
+  }
+
   .reference-action,
   .experience-action,
   .share-story-action,
