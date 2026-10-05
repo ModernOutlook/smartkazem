@@ -53,7 +53,13 @@
   }
 
   function ensureGraph() {
-    if (ctx && master && ambient && cueBus && duck) return true;
+    if (ctx && master && ambient && cueBus && duck) {
+      ambient.gain.value = 1;
+      cueBus.gain.value = state.cues && !state.reducedAudio ? 1 : 0;
+      duck.gain.value = 1;
+      master.gain.value = state.enabled && !state.muted ? state.volume : 0;
+      return true;
+    }
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return false;
 
@@ -383,8 +389,11 @@
       emit('muted', getState());
     });
 
-    if (state.gesture && state.enabled && !state.muted) attempt();
-    else {
+    if (!state.enabled || state.muted) {
+      hide();
+    } else if (state.gesture) {
+      attempt();
+    } else {
       splash.classList.add('audio-blocked');
       splash.setAttribute('aria-hidden', 'false');
       if (enable) enable.hidden = false;
