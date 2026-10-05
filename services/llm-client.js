@@ -9,7 +9,7 @@ const MAX_ATTEMPTS = 3;
 const RETRY_DELAY_MS = 700;
 const RETRYABLE_STATUSES = new Set([408, 425, 429, 500, 502, 503, 504]);
 function normalizeBaseUrl(value) {
-  const raw = String(value || DEFAULTS.baseUrl).trim().replace(/\\/+$/, '');
+  const raw = String(value || DEFAULTS.baseUrl).trim().replace(/\/+$/, '');
   let url;
 
   try {
@@ -26,7 +26,7 @@ function normalizeBaseUrl(value) {
     throw new Error('نشانی سرویس مدل نباید شامل نام کاربری یا گذرواژه باشد.');
   }
 
-  return url.href.replace(/\\/+$/, '');
+  return url.href.replace(/\/+$/, '');
 }
 
 function getSettings(){try{return{baseUrl:normalizeBaseUrl(localStorage.getItem('pgm_baseUrl')||DEFAULTS.baseUrl),model:localStorage.getItem('pgm_model')||DEFAULTS.model,apiKey:localStorage.getItem('pgm_apiKey')||''}}catch(_){return{...DEFAULTS,apiKey:''}}}
