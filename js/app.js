@@ -168,7 +168,7 @@
   const bookPage = document.getElementById('book-page');
   if (
     typeof BookNavigation?.buildBookTabs === 'function' &&
-    bookPage?.style.display === 'block'
+    bookPage?.classList.contains('is-active')
   ) {
     const activeTab = [...document.querySelectorAll('.book-tab')]
       .findIndex((button) => button.classList.contains('active'));
