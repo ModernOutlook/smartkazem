@@ -198,7 +198,7 @@ body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
 @media(max-width:520px){.reference-actions{bottom:4%;gap:7px}.icon-btn{top:12px;right:12px;width:36px;height:36px}.reference-action{min-height:56px;border-radius:13px}.ref-castle{right:3%;width:48%;top:21%}.ref-platform.p1{right:4%;width:58%}.ref-observer{left:5%;bottom:21%}}
 @media(min-width:700px){.reference-actions{max-width:600px;margin:auto}.reference-page{border-radius:4px}}
 /* ===== Structure Hall page ===== */
-.structure-page{z-index:96;display:none;overflow:hidden;background:
+.structure-page{z-index:96;direction:rtl;writing-mode:horizontal-tb;display:none;overflow:hidden;background:
 radial-gradient(ellipse at 78% 62%,rgba(79,174,255,.95),transparent 27%),
 radial-gradient(ellipse at 54% 20%,rgba(25,91,159,.72),transparent 34%),
 radial-gradient(ellipse at 20% 58%,rgba(12,79,145,.82),transparent 35%),
