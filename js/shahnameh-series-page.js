@@ -33,13 +33,14 @@
     const page = catalog?.pages?.shahnameh || {};
     const title = page.titles?.[episode.id - 1] || episode.title;
     const section = page.sections?.[episode.section] || episode.section;
-    if (episode.id === 1 && page.part1) {
+    const localized = page.episodes?.[String(episode.id)] || (episode.id === 1 ? page.part1 : null);
+    if (localized) {
       return {
         ...episode,
-        title: page.part1.title || title,
+        title: localized.title || title,
         section,
-        prose: page.part1.prose || episode.prose,
-        verse: page.part1.originalVerse || episode.verse
+        prose: localized.prose || episode.prose,
+        verse: localized.originalVerse || episode.verse
       };
     }
     return { ...episode, title, section };
