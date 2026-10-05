@@ -1,4 +1,7 @@
-const bookChapters = [
+(() => {
+  'use strict';
+
+  const bookChapters = [
     {
         title: "فصل اول: پیدایش", dot: "#ffffff",
         paragraphs: [
@@ -357,3 +360,6 @@ const bookChaptersAr = [
 
 const bookMoralEn = "The one who displays a skill goes only as far as there are spectators; the one who practices a skill goes as far as they themselves can go. And a forest where everyone is a spectator eventually has nothing left to see but the act of watching itself.";
 const bookMoralFa = 'آنکه مهارت را نمایش می‌دهد، فقط تا آنجا می‌رود که تماشاگر دارد؛ آنکه مهارت را می‌ورزد، تا آنجا که خودش می‌رود. و جنگلی که همه در آن تماشاگرند، سرانجام جز خودِ تماشا چیزی برای دیدن ندارد.';
+
+  window.ForgersCatalog = Object.freeze(bookChapters);
+})();
