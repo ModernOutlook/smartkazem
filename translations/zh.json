@@ -31,7 +31,13 @@
     "volumeLabel": "音量",
     "resumeFailed": "无法自动启用声音。",
     "shahnameh": "《列王纪》诵读",
-    "shahnamehEn": "Shahnameh Reading"
+    "shahnamehEn": "Shahnameh Reading",
+    "accessibility": {
+      "enabled": "无障碍模式已启用。",
+      "disabled": "无障碍模式已关闭。",
+      "repeat": "双击可重复最后一条语音提示。",
+      "hold": "长按可暂停、继续或重复语音。"
+    }
   },
   "meta": {
     "brand": "现代视野",

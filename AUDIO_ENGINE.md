@@ -1,50 +1,33 @@
-# SmartKazem Audio Engine
+# SmartKazem Audio System 3.0
 
-## Purpose
+SmartKazem uses one lightweight page-level Web Audio engine plus an isolated speech accessibility layer.
 
-SmartKazemAudio is the single page-level Web Audio subsystem. It owns one AudioContext, the master bus, ambient bus, cue bus, ducking, lifecycle recovery, and persisted audio state.
+## Startup
+- `audio-engine.js` is preloaded and synchronously initialized from the document head.
+- The engine creates one `AudioContext` and one master gain graph during startup.
+- No external audio files are downloaded.
+- Browsers may keep the context suspended until user activation. The graph is already ready, so the first real pointer gesture can produce sound immediately.
+- Same-document navigation keeps the same AudioContext alive.
 
-The existing SiteAudio object is only a compatibility facade. New code must use SmartKazemAudio.
+## Default sound system
+Five procedural cues correspond to the five realms. The engine infers the realm from the clicked element, its enclosing realm, or the active page, so rings, page controls, buttons, and navigation actions inherit the correct sound without per-button audio files.
 
-## Boot contract
+## Blind accessibility mode
+There is deliberately no visible accessibility audio button.
 
-The tiny inline bootstrap in index.html runs before every other script. It creates the one AudioContext and the minimum bus graph, or records a silent-safe unsupported state. audio-engine.js adopts that graph rather than creating a second context.
+1. **Triple click / triple tap anywhere within about 620 ms:** toggle Blind Accessibility Mode.
+2. **Double click / double tap in Blind Mode:** repeat the last spoken announcement.
+3. **Long press / long pointer hold for about 720 ms in Blind Mode:** pause/resume speech; if idle, repeat the last announcement.
+4. **Escape:** cancel current speech.
 
-Browsers may create the context suspended until user activation; the splash gate therefore treats graph readiness and audible playback readiness as separate states. Audio failure never blocks application startup.
+The triple-click handler captures the third click before the underlying site control can activate.
 
-## Public API
+## Speech and future updates
+The accessibility layer uses the browser-native Web Speech API and selects an available voice matching the current document language: Persian, English, Arabic, or Chinese. This keeps the site light and lets the browser/device supply speech resources.
 
-- init() — initialize once and return the current state.
-- play(name, options) — play a short registered cue.
-- stop() — persist position and suspend the context.
-- duck(level, duration) — temporarily reduce the shared bus.
-- setScene(scene, position) — select the logical ambient scene and persist its position.
-- registerCue(name, renderer) — register a lightweight Web Audio cue renderer.
-- getState() — return a snapshot of persisted runtime state.
-- on(type, handler) / off(type, handler) — subscribe to engine events.
+A versioned boundary is reserved for a future trusted voice-resource updater. Any updater must accept validated static metadata/resources from reputable free sources and must never execute downloaded JavaScript.
 
-Additional preference controls are setVolume, setMuted, setEnabled, setReducedAudio, and setCues.
+## Persistence and navigation
+Audio preferences and accessibility mode are stored locally. Same-document navigation remains uninterrupted.
 
-## State schema
-
-Storage key: smartkazem.audio.v1.
-
-Persisted fields are versioned through the key and currently include enabled, muted, volume, scene, position, reducedAudio, cues, and gesture.
-
-## Accessibility boundary
-
-Accessibility policy must be added through a small versioned adapter rather than embedded throughout the engine. The planned adapter contract is:
-
-create({ engine, i18n, featureDetect }) -> { init, destroy, onState, configure }
-
-The adapter owns assistive-technology heuristics, ARIA announcements, reduced-audio policy, and future WCAG/ARIA changes. Engine code must not acquire screen-reader-specific branching.
-
-## Navigation and static-host limitations
-
-The current repository still performs some full-document navigations and does not yet install a service worker. A later migration concern will move those transitions to the single-document shell where practical and add a scope-correct GitHub Pages service worker for cache recovery.
-
-A hard reload always creates a new JavaScript realm and therefore cannot preserve an AudioContext; the current engine instead restores its persisted state immediately and keeps startup failure-safe. Cache-backed asset recovery and cross-tab single-instance arbitration are intentionally deferred to the next concerns.
-
-## Maintenance rule
-
-Future AI-generated audio changes should treat this document and the public API above as the architectural boundary. Engine internals may change without touching page modules; page modules should call the public API only.
+A full document navigation necessarily creates a new JavaScript realm and AudioContext. A website cannot keep a live AudioContext across that boundary, so full-page routes restore the selected mode/state on the next document. A future SPA migration can make the complete journey share one uninterrupted AudioContext.

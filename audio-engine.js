@@ -1,408 +1,112 @@
-/*! SmartKazem Audio Engine 2.0 — Web Audio, single-instance core. */
+/*! SmartKazem Audio Engine 3.0 — lightweight realm cues + gesture accessibility. */
 (() => {
   'use strict';
-
   if (window.SmartKazemAudio) return;
 
-  const STORAGE_KEY = 'smartkazem.audio.v1';
-  const DEFAULT_STATE = Object.freeze({
-    enabled: true,
-    muted: false,
-    volume: 0.18,
-    scene: 'ambient',
-    position: 0,
-    reducedAudio: false,
-    cues: false,
-    gesture: false
+  const STORAGE_KEY = 'smartkazem.audio.v3';
+  const ACCESSIBILITY_KEY = 'smartkazem.audio.accessibility.v1';
+  const TRIPLE_WINDOW = 620;
+  const LONG_PRESS_MS = 720;
+  const DEFAULT_STATE = Object.freeze({ enabled:true, muted:false, volume:0.18, realm:'structure', accessibility:false, speechEnabled:true, voiceVersion:1 });
+
+  let state={...DEFAULT_STATE}, ctx=null, master=null, initialized=false, voices=[], lastSpoken='', clickTimes=[], longPressTimer=0, longPressPointer=null, longPressTriggered=false, suppressNextClick=false;
+
+  const REALM_CUES=Object.freeze({
+    structure:{notes:[220,329.63],length:.105,peak:.095,type:'sine'},
+    continuity:{notes:[277.18,415.3],length:.115,peak:.095,type:'triangle'},
+    experience:{notes:[329.63,493.88],length:.125,peak:.09,type:'sine'},
+    reference:{notes:[392,587.33],length:.135,peak:.09,type:'triangle'},
+    share:{notes:[493.88,739.99],length:.145,peak:.085,type:'sine'}
   });
 
-  // AudioContext is created lazily from a real user gesture. This keeps audio
-  // from becoming a startup dependency and respects browser autoplay policy.
-  const listeners = new Map();
-  const cues = new Map();
-  let state = { ...DEFAULT_STATE };
-  let ctx = null;
-  let master = null;
-  let ambient = null;
-  let cueBus = null;
-  let duck = null;
-  let initialized = false;
-  let duckTimer = 0;
-
-  function loadState() {
-    try {
-      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
-      if (saved && typeof saved === 'object') state = { ...DEFAULT_STATE, ...saved };
-    } catch (_) {}
-    state.volume = Math.min(1, Math.max(0, Number(state.volume) || DEFAULT_STATE.volume));
-    state.position = Math.max(0, Number(state.position) || 0);
-    state.enabled = state.enabled !== false;
-    state.muted = state.muted === true;
-    state.reducedAudio = state.reducedAudio === true;
-    state.cues = state.cues === true;
-    state.gesture = state.gesture === true;
+  function loadState(){
+    try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(saved&&typeof saved==='object')state={...DEFAULT_STATE,...saved};}catch(_){}
+    state.enabled=state.enabled!==false; state.muted=state.muted===true;
+    state.volume=Math.min(1,Math.max(.02,Number(state.volume)||DEFAULT_STATE.volume));
+    state.realm=REALM_CUES[state.realm]?state.realm:DEFAULT_STATE.realm;
+    try{const access=JSON.parse(localStorage.getItem(ACCESSIBILITY_KEY)||'null');if(access&&typeof access==='object'){state.accessibility=access.enabled===true;state.speechEnabled=access.speechEnabled!==false;state.voiceVersion=Number(access.voiceVersion)||1;}}catch(_){}
   }
-
-  function saveState() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+  function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));localStorage.setItem(ACCESSIBILITY_KEY,JSON.stringify({enabled:state.accessibility,speechEnabled:state.speechEnabled,voiceVersion:state.voiceVersion}));}catch(_){}}
+  function ensureGraph(){
+    if(ctx&&master)return true;
+    const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
+    try{ctx=new AC();master=ctx.createGain();master.gain.value=state.enabled&&!state.muted?state.volume:0;master.connect(ctx.destination);return true;}catch(_){ctx=null;master=null;return false;}
   }
-
-  function emit(type, detail = {}) {
-    const set = listeners.get(type);
-    if (set) set.forEach((fn) => { try { fn(detail); } catch (_) {} });
-    document.dispatchEvent(new CustomEvent('audio:' + type, { detail }));
+  async function resume(){if(!ensureGraph()||!ctx)return false;try{if(ctx.state!=='running')await ctx.resume();return ctx.state==='running';}catch(_){return false;}}
+  function setMasterGain(){if(!master||!ctx)return;master.gain.setTargetAtTime(state.enabled&&!state.muted?state.volume:0,ctx.currentTime,.025);}
+  function setVolume(value){state.volume=Math.min(1,Math.max(.02,Number(value)||.02));setMasterGain();saveState();}
+  function setMuted(value){state.muted=Boolean(value);setMasterGain();saveState();}
+  function setEnabled(value){state.enabled=Boolean(value);setMasterGain();saveState();}
+  function realmFromElement(target){
+    const explicit=target?.closest?.('[data-realm]')?.dataset?.realm;if(REALM_CUES[explicit])return explicit;
+    const realm=target?.closest?.('.realm')?.dataset?.id;if(REALM_CUES[realm])return realm;
+    const id=target?.closest?.('.page')?.id||'';
+    if(id.includes('structure'))return'structure';if(id.includes('continuity'))return'continuity';if(id.includes('experience'))return'experience';if(id.includes('reference'))return'reference';if(id.includes('share'))return'share';
+    return state.realm;
   }
-
-  function ensureGraph() {
-    if (ctx && master && ambient && cueBus && duck) {
-      ambient.gain.value = 1;
-      cueBus.gain.value = state.cues && !state.reducedAudio ? 1 : 0;
-      duck.gain.value = 1;
-      master.gain.value = state.enabled && !state.muted ? state.volume : 0;
-      return true;
-    }
-    const AC = window.AudioContext || window.webkitAudioContext;
-    if (!AC) return false;
-
-    try {
-      ctx ||= new AC();
-      master ||= ctx.createGain();
-      ambient ||= ctx.createGain();
-      cueBus ||= ctx.createGain();
-      duck ||= ctx.createGain();
-
-      ambient.connect(duck);
-      cueBus.connect(duck);
-      duck.connect(master);
-      master.connect(ctx.destination);
-
-      ambient.gain.value = 1;
-      cueBus.gain.value = state.cues && !state.reducedAudio ? 1 : 0;
-      duck.gain.value = 1;
-      master.gain.value = state.enabled && !state.muted ? state.volume : 0;
-
-      ctx.addEventListener?.('statechange', handleContextState);
-      return true;
-    } catch (_) {
-      ctx = null;
-      master = ambient = cueBus = duck = null;
-      return false;
-    }
+  function setRealm(realm){if(!REALM_CUES[realm])return;state.realm=realm;saveState();}
+  function play(realm=state.realm){
+    if(!state.enabled||state.muted)return false;if(!REALM_CUES[realm])realm=state.realm;
+    if(!ensureGraph()||!ctx||!master||ctx.state!=='running')return false;
+    const profile=REALM_CUES[realm],now=ctx.currentTime;
+    try{profile.notes.forEach((frequency,index)=>{const oscillator=ctx.createOscillator(),gain=ctx.createGain(),start=now+index*.018,end=start+profile.length;oscillator.type=profile.type;oscillator.frequency.setValueAtTime(frequency,start);oscillator.frequency.exponentialRampToValueAtTime(frequency*.992,end);gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(profile.peak,start+.012);gain.gain.exponentialRampToValueAtTime(.0001,end);oscillator.connect(gain);gain.connect(master);oscillator.start(start);oscillator.stop(end+.018);});return true;}catch(_){return false;}
   }
-
-  function handleContextState() {
-    const current = ctx?.state || 'unavailable';
-    emit('statechange', { state: current });
-    if (current === 'running') {
-      state.gesture = true;
-      saveState();
-      emit('ready', getState());
-    }
+  function accessibleName(element){
+    if(!element)return'';
+    const i18nAria=element.dataset?.i18nAria;if(i18nAria){const value=i18nGet(i18nAria,'');if(value)return value.trim();}
+    const i18nText=element.dataset?.i18n;if(i18nText){const value=i18nGet(i18nText,'');if(value)return value.trim();}
+    const labelled=element.getAttribute('aria-label');if(labelled)return labelled.trim();
+    const labelledBy=element.getAttribute('aria-labelledby');if(labelledBy){const text=labelledBy.split(/\s+/).map(id=>document.getElementById(id)?.textContent||'').join(' ').trim();if(text)return text;}
+    const title=element.getAttribute('title');if(title)return title.trim();
+    return(element.innerText||element.textContent||'').replace(/\s+/g,' ').trim().slice(0,220);
   }
-
-  async function resume() {
-    if (!state.enabled || state.muted) return false;
-    if (!ensureGraph() || !ctx) return false;
-
-    try {
-      if (ctx.state !== 'running') await ctx.resume();
-      const running = ctx.state === 'running';
-      if (running) {
-        state.gesture = true;
-        saveState();
-        emit('resume', getState());
-      }
-      return running;
-    } catch (_) {
-      emit('resumeerror', { state: ctx.state, error: 'resume-rejected' });
-      return false;
-    }
+  function i18nGet(path,fallback){try{if(window.SiteI18n?.get)return String(window.SiteI18n.get(path,fallback)||fallback);}catch(_){}return fallback;}
+  function currentLanguage(){const lang=window.SiteI18n?.getLanguage?.()||document.documentElement.lang||'fa';if(lang.startsWith('fa'))return'fa-IR';if(lang.startsWith('ar'))return'ar-SA';if(lang.startsWith('zh'))return'zh-CN';return'en-US';}
+  function chooseVoice(lang){if(!voices.length)return null;const exact=voices.find(v=>v.lang?.toLowerCase()===lang.toLowerCase());if(exact)return exact;const prefix=lang.split('-')[0].toLowerCase();return voices.find(v=>v.lang?.toLowerCase().startsWith(prefix))||null;}
+  function refreshVoices(){if('speechSynthesis'in window)voices=window.speechSynthesis.getVoices()||[];}
+  function speak(text,options={}){
+    if(!state.accessibility||!state.speechEnabled||!('speechSynthesis'in window))return false;
+    const value=String(text||'').replace(/\s+/g,' ').trim();if(!value)return false;
+    try{const synth=window.speechSynthesis;synth.cancel();const utterance=new SpeechSynthesisUtterance(value),lang=options.lang||currentLanguage();utterance.lang=lang;utterance.rate=Number(options.rate)||.92;utterance.pitch=Number(options.pitch)||1;utterance.volume=state.volume;const voice=chooseVoice(lang);if(voice)utterance.voice=voice;lastSpoken=value;synth.speak(utterance);return true;}catch(_){return false;}
   }
-
-  async function suspend() {
-    if (!ctx || ctx.state === 'closed') return;
-    try { await ctx.suspend(); } catch (_) {}
+  function speakTarget(target){const element=target?.closest?.('button,a,[role="button"],summary,[tabindex]');if(!element)return;setRealm(realmFromElement(element));const name=accessibleName(element);if(name)window.setTimeout(()=>speak(name),25);}
+  function toggleAccessibility(){
+    state.accessibility=!state.accessibility;saveState();
+    if(state.accessibility){const enabled=i18nGet('labels.accessibility.enabled','Accessibility mode enabled.');const repeat=i18nGet('labels.accessibility.repeat','Double-click to repeat the last announcement.');const hold=i18nGet('labels.accessibility.hold','Long-press to pause, resume, or repeat speech.');speak([enabled,repeat,hold].join(' '));}
+    else if('speechSynthesis'in window)window.speechSynthesis.cancel();
+    document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
+    document.dispatchEvent(new CustomEvent('audio:accessibilitychange',{detail:{enabled:state.accessibility}}));
+    return state.accessibility;
   }
-
-  function setVolume(value) {
-    state.volume = Math.min(1, Math.max(0, Number(value) || 0));
-    if (master && ctx) {
-      master.gain.setTargetAtTime(
-        state.enabled && !state.muted ? state.volume : 0,
-        ctx.currentTime,
-        0.03
-      );
-    }
-    saveState();
-    emit('volume', { value: state.volume });
+  function handleTripleClick(event){
+    const now=performance.now();clickTimes=clickTimes.filter(time=>now-time<=TRIPLE_WINDOW);clickTimes.push(now);
+    if(clickTimes.length<3)return false;clickTimes=[];event.preventDefault();event.stopImmediatePropagation();toggleAccessibility();return true;
   }
-
-  function setMuted(value) {
-    state.muted = Boolean(value);
-    if (state.muted) state.enabled = true;
-    setVolume(state.volume);
-    emit('mute', { muted: state.muted });
+  function handlePointerDown(event){
+    if(event.button!==undefined&&event.button!==0)return;resume();setRealm(realmFromElement(event.target));if(!state.accessibility)return;
+    longPressPointer=event.pointerId??'mouse';window.clearTimeout(longPressTimer);
+    longPressTimer=window.setTimeout(()=>{if(longPressPointer!==(event.pointerId??'mouse'))return;longPressTriggered=true;suppressNextClick=true;if(!('speechSynthesis'in window))return;if(window.speechSynthesis.speaking&&!window.speechSynthesis.paused)window.speechSynthesis.pause();else if(window.speechSynthesis.paused)window.speechSynthesis.resume();else if(lastSpoken)speak(lastSpoken);},LONG_PRESS_MS);
   }
-
-  function setEnabled(value) {
-    state.enabled = Boolean(value);
-    if (!state.enabled) state.muted = true;
-    if (state.enabled && state.muted) state.muted = false;
-    setVolume(state.volume);
-    saveState();
-    emit('enabled', { enabled: state.enabled });
-  }
-
-  function setReducedAudio(value) {
-    state.reducedAudio = Boolean(value);
-    if (cueBus) cueBus.gain.value = state.cues && !state.reducedAudio ? 1 : 0;
-    saveState();
-    emit('reducedaudio', { reducedAudio: state.reducedAudio });
-  }
-
-  function setCues(value) {
-    state.cues = Boolean(value);
-    if (cueBus) cueBus.gain.value = state.cues && !state.reducedAudio ? 1 : 0;
-    saveState();
-    emit('cues', { cues: state.cues });
-  }
-
-  function duckTo(level = 0.35, duration = 0.18) {
-    if (!duck || !ctx) return;
-    const target = Math.min(1, Math.max(0, Number(level) || 0));
-    const seconds = Math.max(0.01, Number(duration) || 0.18);
-    duck.gain.cancelScheduledValues(ctx.currentTime);
-    duck.gain.setTargetAtTime(target, ctx.currentTime, seconds);
-    window.clearTimeout(duckTimer);
-    duckTimer = window.setTimeout(() => {
-      if (duck && ctx) duck.gain.setTargetAtTime(1, ctx.currentTime, seconds);
-    }, Math.round(seconds * 1000));
-  }
-
-  function registerCue(name, renderer) {
-    if (!name || typeof renderer !== 'function') return false;
-    cues.set(String(name), renderer);
-    return true;
-  }
-
-  function play(name = 'tap', options = {}) {
-    if (!state.enabled || state.muted || state.reducedAudio || !state.cues) return false;
-    if (!ensureGraph() || !ctx || ctx.state !== 'running' || !cueBus) return false;
-
-    const custom = cues.get(name);
-    if (custom) {
-      try { custom({ context: ctx, bus: cueBus, options, state: getState() }); return true; }
-      catch (_) { return false; }
-    }
-
-    const profiles = {
-      tap: { notes: [196, 293.66], length: 0.24, peak: 0.10 },
-      open: { notes: [174.61, 261.63, 392], length: 0.72, peak: 0.08 },
-      back: { notes: [293.66, 220, 146.83], length: 0.38, peak: 0.09 },
-      success: { notes: [261.63, 329.63, 392, 523.25], length: 0.58, peak: 0.08 },
-      error: { notes: [155.56, 130.81], length: 0.32, peak: 0.07 }
-    };
-    const profile = profiles[name] || profiles.tap;
-
-    try {
-      const now = ctx.currentTime;
-      profile.notes.forEach((frequency, index) => {
-        const oscillator = ctx.createOscillator();
-        const gain = ctx.createGain();
-        const filter = ctx.createBiquadFilter();
-        const start = now + index * 0.045;
-        const end = start + profile.length;
-
-        oscillator.type = index === 0 ? 'sine' : 'triangle';
-        oscillator.frequency.setValueAtTime(frequency, start);
-        oscillator.frequency.exponentialRampToValueAtTime(
-          frequency * (name === 'error' ? 0.82 : 0.985),
-          end
-        );
-
-        filter.type = 'lowpass';
-        filter.frequency.value = name === 'open' ? 1800 : 2600;
-        filter.Q.value = 0.7;
-
-        gain.gain.setValueAtTime(0.0001, start);
-        gain.gain.exponentialRampToValueAtTime(profile.peak, start + 0.018);
-        gain.gain.exponentialRampToValueAtTime(0.0001, end);
-
-        oscillator.connect(filter);
-        filter.connect(gain);
-        gain.connect(cueBus);
-        oscillator.start(start);
-        oscillator.stop(end + 0.03);
-      });
-      duckTo(0.55, 0.08);
-      emit('play', { cue: name });
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
-
-  function stop() {
-    state.position = ctx?.currentTime || state.position;
-    saveState();
-    suspend();
-    emit('stop', getState());
-  }
-
-  function setScene(scene, position = state.position) {
-    state.scene = String(scene || 'ambient');
-    state.position = Math.max(0, Number(position) || 0);
-    saveState();
-    emit('scene', { scene: state.scene, position: state.position });
-  }
-
-  function getState() {
-    return Object.freeze({ ...state, supported: Boolean(ctx) });
-  }
-
-  function on(type, handler) {
-    if (typeof handler !== 'function') return () => {};
-    if (!listeners.has(type)) listeners.set(type, new Set());
-    listeners.get(type).add(handler);
-    return () => off(type, handler);
-  }
-
-  function off(type, handler) {
-    listeners.get(type)?.delete(handler);
-  }
-
-  function wireLifecycle() {
-    document.addEventListener('visibilitychange', () => {
-      if (document.hidden) suspend();
-      else if (state.gesture && state.enabled && !state.muted) resume();
-    });
-
-    window.addEventListener('pagehide', () => {
-      state.position = ctx?.currentTime || state.position;
-      saveState();
-    });
-
-    window.addEventListener('pageshow', () => {
-      if (state.gesture && state.enabled && !state.muted) resume();
-    });
-
-    document.addEventListener('pointerdown', () => { resume(); }, { capture: true, passive: true });
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') resume();
-    }, { capture: true });
-
-    document.addEventListener('click', (event) => {
-      const target = event.target?.closest?.('[data-sound-cue]');
-      if (target) play(target.dataset.soundCue || 'tap');
-    }, true);
-  }
-
-  function wireControls() {
-    const controls = document.getElementById('audio-controls');
-    if (!controls) return;
-
-    const toggle = controls.querySelector('[data-audio-toggle]');
-    const stopButton = controls.querySelector('[data-audio-stop]');
-    const muteButton = controls.querySelector('[data-audio-mute]');
-    const volume = controls.querySelector('[data-audio-volume]');
-
-    const sync = () => {
-      const current = getState();
-      if (toggle) toggle.setAttribute('aria-pressed', String(current.enabled && !current.muted));
-      if (muteButton) muteButton.setAttribute('aria-pressed', String(current.muted));
-      if (volume) volume.value = String(Math.round(current.volume * 100));
-    };
-
-    toggle?.addEventListener('click', () => {
-      const current = getState();
-      setEnabled(!current.enabled || current.muted);
-      if (getState().enabled) resume();
-      sync();
-    });
-
-    stopButton?.addEventListener('click', () => {
-      stop();
-      sync();
-    });
-
-    muteButton?.addEventListener('click', () => {
-      setMuted(!getState().muted);
-      if (!getState().muted) resume();
-      sync();
-    });
-
-    volume?.addEventListener('input', (event) => {
-      setVolume(Number(event.target.value) / 100);
-      if (getState().volume > 0 && getState().muted) setMuted(false);
-      sync();
-    });
-
-    on('volume', sync);
-    on('mute', sync);
-    on('enabled', sync);
-    sync();
-  }
-
-  function label(path, fallback) {
-    return window.SiteI18n?.get?.(path, fallback) || fallback;
-  }
-
-  function releaseSplash() {
-    const splash = document.getElementById('splash');
-    if (!splash) return;
-    splash.classList.add('is-ready');
-    splash.setAttribute('aria-hidden', 'true');
-    window.setTimeout(() => { splash.hidden = true; }, 360);
-  }
-
-  function init() {
-    if (initialized) return getState();
-    initialized = true;
-    loadState();
-
-    // Startup must never depend on audio support, autoplay permission, or a
-    // successful AudioContext resume. The first user gesture will initialize it.
-    emit('ready', getState());
-    wireLifecycle();
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', () => {
-        wireControls();
-        releaseSplash();
-      }, { once: true });
-    } else {
-      wireControls();
-      releaseSplash();
-    }
-
+  function handlePointerUp(event){if(longPressPointer===(event.pointerId??'mouse')){window.clearTimeout(longPressTimer);longPressPointer=null;}}
+  function handleClick(event){if(handleTripleClick(event))return;if(suppressNextClick){suppressNextClick=false;event.preventDefault();event.stopImmediatePropagation();return;}const realm=realmFromElement(event.target);setRealm(realm);resume().then(()=>play(realm)).catch(()=>{});if(state.accessibility)speakTarget(event.target);}
+  function handleDoubleClick(){if(state.accessibility&&lastSpoken)speak(lastSpoken);}
+  function handleKeyboard(event){if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
+  function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
+  function init(){
+    if(initialized)return getState();initialized=true;loadState();ensureGraph();initSpeech();
+    document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
+    document.addEventListener('pointerdown',handlePointerDown,{capture:true,passive:true});
+    document.addEventListener('pointerup',handlePointerUp,{capture:true,passive:true});
+    document.addEventListener('pointercancel',handlePointerUp,{capture:true,passive:true});
+    document.addEventListener('click',handleClick,{capture:true});
+    document.addEventListener('dblclick',handleDoubleClick,{capture:true});
+    document.addEventListener('keydown',handleKeyboard,{capture:true});
+    window.addEventListener('pageshow',()=>{resume();});
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.enabled&&!state.muted)resume();});
     return getState();
   }
-
-  const api = {
-    VERSION: '2.0.0',
-    init,
-    resume,
-    play,
-    stop,
-    duck: duckTo,
-    setScene,
-    registerCue,
-    getState,
-    on,
-    off,
-    setVolume,
-    setMuted,
-    setEnabled,
-    setReducedAudio,
-    setCues
-  };
-
-  window.SmartKazemAudio = Object.freeze(api);
-  window.SiteAudio = Object.freeze({
-    play,
-    enable: () => setEnabled(true),
-    disable: () => setEnabled(false),
-    get enabled() { return getState().enabled; }
-  });
-
+  function getState(){return Object.freeze({...state,supported:Boolean(ctx),running:ctx?.state==='running',speechSupported:'speechSynthesis'in window,voiceCount:voices.length});}
+  window.SmartKazemAudio=Object.freeze({VERSION:'3.0.0',init,resume,play,speak,setRealm,getState,setVolume,setMuted,setEnabled,toggleAccessibility,registerVoiceManifest(){state.voiceVersion+=1;saveState();return state.voiceVersion;}});
+  window.SiteAudio=Object.freeze({play:(realm)=>play(realm),enable:()=>setEnabled(true),disable:()=>setEnabled(false),get enabled(){return getState().enabled;}});
   init();
 })();
