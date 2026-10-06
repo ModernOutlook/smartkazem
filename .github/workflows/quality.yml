@@ -104,7 +104,7 @@ jobs:
         run: node --check "ui/bootstrap.js"
       - name: Check JavaScript syntax
         run: |
-          find . -type f -name '*.js' -not -path './.git/*' -print0 | xargs -0 -n1 node --check
+          git ls-files -z -- '*.js' | xargs -0 -n1 node --check
 
       - name: Validate JSON catalogs
         run: |
