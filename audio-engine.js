@@ -84,7 +84,7 @@
     longPressTimer=window.setTimeout(()=>{if(longPressPointer!==(event.pointerId??'mouse'))return;if(!('speechSynthesis'in window))return;if(window.speechSynthesis.speaking&&!window.speechSynthesis.paused)window.speechSynthesis.pause();else if(window.speechSynthesis.paused)window.speechSynthesis.resume();else if(lastSpoken)speak(lastSpoken);},LONG_PRESS_MS);
   }
   function handlePointerUp(event){if(longPressPointer===(event.pointerId??'mouse')){window.clearTimeout(longPressTimer);longPressPointer=null;}}
-  function handleClick(event){if(handleTripleClick(event))return;const realm=realmFromElement(event.target);setRealm(realm);play(realm);if(state.accessibility)speakTarget(event.target);}
+  function handleClick(event){if(handleTripleClick(event))return;const realm=realmFromElement(event.target);setRealm(realm);resume().then(()=>play(realm)).catch(()=>{});if(state.accessibility)speakTarget(event.target);}
   function handleDoubleClick(){if(state.accessibility&&lastSpoken)speak(lastSpoken);}
   function handleKeyboard(event){if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
   function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
