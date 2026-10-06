@@ -24,8 +24,32 @@ let entryMode=ENTRY_MODES.EXPERIENCE,currentResults=[];
 const userJudgments=Object.create(null);
 function getLanguage(){return window.SiteI18n?.getLanguage?.()||'fa'}
 function translate(k,f){return window.SiteI18n?.get?.(k,f)||f}
-function loadSettings(){const s=window.ParagraphLLM.getSettings();elements.key.value=s.apiKey;elements.base.value=s.baseUrl;elements.model.value=s.model}
-function saveSettingsAfterSuccess(){window.ParagraphLLM.saveSettings({apiKey:elements.key.value.trim(),baseUrl:elements.base.value.trim(),model:elements.model.value.trim()})}
+function renderHistoryList(id,values){
+ const list=document.getElementById(id);
+ if(!list)return;
+ list.replaceChildren(...(Array.isArray(values)?values:[]).map(value=>{
+   const option=document.createElement('option');
+   option.value=value;
+   return option;
+ }));
+}
+function loadSettings(){
+ const s=window.ParagraphLLM.getSettings();
+ elements.key.value=s.apiKey;
+ elements.base.value=s.baseUrl;
+ elements.model.value=s.model;
+ renderHistoryList('paragraph-api-key-history',s.history?.apiKey);
+ renderHistoryList('paragraph-base-url-history',s.history?.baseUrl);
+ renderHistoryList('paragraph-model-history',s.history?.model);
+}
+function saveSettingsAfterSuccess(){
+ window.ParagraphLLM.saveSettings({
+   apiKey:elements.key.value.trim(),
+   baseUrl:elements.base.value.trim(),
+   model:elements.model.value.trim()
+ });
+ loadSettings();
+}
 function updateDirection(){elements.input.dir=['fa','ar'].includes(getLanguage())?'rtl':'ltr'}
 function escapeHtml(v){return String(v||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function getActionLabel(m){return m===ENTRY_MODES.REFERENCE?translate('paragraphMachine.equivalence','هم‌سنگی'):translate('paragraphMachine.recognize','بازشناسی')}
@@ -69,6 +93,7 @@ async function run(){
   if(entryMode===ENTRY_MODES.EXPERIENCE){
    if(!recognitionReady())return;
    evaluateRecognitionJudgments();
+   saveSettingsAfterSuccess();
   }else{
    if(!equivalenceReady())return;
    currentResults=await evaluateReference();
