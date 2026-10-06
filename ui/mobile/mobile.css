@@ -295,13 +295,6 @@
       calc(var(--ui-space-5) + var(--ui-safe-left));
   }
 
-  .info {
-    align-self: center;
-    max-height: min(72dvh, 360px);
-    overflow: hidden;
-    padding: 14px 18px;
-  }
-
   .menu-svg {
     width: min(72vw, 78dvh);
     height: min(72vw, 78dvh);
