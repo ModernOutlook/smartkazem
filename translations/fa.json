@@ -31,7 +31,9 @@
     "volumeLabel": "بلندی صدا",
     "resumeFailed": "فعال‌سازی خودکار صدا ممکن نشد.",
     "shahnameh": "شاهنامه‌خوانی",
-    "shahnamehEn": "Shahnameh Reading"
+    "shahnamehEn": "Shahnameh Reading",
+    "emergence": "فصل اول ظهور",
+    "emergenceEn": "Chapter One · The Emergence"
   },
   "meta": {
     "brand": "نگرش نوین",
@@ -69,7 +71,11 @@
     "pages": {
       "forgers": "جاعلان تقلید",
       "treatise": "رساله فلسفی",
-      "observation": "سرزمین مشاهده؛ یک رود، یک جریان"
+      "observation": "سرزمین مشاهده؛ یک رود، یک جریان",
+      "emergence": {
+        "title": "فصل اول ظهور",
+        "subtitle": "Chapter One · The Emergence"
+      }
     },
     "title": "نگرش نوین — Modern Outlook"
   },

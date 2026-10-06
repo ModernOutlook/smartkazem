@@ -267,6 +267,9 @@ document.getElementById('book-close').addEventListener('click', BookNavigation.c
 document.getElementById('continuity-shahnameh').addEventListener('click', () => {
   window.location.href = 'shahnameh.html';
 });
+document.getElementById('continuity-emergence').addEventListener('click', () => {
+  window.location.href = 'emergence.html';
+});
 document.getElementById('structure-treatise').addEventListener('click', () => {
   window.location.href = 'philosophical-treatise.html';
 });
