@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'self'; object-src 'none'; frame-src 'none'; child-src 'none'; connect-src 'self' https:; img-src 'self' data:; font-src 'self' data: https://fonts.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="no-referrer"><meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), accelerometer=(), gyroscope=(), magnetometer=()">
 <meta name="theme-color" content="#02060c">
-<link rel="preload" as="image" href="startsmart.jpg" fetchpriority="high">
+<link rel="preload" as="image" href="startsmart.jpg" fetchpriority="high">\n<link rel="preload" as="script" href="audio-engine.js" fetchpriority="high">
 <title>نگرش نوین — Modern Outlook</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -23,23 +23,8 @@
 </head>
 <body>
 <a class="skip-link" href="#app" data-i18n="labels.audio.skipToContent">پرش به محتوای اصلی</a>
-<div id="audio-controls" aria-label="کنترل صوت" data-i18n-aria="labels.audio.controls">
-  <button type="button" data-audio-toggle data-i18n="labels.audio.toggleText" data-i18n-aria="labels.audio.toggle" aria-pressed="true">صدا</button>
-  <button type="button" data-audio-stop data-i18n="labels.audio.stopText" data-i18n-aria="labels.audio.stop">توقف</button>
-  <button type="button" data-audio-mute data-i18n="labels.audio.muteText" data-i18n-aria="labels.audio.mute" aria-pressed="false">بی‌صدا</button>
-  <label>
-    <span class="sr-only" data-i18n="labels.audio.volumeLabel">بلندی صدا</span>
-    <input type="range" data-audio-volume min="0" max="100" value="18" step="1" data-i18n-aria="labels.audio.volume">
-  </label>
-</div>
-<div id="audio-status" role="status" aria-live="polite" aria-atomic="true"></div>
 <div id="splash" aria-hidden="false" tabindex="-1">
   <img src="startsmart.jpg" alt="" fetchpriority="high" decoding="async">
-  <div class="audio-gate">
-    <button type="button" data-audio-enable data-i18n="labels.audio.enable">فعال‌سازی صدا</button>
-    <button type="button" data-audio-continue data-i18n="labels.audio.continueSilent">ادامه بدون صدا</button>
-    <div data-audio-status role="status" aria-live="polite" aria-atomic="true"></div>
-  </div>
 </div>
 <main class="app" id="app">
   <div class="atmosphere"></div>
