@@ -38,9 +38,6 @@ function loadSettings(){
  elements.key.value=s.apiKey;
  elements.base.value=s.baseUrl;
  elements.model.value=s.model;
- renderHistoryList('paragraph-api-key-history',s.history?.apiKey);
- renderHistoryList('paragraph-base-url-history',s.history?.baseUrl);
- renderHistoryList('paragraph-model-history',s.history?.model);
 }
 function saveSettingsAfterSuccess(){
  window.ParagraphLLM.saveSettings({
@@ -111,8 +108,8 @@ elements.choices.forEach(c=>c.addEventListener('click',e=>{e.stopPropagation();i
 elements.input.addEventListener('input',()=>{if(entryMode===ENTRY_MODES.REFERENCE)updateActionState()});
 document.addEventListener('click',e=>{if(elements.popover.hidden)return;if(!elements.popover.contains(e.target)&&!e.target.closest('.pm-realm-choice'))closeJudgmentPopover()});
 document.getElementById('paragraph-close').addEventListener('click',()=>window.SitePages?.closeParagraph?.());
-document.getElementById('paragraph-settings-toggle').addEventListener('click',()=>elements.settings.classList.toggle('collapsed'));
 document.addEventListener('site:languagechange',()=>{updateDirection();if(elements.page.classList.contains('open'))elements.action.textContent=getActionLabel(entryMode)});
 loadSettings();
+document.dispatchEvent(new CustomEvent('paragraph:settings-sync'));
 window.ParagraphPage=Object.freeze({open:openParagraphPage,close:closeParagraphPage});
 })();
