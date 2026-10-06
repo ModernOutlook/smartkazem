@@ -16,7 +16,6 @@
     reference: PageNavigation.closeReference
   });
 
-  let activeId = 'structure';
   let lastSelectionAt = 0;
 
   const realms = [...document.querySelectorAll('.realm')];
@@ -26,7 +25,6 @@
 
   function selectRealm(id) {
   if (id === 'core') {
-    return;
     return;
   }
 
@@ -53,7 +51,7 @@
 }
 
   function openLogoViewer() {
-  clearInfo();
+  window.HomeRealmInfo?.clearInfo();
   logoViewer.classList.add('open');
 }
 
@@ -131,7 +129,6 @@
   if (brandAlt) brandAlt.textContent = catalog.home?.brandLatin || catalog.meta?.brandLatin || brandAlt.textContent;
 
   window.HomeRealmInfo?.refresh();
-  }
 }
 
   function handleLanguageChange() {
@@ -170,6 +167,7 @@
     return;
   }
 
+  const activeId = window.HomeRealmInfo?.getActiveId?.() || 'structure';
   const index = REALM_ORDER.indexOf(activeId);
   if (['ArrowDown', 'ArrowRight'].includes(event.key)) {
     event.preventDefault();
