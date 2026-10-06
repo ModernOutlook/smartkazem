@@ -33,7 +33,13 @@
     "shahnameh": "شاهنامه‌خوانی",
     "shahnamehEn": "Shahnameh Reading",
     "emergence": "فصل اول ظهور",
-    "emergenceEn": "Chapter One · The Emergence"
+    "emergenceEn": "Chapter One · The Emergence",
+    "accessibility": {
+      "enabled": "حالت دسترس‌پذیر فعال شد.",
+      "disabled": "حالت دسترس‌پذیر غیرفعال شد.",
+      "repeat": "برای تکرار آخرین اعلان، دوبار کلیک کنید.",
+      "hold": "برای توقف، ادامه یا تکرار گفتار، کلیک طولانی انجام دهید."
+    }
   },
   "meta": {
     "brand": "نگرش نوین",
