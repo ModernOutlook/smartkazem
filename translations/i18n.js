@@ -214,14 +214,6 @@
       localStorage.setItem(LEGACY_STORAGE_KEY, language);
     } catch (_) {}
 
-    const homePage = document.getElementById('home-page');
-    const homeVisible = homePage?.classList.contains('is-active');
-
-    if (homeVisible) {
-      window.location.reload();
-      return;
-    }
-
     setLanguage(language);
   });
 })();
