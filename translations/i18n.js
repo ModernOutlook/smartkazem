@@ -159,13 +159,20 @@
   function installObserver() {
     if (observer || !document.body) return;
 
+    let scheduled = false;
+
     observer = new MutationObserver(() => {
       const catalog = catalogs[currentLanguage];
-      if (!catalog) return;
+      if (!catalog || scheduled) return;
 
+      scheduled = true;
       observer.disconnect();
-      applyDom(catalog);
-      observer.observe(document.body, { subtree: true, childList: true });
+
+      requestAnimationFrame(() => {
+        scheduled = false;
+        applyDom(catalog);
+        observer.observe(document.body, { subtree: true, childList: true });
+      });
     });
 
     observer.observe(document.body, { subtree: true, childList: true });
