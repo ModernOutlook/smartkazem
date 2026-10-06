@@ -24,11 +24,10 @@ The project contains:
 
 - a five-realm interactive home experience;
 - multilingual content and interface;
-- independent secondary pages;
-- book/reading experiences;
-- Shahnameh reading;
-- observation pages;
-- the Paragraph Machine workspace;
+- five primary realm pages;
+- book/reading experiences as the main secondary-content type;
+- separate albums as a future secondary-content type;
+- the Paragraph Machine workspace as a machine-type secondary surface;
 - a Persian philosophical content model;
 - browser-side model/API integration for Paragraph Machine;
 - responsive mobile and desktop presentation layers.
@@ -142,6 +141,43 @@ The codebase is **substantially modularized, but not fully Clean Code**.
 Large binary/content assets are not application logic.
 
 ---
+
+# 3.1 Content Surface Model
+
+SmartKazem has a deliberately simple user-facing hierarchy. **Do not infer UX page categories from the number of HTML files in the repository.** A standalone HTML file is an implementation detail; its existence does not automatically make it a new semantic page category.
+
+The canonical content model is:
+
+~~~text
+Home
+│
+├── 5 primary realm pages
+│   ├── ساختار تالار
+│   ├── تداوم عالم
+│   ├── قلمرو تجربه
+│   ├── مرجع تقلید
+│   └── اقتصاد سهم
+│
+└── Secondary content surfaces
+    ├── Books        ← current main secondary-content type
+    ├── Machines     ← Paragraph Machine; potentially a small number in future
+    └── Albums       ← future separate album surfaces
+~~~
+
+### Important terminology
+
+- **Home** is the main landing surface.
+- **The five realms** are the five primary realm pages.
+- **All other standalone content surfaces are not a fourth page category.** Today, apart from the Paragraph Machine, they are **books / reading experiences**.
+- **Paragraph Machine is a machine**, not a book.
+- **UI boxes, panels, overlays, information cards, popovers, and similar containers are not pages.** They are components or presentation states inside their owning surface.
+- Future growth should extend the existing content model rather than inventing arbitrary new page categories: more **books**, a small number of **machines**, and separate **albums** are expected possibilities.
+
+### Architecture rule for future changes
+
+When a request says “page”, first determine which user-facing surface it actually belongs to. Do not classify a box, panel, popup, or overlay as a page merely because it has its own DOM container or URL-independent state.
+
+When adding a new content surface, classify it explicitly as **Book**, **Machine**, or **Album** before changing navigation, documentation, or shared page logic.
 
 # 4. Layer Responsibilities
 
@@ -709,20 +745,30 @@ Important rule:
 
 ---
 
-# 15. Other Standalone Pages
+# 15. Secondary Content Surfaces
 
-| Page | Primary purpose |
-|---|---|
-| observation.html | Observation experience |
-| observation-25.html | Observation 25 experience |
-| echo-layer3.html | Echo / third-layer experience |
-| philosophical-treatise.html | Philosophical treatise |
-| shahnameh.html | Shahnameh reading |
-| paragraph-machine.html | Standalone Paragraph Machine |
+The filenames below are implementation surfaces. Their user-facing classification follows the content model in §3.1.
 
-Every standalone page should be treated as an independent surface with explicit dependencies.
+| Implementation surface | User-facing type | Primary purpose |
+|---|---|---|
+| observation.html | Book | Observation reading experience |
+| observation-25.html | Book | Observation 25 reading experience |
+| echo-layer3.html | Book | Echo / third-layer reading experience |
+| philosophical-treatise.html | Book | Philosophical treatise / reading experience |
+| shahnameh.html | Book | Shahnameh reading |
+| paragraph-machine.html | Machine | Standalone Paragraph Machine |
 
-Do not assume a script loaded on index.html is available on another page.
+Future standalone content should be classified before implementation as one of:
+
+~~~text
+Book
+Machine
+Album
+~~~
+
+Do not introduce a generic “independent page” category merely because a new HTML file is needed.
+
+Do not assume a script loaded on index.html is available on another implementation surface.
 
 ---
 
