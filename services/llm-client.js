@@ -29,6 +29,8 @@ const HISTORY_KEYS = Object.freeze({
   model: 'pgm_model_history'
 });
 const CONNECTION_MODE_KEY = 'pgm_connection_mode';
+const PROXY_URL_KEY = 'pgm_proxy_url';
+const DEFAULT_PROXY_URL = '';
 let runtimeApiKey = '';
 let connectionMode = 'direct';
 const MAX_HISTORY = 12;
@@ -36,6 +38,12 @@ const REQUEST_TIMEOUT_MS = 30000;
 const MAX_ATTEMPTS = 3;
 const RETRY_DELAY_MS = 700;
 const RETRYABLE_STATUSES = new Set([408,425,429,500,502,503,504]);
+
+function normalizeOptionalProxyUrl(value) {
+  const raw=String(value||'').trim();
+  if(!raw)return '';
+  return normalizeBaseUrl(raw);
+}
 
 function normalizeBaseUrl(value) {
   const raw=String(value||DEFAULTS.baseUrl).trim().replace(/\/+$/,'');
@@ -84,6 +92,7 @@ function getSettings(){
     return {
       baseUrl:normalizeBaseUrl(localStorage.getItem('pgm_baseUrl')||DEFAULTS.baseUrl),
       model:localStorage.getItem('pgm_model')||DEFAULTS.model,
+      proxyUrl:normalizeOptionalProxyUrl(localStorage.getItem(PROXY_URL_KEY)||DEFAULT_PROXY_URL),
       apiKey:runtimeApiKey,
       history:{
         baseUrl:readHistory(HISTORY_KEYS.baseUrl),
@@ -94,6 +103,7 @@ function getSettings(){
     return {
       ...DEFAULTS,
       apiKey:runtimeApiKey,
+      proxyUrl:'',
       history:{baseUrl:[DEFAULTS.baseUrl],model:[DEFAULTS.model]}
     };
   }
@@ -103,10 +113,12 @@ function saveSettings(settings){
   const baseUrl=normalizeBaseUrl(settings.baseUrl||DEFAULTS.baseUrl);
   const model=String(settings.model||DEFAULTS.model).trim();
   const apiKey=String(settings.apiKey||'').trim();
+  const proxyUrl=normalizeOptionalProxyUrl(settings.proxyUrl||'');
 
   try{
     localStorage.setItem('pgm_baseUrl',baseUrl);
     localStorage.setItem('pgm_model',model);
+    localStorage.setItem(PROXY_URL_KEY,proxyUrl);
     runtimeApiKey=apiKey;
   }catch(_){}
 
@@ -143,15 +155,18 @@ async function request(url,init){
 
 async function complete(messages,options={}){
   const s={...getSettings(),...options};
-  if(!s.apiKey)throw new Error('کلید اتصال به مدل تنظیم نشده است.');
+  const proxy = getConnectionMode()==='proxy';
+  if(!proxy && !s.apiKey)throw new Error('کلید اتصال به مدل تنظیم نشده است.');
   const model=String(s.model||DEFAULTS.model).trim();
+  const endpoint = proxy ? normalizeOptionalProxyUrl(s.proxyUrl||'') : normalizeBaseUrl(s.baseUrl);
+  if(proxy && !endpoint)throw new Error('نشانی پروکسی تنظیم نشده است.');
   const payload={model,messages,temperature:options.temperature??0.7,response_format:{type:'json_object'}};
   if(/^https:\/\/(?:www\.)?openrouter\.ai(?:\/|$)/i.test(normalizeBaseUrl(s.baseUrl))&&model!=='openrouter/free'){
     payload.models=[model,'openrouter/free'];
   }
   const res=await request(
-    normalizeBaseUrl(s.baseUrl)+'/chat/completions',
-    {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.apiKey},body:JSON.stringify(payload)}
+    endpoint+'/chat/completions',
+    {method:'POST',headers:{'Content-Type':'application/json',...(proxy||!s.apiKey?{}:{'Authorization':'Bearer '+s.apiKey})},body:JSON.stringify(payload)}
   );
   let data;
   try{data=await res.json()}catch(_){throw new Error('پاسخ سرویس مدل JSON معتبر نیست.')}
@@ -163,13 +178,15 @@ async function complete(messages,options={}){
 }
 
 async function checkConnection(settings={}){
-  const baseUrl=normalizeBaseUrl(settings.baseUrl||DEFAULTS.baseUrl);
+  const mode=getConnectionMode();
   const apiKey=String(settings.apiKey||runtimeApiKey).trim();
   const model=String(settings.model||DEFAULTS.model).trim();
-  if(!apiKey)return {ok:false,variant:'auth_failed'};
+  const endpoint=mode==='proxy' ? normalizeOptionalProxyUrl(settings.proxyUrl||'') : normalizeBaseUrl(settings.baseUrl||DEFAULTS.baseUrl);
+  if(!endpoint)return {ok:false,variant:'network_failed'};
+  if(mode==='direct' && !apiKey)return {ok:false,variant:'auth_failed'};
   try{
-    const res=await request(baseUrl+'/models',{method:'GET',headers:{Authorization:'Bearer '+apiKey}});
-    return {ok:res.ok,variant:res.ok?'connected':'network_failed'};
+    const res=await request(mode==='proxy'?endpoint+'/models':endpoint+'/models',{method:'GET',headers:mode==='proxy'?{}:{Authorization:'Bearer '+apiKey}});
+    return {ok:res.ok,variant:res.ok?'connected':'network_failed',model};
   }catch(error){
     if(/HTTPS|نشانی/.test(error.message||''))return {ok:false,variant:'insecure_transport'};
     if(/401|403/.test(error.message||''))return {ok:false,variant:'auth_failed'};
@@ -187,6 +204,7 @@ window.ParagraphLLM=Object.freeze({
   checkConnection,
   setConnectionMode,
   getConnectionMode,
+  DEFAULT_PROXY_URL,
   complete
 });
 })();
