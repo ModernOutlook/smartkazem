@@ -16,15 +16,16 @@
     gesture: false
   });
 
-  const bootstrap = window.__SmartKazemAudioBootstrap || null;
+  // AudioContext is created lazily from a real user gesture. This keeps audio
+  // from becoming a startup dependency and respects browser autoplay policy.
   const listeners = new Map();
   const cues = new Map();
   let state = { ...DEFAULT_STATE };
-  let ctx = bootstrap?.context || null;
-  let master = bootstrap?.master || null;
-  let ambient = bootstrap?.ambient || null;
-  let cueBus = bootstrap?.cues || null;
-  let duck = bootstrap?.duck || null;
+  let ctx = null;
+  let master = null;
+  let ambient = null;
+  let cueBus = null;
+  let duck = null;
   let initialized = false;
   let duckTimer = 0;
 
@@ -346,76 +347,12 @@
     return window.SiteI18n?.get?.(path, fallback) || fallback;
   }
 
-  function wireSplashGate() {
+  function releaseSplash() {
     const splash = document.getElementById('splash');
     if (!splash) return;
-
-    if (!ctx) {
-      splash.classList.add('is-ready');
-      splash.setAttribute('aria-hidden', 'true');
-      window.setTimeout(() => { splash.hidden = true; }, 360);
-      return;
-    }
-
-    const enable = splash.querySelector('[data-audio-enable]');
-    const skip = splash.querySelector('[data-audio-continue]');
-    const status = splash.querySelector('[data-audio-status]');
-    let gateOpen = true;
-
-    const setStatus = (message) => {
-      if (status) status.textContent = message;
-    };
-
-    const hide = () => {
-      if (!gateOpen) return;
-      gateOpen = false;
-      splash.classList.add('is-ready');
-      splash.setAttribute('aria-hidden', 'true');
-      window.setTimeout(() => { splash.hidden = true; }, 360);
-    };
-
-    const attempt = () => resume().then((ok) => {
-      if (ok) {
-        hide();
-        setStatus('');
-      } else {
-        splash.classList.add('audio-blocked');
-        splash.setAttribute('aria-hidden', 'false');
-        if (enable) enable.hidden = false;
-        setStatus(label('labels.audio.resumeFailed', 'Sound could not be enabled automatically.'));
-      }
-      return ok;
-    });
-
-    if (enable) enable.addEventListener('click', attempt);
-    if (skip) skip.addEventListener('click', () => {
-      state.muted = true;
-      state.gesture = true;
-      saveState();
-      hide();
-      emit('muted', getState());
-    });
-
-    if (!state.enabled || state.muted) {
-      hide();
-    } else if (state.gesture) {
-      attempt();
-    } else {
-      splash.classList.add('audio-blocked');
-      splash.setAttribute('aria-hidden', 'false');
-      if (enable) enable.hidden = false;
-    }
-
-    splash.addEventListener('click', (event) => {
-      if (event.target?.closest?.('button')) return;
-      attempt();
-    });
-    splash.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        attempt();
-      }
-    });
+    splash.classList.add('is-ready');
+    splash.setAttribute('aria-hidden', 'true');
+    window.setTimeout(() => { splash.hidden = true; }, 360);
   }
 
   function init() {
@@ -423,23 +360,18 @@
     initialized = true;
     loadState();
 
-    if (!ensureGraph()) {
-      emit('ready', getState());
-      return getState();
-    }
-
+    // Startup must never depend on audio support, autoplay permission, or a
+    // successful AudioContext resume. The first user gesture will initialize it.
     emit('ready', getState());
     wireLifecycle();
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', wireControls, { once: true });
+      document.addEventListener('DOMContentLoaded', () => {
+        wireControls();
+        releaseSplash();
+      }, { once: true });
     } else {
       wireControls();
-    }
-
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', wireSplashGate, { once: true });
-    } else {
-      wireSplashGate();
+      releaseSplash();
     }
 
     return getState();
