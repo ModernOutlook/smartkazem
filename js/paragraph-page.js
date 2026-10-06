@@ -46,10 +46,12 @@ function openParagraphPage(kind){
  loadSettings();updateDirection();
 }
 function closeParagraphPage(){elements.page.classList.remove('open')}
-function renderPrimaryParagraphs(results){elements.primaryOutput.innerHTML=results.map((p,i)=>{const x=window.ParagraphMachineCore.processText(p.text),t=p.displayedText||x.text;return '<article class="pm-primary-card"><div class="pm-primary-index">'+(i+1)+'</div><div class="pm-primary-text">'+escapeHtml(t)+'</div><div class="pm-primary-meta">'+x.finalWordCount+' / 144 '+translate('paragraphMachine.words','کلمه')+' · '+x.finalCharCount+' / 900 '+translate('paragraphMachine.chars','حرف')+'</div></article>'}).join('')}
+function renderPrimaryParagraphs(results){elements.primaryOutput.innerHTML=results.map((p,i)=>{const x=window.ParagraphMachineCore.processText(p.text),t=p.displayedText||x.text,e=p.userEvaluation||'',ec=e?' pm-user-'+e:'';return '<article class="pm-primary-card"><div class="pm-primary-index">'+(i+1)+'</div><div class="pm-primary-text'+ec+'">'+escapeHtml(t)+'</div><div class="pm-primary-meta">'+x.finalWordCount+' / 144 '+translate('paragraphMachine.words','کلمه')+' · '+x.finalCharCount+' / 900 '+translate('paragraphMachine.chars','حرف')+'</div></article>'}).join('')}
 async function evaluateReference(){const raw=elements.input.value.trim();if(!raw)throw new Error(translate('paragraphMachine.empty','متنی وارد نشده است.'));const l=getLanguage(),ptext=await window.ParagraphTranslation.toPersian(raw,l),p=await window.ParagraphWorkspaceAdapter.evaluatePersian(ptext);p.displayedText=l==='fa'?p.text:await window.ParagraphTranslation.fromPersian(p.text,l);return[p]}
 async function generateExperience(){const n=Number(elements.count.value)||1;const r=await window.ParagraphWorkspaceAdapter.generatePersian(n,'mixed'),l=getLanguage(),t=l==='fa'?r.map(p=>p.text):await window.ParagraphTranslation.fromPersianBatch(r.map(p=>p.text),l);r.forEach((p,i)=>p.displayedText=t[i]);return r}
 function closeJudgmentPopover(){elements.popover.hidden=true;elements.popover.replaceChildren()}
+function evaluateRecognitionJudgments(){const missing=DOMAIN_ORDER.filter(d=>!userJudgments[d]);if(missing.length)throw new Error(translate('paragraphMachine.judgeAll','برای هر پنج قلمرو یک قضاوت انتخاب کنید.'));currentResults.forEach(p=>{p.userEvaluation=DOMAIN_ORDER.every(d=>userJudgments[d]===p.judgment?.[d]?.status)?'correct':'incorrect'});renderPrimaryParagraphs(currentResults);elements.source.textContent=translate(currentResults.every(p=>p.userEvaluation==='correct')?'paragraphMachine.recognitionCorrect':'paragraphMachine.recognitionIncorrect',currentResults.every(p=>p.userEvaluation==='correct')?'قضاوت شما با داوری ماشین منطبق است.':'قضاوت شما با داوری ماشین منطبق نیست.')}
+
 function openJudgmentPopover(button){
  if(entryMode===ENTRY_MODES.REFERENCE)return;
  const d=button.dataset.domain,name=button.querySelector('span')?.textContent||'';
@@ -61,6 +63,7 @@ function openJudgmentPopover(button){
 async function run(){
  elements.error.textContent='';elements.primaryOutput.innerHTML='<div class="pm-loading">'+translate('paragraphMachine.processing','در حال پردازش...')+'</div>';elements.action.disabled=true;
  try{
+  if(entryMode===ENTRY_MODES.EXPERIENCE && currentResults.length){evaluateRecognitionJudgments();return}
   currentResults=entryMode===ENTRY_MODES.REFERENCE?await evaluateReference():await generateExperience();
   if(entryMode===ENTRY_MODES.REFERENCE){setRealmOutputState(currentResults[0]);elements.source.textContent=translate('paragraphMachine.referenceDone','متن به فارسی منتقل و در هسته سنجیده شد.')}
   else{renderPrimaryParagraphs(currentResults);clearRealmState();elements.source.textContent=translate('paragraphMachine.judgmentReady','پاراگراف آماده قضاوت پنج‌قلمرویی است.')}
