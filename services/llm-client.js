@@ -185,7 +185,7 @@ async function checkConnection(settings={}){
   if(!endpoint)return {ok:false,variant:'network_failed'};
   if(mode==='direct' && !apiKey)return {ok:false,variant:'auth_failed'};
   try{
-    const res=await request(mode==='proxy'?endpoint+'/health':endpoint+'/models',{method:'GET',headers:mode==='proxy'?{}:{Authorization:'Bearer '+apiKey}});
+    const res=await request(mode==='proxy'?endpoint+'/models':endpoint+'/models',{method:'GET',headers:mode==='proxy'?{}:{Authorization:'Bearer '+apiKey}});
     return {ok:res.ok,variant:res.ok?'connected':'network_failed',model};
   }catch(error){
     if(/HTTPS|نشانی/.test(error.message||''))return {ok:false,variant:'insecure_transport'};
