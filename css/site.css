@@ -627,3 +627,14 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 
 .paragraph-page .pm-user-correct{color:#39d98a;text-shadow:0 0 18px rgba(57,217,138,.12)}
 .paragraph-page .pm-user-incorrect{color:#ff665b;text-shadow:0 0 18px rgba(255,102,91,.1)}
+
+/* Action buttons: neutral until their route-specific prerequisites are satisfied. */
+.pm-smartbot button:disabled,
+.pm-smartbot button:not(.is-enabled){background:linear-gradient(145deg,#f4f4f4,#cfcfcf);border-color:rgba(255,255,255,.8);color:#25252b;box-shadow:0 7px 18px rgba(0,0,0,.28);filter:none;opacity:1;cursor:not-allowed}
+.pm-smartbot button.pm-action-recognition.is-enabled{background:linear-gradient(145deg,#9d4cff,#6323a0);border-color:rgba(166,76,255,.78);color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.35),0 0 22px rgba(166,76,255,.2)}
+.pm-smartbot button.pm-action-reference.is-enabled{background:linear-gradient(145deg,#d65348,#8f2923);border-color:rgba(255,102,91,.82);color:#fff;cursor:pointer;box-shadow:0 8px 22px rgba(0,0,0,.35),0 0 22px rgba(214,83,72,.2)}
+.paragraph-page[data-entry="reference"] .pm-realm-choice.realm-output{cursor:default}
+.paragraph-page[data-entry="reference"] .pm-primary-output{display:none}
+.paragraph-page[data-entry="reference"] .pm-panel.is-input-mode textarea{display:block}
+.paragraph-page[data-entry="reference"] .pm-panel.is-input-mode textarea.pm-user-correct{color:#39d98a}
+.paragraph-page[data-entry="reference"] .pm-panel.is-input-mode textarea.pm-user-incorrect{color:#ff665b}
