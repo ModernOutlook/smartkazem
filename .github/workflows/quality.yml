@@ -23,6 +23,25 @@ jobs:
         with:
           node-version: 22
 
+
+      - name: Diagnose content/emergence-2.js
+        continue-on-error: true
+        run: node --check content/emergence-2.js
+      - name: Diagnose content/emergence.js
+        continue-on-error: true
+        run: node --check content/emergence.js
+      - name: Diagnose js/emergence-2-page.js
+        continue-on-error: true
+        run: node --check js/emergence-2-page.js
+      - name: Diagnose js/possible-mirror-page.js
+        continue-on-error: true
+        run: node --check js/possible-mirror-page.js
+      - name: Diagnose audio-engine.js
+        continue-on-error: true
+        run: node --check audio-engine.js
+      - name: Diagnose translations/i18n.js
+        continue-on-error: true
+        run: node --check translations/i18n.js
       - name: Check JavaScript syntax
         run: |
           find . -type f -name '*.js' -not -path './.git/*' -print0 | xargs -0 -n1 node --check
@@ -72,24 +91,3 @@ jobs:
               print('\n'.join(bad)); sys.exit(1)
           print('HTML checks passed')
           PY
-  syntax-diagnostics:
-    strategy:
-      fail-fast: false
-      matrix:
-        file:
-          - content/emergence-2.js
-          - content/emergence.js
-          - js/emergence-2-page.js
-          - js/possible-mirror-page.js
-          - audio-engine.js
-          - translations/i18n.js
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
-      - name: Setup Node
-        uses: actions/setup-node@49933aa5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
-        with:
-          node-version: 22
-      - name: Check ${{ matrix.file }}
-        run: node --check "${{ matrix.file }}"
