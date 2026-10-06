@@ -75,6 +75,7 @@ function renderPrimaryParagraphs(results){elements.primaryOutput.innerHTML=resul
 async function evaluateReference(){const raw=elements.input.value.trim();if(!raw)throw new Error(translate('paragraphMachine.empty','متنی وارد نشده است.'));const l=getLanguage(),ptext=await window.ParagraphTranslation.toPersian(raw,l),p=await window.ParagraphWorkspaceAdapter.evaluatePersian(ptext);p.displayedText=l==='fa'?p.text:await window.ParagraphTranslation.fromPersian(p.text,l);return[p]}
 async function generateExperience(){const r=await window.ParagraphWorkspaceAdapter.generatePersian(1,'mixed'),l=getLanguage(),t=l==='fa'?r.map(p=>p.text):await window.ParagraphTranslation.fromPersianBatch(r.map(p=>p.text),l);r.forEach((p,i)=>p.displayedText=t[i]);return r}
 function closeJudgmentPopover({restoreFocus=false}={}){
+ elements.choices.forEach(choice=>choice.setAttribute('aria-expanded','false'));
  elements.popover.hidden=true;
  elements.popover.replaceChildren();
  if(restoreFocus&&judgmentReturnFocus?.isConnected){judgmentReturnFocus.focus({preventScroll:true});}
@@ -87,6 +88,7 @@ function openJudgmentPopover(button){
  if(!elements.popover.hidden) closeJudgmentPopover();
  judgmentReturnFocus=button;
  const d=button.dataset.domain,name=button.querySelector('span')?.textContent||'';
+ elements.choices.forEach(choice=>choice.setAttribute('aria-expanded',String(choice===button)));
  elements.popover.className='pm-judgment-popover pm-domain-'+d;
  elements.popover.innerHTML='<strong>'+escapeHtml(name)+'</strong><div class="pm-judgment-options">'+STATUS_OPTIONS.map(([v,l])=>'<button type="button" data-status="'+v+'" class="pm-choice-'+v+'">'+l+'</button>').join('')+'</div>';
  elements.popover.hidden=false;
