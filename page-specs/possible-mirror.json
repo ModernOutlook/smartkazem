@@ -1,0 +1,12 @@
+{
+  "schema": "page-completion/v1",
+  "page": "possible-mirror",
+  "source": {"path":"translations/fa.json","authority":"fa","content_key":"pages.possibleMirror"},
+  "translations": {"path":"translations/{lang}.json","languages":["en","ar","zh"],"derived_from":"source"},
+  "runtime": {"html":"possible-mirror.html","controller":"js/possible-mirror-page.js","i18n":"translations/i18n.js"},
+  "accessibility": {
+    "required": true,
+    "features": ["skip-link","semantic-tablist-tabpanel-navigation","aria-selected-active-section","aria-controls-and-labelledby","explicit-close-accessible-name","language-controls-shared-site-i18n","dynamic-content-live-region","focus-restoration","visible-focus","reduced-motion","rtl-ltr","mobile-long-labels"],
+    "verification": ["keyboard-only","screen-reader","rtl-ltr","mobile-portrait","mobile-landscape","desktop"]
+  }
+}

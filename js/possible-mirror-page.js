@@ -11,25 +11,51 @@
     return window.SiteI18n?.getCatalog?.()?.pages?.possibleMirror || {};
   }
 
-  function setActiveSection(index) {
-    tabs.querySelectorAll('.possible-mirror-tab').forEach((tab) => {
+  function setPageLanguage() {
+    const lang = document.body.dataset.mode || document.documentElement.lang || 'fa';
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'fa' || lang === 'ar' ? 'rtl' : 'ltr';
+  }
+
+  function announce(text) {
+    body.setAttribute('aria-label', text || '');
+  }
+
+  function setActiveSection(index, moveFocus = false) {
+    const tabList = [...tabs.querySelectorAll('.possible-mirror-tab')];
+    const sections = [...body.querySelectorAll('.possible-mirror-section')];
+
+    tabList.forEach((tab) => {
       const active = Number(tab.dataset.index) === index;
       tab.classList.toggle('active', active);
       tab.setAttribute('aria-selected', String(active));
+      tab.setAttribute('aria-current', active ? 'true' : 'false');
+      tab.tabIndex = active ? 0 : -1;
     });
 
-    body.querySelectorAll('.possible-mirror-section').forEach((section, sectionIndex) => {
-      section.classList.toggle('active', sectionIndex === index);
-      section.hidden = sectionIndex !== index;
+    sections.forEach((section, sectionIndex) => {
+      const active = sectionIndex === index;
+      section.classList.toggle('active', active);
+      section.hidden = !active;
     });
 
     body.scrollTop = 0;
+    const activeSection = sections[index];
+    if (activeSection) {
+      announce(activeSection.querySelector('h1')?.textContent || '');
+    }
+
+    if (moveFocus) {
+      tabList[index]?.focus();
+    }
   }
 
   function render() {
     const data = catalog();
     const sections = Array.isArray(data.sections) ? data.sections : [];
     const contents = Array.isArray(data.contents) ? data.contents : [];
+
+    setPageLanguage();
 
     const title = document.getElementById('possible-mirror-title');
     const subtitle = document.getElementById('possible-mirror-subtitle');
@@ -40,6 +66,9 @@
     tabs.replaceChildren();
     body.replaceChildren();
 
+    tabs.setAttribute('role', 'tablist');
+    tabs.setAttribute('aria-orientation', 'horizontal');
+
     sections.forEach((label, index) => {
       const tab = document.createElement('button');
       tab.type = 'button';
@@ -47,8 +76,10 @@
       tab.dataset.index = String(index);
       tab.setAttribute('role', 'tab');
       tab.setAttribute('aria-selected', String(index === 0));
+      tab.setAttribute('aria-current', index === 0 ? 'true' : 'false');
       tab.setAttribute('aria-controls', `possible-mirror-section-${index}`);
       tab.id = `possible-mirror-tab-${index}`;
+      tab.tabIndex = index === 0 ? 0 : -1;
       tab.textContent = label;
       tabs.appendChild(tab);
 
@@ -57,6 +88,7 @@
       section.id = `possible-mirror-section-${index}`;
       section.setAttribute('role', 'tabpanel');
       section.setAttribute('aria-labelledby', tab.id);
+      section.tabIndex = -1;
       section.hidden = index !== 0;
 
       const heading = document.createElement('h1');
@@ -94,6 +126,7 @@
 
     if (!sections.length) {
       body.innerHTML = '<p class="possible-mirror-empty">—</p>';
+      announce(data.title || '');
       return;
     }
 
@@ -104,6 +137,24 @@
     const tab = event.target.closest('.possible-mirror-tab');
     if (!tab || !tabs.contains(tab)) return;
     setActiveSection(Number(tab.dataset.index));
+  });
+
+  tabs.addEventListener('keydown', (event) => {
+    const tab = event.target.closest('.possible-mirror-tab');
+    if (!tab) return;
+    const items = [...tabs.querySelectorAll('.possible-mirror-tab')];
+    const current = items.indexOf(tab);
+    let next = current;
+
+    if (event.key === 'ArrowRight') next = (current + 1) % items.length;
+    if (event.key === 'ArrowLeft') next = (current - 1 + items.length) % items.length;
+    if (event.key === 'Home') next = 0;
+    if (event.key === 'End') next = items.length - 1;
+
+    if (next !== current) {
+      event.preventDefault();
+      setActiveSection(next, true);
+    }
   });
 
   close.addEventListener('click', () => {

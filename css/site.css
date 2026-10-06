@@ -822,3 +822,4 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
     padding:10px 12px;
   }
 }
+\n/* Possible Mirror accessibility contract */\n.skip-link{position:fixed;top:8px;right:8px;z-index:10000;transform:translateY(-180%);padding:10px 14px;border-radius:10px;background:#fff;color:#000;text-decoration:none;font-weight:700;box-shadow:0 4px 18px rgba(0,0,0,.35)}.skip-link:focus{transform:translateY(0);outline:3px solid #fff;outline-offset:3px}:focus-visible{outline:3px solid #f0d58b;outline-offset:3px}.possible-mirror-tab[aria-selected="true"]{outline-offset:2px}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
