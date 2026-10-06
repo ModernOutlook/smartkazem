@@ -16,58 +16,21 @@
     reference: PageNavigation.closeReference
   });
 
-  let activeId = 'structure';
   let lastSelectionAt = 0;
 
-  const info = document.getElementById('info');
-  const infoTitle = document.getElementById('info-title');
-  const infoText = document.getElementById('info-text');
   const realms = [...document.querySelectorAll('.realm')];
   const core = document.getElementById('core');
   const logoViewer = document.getElementById('logo-viewer');
   const logoViewerClose = document.getElementById('logo-viewer-close');
 
-  function setInfo(id, show = true) {
-  activeId = id;
-
-  realms.forEach((realm) => {
-    realm.classList.toggle('selected', realm.dataset.id === id);
-  });
-
-  const realm = window.SiteI18n?.getCatalog?.()?.home?.realms?.[id];
-  if (realm) {
-    infoTitle.textContent = realm.title || '';
-    infoText.textContent = realm.text || '';
-  }
-
-  info.classList.remove(
-    'realm-structure',
-    'realm-continuity',
-    'realm-experience',
-    'realm-reference',
-    'realm-share',
-    'realm-core'
-  );
-  info.classList.add('realm-' + id);
-  info.dataset.realm = id;
-  info.classList.toggle('reference', id === 'reference');
-  info.classList.toggle('visible', show);
-}
-
-  function clearInfo() {
-  info.classList.remove('visible');
-  realms.forEach((realm) => realm.classList.remove('selected'));
-}
-
   function selectRealm(id) {
   if (id === 'core') {
-    setInfo('core');
     return;
   }
 
   if (!realms.some((realm) => realm.dataset.id === id)) return;
 
-  setInfo(id);
+  window.HomeRealmInfo?.setInfo(id);
 
   const openers = {
     share: PageNavigation.openShare,
@@ -88,7 +51,7 @@
 }
 
   function openLogoViewer() {
-  clearInfo();
+  window.HomeRealmInfo?.clearInfo();
   logoViewer.classList.add('open');
 }
 
@@ -165,11 +128,7 @@
   if (brand) brand.textContent = catalog.home?.brand || catalog.meta?.brand || brand.textContent;
   if (brandAlt) brandAlt.textContent = catalog.home?.brandLatin || catalog.meta?.brandLatin || brandAlt.textContent;
 
-  const currentRealm = catalog.home?.realms?.[activeId];
-  if (currentRealm) {
-    infoTitle.textContent = currentRealm.title || '';
-    infoText.textContent = currentRealm.text || '';
-  }
+  window.HomeRealmInfo?.refresh();
 }
 
   function handleLanguageChange() {
@@ -208,15 +167,16 @@
     return;
   }
 
+  const activeId = window.HomeRealmInfo?.getActiveId?.() || 'structure';
   const index = REALM_ORDER.indexOf(activeId);
   if (['ArrowDown', 'ArrowRight'].includes(event.key)) {
     event.preventDefault();
-    setInfo(REALM_ORDER[(index + 1) % REALM_ORDER.length]);
+    window.HomeRealmInfo?.setInfo(REALM_ORDER[(index + 1) % REALM_ORDER.length]);
   }
 
   if (['ArrowUp', 'ArrowLeft'].includes(event.key)) {
     event.preventDefault();
-    setInfo(REALM_ORDER[(index - 1 + REALM_ORDER.length) % REALM_ORDER.length]);
+    window.HomeRealmInfo?.setInfo(REALM_ORDER[(index - 1 + REALM_ORDER.length) % REALM_ORDER.length]);
   }
 
   if (event.key === 'Enter' && activeId === 'reference') PageNavigation.openReference();
@@ -293,8 +253,7 @@ document.getElementById('reference-match').addEventListener('click', () => PageN
 document.addEventListener('keydown', handleEscape);
 
 // Language state is owned exclusively by translations/i18n.js.
-PageNavigation.setHomeController({ setInfo, clearInfo });
-  setInfo('structure');
+PageNavigation.setHomeController(window.HomeRealmInfo);
 
 
 })();

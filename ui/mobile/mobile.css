@@ -62,20 +62,6 @@
     max-height: 620px;
   }
 
-  .info {
-    position: relative;
-    left: auto;
-    right: auto;
-    bottom: auto;
-    width: min(100%, 650px);
-    max-height: min(28dvh, 240px);
-    margin: 0 auto;
-    transform: none;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: 14px 18px calc(14px + var(--ui-safe-bottom));
-  }
-
   .topbar {
     top: var(--ui-safe-top);
     right: calc(12px + var(--ui-safe-right));
@@ -309,11 +295,6 @@
       calc(var(--ui-space-5) + var(--ui-safe-left));
   }
 
-  .info {
-    align-self: center;
-    max-height: min(72dvh, 420px);
-  }
-
   .menu-svg {
     width: min(72vw, 78dvh);
     height: min(72vw, 78dvh);
@@ -405,3 +386,4 @@
     height: min(72vw, 62dvh);
   }
 }
+
