@@ -79,8 +79,16 @@
     return state.accessibility;
   }
   function handleTripleClick(event){
-    const now=performance.now();clickTimes=clickTimes.filter(time=>now-time<=TRIPLE_WINDOW);clickTimes.push(now);
-    if(clickTimes.length<3)return false;clickTimes=[];event.preventDefault();event.stopImmediatePropagation();toggleAccessibility();return true;
+    const now=performance.now();
+    clickTimes=clickTimes.filter(time=>now-time<=TRIPLE_WINDOW);
+    clickTimes.push(now);
+    if(clickTimes.length<3)return false;
+
+    clickTimes=[];
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    toggleAccessibility();
+    return true;
   }
   function handlePointerDown(event){
     if(event.button!==undefined&&event.button!==0)return;resume();setRealm(realmFromElement(event.target));if(!state.accessibility)return;
