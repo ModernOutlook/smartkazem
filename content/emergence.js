@@ -1753,5 +1753,5 @@ list.addEventListener('keydown',event=>{
 document.addEventListener('site:languagechange',()=>{
   render();
 });
-applyLanguage?.();
+// initial render
 render();
