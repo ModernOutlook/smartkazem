@@ -1,12 +1,13 @@
 {
   "schema": "page-completion/v1",
-  "page": "emergence",
+  "page": "emergence2",
   "source": {
-    "path": "content/emergence.js",
-    "authority": "fa"
+    "path": "content/emergence-2.js",
+    "authority": "fa",
+    "content_key": "episodes"
   },
   "translations": {
-    "path": "translations/emergence.json",
+    "path": "translations/{lang}.json",
     "languages": [
       "en",
       "ar",
@@ -15,20 +16,20 @@
     "derived_from": "source"
   },
   "runtime": {
-    "html": "emergence.html",
-    "i18n": "translations/i18n.js",
-    "controller": "content/emergence.js"
+    "html": "emergence-2.html",
+    "controller": "js/emergence-2-page.js",
+    "i18n": "translations/i18n.js"
   },
   "accessibility": {
     "required": true,
     "features": [
       "skip-link",
       "semantic-episode-navigation",
-      "aria-current-active-item",
-      "aria-controls-reader",
+      "aria-current-active-episode",
+      "aria-controls",
       "dynamic-reader-region",
       "accessible-reader-heading",
-      "explicit-previous-next-controls",
+      "accessible-previous-next-controls",
       "explicit-close-accessible-name",
       "shared-site-language-controls",
       "language-aware-aria-labels",
