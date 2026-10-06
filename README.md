@@ -278,3 +278,20 @@ Prefer: fix: / feat: / refactor: / style: / docs: / test: / chore:
 ## Final rule
 
 > **Inspect first. Identify the smallest responsible layer. Change only what is necessary. Preserve contracts. Validate the affected surface.**
+
+## 19. Repeatable AI page-completion system
+
+Long-form content pages use a machine-detectable **page-completion package** so future ChatGPT maintenance can recognize the workflow instead of inventing a new one.
+
+Reference protocol: `docs/ai-page-completion.md`  
+Machine-readable manifest: `page-specs/<page>.json`
+
+The standard flow is:
+
+`Persian source → translation reservoir (EN/AR/ZH) → shared i18n/runtime → accessibility derived from content + interaction model → verification`
+
+For a new page, ChatGPT should inspect the repository first and request only missing inputs: page identity, canonical Persian source, translation target/path, runtime page/path, and any page-specific accessibility requirements. It should then reconcile source and translations, complete translations from Persian, derive the accessibility layer, run the quality gate, and perform real browser/screen-reader testing when that capability is available.
+
+The **Persian source remains authoritative**. Translation cardinality and ordering must match it. Accessibility is not a separate content source; it is a contract derived from the actual translated content and controls. The reference implementation is `emergence`.
+
+This protocol does not replace page-specific inspection. It makes the expected relationship explicit and repeatable.
