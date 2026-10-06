@@ -36,7 +36,8 @@
       "disabled": "Accessibility mode disabled.",
       "repeat": "Double-click to repeat the last announcement.",
       "hold": "Long-press to pause, resume, or repeat speech."
-    }
+    },
+    "episodeNavigation": "Episode navigation"
   },
   "meta": {
     "brand": "Modern Outlook",
