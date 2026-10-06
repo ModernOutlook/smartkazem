@@ -56,7 +56,8 @@
   window.HomeRealmInfo = Object.freeze({
     setInfo: render,
     clearInfo: clear,
-    refresh
+    refresh,
+    getActiveId: () => activeId
   });
 
   render('structure', true);
