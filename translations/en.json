@@ -37,7 +37,10 @@
       "repeat": "Double-click to repeat the last announcement.",
       "hold": "Long-press to pause, resume, or repeat speech."
     },
-    "episodeNavigation": "Episode navigation"
+    "episodeNavigation": "Episode navigation",
+    "previousEpisode": "Previous episode",
+    "nextEpisode": "Next episode",
+    "episodeReader": "Episode text"
   },
   "meta": {
     "brand": "Modern Outlook",
