@@ -122,7 +122,7 @@
       }
       const chapter = await chapterResponse.json();
       data.chapters = data.chapters || {};
-      data.chapters.emergence = chapter;
+      data.chapters[pageKey] = chapter;
     }
 
     catalogs[normalizedLanguage] = data;
