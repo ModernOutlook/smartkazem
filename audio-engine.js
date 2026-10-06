@@ -102,6 +102,7 @@
   function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
   function init(){
     if(initialized)return getState();initialized=true;loadState();ensureGraph();initSpeech();
+    document.documentElement.style.touchAction='manipulation';
     document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
     document.addEventListener('pointerdown',handlePointerDown,{capture:true,passive:true});
     document.addEventListener('pointerup',handlePointerUp,{capture:true,passive:true});
