@@ -207,7 +207,7 @@ font-size:.82rem;line-height:2;color:#f2ffe9;text-shadow:0 1px 8px rgba(0,0,0,.1
 .app::after{background:radial-gradient(circle at 50% 47%,transparent 29%,rgba(0,0,0,.06) 56%,rgba(0,0,0,.68) 100%),linear-gradient(180deg,rgba(0,0,0,.18),transparent 18%,transparent 80%,rgba(0,0,0,.42))}
 .atmosphere{opacity:.82;background:radial-gradient(circle at 7% 11%,rgba(255,255,255,.82) 0 1px,transparent 1.5px),radial-gradient(circle at 22% 37%,rgba(106,190,255,.62) 0 1px,transparent 1.6px),radial-gradient(circle at 42% 13%,rgba(255,220,137,.6) 0 1px,transparent 1.7px),radial-gradient(circle at 63% 23%,rgba(255,255,255,.58) 0 1px,transparent 1.5px),radial-gradient(circle at 82% 14%,rgba(150,208,255,.64) 0 1px,transparent 1.7px),radial-gradient(circle at 93% 43%,rgba(255,231,170,.58) 0 1px,transparent 1.6px),radial-gradient(circle at 14% 68%,rgba(214,133,255,.58) 0 1px,transparent 1.6px),radial-gradient(circle at 39% 83%,rgba(255,160,113,.52) 0 1px,transparent 1.5px),radial-gradient(circle at 67% 76%,rgba(111,255,194,.56) 0 1px,transparent 1.6px);background-size:103px 127px,149px 173px,127px 151px,173px 139px,131px 167px,157px 143px,139px 181px,167px 151px,151px 173px;mix-blend-mode:screen}
 .core,.center-label{display:none}
-.info{box-shadow:0 14px 34px rgba(0,0,0,.4)}
+.info{box-shadow:0 14px 34px rgba(0,0,0,.4);max-height:min(34dvh,230px);overflow:hidden}
 .info .kicker{margin-bottom:3px}
 .info h1{margin-bottom:3px}
 .info p{line-height:1.65}
