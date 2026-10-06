@@ -741,5 +741,37 @@
         ]
       }
     }
-  ]
+  ],
+  "ui": {
+    "description": {
+      "fa": "روایتی دربارهٔ ترس، حقیقت و انتخاب؛ فصل نخست در ۱۹ قسمت.",
+      "en": "A story about fear, truth, and choice; the first chapter in 19 episodes.",
+      "ar": "حكاية عن الخوف والحقيقة والاختيار؛ الفصل الأول في 19 حلقة.",
+      "zh": "一个关于恐惧、真相与选择的故事；第一章共19集。"
+    },
+    "episodesLabel": {
+      "fa": "قسمت‌های فصل اول",
+      "en": "Chapter One Episodes",
+      "ar": "حلقات الفصل الأول",
+      "zh": "第一章各集"
+    },
+    "storyDescription": {
+      "fa": "روایتی دربارهٔ ترس، حقیقت و انتخاب",
+      "en": "A story about fear, truth, and choice",
+      "ar": "حكاية عن الخوف والحقيقة والاختيار",
+      "zh": "一个关于恐惧、真相与选择的故事"
+    },
+    "coverLabel": {
+      "fa": "تصویر جلد فصل",
+      "en": "Chapter Cover",
+      "ar": "غلاف الفصل",
+      "zh": "章节封面"
+    },
+    "placeholder": {
+      "fa": "این قسمت هنوز در مخزن فارسی وارد نشده است.\nمتن هر قسمت در ادامهٔ انتشار رمان، در همین صفحه قرار می‌گیرد.",
+      "en": "This episode has not yet been added to the Persian source repository.\nEach episode's text will appear here as the novel is released.",
+      "ar": "لم تُضف هذه الحلقة بعد إلى مستودع النص الفارسي.\nسيظهر نص كل حلقة هنا مع استمرار نشر الرواية.",
+      "zh": "这一集尚未加入波斯语源文本库。\n随着小说继续发布，每一集的正文都会在此出现。"
+    }
+  }
 }
