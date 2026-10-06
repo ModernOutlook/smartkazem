@@ -46,7 +46,7 @@ function openParagraphPage(kind){
  loadSettings();updateDirection();
 }
 function closeParagraphPage(){elements.page.classList.remove('open')}
-function renderPrimaryParagraph(p){const x=window.ParagraphMachineCore.processText(p.text),t=p.displayedText||x.text;elements.primaryOutput.innerHTML='<article class="pm-primary-card"><div class="pm-primary-index">۱</div><div class="pm-primary-text">'+escapeHtml(t)+'</div><div class="pm-primary-meta">'+x.finalWordCount+' / 144 '+translate('paragraphMachine.words','کلمه')+' · '+x.finalCharCount+' / 900 '+translate('paragraphMachine.chars','حرف')+'</div></article>'}
+function renderPrimaryParagraphs(results){elements.primaryOutput.innerHTML=results.map((p,i)=>{const x=window.ParagraphMachineCore.processText(p.text),t=p.displayedText||x.text;return '<article class="pm-primary-card"><div class="pm-primary-index">'+(i+1)+'</div><div class="pm-primary-text">'+escapeHtml(t)+'</div><div class="pm-primary-meta">'+x.finalWordCount+' / 144 '+translate('paragraphMachine.words','کلمه')+' · '+x.finalCharCount+' / 900 '+translate('paragraphMachine.chars','حرف')+'</div></article>'}).join('')}
 async function evaluateReference(){const raw=elements.input.value.trim();if(!raw)throw new Error(translate('paragraphMachine.empty','متنی وارد نشده است.'));const l=getLanguage(),ptext=await window.ParagraphTranslation.toPersian(raw,l),p=await window.ParagraphWorkspaceAdapter.evaluatePersian(ptext);p.displayedText=l==='fa'?p.text:await window.ParagraphTranslation.fromPersian(p.text,l);return[p]}
 async function generateExperience(){const n=Number(elements.count.value)||1;const r=await window.ParagraphWorkspaceAdapter.generatePersian(n,'mixed'),l=getLanguage(),t=l==='fa'?r.map(p=>p.text):await window.ParagraphTranslation.fromPersianBatch(r.map(p=>p.text),l);r.forEach((p,i)=>p.displayedText=t[i]);return r}
 function closeJudgmentPopover(){elements.popover.hidden=true;elements.popover.replaceChildren()}
@@ -63,7 +63,7 @@ async function run(){
  try{
   currentResults=entryMode===ENTRY_MODES.REFERENCE?await evaluateReference():await generateExperience();
   if(entryMode===ENTRY_MODES.REFERENCE){setRealmOutputState(currentResults[0]);elements.source.textContent=translate('paragraphMachine.referenceDone','متن به فارسی منتقل و در هسته سنجیده شد.')}
-  else{renderPrimaryParagraph(currentResults[0]);clearRealmState();elements.source.textContent=translate('paragraphMachine.judgmentReady','پاراگراف آماده قضاوت پنج‌قلمرویی است.')}
+  else{renderPrimaryParagraphs(currentResults);clearRealmState();elements.source.textContent=translate('paragraphMachine.judgmentReady','پاراگراف آماده قضاوت پنج‌قلمرویی است.')}
   saveSettingsAfterSuccess();
  }catch(e){currentResults=[];elements.primaryOutput.replaceChildren();clearRealmState();elements.error.textContent=e.message||String(e)}
  finally{elements.action.disabled=false}
