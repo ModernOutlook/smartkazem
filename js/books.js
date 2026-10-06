@@ -94,6 +94,8 @@ function createElement(tag, className, text) {
 
 function buildBookTabs(activeIndex = 0) {
   bookTabs.replaceChildren();
+  bookTabs.setAttribute('role', 'tablist');
+  bookTabs.setAttribute('aria-orientation', 'horizontal');
 
   activeChapters().forEach((chapter, index) => {
     const button = createElement(
@@ -103,7 +105,25 @@ function buildBookTabs(activeIndex = 0) {
     );
 
     button.type = 'button';
+    button.setAttribute('role', 'tab');
+    button.id = `book-tab-${index}`;
+    button.setAttribute('aria-selected', String(index === activeIndex));
+    button.setAttribute('aria-controls', 'book-body');
+    button.tabIndex = index === activeIndex ? 0 : -1;
     button.addEventListener('click', () => selectChapter(index));
+    button.addEventListener('keydown', (event) => {
+      const count = activeChapters().length;
+      if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
+      event.preventDefault();
+      let next = index;
+      if (event.key === 'ArrowRight') next = (index + 1) % count;
+      if (event.key === 'ArrowLeft') next = (index - 1 + count) % count;
+      if (event.key === 'Home') next = 0;
+      if (event.key === 'End') next = count - 1;
+      const target = bookTabs.children[next];
+      target?.focus({ preventScroll: true });
+      selectChapter(next);
+    });
     bookTabs.appendChild(button);
   });
 }
@@ -158,7 +178,10 @@ function selectChapter(index) {
   if (!chapter) return;
 
   document.querySelectorAll('.book-tab').forEach((button, buttonIndex) => {
-    button.classList.toggle('active', buttonIndex === index);
+    const active = buttonIndex === index;
+    button.classList.toggle('active', active);
+    button.setAttribute('aria-selected', String(active));
+    button.tabIndex = active ? 0 : -1;
   });
 
   const fragment = renderBookHeader(index, chapter);
@@ -167,6 +190,8 @@ function selectChapter(index) {
     if (moral) fragment.appendChild(moral);
   }
 
+  bookBody.setAttribute('role', 'tabpanel');
+  bookBody.setAttribute('aria-labelledby', `book-tab-${index}`);
   bookBody.classList.toggle('lang-en', getCurrentLanguage() === 'en');
   bookBody.dir = getCurrentLanguage() === 'en' ? 'ltr' : 'rtl';
   bookBody.replaceChildren(fragment);
