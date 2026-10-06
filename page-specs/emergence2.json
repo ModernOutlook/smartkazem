@@ -1,12 +1,57 @@
 {
-  "schema":"page-completion/v1",
-  "page":"emergence2",
-  "source":{"path":"content/emergence-2.js","authority":"fa","content_key":"episodes"},
-  "translations":{"path":"translations/{lang}.json","languages":["en","ar","zh"],"derived_from":"source"},
-  "runtime":{"html":"emergence-2.html","controller":"js/emergence-2-page.js","i18n":"translations/i18n.js"},
-  "accessibility":{
-    "required":true,
-    "features":["skip-link","semantic-episode-navigation","aria-current-active-episode","aria-controls","explicit-close-accessible-name","shared-site-language-controls","dynamic-reader-region","keyboard-navigation","visible-focus","reduced-motion","rtl-ltr","mobile-portrait","mobile-landscape","desktop"],
-    "verification":["keyboard-only","screen-reader","rtl-ltr","mobile-portrait","mobile-landscape","desktop"]
+  "schema": "page-completion/v1",
+  "page": "emergence2",
+  "source": {
+    "path": "content/emergence-2.js",
+    "authority": "fa",
+    "content_key": "episodes"
+  },
+  "translations": {
+    "path": "translations/{lang}.json",
+    "languages": [
+      "en",
+      "ar",
+      "zh"
+    ],
+    "derived_from": "source"
+  },
+  "runtime": {
+    "html": "emergence-2.html",
+    "controller": "js/emergence-2-page.js",
+    "i18n": "translations/i18n.js"
+  },
+  "accessibility": {
+    "required": true,
+    "features": [
+      "skip-link",
+      "semantic-episode-navigation",
+      "aria-current-active-episode",
+      "aria-controls",
+      "dynamic-reader-region",
+      "accessible-reader-heading",
+      "accessible-previous-next-controls",
+      "explicit-close-accessible-name",
+      "shared-site-language-controls",
+      "language-aware-aria-labels",
+      "keyboard-arrow-home-end-navigation",
+      "keyboard-focus-to-reader-after-navigation",
+      "visible-focus",
+      "reduced-motion",
+      "rtl-ltr",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
+    ],
+    "verification": [
+      "source-inspection",
+      "json-validity",
+      "javascript-syntax",
+      "keyboard-navigation-contract",
+      "screen-reader-semantics",
+      "rtl-ltr-contract",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
+    ]
   }
 }
