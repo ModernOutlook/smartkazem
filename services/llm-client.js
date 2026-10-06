@@ -86,7 +86,6 @@ function getSettings(){
       model:localStorage.getItem('pgm_model')||DEFAULTS.model,
       apiKey:runtimeApiKey,
       history:{
-        apiKey:runtimeApiKey,
         baseUrl:readHistory(HISTORY_KEYS.baseUrl),
         model:readHistory(HISTORY_KEYS.model)
       }
@@ -94,8 +93,8 @@ function getSettings(){
   }catch(_){
     return {
       ...DEFAULTS,
-      apiKey:'',
-      history:{apiKey:[],baseUrl:[DEFAULTS.baseUrl],model:[DEFAULTS.model]}
+      apiKey:runtimeApiKey,
+      history:{baseUrl:[DEFAULTS.baseUrl],model:[DEFAULTS.model]}
     };
   }
 }
