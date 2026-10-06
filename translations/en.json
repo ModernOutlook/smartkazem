@@ -81,7 +81,6 @@
   "pages": {
     "observation": {
       "title": "The Land of Observation",
-      "tab": "The Land of Observation",
       "close": "Close"
     },
     "treatise": {
@@ -1038,19 +1037,19 @@
       "close": "Back",
       "sectionNote": "A story about will, possibility, observation, and what may remain among our choices.",
       "sections": [
-        "Chapter One · The First Static",
-        "Chapter Two · The Zero Seed",
-        "Chapter Three · One Percent of Static",
-        "Chapter Four · The Receiver",
-        "Chapter Five · The Loop",
-        "Chapter Six · The Prompt You Were",
-        "Chapter Seven · The First Seed",
-        "Chapter Eight · Guidance Scale",
-        "Chapter Nine · The Threshold",
-        "Chapter Ten · Self-Fulfilling Prediction",
-        "Chapter Eleven · Question Instead of Command",
-        "Chapter Twelve · What Was Not Chosen",
-        "Chapter Thirteen · The Unchosen Life",
+        "Part One · The First Static",
+        "Part Two · The Zero Seed",
+        "Part Three · One Percent of Static",
+        "Part Four · The Receiver",
+        "Part Five · The Loop",
+        "Part Six · The Prompt You Were",
+        "Part Seven · The First Seed",
+        "Part Eight · Guidance Scale",
+        "Part Nine · The Threshold",
+        "Part Ten · Self-Fulfilling Prediction",
+        "Part Eleven · Question Instead of Command",
+        "Part Twelve · What Was Not Chosen",
+        "Part Thirteen · The Unchosen Life",
         "The Network of Meaning"
       ],
       "contents": [
