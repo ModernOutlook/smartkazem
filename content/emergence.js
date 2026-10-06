@@ -1755,3 +1755,4 @@ document.addEventListener('site:languagechange',()=>{
 });
 // initial render
 render();
+})();
