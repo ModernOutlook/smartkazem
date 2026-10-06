@@ -258,6 +258,7 @@ document.getElementById('ref-observation').addEventListener('click', () => openS
 document.getElementById('reference-layer3').addEventListener('click', () => openSecondaryPage('echo-layer3.html', 'reference'));
 document.getElementById('experience-observation25').addEventListener('click', () => openSecondaryPage('observation-25.html', 'experience'));
 document.getElementById('experience-possible-mirror').addEventListener('click', () => openSecondaryPage('possible-mirror.html', 'experience'));
+document.getElementById('experience-emergence2').addEventListener('click', () => openSecondaryPage('emergence-2.html', 'experience'));
 document.getElementById('experience-detect').addEventListener('click', () => PageNavigation.openParagraph('experience'));
 document.getElementById('reference-match').addEventListener('click', () => PageNavigation.openParagraph('reference'));
 
