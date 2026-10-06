@@ -91,7 +91,7 @@
     const span = page.querySelector('span');
 
     if (strong && title) strong.textContent = title;
-    if (span) span.textContent = (title || '').split(' · ')[1] || title || '';
+    if (span) span.textContent = '';
     page.setAttribute('aria-label', title || '');
   });
 
