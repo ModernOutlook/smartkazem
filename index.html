@@ -150,9 +150,10 @@
         <strong id="paragraph-source"></strong>
         <span data-i18n="paragraphMachine.internal">پردازش هسته همیشه به فارسی انجام می‌شود.</span>
       </div>
-      <section class="pm-panel pm-input-panel">
+      <section class="pm-panel pm-input-panel" id="paragraph-primary-panel">
         <label for="paragraph-input" data-i18n="paragraphMachine.input">متن برای تطبیق</label>
-        <textarea id="paragraph-input" rows="7" placeholder="متن خود را وارد کنید…"></textarea>
+        <textarea id="paragraph-input" rows="7" placeholder="یک پاراگراف وارد کنید…"></textarea>
+        <div id="paragraph-primary-output" class="pm-primary-output" aria-live="polite"></div>
       </section>
 
       <section class="pm-recognition-stage" aria-label="قضاوت قلمروها">
@@ -163,19 +164,19 @@
 
         <div class="pm-realm-choices" role="group" aria-label="پنج قلمرو">
           <button class="pm-realm-choice realm-structure" type="button" data-domain="S" aria-label="ساختار تالار">
-            <img src="engine/ساختار تالار.png" alt="ساختار تالار"><span>ساختار تالار</span>
+            <img src="engine/ساختار تالار.png" alt="ساختار تالار"><span data-realm-label="S">ساختار تالار</span>
           </button>
           <button class="pm-realm-choice realm-continuity" type="button" data-domain="T" aria-label="تداوم عالم">
-            <img src="engine/تداوم عالم.png" alt="تداوم عالم"><span>تداوم عالم</span>
+            <img src="engine/تداوم عالم.png" alt="تداوم عالم"><span data-realm-label="T">تداوم عالم</span>
           </button>
           <button class="pm-realm-choice realm-experience" type="button" data-domain="E" aria-label="قلمرو تجربه">
-            <img src="engine/قلمرو تجربه.png" alt="قلمرو تجربه"><span>قلمرو تجربه</span>
+            <img src="engine/قلمرو تجربه.png" alt="قلمرو تجربه"><span data-realm-label="E">قلمرو تجربه</span>
           </button>
           <button class="pm-realm-choice realm-reference" type="button" data-domain="R" aria-label="مرجع تقلید">
-            <img src="engine/مرجع تقلید.png" alt="مرجع تقلید"><span>مرجع تقلید</span>
+            <img src="engine/مرجع تقلید.png" alt="مرجع تقلید"><span data-realm-label="R">مرجع تقلید</span>
           </button>
           <button class="pm-realm-choice realm-share" type="button" data-domain="C" aria-label="اقتصاد سهم">
-            <img src="engine/اقتصاد سهم.png" alt="اقتصاد سهم"><span>اقتصاد سهم</span>
+            <img src="engine/اقتصاد سهم.png" alt="اقتصاد سهم"><span data-realm-label="C">اقتصاد سهم</span>
           </button>
         </div>
 
@@ -187,7 +188,7 @@
         <div><label for="paragraph-mode" data-i18n="paragraphMachine.mode">حالت نیّت</label><select id="paragraph-mode"><option value="mixed" selected>ترکیبی</option><option value="all-ok">همه منطبق</option><option value="all-bad">همه متناقض</option><option value="all-warn">همه مبهم</option><option value="cross">بین‌قلمرویی</option></select></div>
       </section>
       <section class="pm-panel pm-settings" id="paragraph-settings">
-        <button id="paragraph-settings-toggle" class="pm-settings-toggle" type="button" data-i18n="paragraphMachine.settings">تنظیمات اتصال</button>
+        <button id="paragraph-settings-toggle" class="pm-settings-toggle" type="button" data-i18n="paragraphMachine.settings">تنظیمات</button>
         <div class="pm-settings-body">
           <label for="paragraph-api-key" data-i18n="paragraphMachine.apiKey">کلید API</label>
           <input id="paragraph-api-key" type="password" autocomplete="off" placeholder="sk-or-…">
@@ -195,8 +196,9 @@
           <input id="paragraph-base-url" type="url">
           <label for="paragraph-model" data-i18n="paragraphMachine.model">مدل</label>
           <input id="paragraph-model" type="text">
-          <button id="paragraph-save-settings" type="button" data-i18n="paragraphMachine.save">ذخیره تنظیمات</button>
-          <small data-i18n="paragraphMachine.localOnly">کلید فقط در مرورگر شما نگهداری می‌شود.</small>
+          <label for="paragraph-count" data-i18n="paragraphMachine.count">تعداد پاراگراف</label>
+          <select id="paragraph-count"><option value="1">1</option><option value="3">3</option><option value="5" selected>5</option><option value="10">10</option></select>
+          <small data-i18n="paragraphMachine.localOnly">تنظیمات پس از اجرای موفق ماشین در همین مرورگر نگهداری می‌شوند.</small>
         </div>
       </section>
       <div id="paragraph-error" class="pm-error" role="alert"></div>
