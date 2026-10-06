@@ -70,11 +70,134 @@
     try{const synth=window.speechSynthesis;synth.cancel();const utterance=new SpeechSynthesisUtterance(value),lang=options.lang||currentLanguage();utterance.lang=lang;utterance.rate=Number(options.rate)||.92;utterance.pitch=Number(options.pitch)||1;utterance.volume=state.volume;const voice=chooseVoice(lang);if(voice)utterance.voice=voice;lastSpoken=value;synth.speak(utterance);return true;}catch(_){return false;}
   }
   function speakTarget(target){const element=target?.closest?.('button,a,[role="button"],summary,[tabindex]');if(!element)return;setRealm(realmFromElement(element));const name=accessibleName(element);if(name)window.setTimeout(()=>speak(name),25);}
+
+
+  // Accessible navigation layer: semantic focus + fast speech + touch/keyboard movement.
+  const NAV_SELECTOR='h1,h2,h3,h4,a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),summary,[tabindex]:not([tabindex="-1"]),[role="button"],[role="link"],[role="checkbox"],[role="radio"],[role="switch"],[role="tab"],[role="menuitem"],[role="heading"]';
+  let navIndex=-1, navItems=[], navRegion=null;
+
+  function ensureAccessibilityRegion(){
+    if(navRegion)return navRegion;
+    navRegion=document.createElement('div');
+    navRegion.id='smartkazem-accessibility-announcer';
+    navRegion.className='sr-only';
+    navRegion.setAttribute('aria-live','assertive');
+    navRegion.setAttribute('aria-atomic','true');
+    navRegion.setAttribute('role','status');
+    navRegion.style.cssText='position:fixed;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;';
+    document.body.appendChild(navRegion);
+    return navRegion;
+  }
+  function navigationItems(){
+    const root=document.querySelector('main')||document.body;
+    return [...root.querySelectorAll(NAV_SELECTOR)].filter(el=>{
+      if(el.matches('h1,h2,h3,h4,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
+      if(el.hidden||el.getAttribute('aria-hidden')==='true')return false;
+      const rect=el.getBoundingClientRect();
+      return rect.width>0&&rect.height>0;
+    });
+  }
+  function semanticDescription(el){
+    const role=el.getAttribute('role')||({BUTTON:'دکمه',A:'پیوند',INPUT:'ورودی',TEXTAREA:'متن',SELECT:'انتخاب',SUMMARY:'بازکننده'}[el.tagName]||'');
+    const name=accessibleName(el);
+    const state=[];
+    if(el.hasAttribute('aria-pressed'))state.push(el.getAttribute('aria-pressed')==='true'?'فعال':'غیرفعال');
+    if(el.hasAttribute('aria-expanded'))state.push(el.getAttribute('aria-expanded')==='true'?'باز':'بسته');
+    if(el.checked===true)state.push('انتخاب‌شده');
+    if(el.disabled)state.push('غیرفعال');
+    const href=el.getAttribute('href');
+    const destination=href&&href.startsWith('#')?'':(href?'لینک':'');
+    return [role,name,state.join('، '),destination].filter(Boolean).join('، ');
+  }
+  function syncNavigation(){
+    navItems=navigationItems();
+    if(navIndex>=navItems.length)navIndex=navItems.length-1;
+    return navItems;
+  }
+  function focusNavigation(index,announce=true){
+    syncNavigation();
+    if(!navItems.length)return false;
+    navIndex=(index+navItems.length)%navItems.length;
+    const el=navItems[navIndex];
+    el.focus({preventScroll:false});
+    if(announce)announceNavigation(el);
+    return true;
+  }
+  function announceNavigation(el){
+    if(!el)return;
+    const description=semanticDescription(el);
+    if(!description)return;
+    const position='عنصر '+(navIndex+1)+' از '+navItems.length;
+    const text=position+'، '+description;
+    const region=ensureAccessibilityRegion();
+    region.textContent='';
+    requestAnimationFrame(()=>{region.textContent=text;});
+    speak(text,{rate:1.08});
+  }
+  function announcePage(){
+    if(!state.accessibility)return;
+    syncNavigation();
+    const title=document.title.replace(/\s*[—|·-]\s*Modern Outlook.*$/i,'').trim();
+    const main=document.querySelector('main');
+    const heading=main?.querySelector('h1,h2,[role="heading"]');
+    const pageName=accessibleName(heading)||title||'صفحه';
+    const landmarks=[...document.querySelectorAll('main,nav,aside,section[aria-label],section[aria-labelledby]')].filter(el=>el.offsetParent!==null).length;
+    speak('صفحه '+pageName+'، '+navItems.length+' گزینه قابل پیمایش'+(landmarks?'، '+landmarks+' بخش':'')+'. برای حرکت از کلیدهای بالا و پایین استفاده کنید. برای اجرا Enter را بزنید.',{rate:1.04});
+  }
+  function activateNavigation(){
+    const el=navItems[navIndex];
+    if(!el)return;
+    el.click();
+  }
+  function handleAccessibilityKeyboard(event){
+    if(!state.accessibility)return;
+    const keys=['ArrowDown','ArrowUp','Home','End','Enter',' ','Escape'];
+    if(!keys.includes(event.key))return;
+    syncNavigation();
+    if(event.key==='Escape'){
+      if('speechSynthesis'in window)window.speechSynthesis.cancel();
+      return;
+    }
+    if(event.key==='ArrowDown'||event.key==='ArrowRight'){event.preventDefault();focusNavigation(navIndex+1);return;}
+    if(event.key==='ArrowUp'||event.key==='ArrowLeft'){event.preventDefault();focusNavigation(navIndex-1);return;}
+    if(event.key==='Home'){event.preventDefault();focusNavigation(0);return;}
+    if(event.key==='End'){event.preventDefault();focusNavigation(navItems.length-1);return;}
+    if(event.key==='Enter'||event.key===' '){event.preventDefault();activateNavigation();return;}
+  }
+  let touchStartX=0,touchStartY=0,touchPointer=null;
+  function handleAccessibilityTouchStart(event){
+    if(!state.accessibility||event.pointerType!=='touch')return;
+    touchPointer=event.pointerId;touchStartX=event.clientX;touchStartY=event.clientY;
+  }
+  function handleAccessibilityTouchEnd(event){
+    if(!state.accessibility||event.pointerType!=='touch'||touchPointer!==event.pointerId)return;
+    touchPointer=null;
+    const dx=event.clientX-touchStartX,dy=event.clientY-touchStartY;
+    if(Math.abs(dx)<42||Math.abs(dx)<Math.abs(dy)*1.25)return;
+    event.preventDefault();
+    focusNavigation(navIndex+(dx<0?1:-1));
+  }
+  function enableAccessibilityNavigation(){
+    ensureAccessibilityRegion();
+    syncNavigation();
+    document.documentElement.dataset.accessibilityNavigation='on';
+    const first=navItems.findIndex(el=>el.matches('main h1,h1,h2,[role="heading"]'))>=0?navItems.findIndex(el=>el.matches('main h1,h1,h2,[role="heading"]')):0;
+    focusNavigation(first,false);
+    window.setTimeout(announcePage,40);
+  }
+  function disableAccessibilityNavigation(){
+    document.documentElement.dataset.accessibilityNavigation='off';
+    if(navRegion)navRegion.textContent='';
+    if('speechSynthesis'in window)window.speechSynthesis.cancel();
+    navIndex=-1;navItems=[];
+  }
+
   function toggleAccessibility(){
     state.accessibility=!state.accessibility;saveState();
     if(state.accessibility){const enabled=i18nGet('labels.accessibility.enabled','Accessibility mode enabled.');const repeat=i18nGet('labels.accessibility.repeat','Double-click to repeat the last announcement.');const hold=i18nGet('labels.accessibility.hold','Long-press to pause, resume, or repeat speech.');speak([enabled,repeat,hold].join(' '));}
     else if('speechSynthesis'in window)window.speechSynthesis.cancel();
     document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
+    if(state.accessibility)enableAccessibilityNavigation();else disableAccessibilityNavigation();
     document.dispatchEvent(new CustomEvent('audio:accessibilitychange',{detail:{enabled:state.accessibility}}));
     return state.accessibility;
   }
@@ -90,7 +213,7 @@
   function handlePointerUp(event){if(longPressPointer===(event.pointerId??'mouse')){window.clearTimeout(longPressTimer);longPressPointer=null;}}
   function handleClick(event){if(handleTripleClick(event))return;if(suppressNextClick){suppressNextClick=false;event.preventDefault();event.stopImmediatePropagation();return;}const realm=realmFromElement(event.target);setRealm(realm);resume().then(()=>play(realm)).catch(()=>{});if(state.accessibility)speakTarget(event.target);}
   function handleDoubleClick(){if(state.accessibility&&lastSpoken)speak(lastSpoken);}
-  function handleKeyboard(event){if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
+  function handleKeyboard(event){handleAccessibilityKeyboard(event);if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
   function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
   function init(){
     if(initialized)return getState();initialized=true;loadState();ensureGraph();initSpeech();
@@ -101,7 +224,10 @@
     document.addEventListener('click',handleClick,{capture:true});
     document.addEventListener('dblclick',handleDoubleClick,{capture:true});
     document.addEventListener('keydown',handleKeyboard,{capture:true});
-    window.addEventListener('pageshow',()=>{resume();});
+    document.addEventListener('pointerdown',handleAccessibilityTouchStart,{capture:true,passive:true});
+    document.addEventListener('pointerup',handleAccessibilityTouchEnd,{capture:true,passive:false});
+    document.addEventListener('focusin',event=>{if(state.accessibility&&event.target?.matches?.(NAV_SELECTOR)){syncNavigation();const index=navItems.indexOf(event.target);if(index>=0)navIndex=index;announceNavigation(event.target);}}, {capture:true});
+    window.addEventListener('pageshow',()=>{resume();if(state.accessibility)window.setTimeout(announcePage,80);});
     document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.enabled&&!state.muted)resume();});
     return getState();
   }
