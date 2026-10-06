@@ -36,7 +36,8 @@
       "disabled": "无障碍模式已关闭。",
       "repeat": "双击可重复最后一条语音提示。",
       "hold": "长按可暂停、继续或重复语音。"
-    }
+    },
+    "episodeNavigation": "章节导航"
   },
   "meta": {
     "brand": "现代视野",
