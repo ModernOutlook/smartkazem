@@ -187,11 +187,14 @@
         <button id="paragraph-settings-toggle" class="pm-settings-toggle" type="button" data-i18n="paragraphMachine.connectionSettings">تنظیمات اتصال</button>
         <div class="pm-settings-body">
           <label for="paragraph-api-key" data-i18n="paragraphMachine.apiKey">کلید API</label>
-          <input id="paragraph-api-key" type="password" autocomplete="off" placeholder="sk-or-…">
+          <input id="paragraph-api-key" type="password" list="paragraph-api-key-history" autocomplete="off">
+          <datalist id="paragraph-api-key-history"></datalist>
           <label for="paragraph-base-url" data-i18n="paragraphMachine.baseUrl">نشانی سرویس</label>
-          <input id="paragraph-base-url" type="url">
+          <input id="paragraph-base-url" type="url" list="paragraph-base-url-history">
+          <datalist id="paragraph-base-url-history"></datalist>
           <label for="paragraph-model" data-i18n="paragraphMachine.model">مدل</label>
-          <input id="paragraph-model" type="text">
+          <input id="paragraph-model" type="text" list="paragraph-model-history">
+          <datalist id="paragraph-model-history"></datalist>
           <small data-i18n="paragraphMachine.localOnly">تنظیمات اتصال پس از اجرای موفق ماشین در همین مرورگر نگهداری می‌شوند.</small>
         </div>
       </section>
