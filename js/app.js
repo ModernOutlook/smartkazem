@@ -211,6 +211,15 @@ realms.forEach((realm) => {
   });
 
   realm.addEventListener('keydown', (event) => {
+    if (['ArrowDown','ArrowRight','ArrowUp','ArrowLeft'].includes(event.key)) {
+      event.preventDefault();
+      const index = realms.indexOf(realm);
+      const delta = ['ArrowDown','ArrowRight'].includes(event.key) ? 1 : -1;
+      const next = realms[(index + delta + realms.length) % realms.length];
+      next?.focus({ preventScroll: true });
+      window.HomeRealmInfo?.setInfo(next?.dataset.id);
+      return;
+    }
     handleActivation(event, () => selectRealm(realm.dataset.id));
   });
 });
