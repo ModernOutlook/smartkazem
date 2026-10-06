@@ -50,13 +50,19 @@
   }
 }
 
+  let logoReturnFocus = null;
+
   function openLogoViewer() {
+  logoReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   window.HomeRealmInfo?.clearInfo();
   logoViewer.classList.add('open');
+  logoViewerClose.focus({ preventScroll: true });
 }
 
   function closeLogoViewer() {
   logoViewer.classList.remove('open');
+  if (logoReturnFocus?.isConnected) logoReturnFocus.focus({ preventScroll: true });
+  logoReturnFocus = null;
 }
 
   function handleActivation(event, callback) {
