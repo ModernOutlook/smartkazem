@@ -14,14 +14,18 @@
   const infoText = document.getElementById('info-text');
   const realms = [...document.querySelectorAll('.realm')];
 
-  let activeId = 'structure';
+  let activeId = null;
 
   function isRealm(id) {
     return REALM_IDS.includes(id);
   }
 
   function render(id = activeId, show = true) {
-    if (!isRealm(id)) id = activeId;
+    if (!isRealm(id)) {
+      clear();
+      return;
+    }
+
     activeId = id;
     realms.forEach((item) => item.classList.toggle('selected', item.dataset.id === id));
 
@@ -62,5 +66,5 @@
     getActiveId: () => activeId
   });
 
-  render('structure', true);
+  clear();
 })();
