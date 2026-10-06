@@ -68,12 +68,12 @@
     right: auto;
     bottom: auto;
     width: min(100%, 650px);
-    max-height: min(28dvh, 240px);
+    max-height: min(26dvh, 210px);
     margin: 0 auto;
     transform: none;
-    overflow-y: auto;
+    overflow: hidden;
     overscroll-behavior: contain;
-    padding: 14px 18px calc(14px + var(--ui-safe-bottom));
+    padding: 12px 16px calc(12px + var(--ui-safe-bottom));
   }
 
   .topbar {
@@ -311,7 +311,9 @@
 
   .info {
     align-self: center;
-    max-height: min(72dvh, 420px);
+    max-height: min(72dvh, 360px);
+    overflow: hidden;
+    padding: 14px 18px;
   }
 
   .menu-svg {
@@ -404,4 +406,16 @@
     width: min(72vw, 62dvh);
     height: min(72vw, 62dvh);
   }
+}
+
+
+/* Home realm info panel: content is always fully contained without an internal scrollbar. */
+@media (max-width: 639px) {
+  .info .kicker { font-size: clamp(.46rem, 1.55vw, .62rem); }
+  .info h1 { font-size: clamp(.82rem, 3.4vw, 1.12rem); margin-bottom: 3px; }
+  .info p { font-size: clamp(.52rem, 1.7vw, .72rem); line-height: 1.58; max-width: 98%; }
+}
+
+@media (orientation: landscape) and (max-width: 1023px) {
+  .info { max-height: min(72dvh, 300px); }
 }
