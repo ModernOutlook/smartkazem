@@ -27,7 +27,8 @@
   const logoViewer = document.getElementById('logo-viewer');
   const logoViewerClose = document.getElementById('logo-viewer-close');
 
-  function setInfo(id, show = true) {
+  function setInfo(id = activeId, show = true) {
+  if (!id) id = 'structure';
   activeId = id;
 
   realms.forEach((realm) => {
