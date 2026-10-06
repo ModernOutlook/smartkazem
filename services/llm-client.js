@@ -155,9 +155,9 @@ async function request(url,init){
 
 async function complete(messages,options={}){
   const s={...getSettings(),...options};
-  if(!s.apiKey)throw new Error('کلید اتصال به مدل تنظیم نشده است.');
-  const model=String(s.model||DEFAULTS.model).trim();
   const proxy = getConnectionMode()==='proxy';
+  if(!proxy && !s.apiKey)throw new Error('کلید اتصال به مدل تنظیم نشده است.');
+  const model=String(s.model||DEFAULTS.model).trim();
   const endpoint = proxy ? normalizeOptionalProxyUrl(s.proxyUrl||'') : normalizeBaseUrl(s.baseUrl);
   if(proxy && !endpoint)throw new Error('نشانی پروکسی تنظیم نشده است.');
   const payload={model,messages,temperature:options.temperature??0.7,response_format:{type:'json_object'}};
@@ -166,7 +166,7 @@ async function complete(messages,options={}){
   }
   const res=await request(
     endpoint+'/chat/completions',
-    {method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+s.apiKey},body:JSON.stringify(payload)}
+    {method:'POST',headers:{'Content-Type':'application/json',...(proxy||!s.apiKey?{}:{'Authorization':'Bearer '+s.apiKey})},body:JSON.stringify(payload)}
   );
   let data;
   try{data=await res.json()}catch(_){throw new Error('پاسخ سرویس مدل JSON معتبر نیست.')}
