@@ -1606,17 +1606,152 @@ episodes[17].title="ریشه";
 episodes[17].paragraphs=["صبح، روستا هنوز خواب بود. اما صدای سم اسب‌ها پیش از طلوع آفتاب رسید. مارا از خواب بیدار شد. مدتی در تاریکی نشست. بعد صدای کوبیدن در را شنید. یک بار. دو بار. بار سوم، صدایی از بیرون گفت:\n«خانم مارا؟» او جواب نداد. \nبه سمت پنجره رفت. پنج سرباز در کوچه ایستاده بودند. یکی از آنها گفت:\n«ما فقط چند سؤال داریم.» مارا پرده را کنار زد.\n«درباره‌ی پسرم؟» سرباز مکث کرد.\n«بله.» مارا آرام گفت:\n«پس سؤال‌هایتان را از خودم بپرسید.»\nدر باز شد. سربازان وارد شدند. خانه هنوز همان خانه بود. میز چوبی، صندلی قدیمی، قاب عکس و خط‌خطی‌های کودکی آرن روی دیوار.  یکی از سربازان به آنها نگاه کرد. پرسید:\n«این‌ها چیست؟» مارا گفت:\n«هیچ.»\n«همه‌چیز برای شما هیچ است؟»\n«چیزی که شما نمی‌فهمید، لزوماً مهم نیست.» سرباز جوانی جلو آمد.\n«پسرتان کجاست؟» مارا گفت:\n«نمی‌دانم.»\n«آخرین بار کی دیدیدش؟»\n«مدتی پیش.»\n«کجا رفت؟»\n«گفت می‌رود.»\n«به کجا؟» مارا لبخند زد.\n«اگر می‌دانستم، سؤال شما را جواب داده بودم.» سرباز خشمگین شد. اما فرمانده دستش را بالا آورد.\n«بگذار.» بعد رو به مارا کرد.\n«ما نمی‌خواهیم به شما آسیبی برسد.» مارا گفت:\n«این جمله را قبلاً هم شنیده‌ام.»\nآنها خانه را جست‌وجو کردند. در اتاق آرن چیزی پیدا نکردند، جز شاخه‌ای خشک. همان شاخه‌ای که سال‌ها زیر تخت او مانده بود. فرمانده آن را برداشت. روی آن، حروف قدیمی دیده می‌شد. پرده را کنار بزن. مرد پرسید:\n«این یعنی چه؟» مارا نگاهش کرد.\n«نمی‌دانم.» فرمانده گفت:\n«شما مادرش هستید.»\n«بله.»\n«پس باید بدانید.» مارا آرام گفت:\n«مادر بودن به این معنی نیست که آدم جواب همه‌ی سؤال‌های بچه‌اش را می‌داند.»\nفرمانده شاخه را شکست. حروف از وسط دو نیم شدند. مارا برای نخستین بار عصبانی شد.\n«لازم نبود.» فرمانده گفت:\n«لازم بود.» و بیرون رفتند.\nاما یکی از سربازان جوان، پیش از خروج، تکه‌ی شکسته‌ی شاخه را کنار دیوار گذاشت. او نمی‌دانست چرا. فقط احساس کرد باید این کار را بکند.\nدر قلعه، آرن هنوز بیدار بود. سه روز گذشته بود. کالن دوباره وارد سلول شد.\n«مادرت را پیدا نکردیم.» آرن نگاهش کرد.\n«دروغ می‌گی.»\n«چطور؟»\n«چون اگر پیدا نکرده بودید، این‌قدر زود نمی‌اومدی.» کالن لبخند زد.\n«تو باهوش‌تر شدی.»\n«نه.» آرن روی زمین نشست.\n«فقط بیشتر دروغ شنیدم.» کالن گفت:\n«او در روستا نیست.» آرن چیزی نگفت.\n«اما سربازان ما آنجا هستند.» آرن سرش را بلند کرد.\n«چرا؟»\n«برای اطمینان.»\n«از چی؟»\n«از اینکه تو برنگردی.» آرن آرام گفت:\n«پس هنوز فکر می‌کنید من برای مادرم برمی‌گردم.» کالن گفت:\n«تو همیشه برمی‌گردی.» آرن پرسید:\n«چرا؟»  کالن جواب داد:\n«چون انسان‌ها به ریشه‌هایشان برمی‌گردند.» آرن لبخند تلخی زد.\n«پس شما هم می‌دونید چطور منو کنترل کنید.» کالن گفت:\n«ما فقط چیزی را می‌شناسیم که خودت به ما نشان دادی.»\nشب، آرن دوباره آن صدا را شنید. سه ضربه. مکث. دو ضربه. اما این بار صدای دیگری هم بود. ضربه‌ها از دیوار نیامدند. از زمین آمدند. آرن روی زانو نشست. کف سنگی را لمس کرد. سه ضربه. مکث. دو ضربه. آرن آهسته گفت:\n«این دیگه تو نیستی.» صدایی پاسخ داد:\n«نه.» آرن خشک شد.\n«کیه؟» سکوت. بعد:\n«کسی که تو را پیش از نامت می‌شناخت.» آرن گفت:\n«مادرم؟» جوابی نیامد.\nدر همان لحظه، یکی از سنگ‌های کف کمی جابه‌جا شد. آرن آن را کنار زد. زیر سنگ، فضایی باریک بود. داخلش تکه‌ای کاغذ. همان دست‌خط مارا. آرن آن را باز کرد.\n«اگر این را می‌خوانی، یعنی آنها بالاخره تو را از جهان جدا کرده‌اند.» نفس آرن بند آمد. ادامه داد:\n«و اگر قدرتت هنوز کار می‌کند، اشتباه نکن.»\n«برای فرار از اینجا، جهان را مجبور نکن.»\n«بگذار جهان خودش انتخاب کند.»\nآرن کاغذ را پایین آورد. برای چند لحظه هیچ چیز نفهمید. بعد لبخند زد. خیلی آرام.\nدر راهروی قلعه، نگهبانی ایستاده بود. کلیدها در دستش بود. در را باز کرد. نمی‌دانست چرا. فقط حس کرده بود باید آن را باز کند. در سلول آرن چند سانتی‌متر کنار رفت. نگهبان داخل را نگاه کرد. آرن آنجا نبود. مرد وحشت کرد. به پشت سر نگاه کرد و همان لحظه، صدای قدم‌های کالن از راهرو آمد. نگهبان در را بست. چیزی نگفت.\nآرن در تاریکی قلعه حرکت می‌کرد. نه با زور. نه با شکستن دیوار. هر بار کسی در برابرش قرار می‌گرفت، یک انتخاب کوچک اتفاق می‌افتاد. نگهبانی که به سمت دیگری نگاه می‌کرد. درگاهی که باز می‌ماند. چراغی که خاموش می‌شد. سربازی که چند ثانیه دیر می‌رسید. آرن هیچ‌کدام را مستقیماً ایجاد نمی‌کرد. فقط انتخاب‌ها را لمس می‌کرد یا شاید جهان، در حضور او، راه‌هایی را که همیشه وجود داشتند کمی واضح‌تر نشان می‌داد.\nدر انتهای راهرو، به دری رسید. پشت آن، یورن بود. در را باز کرد. یورن روی زمین نشسته بود. وقتی آرن را دید، چند لحظه فقط نگاه کرد. بعد گفت:\n«چطور؟» آرن گفت:\n«فرار نکردم.»\n«پس؟»\n«فقط از جایی که بودم، بیرون اومدم.» یورن خندید.\n«این همون چیزیه که آدم‌های عاقل بهش می‌گن فرار.» آرن دستش را دراز کرد.\n«بیا.»\nآنها از قلعه خارج شدند. اما پشت دروازه، کالن منتظر بود. تنها. یورن شمشیر کشید. آرن گفت:\n«نه.» کالن گفت:\n«می‌دونی چرا گذاشتم بری؟» آرن ایستاد.\n«تو نگذاشتی.»\n«پس چی؟»\n«تو انتخاب کردی که جلوی من رو نگیری.» کالن لبخند زد.\n«فرق زیادی ندارد.» آرن گفت:\n«دارد.» کالن چند لحظه سکوت کرد. بعد گفت:\n«ما فکر می‌کردیم اگر تو را محدود کنیم، آینده را محدود می‌کنیم.»\n«و؟»\n«اشتباه کردیم.»\n«حالا چی؟» کالن گفت:\n«حالا می‌خواهیم ببینیم اگر آزاد باشی، چه می‌کنی.» آرن نگاهش کرد.\n«این هم یک آزمایش دیگست؟» کالن گفت:\n«شاید.» آرن به یورن اشاره کرد.\n«پس چرا گذاشتی اون زنده بمونه؟» کالن نگاهش را پایین انداخت.\n«چون او هم انتخاب خودش را کرد.» آرن چیزی نگفت. کالن ادامه داد:\n«این قسمت داستان برای ما جدید است.»\nآنها به سمت جنوب رفتند. آرن نمی‌دانست مادرش کجاست اما برای نخستین بار، تصمیم گرفت دنبال او نرود. نه فوراً. نه از ترس. بلکه برای اینکه نمی‌خواست رابطه‌ی میان خودش و مادرش دوباره به ابزاری برای کنترل تبدیل شود. چند ساعت بعد، در میان جنگل، یورن پرسید:\n«پس حالا کجا می‌ریم؟» آرن گفت:\n«نمی‌دونم.»\n«جواب همیشگی.»آرن لبخند زد.\n«این بار فرق داره.»\n«چطور؟» آرن به آسمان نگاه کرد.\n«این بار نمی‌دونم و از ندونستنش نمی‌ترسم.»\nدر همان زمان، در روستای قدیمی، مارا تنها وارد خانه شد. سربازان رفته بودند. روی زمین نشست. تکه‌های شکسته‌ی شاخه را برداشت. آنها را کنار هم گذاشت. حروف هنوز خوانا بودند. اما پشت شاخه، چیزی وجود داشت که هیچ‌کس ندیده بود. حک شده بود: «او را به دنیا نیاوردم تاجهان را نجات دهد.» مارا چشم‌هایش را بست. زیر لب گفت: «می‌دونم.»\nبعد شاخه را باز کرد. داخل آن محفظه‌ای بسیار کوچک بود. درون محفظه، یک تار موی کودکانه و تکه‌ای پارچه قرار داشت و نامه‌ای دیگر. این یکی خطاب به آرن بود. اما تاریخش مربوط به پیش از تولد او بود. مارا نامه را باز کرد و خواند:\n«پسرم، اگر روزی این را می‌خوانی، بدان که اولین انتخاب من درباره‌ی تو این نبود که نجات‌دهنده باشی یا هیولا.»\n«اولین انتخاب من این بود که بگذارم انتخاب کنی.»\nمارا گریه نکرد. فقط به صندلی خالی روبه‌رویش نگاه کرد. بعد آهسته گفت: «حالا نوبت توست.» و بیرون از خانه، در جایی که هیچ‌کس حضور نداشت، شاخه‌ی خشک‌شده دوباره جوانه زد. اما این بار... هیچ‌کس آن را نشانه ندانست."];
 episodes[18].title="کسی که دیگر نمی‌بخشد";
 episodes[18].paragraphs=["جوانه فقط یک شب دوام آورد. صبح، شاخه دوباره خشک شده بود. اما مارا آن را دور نینداخت. آن را روی میز گذاشت؛ کنار نامه‌ای که هنوز تمام نشده بود. نامه‌ای که قرار بود سال‌ها پیش نوشته شود و هرگز به دست آرن نرسد.\nآرن و یورن سه روز در جاده بودند. نه مقصدی داشتند، نه برنامه‌ای. گاهی شب را در جنگل می‌گذراندند. گاهی در خانه‌ی کشاورزی که صاحبش چیزی درباره‌ی گذشته نمی‌پرسید. گاهی هم کنار جاده می‌خوابیدند. آرن کمتر حرف می‌زد. یورن یک شب گفت:\n«هنوز به مادرت فکر می‌کنی؟»\n«هر لحظه.»\n«پس چرا دنبالش نمی‌ری؟» آرن به آتش نگاه کرد.\n«چون اگه دنبالش برم، ممکنه هر تصمیمی که می‌گیرم از ترسِ از دست دادنش باشه.» یورن گفت:\n«و اگر نری؟»\n«ممکنه از ترسِ نزدیک شدن بهش باشه.» یورن لبخند زد.\n«تو واقعاً برای هر چیزی دو تا جواب داری.» آرن گفت:\n«نه.» مکث کرد.\n«برای هر چیزی دو تا ترس دارم.»\nروز چهارم به شهری کوچک رسیدند. در میدان شهر، جمعیتی دور مردی حلقه زده بودند.  مردی را به ستونی بسته بودند. روی سینه‌اش نوشته بودند:\n«همکار هیولا.» آرن ایستاد. یورن گفت:\n«نرو.» آرن به جمعیت نگاه کرد.\nمرد را می‌شناخت. همان نانوا نبود. اما جمله آشنا بود. همان چیزی که در روستای قبلی رخ داده بود. آرن جلو رفت.\n«جرمش چیه؟» مردی از جمعیت گفت:\n«به آرن نان داده.» آرن خشک شد. یورن آرام گفت:\n«اینجا هم؟» مرد دیگری فریاد زد:\n«هرکس به او کمک کنه، شریکشه!»\n آرن به مرد بسته‌شده نگاه کرد. مرد ترسیده بود اما هنوز زنده بود. آرن گفت:\n«بازش کنید.» یکی از نگهبانان گفت:\n«تو کی هستی؟» آرن جواب نداد.\nنگهبان نزدیک‌تر آمد. چهره‌ی آرن را دید. رنگش پرید.\n«خودشه.» میدان منفجر شد.\nجمعیت عقب رفت. چند نفر فرار کردند اما بعضی‌ها سنگ برداشتند. آرن می‌توانست همه را متوقف کند. این بار اما، چیزی درونش تغییر کرده بود. دستش را بالا نبرد. سنگ اول به شانه‌اش خورد. دومی به صورتش. خون از لبش جاری شد. یورن فریاد زد:\n«آرن!»\nآرن دستش را پاک کرد. به خون نگاه کرد. بعد به مردم.\n«کافیه.» هیچ‌کس گوش نکرد.\nسنگ سوم در هوا بود. آرن به آن نگاه کرد و سنگ آرام پایین آمد. نه با خشونت. نه با فرمان. فقط افتاد. آرن گفت:\n«من هنوز می‌تونم انتخاب کنم.» مردی از جمعیت فریاد زد:\n«هیولاها هم انتخاب می‌کنن!» آرن مکث کرد.\nاین جمله جایی درونش نشست. نه مثل ضربه. مثل میخ.\nمرد زندانی آزاد شد. اما پیش از رفتن، دست آرن را گرفت.\n«چرا؟» آرن پرسید:\n«چی؟»\n«چرا منو نجات دادی؟» آرن گفت:\n«چون بهت ظلم شده بود.» مرد گفت:\n«ولی من به تو کمک نکرده بودم.» آرن نگاهش کرد.\n«پس شاید این بار به خاطر خودت نجاتت دادم.» مرد لبخند زد.\nاما همان شب، وقتی آرن خواب بود، مرد نزد فرماندار رفت و همه‌چیز را گفت.\nصبح، سربازان دوباره رسیدند. این بار نه ده نفر. پنجاه نفر. یورن گفت:\n«اون فروختتمون.» آرن چیزی نگفت.\n«آرن.» سکوت.\n«شنیدی؟»\n«بله.»\n«عصبانی نیستی؟» آرن به پنجره نگاه کرد.\n«هستم.»\n«پس چرا کاری نمی‌کنی؟» آرن گفت:\n«چون خیانت، حق انتخاب آدم‌هاست.» یورن گفت:\n«و کشتنت هم؟» آرن جواب نداد.\nسربازان شهر را محاصره کردند. فرمانده فریاد زد:\n«آرن! تسلیم شو!» هیچ پاسخی نیامد.\nیکی از سربازان آتش روشن کرد. خانه‌ای آتش گرفت. آرن بیرون آمد.\n«آتش رو خاموش کنید.» فرمانده گفت:\n«خودت رو تحویل بده.»\n«مردم چه؟»\n«آنها قربانی انتخاب تو هستند.»\nآرن به شهر نگاه کرد. خانه‌ها. مردم. کودکان. پیرمردها. و در میان همه‌ی آنها، ترس. همان ترسی که هزار سال پیش شروع شده بود. همان ترسی که حالا شکل سرباز گرفته بود. آرن برای لحظه‌ای فهمید اگر فقط یک قدم بردارد، می‌تواند تمام سپاه را زمین‌گیر کند. اگر بخواهد، می‌تواند. و این بار... خواست. زمین لرزید. نه زلزله. چیزی دیگر. سربازان یکی‌یکی زانو زدند. شمشیرها از دست‌ها افتادند. اسب‌ها عقب رفتند. باد ناگهان ایستاد. فرمانده به آرن خیره شد.\n«تو...» آرن به او نزدیک شد.\n«بله.» فرمانده عقب رفت.\n«می‌خوای ما رو بکشی؟» آرن جواب نداد.\nقدرت در اطرافش می‌چرخید. هزاران امکان. یک مسیر، پر از اجساد. مسیر دیگر، پر از فرار. مسیر دیگری، پر از تسلیم. و مسیری که از همه سخت‌تر بود: هیچ‌کدام. آرن دستش را پایین آورد. زمین آرام شد. سربازان بلند شدند. فرمانده نفس راحتی کشید. آرن گفت:\n«برید.» فرمانده گفت:\n«چرا؟» آرن جواب داد:\n«چون هنوز نمی‌خوام تبدیل به چیزی بشم که شما می‌گید هستم.»\nاما یک سرباز نرفت. جوان بود. شاید هم‌سن یورن. شمشیرش را پایین گذاشت. گفت:\n«من می‌مونم.» فرمانده فریاد زد:\n«حرکت کن!» جوان گفت:\n«نه.» آرن به او نگاه کرد.\n«چرا؟» جوان گفت:\n«چون دیدم می‌تونستی ما رو بکشی.»\n«و؟»\n«و نکردی.» آرن گفت:\n«این دلیل کافی نیست.» جوان جواب داد:\n«برای من هست.» فرمانده به او حمله کرد.\nآرن خواست مداخله کند. اما دیر شد. شمشیر فرمانده در سینه‌ی سرباز جوان فرو رفت. جوان روی زمین افتاد. سکوت. آرن به بدن او نگاه کرد. فرمانده گفت:\n«این تقصیر تو بود.» آرن سرش را بالا آورد.\nبرای چند ثانیه، هیچ احساسی در چهره‌اش نبود. بعد چیزی درونش خاموش شد. نه قدرت. نه عقل. چیزی دیگر. بخشش. آرن گفت:\n«باشه.» فرمانده عقب رفت.\n«چی؟» آرن آرام تکرار کرد:\n«باشه.»\nقدرت دوباره در اطرافش ظاهر شد. اما این بار، هیچ‌کس را متوقف نکرد. فقط همه‌ی سلاح‌ها از دست سربازان افتادند. فرمانده روی زانو نشست. آرن گفت:\n«برید.» فرمانده گفت:\n«تو منو نمی‌کشی؟» آرن به جسد سرباز جوان نگاه کرد.\n«نه.»\n«چرا؟» آرن گفت:\n«چون نمی‌خوام مرگ تو، اولین مرگی باشه که به اسم من نوشته می‌شه.»\nشب، آرن کنار جسد نشست. یورن پرسید:\n«چرا این‌قدر بهش نگاه می‌کنی؟» آرن گفت:\n«چون اون به خاطر اینکه به من اعتماد کرد مرد.»\n«تو نکشتیش.»\n«مهم نیست.»\n«چرا؟» آرن گفت:\n«چون اگر کسی به خاطر من بمیره، حتی اگر دست من خونین نباشه، باز هم بخشی از داستان منه.» یورن نشست.\n«پس چی می‌خوای؟» آرن مدت زیادی سکوت کرد.\n«نمی‌دونم.»\n«باز هم؟» آرن سرش را پایین انداخت.\n«این بار فرق داره.»\n«چطور؟» آرن به خون خشک‌شده روی زمین نگاه کرد.\n«این بار دیگه نمی‌خوام ببخشم.» یورن چیزی نگفت.\nآرن ادامه داد: «نه چون از آنها متنفرم.» مکث کرد.\n«چون بخشیدنِ همه‌چیز، گاهی یعنی وانمود کنی هیچ‌چیز اتفاق نیفتاده.»\nآن شب، برای اولین بار، آرن تصمیم گرفت دیگر فرار نکند. نه به سمت پایتخت. نه به سمت خانه. نه به سمت مادرش. بلکه به سمت چیزی که از آن می‌ترسید. قدرتش. او کنار رودخانه نشست. چشم‌هایش را بست و این بار به جای اینکه بپرسد: «چه چیزی ممکن است اتفاق بیفتد؟» پرسید: «چه چیزی را من می‌توانم انتخاب کنم؟» رودخانه پاسخ نداد. اما در تاریکی، شاخه‌های امکان آرام‌آرام آشکار شدند. بعضی روشن. بعضی تاریک. بعضی تقریباً نامرئی و میان همه‌ی آنها، یک مسیر بیش از بقیه سنگین بود. مسیر جنگ. آرن چشم‌هایش را باز کرد. دورتر، در افق، نور شهر می‌سوخت. او هنوز نمی‌دانست چرا آن مسیر سنگین‌تر شده است. اما نمی‌دانست که در همان لحظه، در هزاران کیلومتر آن‌سوتر، شورای پیشگیری فرمانی صادر کرده بود: «از امروز، مذاکره با آرن ممنوع است.» و زیر آن، جمله‌ای اضافه شده بود: «او دیگر باید به عنوان دشمن شناخته شود.»\nآنها نمی‌دانستند با همین جمله، نخستین سنگِ تاجی را که بعدها بر سر آرن خواهند گذاشت، خودشان تراشیده‌اند."];
-const list=document.getElementById('episode-list'),reader=document.getElementById('reader');let current=0;
-const faNumber=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
-const fallbackChapter={title:{fa:'ظهور',en:'Emergence',ar:'الظهور',zh:'显现'},episodes:episodes.map(ep=>({number:ep.number,title:{fa:ep.title,en:ep.title,ar:ep.title,zh:ep.title},paragraphs:{en:ep.paragraphs,ar:ep.paragraphs,zh:ep.paragraphs}}))};
-function chapterCatalog(){return window.SiteI18n?.getCatalog?.()?.chapters?.emergence||fallbackChapter;}
-function languageCode(){return window.SiteI18n?.getLanguage?.()||'fa';}
-function translatedEpisode(ep){const chapter=chapterCatalog();return chapter.episodes?.find(item=>item.number===ep.number)||null;}
-function renderList(){const chapter=chapterCatalog();const lang=languageCode();list.innerHTML='';episodes.forEach((ep,i)=>{const translated=chapter.episodes?.find(item=>item.number===ep.number);const title=translated?.title?.[lang]||ep.title;const b=document.createElement('button');b.className='episode'+(i===current?' active':'');b.type='button';b.setAttribute('aria-label',title);b.setAttribute('aria-current',String(i===current));b.innerHTML=`<span class="n">${faNumber(ep.number)}</span>`;b.addEventListener('click',()=>{current=i;render()});list.appendChild(b)})}
-function render(){const ep=episodes[current];const translated=translatedEpisode(ep);const lang=languageCode();const chapter=chapterCatalog();const ui=chapter.ui||{};const title=translated?.title?.[lang]||ep.title;const paragraphs=translated?.paragraphs?.[lang]||ep.paragraphs;const chapterTitle=chapter.title?.[lang]||'Emergence';const description=ui.description?.[lang]||'';const storyDescription=ui.storyDescription?.[lang]||'';const placeholder=ui.placeholder?.[lang]||'';document.title=`${title} — ${chapterTitle}`;const body=paragraphs.length?paragraphs.map(p=>`<p class="prose">${p}</p>`).join(''):`<div class="placeholder">${placeholder.replace(/\n/g,'<br>')}</div>`;reader.innerHTML=`<div class="reader-head"><div><div class="story-label">${chapterTitle}</div><h2>${title}</h2><p>${storyDescription}</p></div></div><div class="block">${body}</div><div class="navrow reader-nav" aria-label="پیمایش قسمت‌ها"><button class="btn" id="prev-bottom" aria-label="رفتن به قسمت پیشین">پیشین</button><button class="btn" id="next-bottom" aria-label="رفتن به قسمت پسین">پسین</button></div>`;document.getElementById("prev-bottom")?.addEventListener("click",()=>{current=(current+18)%19;render()});document.getElementById("next-bottom")?.addEventListener("click",()=>{current=(current+1)%19;render()});document.querySelector('.title h1').textContent=chapterTitle;document.querySelector('.title p').textContent=description;document.querySelector('.controls h3').textContent=ui.episodesLabel?.[lang]||'';document.querySelectorAll('.story-label').forEach(el=>{el.textContent=chapterTitle});document.getElementById('art-caption').textContent=chapterTitle;renderList()}
-const translate=(key,fallback)=>window.SiteI18n?.get?.(key,fallback)||fallback;
-function applyLanguage(){document.getElementById('prev').textContent=translate('pages.shahnameh.ui.previous','پیشین');document.getElementById('next').textContent=translate('pages.shahnameh.ui.next','پسین');document.getElementById('emergence-close').textContent=translate('labels.back','بازگشت');render();}
-document.getElementById('prev').addEventListener('click',()=>{current=(current+18)%19;render()});document.getElementById('next').addEventListener('click',()=>{current=(current+1)%19;render()});document.addEventListener('site:languagechange',applyLanguage);applyLanguage();render();
-})();
+const list=document.getElementById('episode-list');
+const reader=document.getElementById('reader');
+const main=document.querySelector('main.page');
+const episodeHeading=document.getElementById('episode-list-heading');
+const episodeNav=document.querySelector('.controls nav');
+const prev=document.getElementById('prev');
+const next=document.getElementById('next');
+const close=document.getElementById('emergence-close');
+let current=0;
 
-document.getElementById('emergence-close')?.addEventListener('click',()=>{if(history.length>1) history.back(); else window.location.href='index.html';});
+const faNumber=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const fallbackChapter={
+  title:{fa:'ظهور',en:'Emergence',ar:'الظهور',zh:'显现'},
+  ui:{
+    description:{fa:'روایتی دربارهٔ ترس، حقیقت و انتخاب؛ فصل نخست در ۱۹ قسمت.',en:'A story about fear, truth, and choice; the first chapter in 19 episodes.',ar:'حكاية عن الخوف والحقيقة والاختيار؛ الفصل الأول في 19 حلقة.',zh:'一个关于恐惧、真相与选择的故事；第一章共19集。'},
+    storyDescription:{fa:'روایت فصل اول ظهور',en:'Narrative of Chapter One: Emergence',ar:'سرد الفصل الأول: الظهور',zh:'第一章《显现》的叙事'},
+    episodesLabel:{fa:'قسمت‌های فصل اول',en:'Chapter One episodes',ar:'حلقات الفصل الأول',zh:'第一章各集'},
+    placeholder:{fa:'متن این قسمت در دسترس نیست.',en:'The text for this episode is unavailable.',ar:'نص هذه الحلقة غير متاح.',zh:'本集文本不可用。'}
+  },
+  episodes:episodes.map(ep=>({number:ep.number,title:{fa:ep.title,en:ep.title,ar:ep.title,zh:ep.title},paragraphs:{en:ep.paragraphs,ar:ep.paragraphs,zh:ep.paragraphs}}))
+};
+
+function chapterCatalog(){
+  return window.SiteI18n?.getCatalog?.()?.chapters?.emergence || fallbackChapter;
+}
+function languageCode(){
+  return window.SiteI18n?.getLanguage?.() || 'fa';
+}
+function t(key,fallback){
+  return window.SiteI18n?.get?.(key,fallback) || fallback;
+}
+function localized(obj,lang,fallback=''){
+  return obj?.[lang] ?? obj?.fa ?? fallback;
+}
+function translatedEpisode(ep){
+  const chapter=chapterCatalog();
+  return chapter.episodes?.find(item=>item.number===ep.number) || null;
+}
+function labelSet(){
+  const lang=languageCode();
+  const fallback={
+    navigation:lang==='fa'?'انتخاب قسمت':lang==='ar'?'اختيار الحلقة':lang==='zh'?'选择章节':'Episode selection',
+    previous:lang==='fa'?'پیشین':lang==='ar'?'السابق':lang==='zh'?'上一集':'Previous episode',
+    next:lang==='fa'?'پسین':lang==='ar'?'التالي':lang==='zh'?'下一集':'Next episode',
+    close:lang==='fa'?'بازگشت':lang==='ar'?'رجوع':lang==='zh'?'返回':'Back',
+    reader:lang==='fa'?'متن قسمت':lang==='ar'?'نص الحلقة':lang==='zh'?'章节文本':'Episode text',
+    skip:lang==='fa'?'پرش به متن قسمت':lang==='ar'?'تخطي إلى نص الحلقة':lang==='zh'?'跳到章节文本':'Skip to episode text'
+  };
+  return {
+    navigation:t('labels.episodeNavigation',fallback.navigation),
+    previous:t('labels.previousEpisode',fallback.previous),
+    next:t('labels.nextEpisode',fallback.next),
+    close:t('labels.back',fallback.close),
+    reader:t('labels.episodeReader',fallback.reader),
+    skip:t('labels.skipToContent',fallback.skip)
+  };
+}
+function renderList(){
+  const chapter=chapterCatalog();
+  const lang=languageCode();
+  list.innerHTML='';
+  episodes.forEach((ep,i)=>{
+    const translated=chapter.episodes?.find(item=>item.number===ep.number);
+    const title=translated?.title?.[lang] || ep.title;
+    const b=document.createElement('button');
+    b.className='episode'+(i===current?' active':'');
+    b.type='button';
+    b.setAttribute('aria-label',`${title} — ${i+1} / ${episodes.length}`);
+    b.setAttribute('aria-controls','reader');
+    if(i===current) b.setAttribute('aria-current','step');
+    else b.removeAttribute('aria-current');
+    b.innerHTML=`<span class="n">${faNumber(ep.number)}</span>`;
+    b.addEventListener('click',()=>select(i,true));
+    list.appendChild(b);
+  });
+}
+function render(){
+  const ep=episodes[current];
+  const translated=translatedEpisode(ep);
+  const lang=languageCode();
+  const chapter=chapterCatalog();
+  const ui=chapter.ui || fallbackChapter.ui;
+  const title=translated?.title?.[lang] || ep.title;
+  const paragraphs=translated?.paragraphs?.[lang] || ep.paragraphs;
+  const chapterTitle=chapter.title?.[lang] || localized(chapter.title,lang,'Emergence');
+  const description=ui.description?.[lang] || '';
+  const storyDescription=ui.storyDescription?.[lang] || '';
+  const placeholder=ui.placeholder?.[lang] || '';
+  const labels=labelSet();
+  document.title=`${title} — ${chapterTitle}`;
+  document.documentElement.lang=lang;
+  document.documentElement.dir=(lang==='fa'||lang==='ar')?'rtl':'ltr';
+  episodeHeading.textContent=ui.episodesLabel?.[lang] || fallbackChapter.ui.episodesLabel[lang];
+  episodeNav.setAttribute('aria-label',labels.navigation);
+  const body=paragraphs.length
+    ? paragraphs.map(p=>`<p class="prose">${p}</p>`).join('')
+    : `<div class="placeholder">${placeholder.replace(/\n/g,'<br>')}</div>`;
+  reader.setAttribute('aria-label',labels.reader);
+  reader.innerHTML=`<div class="reader-head"><div><div class="story-label">${chapterTitle}</div><h2 id="episode-reader-heading">${title}</h2><p>${storyDescription}</p></div></div><div class="block">${body}</div><div class="navrow reader-nav" aria-label="${labels.navigation}"><button class="btn" id="prev-bottom" type="button" aria-label="${labels.previous}">${labels.previous}</button><button class="btn" id="next-bottom" type="button" aria-label="${labels.next}">${labels.next}</button></div>`;
+  reader.setAttribute('aria-labelledby','episode-reader-heading');
+  document.getElementById('prev-bottom')?.addEventListener('click',()=>select((current+episodes.length-1)%episodes.length,true));
+  document.getElementById('next-bottom')?.addEventListener('click',()=>select((current+1)%episodes.length,true));
+  document.querySelector('.title h1').textContent=chapterTitle;
+  document.querySelector('.title p').textContent=description;
+  document.querySelectorAll('.story-label').forEach(el=>{el.textContent=chapterTitle});
+  document.getElementById('art-caption').textContent=chapterTitle;
+  prev.textContent=labels.previous;
+  next.textContent=labels.next;
+  prev.setAttribute('aria-label',labels.previous);
+  next.setAttribute('aria-label',labels.next);
+  close.textContent=labels.close;
+  close.setAttribute('aria-label',labels.close);
+  document.querySelector('.skip-link').textContent=labels.skip;
+  document.querySelector('.skip-link').setAttribute('aria-label',labels.skip);
+  renderList();
+}
+function select(index,moveFocus=false){
+  current=(index+episodes.length)%episodes.length;
+  render();
+  if(moveFocus) requestAnimationFrame(()=>reader.focus({preventScroll:false}));
+}
+function moveBy(delta,moveFocus=true){
+  select(current+delta,moveFocus);
+}
+function handleEpisodeKeydown(event,index){
+  const lang=languageCode();
+  if(event.key==='Home'){event.preventDefault();select(0,true);return;}
+  if(event.key==='End'){event.preventDefault();select(episodes.length-1,true);return;}
+  const rtl=lang==='fa'||lang==='ar';
+  if(event.key==='ArrowRight'){event.preventDefault();moveBy(rtl?-1:1);return;}
+  if(event.key==='ArrowLeft'){event.preventDefault();moveBy(rtl?1:-1);}
+}
+episodes.forEach((episode,index)=>{
+  const b=document.createElement('button');
+  b.type='button';
+});
+prev.addEventListener('click',()=>moveBy(-1));
+next.addEventListener('click',()=>moveBy(1));
+close.addEventListener('click',()=>{if(history.length>1) history.back(); else window.location.href='index.html';});
+list.addEventListener('keydown',event=>{
+  const buttons=[...list.querySelectorAll('button')];
+  const index=buttons.indexOf(document.activeElement);
+  if(index>=0) handleEpisodeKeydown(event,index);
+});
+document.addEventListener('site:languagechange',()=>{
+  render();
+});
+applyLanguage?.();
+render();
