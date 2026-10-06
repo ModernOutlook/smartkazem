@@ -31,7 +31,13 @@
     "volumeLabel": "Audio volume",
     "resumeFailed": "Sound could not be enabled automatically.",
     "shahnameh": "Shahnameh Reading",
-    "shahnamehEn": "Shahnameh Reading"
+    "shahnamehEn": "Shahnameh Reading",
+    "accessibility": {
+      "enabled": "Accessibility mode enabled.",
+      "disabled": "Accessibility mode disabled.",
+      "repeat": "Double-click to repeat the last announcement.",
+      "hold": "Long-press to pause, resume, or repeat speech."
+    }
   },
   "meta": {
     "brand": "Modern Outlook",
