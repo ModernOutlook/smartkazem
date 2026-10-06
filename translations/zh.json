@@ -37,7 +37,10 @@
       "repeat": "双击可重复最后一条语音提示。",
       "hold": "长按可暂停、继续或重复语音。"
     },
-    "episodeNavigation": "章节导航"
+    "episodeNavigation": "章节导航",
+    "previousEpisode": "上一集",
+    "nextEpisode": "下一集",
+    "episodeReader": "章节文本"
   },
   "meta": {
     "brand": "现代视野",
