@@ -73,7 +73,7 @@
 
 
   // Accessible navigation layer: semantic focus + fast speech + touch/keyboard movement.
-  const NAV_SELECTOR='a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),summary,[tabindex]:not([tabindex="-1"]),[role="button"],[role="link"],[role="checkbox"],[role="radio"],[role="switch"],[role="tab"],[role="menuitem"]';
+  const NAV_SELECTOR='h1,h2,h3,h4,a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),summary,[tabindex]:not([tabindex="-1"]),[role="button"],[role="link"],[role="checkbox"],[role="radio"],[role="switch"],[role="tab"],[role="menuitem"],[role="heading"]';
   let navIndex=-1, navItems=[], navRegion=null;
 
   function ensureAccessibilityRegion(){
@@ -91,6 +91,7 @@
   function navigationItems(){
     const root=document.querySelector('main')||document.body;
     return [...root.querySelectorAll(NAV_SELECTOR)].filter(el=>{
+      if(el.matches('h1,h2,h3,h4,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
       if(el.hidden||el.getAttribute('aria-hidden')==='true')return false;
       const rect=el.getBoundingClientRect();
       return rect.width>0&&rect.height>0;
