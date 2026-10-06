@@ -17,6 +17,12 @@
   );
 
   let paragraphOrigin = 'experience';
+  let lastFocusElement = null;
+
+  const PAGE_CLOSE_BUTTONS = Object.freeze({ share: 'share-close', experience: 'experience-close', continuity: 'continuity-close', structure: 'structure-close', reference: 'reference-close', paragraph: 'paragraph-close' });
+  function rememberFocus() { const active = document.activeElement; lastFocusElement = active instanceof HTMLElement && active !== document.body ? active : null; }
+  function focusPage(pageKey) { document.getElementById(PAGE_CLOSE_BUTTONS[pageKey])?.focus({ preventScroll: true }); }
+  function restoreFocus() { const target = lastFocusElement; lastFocusElement = null; if (target?.isConnected) target.focus({ preventScroll: true }); }
   let homeController = {
     setInfo: () => {},
     clearInfo: () => {}
@@ -37,8 +43,10 @@
   }
 
   function openParagraph(kind) {
+    rememberFocus();
     paragraphOrigin = kind;
     showPage('paragraph');
+    focusPage('paragraph');
     window.ParagraphPage?.open(kind);
     homeController.clearInfo();
   }
@@ -46,33 +54,43 @@
   function closeParagraph() {
     window.ParagraphPage?.close();
     showPage(paragraphOrigin);
+    restoreFocus();
   }
 
   function openShare() {
+    rememberFocus();
     showPage('share');
+    focusPage('share');
     homeController.clearInfo();
   }
 
   function closeShare() {
     returnHome();
+    restoreFocus();
   }
 
   function openExperience() {
+    rememberFocus();
     showPage('experience');
+    focusPage('experience');
     homeController.clearInfo();
   }
 
   function closeExperience() {
     returnHome();
+    restoreFocus();
   }
 
   function openContinuity() {
+    rememberFocus();
     showPage('continuity');
+    focusPage('continuity');
     homeController.clearInfo();
   }
 
   function closeContinuity() {
     returnHome();
+    restoreFocus();
   }
 
   function openStructure() {
@@ -83,15 +101,19 @@
 
   function closeStructure() {
     returnHome();
+    restoreFocus();
   }
 
   function openReference() {
+    rememberFocus();
     showPage('reference');
+    focusPage('reference');
     homeController.clearInfo();
   }
 
   function closeReference() {
     returnHome();
+    restoreFocus();
   }
 
   function setHomeController(controller) {
