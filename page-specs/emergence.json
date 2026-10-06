@@ -7,12 +7,17 @@
   },
   "translations": {
     "path": "translations/emergence.json",
-    "languages": ["en", "ar", "zh"],
+    "languages": [
+      "en",
+      "ar",
+      "zh"
+    ],
     "derived_from": "source"
   },
   "runtime": {
     "html": "emergence.html",
-    "i18n": "translations/i18n.js"
+    "i18n": "translations/i18n.js",
+    "controller": "content/emergence.js"
   },
   "accessibility": {
     "required": true,
@@ -20,14 +25,29 @@
       "skip-link",
       "semantic-episode-navigation",
       "aria-current-active-item",
-      "explicit-previous-next-labels",
+      "aria-controls-reader",
+      "dynamic-reader-region",
+      "accessible-reader-heading",
+      "explicit-previous-next-controls",
+      "explicit-close-accessible-name",
+      "shared-site-language-controls",
+      "language-aware-aria-labels",
+      "keyboard-arrow-home-end-navigation",
+      "keyboard-focus-to-reader-after-navigation",
       "visible-focus",
-      "reduced-motion"
+      "reduced-motion",
+      "rtl-ltr",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
     ],
     "verification": [
-      "keyboard-only",
-      "screen-reader",
-      "rtl-ltr",
+      "source-inspection",
+      "json-validity",
+      "javascript-syntax",
+      "keyboard-navigation-contract",
+      "screen-reader-semantics",
+      "rtl-ltr-contract",
       "mobile-portrait",
       "mobile-landscape",
       "desktop"
