@@ -17,6 +17,7 @@
   });
 
   let lastSelectionAt = 0;
+  const SECONDARY_RETURN_KEY = 'smartkazem.secondaryReturn';
 
   const realms = [...document.querySelectorAll('.realm')];
   const core = document.getElementById('core');
@@ -90,7 +91,7 @@
     const span = page.querySelector('span');
 
     if (strong && title) strong.textContent = title;
-    if (span) span.textContent = (title || '').split(' · ')[1] || title || '';
+    if (span) span.textContent = '';
     page.setAttribute('aria-label', title || '');
   });
 
@@ -101,17 +102,13 @@
     const button = document.getElementById(id);
     if (!button || !value) return;
 
-    const small = button.querySelector('small');
-    button.firstChild.textContent = value;
-    if (small) small.textContent = '';
+    button.textContent = value;
   });
 
   const humanMachinesButton = document.getElementById('share-human-machines');
   const humanMachines = catalog.pages?.humanMachines;
   if (humanMachinesButton && humanMachines) {
-    humanMachinesButton.firstChild.textContent = humanMachines.title || labels.share;
-    const small = humanMachinesButton.querySelector('small');
-    if (small) small.textContent = humanMachines.title || '';
+    humanMachinesButton.textContent = humanMachines.title || labels.share;
   }
 
   const backLabel = labels.back || '';
@@ -136,6 +133,19 @@
 
   window.HomeRealmInfo?.refresh();
 }
+
+  function openSecondaryPage(path, origin) {
+    try { sessionStorage.setItem(SECONDARY_RETURN_KEY, origin); } catch (_) {}
+    window.location.href = path;
+  }
+
+  function restoreSecondaryOrigin() {
+    let origin = null;
+    try { origin = sessionStorage.getItem(SECONDARY_RETURN_KEY); } catch (_) {}
+    if (!REALM_ORDER.includes(origin)) return;
+    try { sessionStorage.removeItem(SECONDARY_RETURN_KEY); } catch (_) {}
+    window.requestAnimationFrame(() => selectRealm(origin));
+  }
 
   function handleLanguageChange() {
   renderHomeFromCatalog();
@@ -239,29 +249,15 @@ document.getElementById('structure-close').addEventListener('click', PageNavigat
 document.getElementById('reference-close').addEventListener('click', PageNavigation.closeReference);
 document.getElementById('book-close').addEventListener('click', BookNavigation.closeBook);
 
-document.getElementById('continuity-shahnameh').addEventListener('click', () => {
-  window.location.href = 'shahnameh.html';
-});
-document.getElementById('continuity-emergence').addEventListener('click', () => {
-  window.location.href = 'emergence.html';
-});
-document.getElementById('structure-treatise').addEventListener('click', () => {
-  window.location.href = 'philosophical-treatise.html';
-});
+document.getElementById('continuity-shahnameh').addEventListener('click', () => openSecondaryPage('shahnameh.html', 'continuity'));
+document.getElementById('continuity-emergence').addEventListener('click', () => openSecondaryPage('emergence.html', 'continuity'));
+document.getElementById('structure-treatise').addEventListener('click', () => openSecondaryPage('philosophical-treatise.html', 'structure'));
 document.getElementById('share-human-machines').addEventListener('click', () => BookNavigation.openBook('share', 'humanMachines'));
 document.getElementById('share-forgers').addEventListener('click', () => BookNavigation.openBook('share', 'forgers'));
-document.getElementById('ref-observation').addEventListener('click', () => {
-  window.location.href = 'observation.html';
-});
-document.getElementById('reference-layer3').addEventListener('click', () => {
-  window.location.href = 'echo-layer3.html';
-});
-document.getElementById('experience-observation25').addEventListener('click', () => {
-  window.location.href = 'observation-25.html';
-});
-document.getElementById('experience-possible-mirror').addEventListener('click', () => {
-  window.location.href = 'possible-mirror.html';
-});
+document.getElementById('ref-observation').addEventListener('click', () => openSecondaryPage('observation.html', 'reference'));
+document.getElementById('reference-layer3').addEventListener('click', () => openSecondaryPage('echo-layer3.html', 'reference'));
+document.getElementById('experience-observation25').addEventListener('click', () => openSecondaryPage('observation-25.html', 'experience'));
+document.getElementById('experience-possible-mirror').addEventListener('click', () => openSecondaryPage('possible-mirror.html', 'experience'));
 document.getElementById('experience-detect').addEventListener('click', () => PageNavigation.openParagraph('experience'));
 document.getElementById('reference-match').addEventListener('click', () => PageNavigation.openParagraph('reference'));
 
@@ -270,5 +266,7 @@ document.addEventListener('keydown', handleEscape);
 // Language state is owned exclusively by translations/i18n.js.
 PageNavigation.setHomeController(window.HomeRealmInfo);
 
+window.addEventListener('pageshow', restoreSecondaryOrigin);
+restoreSecondaryOrigin();
 
 })();

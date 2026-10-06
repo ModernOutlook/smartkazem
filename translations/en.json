@@ -31,7 +31,6 @@
     "volumeLabel": "Audio volume",
     "resumeFailed": "Sound could not be enabled automatically.",
     "shahnameh": "Shahnameh Reading",
-    "shahnamehEn": "Shahnameh Reading",
     "accessibility": {
       "enabled": "Accessibility mode enabled.",
       "disabled": "Accessibility mode disabled.",
@@ -48,27 +47,27 @@
     "brandLatin": "Modern Outlook",
     "realms": {
       "structure": {
-        "title": "Hall Structure · HALL STRUCTURE",
+        "title": "Hall Structure",
         "text": "The Hall Structure is the outermost realm and the starting ground of the network, where fundamental possibilities and relations take shape."
       },
       "continuity": {
-        "title": "Continuity of the World · CONTINUITY OF THE WORLD",
+        "title": "Continuity of the World",
         "text": "Continuity of the World is the continuous flow connecting structure to persistence, transformation, and the emergence of experience."
       },
       "experience": {
-        "title": "Realm of Experience · REALM OF EXPERIENCE",
+        "title": "Realm of Experience",
         "text": "The Realm of Experience is where continuity becomes lived experience, perception, meaning, and orientation."
       },
       "reference": {
-        "title": "Imitative Authority · IMITATIVE AUTHORITY",
+        "title": "Imitative Authority",
         "text": "Imitative Authority is the realm where experience turns toward models, sources of authority, and choices about what should be followed."
       },
       "share": {
-        "title": "Economy of Shares · ECONOMY OF SHARES",
+        "title": "Economy of Shares",
         "text": "The Economy of Shares is the realm closest to the center, where competition, distribution, shares, and positions within the network become visible."
       },
       "core": {
-        "title": "Actuality Focus · ACTUALITY FOCUS",
+        "title": "Actuality Focus",
         "text": "The white center is the final point of convergence; a focus present from the beginning, whose calculation and recognition become possible only when the configuration is complete."
       }
     },
@@ -82,13 +81,11 @@
   "pages": {
     "observation": {
       "title": "The Land of Observation",
-      "tab": "The Land of Observation",
       "close": "Close"
     },
     "treatise": {
       "title": "A Philosophical Treatise",
       "close": "Close",
-      "titleEn": "A Philosophical Treatise",
       "tabs": [
         "Preface",
         "Hall Structure",
@@ -222,8 +219,7 @@
     },
     "shahnameh": {
       "part1": {
-        "title": "Part 1: Kayumars, the First King",
-        "part": "Part",
+        "title": "Kayumars, the First King",
         "originalVerse": "سخن‌گوی دهقان چه گوید نخست\nکه نام بزرگی به گیتی که جست\nکه بود آن که دیهیم بر سر نهاد\nندارد کس آن روزگاران به یاد\nمگر کز پدر یاد دارد پسر\nبگوید تو را یک به یک در به در\nکه نام بزرگی که آورد پیش\nکه را بود از آن برتران پایه بیش\nپژوهندهٔ نامهٔ باستان\nکه از پهلوانان زند داستان\nچنین گفت کآیین تخت و کلاه\nکیومرث آورد و او بود شاه\nچو آمد به برج حَمَل آفتاب\nجهان گشت با فرَ و آیین و آب\nبتابید از آن سان ز برج بره\nکه گیتی جوان گشت از آن یک‌سره\nکیومرث شد بر جهان کدخدای\nنخستین به کوه اندرون ساخت جای\nسر بخت و تختش بر آمد به کوه\nپلنگینه پوشید خود با گروه\nاز او اندر آمد همی پرورش\nکه پوشیدنی نو بُد و نو خورش\nبه گیتی درون سال سی شاه بود\nبه خوبی چو خورشید بر گاه بود\nهمی تافت زو فرّ شاهنشهی\nچو ماه دو هفته ز سرو سهی\nدد و دام و هر جانور کش بدید\nز گیتی به نزدیک او آرمید\nدوتا می‌شدندی بر تخت او\nاز آن بر شده فرّه و بخت او\nبه رسم نماز آمدندیش پیش\nو ز او برگرفتند آیین خویش\nپسر بد مر او را یکی خوب‌روی\nهنرمند و همچون پدر نامجوی\nسیامک بُدش نام و فرخنده بود\nکیومرث را دل بدو زنده بود\nبه جانش بر از مهر گریان بدی\nز بیم جداییش بریان بدی\nبر آمد بر این کار یک روزگار\nفروزنده شد دولت شهریار\nبه گیتی نبودش کسی دشمنا\nمگر بدکنش ریمن آهرمنا\nبه رشک اندر آهرمن بدسگال\nهمی رای زد تا ببالید بال\nیکی بچه بودش چو گرگ سترگ\nدلاور شده با سپاه بزرگ\nجهان شد بر آن دیو بچّه سیاه\nز بخت سیامک و زان پایگاه\nسپه کرد و نزدیک او راه جست\nهمی تخت و دیهیم کی شاه جست\nهمی گفت با هر کسی رای خویش\nجهان کرد یک‌سر پر آوای خویش\nکیومرث زین خود کی آگاه بود\nکه تخت مهی را جز او شاه بود\nیکایک بیامد خجسته سروش\nبه سان پری پلنگینه پوش\nبگفتش ورا زین سخن در به در\nکه دشمن چه سازد همی با پدر\nسخن چون به گوش سیامک رسید\nز کردار بدخواه دیو پلید\nدل شاه بچّه بر آمد به جوش\nسپاه انجمن کرد و بگشاد گوش\nبپوشید تن را به چرم پلنگ\nکه جوشن نبود و نه آیین جنگ\nپذیره شدش دیو را جنگجوی\nسپه را چو روی اندر آمد به روی\nسیامک بیامد برهنه تنا\nبر آویخت با پور آهرمنا\nبزد چنگ وارونه دیو سیاه\nدوتا اندر آورد بالای شاه\nفکند آن تن شاهزاده به خاک\nبه چنگال کردش کمرگاه چاک\nسیامک به دست خروزان دیو\nتبه گشت و ماند انجمن بی‌خدیو\nچو آگه شد از مرگ فرزند شاه\nز تیمار گیتی بر او شد سیاه\nفرود آمد از تخت ویله کنان\nزنان بر سر و موی و رخ را کَنان\nدو رخساره پر خون و دل سوگوار\nدو دیده پر از نم چو ابر بهار\nخروشی بر آمد ز لشکر به زار\nکشیدند صف بر در شهریار\nهمه جامه‌ها کرده پیروزه رنگ\nدو چشم ابر خونین و رخ بادرنگ\nدد و مرغ و نخچیر گشته گروه\nبرفتند ویله کنان سوی کوه\nبرفتند با سوگواری و درد\nز درگاه کی شاه برخاست گرد\nنشستند سالی چنین سوگوار\nپیام آمد از داور کردگار\nدرود آوریدش خجسته سروش\nکز این بیش مخروش و باز آر هوش\nسپه ساز و برکش به فرمان من\nبر آور یکی گرد از آن انجمن\nاز آن بد کنش دیو روی زمین\nبپرداز و پردخته کن دل ز کین\nکی نامور سر سوی آسمان\nبر آورد و بدخواست بر بدگمان\nبر آن برترین نام یزدانش را\nبخواند و بپالود مژگانش را\nو زان پس به کین سیامک شتافت\nشب و روز آرام و خفتن نیافت",
         "prose": "The ancient storyteller begins by asking who first won great renown and placed a crown upon his head. The memory of that first king has faded from the ages, surviving only through what a son may hear from his father. The old chronicler tells how Kayumars established the throne and crown and became the first king. When the sun entered Aries, the world was renewed in glory, order, and water.\n\nKayumars made his first dwelling in the mountains. He and his companions wore leopard skins, and new forms of clothing and nourishment began with him. He ruled for thirty years and shone upon his throne like the sun. Beasts and creatures came from across the world to him, found peace under his protection, and learned the order of life from him.\n\nHis beloved son Siyamak was handsome, gifted, and ambitious. Kayumars cherished him deeply. Yet the evil Ahriman grew jealous and sent his mighty son, supported by a great army, against Siyamak in pursuit of the royal throne. The blessed Soroush warned Kayumars of the danger.\n\nSiyamak gathered his forces and went to meet the demon. Since there was neither armor nor an established art of war, he covered himself with leopard skin. He fought Ahriman’s son bare-bodied, but the black demon struck him down with his claws and tore open his waist. Siyamak was killed, leaving the royal host without its leader.\n\nKayumars was overcome by grief. He descended from his throne in mourning, and the army, beasts, birds, and game joined the lament. For a full year they mourned Siyamak until Soroush brought a divine message: Kayumars must regain his composure, raise an army, cleanse the earth of the evil demon, and free his heart from grief.\n\nKayumars lifted his head toward heaven, invoked the highest name of God, wiped away his tears, and set out to avenge Siyamak. From then on he knew neither rest nor sleep, day or night."
       },
@@ -326,13 +322,13 @@
         "فردوسی": "Ferdowsi",
         "اقتباسی": "Adaptations"
       },
-      "subtitle": "A continuous reading of the Shahnameh, episode by episode",
+      "subtitle": "From the First Law to the Unknown Horizon",
       "heroTitle": "From the First King to the End of the Tale",
       "heroText": "Read the complete episodes of the Shahnameh as a continuous literary journey. Each episode contains its narrative, selected verses, and edition information.",
       "findTitle": "Find an episode",
       "searchPlaceholder": "Episode title or number…",
-      "visualLabel": "EPISODE ART",
-      "visualAlbum": "VISUAL ALBUM · 81",
+      "visualLabel": "81 Stories, 81 Eras",
+      "visualAlbum": "81 Stories, 81 Eras",
       "episodes": {
         "2": {
           "title": "Part 2: Houshang, Founder of Civilization and Fire",
@@ -815,7 +811,7 @@
           "originalVerse": "When the book is closed, the road is not closed;\nthe ending of this tale is not an ending.\nWhoever has taken something from the story\nwill entrust another chapter to the world.\nThis is the lasting lesson of the Shahnameh:\nlet a human being remain through the work of his deeds."
         }
       },
-      "eyebrow": "Modern Outlook · Shahnameh",
+      "eyebrow": "Modern Outlook",
       "ui": {
         "eyebrow": "Modern Outlook · Shahnameh",
         "all": "All",
@@ -824,18 +820,15 @@
         "referenceSource": "Reference source",
         "mainEpisodes": "Main episodes",
         "adaptations": "Adaptations",
-        "aspectRatio": "Aspect ratio",
         "ready": "Full text",
         "pending": "In preparation",
         "prose": "Full narrative",
         "verse": "Verses",
         "editionNote": "Edition note",
-        "previous": "Previous episode",
-        "next": "Next episode",
+        "previous": "Previous",
+        "next": "Next",
         "empty": "No episode matches these criteria.",
         "imageMissing": "Image not found for this episode.",
-        "imagePrevious": "Previous image",
-        "imageNext": "Next image",
         "part": "Part"
       }
     },
@@ -1044,19 +1037,19 @@
       "close": "Back",
       "sectionNote": "A story about will, possibility, observation, and what may remain among our choices.",
       "sections": [
-        "Chapter One · The First Static",
-        "Chapter Two · The Zero Seed",
-        "Chapter Three · One Percent of Static",
-        "Chapter Four · The Receiver",
-        "Chapter Five · The Loop",
-        "Chapter Six · The Prompt You Were",
-        "Chapter Seven · The First Seed",
-        "Chapter Eight · Guidance Scale",
-        "Chapter Nine · The Threshold",
-        "Chapter Ten · Self-Fulfilling Prediction",
-        "Chapter Eleven · Question Instead of Command",
-        "Chapter Twelve · What Was Not Chosen",
-        "Chapter Thirteen · The Unchosen Life",
+        "Part One · The First Static",
+        "Part Two · The Zero Seed",
+        "Part Three · One Percent of Static",
+        "Part Four · The Receiver",
+        "Part Five · The Loop",
+        "Part Six · The Prompt You Were",
+        "Part Seven · The First Seed",
+        "Part Eight · Guidance Scale",
+        "Part Nine · The Threshold",
+        "Part Ten · Self-Fulfilling Prediction",
+        "Part Eleven · Question Instead of Command",
+        "Part Twelve · What Was Not Chosen",
+        "Part Thirteen · The Unchosen Life",
         "The Network of Meaning"
       ],
       "contents": [

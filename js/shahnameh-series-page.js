@@ -19,7 +19,6 @@
 
   let filter = 'all';
   let activeEpisode = 1;
-  let artworkEpisode = 1;
   let catalog = null;
 
   const getPage = () => catalog?.pages?.shahnameh || {};
@@ -97,10 +96,7 @@
     button.append(number);
     button.addEventListener('click', () => {
       activeEpisode = episode.id;
-      artworkEpisode = episode.id;
-      renderEpisodeList();
-      renderReader();
-      syncArtwork();
+      setEpisode(episode.id);
     });
 
     return button;
@@ -122,7 +118,7 @@
   }
 
   function syncArtwork() {
-    const episode = getEpisodeView(data.getEpisode(artworkEpisode));
+    const episode = getEpisodeView(data.getEpisode(activeEpisode));
     if (!episode || !elements.artFrame) return;
 
     elements.artIndex.textContent =
@@ -167,14 +163,20 @@
     return section;
   }
 
-  function moveArtwork(offset) {
-    const index = data.episodes.findIndex((episode) => episode.id === artworkEpisode);
-    const nextEpisode = data.episodes[index + offset];
-
-    if (!nextEpisode) return;
-
-    artworkEpisode = nextEpisode.id;
+  function setEpisode(id) {
+    const episode = data.getEpisode(id);
+    if (!episode) return;
+    activeEpisode = episode.id;
+    renderEpisodeList();
+    renderReader();
     syncArtwork();
+  }
+
+  function moveEpisode(offset) {
+    const index = data.episodes.findIndex((episode) => episode.id === activeEpisode);
+    const nextEpisode = data.episodes[index + offset];
+    if (!nextEpisode) return;
+    setEpisode(nextEpisode.id);
   }
 
   function renderReader() {
@@ -210,15 +212,15 @@
     previous.type = 'button';
     previous.className = 'btn';
     previous.id = 'prev';
-    previous.textContent = translate('previous', 'قسمت پیشین');
-    previous.addEventListener('click', () => move(-1));
+    previous.textContent = translate('previous', 'پیشین');
+    previous.addEventListener('click', () => moveEpisode(-1));
 
     const next = document.createElement('button');
     next.type = 'button';
     next.className = 'btn';
     next.id = 'next';
-    next.textContent = translate('next', 'قسمت بعد');
-    next.addEventListener('click', () => move(1));
+    next.textContent = translate('next', 'پسین');
+    next.addEventListener('click', () => moveEpisode(1));
 
     navigation.append(previous, next);
     elements.reader.appendChild(navigation);
@@ -249,6 +251,8 @@
     if (search) search.placeholder = page.searchPlaceholder || search.placeholder;
     if (visualLabel) visualLabel.textContent = page.visualLabel || visualLabel.textContent;
     if (back) back.textContent = labels.back || back.textContent;
+    if (elements.artPrevious) elements.artPrevious.textContent = ui.previous || 'پیشین';
+    if (elements.artNext) elements.artNext.textContent = ui.next || 'پسین';
 
     elements.filters.forEach((button) => {
       const key = button.dataset.filter;
@@ -277,8 +281,8 @@
       else window.location.href = 'index.html';
     });
 
-    elements.artPrevious?.addEventListener('click', () => moveArtwork(-1));
-    elements.artNext?.addEventListener('click', () => moveArtwork(1));
+    elements.artPrevious?.addEventListener('click', () => moveEpisode(-1));
+    elements.artNext?.addEventListener('click', () => moveEpisode(1));
   }
 
   function init() {

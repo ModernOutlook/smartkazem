@@ -19,3 +19,52 @@
   --ui-safe-bottom: env(safe-area-inset-bottom, 0px);
   --ui-safe-left: env(safe-area-inset-left, 0px);
 }
+
+/* Shared language-control contract.
+ * Every page keeps the same language control available across viewport modes.
+ * Page-specific layouts own the control's exact position and visual theme.
+ */
+.global-lang,
+.lang-switch {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  max-width: calc(100vw - 20px);
+}
+
+.global-lang button,
+.lang-switch button {
+  min-width: 40px;
+  min-height: 36px;
+  flex: 0 1 auto;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+
+@media (max-width: 1023px) {
+  .global-lang,
+  .lang-switch {
+    max-width: calc(100vw - 16px);
+  }
+
+  .global-lang button,
+  .lang-switch button {
+    min-width: var(--ui-touch-target);
+    min-height: var(--ui-touch-target);
+  }
+}
+
+@media (max-width: 359px) {
+  .global-lang,
+  .lang-switch {
+    max-width: calc(100vw - 12px);
+  }
+
+  .global-lang button,
+  .lang-switch button {
+    min-width: 42px;
+  }
+}

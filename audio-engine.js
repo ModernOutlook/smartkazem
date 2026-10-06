@@ -22,7 +22,10 @@
   function loadState(){
     try{const saved=JSON.parse(localStorage.getItem(STORAGE_KEY)||'null');if(saved&&typeof saved==='object')state={...DEFAULT_STATE,...saved};}catch(_){}
     state.enabled=state.enabled!==false; state.muted=state.muted===true;
-    const savedVolume=Number(state.volume);\n    // Preserve user-selected volumes, but migrate the old default to the new 2x default.\n    state.volume=Math.min(1,Math.max(.02,Number.isFinite(savedVolume)?savedVolume:DEFAULT_STATE.volume));\n    if(savedVolume===0.18)state.volume=DEFAULT_STATE.volume;
+    const savedVolume=Number(state.volume);
+    // Preserve user-selected volumes, but migrate the old default to the new 2x default.
+    state.volume=Math.min(1,Math.max(.02,Number.isFinite(savedVolume)?savedVolume:DEFAULT_STATE.volume));
+    if(savedVolume===0.18)state.volume=DEFAULT_STATE.volume;
     state.realm=REALM_CUES[state.realm]?state.realm:DEFAULT_STATE.realm;
     try{const access=JSON.parse(localStorage.getItem(ACCESSIBILITY_KEY)||'null');if(access&&typeof access==='object'){state.accessibility=access.enabled===true;state.speechEnabled=access.speechEnabled!==false;state.voiceVersion=Number(access.voiceVersion)||1;}}catch(_){}
   }
