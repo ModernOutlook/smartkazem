@@ -410,6 +410,109 @@ Avoid adding large translated prose directly to UI/controller modules.
 
 ---
 
+## 6.4 Content-source repositories and the four-language data contract
+
+SmartKazem has a strict **source → translation** content architecture. This is a content-authoring contract, not a permission to rewrite the Persian source while translating it.
+
+### Persian source repository
+
+The Persian repository contains the original Persian material supplied for publication.
+
+When the user supplies Persian source material:
+1. preserve the Persian text exactly;
+2. do not summarize, polish, reinterpret, or silently correct it;
+3. place the original in the Persian source repository;
+4. treat that Persian version as the canonical reference for later translation work.
+
+### Translation repository
+
+The translation repository contains **native, faithful translations** of the Persian source in English (en), Arabic (ar), and Chinese (zh).
+
+When the user asks to complete translations for a specific work:
+1. read the canonical Persian version from the Persian source repository;
+2. translate from that Persian source;
+3. preserve meaning, structure, terminology, narrative information, and intended style;
+4. write only the requested target-language versions into the translation repository.
+
+**Do not use an existing translated version as the source for another language.**
+
+### Runtime relationship
+
+The browser has one clear language boundary:
+
+    Selected language
+          │
+          ├── fa ──► Persian source data
+          │
+          └── en/ar/zh ──► translated data
+
+The deployed GitHub Pages site may contain synchronized runtime copies of these data sets for static delivery. Those runtime copies are **artifacts of the two authoritative repositories**, not alternative sources of truth.
+
+The current translations/i18n.js loader is the runtime language boundary. It loads the language catalog available to the deployed site and never translates Persian at display time.
+
+If physical repository endpoints used for runtime synchronization are changed, update the synchronization/loader contract deliberately; do not introduce ad-hoc per-page fetches.
+
+### Important distinction
+
+There are three different concerns:
+
+    Authoring source
+        ↓
+    Translation production
+        ↓
+    Runtime delivery
+
+- **Authoring source:** Persian repository.
+- **Translation production:** translation repository, using Persian as the only source.
+- **Runtime delivery:** the site's synchronized data artifacts plus translations/i18n.js.
+
+A future change must not collapse these into one mutable content source.
+
+## 6.5 Content additions and translation timing
+
+A new Persian chapter/content item may be published before its translations exist.
+
+Therefore:
+- adding Persian source content does **not** require inventing EN/AR/ZH text;
+- the Persian UI must be able to display the new source immediately;
+- translated catalogs may temporarily lag behind the Persian source;
+- when translations are later completed, they must be added from the Persian source without altering the Persian text.
+
+For example, the current Possible Mirror update adds Chapters 14 and 15 and extends the Persian Meaning Network from the supplied artifact. No translation text is fabricated as part of that Persian-source update.
+
+## 6.6 Talk Back architecture contract
+
+**Talk Back must follow the same source separation as the visual translation system.**
+
+Its implementation is parallel, not intertwined:
+
+    SMARTKAZEM CONTENT
+           │
+      ┌────┴────┐
+      ▼         ▼
+    Persian   Translation
+     source     source
+      │         │
+      └────┬────┘
+           ▼
+     shared language
+        selection
+       ┌────┴────┐
+       ▼         ▼
+    Visual    Talk Back
+                │
+                ▼
+          audio service
+
+Talk Back may add its own audio processing, voice selection, caching, and playback logic, but it must not create a second content-authority system.
+
+Its core rule is:
+
+> **Read the same language-selected content source used by the page; do not create an independent Persian/translation content copy for audio.**
+
+Keep content ownership independent from audio presentation; language selection owned by the shared i18n boundary; Persian as canonical source; EN/AR/ZH as translated source material; and audio generation/playback as a parallel presentation/service layer.
+
+
 # 7. Five Realms
 
 The application is organized around five conceptual realms:
