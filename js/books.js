@@ -29,6 +29,7 @@
 });
 
   let bookReturn = 'home';
+  let bookReturnFocus = null;
   let activeBookKind = BOOK_KINDS.FORGERS;
 
   const bookTabs = document.getElementById('book-tabs');
@@ -174,6 +175,7 @@ function selectChapter(index) {
 
 function openBook(from = 'home', kind = BOOK_KINDS.FORGERS) {
   bookReturn = from;
+  bookReturnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
   activeBookKind = kind;
 
   const catalog = window.SiteI18n?.getCatalog?.()?.pages?.[activeBookKind];
@@ -185,22 +187,17 @@ function openBook(from = 'home', kind = BOOK_KINDS.FORGERS) {
   }
 
   window.SitePages?.showPage('book');
+  document.getElementById('book-close')?.focus({ preventScroll: true });
   buildBookTabs(0);
   selectChapter(0);
 }
 
 function closeBook() {
-  if (bookReturn === 'reference') {
-    window.SitePages?.showPage('reference');
-    return;
-  }
-
-  if (bookReturn === 'share') {
-    window.SitePages?.showPage('share');
-    return;
-  }
-
-  window.SitePages?.returnHome('reference');
+  if (bookReturn === 'reference') window.SitePages?.showPage('reference');
+  else if (bookReturn === 'share') window.SitePages?.showPage('share');
+  else window.SitePages?.returnHome('reference');
+  if (bookReturnFocus?.isConnected) bookReturnFocus.focus({ preventScroll: true });
+  bookReturnFocus = null;
 }
 
   window.BookNavigation = Object.freeze({ buildBookTabs, selectChapter, openBook, closeBook });

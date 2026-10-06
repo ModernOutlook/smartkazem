@@ -21,6 +21,7 @@ const elements={
  popover:document.getElementById('pm-judgment-popover')
 };
 let entryMode=ENTRY_MODES.EXPERIENCE,currentResults=[];
+let judgmentReturnFocus=null;
 const userJudgments=Object.create(null);
 function getLanguage(){return window.SiteI18n?.getLanguage?.()||'fa'}
 function translate(k,f){return window.SiteI18n?.get?.(k,f)||f}
@@ -73,16 +74,26 @@ function closeParagraphPage(){elements.page.classList.remove('open')}
 function renderPrimaryParagraphs(results){elements.primaryOutput.innerHTML=results.map((p,i)=>{const x=window.ParagraphMachineCore.processText(p.text),t=p.displayedText||x.text,e=p.userEvaluation||'',ec=e?' pm-user-'+e:'';return '<article class="pm-primary-card"><div class="pm-primary-index">'+(i+1)+'</div><div class="pm-primary-text'+ec+'">'+escapeHtml(t)+'</div><div class="pm-primary-meta">'+x.finalWordCount+' / 144 '+translate('paragraphMachine.words','کلمه')+' · '+x.finalCharCount+' / 900 '+translate('paragraphMachine.chars','حرف')+'</div></article>'}).join('')}
 async function evaluateReference(){const raw=elements.input.value.trim();if(!raw)throw new Error(translate('paragraphMachine.empty','متنی وارد نشده است.'));const l=getLanguage(),ptext=await window.ParagraphTranslation.toPersian(raw,l),p=await window.ParagraphWorkspaceAdapter.evaluatePersian(ptext);p.displayedText=l==='fa'?p.text:await window.ParagraphTranslation.fromPersian(p.text,l);return[p]}
 async function generateExperience(){const r=await window.ParagraphWorkspaceAdapter.generatePersian(1,'mixed'),l=getLanguage(),t=l==='fa'?r.map(p=>p.text):await window.ParagraphTranslation.fromPersianBatch(r.map(p=>p.text),l);r.forEach((p,i)=>p.displayedText=t[i]);return r}
-function closeJudgmentPopover(){elements.popover.hidden=true;elements.popover.replaceChildren()}
+function closeJudgmentPopover({restoreFocus=false}={}){
+ elements.choices.forEach(choice=>choice.setAttribute('aria-expanded','false'));
+ elements.popover.hidden=true;
+ elements.popover.replaceChildren();
+ if(restoreFocus&&judgmentReturnFocus?.isConnected){judgmentReturnFocus.focus({preventScroll:true});}
+ judgmentReturnFocus=null;
+}
 function evaluateRecognitionJudgments(){const missing=DOMAIN_ORDER.filter(d=>!userJudgments[d]);if(missing.length)throw new Error(translate('paragraphMachine.judgeAll','برای هر پنج قلمرو یک قضاوت انتخاب کنید.'));currentResults.forEach(p=>{p.userEvaluation=DOMAIN_ORDER.every(d=>userJudgments[d]===p.judgment?.[d]?.status)?'correct':'incorrect'});renderPrimaryParagraphs(currentResults);elements.source.textContent=translate(currentResults.every(p=>p.userEvaluation==='correct')?'paragraphMachine.recognitionCorrect':'paragraphMachine.recognitionIncorrect',currentResults.every(p=>p.userEvaluation==='correct')?'قضاوت شما با داوری ماشین منطبق است.':'قضاوت شما با داوری ماشین منطبق نیست.')}
 
 function openJudgmentPopover(button){
  if(entryMode===ENTRY_MODES.REFERENCE)return;
+ if(!elements.popover.hidden) closeJudgmentPopover();
+ judgmentReturnFocus=button;
  const d=button.dataset.domain,name=button.querySelector('span')?.textContent||'';
+ elements.choices.forEach(choice=>choice.setAttribute('aria-expanded',String(choice===button)));
  elements.popover.className='pm-judgment-popover pm-domain-'+d;
  elements.popover.innerHTML='<strong>'+escapeHtml(name)+'</strong><div class="pm-judgment-options">'+STATUS_OPTIONS.map(([v,l])=>'<button type="button" data-status="'+v+'" class="pm-choice-'+v+'">'+l+'</button>').join('')+'</div>';
  elements.popover.hidden=false;
- elements.popover.querySelectorAll('[data-status]').forEach(o=>o.addEventListener('click',()=>{userJudgments[d]=o.dataset.status;button.dataset.judgment=o.dataset.status;button.classList.remove('judgment-ok','judgment-warn','judgment-bad');button.classList.add('judgment-'+o.dataset.status);closeJudgmentPopover()}))
+ elements.popover.querySelectorAll('[data-status]').forEach(o=>o.addEventListener('click',()=>{userJudgments[d]=o.dataset.status;button.dataset.judgment=o.dataset.status;button.classList.remove('judgment-ok','judgment-warn','judgment-bad');button.classList.add('judgment-'+o.dataset.status);closeJudgmentPopover({restoreFocus:true})}));
+ elements.popover.querySelector('[data-status]')?.focus({preventScroll:true});
 }
 async function run(){
  elements.error.textContent='';
@@ -106,7 +117,18 @@ async function run(){
 elements.action.addEventListener('click',run);
 elements.choices.forEach(c=>c.addEventListener('click',e=>{e.stopPropagation();if(entryMode===ENTRY_MODES.EXPERIENCE)openJudgmentPopover(c)}));
 elements.input.addEventListener('input',()=>{if(entryMode===ENTRY_MODES.REFERENCE)updateActionState()});
-document.addEventListener('click',e=>{if(elements.popover.hidden)return;if(!elements.popover.contains(e.target)&&!e.target.closest('.pm-realm-choice'))closeJudgmentPopover()});
+document.addEventListener('click',e=>{if(elements.popover.hidden)return;if(!elements.popover.contains(e.target)&&!e.target.closest('.pm-realm-choice'))closeJudgmentPopover({restoreFocus:true})});
+document.addEventListener('keydown',e=>{
+ if(elements.popover.hidden)return;
+ if(e.key==='Escape'){e.preventDefault();closeJudgmentPopover({restoreFocus:true});return;}
+ if(e.key==='Tab'){
+  const controls=[...elements.popover.querySelectorAll('button:not([disabled])')];
+  if(!controls.length)return;
+  const first=controls[0],last=controls[controls.length-1];
+  if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+  else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+ }
+});
 document.getElementById('paragraph-close').addEventListener('click',()=>window.SitePages?.closeParagraph?.());
 document.addEventListener('site:languagechange',()=>{updateDirection();if(elements.page.classList.contains('open'))elements.action.textContent=getActionLabel(entryMode)});
 loadSettings();
