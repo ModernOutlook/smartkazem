@@ -1,4 +1,4 @@
-/* Provider-agnostic OpenAI-compatible client. Connection histories remain local to this browser. */
+/* Provider-agnostic OpenAI-compatible client. API credentials remain in runtime memory only. */
 (function(){'use strict';
 
 const DEFAULTS = Object.freeze({
@@ -25,10 +25,12 @@ const PRESET_CONNECTIONS = Object.freeze([
 ]);
 
 const HISTORY_KEYS = Object.freeze({
-  apiKey: 'pgm_apiKey_history',
   baseUrl: 'pgm_baseUrl_history',
   model: 'pgm_model_history'
 });
+const CONNECTION_MODE_KEY = 'pgm_connection_mode';
+let runtimeApiKey = '';
+let connectionMode = 'direct';
 const MAX_HISTORY = 12;
 const REQUEST_TIMEOUT_MS = 30000;
 const MAX_ATTEMPTS = 3;
@@ -82,9 +84,8 @@ function getSettings(){
     return {
       baseUrl:normalizeBaseUrl(localStorage.getItem('pgm_baseUrl')||DEFAULTS.baseUrl),
       model:localStorage.getItem('pgm_model')||DEFAULTS.model,
-      apiKey:localStorage.getItem('pgm_apiKey')||'',
+      apiKey:runtimeApiKey,
       history:{
-        apiKey:readHistory(HISTORY_KEYS.apiKey),
         baseUrl:readHistory(HISTORY_KEYS.baseUrl),
         model:readHistory(HISTORY_KEYS.model)
       }
@@ -92,8 +93,8 @@ function getSettings(){
   }catch(_){
     return {
       ...DEFAULTS,
-      apiKey:'',
-      history:{apiKey:[],baseUrl:[DEFAULTS.baseUrl],model:[DEFAULTS.model]}
+      apiKey:runtimeApiKey,
+      history:{baseUrl:[DEFAULTS.baseUrl],model:[DEFAULTS.model]}
     };
   }
 }
@@ -106,13 +107,12 @@ function saveSettings(settings){
   try{
     localStorage.setItem('pgm_baseUrl',baseUrl);
     localStorage.setItem('pgm_model',model);
-    if(apiKey)localStorage.setItem('pgm_apiKey',apiKey);
-    else localStorage.removeItem('pgm_apiKey');
+    runtimeApiKey=apiKey;
   }catch(_){}
 
   rememberValue(HISTORY_KEYS.baseUrl,baseUrl);
   rememberValue(HISTORY_KEYS.model,model);
-  if(apiKey)rememberValue(HISTORY_KEYS.apiKey,apiKey);
+  runtimeApiKey=apiKey;
 }
 
 async function request(url,init){
@@ -162,12 +162,31 @@ async function complete(messages,options={}){
   }catch(_){throw new Error('مدل پاسخ JSON معتبر برنگرداند.')}
 }
 
+async function checkConnection(settings={}){
+  const baseUrl=normalizeBaseUrl(settings.baseUrl||DEFAULTS.baseUrl);
+  const apiKey=String(settings.apiKey||runtimeApiKey).trim();
+  const model=String(settings.model||DEFAULTS.model).trim();
+  if(!apiKey)return {ok:false,variant:'auth_failed'};
+  try{
+    const res=await request(baseUrl+'/models',{method:'GET',headers:{Authorization:'Bearer '+apiKey}});
+    return {ok:res.ok,variant:res.ok?'connected':'network_failed'};
+  }catch(error){
+    if(/HTTPS|نشانی/.test(error.message||''))return {ok:false,variant:'insecure_transport'};
+    if(/401|403/.test(error.message||''))return {ok:false,variant:'auth_failed'};
+    return {ok:false,variant:'network_failed'};
+  }
+}
+function setConnectionMode(mode){connectionMode=mode==='proxy'?'proxy':'direct';try{localStorage.setItem(CONNECTION_MODE_KEY,connectionMode)}catch(_){} }
+function getConnectionMode(){try{return localStorage.getItem(CONNECTION_MODE_KEY)==='proxy'?'proxy':connectionMode}catch(_){return connectionMode}}
 window.ParagraphLLM=Object.freeze({
   DEFAULTS,
   PRESET_CONNECTIONS,
   REQUEST_TIMEOUT_MS,
   getSettings,
   saveSettings,
+  checkConnection,
+  setConnectionMode,
+  getConnectionMode,
   complete
 });
 })();

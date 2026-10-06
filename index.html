@@ -17,6 +17,7 @@
 <link rel="stylesheet" href="ui/shared/layout-spec.css">
 <link rel="stylesheet" href="ui/mobile/mobile.css">
 <link rel="stylesheet" href="css/desktop.css">
+<link rel="stylesheet" href="css/paragraph-connection.css">
 <script src="audio-engine.js"></script>
 <script src="ui/bootstrap.js" defer></script>
 </head>
@@ -204,19 +205,27 @@
         <div id="pm-judgment-popover" class="pm-judgment-popover" hidden></div>
       </section>
 
-      <section class="pm-panel pm-settings" id="paragraph-settings">
-        <button id="paragraph-settings-toggle" class="pm-settings-toggle" type="button" data-i18n="paragraphMachine.connectionSettings">تنظیمات اتصال</button>
-        <div class="pm-settings-body">
-          <label for="paragraph-api-key" data-i18n="paragraphMachine.apiKey">کلید API</label>
-          <input id="paragraph-api-key" type="password" list="paragraph-api-key-history" autocomplete="off">
-          <datalist id="paragraph-api-key-history"></datalist>
-          <label for="paragraph-base-url" data-i18n="paragraphMachine.baseUrl">نشانی سرویس</label>
-          <input id="paragraph-base-url" type="url" list="paragraph-base-url-history">
-          <datalist id="paragraph-base-url-history"></datalist>
-          <label for="paragraph-model" data-i18n="paragraphMachine.model">مدل</label>
-          <input id="paragraph-model" type="text" list="paragraph-model-history">
-          <datalist id="paragraph-model-history"></datalist>
-          <small data-i18n="paragraphMachine.localOnly">تنظیمات اتصال پس از اجرای موفق ماشین در همین مرورگر نگهداری می‌شوند.</small>
+      <section class="paragraph-connection" id="paragraph-connection" data-state="idle" aria-label="تنظیمات اتصال">
+        <div class="pc-layout">
+          <div class="pc-feed">
+            <div class="pc-input-wrap"><input id="paragraph-api-key" class="pc-input" type="password" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="API Key"><button id="paragraph-key-toggle" class="pc-eye" type="button" aria-label="نمایش کلید API" aria-pressed="false">◉</button></div>
+            <div class="pc-input-wrap"><input id="paragraph-base-url" class="pc-input" type="text" autocomplete="off" aria-label="Base URL"></div>
+          </div>
+          <div class="pc-center" aria-live="polite">
+            <div class="pc-lock" aria-hidden="true">🔒</div><div class="pc-ring"></div><div class="pc-ring r2"></div><div class="pc-ring r3"></div><div class="pc-orbit"></div><div class="pc-core"></div><div class="pc-check" aria-hidden="true">✓</div>
+            <span id="paragraph-connection-status" class="pc-status">idle</span>
+            <button id="paragraph-connect" class="pc-action" type="button" aria-label="اتصال">⬢</button>
+          </div>
+          <div class="pc-feed">
+            <div class="pc-input-wrap"><input id="paragraph-model" class="pc-input" type="text" autocomplete="off" aria-label="Model ID"></div>
+          </div>
+        </div>
+        <div class="pc-footer">
+          <div class="pc-mode" role="group" aria-label="Connection mode">
+            <button type="button" data-connection-mode="direct" class="active">Direct</button>
+            <button type="button" data-connection-mode="proxy">Proxy</button>
+          </div>
+          <div class="pc-note">API key در localStorage ذخیره نمی‌شود.</div>
         </div>
       </section>
       <div id="paragraph-error" class="pm-error" role="alert"></div>
@@ -247,6 +256,7 @@
 <script src="services/translation-bridge.js"></script>
 <script src="adapters/paragraph-workspace.js"></script>
 <script src="js/paragraph-page.js"></script>
+<script src="js/paragraph-connection.js"></script>
 <script src="js/app.js"></script><script src="js/splash.js" defer></script>
 </body>
 </html>
