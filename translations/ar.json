@@ -31,7 +31,13 @@
     "volumeLabel": "مستوى الصوت",
     "resumeFailed": "تعذر تفعيل الصوت تلقائيًا.",
     "shahnameh": "قراءة الشاهنامة",
-    "shahnamehEn": "Shahnameh Reading"
+    "shahnamehEn": "Shahnameh Reading",
+    "accessibility": {
+      "enabled": "تم تفعيل وضع إمكانية الوصول.",
+      "disabled": "تم إيقاف وضع إمكانية الوصول.",
+      "repeat": "انقر نقرًا مزدوجًا لتكرار آخر إعلان صوتي.",
+      "hold": "اضغط مطولًا لإيقاف الكلام مؤقتًا أو متابعته أو تكراره."
+    }
   },
   "meta": {
     "brand": "النظرة الحديثة",
