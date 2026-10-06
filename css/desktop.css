@@ -43,14 +43,6 @@
     height: min(78vh, 900px);
   }
 
-  .info {
-    position: relative;
-    inset: auto;
-    width: 420px;
-    transform: none;
-    text-align: right;
-  }
-
   /* Book reader */
   .book-shell {
     display: grid;
