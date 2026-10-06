@@ -12,3 +12,6 @@ namespace_id = "1001"
   [ratelimits.simple]
   limit = 30
   period = 60
+
+[secrets]
+required = ["OPENROUTER_API_KEY"]
