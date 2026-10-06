@@ -200,7 +200,7 @@
 
   const openPage = Object.keys(ESCAPE_HANDLERS).find((key) => {
     const page = document.getElementById(PAGE_IDS[key]);
-    return page?.style.display === 'block';
+    return page?.classList.contains('is-active');
   });
 
   if (openPage) {
