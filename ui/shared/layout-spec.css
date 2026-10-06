@@ -19,3 +19,58 @@
   --ui-safe-bottom: env(safe-area-inset-bottom, 0px);
   --ui-safe-left: env(safe-area-inset-left, 0px);
 }
+
+/* Shared language-control contract.
+ * Every page keeps the same language control available across viewport modes.
+ * Page-specific themes may style colors, but not the responsive safety contract.
+ */
+.global-lang,
+.lang-switch {
+  position: absolute;
+  z-index: 10000;
+  top: calc(10px + var(--ui-safe-top));
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px;
+  max-width: calc(100vw - 20px);
+  box-sizing: border-box;
+}
+
+.global-lang button,
+.lang-switch button {
+  min-width: 40px;
+  min-height: 36px;
+  flex: 0 1 auto;
+  white-space: nowrap;
+  touch-action: manipulation;
+}
+
+@media (max-width: 1023px) {
+  .global-lang,
+  .lang-switch {
+    top: calc(8px + var(--ui-safe-top));
+    max-width: calc(100vw - 16px);
+  }
+
+  .global-lang button,
+  .lang-switch button {
+    min-width: var(--ui-touch-target);
+    min-height: var(--ui-touch-target);
+  }
+}
+
+@media (max-width: 359px) {
+  .global-lang,
+  .lang-switch {
+    max-width: calc(100vw - 12px);
+  }
+
+  .global-lang button,
+  .lang-switch button {
+    min-width: 42px;
+  }
+}
