@@ -387,3 +387,71 @@
   }
 }
 
+
+/* Possible Mirror: keep the page structurally parallel to Observation 25 on mobile. */
+@media (max-width: 1023px) {
+  .possible-mirror-page {
+    width: 100vw;
+    height: 100dvh;
+    min-width: 320px;
+    max-width: none;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+
+  .possible-mirror-head {
+    top: calc(4% + var(--ui-safe-top));
+    left: calc(4% + var(--ui-safe-left));
+    right: calc(4% + var(--ui-safe-right));
+  }
+
+  .possible-mirror-close {
+    width: var(--ui-touch-target);
+    height: var(--ui-touch-target);
+    min-width: var(--ui-touch-target);
+    min-height: var(--ui-touch-target);
+  }
+
+  .possible-mirror-shell {
+    left: max(4%, var(--ui-safe-left));
+    right: max(4%, var(--ui-safe-right));
+    top: 15%;
+    bottom: max(3%, var(--ui-safe-bottom));
+    min-width: 0;
+  }
+
+  .possible-mirror-tabs {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .possible-mirror-tab {
+    min-height: var(--ui-touch-target);
+  }
+
+  .possible-mirror-body {
+    min-width: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 1023px) {
+  .possible-mirror-head {
+    top: calc(56px + var(--ui-safe-top));
+    left: calc(12px + var(--ui-safe-left));
+    right: calc(12px + var(--ui-safe-right));
+  }
+
+  .possible-mirror-title {
+    min-width: 0;
+    max-width: calc(100% - var(--ui-touch-target) - var(--ui-space-3));
+  }
+
+  .possible-mirror-title strong,
+  .possible-mirror-title span {
+    overflow-wrap: anywhere;
+  }
+}
