@@ -281,6 +281,9 @@ document.getElementById('reference-layer3').addEventListener('click', () => {
 document.getElementById('experience-observation25').addEventListener('click', () => {
   window.location.href = 'observation-25.html';
 });
+document.getElementById('experience-possible-mirror').addEventListener('click', () => {
+  window.location.href = 'possible-mirror.html';
+});
 document.getElementById('experience-detect').addEventListener('click', () => PageNavigation.openParagraph('experience'));
 document.getElementById('reference-match').addEventListener('click', () => PageNavigation.openParagraph('reference'));
 

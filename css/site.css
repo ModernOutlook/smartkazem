@@ -590,3 +590,71 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
 .page.book-page.is-active {
   display: block;
 }
+
+/* ===== Possible Mirror — attached Persian literary page ===== */
+.experience-actions{grid-template-columns:repeat(3,minmax(0,1fr)}
+.possible-mirror-page{
+  width:min(100vw,75vh);height:min(133.333333vw,100vh);aspect-ratio:3/4;
+  position:relative;overflow:hidden;color:#fff;
+  background:
+    radial-gradient(ellipse at 48% 14%,rgba(213,164,255,.68),transparent 27%),
+    radial-gradient(ellipse at 22% 62%,rgba(72,205,255,.34),transparent 30%),
+    radial-gradient(ellipse at 82% 65%,rgba(117,45,207,.58),transparent 34%),
+    linear-gradient(180deg,#08000f 0%,#24103e 39%,#4e2580 68%,#b8a0d9 100%);
+  box-shadow:0 0 0 1px rgba(219,187,255,.18),0 30px 100px rgba(0,0,0,.9);
+}
+.possible-mirror-page::before{
+  content:"";position:absolute;inset:0;pointer-events:none;opacity:.78;
+  background:
+    radial-gradient(circle at 8% 12%,#fff 0 1px,transparent 2px),
+    radial-gradient(circle at 29% 22%,#ead4ff 0 1px,transparent 2px),
+    radial-gradient(circle at 70% 10%,#fff 0 1px,transparent 2px),
+    radial-gradient(circle at 92% 34%,#e8caff 0 1px,transparent 2px);
+  background-size:131px 149px,157px 137px,173px 151px,143px 163px;
+}
+.possible-mirror-page::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 42%,transparent 0 23%,rgba(242,213,255,.08) 23.4% 24%,transparent 24.4% 36%,rgba(129,218,255,.08) 36.4% 37%,transparent 37.4%),
+    linear-gradient(90deg,transparent 49.8%,rgba(255,255,255,.13) 50%,transparent 50.2%);
+}
+.possible-mirror-scene{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.possible-mirror-ring{position:absolute;border:2px solid rgba(226,190,255,.62);border-radius:50%;box-shadow:0 0 16px rgba(184,108,255,.48),inset 0 0 12px rgba(151,210,255,.14)}
+.possible-mirror-ring.r1{right:-9%;top:12%;width:69%;height:19%;transform:rotate(-10deg)}
+.possible-mirror-ring.r2{left:-14%;top:31%;width:75%;height:17%;transform:rotate(8deg)}
+.possible-mirror-ring.r3{right:1%;top:53%;width:63%;height:15%;transform:rotate(-6deg)}
+.possible-mirror-ring.r4{left:5%;top:71%;width:78%;height:14%;transform:rotate(5deg)}
+.possible-mirror-river{position:absolute;left:42%;top:0;width:16%;height:100%;background:linear-gradient(180deg,rgba(255,235,255,.02),rgba(199,130,255,.14) 42%,rgba(74,189,255,.24) 74%,transparent);filter:blur(6px);transform:skewX(8deg)}
+.possible-mirror-island{position:absolute;background:linear-gradient(180deg,#62467a,#251536 60%,#0c0711);clip-path:polygon(0 17%,100% 0,91% 64%,70% 76%,59% 100%,37% 82%,14% 90%);box-shadow:0 15px 35px rgba(0,0,0,.5)}
+.possible-mirror-island.i1{right:5%;top:34%;width:34%;height:25%}
+.possible-mirror-island.i2{left:5%;top:52%;width:29%;height:22%}
+.possible-mirror-island.i3{left:37%;top:68%;width:27%;height:18%}
+.possible-mirror-reflection{position:absolute;left:50%;top:18%;width:2px;height:48%;background:linear-gradient(180deg,transparent,#f2dcff,#77d8ff,transparent);box-shadow:0 0 20px #d48cff;transform:scaleX(-1)}
+.possible-mirror-head{position:absolute;z-index:10;top:5%;left:5%;right:5%;display:flex;align-items:center;justify-content:space-between;direction:rtl}
+.possible-mirror-title strong{display:block;font-size:clamp(.98rem,3.6vw,1.4rem);text-shadow:0 2px 12px #000}
+.possible-mirror-title span{display:block;font-size:.62rem;opacity:.64;direction:rtl}
+.possible-mirror-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(231,205,255,.45);background:rgba(15,0,30,.5);color:#fff;cursor:pointer}
+.possible-mirror-shell{position:absolute;z-index:9;left:5%;right:5%;top:16%;bottom:5%;display:flex;flex-direction:column;min-height:0}
+.possible-mirror-tabs{display:flex;gap:5px;overflow-x:auto;flex:0 0 auto;padding:9px;background:rgba(15,2,28,.62);border:1px solid rgba(226,190,255,.2);border-radius:12px 12px 0 0;direction:rtl;backdrop-filter:blur(10px)}
+.possible-mirror-tabs::-webkit-scrollbar{height:4px}.possible-mirror-tabs::-webkit-scrollbar-thumb{background:rgba(207,156,255,.5);border-radius:5px}
+.possible-mirror-tab{flex:0 0 auto;border:1px solid rgba(226,190,255,.22);background:rgba(255,255,255,.055);color:rgba(255,242,255,.76);padding:6px 9px;border-radius:7px;font-size:.58rem;font-weight:800;cursor:pointer}
+.possible-mirror-tab.active{background:rgba(128,74,190,.72);color:#fff;border-color:rgba(246,221,255,.7);box-shadow:0 0 12px rgba(181,111,255,.28)}
+.possible-mirror-body{flex:1;min-height:0;overflow:auto;padding:18px 16px 28px;background:rgba(10,2,18,.74);border:1px solid rgba(226,190,255,.2);border-top:0;border-radius:0 0 12px 12px;backdrop-filter:blur(12px);direction:rtl}
+.possible-mirror-section{display:none}.possible-mirror-section.active{display:block}
+.possible-mirror-section h1{font-size:1.2rem;line-height:1.55;margin:0 0 10px;color:#fff}
+.possible-mirror-section .section-number{display:inline-flex;min-width:32px;height:32px;align-items:center;justify-content:center;margin-left:7px;border:1px solid rgba(226,190,255,.42);border-radius:50%;color:#e5c5ff;background:rgba(128,74,190,.18);font-size:.7rem}
+.possible-mirror-section .section-note{margin:12px 0 0;color:rgba(245,228,255,.64);font-size:.75rem;line-height:1.9}
+.possible-mirror-content{margin-top:15px}
+.possible-mirror-content p{margin:0 0 14px;color:rgba(250,244,255,.9);font-size:.8rem;line-height:2.05;text-align:justify}
+.possible-mirror-empty{padding:28px 8px;text-align:center;color:rgba(245,228,255,.6);font-size:.78rem;line-height:2}
+@media(max-width:520px){
+  .experience-actions{grid-template-columns:1fr;bottom:4%}
+  .experience-actions .experience-action{min-height:58px}
+  .possible-mirror-page{width:100vw;height:100vh}
+  .possible-mirror-shell{left:4%;right:4%;top:15%;bottom:3%}
+  .possible-mirror-title strong{font-size:1rem}
+  .possible-mirror-tab{font-size:.55rem;padding:6px 8px}
+  .possible-mirror-body{padding:16px 13px 24px}
+  .possible-mirror-content p{font-size:.76rem}
+}
+@media(min-width:700px){.possible-mirror-page{border-radius:4px}.possible-mirror-shell{max-width:600px;margin:auto}}
