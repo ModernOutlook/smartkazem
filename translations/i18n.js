@@ -107,6 +107,24 @@
     }
 
     const data = await response.json();
+
+    // Chapter-specific catalogs are layered onto the base site catalog.
+    // This keeps the global i18n runtime as the single language switcher while
+    // allowing long-form chapter content to live in dedicated translation files.
+    const pageKey = document.querySelector('meta[name="i18n-page"]')?.content;
+    if (pageKey === 'emergence') {
+      const chapterResponse = await fetch(
+        'translations/emergence.json',
+        { cache: 'no-store' }
+      );
+      if (!chapterResponse.ok) {
+        throw new Error('Chapter translation catalog unavailable: emergence');
+      }
+      const chapter = await chapterResponse.json();
+      data.chapters = data.chapters || {};
+      data.chapters.emergence = chapter;
+    }
+
     catalogs[normalizedLanguage] = data;
     return data;
   }
