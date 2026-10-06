@@ -24,24 +24,84 @@ jobs:
           node-version: 22
 
 
-      - name: Diagnose content/emergence-2.js
+      - name: Diagnose adapters/paragraph-workspace.js
         continue-on-error: true
-        run: node --check content/emergence-2.js
-      - name: Diagnose content/emergence.js
-        continue-on-error: true
-        run: node --check content/emergence.js
-      - name: Diagnose js/emergence-2-page.js
-        continue-on-error: true
-        run: node --check js/emergence-2-page.js
-      - name: Diagnose js/possible-mirror-page.js
-        continue-on-error: true
-        run: node --check js/possible-mirror-page.js
+        run: node --check "adapters/paragraph-workspace.js"
       - name: Diagnose audio-engine.js
         continue-on-error: true
-        run: node --check audio-engine.js
+        run: node --check "audio-engine.js"
+      - name: Diagnose content/echo-layer3.js
+        continue-on-error: true
+        run: node --check "content/echo-layer3.js"
+      - name: Diagnose content/emergence-2.js
+        continue-on-error: true
+        run: node --check "content/emergence-2.js"
+      - name: Diagnose content/emergence.js
+        continue-on-error: true
+        run: node --check "content/emergence.js"
+      - name: Diagnose content/forgers.js
+        continue-on-error: true
+        run: node --check "content/forgers.js"
+      - name: Diagnose content/human-machines.js
+        continue-on-error: true
+        run: node --check "content/human-machines.js"
+      - name: Diagnose content/shahnameh-series.js
+        continue-on-error: true
+        run: node --check "content/shahnameh-series.js"
+      - name: Diagnose engine/paragraph-engine.js
+        continue-on-error: true
+        run: node --check "engine/paragraph-engine.js"
+      - name: Diagnose js/app.js
+        continue-on-error: true
+        run: node --check "js/app.js"
+      - name: Diagnose js/books.js
+        continue-on-error: true
+        run: node --check "js/books.js"
+      - name: Diagnose js/emergence-2-page.js
+        continue-on-error: true
+        run: node --check "js/emergence-2-page.js"
+      - name: Diagnose js/home-realm-info.js
+        continue-on-error: true
+        run: node --check "js/home-realm-info.js"
+      - name: Diagnose js/observation25-page.js
+        continue-on-error: true
+        run: node --check "js/observation25-page.js"
+      - name: Diagnose js/pages.js
+        continue-on-error: true
+        run: node --check "js/pages.js"
+      - name: Diagnose js/paragraph-connection.js
+        continue-on-error: true
+        run: node --check "js/paragraph-connection.js"
+      - name: Diagnose js/paragraph-page.js
+        continue-on-error: true
+        run: node --check "js/paragraph-page.js"
+      - name: Diagnose js/possible-mirror-page.js
+        continue-on-error: true
+        run: node --check "js/possible-mirror-page.js"
+      - name: Diagnose js/reading-page.js
+        continue-on-error: true
+        run: node --check "js/reading-page.js"
+      - name: Diagnose js/shahnameh-series-page.js
+        continue-on-error: true
+        run: node --check "js/shahnameh-series-page.js"
+      - name: Diagnose js/splash.js
+        continue-on-error: true
+        run: node --check "js/splash.js"
+      - name: Diagnose proxy/worker.js
+        continue-on-error: true
+        run: node --check "proxy/worker.js"
+      - name: Diagnose services/llm-client.js
+        continue-on-error: true
+        run: node --check "services/llm-client.js"
+      - name: Diagnose services/translation-bridge.js
+        continue-on-error: true
+        run: node --check "services/translation-bridge.js"
       - name: Diagnose translations/i18n.js
         continue-on-error: true
-        run: node --check translations/i18n.js
+        run: node --check "translations/i18n.js"
+      - name: Diagnose ui/bootstrap.js
+        continue-on-error: true
+        run: node --check "ui/bootstrap.js"
       - name: Check JavaScript syntax
         run: |
           find . -type f -name '*.js' -not -path './.git/*' -print0 | xargs -0 -n1 node --check
