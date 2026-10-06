@@ -22,22 +22,17 @@
 
 /* Shared language-control contract.
  * Every page keeps the same language control available across viewport modes.
- * Page-specific themes may style colors, but not the responsive safety contract.
+ * Page-specific layouts own the control's exact position and visual theme.
  */
 .global-lang,
 .lang-switch {
-  position: absolute;
-  z-index: 10000;
-  top: calc(10px + var(--ui-safe-top));
-  left: 50%;
-  transform: translateX(-50%);
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
   gap: 2px;
   max-width: calc(100vw - 20px);
-  box-sizing: border-box;
 }
 
 .global-lang button,
@@ -52,7 +47,6 @@
 @media (max-width: 1023px) {
   .global-lang,
   .lang-switch {
-    top: calc(8px + var(--ui-safe-top));
     max-width: calc(100vw - 16px);
   }
 
