@@ -12,6 +12,7 @@
   const info = document.getElementById('info');
   const infoTitle = document.getElementById('info-title');
   const infoText = document.getElementById('info-text');
+  const realms = [...document.querySelectorAll('.realm')];
 
   let activeId = 'structure';
 
@@ -22,6 +23,7 @@
   function render(id = activeId, show = true) {
     if (!isRealm(id)) id = activeId;
     activeId = id;
+    realms.forEach((item) => item.classList.toggle('selected', item.dataset.id === id));
 
     const realm = window.SiteI18n?.getCatalog?.()?.home?.realms?.[id];
     if (!realm) return;
