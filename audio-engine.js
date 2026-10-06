@@ -151,7 +151,7 @@
   }
   function handleAccessibilityKeyboard(event){
     if(!state.accessibility)return;
-    const keys=['ArrowDown','ArrowUp','Home','End','Enter',' ','Escape'];
+    const keys=['ArrowDown','ArrowUp','ArrowLeft','ArrowRight','Home','End','Enter',' ','Escape'];
     if(!keys.includes(event.key))return;
     syncNavigation();
     if(event.key==='Escape'){
