@@ -46,7 +46,7 @@ function openParagraphPage(kind){
  elements.source.textContent=getSourceLabel(kind);elements.input.value='';elements.primaryOutput.replaceChildren();elements.output.replaceChildren();elements.error.textContent='';
  currentResults=[];DOMAIN_ORDER.forEach(d=>delete userJudgments[d]);clearRealmState();closeJudgmentPopover();
  elements.choices.forEach(c=>{c.classList.toggle('is-judgment-input',!ref);c.classList.toggle('is-result-output',ref)});
- loadSettings();updateDirection();if(ref){generateRandomTargetJudgments();generateRecognitionParagraph()}else{generateRandomTargetJudgments()}updateActionState();
+ loadSettings();updateDirection();if(ref){generateRandomTargetJudgments()}else{DOMAIN_ORDER.forEach(d=>delete userJudgments[d]);clearRealmState();generateRecognitionParagraph()}updateActionState();
 }
 function closeParagraphPage(){elements.page.classList.remove('open')}
 function renderPrimaryParagraphs(results){elements.primaryOutput.innerHTML=results.map((p,i)=>{const x=window.ParagraphMachineCore.processText(p.text),t=p.displayedText||x.text,e=p.userEvaluation||'',ec=e?' pm-user-'+e:'';return '<article class="pm-primary-card"><div class="pm-primary-index">'+(i+1)+'</div><div class="pm-primary-text'+ec+'">'+escapeHtml(t)+'</div><div class="pm-primary-meta">'+x.finalWordCount+' / 144 '+translate('paragraphMachine.words','کلمه')+' · '+x.finalCharCount+' / 900 '+translate('paragraphMachine.chars','حرف')+'</div></article>'}).join('')}
