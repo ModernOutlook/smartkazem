@@ -5,7 +5,6 @@ if (!data || !Array.isArray(data.episodes)) throw new Error('Emergence II conten
 
 const list = document.getElementById('episode-list');
 const reader = document.getElementById('reader');
-const artFrame = document.getElementById('art-frame');
 const artIndex = document.getElementById('art-index');
 const artCaption = document.getElementById('art-caption');
 const prev = document.getElementById('prev');
@@ -16,25 +15,9 @@ let activeIndex = 0;
 const faNumber = value => String(value).replace(/\d/g, d => '۰۱۲۳۴۵۶۷۸۹'[d]);
 const escapeHtml = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-function renderImage(episode){
-  artFrame.replaceChildren();
-  if (episode.image) {
-    const img=document.createElement('img');
-    img.src=episode.image;
-    img.alt=`تصویر فصل دوم ظهور، قسمت ${faNumber(episode.number)}`;
-    img.loading=episode.number <= 2 ? 'eager' : 'lazy';
-    img.decoding='async';
-    artFrame.appendChild(img);
-  } else {
-    const span=document.createElement('span');
-    span.textContent='تصویر این قسمت هنوز در مخزن محتوا قرار نگرفته است.';
-    artFrame.appendChild(span);
-  }
-}
-
 function renderReader(episode){
   const hasText=episode.paragraphs.length>0;
-  reader.innerHTML=`<header class="reader-head"><div><div class="story-label">فصل دوم ظهور</div><h2>${escapeHtml(episode.title)}</h2><p>قسمت ${faNumber(episode.number)} از ${faNumber(data.total)}</p></div></header><section class="block"><h3>متن قسمت</h3>${hasText ? episode.paragraphs.map(p=>`<p class="prose">${escapeHtml(p)}</p>`).join('') : '<div class="placeholder">متن فارسی این قسمت در مرحلهٔ تکمیل مخزن فارسی افزوده خواهد شد.</div>'}</section>`;
+  reader.innerHTML=`<header class="reader-head"><div><div class="story-label">فصل دوم ظهور</div><h2>${escapeHtml(episode.title)}</h2><p>قسمت ${faNumber(episode.number)} از ${faNumber(data.total)}</p></div></header><section class="block"><h3>متن قسمت</h3>${hasText ? episode.paragraphs.map(p=>`<p class="prose">${escapeHtml(p)}</p>`).join('') : '<div class="placeholder">متن فارسی این قسمت در مرحلهٔ تکمیل مخزن فارسی افزوده خواهد شد.</div>'}</section><div class="navrow reader-nav" aria-label="پیمایش قسمت‌ها"><button class="btn" id="prev-bottom" aria-label="رفتن به قسمت پیشین">پیشین</button><button class="btn" id="next-bottom" aria-label="رفتن به قسمت پسین">پسین</button></div>`;document.getElementById("prev-bottom")?.addEventListener("click",()=>select(activeIndex-1));document.getElementById("next-bottom")?.addEventListener("click",()=>select(activeIndex+1));
 }
 
 function render(){
@@ -47,7 +30,6 @@ function render(){
   });
   artIndex.textContent=`${faNumber(episode.number).padStart(2,'۰')} / ${faNumber(data.total)}`;
   artCaption.textContent=episode.title;
-  renderImage(episode);
   renderReader(episode);
   prev.disabled=activeIndex===0;
   next.disabled=activeIndex===data.episodes.length-1;
