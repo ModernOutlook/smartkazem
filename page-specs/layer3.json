@@ -1,0 +1,57 @@
+{
+  "schema": "page-completion/v1",
+  "page": "layer3",
+  "source": {
+    "path": "content/echo-layer3.js",
+    "authority": "fa"
+  },
+  "translations": {
+    "path": "translations/echo-layer3.json",
+    "languages": [
+      "en",
+      "ar",
+      "zh"
+    ],
+    "derived_from": "source"
+  },
+  "runtime": {
+    "html": "echo-layer3.html",
+    "i18n": "translations/i18n.js",
+    "controller": "content/echo-layer3.js"
+  },
+  "accessibility": {
+    "required": true,
+    "features": [
+      "semantic-chapter-and-part-navigation",
+      "aria-current-active-item",
+      "aria-controls-reader",
+      "dynamic-reader-region",
+      "accessible-reader-heading",
+      "explicit-previous-next-controls",
+      "explicit-close-accessible-name",
+      "shared-site-language-controls",
+      "language-aware-reader-content",
+      "keyboard-arrow-navigation",
+      "keyboard-home-end-navigation",
+      "keyboard-focus-to-reader-after-navigation",
+      "visible-focus",
+      "reduced-motion",
+      "rtl-ltr",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
+    ],
+    "verification": [
+      "source-inspection",
+      "translation-cardinality",
+      "json-validity",
+      "javascript-syntax",
+      "keyboard-navigation-contract",
+      "screen-reader-semantics",
+      "rtl-ltr-contract",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
+    ]
+  }
+}
