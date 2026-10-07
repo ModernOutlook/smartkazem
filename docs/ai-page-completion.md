@@ -100,7 +100,6 @@ Accessibility is derived from the actual Persian/translation content model and t
 At minimum, check:
 
 - semantic landmarks and headings
-- a keyboard skip link to the main reading content
 - native buttons/links for interactive controls
 - meaningful accessible names for every control
 - `aria-current` or equivalent state for the active item

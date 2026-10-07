@@ -48,12 +48,27 @@
   .global-lang,
   .lang-switch {
     max-width: calc(100vw - 16px);
+    border-radius: 20px !important;
   }
 
   .global-lang button,
   .lang-switch button {
     min-width: var(--ui-touch-target);
     min-height: var(--ui-touch-target);
+    border-radius: 16px !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .global-lang,
+  .lang-switch {
+    border-radius: 8px !important;
+  }
+
+  .global-lang button,
+  .lang-switch button {
+    min-height: 36px;
+    border-radius: 8px;
   }
 }
 
@@ -67,4 +82,53 @@
   .lang-switch button {
     min-width: 42px;
   }
+}
+
+/* Direction-change viewport safety.
+ * Language switching changes document direction globally. Keep the physical
+ * viewport/shell bounded while allowing inner components to honor RTL/LTR.
+ */
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.app,
+.page {
+  max-width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+.app > *,
+.page > *,
+.book-shell > *,
+.paragraph-workspace > *,
+.observation25-shell > *,
+.possible-mirror-shell > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.global-lang,
+.lang-switch {
+  flex-shrink: 1;
+  min-width: 0;
+  max-width: calc(100vw - 16px);
+}
+
+.global-lang button,
+.lang-switch button {
+  min-width: 0;
+  max-width: 100%;
+  flex-shrink: 1;
+  overflow-wrap: anywhere;
+}
+
+[dir="rtl"],
+[dir="ltr"] {
+  overflow-wrap: anywhere;
 }

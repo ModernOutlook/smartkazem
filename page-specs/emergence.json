@@ -22,7 +22,7 @@
   "accessibility": {
     "required": true,
     "features": [
-      "skip-link",
+      
       "semantic-episode-navigation",
       "aria-current-active-item",
       "aria-controls-reader",
