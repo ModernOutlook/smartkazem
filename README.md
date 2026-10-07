@@ -295,3 +295,29 @@ For a new page, ChatGPT should inspect the repository first and request only mis
 The **Persian source remains authoritative**. Translation cardinality and ordering must match it. Accessibility is not a separate content source; it is a contract derived from the actual translated content and controls. The reference implementation is `emergence`.
 
 This protocol does not replace page-specific inspection. It makes the expected relationship explicit and repeatable.
+
+
+## 20. Unified visual-family system
+
+The five realms form one visual composition from the outer black perimeter toward the white center:
+
+1. **S — ساختار تالار:** deep petroleum blue
+2. **T — تداوم عالم:** matte golden yellow
+3. **E — قلمرو تجربه:** cosmic purple
+4. **R — مرجع تقلید:** dark coral red
+5. **C — اقتصاد سهم:** emerald green
+
+The palette order is invariant and is part of the site's visual identity. A page opened from a realm should inherit that realm's dominant color family, while it may develop its own visual language from the parent realm's background motifs. Child surfaces are therefore **related, not identical**.
+
+### Visual design rules
+- Shared page grammar: restrained header, glass-like control surfaces, soft depth, fine borders, controlled glow, strong negative space, and a common motion language.
+- Realm identity: preserve the parent realm's dominant color and atmospheric character.
+- Child identity: reuse one or more motifs from the parent realm's background, then reinterpret them rather than copying the parent scene literally.
+- Visual hierarchy: atmosphere → title/navigation → content surface → actions.
+- The Reference realm uses an architectural/concentric vocabulary derived from its coral-red identity; it should not be visually reduced to the simpler legacy treatment.
+- Paragraph Machine remains a deliberately exceptional machine surface. Its stronger visual language is allowed because it is a functional workspace, not a normal child page.
+- Shahnameh remains a flagship visual surface; its image-rich composition is not a baseline that every page must imitate.
+- Visual refinement must not alter navigation, state, content, i18n, accessibility semantics, service boundaries, or business rules.
+
+### Maintenance rule
+When improving a visual surface, inspect both the owning page and its parent realm. Prefer a presentation-only CSS change when structure and behavior already satisfy the contract. New visual motifs should belong to the realm family rather than becoming an unrelated sixth design language.
