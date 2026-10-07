@@ -58,23 +58,30 @@ window.EchoLayer3Content={
  "use strict";
  const C=window.EchoLayer3Content;
  const $=id=>document.getElementById(id);
- const title=$("head-title"),sub=$("head-sub"),chapters=$("chapters"),parts=$("parts"),reader=$("reader"),tocLabel=$("toc-label");
+ const title=$("head-title"),sub=$("head-sub"),chapters=$("chapters"),parts=$("parts"),reader=$("reader"),tocLabel=$("toc-label"),prev=$("prev-part"),next=$("next-part");
  let activeChapter=0,activePart=0;
 
  function catalog(){return window.SiteI18n?.getCatalog?.()||{}}
  function layer(){return catalog().pages?.layer3||{}}
- function getPath(obj,path,fallback){
-   return path.split(".").reduce((v,k)=>v==null?undefined:v[k],obj)??fallback;
+ function chapterCatalog(){return catalog().chapters?.layer3||{}}
+ function language(){return window.SiteI18n?.getLanguage?.()||"fa"}
+ function rtl(){return ["fa","ar"].includes(language())}
+ function partData(ch,pi){
+   const translated=chapterCatalog().parts?.[pi];
+   return translated||null;
+ }
+ function focusReader(){
+   requestAnimationFrame(()=>reader.focus({preventScroll:true}));
  }
  function render(){
-   const d=layer(), source=C;
-   document.documentElement.lang=window.SiteI18n?.getLanguage?.()||"fa";
-   document.documentElement.dir=(document.documentElement.lang==="fa"||document.documentElement.lang==="ar")?"rtl":"ltr";
-   document.body.dataset.mode=document.documentElement.lang;
-   title.textContent=d.title||"پژواک لایه سوم";
+   const lang=language(),d=layer(),source=C,book=chapterCatalog();
+   document.documentElement.lang=lang;
+   document.documentElement.dir=rtl()?"rtl":"ltr";
+   document.body.dataset.mode=lang;
+   title.textContent=d.title||book.title?.[lang]||"پژواک لایه سوم";
    sub.textContent=d.subtitle||"";
    $("close").setAttribute("aria-label",d.close||"بازگشت");
-   tocLabel.textContent=document.documentElement.lang==="en"?"Contents":document.documentElement.lang==="zh"?"目录":document.documentElement.lang==="ar"?"الفهرس":"فهرست";
+   tocLabel.textContent=lang==="en"?"Contents":lang==="zh"?"目录":lang==="ar"?"الفهرس":"فهرست";
    chapters.innerHTML="";
    parts.innerHTML="";
    reader.innerHTML="";
@@ -85,7 +92,9 @@ window.EchoLayer3Content={
      b.type="button";
      b.textContent=d[ch.titleKey]||ch.id;
      b.disabled=!ch.parts.length;
-     b.addEventListener("click",()=>{activeChapter=ci;activePart=0;render()});
+     b.setAttribute("aria-current",ci===activeChapter?"true":"false");
+     b.setAttribute("aria-controls","reader");
+     b.addEventListener("click",()=>{activeChapter=ci;activePart=0;render();focusReader()});
      chapters.appendChild(b);
    });
 
@@ -93,42 +102,78 @@ window.EchoLayer3Content={
    if(!ch)return;
    const names=d.sections||[];
    ch.parts.forEach((p,pi)=>{
+     const t=partData(ch,pi);
+     const label=t?.title?.[lang]||names[pi]||p.titleFallback;
      const b=document.createElement("button");
      b.className="part"+(pi===activePart?" active":"");
      b.type="button";
-     b.textContent=(pi+1)+" . "+(names[pi]||p.titleFallback);
-     b.addEventListener("click",()=>{activePart=pi;renderPart()});
+     b.textContent=(pi+1)+" . "+label;
+     b.setAttribute("aria-current",pi===activePart?"true":"false");
+     b.setAttribute("aria-controls","reader");
+     b.setAttribute("aria-label",label);
+     b.addEventListener("click",()=>{activePart=pi;renderPart();focusReader()});
      parts.appendChild(b);
    });
 
    if(!ch.parts.length){
      const n=document.createElement("div");
      n.className="notice";
-     n.textContent=document.documentElement.lang==="en"?"This chapter has not been added yet.":document.documentElement.lang==="zh"?"本章尚未加入。":document.documentElement.lang==="ar"?"لم يُضف هذا الفصل بعد.":"این فصل هنوز به مخزن افزوده نشده است.";
+     n.textContent=lang==="en"?"This chapter has not been added yet.":lang==="zh"?"本章尚未加入。":lang==="ar"?"لم يُضف هذا الفصل بعد.":"این فصل هنوز به مخزن افزوده نشده است.";
      reader.appendChild(n);
      return;
    }
    renderPart();
  }
  function renderPart(){
-   const d=layer(),ch=C.chapters[activeChapter],p=ch.parts[activePart];
+   const lang=language(),d=layer(),book=chapterCatalog(),ch=C.chapters[activeChapter],p=ch.parts[activePart],t=partData(ch,activePart);
    if(!p)return;
-   parts.querySelectorAll(".part").forEach((b,i)=>b.classList.toggle("active",i===activePart));
+   parts.querySelectorAll(".part").forEach((b,i)=>{
+     b.classList.toggle("active",i===activePart);
+     b.setAttribute("aria-current",i===activePart?"true":"false");
+   });
    reader.innerHTML="";
    const top=document.createElement("div");top.className="reader-head";
-   const h=document.createElement("h1");h.textContent=d.title||"پژواک لایه سوم";
-   const sp=document.createElement("p");sp.textContent=(d[ch.titleKey]||"")+" — "+((d.sections||[])[activePart]||p.titleFallback);
+   const h=document.createElement("h1");h.id="reader-title";h.textContent=d.title||book.title?.[lang]||"پژواک لایه سوم";
+   const sp=document.createElement("p");sp.textContent=(d[ch.titleKey]||"")+" — "+(t?.title?.[lang]||((d.sections||[])[activePart]||p.titleFallback));
    top.append(h,sp);reader.appendChild(top);
-   const story=document.createElement("section");story.className="story";story.id=p.id;story.dir="rtl";story.lang="fa";
-   const h2=document.createElement("h2");h2.textContent=((activePart+1)+" . "+((d.sections||[])[activePart]||p.titleFallback));
+   const story=document.createElement("section");story.className="story";story.id=p.id;story.lang=lang;story.dir=rtl()?"rtl":"ltr";story.setAttribute("aria-labelledby","reader-part-title");
+   const h2=document.createElement("h2");h2.id="reader-part-title";h2.textContent=((activePart+1)+" . "+(t?.title?.[lang]||((d.sections||[])[activePart]||p.titleFallback)));
    story.appendChild(h2);
-   p.text.forEach(text=>{
+   const paragraphs=t?.paragraphs?.[lang]||p.text;
+   paragraphs.forEach(text=>{
      const para=document.createElement("p");para.textContent=text;story.appendChild(para);
    });
    reader.appendChild(story);
+   prev.disabled=activePart===0;
+   next.disabled=activePart===ch.parts.length-1;
+   prev.setAttribute("aria-label",lang==="en"?"Previous part":lang==="ar"?"الجزء السابق":lang==="zh"?"上一部分":"بخش پیشین");
+   next.setAttribute("aria-label",lang==="en"?"Next part":lang==="ar"?"الجزء التالي":lang==="zh"?"下一部分":"بخش پسین");
  }
- document.addEventListener("site:languagechange",render);
+ function move(delta){
+   const ch=C.chapters[activeChapter];
+   const nextIndex=activePart+delta;
+   if(!ch?.parts[nextIndex])return;
+   activePart=nextIndex;
+   renderPart();
+   focusReader();
+ }
+ prev.addEventListener("click",()=>move(-1));
+ next.addEventListener("click",()=>move(1));
+ document.addEventListener("keydown",event=>{
+   if(event.altKey||event.ctrlKey||event.metaKey)return;
+   const target=event.target;
+   if(target.matches?.("input,textarea,select,[contenteditable='true']"))return;
+   if(event.key==="ArrowLeft"||event.key==="ArrowRight"){
+     event.preventDefault();
+     move((rtl()?(event.key==="ArrowLeft"?1:-1):(event.key==="ArrowRight"?1:-1)));
+   }else if(event.key==="Home"){
+     const ch=C.chapters[activeChapter]; if(ch?.parts.length){activePart=0;renderPart();focusReader()}
+   }else if(event.key==="End"){
+     const ch=C.chapters[activeChapter]; if(ch?.parts.length){activePart=ch.parts.length-1;renderPart();focusReader()}
+   }
+ });
+ document.addEventListener("site:languagechange",()=>render());
  document.addEventListener("DOMContentLoaded",render,{once:true});
  if(document.readyState!=="loading")render();
- $("close").addEventListener("click",()=>{if(history.length>1) history.back(); else window.location.href="index.html"});
+ $("close").addEventListener("click",()=>{if(history.length>1)history.back();else window.location.href="index.html"});
 })();
