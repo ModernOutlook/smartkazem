@@ -672,6 +672,71 @@
           "“欢迎你，向导。是时候加入我们了。”"
         ]
       }
+    },
+    {
+      "number": 11,
+      "title": {
+        "fa": "لایه‌های حقیقت",
+        "en": "Layers of Truth",
+        "ar": "طبقات الحقيقة",
+        "zh": "真理的层次"
+      },
+      "paragraphs": {
+        "en": [
+          "The silver wires on Kaveh's head suddenly lit up. Parsa prepared himself for an electrical shock or sharp pain, but instead a flood of understanding rushed into his mind. This was not an attack; it was a sharing.",
+          "He was no longer in the cold power-plant room. Before his eyes appeared the Cosmic Network, but not in the form of the luminous threads he had seen before. This time it was an infinitely complex, layered world.",
+          "Layer One: the Raw Emotion Network—the one Parsa saw: golden threads of love, silver of friendship, red of anger, and blue of sorrow. This layer was a beautiful and dangerous chaos.",
+          "Then his gaze went deeper.",
+          "Layer Two: the Stability Network—beneath that chaos was a network of gray, durable threads. This network was a rigid framework that held personal worlds together and prevented them from colliding and being destroyed. This network had been woven by Apparatus.",
+          "And deeper...",
+          "Layer Three: the Unity Network—in the depths of everything there was only a single, unified white light. It was as though all personal worlds were rooted, in essence, in one source. This layer was still and complete.",
+          "Now Parsa understood. Apparatus's silence was a brutal but necessary attempt to suppress Layer One (raw emotions) so that Layer Two (stability) could be preserved. Whenever emotions erupted in Layer One, they struck Layer Two like a shock and endangered the whole structure. But this control was a tragedy: to preserve stability, they were suffocating life.",
+          "Kaveh said, his voice now resonating in Parsa's mind: \"They don't know. They think they are saving the world. They do not see that by protecting the cage, they are killing the bird.\"",
+          "The gray-clad man, whom Parsa now thought of as the \"Guardian,\" still stood at the entrance. He could see only Layer Two and believed he was carrying out a heroic mission.",
+          "Then a question took root in Parsa's mind, a question that crossed every layer: \"But if Layer Three is true unity, then why is all this suffering and separation necessary? Why must we choose between emotion and stability?\"",
+          "In answer, Kaveh took him to the deepest layer.",
+          "Layer Zero: Pure Creativity—before the white light of unity, there was an absolute \"nothing.\" But this nothing was pure potential. All these layers—emotion, stability, unity—had been created so that something could emerge from that nothing. Suffering, love, separation, and connection were all colors on the canvas of existence, simply so that something could happen.",
+          "Parsa was shocked. Was this entire struggle merely part of a greater performance?",
+          "The Guardian, impatient with the long silence, signaled his agents. They advanced with their crown-like devices.",
+          "Kaveh cried out mentally: \"Now you see? Silence is bad because it limits life. But uncontrolled life destroys structures. And behind all of this is a creative force that cares about none of us; it only wants the story to continue. We are merely characters in a novel...\""
+        ],
+        "ar": [
+          "أضاءت الأسلاك الفضية على رأس كاوه فجأة. استعد بارسا لصدمة كهربائية أو ألم حاد، لكن بدلًا من ذلك اندفع سيل من الإدراك إلى ذهنه. لم يكن هجومًا؛ كان مشاركة.",
+          "لم يعد في غرفة محطة الكهرباء الباردة. ظهرت أمام عينيه شبكة الكون، لكن ليس على هيئة الخيوط المضيئة التي رآها من قبل. كانت هذه المرة عالمًا متعدد الطبقات ومعقدًا بلا نهاية.",
+          "الطبقة الأولى: شبكة المشاعر الخام، تلك التي كان بارسا يراها: خيوط ذهبية للحب، وفضية للصداقة، وحمراء للغضب، وزرقاء للحزن. كانت هذه الطبقة فوضى جميلة وخطيرة.",
+          "ثم تعمقت نظرته.",
+          "الطبقة الثانية: شبكة الاستقرار. تحت تلك الفوضى كانت هناك شبكة من خيوط رمادية ومتينة. كان هذا النظام إطارًا صلبًا يحافظ على العوالم الشخصية متماسكة ويمنعها من الاصطدام والدمار. وكانت أباراتوس هي التي نسجت هذه الشبكة.",
+          "وأعمق...",
+          "الطبقة الثالثة: شبكة الوحدة. في أعماق كل شيء لم يكن هناك سوى نور أبيض واحد متكامل. كأن جميع العوالم الشخصية كانت، في أصلها، متجذرة في مصدر واحد. كانت هذه الطبقة ساكنة ومكتملة.",
+          "الآن فهم بارسا. كان صمت أباراتوس محاولة قاسية لكنها ضرورية لقمع الطبقة الأولى، أي المشاعر الخام، حتى تُحفظ الطبقة الثانية، أي الاستقرار. فكلما انفجرت المشاعر في الطبقة الأولى، أصابت الطبقة الثانية كصدمة وهددت البنية كلها. لكن هذا التحكم كان مأساة: لكي يحافظوا على الاستقرار، كانوا يخنقون الحياة.",
+          "قال كاوه بصوت يتردد الآن في ذهن بارسا: «إنهم لا يعرفون. يظنون أنهم ينقذون العالم. لا يرون أنهم، بحماية القفص، يقتلون الطائر».",
+          "كان الرجل ذو الملابس الرمادية، الذي أصبح بارسا يعرفه باسم «الحارس»، لا يزال واقفًا عند المدخل. لم يكن يرى سوى الطبقة الثانية، وكان يعتقد أنه يؤدي مهمة بطولية.",
+          "ثم نبت سؤال في ذهن بارسا، سؤال عبر كل الطبقات: «لكن إذا كانت الطبقة الثالثة هي الوحدة الحقيقية، فلماذا كل هذا الألم والانفصال ضروري؟ لماذا يجب أن نختار بين الشعور والاستقرار؟»",
+          "وفي الإجابة، أخذ كاوه بارسا إلى أعمق طبقة.",
+          "الطبقة صفر: الإبداع المحض. قبل النور الأبيض للوحدة، كان هناك «عدم» مطلق. لكن هذا العدم كان إمكانًا محضًا. كل هذه الطبقات—المشاعر والاستقرار والوحدة—خُلقت لكي ينشأ شيء من ذلك العدم. كان الألم والحب والانفصال والاتصال كلها ألوانًا على لوحة الوجود، فقط لكي يحدث شيء.",
+          "كان بارسا مصدومًا. هل كان هذا الصراع كله مجرد جزء من عرض أعظم؟",
+          "أشار الحارس، الذي نفد صبره من طول الصمت، إلى عملائه. فتقدموا بأجهزتهم الشبيهة بالتيجان.",
+          "صرخ كاوه في ذهنه: «الآن ترى؟ الصمت سيئ لأنه يحد الحياة. لكن الحياة غير المنضبطة تدمر البنى. وخلف كل هذا توجد قوة خلاقة لا تهتم بأي منا، بل تريد فقط أن تستمر القصة. نحن مجرد شخصيات في رواية...»"
+        ],
+        "zh": [
+          "卡维头上的银色丝线突然亮了起来。帕尔萨本以为会遭遇电击或尖锐的疼痛，然而涌入意识的却是一股理解的洪流。这不是攻击，而是一种共享。",
+          "他已经不在那间冰冷的发电厂房间里。宇宙网络出现在他眼前，但不再是他之前见过的发光丝线。这一次，它是一个无限复杂、层层叠叠的世界。",
+          "第一层：原始情感网络——正是帕尔萨所看到的：金色的爱之丝线、银色的友谊、红色的愤怒，以及蓝色的悲伤。这一层是一种美丽而危险的混沌。",
+          "随后，他的目光继续深入。",
+          "第二层：稳定网络——在那片混沌之下，是由灰色而坚韧的丝线组成的网络。它是一种坚固的框架，把一个个个人世界维系在一起，防止它们碰撞并毁灭。这张网络由阿帕拉图斯编织。",
+          "更深处……",
+          "第三层：统一网络——在一切事物的深处，只有一道完整统一的白光。仿佛所有个人世界本质上都扎根于同一个源头。这一层静止而完整。",
+          "现在帕尔萨明白了。阿帕拉图斯的寂静，是一种残酷却必要的尝试：压制第一层，即原始情感，以维持第二层，即稳定。每当第一层的情感爆发，它们就像冲击一样撞击第二层，危及整个结构。但这种控制本身就是悲剧：为了维持稳定，他们正在扼杀生命。",
+          "卡维说道，他的声音此刻回荡在帕尔萨的意识中：“他们不知道。他们以为自己在拯救世界。他们看不见，保护笼子的同时，他们正在杀死笼中的鸟。”",
+          "那个灰衣男人——帕尔萨现在称他为“守卫者”——仍站在门口。他只能看见第二层，并认为自己正在执行一项英雄般的使命。",
+          "随后，一个问题在帕尔萨心中萌发，一个穿越所有层次的问题：“但如果第三层才是真正的统一，那么为什么这一切苦难与分离是必要的？为什么必须在情感与稳定之间做出选择？”",
+          "作为回答，卡维把他带到了最深的一层。",
+          "第零层：纯粹的创造力——在统一的白光之前，存在着绝对的“无”。但这个“无”是纯粹的潜能。所有这些层次——情感、稳定、统一——都是为了让某种东西从“无”中产生。痛苦、爱、分离与连接，全都是存在画布上的色彩，只为了让某件事发生。",
+          "帕尔萨震惊了。难道这场全部的斗争，只是一场更宏大演出的一部分？",
+          "守卫者对漫长的寂静失去了耐心，向特工示意。他们带着王冠般的装置向前走来。",
+          "卡维在意识中喊道：“现在你看到了吗？寂静是坏的，因为它限制生命。但不受控制的生命会摧毁结构。而这一切背后，有一股不在乎我们任何人的创造力量；它只想让故事继续。我们不过是一本小说里的角色……”"
+        ]
+      }
     }
   ]
 }
