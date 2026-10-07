@@ -112,9 +112,9 @@
     // This keeps the global i18n runtime as the single language switcher while
     // allowing long-form chapter content to live in dedicated translation files.
     const pageKey = document.querySelector('meta[name="i18n-page"]')?.content;
-    if (pageKey === 'emergence' || pageKey === 'emergence2') {
+    if (pageKey === 'emergence' || pageKey === 'emergence2' || pageKey === 'layer3') {
       const chapterResponse = await fetch(
-        pageKey === 'emergence2' ? 'translations/emergence-2.json' : 'translations/emergence.json',
+        pageKey === 'emergence2' ? 'translations/emergence-2.json' : pageKey === 'layer3' ? 'translations/echo-layer3.json' : 'translations/emergence.json',
         { cache: 'no-store' }
       );
       if (!chapterResponse.ok) {

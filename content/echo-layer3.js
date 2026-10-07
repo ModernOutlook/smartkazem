@@ -139,7 +139,6 @@ window.EchoLayer3Content={
     "پارسا با قلبی که تند می‌زد، حالا پاسخش را داشت. کسی آنجا در اسارت بود؛ کسی که می‌توانست از طریق ابعاد عمیق‌تر احساس ارتباط برقرار کند. اما آن شخص همچنین هشدار داده بود که هر گونه اقدام مستقیم به معنای به دام افتادن است. آن حس هشدار به قدری قوی و اضطراری بود که پارسا را متقاعد کرد این یک تله نیست؛ یک اخطار واقعی است.",
     "آنها داشتند با او صحبت می‌کردند، و اولین کلمه‌شان \"فرار کن\" بود."
    ]
-  }
   },{ 
    id:"part-8",
    titleKey:"sections.7",
@@ -164,7 +163,6 @@ window.EchoLayer3Content={
     "\"این ممکن است تنها نقطه ورودی باشد که تحت نظارت شدید نیست.\"",
     "همه نگاه‌ها به پارسا دوخته شد. آنها اطلاعات را جمع‌آوری کرده بودند. آیا سه‌شنبه آینده، زمان اقدام بود؟"
    ]
-  }
   },{
    id:"part-9",
    titleKey:"sections.8",
@@ -281,7 +279,7 @@ window.EchoLayer3Content={
     "سکوت سنگینی بر فضای اتاق حاکم شد. تمام نگاه‌ها به نگهبان دوخته شده بود. او کلید این تحول بود - مأموری که می‌توانست یا یک زندان‌بان باقی بماند، یا اولین پیام‌آور یک دوران جدید شود.",
     "او به مدت طولانی به پارسا خیره ماند، و سپس نگاهش به کاوه افتاد، به آن سیم‌هایی که از مغز جوانش بیرون زده بود. شاید برای اولین بار، او یک  «وسیله» را نمی‌دید، بلکه یک «قربانی» را می‌دید."
    ]
-  ,{
+  },{
    id:"part-13",
    titleKey:"sections.12",
    titleFallback:"مهندس خاموش",
@@ -323,7 +321,7 @@ window.EchoLayer3Content={
     "«شما، هدایتگر و تقویت‌کننده، اولین مهندسان این دنیای جدید خواهید بود. کار شما آسان نخواهد بود. بازگرداندن احساس به جهانی که آن را فراموش کرده، مانند بیدار کردن یک غول خفته است. خطرات بسیار است.»",
     "پارسا نفسی عمیق کشید. این آغاز یک انقلاب آرام بود - بازنویسی قرارداد هستی."
    ]
-  ,{
+  },{
    id:"part-14",
    titleKey:"sections.13",
    titleFallback:"نقشه گمشده هستی",
@@ -338,7 +336,7 @@ window.EchoLayer3Content={
     "ایده کلیدی زمانی به ذهن پارسا رسید که او الگویی تکرارشونده را در دل پیچیدگی‌های بی‌پایان مشاهده کرد:  «چرخه‌های تعادل پویا». این الگو نشان می‌داد که ثبات مطلق، یک توهم و در نهایت مرگ‌بار است. در عوض، هستی برای سلامت، نیاز به چرخه‌هایی از آشوب و سکون، اوج و فرود، اتصال و انفصال داشت. کلید کار، نه سرکوب یک قطب، بلکه مدیریت ریتم این چرخه‌ها بود. او فهمید که  «سکوت» معمار، سعی داشت جهان را در «نقطه سکون» ابدی قفل کند، در حالی که جهان برای زنده ماندن، به «آشوب هدایت شده» نیز نیاز داشت. راه حل، یک  «ترموستات هستی» بود، نه یک دیوار.",
     "با این درک جدید، آنها برای اقدام جهت بازآموزی تدریجی آماده شدند. اما این‌بار، نه بر اساس ترس، بلکه بر اساس نقشه اصلی هستی."
    ]
-  ,{
+  },{
    id:"part-15",
    titleKey:"sections.14",
    titleFallback:"اولین نبض",
@@ -353,7 +351,7 @@ window.EchoLayer3Content={
     "معمار، برای اولین بار در عمر طولانی‌اش، اشکی از شوق و حسرت فرو ریخت.  «ما می‌توانستیم از ابتدا اینگونه باشیم.» او زمزمه کرد.",
     "پارسا و کاوه به یکدیگر نگاه کردند. آنها نه یک انقلاب، بلکه یک  «تکامل» را هدایت کرده بودند. راه درازی در پیش بود، اما اکنون می‌دانستند که مسیر درست کجاست. اکنون که پایه‌های نظریه مستحکم شده و اولین آزمایش موفقیت‌آمیز بوده، نوبت به گسترش این هماهنگی می‌رسد."
    ]
-  ,{
+  },{
    id:"part-16",
    titleKey:"sections.15",
    titleFallback:"دانه‌های کهکشان جدید",
@@ -375,7 +373,7 @@ window.EchoLayer3Content={
     "این یک نقطه عطف بود. آنها اکنون به دروازه‌ای رسیده بودند که می‌توانست تمام دانش هستی را در اختیارشان بگذارد. دانشی که شاید نحوه گسترش هماهنگی در سراسر گیتی، یا حتی راز خودآگاهی را فاش می‌کرد. اما این سفر به ناشناخته‌ها، خطراتی باورنکردنی داشت. ذهن یک انسان می‌توانست در آن اقیانوس بی‌کران اطلاعات گم شود یا برای همیشه محو گردد.",
     "این تنها آغاز راه بود. اکنون، کهکشانی از احتمالات در مقابل آنها قرار داشت."
    ]
-  ,{
+  },{
    id:"part-17",
    titleKey:"sections.16",
    titleFallback:"پژواک ابدیت",
@@ -422,68 +420,121 @@ window.EchoLayer3Content={
  "use strict";
  const C=window.EchoLayer3Content;
  const $=id=>document.getElementById(id);
- const title=$("head-title"),sub=$("head-sub"),chapters=$("chapters"),parts=$("parts"),reader=$("reader"),tocLabel=$("toc-label");
+ const title=$("head-title"),sub=$("head-sub"),chapters=$("chapters"),parts=$("parts"),reader=$("reader"),tocLabel=$("toc-label"),prev=$("prev-part"),next=$("next-part");
  let activeChapter=0,activePart=0;
+
  function catalog(){return window.SiteI18n?.getCatalog?.()||{}}
  function layer(){return catalog().pages?.layer3||{}}
- function getPath(obj,path,fallback){return path.split(".").reduce((v,k)=>v==null?undefined:v[k],obj)??fallback;}
+ function chapterCatalog(){return catalog().chapters?.layer3||{}}
+ function language(){return window.SiteI18n?.getLanguage?.()||"fa"}
+ function rtl(){return ["fa","ar"].includes(language())}
+ function partData(ch,pi){
+   const translated=chapterCatalog().parts?.[pi];
+   return translated||null;
+ }
+ function focusReader(){
+   requestAnimationFrame(()=>reader.focus({preventScroll:true}));
+ }
  function render(){
-   const d=layer(), source=C;
-   document.documentElement.lang=window.SiteI18n?.getLanguage?.()||"fa";
-   document.documentElement.dir=(document.documentElement.lang==="fa"||document.documentElement.lang==="ar")?"rtl":"ltr";
-   document.body.dataset.mode=document.documentElement.lang;
-   title.textContent=d.title||"پژواک لایه سوم";
+   const lang=language(),d=layer(),source=C,book=chapterCatalog();
+   document.documentElement.lang=lang;
+   document.documentElement.dir=rtl()?"rtl":"ltr";
+   document.body.dataset.mode=lang;
+   title.textContent=d.title||book.title?.[lang]||"پژواک لایه سوم";
    sub.textContent=d.subtitle||"";
    $("close").setAttribute("aria-label",d.close||"بازگشت");
-   tocLabel.textContent=document.documentElement.lang==="en"?"Contents":document.documentElement.lang==="zh"?"目录":document.documentElement.lang==="ar"?"الفهرس":"فهرست";
+   tocLabel.textContent=lang==="en"?"Contents":lang==="zh"?"目录":lang==="ar"?"الفهرس":"فهرست";
    chapters.innerHTML="";
    parts.innerHTML="";
    reader.innerHTML="";
+
    source.chapters.forEach((ch,ci)=>{
      const b=document.createElement("button");
      b.className="chapter"+(ci===activeChapter?" active":"");
      b.type="button";
      b.textContent=d[ch.titleKey]||ch.id;
      b.disabled=!ch.parts.length;
-     b.addEventListener("click",()=>{activeChapter=ci;activePart=0;render()});
+     b.setAttribute("aria-current",ci===activeChapter?"true":"false");
+     b.setAttribute("aria-controls","reader");
+     b.addEventListener("click",()=>{activeChapter=ci;activePart=0;render();focusReader()});
      chapters.appendChild(b);
    });
+
    const ch=source.chapters[activeChapter]||source.chapters[0];
    if(!ch)return;
    const names=d.sections||[];
    ch.parts.forEach((p,pi)=>{
+     const t=partData(ch,pi);
+     const label=t?.title?.[lang]||names[pi]||p.titleFallback;
      const b=document.createElement("button");
      b.className="part"+(pi===activePart?" active":"");
      b.type="button";
-     b.textContent=(pi+1)+" . "+(names[pi]||p.titleFallback);
-     b.addEventListener("click",()=>{activePart=pi;renderPart()});
+     b.textContent=(pi+1)+" . "+label;
+     b.setAttribute("aria-current",pi===activePart?"true":"false");
+     b.setAttribute("aria-controls","reader");
+     b.setAttribute("aria-label",label);
+     b.addEventListener("click",()=>{activePart=pi;renderPart();focusReader()});
      parts.appendChild(b);
    });
+
    if(!ch.parts.length){
      const n=document.createElement("div");
      n.className="notice";
-     n.textContent=document.documentElement.lang==="en"?"This chapter has not been added yet.":document.documentElement.lang==="zh"?"本章尚未加入。":document.documentElement.lang==="ar"?"لم يُضف هذا الفصل بعد.":"این فصل هنوز به مخزن افزوده نشده است.";
+     n.textContent=lang==="en"?"This chapter has not been added yet.":lang==="zh"?"本章尚未加入。":lang==="ar"?"لم يُضف هذا الفصل بعد.":"این فصل هنوز به مخزن افزوده نشده است.";
      reader.appendChild(n);
      return;
    }
    renderPart();
  }
  function renderPart(){
-   const d=layer(),ch=C.chapters[activeChapter],p=ch.parts[activePart];
+   const lang=language(),d=layer(),book=chapterCatalog(),ch=C.chapters[activeChapter],p=ch.parts[activePart],t=partData(ch,activePart);
    if(!p)return;
-   parts.querySelectorAll(".part").forEach((b,i)=>b.classList.toggle("active",i===activePart));
+   parts.querySelectorAll(".part").forEach((b,i)=>{
+     b.classList.toggle("active",i===activePart);
+     b.setAttribute("aria-current",i===activePart?"true":"false");
+   });
    reader.innerHTML="";
    const top=document.createElement("div");top.className="reader-head";
-   const h=document.createElement("h1");h.textContent=d.title||"پژواک لایه سوم";
-   const sp=document.createElement("p");sp.textContent=(d[ch.titleKey]||"")+" — "+((d.sections||[])[activePart]||p.titleFallback);
+   const h=document.createElement("h1");h.id="reader-title";h.textContent=d.title||book.title?.[lang]||"پژواک لایه سوم";
+   const sp=document.createElement("p");sp.textContent=(d[ch.titleKey]||"")+" — "+(t?.title?.[lang]||((d.sections||[])[activePart]||p.titleFallback));
    top.append(h,sp);reader.appendChild(top);
-   const story=document.createElement("section");story.className="story";story.id=p.id;story.dir="rtl";story.lang="fa";
-   const h2=document.createElement("h2");h2.textContent=((activePart+1)+" . "+((d.sections||[])[activePart]||p.titleFallback));
+   const story=document.createElement("section");story.className="story";story.id=p.id;story.lang=lang;story.dir=rtl()?"rtl":"ltr";story.setAttribute("aria-labelledby","reader-part-title");
+   const h2=document.createElement("h2");h2.id="reader-part-title";h2.textContent=((activePart+1)+" . "+(t?.title?.[lang]||((d.sections||[])[activePart]||p.titleFallback)));
    story.appendChild(h2);
-   p.text.forEach(text=>{const para=document.createElement("p");para.textContent=text;story.appendChild(para);});
+   const paragraphs=t?.paragraphs?.[lang]||p.text;
+   paragraphs.forEach(text=>{
+     const para=document.createElement("p");para.textContent=text;story.appendChild(para);
+   });
    reader.appendChild(story);
+   prev.disabled=activePart===0;
+   next.disabled=activePart===ch.parts.length-1;
+   prev.setAttribute("aria-label",lang==="en"?"Previous part":lang==="ar"?"الجزء السابق":lang==="zh"?"上一部分":"بخش پیشین");
+   next.setAttribute("aria-label",lang==="en"?"Next part":lang==="ar"?"الجزء التالي":lang==="zh"?"下一部分":"بخش پسین");
  }
- document.addEventListener("site:languagechange",render);
+ function move(delta){
+   const ch=C.chapters[activeChapter];
+   const nextIndex=activePart+delta;
+   if(!ch?.parts[nextIndex])return;
+   activePart=nextIndex;
+   renderPart();
+   focusReader();
+ }
+ prev.addEventListener("click",()=>move(-1));
+ next.addEventListener("click",()=>move(1));
+ document.addEventListener("keydown",event=>{
+   if(event.altKey||event.ctrlKey||event.metaKey)return;
+   const target=event.target;
+   if(target.matches?.("input,textarea,select,[contenteditable='true']"))return;
+   if(event.key==="ArrowLeft"||event.key==="ArrowRight"){
+     event.preventDefault();
+     move((rtl()?(event.key==="ArrowLeft"?1:-1):(event.key==="ArrowRight"?1:-1)));
+   }else if(event.key==="Home"){
+     const ch=C.chapters[activeChapter]; if(ch?.parts.length){activePart=0;renderPart();focusReader()}
+   }else if(event.key==="End"){
+     const ch=C.chapters[activeChapter]; if(ch?.parts.length){activePart=ch.parts.length-1;renderPart();focusReader()}
+   }
+ });
+ document.addEventListener("site:languagechange",()=>render());
  document.addEventListener("DOMContentLoaded",render,{once:true});
  if(document.readyState!=="loading")render();
  $("close").addEventListener("click",()=>{if(history.length>1)history.back();else window.location.href="index.html"});
