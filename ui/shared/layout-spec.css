@@ -48,12 +48,27 @@
   .global-lang,
   .lang-switch {
     max-width: calc(100vw - 16px);
+    border-radius: 20px;
   }
 
   .global-lang button,
   .lang-switch button {
     min-width: var(--ui-touch-target);
     min-height: var(--ui-touch-target);
+    border-radius: 16px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .global-lang,
+  .lang-switch {
+    border-radius: 8px;
+  }
+
+  .global-lang button,
+  .lang-switch button {
+    min-height: 36px;
+    border-radius: 8px;
   }
 }
 
