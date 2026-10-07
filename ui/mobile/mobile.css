@@ -217,12 +217,14 @@
   .global-lang {
     top: calc(8px + var(--ui-safe-top));
     max-width: calc(100vw - 20px);
+    border-radius: 20px;
   }
 
   .global-lang button {
     min-width: var(--ui-touch-target);
     min-height: var(--ui-touch-target);
     padding: 8px 9px;
+    border-radius: 16px;
   }
 
   .observation25-page {
