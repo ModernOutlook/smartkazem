@@ -32,7 +32,7 @@ body{display:grid;place-items:center;font-family:Vazirmatn,Tahoma,sans-serif;col
 .part{flex:0 0 auto;border:1px solid #c9cdc9;background:#fff;color:#5a5f5c;border-radius:7px;padding:6px 9px;font-size:.57rem;font-weight:800;cursor:pointer;white-space:nowrap}.part.active{background:#2f6fd0;color:#fff;border-color:#2f6fd0}.part:disabled{opacity:.45;cursor:default}
 .reader{flex:1;min-height:0;overflow:auto;padding:22px 18px 42px;background:#f3f4f2;font-size:.82rem;line-height:2}
 .reader-head{margin-bottom:22px}.reader-head h1{margin:0 0 3px;font-size:1.55rem;line-height:1.3}.reader-head p{margin:0;color:#626763;font-size:.78rem}
-.story{scroll-margin-top:12px}.story h2{margin:20px 0 12px;padding-top:12px;border-top:1px solid #cdd1cc;font-size:1.04rem;line-height:1.5}.story p{margin:.8rem 0;text-align:justify}
+.story{scroll-margin-top:12px}.story h2{margin:20px 0 12px;padding-top:12px;border-top:1px solid #cdd1cc;font-size:1.04rem;line-height:1.5}.story p{margin:.8rem 0;text-align:justify}.navrow{display:flex;gap:8px;margin-top:22px;padding-top:14px;border-top:1px solid #cdd1cc}.navbtn{flex:1;border:1px solid #c9cdc9;background:#fff;color:#5a5f5c;border-radius:7px;padding:8px 10px;font:700 .62rem/1.5 Vazirmatn,Tahoma,sans-serif;cursor:pointer}.navbtn:disabled{opacity:.45;cursor:default}:focus-visible{outline:3px solid #2f6fd0;outline-offset:3px}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 .notice{padding:24px 12px;text-align:center;color:#626763;border:1px dashed #c4c8c4;border-radius:9px;background:#eceeea}
 .hidden{display:none!important}
 @media(min-width:700px){.page{border-radius:4px}}
@@ -55,12 +55,12 @@ body{display:grid;place-items:center;font-family:Vazirmatn,Tahoma,sans-serif;col
 <div class="head-main"><div class="head-title" id="head-title">پژواک لایه سوم</div><div class="head-sub" id="head-sub">پروتکل هماهنگی</div></div>
 <button class="close" id="close" type="button" aria-label="بازگشت">✕</button>
 </header>
-<nav class="toc" aria-label="فهرست فصل‌ها">
-<div class="toc-label" id="toc-label">فهرست</div>
+<nav class="toc" aria-label="فهرست فصل‌ها" aria-labelledby="toc-label">
+<h2 class="toc-label" id="toc-label">فهرست</h2>
 <div class="chapter-row" id="chapters"></div>
 </nav>
 <nav class="parts" id="parts" aria-label="بخش‌های فصل"></nav>
-<article class="reader" id="reader"></article>
+<article class="reader" id="reader" tabindex="-1" aria-live="polite" aria-atomic="false" aria-labelledby="reader-title"><div class="navrow"><button class="navbtn" id="prev-part" type="button">پیشین</button><button class="navbtn" id="next-part" type="button">پسین</button></div></article>
 </main>
 <script src="translations/i18n.js"></script>
 <script src="content/echo-layer3.js"></script>
