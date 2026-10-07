@@ -1,0 +1,136 @@
+{
+  "code": "echo-layer3",
+  "source": "fa",
+  "title": {
+    "fa": "پژواک لایه سوم",
+    "en": "Echo Layer Three",
+    "ar": "صدى الطبقة الثالثة",
+    "zh": "第三层回响"
+  },
+  "parts": [
+    {
+      "number": 1,
+      "title": {
+        "fa": "سکوت بزرگ",
+        "en": "The Great Silence",
+        "ar": "الصمت العظيم",
+        "zh": "寂静之境"
+      },
+      "paragraphs": {
+        "en": [
+          "The city had sunk into the gray shadows of dusk. The sky was neither blue nor cloudy, but had turned a lifeless milky color, as though the world were forgetting. On the streets of Shahrpeyvand, ghostlike people moved. Their feet landed on the cobblestones, yet it seemed they made no sound. Or perhaps the silence was so heavy that it swallowed every sound within itself.",
+          "Neon lights advertising the Apparatus shone across the glass facades of the buildings: "A peaceful life, with Apparatus." Yet the lights were cold and lifeless, like the eyes of a dead fish.",
+          "In a café by the street, a man and a woman sat facing each other. Their hands rested on the table, but did not touch. From time to time they looked at their phones, sometimes into each other's eyes. But their gazes were empty, as though they were looking at lifeless images. They smiled, but their smiles never reached their eyes.",
+          "Suddenly, a scream shattered the heavy silence.",
+          "A middle-aged man in the center of the main square pressed his hands to his head and screamed: "Can't you hear? No one can hear!"",
+          "People looked at him, but their eyes held no feeling. The man ran toward a woman: "I can see you, but you don't seem real! Like a dream!"",
+          "The woman merely stepped back and stared at him. There was no fear in her face, only a vague curiosity, like someone watching a television program.",
+          "The man continued: "I can't hear my heart! I don't feel anything!" Tears ran from his eyes, yet he seemed almost surprised by the unfamiliar wetness.",
+          "Then Apparatus agents arrived—a woman and a man in identical gray clothes, with calm faces. They were genuinely calm, not artificially so.",
+          ""Everything is in order, Mr. Raham," the woman said in an even voice. "You only need to rest."",
+          "The man—Raham—stared at them. "What... what have you done? Where have the threads gone? Everything is cut off..."",
+          "The male agent replied with the same calmness: "There are no threads. They are illusions from the past." They escorted him away with practiced ease. Raham no longer resisted. He only gazed at the colorless sky, as though searching for something lost.",
+          "The city's loudspeakers broadcast a message: "One emotional anomaly has been managed. Continue your normal life. Apparatus protects you."",
+          "From the fourth floor of a building overlooking the square, Parsa watched the scene. His hands rested against the cold window, and his breath left a faint mist on the glass. His eyes were different from the others—in them shone a question, and a pain the others seemed to have forgotten.",
+          "He knew Raham too. The day before, Raham had helped him carry a heavy package. They had exchanged only a few words, but Parsa remembered that simple connection clearly.",
+          ""Why do I remember?" Parsa whispered. "Why can I still feel the difference?"",
+          "Suddenly, a blinding headache struck him. He closed his eyes and the world fell into darkness. But within that darkness, something appeared—faint silver threads, knots coming undone, an immense network fading away. And amid the deepening darkness, a single thread remained, bright and golden, as though connected to something invisible in the distance."
+        ],
+        "ar": [
+          "كانت المدينة غارقة في ظلال الغسق الرمادية. لم تكن السماء زرقاء ولا ملبدة بالغيوم، بل اكتست بلون حليبي باهت، كأن العالم كان ينسى. في شوارع شهرپيوند، كان الناس يتحركون كالأشباح. كانت أقدامهم تهبط على حجارة الرصف، لكن بدا كأنها لا تُصدر أي صوت. أو لعل الصمت كان ثقيلًا إلى حد أنه كان يبتلع كل الأصوات في داخله.",
+          "كانت أضواء النيون لإعلانات جهاز «أباراتوس» تلمع على الواجهات الزجاجية للمباني: «حياة هادئة، مع أباراتوس». لكن تلك الأضواء كانت باردة وبلا حياة، كعيون سمكة ميتة.",
+          "في مقهى بجانب الشارع، جلس رجل وامرأة متقابلين. كانت أيديهما على الطاولة، لكنهما لم تتلامسا. كانا ينظران أحيانًا إلى هاتفيهما، وأحيانًا إلى عيني بعضهما. لكن نظراتهما كانت خاوية، كأنهما تنظران إلى صور بلا روح. كانا يبتسمان، لكن ابتسامتيهما لم تصلا إلى عيونهما.",
+          "وفجأة، شقّ صرخةٌ الصمتَ الثقيل.",
+          "كان رجل في منتصف العمر، في وسط الساحة الرئيسية، يضغط يديه على رأسه ويصرخ: «ألا تسمعون؟ لا أحد يسمع!»",
+          "نظر الناس إليه، لكن عيونهم كانت خالية من الشعور. ركض الرجل نحو امرأة: «أراك، لكنك لا تبدين حقيقية! كأنك حلم!»",
+          "تراجعت المرأة خطوة واحدة فقط وحدقت فيه. لم يكن في وجهها خوف، بل فضول غامض، كمن يشاهد برنامجًا تلفزيونيًا.",
+          "تابع الرجل: «لا أسمع صوت قلبي! لا أشعر بشيء!» وانهمرت الدموع من عينيه، لكنه بدا وكأنه مندهش من هذه الرطوبة الغريبة.",
+          "ثم وصل عملاء أباراتوس، رجل وامرأة يرتديان الملابس الرمادية نفسها، ووجهان هادئان. كانا هادئين حقًا، لا بصورة مصطنعة.",
+          "قالت المرأة بصوت رتيب: «كل شيء على ما يرام، سيد رهام. أنت بحاجة إلى الراحة فقط».",
+          "حدق الرجل، رهام، فيهما: «ماذا... ماذا فعلتما؟ أين ذهبت الخيوط؟ كل شيء انقطع...»",
+          "أجاب العميل الرجل بالهدوء نفسه: «لا توجد خيوط. إنها أوهام من الماضي». واقتاداه بمهارة هادئة. لم يعد رهام يقاوم. اكتفى بالنظر إلى السماء عديمة اللون، كأنه يبحث عن شيء مفقود.",
+          "بثت مكبرات صوت المدينة رسالة: «تمت معالجة حالة شذوذ عاطفي. تابعوا حياتكم الطبيعية. أباراتوس يحميكم».",
+          "ومن الطابق الرابع لمبنى يطل على الساحة، كان بارسا يشاهد المشهد. كانت يداه على زجاج النافذة البارد، وأنفاسه تترك ضبابًا خفيفًا على الزجاج. كانت عيناه مختلفتين عن الآخرين؛ كان فيهما سؤال، وألم بدا أن الآخرين قد نسوه.",
+          "كان يعرف رهام أيضًا. في اليوم السابق، ساعده رهام في حمل طرد ثقيل. لم يتبادلا سوى بضع كلمات، لكن بارسا كان يتذكر بوضوح ذلك التواصل البسيط.",
+          "همس بارسا: «لماذا أتذكر؟ لماذا ما زلت أستطيع أن أشعر بالفرق؟»",
+          "وفجأة، أصابه صداع خاطف يعمي الأبصار. أغمض عينيه وغرق العالم في الظلام. لكن في قلب ذلك الظلام ظهر شيء: خيوط فضية باهتة، وعُقد تتفكك، وشبكة هائلة تتلاشى. وفي وسط الظلام المتزايد، بقي خيط واحد، متوهج وذهبي، كأنه متصل بشيء غير مرئي في البعيد."
+        ],
+        "zh": [
+          "城市沉入黄昏的灰色阴影。天空既不是蓝色，也没有乌云，而是变成了一片毫无生气的乳白色，仿佛世界正在遗忘。在沙赫尔皮وند的街道上，人们像幽灵一样移动着。脚步落在石板路上，却仿佛没有发出任何声音。又或者，寂静沉重得足以吞没所有声音。",
+          "阿帕拉图斯公司的霓虹广告映照在建筑的玻璃外墙上：“与阿帕拉图斯一起，享受宁静生活。”然而那些灯光冰冷而毫无生气，就像死鱼的眼睛。",
+          "街边一家咖啡馆里，一男一女面对面坐着。他们的手放在桌上，却没有触碰彼此。他们偶尔看手机，有时望向对方的眼睛。但他们的目光空洞，仿佛在注视没有生命的影像。他们微笑着，可笑意从未抵达眼底。",
+          "突然，一声尖叫撕裂了沉重的寂静。",
+          "主广场中央，一个中年男人双手抱头，大声喊道：“你们听不见吗？没有人能听见！”",
+          "人们望着他，可他们的眼睛里没有任何情感。男人冲向一个女人：“我看得见你，可你却不像真的！像一场梦！”",
+          "女人只是后退了一步，凝视着他。她脸上没有恐惧，只有一丝模糊的好奇，像是在看电视节目。",
+          "男人继续喊：“我听不见自己的心跳！我什么感觉都没有！”泪水从他的眼中流下，而他似乎也对这种陌生的湿润感到惊讶。",
+          "随后，阿帕拉图斯的特工赶到——一男一女，穿着完全相同的灰色服装，神情平静。他们是真正的平静，并非伪装出来的。",
+          "女人用平板的声音说道：“一切正常，拉哈姆先生。您只需要休息。”",
+          "男人——拉哈姆——盯着他们：“你们……究竟做了什么？那些丝线去哪了？一切都断了……”",
+          "男特工同样平静地回答：“没有什么丝线。那只是过去的幻觉。”他们熟练地带走了他。拉哈姆不再反抗，只是望着毫无色彩的天空，仿佛在寻找某件失落之物。",
+          "城市的扩音器播报着：“一例情感异常已得到处理。请继续正常生活。阿帕拉图斯保护您。”",
+          "在俯瞰广场的一栋建筑四楼，帕尔萨注视着这一幕。他的双手贴在冰冷的窗玻璃上，呼吸在玻璃上留下淡淡的雾气。他的眼睛与其他人不同——那里闪烁着一个问题，以及一种其他人似乎已经遗忘的痛楚。",
+          "他也认识拉哈姆。就在昨天，拉哈姆曾帮他搬运一个沉重的包裹。他们只交换了几句话，但帕尔萨清楚地记得那份简单的联系。",
+          "帕尔萨低声说：“为什么我还记得？为什么我仍然能够感觉到不同？”",
+          "突然，一阵令人目眩的剧痛袭来。他闭上眼睛，世界坠入黑暗。但在黑暗之中，有什么东西出现了——模糊的银色丝线，正在松开的结，一张正在消退的巨大网络。而在不断加深的黑暗中，只剩下一根明亮的金色丝线，仿佛连接着远方某个不可见的存在。"
+        ]
+      }
+    },
+    {
+      "number": 2,
+      "title": {
+        "fa": "شیارهایی در سکوت",
+        "en": "Grooves in the Silence",
+        "ar": "شقوق في الصمت",
+        "zh": "寂静中的裂痕"
+      },
+      "paragraphs": {
+        "en": [
+          "Parsa pulled back from the window. The pulse in his temples had slowed, but the image of that brilliant golden thread burned in the back of his mind like an unforgettable memory. He was afraid, but curiosity and that familiar pain—the pain everyone else seemed to have forgotten—were stronger than fear. He decided to return to ordinary life, but this time not with the eyes of a sleepwalker, but with the eyes of a seeker.",
+          "The next morning, Parsa sat behind his desk at the central post office of Shahrpeyvand. His job was auditing digital letters, a monotonous occupation that had now become an opportunity for investigation. He had always done it mechanically, but today he stared at the words. Instead of automatically checking the words themselves, he paid attention to the feeling behind them.",
+          "And there it was: the first anomaly he saw.",
+          "A letter from a mother to her daughter in another city. Every sentence was ordinary: "I'm fine," "It's cold," "Take care of yourself." Yet Parsa felt that something was missing. It was as though these words were empty shells from which a great emotional charge had been drained. There was no longing in "Take care of yourself," no warmth in "I miss you"—a sentence that had not even been written.",
+          "Throughout the day, Parsa saw this pattern everywhere. In his coworkers' conversations, which revolved around work and weather, without any jokes or personal irritation. In the eyes of passersby, which slid from one thing to another without any depth.",
+          "But then he discovered the second groove.",
+          "In the small office kitchen, his coworker Sara was pouring tea. Parsa noticed that when Sara picked up the cup, her hand involuntarily moved across her stomach for a moment. A quick, almost imperceptible gesture. Yet when Parsa looked at her face, there was nothing there—no sadness, no joy, not even a memory of the movement. It was the body remembering what the mind had forgotten.",
+          "At dusk, Parsa went to the neighborhood supermarket. He was standing beside the jam shelf when an old piece of music suddenly came through the store's speakers—a love song from decades ago.",
+          "And there it was: the third and deepest groove.",
+          "An old man examining price labels suddenly froze. For a moment, his eyes widened. His chest rose. It was as though something like a lost emotion were trying to rise from the depths of his being. His mouth opened slightly, as if he wanted to sing or cry.",
+          "Then, just as quickly, the moment passed. His eyes became empty again. He slowly shrugged and continued on his way, as though nothing had happened. But Parsa had seen it: that brief struggle, a soul trying to break the cage of silence.",
+          "That night, in his empty, silent apartment, Parsa wrote down what he had seen in a notebook. "Grooves in the silence"—brief moments when the old reality showed itself. He was beginning to see a pattern. These moments were connected to a powerful sensory trigger: music, a smell, or a touch. As though the body still remembered even when the mind had forgotten.",
+          "He was no longer afraid. Now he knew he was not the only one who felt this emptiness. The world was speaking to him, not with words, but through these mysterious grooves in the seamless curtain of silence; and this was only the beginning."
+        ],
+        "ar": [
+          "ابتعد بارسا عن النافذة. كان نبض صدغيه قد هدأ، لكن صورة ذلك الخيط الذهبي المتوهج كانت تحترق في مؤخرة ذهنه كذكرى لا تُنسى. كان خائفًا، لكن الفضول وذلك الألم المألوف، الألم الذي بدا أن الآخرين قد نسوه، كانا أقوى من الخوف. قرر العودة إلى حياته العادية، لكن هذه المرة لا بعيني شخص يمشي نائمًا، بل بعيني باحث.",
+          "في صباح اليوم التالي، جلس بارسا خلف مكتبه في مكتب البريد المركزي في شهرپيوند. كانت وظيفته تدقيق الرسائل الرقمية؛ عملًا رتيبًا تحول الآن إلى فرصة للتحقيق. كان يؤدي عمله دائمًا بصورة آلية، لكنه اليوم حدق في الكلمات. وبدلًا من فحص الكلمات نفسها آليًا، بدأ ينتبه إلى الشعور الكامن وراءها.",
+          "وهناك رأى أول شذوذ.",
+          "رسالة من أم إلى ابنتها في مدينة أخرى. كانت كل الجمل عادية: «أنا بخير»، «الجو بارد»، «اعتني بنفسك». لكن بارسا شعر بأن شيئًا ما غائب. كأن هذه الكلمات قشور فارغة أُفرغت من داخلها شحنة عاطفية كبيرة. لم يكن هناك شوق في «اعتني بنفسك»، ولا دفء في «أشتاق إليك»؛ وهي جملة لم تُكتب أصلًا.",
+          "طوال اليوم، رأى بارسا هذا النمط في كل مكان. في أحاديث زملائه التي كانت تدور حول العمل والطقس، بلا مزاح ولا ضيق شخصي. وفي عيون المارة التي كانت تنزلق من شيء إلى آخر بلا أي عمق.",
+          "لكن بعد ذلك اكتشف الشق الثاني.",
+          "في مطبخ المكتب الصغير، كانت زميلته سارا تصب الشاي. لاحظ بارسا أنه عندما ترفع سارا الفنجان، تنزلق يدها للحظة، من دون إرادة منها، على بطنها. حركة سريعة تكاد لا تُلاحظ. لكن حين نظر بارسا إلى وجهها، لم يجد شيئًا فيه؛ لا حزن، ولا فرح، ولا حتى ذكرى للحركة. كان الجسد يتذكر ما نسيه العقل.",
+          "عند الغروب، ذهب بارسا إلى متجر الحي. كان يقف قرب رف المربى حين انطلقت فجأة من مكبرات المتجر موسيقى قديمة؛ أغنية حب من عقود مضت.",
+          "وهناك رأى الشق الثالث والأعمق.",
+          "تجمد رجل مسن كان يفحص بطاقات الأسعار فجأة. لبرهة اتسعت عيناه. ارتفع صدره. كأن شيئًا يشبه شعورًا مفقودًا يحاول الصعود من أعماق كيانه. انفتح فمه قليلًا، كأنه يريد أن يغني أو يبكي.",
+          "ثم، بالسرعة نفسها، انتهت اللحظة. عادت عيناه خاويتين. هز كتفًا ببطء وتابع طريقه، كأن شيئًا لم يحدث. لكن بارسا كان قد رأى ذلك الصراع القصير؛ روحًا تحاول كسر قفص الصمت.",
+          "في تلك الليلة، في شقته الخالية والصامتة، دوّن بارسا ما رآه في دفتر. «شقوق في الصمت»، لحظات قصيرة تظهر فيها الحقيقة القديمة. بدأ يرى نمطًا. كانت هذه اللحظات مرتبطة بمحفز حسي قوي، موسيقى أو رائحة أو لمسة. كأن الجسد لا يزال يتذكر حتى حين ينسى العقل.",
+          "لم يعد خائفًا. الآن عرف أنه ليس الوحيد الذي يشعر بهذا الفراغ. كان العالم يتحدث إليه، لا بالكلمات، بل عبر هذه الشقوق الغامضة في ستار الصمت المتجانس؛ وكانت هذه مجرد البداية."
+        ],
+        "zh": [
+          "帕尔萨从窗边退开。太阳穴的脉搏渐渐平缓，但那根明亮金色丝线的影像仍像一段无法忘却的记忆，灼烧在他的脑海深处。他害怕了，可好奇心以及那种熟悉的痛楚——那种其他人似乎已经忘记的痛楚——比恐惧更强。他决定回到普通生活，但这一次，他不再以梦游者的目光生活，而是以一个探索者的目光。",
+          "第二天早晨，帕尔萨坐在沙赫尔皮وند中央邮局的办公桌后。他的工作是审核数字信件，一份单调的工作，如今却成了调查的机会。他过去总是机械地完成工作，但今天，他盯着那些文字。与其自动检查文字本身，他开始留意文字背后的感觉。",
+          "就在那里，他看到了第一个异常。",
+          "一封母亲写给身处另一座城市的女儿的信。每句话都很普通：“我很好。”“天气很冷。”“照顾好自己。”但帕尔萨感觉少了些什么。仿佛这些话只是空壳，里面巨大的情感重量已经被抽空。“照顾好自己”里没有牵挂，“我想你”里没有温度——而这句话甚至没有被写出来。",
+          "一整天，帕尔萨到处都看见这种模式。同事们的谈话围绕工作和天气展开，没有玩笑，也没有私人情绪。路人的眼睛从一件事滑向另一件事，毫无深度。",
+          "但随后，他发现了第二道裂痕。",
+          "在办公室的小厨房里，同事萨拉正在倒茶。帕尔萨注意到，当萨拉拿起杯子时，她的手不由自主地在腹部掠过一瞬。一个迅速而几乎无法察觉的动作。然而当帕尔萨看向她的脸时，那里什么也没有——没有悲伤，没有喜悦，甚至没有对这个动作的记忆。是身体记住了，而心智已经遗忘。",
+          "黄昏时，帕尔萨去了附近的超市。他站在果酱货架旁，商店的扬声器突然响起一首老歌——几十年前的爱情歌曲。",
+          "在那里，他看见了第三道、也是最深的一道裂痕。",
+          "一位正在查看价格标签的老人突然僵住了。那一瞬间，他的眼睛睁大，胸口起伏，仿佛某种失落的情感正试图从存在深处浮现出来。他的嘴微微张开，像是想唱歌，又像是想哭。",
+          "然而，转眼间，这一刻便消失了。他的眼睛再次变得空洞。他缓缓耸了耸肩，继续向前走去，仿佛什么也没有发生。但帕尔萨看见了：那短暂的挣扎，一个灵魂试图挣脱寂静的牢笼。",
+          "那天夜里，在空荡而寂静的公寓中，帕尔萨把自己看到的一切写进笔记本。“寂静中的裂痕”——旧现实短暂显现的时刻。他开始看见其中的规律。这些时刻都与强烈的感官触发有关：音乐、气味或触碰。仿佛即使心智遗忘了，身体仍然记得。",
+          "他不再害怕。现在他知道，感受到这种空洞的并不只有自己。世界正在与他说话，不是通过语言，而是通过寂静整齐帷幕上的这些神秘裂痕；而这，仅仅是开始。"
+        ]
+      }
+    }
+  ]
+}
