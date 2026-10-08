@@ -458,3 +458,14 @@ A page is accessibility-complete when:
 - quality/security gates pass.
 
 This means **content synchronization and accessibility synchronization are the same runtime operation**: accessibility consumes the current rendered content rather than maintaining an independent copy.
+
+
+### §21.1 Automatic runtime bootstrap
+
+`translations/i18n.js` is the shared language boundary and also bootstraps `audio-engine.js` when the accessibility runtime is not already present. This is intentional: a future page that follows the normal site i18n contract inherits Talk Back automatically instead of needing a page-specific accessibility script tag.
+
+The resulting runtime chain is:
+
+`Persian source → translation reservoir → SiteI18n → localized DOM → auto-bootstrapped shared Talk Back`
+
+The page still owns its semantic HTML and interaction model; the accessibility engine owns only the generic behavior. Existing explicit `audio-engine.js` inclusions remain safe because the engine is idempotent.
