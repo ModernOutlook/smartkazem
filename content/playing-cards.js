@@ -91,8 +91,14 @@
       return Boolean(identify(source));
     },
     imagePath(card) {
-      const entry = typeof card === 'number' ? byId[card] : identify(card) || card;
-      return entry ? `content/${encodeURIComponent(entry.file).replace(/%2F/g, '/')}` : null;
+      const entry = typeof card === 'number'
+        ? byId[card]
+        : typeof card === 'string'
+          ? identify(card)
+          : card;
+      return entry && typeof entry.file === 'string'
+        ? `content/${encodeURIComponent(entry.file).replace(/%2F/g, '/')}`
+        : null;
     }
   });
 })();
