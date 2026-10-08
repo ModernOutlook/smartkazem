@@ -13,8 +13,16 @@
   --sk-focus: #f7d77a;
 }
 
-body {
-  filter: brightness(var(--sk-brightness)) contrast(var(--sk-contrast));
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,.055), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,.018), transparent 34%, rgba(255,255,255,.012));
+  mix-blend-mode: screen;
 }
 
 :where(button, input, textarea, select, a) {
