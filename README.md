@@ -38,7 +38,13 @@ Secondary surfaces (current child-page inventory):
 11. **انسان و ماشین‌هایش** — book
 12. **جاعلان تقلید** — book
 
-The two Paragraph Machine entries are two workspace modes/pages, not separate engines. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
+`paragraph-machine.html` is also a **machine surface**, not a book. It is the legacy/standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
+- **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
+- **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
+
+`بازشناسی` and `هم‌سنگی` remain two modes of the same shared Paragraph Machine workspace in `index.html`; `paragraph-machine.html` is the separate legacy machine surface for that same functional category. They are not separate engines.
+
+An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ## 3. Two-repository content architecture
 
@@ -93,7 +99,7 @@ The current user-facing surfaces include Home, the five realms, books, and Parag
 ├── emergence-2.html · فصل دوم ظهور book
 ├── echo-layer3.html · پژواک لایه سوم book
 ├── philosophical-treatise.html · رساله فلسفی book
-├── paragraph-machine.html · legacy/standalone machine surface
+├── paragraph-machine.html · legacy/standalone Paragraph Machine surface (machine)
 ├── css/ · site, desktop, splash
 ├── ui/ · bootstrap, mobile, shared layout
 ├── js/ · page/application controllers
@@ -200,7 +206,7 @@ Translation bridge public operations: toPersian(), fromPersian(), fromPersianBat
 
 llm-client.js is the model-service boundary. UI must not call the model API directly; adapters must not duplicate retry logic.
 
-paragraph-machine.html is a separate/legacy machine surface, not the shared home workspace.
+paragraph-machine.html is a separate/legacy **machine surface**, not a book and not the shared home workspace. It belongs to the same Paragraph Machine category reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **مرجع تقلید → هم‌سنگی → ماشین پاراگراف** paths. The shared current workspace is still the `paragraph-page` surface in `index.html`; the standalone file is maintained as a legacy compatibility surface.
 
 ## 9. Content and reading ownership
 
