@@ -61,6 +61,11 @@ Talk Back is a parallel presentation/service layer over the same language-select
 
 ## 4. Repository map
 
+The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
+
+The current user-facing surfaces include Home, the five realms, books, and Paragraph Machine. New user-facing pages must be classified by the page model above before being added.
+
+
 
 /
 ├── index.html · home
@@ -80,6 +85,22 @@ Talk Back is a parallel presentation/service layer over the same language-select
 ├── translations/ · language catalogs + i18n runtime
 └── .github/workflows/ · quality/deployment
 
+
+### Presentation enforcement
+
+The architecture is enforced, not only documented:
+- user-facing HTML pages must not contain inline `<style>` blocks or inline event handlers;
+- the shared language contract requires four language controls (`fa/en/zh/ar`) on each user-facing page;
+- every user-facing HTML document must declare its language;
+- page presentation belongs in external CSS layers (`css/`, `ui/mobile/`, or page-specific CSS under `css/pages/`);
+- dynamic UI should prefer `textContent`, `replaceChildren()`, and explicit DOM APIs over avoidable dynamic HTML injection;
+- security checks cover every HTML page, including legacy surfaces.
+
+The GitHub Actions quality/security gates are part of the maintenance contract. A change that violates these contracts is incomplete even if the page appears visually correct.
+
+### Desktop/mobile ownership
+
+Desktop and mobile are presentation layers, not separate application architectures. They must reuse the same content, translation, engine, service, adapter, and business logic.
 
 ## 5. Layer ownership
 
@@ -201,11 +222,17 @@ Preserve existing CSP and browser security constraints, including HTTPS-only mod
 
 A browser-side API key is not a server-side secret. Never commit keys, tokens, passwords, or provider secrets.
 
-## 13. Quality and deployment
+## 13. Quality, security, and deployment
 
-quality.yml currently checks JavaScript syntax, JSON validity, duplicate HTML IDs, missing local HTML assets, inline scripts, and inline event handlers.
+`quality.yml` enforces the maintenance contract: JavaScript syntax, JSON validity, duplicate HTML IDs, missing local HTML assets, inline-script/event-handler restrictions, externalized presentation CSS, document language, and the four-button shared language contract.
 
-Deployment definitions currently include deploy.yml and deploy-pages.yml; their overlap is known technical debt. Consolidation is a dedicated infrastructure change.
+`security.yml` checks every HTML page for the browser-security metadata contract, insecure `http://` URLs, `javascript:` URLs, and likely committed credentials. The legacy Paragraph Machine is not exempt.
+
+Browser security is intentionally implemented within static GitHub Pages constraints. Do not assume arbitrary server response headers are available. Keep CSP, referrer, and Permissions-Policy metadata synchronized with the actual page requirements.
+
+`css/visual-security.css` is presentation-only: it may improve visual focus, contrast, illumination, and control affordances, but must not acquire navigation, state, content, i18n, engine, service, or adapter logic.
+
+`deploy.yml` is the current deployment workflow. Do not introduce or document a second deployment workflow without first inspecting the actual workflow tree.
 
 ## 14. Known technical debt
 
@@ -213,10 +240,10 @@ Deployment definitions currently include deploy.yml and deploy-pages.yml; their 
 - large css/site.css
 - inconsistent legacy JS formatting
 - some fallback/content prose near logic
-- some controlled innerHTML
+- some legacy compatibility globals
 - no complete formatter/linter/type system
 - no full browser smoke-test suite
-- overlapping deployment workflows
+- some legacy HTML/CSS may still require staged cleanup as the repository evolves
 - Structure.txt overlaps README
 
 These are boundaries, not reasons for opportunistic rewrites.
@@ -240,7 +267,9 @@ These are boundaries, not reasons for opportunistic rewrites.
 - Avoid speculative abstraction.
 
 ### After editing
-Verify as applicable: JS syntax, JSON validity, HTML structure, local assets, language switching, affected navigation, mobile/desktop, RTL/LTR, and accessibility.
+Verify as applicable: JS syntax, JSON validity, HTML structure, local assets, language switching, affected navigation, mobile/desktop, RTL/LTR, accessibility, and the quality/security gates. If a presentation change can be made without touching behavior, keep it in CSS.
+
+For every user-facing page, explicitly verify the shared language selector in portrait/landscape and RTL/LTR before considering the change complete.
 
 For Paragraph Machine also verify evaluation/generation paths, S/T/E/R/C judgment, 144/34/900 limits, translation boundary, and batch cardinality.
 
