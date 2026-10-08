@@ -56,7 +56,9 @@
       "page": "页面",
       "navigable": "个可导航项目",
       "sections": "个部分",
-      "navigationHelp": "使用方向键移动。按 Enter 激活。"
+      "navigationHelp": "使用方向键移动。按 Enter 激活。",
+      "article": "文章",
+      "readingArticle": "正在朗读文章"
     },
     "episodeNavigation": "章节导航",
     "previousEpisode": "上一集",
