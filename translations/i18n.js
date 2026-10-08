@@ -160,7 +160,18 @@
     return normalizedLanguage;
   }
 
+  function ensureAccessibilityRuntime(){
+    if(window.SmartKazemAudio)return;
+    if(document.querySelector('script[data-smartkazem-accessibility]'))return;
+    const script=document.createElement('script');
+    script.src='audio-engine.js';
+    script.defer=true;
+    script.dataset.smartkazemAccessibility='true';
+    document.head.appendChild(script);
+  }
+
   async function init() {
+    ensureAccessibilityRuntime();
     const language = getLanguage();
 
     try {
