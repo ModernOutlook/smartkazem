@@ -281,12 +281,18 @@
   }
   function handlePointerUp(event){if(longPressPointer===(event.pointerId??'mouse')){window.clearTimeout(longPressTimer);longPressPointer=null;}}
   function handleClick(event){if(handleTripleClick(event))return;if(suppressNextClick){suppressNextClick=false;event.preventDefault();event.stopImmediatePropagation();return;}const realm=realmFromElement(event.target);setRealm(realm);resume().then(()=>play(realm)).catch(()=>{});if(state.accessibility)speakTarget(event.target);}
-  function handleDoubleClick(){if(state.accessibility&&lastSpoken)speak(lastSpoken);}
+  function handleDoubleClick(event){
+    // A double-click is only a repeat gesture while accessibility is active.
+    // It must never toggle the mode and must not compete with triple-click.
+    if(state.accessibility&&lastSpoken&&Number(event.detail)===2)speak(lastSpoken);
+  }
   function handleLanguageChange(){if(!state.accessibility)return;syncNavigation();const focused=document.activeElement;const index=navItems.indexOf(focused);if(index>=0)navIndex=index;window.setTimeout(()=>{if(focused&&navItems.includes(focused))announceNavigation(focused);},40);}
   function handleKeyboard(event){handleAccessibilityKeyboard(event);if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
   function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
   function init(){
     if(initialized)return getState();initialized=true;loadState();ensureGraph();initSpeech();
+    // Prevent browser double-tap zoom from stealing the global triple-tap
+    // gesture on touch devices, while preserving normal panning/scrolling.
     document.documentElement.style.touchAction='manipulation';
     document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
     document.addEventListener('pointerdown',handlePointerDown,{capture:true,passive:true});
