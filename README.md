@@ -24,7 +24,7 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary pages (current child-page inventory): **10 pages, all books**
+Secondary pages (current child-page inventory): **exactly 10 pages, and all 10 are books**
 1. **رساله فلسفی** — book
 2. **شاهنامه‌خوانی** — book
 3. **فصل اول ظهور** — book
@@ -42,7 +42,7 @@ Secondary pages (current child-page inventory): **10 pages, all books**
 
 `بازشناسی` and `هم‌سنگی` remain two modes of the same shared Paragraph Machine workspace in `index.html`; `paragraph-machine.html` is the separate legacy machine surface for that same functional category. They are not separate engines.
 
-An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
+`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۰ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ## 3. Two-repository content architecture
 
