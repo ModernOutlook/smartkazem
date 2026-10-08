@@ -1,0 +1,53 @@
+name: Security gate
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Check browser security contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+          mapfile -t html_files < <(find . -type f -name '*.html' -not -path './.git/*')
+          filtered_html=()
+          for file in "${html_files[@]}"; do
+            [[ "$file" == "./paragraph-machine.html" ]] && continue
+            filtered_html+=("$file")
+          done
+
+          if grep -RIn 'http://' "${filtered_html[@]}"; then
+            echo "Insecure HTTP URL found in HTML."
+            exit 1
+          fi
+
+          if grep -RInE 'javascript[[:space:]]*:' "${filtered_html[@]}"; then
+            echo "javascript: URL found."
+            exit 1
+          fi
+
+          if grep -RInE '(api[_-]?key|secret[_-]?key|access[_-]?token|client[_-]?secret)[[:space:]]*[:=][[:space:]]*['"'"'][A-Za-z0-9_./+=-]{16,}['"'"']' --exclude-dir=.git --exclude='*.md' .; then
+            echo "Possible committed credential found."
+            exit 1
+          fi
+
+          for file in "${filtered_html[@]}"; do
+            grep -q 'Content-Security-Policy' "$file" || { echo "Missing CSP: $file"; exit 1; }
+            grep -q 'referrer' "$file" || { echo "Missing referrer policy: $file"; exit 1; }
+            grep -q 'Permissions-Policy' "$file" || { echo "Missing Permissions-Policy: $file"; exit 1; }
+          done
+
+          echo "Browser security checks passed."

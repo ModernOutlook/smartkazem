@@ -1,0 +1,77 @@
+/*
+ * SmartKazem — Unified Security & Brightness Layer
+ * Presentation-only: no navigation, content, i18n, engine, service, or adapter logic.
+ */
+:root {
+  --sk-brightness: 1.08;
+  --sk-contrast: 1.04;
+  --sk-text: #f4f7fb;
+  --sk-muted: #b7c1cc;
+  --sk-surface: rgba(255,255,255,.075);
+  --sk-surface-strong: rgba(255,255,255,.11);
+  --sk-border: rgba(220,235,250,.24);
+  --sk-focus: #f7d77a;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 50% 18%, rgba(255,255,255,.055), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,.018), transparent 34%, rgba(255,255,255,.012));
+  mix-blend-mode: screen;
+}
+
+:where(button, input, textarea, select, a) {
+  -webkit-tap-highlight-color: transparent;
+}
+
+:where(button, input, textarea, select):focus-visible,
+:where(a):focus-visible {
+  outline: 3px solid var(--sk-focus);
+  outline-offset: 3px;
+}
+
+:where(button, .btn, .realm-action, .global-lang, .lang-switch, .book-tab) {
+  border-color: var(--sk-border);
+}
+
+:where(.lang-switch, .global-lang) {
+  background-color: rgba(5,10,16,.68);
+  box-shadow: 0 8px 30px rgba(0,0,0,.28);
+}
+
+:where(.lang-switch button, .global-lang button) {
+  min-height: 32px;
+}
+
+:where(.realm-action, .btn, .book-tab):hover {
+  filter: brightness(1.12);
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --sk-brightness: 1.12;
+    --sk-contrast: 1.12;
+    --sk-border: rgba(255,255,255,.46);
+    --sk-muted: #d2dae2;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  :where(.lang-switch, .global-lang, .realm-action, .btn, .book-tab) {
+    backdrop-filter: none !important;
+    background-color: rgba(8,13,19,.94);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*, *::before, *::after) {
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
