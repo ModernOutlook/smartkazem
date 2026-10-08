@@ -64,7 +64,14 @@
     "previousEpisode": "الحلقة السابقة",
     "nextEpisode": "الحلقة التالية",
     "episodeReader": "نص الحلقة",
-    "emergence": "الفصل الأول · الظهور"
+    "emergence": "الفصل الأول · الظهور",
+    "manifestoParts": "أجزاء البيان",
+    "partNavigation": "اختيار الجزء",
+    "partText": "نص الجزء",
+    "previousPart": "السابق",
+    "nextPart": "التالي",
+    "goToPart": "الانتقال إلى الجزء ",
+    "partOf": "الجزء {n} من {t}"
   },
   "meta": {
     "brand": "النظرة الحديثة",
