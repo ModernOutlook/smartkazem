@@ -56,7 +56,9 @@
       "page": "صفحة",
       "navigable": "عنصرًا قابلاً للتنقل",
       "sections": "قسم",
-      "navigationHelp": "استخدم مفاتيح الأسهم للتنقل. اضغط Enter للتفعيل."
+      "navigationHelp": "استخدم مفاتيح الأسهم للتنقل. اضغط Enter للتفعيل.",
+      "article": "مقال",
+      "readingArticle": "قراءة المقال"
     },
     "episodeNavigation": "التنقل بين الحلقات",
     "previousEpisode": "الحلقة السابقة",
