@@ -35,7 +35,28 @@
       "enabled": "无障碍模式已启用。",
       "disabled": "无障碍模式已关闭。",
       "repeat": "双击可重复最后一条语音提示。",
-      "hold": "长按可暂停、继续或重复语音。"
+      "hold": "长按可暂停、继续或重复语音。",
+      "roles": {
+        "button": "按钮",
+        "link": "链接",
+        "input": "输入",
+        "textarea": "نص",
+        "select": "选择",
+        "summary": "摘要",
+        "heading": "标题"
+      },
+      "states": {
+        "pressed": "已按下",
+        "notPressed": "未按下",
+        "expanded": "已展开",
+        "collapsed": "已收起",
+        "checked": "已选中",
+        "disabled": "已禁用"
+      },
+      "page": "页面",
+      "navigable": "个可导航项目",
+      "sections": "个部分",
+      "navigationHelp": "使用方向键移动。按 Enter 激活。"
     },
     "episodeNavigation": "章节导航",
     "previousEpisode": "上一集",
