@@ -374,3 +374,98 @@ The palette order is invariant and is part of the site's visual identity. A page
 
 ### Maintenance rule
 When improving a visual surface, inspect both the owning page and its parent realm. Prefer a presentation-only CSS change when structure and behavior already satisfy the contract. New visual motifs should belong to the realm family rather than becoming an unrelated sixth design language.
+
+
+## §21 Accessibility data-flow contract — future-proof by default
+
+The blind-user accessibility system is a **shared runtime service**, not a per-page content implementation.
+
+### Core invariant
+
+Future content updates must follow this one-way data flow:
+
+`Persian source → translation reservoir → SiteI18n → rendered localized DOM → shared Talk Back/accessibility runtime`
+
+Accessibility never owns a second copy of page prose. It reads the **currently rendered, language-selected content** from the page at runtime.
+
+Therefore:
+
+> **Updating authoritative Persian content and its EN/AR/ZH translations automatically updates the Talk Back content, without editing the accessibility engine.**
+
+### What future pages MUST NOT do
+
+- Do not create a page-specific Talk Back engine.
+- Do not create an accessibility translation catalog.
+- Do not duplicate Persian/English/Arabic/Chinese prose for screen readers.
+- Do not hard-code page titles, paragraphs, episode text, or navigation prose inside `audio-engine.js`.
+- Do not add a page-specific accessibility script merely because a new book/section was added.
+- Do not connect Talk Back directly to the Persian repository or a target translation repository from page code. The runtime path is always through the shared i18n/rendered-DOM boundary.
+- Do not require a future content editor to update accessibility text separately.
+
+### What the shared runtime guarantees
+
+`audio-engine.js` is responsible for behavior, not content. When accessibility is active it:
+
+1. discovers semantic/navigable elements from the current DOM;
+2. derives accessible names from native semantics, ARIA labels, i18n labels, and visible text;
+3. reads the currently rendered article/book content;
+4. uses `document.documentElement.lang` / `SiteI18n` to select the active speech language;
+5. reacts to `site:languagechange`;
+6. observes DOM/content mutations and resynchronizes its navigation model;
+7. announces dynamically replaced content through the shared live region;
+8. supports keyboard, touch, focus, previous/next, item selection, and long-form reading without knowing the page's prose.
+
+The runtime therefore remains stable while the content and translation repositories evolve.
+
+### Content contract for automatic accessibility
+
+Every future user-facing content surface must expose its content through the existing shared runtime:
+
+- Persian content is authoritative.
+- EN/AR/ZH are structurally aligned translations.
+- `translations/i18n.js` selects and renders the active language.
+- Book/article content is present in the DOM or is rendered into the DOM from the same source/translation model.
+- Interactive controls use native HTML semantics and existing i18n labels where labels are language-sensitive.
+- Dynamic content must be inserted through the page's existing rendering boundary so the shared MutationObserver can discover it.
+- No hidden duplicate accessibility-only content is permitted.
+
+### Automatic update rule
+
+For a new or changed content item:
+
+`update Persian → update EN/AR/ZH → render → Talk Back sees the new DOM`
+
+No accessibility-engine change is expected.
+
+A change to `audio-engine.js` is justified only when the **interaction model itself** changes, such as introducing a genuinely new accessibility gesture, control type, or reading behavior. A normal new page, chapter, episode, paragraph, title, translation, or button label is a **content/data change**, not an accessibility-engine change.
+
+### Page manifests and accessibility
+
+`page-specs/<page>.json` may declare page-specific accessibility requirements when the interaction model genuinely needs them. Such declarations describe **requirements and verification**, not a second implementation.
+
+If a page uses only standard book/article navigation, it should inherit the shared accessibility contract rather than adding custom accessibility code.
+
+### Definition of automatic accessibility completeness
+
+A page is accessibility-complete when:
+
+- its Persian source is complete;
+- EN/AR/ZH translations are complete and structurally aligned;
+- the shared i18n runtime can render every language;
+- the resulting DOM uses semantic controls and landmarks;
+- `audio-engine.js` is loaded by the shared page shell/runtime;
+- Talk Back can discover the rendered content and controls without page-specific accessibility prose;
+- quality/security gates pass.
+
+This means **content synchronization and accessibility synchronization are the same runtime operation**: accessibility consumes the current rendered content rather than maintaining an independent copy.
+
+
+### §21.1 Automatic runtime bootstrap
+
+`translations/i18n.js` is the shared language boundary and also bootstraps `audio-engine.js` when the accessibility runtime is not already present. This is intentional: a future page that follows the normal site i18n contract inherits Talk Back automatically instead of needing a page-specific accessibility script tag.
+
+The resulting runtime chain is:
+
+`Persian source → translation reservoir → SiteI18n → localized DOM → auto-bootstrapped shared Talk Back`
+
+The page still owns its semantic HTML and interaction model; the accessibility engine owns only the generic behavior. Existing explicit `audio-engine.js` inclusions remain safe because the engine is idempotent.
