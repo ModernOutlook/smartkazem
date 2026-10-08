@@ -36,7 +36,7 @@ Secondary pages (current child-page inventory): **exactly 10 pages, and all 10 a
 9. **انسان و ماشین‌هایش** — book
 10. **جاعلان تقلید** — book
 
-`paragraph-machine.html` is also a **machine surface**, not a book. It is the legacy/standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
+`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\n`paragraph-machine.html` is also a **machine surface**, not a book. It is the legacy/standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
 - **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
 
@@ -98,7 +98,7 @@ The current user-facing surfaces are Home, the five realms, 10 book pages, and t
 ├── echo-layer3.html · پژواک لایه سوم book
 ├── philosophical-treatise.html · رساله فلسفی book
 ├── paragraph-machine.html · legacy/standalone Paragraph Machine surface (machine)
-├── inventory.html · playing-card inventory
+├── inventory.html · playing-card inventory utility surface
 ├── css/ · site, desktop, splash
 ├── ui/ · bootstrap, mobile, shared layout
 ├── js/ · page/application controllers
