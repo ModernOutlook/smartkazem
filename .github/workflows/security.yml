@@ -1,0 +1,53 @@
+name: Security gate
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  browser-security:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Check browser security contracts
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          html_files="$(find . -type f -name '*.html' -not -path './.git/*')"
+
+          if grep -RInE '(^|[^[:alnum:]_])https?://[^[:space:]"'"'<>)]+' $html_files | grep -E 'http://' ; then
+            echo "Insecure HTTP URL found in HTML."
+            exit 1
+          fi
+
+          if grep -RInE '<script(?![^>]*\\bsrc=)' $html_files; then
+            echo "Inline script tag found."
+            exit 1
+          fi
+
+          if grep -RInE 'javascript:' $html_files; then
+            echo "javascript: URL found."
+            exit 1
+          fi
+
+          if grep -RInE '(api[_-]?key|secret[_-]?key|access[_-]?token|client[_-]?secret)[[:space:]]*[:=][[:space:]]*['"'"'][A-Za-z0-9_./+=-]{12,}' --exclude-dir=.git --exclude='*.md' .; then
+            echo "Possible committed credential found."
+            exit 1
+          fi
+
+          for file in $html_files; do
+            grep -q 'Content-Security-Policy' "$file" || { echo "Missing CSP: $file"; exit 1; }
+            grep -q 'X-Content-Type-Options' "$file" || { echo "Missing browser hardening contract: $file"; exit 1; }
+          done
+
+          echo "Browser security checks passed."
