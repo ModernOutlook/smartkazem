@@ -24,12 +24,25 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary surfaces:
-- **Book:** the normal secondary reading surface.
-- **Machine:** Paragraph Machine; potentially a small number of machines.
-- **Album:** a future separate surface.
+Secondary pages (current child-page inventory): **exactly 10 pages, and all 10 are books**
+1. **رساله فلسفی** — book
+2. **شاهنامه‌خوانی** — book
+3. **فصل اول ظهور** — book
+4. **سرزمین مشاهده؛ ۲۵ بار رسیدن** — book
+5. **آینه‌ی ممکن‌ها** — book
+6. **فصل دوم ظهور** — book
+7. **سرزمین مشاهده؛ یک رود، یک جریان** — book
+8. **پژواک لایه سوم** — book
+9. **انسان و ماشین‌هایش** — book
+10. **جاعلان تقلید** — book
 
-An HTML file, box, panel, overlay, card, or popup is not automatically a page/category. Today, secondary content is primarily books; Paragraph Machine is a machine.
+`paragraph-machine.html` is also a **machine surface**, not a book. It is the legacy/standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
+- **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
+- **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
+
+`بازشناسی` and `هم‌سنگی` remain two modes of the same shared Paragraph Machine workspace in `index.html`; `paragraph-machine.html` is the separate legacy machine surface for that same functional category. They are not separate engines.
+
+`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۰ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ## 3. Two-repository content architecture
 
@@ -70,18 +83,21 @@ Talk Back is a parallel presentation/service layer over the same language-select
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
 
-The current user-facing surfaces include Home, the five realms, books, and Paragraph Machine. New user-facing pages must be classified by the page model above before being added.
+The current user-facing surfaces are Home, the five realms, 10 book pages, and the Paragraph Machine machine surface. `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
 
 
 
 /
-├── index.html · home
-├── shahnameh.html · book
-├── observation.html · book
-├── observation-25.html · book
-├── echo-layer3.html · book
-├── philosophical-treatise.html · book
-├── paragraph-machine.html · machine
+├── index.html · home + dynamic book pages + shared Paragraph Machine workspace
+├── shahnameh.html · شاهنامه‌خوانی book
+├── observation.html · سرزمین مشاهده؛ یک رود، یک جریان book
+├── observation-25.html · سرزمین مشاهده؛ ۲۵ بار رسیدن book
+├── possible-mirror.html · آینه‌ی ممکن‌ها book
+├── emergence.html · فصل اول ظهور book
+├── emergence-2.html · فصل دوم ظهور book
+├── echo-layer3.html · پژواک لایه سوم book
+├── philosophical-treatise.html · رساله فلسفی book
+├── paragraph-machine.html · legacy/standalone Paragraph Machine surface (machine)
 ├── css/ · site, desktop, splash
 ├── ui/ · bootstrap, mobile, shared layout
 ├── js/ · page/application controllers
@@ -188,7 +204,7 @@ Translation bridge public operations: toPersian(), fromPersian(), fromPersianBat
 
 llm-client.js is the model-service boundary. UI must not call the model API directly; adapters must not duplicate retry logic.
 
-paragraph-machine.html is a separate/legacy machine surface, not the shared home workspace.
+paragraph-machine.html is a separate/legacy **machine surface**, not a book and not the shared home workspace. It belongs to the same Paragraph Machine category reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **مرجع تقلید → هم‌سنگی → ماشین پاراگراف** paths. The shared current workspace is still the `paragraph-page` surface in `index.html`; the standalone file is maintained as a legacy compatibility surface.
 
 ## 9. Content and reading ownership
 

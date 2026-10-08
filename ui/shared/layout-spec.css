@@ -95,3 +95,106 @@ body {
 [dir="ltr"] {
   overflow-wrap: anywhere;
 }
+
+
+/* Shared child-page layout contract.
+ * Reference pattern: فصل اول ظهور / فصل دوم ظهور.
+ * Every child page keeps the same responsive geometry while retaining its
+ * own visual theme and page-specific components.
+ */
+.child-page {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: clip;
+  overflow-wrap: anywhere;
+}
+
+.child-page .shell {
+  width: min(1180px, calc(100% - 28px));
+  max-width: 100%;
+  min-width: 0;
+  margin-inline: auto;
+}
+
+.child-page .top,
+.child-page .head,
+.child-page .book-head {
+  min-width: 0;
+}
+
+.child-page .top {
+  flex-wrap: wrap;
+}
+
+.child-page .title,
+.child-page .head-main,
+.child-page .book-title {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.child-page .actions {
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+}
+
+.child-page .controls,
+.child-page .visual,
+.child-page .main,
+.child-page .side,
+.child-page .reader,
+.child-page .book-tabs,
+.child-page .book-body,
+.child-page .toc,
+.child-page .parts {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.child-page img,
+.child-page video,
+.child-page canvas,
+.child-page table {
+  max-width: 100%;
+}
+
+@media (max-width: 820px) {
+  .child-page .visual {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 520px) {
+  .child-page .shell {
+    width: min(calc(100% - 18px), 1180px);
+    padding-inline: 0;
+  }
+
+  .child-page .top {
+    display: block;
+  }
+
+  .child-page .actions {
+    width: 100%;
+    margin-top: 14px;
+    align-items: flex-start;
+  }
+
+  .child-page .title h1 {
+    overflow-wrap: anywhere;
+  }
+
+  .child-page .controls,
+  .child-page .reader,
+  .child-page .book-body {
+    min-width: 0;
+  }
+}
+
+@media (orientation: landscape) and (max-width: 1023px) {
+  .child-page .shell {
+    width: min(calc(100% - 20px), 1180px);
+  }
+}
