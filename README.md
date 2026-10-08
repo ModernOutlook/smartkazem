@@ -37,7 +37,7 @@ Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 a
 10. **جاعلان تقلید** — book
 11. **مانیفست آشوب‌زده** — book
 
-`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\n`paragraph-machine.html` is also a **machine surface**, not a book. It is the legacy/standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
+`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\n`paragraph-machine.html` is also a **machine surface**, not a book. It is the standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
 - **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
 
@@ -84,7 +84,7 @@ Talk Back is a parallel presentation/service layer over the same language-select
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
 
-The current user-facing surfaces are Home, the five realms, 11 book pages, and the Paragraph Machine machine surface. `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
+The current user-facing surfaces are Home, the five realms, 11 book pages, and the Paragraph Machine machine surface. **Navigation order is defined only by the site's route hierarchy and canonical DOM order; it is never inferred from file age, commit history, creation time, or which implementation was written first.** `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
 
 
 
@@ -175,7 +175,7 @@ Rules:
 | R | مرجع تقلید |
 | C | اقتصاد سهم |
 
-Order S/T/E/R/C is an invariant. Check navigation, translations, Paragraph Machine, and documentation before changing it.
+Order S/T/E/R/C is an invariant. Child-page order is likewise the order explicitly defined by the site's realm navigation. Check navigation, translations, Paragraph Machine, and documentation before changing it. **Never introduce a chronological/legacy-vs-new ordering rule based on code history or file age.**
 
 ## 8. Paragraph Machine contract
 
