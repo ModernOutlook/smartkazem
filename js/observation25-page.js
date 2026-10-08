@@ -12,8 +12,8 @@ function render(){
   const subtitle=document.getElementById('observation25-subtitle');
   if(title)title.textContent=data.title||'';
   if(subtitle)subtitle.textContent=data.subtitle||'';
-  tabs.innerHTML='';
-  body.innerHTML='';
+  tabs.replaceChildren();
+  body.replaceChildren();
   sections.forEach((label,index)=>{
     const tab=document.createElement('button');
     tab.type='button';
@@ -54,7 +54,10 @@ function render(){
     body.appendChild(section);
   });
   if(!sections.length){
-    body.innerHTML='<p class="observation25-empty">—</p>';
+    const empty=document.createElement('p');
+    empty.className='observation25-empty';
+    empty.textContent='—';
+    body.replaceChildren(empty);
     return;
   }
   tabs.querySelectorAll('.observation25-tab').forEach(tab=>{

@@ -23,11 +23,7 @@ jobs:
         run: |
           set -euo pipefail
           mapfile -t html_files < <(find . -type f -name '*.html' -not -path './.git/*')
-          filtered_html=()
-          for file in "${html_files[@]}"; do
-            [[ "$file" == "./paragraph-machine.html" ]] && continue
-            filtered_html+=("$file")
-          done
+          filtered_html=("${html_files[@]}")
 
           if grep -RIn 'http://' "${filtered_html[@]}"; then
             echo "Insecure HTTP URL found in HTML."

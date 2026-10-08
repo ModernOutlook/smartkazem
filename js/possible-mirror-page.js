@@ -125,7 +125,10 @@
     });
 
     if (!sections.length) {
-      body.innerHTML = '<p class="possible-mirror-empty">—</p>';
+      const empty = document.createElement('p');
+      empty.className = 'possible-mirror-empty';
+      empty.textContent = '—';
+      body.replaceChildren(empty);
       announce(data.title || '');
       return;
     }
