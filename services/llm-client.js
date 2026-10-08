@@ -32,7 +32,7 @@ const CONNECTION_MODE_KEY = 'pgm_connection_mode';
 const PROXY_URL_KEY = 'pgm_proxy_url';
 const DEFAULT_PROXY_URL = '';
 let runtimeApiKey = '';
-let connectionMode = 'direct';
+let connectionMode = 'proxy';
 const MAX_HISTORY = 12;
 const REQUEST_TIMEOUT_MS = 30000;
 const MAX_ATTEMPTS = 3;
@@ -194,7 +194,13 @@ async function checkConnection(settings={}){
   }
 }
 function setConnectionMode(mode){connectionMode=mode==='proxy'?'proxy':'direct';try{localStorage.setItem(CONNECTION_MODE_KEY,connectionMode)}catch(_){} }
-function getConnectionMode(){try{return localStorage.getItem(CONNECTION_MODE_KEY)==='proxy'?'proxy':connectionMode}catch(_){return connectionMode}}
+function getConnectionMode(){
+  try{
+    const stored=localStorage.getItem(CONNECTION_MODE_KEY);
+    if(stored==='proxy'||stored==='direct')return stored;
+  }catch(_){}
+  return connectionMode;
+}
 window.ParagraphLLM=Object.freeze({
   DEFAULTS,
   PRESET_CONNECTIONS,
