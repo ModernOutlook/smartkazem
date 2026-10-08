@@ -461,6 +461,28 @@ A page is accessibility-complete when:
 This means **content synchronization and accessibility synchronization are the same runtime operation**: accessibility consumes the current rendered content rather than maintaining an independent copy.
 
 
+### §21.2 Bootstrap and coverage safeguards
+
+The automatic bootstrap is defensive as well as convenient:
+
+- `translations/i18n.js` first reuses an already loaded `window.SmartKazemAudio` instance.
+- If the page already declares `audio-engine.js`, the i18n runtime reuses that script instead of injecting a second copy.
+- Otherwise the shared engine is injected once and initialized idempotently.
+- This means script-order differences between legacy and newer pages must not create duplicate accessibility engines.
+- The accessibility contract applies to every user-facing HTML surface that follows the shared i18n contract, including books, the home/realm surface, inventory, and the legacy Paragraph Machine surface.
+- Page-specific manifests may describe verification requirements, but they do not create separate accessibility implementations.
+
+When validating a future page, check the shared runtime rather than adding page-specific accessibility code:
+
+1. Fresh/local state → accessibility is off.
+2. Triple primary-pointer click/tap anywhere → toggles accessibility.
+3. A second triple click/tap → toggles it back off.
+4. While off → accessibility gestures do nothing.
+5. While on → the current localized DOM is what is announced/read.
+6. Changing language → accessibility follows the new rendered language.
+7. Dynamic content replacement → the shared navigation model resynchronizes.
+8. No duplicate `audio-engine.js` instance is created.
+
 ### §21.1 Automatic runtime bootstrap
 
 `translations/i18n.js` is the shared language boundary and also bootstraps `audio-engine.js` when the accessibility runtime is not already present. This is intentional: a future page that follows the normal site i18n contract inherits Talk Back automatically instead of needing a page-specific accessibility script tag.
