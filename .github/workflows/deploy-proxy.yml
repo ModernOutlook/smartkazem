@@ -21,17 +21,14 @@ jobs:
         with:
           node-version: 22
 
-      - name: Deploy Worker
-        working-directory: proxy
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-        run: npx --yes wrangler deploy
-
-      - name: Configure OpenRouter secret
+      - name: Deploy Worker with secret
         working-directory: proxy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
-        run: printf '%s' "$OPENROUTER_API_KEY" | npx --yes wrangler secret put OPENROUTER_API_KEY
+        run: |
+          umask 077
+          printf '{"OPENROUTER_API_KEY":"%s"}' "$OPENROUTER_API_KEY" > /tmp/paragraph-machine-secrets.json
+          npx --yes wrangler deploy --secrets-file /tmp/paragraph-machine-secrets.json
+          rm -f /tmp/paragraph-machine-secrets.json
