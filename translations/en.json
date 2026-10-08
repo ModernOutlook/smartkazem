@@ -35,7 +35,28 @@
       "enabled": "Accessibility mode enabled.",
       "disabled": "Accessibility mode disabled.",
       "repeat": "Double-click to repeat the last announcement.",
-      "hold": "Long-press to pause, resume, or repeat speech."
+      "hold": "Long-press to pause, resume, or repeat speech.",
+      "roles": {
+        "button": "button",
+        "link": "link",
+        "input": "input",
+        "textarea": "text area",
+        "select": "select",
+        "summary": "summary",
+        "heading": "heading"
+      },
+      "states": {
+        "pressed": "pressed",
+        "notPressed": "not pressed",
+        "expanded": "expanded",
+        "collapsed": "collapsed",
+        "checked": "checked",
+        "disabled": "disabled"
+      },
+      "page": "Page",
+      "navigable": "navigable items",
+      "sections": "sections",
+      "navigationHelp": "Use arrow keys to move. Press Enter to activate."
     },
     "episodeNavigation": "Episode navigation",
     "previousEpisode": "Previous episode",
