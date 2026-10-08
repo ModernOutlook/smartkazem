@@ -58,6 +58,13 @@ The deployed translations/*.json files are runtime artifacts, not alternative so
 
 ### Talk Back
 Talk Back is a parallel presentation/service layer over the same language-selected content. It may own audio processing, voice selection, caching, and playback, but **must not create an independent Persian/translation content authority**.
+- Accessibility/Talk Back is **off by default** on a fresh installation.
+- Its only global on/off gesture is a **triple primary-pointer click/tap anywhere on the site**; the state may persist across reloads once the user has chosen it.
+- The gesture uses the browser's click sequence and a short global timing window; keyboard/programmatic clicks do not toggle accessibility.
+- Double-click is not an accessibility toggle. While accessibility is active, double-click may repeat the last spoken announcement.
+- Touch uses the shared Pointer Events path; the document uses `touch-action: manipulation` so browser double-tap zoom does not steal the triple-tap gesture while normal panning remains available.
+- Long-press remains an in-accessibility reading-control gesture (pause/resume/repeat) and is inactive while Talk Back is off.
+- The accessibility navigator can select and read the currently displayed article/book content in the active language; article text is derived from the visible localized DOM, never from a duplicate accessibility content store.
 
 ## 4. Repository map
 

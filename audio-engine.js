@@ -54,6 +54,48 @@
     const profile=REALM_CUES[realm],now=ctx.currentTime;
     try{profile.notes.forEach((frequency,index)=>{const oscillator=ctx.createOscillator(),gain=ctx.createGain(),start=now+index*.018,end=start+profile.length;oscillator.type=profile.type;oscillator.frequency.setValueAtTime(frequency,start);oscillator.frequency.exponentialRampToValueAtTime(frequency*.992,end);gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(profile.peak,start+.012);gain.gain.exponentialRampToValueAtTime(.0001,end);oscillator.connect(gain);gain.connect(master);oscillator.start(start);oscillator.stop(end+.018);});return true;}catch(_){return false;}
   }
+  function visibleLocalizedText(root){
+    if(!root)return'';
+    const language=window.SiteI18n?.getLanguage?.()||document.documentElement.lang||'fa';
+    const candidates=[...root.querySelectorAll('.'+language+', [lang="'+language+'"]')];
+    const localized=candidates.find(el=>el.offsetParent!==null&&el.textContent?.trim());
+    const source=localized||root;
+    return String(source.innerText||source.textContent||'').replace(/\\s+/g,' ').trim();
+  }
+  function readArticle(article){
+    if(!state.accessibility||!article)return false;
+    const text=visibleLocalizedText(article);
+    if(!text)return false;
+    const title=article.querySelector('h1,h2,h3,[role="heading"]');
+    const titleText=title?accessibleName(title):'';
+    const label=i18nGet('labels.accessibility.readingArticle','Reading article');
+    const content=titleText&&text.startsWith(titleText)?text:[titleText,text].filter(Boolean).join('، ');
+    const full=label+'، '+content;
+    const chunks=[];
+    for(let i=0;i<full.length;i+=900)chunks.push(full.slice(i,i+900));
+    if(!('speechSynthesis'in window))return false;
+    try{
+      const synth=window.speechSynthesis;
+      synth.cancel();
+      chunks.forEach((chunk,index)=>{
+        const utterance=new SpeechSynthesisUtterance(chunk);
+        const lang=currentLanguage();
+        utterance.lang=lang;
+        utterance.rate=.92;
+        utterance.pitch=1;
+        utterance.volume=state.volume;
+        const voice=chooseVoice(lang);
+        if(voice)utterance.voice=voice;
+        synth.speak(utterance);
+      });
+      lastSpoken=full;
+      return true;
+    }catch(_){return false;}
+  }
+  function selectedArticle(){
+    const explicit=document.querySelector('article[data-a11y-read], article.book-body, main article');
+    return explicit||null;
+  }
   function accessibleName(element){
     if(!element)return'';
     const i18nAria=element.dataset?.i18nAria;if(i18nAria){const value=i18nGet(i18nAria,'');if(value)return value.trim();}
@@ -76,7 +118,7 @@
 
 
   // Accessible navigation layer: semantic focus + fast speech + touch/keyboard movement.
-  const NAV_SELECTOR='h1,h2,h3,h4,a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),summary,[tabindex]:not([tabindex="-1"]),[role="button"],[role="link"],[role="checkbox"],[role="radio"],[role="switch"],[role="tab"],[role="menuitem"],[role="heading"]';
+  const NAV_SELECTOR='article,[data-a11y-read],h1,h2,h3,h4,a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),summary,[tabindex]:not([tabindex="-1"]),[role="button"],[role="link"],[role="checkbox"],[role="radio"],[role="switch"],[role="tab"],[role="menuitem"],[role="heading"]';
   let navIndex=-1, navItems=[], navRegion=null;
 
   function ensureAccessibilityRegion(){
@@ -94,23 +136,32 @@
   function navigationItems(){
     const root=document.querySelector('main')||document.body;
     return [...root.querySelectorAll(NAV_SELECTOR)].filter(el=>{
-      if(el.matches('h1,h2,h3,h4,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
+      if(el.matches('article,[data-a11y-read],h1,h2,h3,h4,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
       if(el.hidden||el.getAttribute('aria-hidden')==='true')return false;
       const rect=el.getBoundingClientRect();
       return rect.width>0&&rect.height>0;
     });
   }
   function semanticDescription(el){
-    const role=el.getAttribute('role')||({BUTTON:'دکمه',A:'پیوند',INPUT:'ورودی',TEXTAREA:'متن',SELECT:'انتخاب',SUMMARY:'بازکننده'}[el.tagName]||'');
-    const name=accessibleName(el);
+    const roleKey=el.getAttribute('role')||el.tagName;
+    const rolePath={
+      BUTTON:'button',A:'link',INPUT:'input',TEXTAREA:'textarea',SELECT:'select',
+      SUMMARY:'summary',heading:'heading',H1:'heading',H2:'heading',H3:'heading',H4:'heading'
+    }[roleKey]||roleKey.toLowerCase();
+    const role=i18nGet('labels.accessibility.roles.'+rolePath,rolePath);
+    const name=el.matches?.('article') ? i18nGet('labels.accessibility.article','Article') : accessibleName(el);
     const state=[];
-    if(el.hasAttribute('aria-pressed'))state.push(el.getAttribute('aria-pressed')==='true'?'فعال':'غیرفعال');
-    if(el.hasAttribute('aria-expanded'))state.push(el.getAttribute('aria-expanded')==='true'?'باز':'بسته');
-    if(el.checked===true)state.push('انتخاب‌شده');
-    if(el.disabled)state.push('غیرفعال');
-    const href=el.getAttribute('href');
-    const destination=href&&href.startsWith('#')?'':(href?'لینک':'');
-    return [role,name,state.join('، '),destination].filter(Boolean).join('، ');
+    if(el.hasAttribute('aria-pressed'))state.push(i18nGet(
+      el.getAttribute('aria-pressed')==='true'
+        ?'labels.accessibility.states.pressed'
+        :'labels.accessibility.states.notPressed',''));
+    if(el.hasAttribute('aria-expanded'))state.push(i18nGet(
+      el.getAttribute('aria-expanded')==='true'
+        ?'labels.accessibility.states.expanded'
+        :'labels.accessibility.states.collapsed',''));
+    if(el.checked===true)state.push(i18nGet('labels.accessibility.states.checked',''));
+    if(el.disabled)state.push(i18nGet('labels.accessibility.states.disabled',''));
+    return [name,role,state.filter(Boolean).join('، ')].filter(Boolean).join('، ');
   }
   function syncNavigation(){
     navItems=navigationItems();
@@ -130,8 +181,7 @@
     if(!el)return;
     const description=semanticDescription(el);
     if(!description)return;
-    const position='عنصر '+(navIndex+1)+' از '+navItems.length;
-    const text=position+'، '+description;
+    const text=description;
     const region=ensureAccessibilityRegion();
     region.textContent='';
     requestAnimationFrame(()=>{region.textContent=text;});
@@ -145,11 +195,16 @@
     const heading=main?.querySelector('h1,h2,[role="heading"]');
     const pageName=accessibleName(heading)||title||'صفحه';
     const landmarks=[...document.querySelectorAll('main,nav,aside,section[aria-label],section[aria-labelledby]')].filter(el=>el.offsetParent!==null).length;
-    speak('صفحه '+pageName+'، '+navItems.length+' گزینه قابل پیمایش'+(landmarks?'، '+landmarks+' بخش':'')+'. برای حرکت از کلیدهای بالا و پایین استفاده کنید. برای اجرا Enter را بزنید.',{rate:1.04});
+    const pageLabel=i18nGet('labels.accessibility.page','Page');
+    const navigableLabel=i18nGet('labels.accessibility.navigable','navigable items');
+    const landmarksLabel=i18nGet('labels.accessibility.sections','sections');
+    const navigationHelp=i18nGet('labels.accessibility.navigationHelp','Use arrow keys to move. Press Enter to activate.');
+    speak(pageLabel+' '+pageName+'، '+navItems.length+' '+navigableLabel+(landmarks?'، '+landmarks+' '+landmarksLabel:'')+'، '+navigationHelp,{rate:1.04});
   }
   function activateNavigation(){
     const el=navItems[navIndex];
     if(!el)return;
+    if(el.matches?.('article,[data-a11y-read]')){readArticle(el);return;}
     el.click();
   }
   function handleAccessibilityKeyboard(event){
@@ -182,6 +237,8 @@
   }
   function enableAccessibilityNavigation(){
     ensureAccessibilityRegion();
+    const article=selectedArticle();
+    if(article)article.setAttribute('data-a11y-read','true');
     syncNavigation();
     document.documentElement.dataset.accessibilityNavigation='on';
     const first=navItems.findIndex(el=>el.matches('main h1,h1,h2,[role="heading"]'))>=0?navItems.findIndex(el=>el.matches('main h1,h1,h2,[role="heading"]')):0;
@@ -190,6 +247,7 @@
   }
   function disableAccessibilityNavigation(){
     document.documentElement.dataset.accessibilityNavigation='off';
+    document.querySelectorAll('[data-a11y-read]').forEach(el=>el.removeAttribute('data-a11y-read'));
     if(navRegion)navRegion.textContent='';
     if('speechSynthesis'in window)window.speechSynthesis.cancel();
     navIndex=-1;navItems=[];
@@ -205,16 +263,33 @@
     return state.accessibility;
   }
   function handleTripleClick(event){
+    // Only genuine pointer/touch clicks may toggle accessibility.
+    // Keyboard/programmatic clicks have detail=0 and must never count.
+    const detail=Number(event.detail)||0;
+    if(detail===0)return false;
     const now=performance.now();
     clickTimes=clickTimes.filter(time=>now-time<=TRIPLE_WINDOW);
-    clickTimes.push(now);
-    if(clickTimes.length<3)return false;
-
-    clickTimes=[];
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    toggleAccessibility();
-    return true;
+    if(detail>=3){
+      clickTimes=[];
+      if(event.cancelable)event.preventDefault();
+      event.stopImmediatePropagation();
+      toggleAccessibility();
+      return true;
+    }
+    if(detail===1){
+      clickTimes.push(now);
+      if(clickTimes.length>=3){
+        clickTimes=[];
+        if(event.cancelable)event.preventDefault();
+        event.stopImmediatePropagation();
+        toggleAccessibility();
+        return true;
+      }
+    }else if(detail===2){
+      // Preserve the sequence for browsers that expose click.detail.
+      clickTimes.push(now);
+    }
+    return false;
   }
   function handlePointerDown(event){
     if(event.button!==undefined&&event.button!==0)return;resume();setRealm(realmFromElement(event.target));if(!state.accessibility)return;
@@ -223,11 +298,18 @@
   }
   function handlePointerUp(event){if(longPressPointer===(event.pointerId??'mouse')){window.clearTimeout(longPressTimer);longPressPointer=null;}}
   function handleClick(event){if(handleTripleClick(event))return;if(suppressNextClick){suppressNextClick=false;event.preventDefault();event.stopImmediatePropagation();return;}const realm=realmFromElement(event.target);setRealm(realm);resume().then(()=>play(realm)).catch(()=>{});if(state.accessibility)speakTarget(event.target);}
-  function handleDoubleClick(){if(state.accessibility&&lastSpoken)speak(lastSpoken);}
+  function handleDoubleClick(event){
+    // A double-click is only a repeat gesture while accessibility is active.
+    // It must never toggle the mode and must not compete with triple-click.
+    if(state.accessibility&&lastSpoken&&Number(event.detail)===2)speak(lastSpoken);
+  }
+  function handleLanguageChange(){if(!state.accessibility)return;syncNavigation();const focused=document.activeElement;const index=navItems.indexOf(focused);if(index>=0)navIndex=index;window.setTimeout(()=>{if(focused&&navItems.includes(focused))announceNavigation(focused);},40);}
   function handleKeyboard(event){handleAccessibilityKeyboard(event);if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
   function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
   function init(){
     if(initialized)return getState();initialized=true;loadState();ensureGraph();initSpeech();
+    // Prevent browser double-tap zoom from stealing the global triple-tap
+    // gesture on touch devices, while preserving normal panning/scrolling.
     document.documentElement.style.touchAction='manipulation';
     document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
     document.addEventListener('pointerdown',handlePointerDown,{capture:true,passive:true});
@@ -239,6 +321,7 @@
     document.addEventListener('pointerdown',handleAccessibilityTouchStart,{capture:true,passive:true});
     document.addEventListener('pointerup',handleAccessibilityTouchEnd,{capture:true,passive:false});
     document.addEventListener('focusin',event=>{if(state.accessibility&&event.target?.matches?.(NAV_SELECTOR)){syncNavigation();const index=navItems.indexOf(event.target);if(index>=0)navIndex=index;announceNavigation(event.target);}}, {capture:true});
+    document.addEventListener('site:languagechange',handleLanguageChange);
     window.addEventListener('pageshow',()=>{resume();if(state.accessibility)window.setTimeout(announcePage,80);});
     document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.enabled&&!state.muted)resume();});
     return getState();
