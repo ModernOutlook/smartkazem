@@ -59,7 +59,14 @@
       "navigationHelp": "برای حرکت از کلیدهای جهت‌دار استفاده کنید. برای اجرا Enter را بزنید.",
       "article": "مقاله",
       "readingArticle": "خواندن مقاله"
-    }
+    },
+    "manifestoParts": "بخش‌های مانیفست",
+    "partNavigation": "انتخاب بخش",
+    "partText": "متن بخش",
+    "previousPart": "پیشین",
+    "nextPart": "پسین",
+    "goToPart": "رفتن به بخش ",
+    "partOf": "بخش {n} از {t}"
   },
   "meta": {
     "brand": "نگرش نوین",
