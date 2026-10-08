@@ -864,3 +864,7 @@ html[dir="rtl"] .home-page > .info {
 .page {
   direction: rtl;
 }
+
+
+/* Keep scrollbar geometry stable while the document switches RTL/LTR. */
+html,body{scrollbar-gutter:stable both-edges}
