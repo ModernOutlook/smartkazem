@@ -41,7 +41,7 @@
       <a class="icon-btn" id="x-social" href="https://x.com/_thekazem" target="_blank" rel="noopener noreferrer" title="X / Twitter" aria-label="X / Twitter">𝕏</a>
     </header>
 
-    <div class="orbit" aria-label="پنج قلمرو">
+    <div class="orbit" aria-label="پنج قلمرو" data-i18n-aria="paragraphMachine.realms">
       <svg class="menu-svg" id="universe" viewBox="0 0 1000 1000" role="group" aria-label="پنج قلمرو">
         <defs>
           <radialGradient id="blueGradient"><stop offset="0%" stop-color="#174d68"/><stop offset="55%" stop-color="#0a3045"/><stop offset="100%" stop-color="#03141e"/></radialGradient>
@@ -147,11 +147,11 @@
     <div class="realm-actions reference-actions"><button class="realm-action reference-action" id="reference-match" type="button" data-i18n="paragraphMachine.equivalence">هم‌سنگی</button><button class="reference-action" id="ref-observation" data-i18n="home.pages.observation">سرزمین مشاهده؛ یک رود، یک جریان</button><button class="reference-action" id="reference-layer3" type="button" data-i18n="pages.layer3.title">پژواک لایه سوم</button></div>
   </section>
 
-  <section class="page paragraph-page" id="paragraph-page" aria-label="ماشین پاراگراف">
+  <section class="page paragraph-page" id="paragraph-page" aria-label="ماشین پاراگراف" data-i18n-aria="paragraphMachine.title">
     <div class="paragraph-workspace">
       <header class="paragraph-head">
         <div><strong data-i18n="paragraphMachine.title">ماشین پاراگراف</strong><span data-i18n="paragraphMachine.subtitle">تولید و سنجش پاراگراف</span></div>
-        <button id="paragraph-close" type="button" aria-label="بستن">✕</button>
+        <button id="paragraph-close" type="button" aria-label="بستن" data-i18n-aria="paragraphMachine.close">✕</button>
       </header>
       <div class="paragraph-context">
         <strong id="paragraph-source"></strong>
@@ -159,59 +159,59 @@
       </div>
       <section class="pm-panel pm-input-panel" id="paragraph-primary-panel">
         <label for="paragraph-input" data-i18n="paragraphMachine.input">متن برای تطبیق</label>
-        <textarea id="paragraph-input" rows="7" placeholder="یک پاراگراف وارد کنید…"></textarea>
+        <textarea id="paragraph-input" rows="7" placeholder="یک پاراگراف وارد کنید…" data-i18n-placeholder="paragraphMachine.inputPlaceholder"></textarea>
         <div id="paragraph-primary-output" class="pm-primary-output" aria-live="polite"></div>
       </section>
 
-      <section class="pm-recognition-stage" aria-label="قضاوت قلمروها">
+      <section class="pm-recognition-stage" aria-label="قضاوت قلمروها" data-i18n-aria="paragraphMachine.realms">
         <div class="pm-smartbot">
           <img src="engine/smartbot.png" alt="SmartBot" loading="lazy" decoding="async">
           <button id="paragraph-recognize" type="button" data-i18n="paragraphMachine.recognize">بازشناسی</button>
         </div>
 
-        <div class="pm-realm-choices" role="group" aria-label="پنج قلمرو">
-          <button class="pm-realm-choice realm-structure" type="button" data-domain="S" aria-label="ساختار تالار" aria-haspopup="dialog" aria-expanded="false">
+        <div class="pm-realm-choices" role="group" aria-label="پنج قلمرو" data-i18n-aria="paragraphMachine.realms">
+          <button class="pm-realm-choice realm-structure" type="button" data-domain="S" aria-label="ساختار تالار" data-i18n-aria="paragraphMachine.realmS" aria-haspopup="dialog" aria-expanded="false">
             <img src="engine/ساختار تالار.png" alt="ساختار تالار" loading="lazy" decoding="async"><span data-realm-label="S">ساختار تالار</span>
           </button>
-          <button class="pm-realm-choice realm-continuity" type="button" data-domain="T" aria-label="تداوم عالم" aria-haspopup="dialog" aria-expanded="false">
+          <button class="pm-realm-choice realm-continuity" type="button" data-domain="T" aria-label="تداوم عالم" data-i18n-aria="paragraphMachine.realmT" aria-haspopup="dialog" aria-expanded="false">
             <img src="engine/تداوم عالم.png" alt="تداوم عالم" loading="lazy" decoding="async"><span data-realm-label="T">تداوم عالم</span>
           </button>
-          <button class="pm-realm-choice realm-experience" type="button" data-domain="E" aria-label="قلمرو تجربه" aria-haspopup="dialog" aria-expanded="false">
+          <button class="pm-realm-choice realm-experience" type="button" data-domain="E" aria-label="قلمرو تجربه" data-i18n-aria="paragraphMachine.realmE" aria-haspopup="dialog" aria-expanded="false">
             <img src="engine/قلمرو تجربه.png" alt="قلمرو تجربه" loading="lazy" decoding="async"><span data-realm-label="E">قلمرو تجربه</span>
           </button>
-          <button class="pm-realm-choice realm-reference" type="button" data-domain="R" aria-label="مرجع تقلید" aria-haspopup="dialog" aria-expanded="false">
+          <button class="pm-realm-choice realm-reference" type="button" data-domain="R" aria-label="مرجع تقلید" data-i18n-aria="paragraphMachine.realmR" aria-haspopup="dialog" aria-expanded="false">
             <img src="engine/مرجع تقلید.png" alt="مرجع تقلید" loading="lazy" decoding="async"><span data-realm-label="R">مرجع تقلید</span>
           </button>
-          <button class="pm-realm-choice realm-share" type="button" data-domain="C" aria-label="اقتصاد سهم" aria-haspopup="dialog" aria-expanded="false">
+          <button class="pm-realm-choice realm-share" type="button" data-domain="C" aria-label="اقتصاد سهم" data-i18n-aria="paragraphMachine.realmC" aria-haspopup="dialog" aria-expanded="false">
             <img src="engine/اقتصاد سهم.png" alt="اقتصاد سهم" loading="lazy" decoding="async"><span data-realm-label="C">اقتصاد سهم</span>
           </button>
         </div>
 
-        <div id="pm-judgment-popover" class="pm-judgment-popover" role="dialog" aria-modal="false" aria-label="انتخاب قضاوت قلمرو" hidden></div>
+        <div id="pm-judgment-popover" class="pm-judgment-popover" role="dialog" aria-modal="false" aria-label="انتخاب قضاوت قلمرو" data-i18n-aria="paragraphMachine.judgmentDialog" hidden></div>
       </section>
 
-      <section class="paragraph-connection" id="paragraph-connection" data-state="idle" aria-label="تنظیمات اتصال">
+      <section class="paragraph-connection" id="paragraph-connection" data-state="idle" aria-label="تنظیمات اتصال" data-i18n-aria="paragraphMachine.connectionSettings">
         <div class="pc-layout">
           <div class="pc-feed">
-            <div class="pc-input-wrap"><input id="paragraph-api-key" class="pc-input" type="password" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="API Key"><button id="paragraph-key-toggle" class="pc-eye" type="button" aria-label="نمایش کلید API" aria-pressed="false">◉</button></div>
-            <div class="pc-input-wrap"><input id="paragraph-base-url" class="pc-input" type="text" autocomplete="off" aria-label="Base URL"></div>
+            <div class="pc-input-wrap"><input id="paragraph-api-key" class="pc-input" type="password" autocomplete="new-password" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="API Key" data-i18n-aria="paragraphMachine.apiKeyLabel"><button id="paragraph-key-toggle" class="pc-eye" type="button" aria-label="نمایش کلید API" data-i18n-aria="paragraphMachine.showApiKey" aria-pressed="false">◉</button></div>
+            <div class="pc-input-wrap"><input id="paragraph-base-url" class="pc-input" type="text" autocomplete="off" aria-label="Base URL" data-i18n-aria="paragraphMachine.baseUrlLabel"></div>
           </div>
           <div class="pc-center" aria-live="polite">
             <div class="pc-lock" aria-hidden="true">🔒</div><div class="pc-ring"></div><div class="pc-ring r2"></div><div class="pc-ring r3"></div><div class="pc-orbit"></div><div class="pc-core"></div><div class="pc-check" aria-hidden="true">✓</div>
             <span id="paragraph-connection-status" class="pc-status">idle</span>
-            <button id="paragraph-connect" class="pc-action" type="button" aria-label="اتصال">⬢</button>
+            <button id="paragraph-connect" class="pc-action" type="button" aria-label="اتصال" data-i18n-aria="paragraphMachine.connect">⬢</button>
           </div>
           <div class="pc-feed">
-            <div class="pc-input-wrap"><input id="paragraph-model" class="pc-input" type="text" autocomplete="off" aria-label="Model ID"></div>
+            <div class="pc-input-wrap"><input id="paragraph-model" class="pc-input" type="text" autocomplete="off" aria-label="Model ID" data-i18n-aria="paragraphMachine.modelLabel"></div>
           </div>
         </div>
-        <div class="pc-proxy-url" id="paragraph-proxy-url-wrap"><label for="paragraph-proxy-url">Proxy URL</label><input id="paragraph-proxy-url" class="pc-input" type="url" inputmode="url" autocomplete="off" placeholder="https://your-worker.workers.dev"></div>
+        <div class="pc-proxy-url" id="paragraph-proxy-url-wrap"><label for="paragraph-proxy-url" data-i18n="paragraphMachine.proxyUrlLabel">Proxy URL</label><input id="paragraph-proxy-url" class="pc-input" type="url" inputmode="url" autocomplete="off" placeholder="https://your-worker.workers.dev" data-i18n-placeholder="paragraphMachine.proxyUrlPlaceholder"></div>
         <div class="pc-footer">
-          <div class="pc-mode" role="group" aria-label="Connection mode">
-            <button type="button" data-connection-mode="direct" class="active">Direct</button>
-            <button type="button" data-connection-mode="proxy">Proxy</button>
+          <div class="pc-mode" role="group" aria-label="Connection mode" data-i18n-aria="paragraphMachine.connectionMode">
+            <button type="button" data-connection-mode="direct" class="active" data-i18n="paragraphMachine.direct">Direct</button>
+            <button type="button" data-connection-mode="proxy" data-i18n="paragraphMachine.proxy">Proxy</button>
           </div>
-          <div class="pc-note">API key در localStorage ذخیره نمی‌شود.</div>
+          <div class="pc-note" data-i18n="paragraphMachine.localStorageNote">API key در localStorage ذخیره نمی‌شود.</div>
         </div>
       </section>
       <div id="paragraph-error" class="pm-error" role="alert"></div>

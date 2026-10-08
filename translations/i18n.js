@@ -62,6 +62,11 @@
       if (value) element.setAttribute('title', value);
     });
 
+    document.querySelectorAll('[data-i18n-placeholder]').forEach((element) => {
+      const value = String(get(element.dataset.i18nPlaceholder, ''));
+      if (value) element.setAttribute('placeholder', value);
+    });
+
     document.querySelectorAll('[data-site-lang]').forEach((button) => {
       const active = button.dataset.siteLang === currentLanguage;
       button.classList.toggle('active', active);

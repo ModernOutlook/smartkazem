@@ -35,7 +35,7 @@ function validateJudgment(judgment) {
   }
   return judgment;
 }
-function validateResult(parsed,expectedCount){if(!parsed||!Array.isArray(parsed.paragraphs))throw new Error('ساختار پاسخ نامعتبر است.');if(Number.isInteger(expectedCount)&&parsed.paragraphs.length!==expectedCount)throw new Error('تعداد پاراگراف‌های پاسخ با درخواست برابر نیست.');return{paragraphs:parsed.paragraphs.map(p=>{if(!p||typeof p.text!=='string'||!p.text.trim())throw new Error('متن پاراگراف نامعتبر است.');return{text:processText(p.text).text,judgment:validateJudgment(p.judgment)}})}}
+function validateResult(parsed,expectedCount){if(!parsed||!Array.isArray(parsed.paragraphs))throw new Error('ساختار پاسخ نامعتبر است.');if(Number.isInteger(expectedCount)&&parsed.paragraphs.length!==expectedCount)throw new Error('تعداد پاراگراف‌های پاسخ با درخواست برابر نیست.');return{paragraphs:parsed.paragraphs.map(p=>{if(!p||typeof p.text!=='string'||!p.text.trim())throw new Error('متن پاراگراف نامعتبر است.');const processed=processText(p.text);if(processed.violations.wordLimit||processed.violations.charLimit||processed.violations.wordLength)throw new Error('پاراگراف پس از پردازش هنوز محدودیت‌های سخت را نقض می‌کند.');return{text:processed.text,judgment:validateJudgment(p.judgment)}})}}
 function buildGenerationPrompt(options = {}) {
   const count = options.count || 1;
   const mode = options.mode || 'mixed';
