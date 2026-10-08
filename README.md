@@ -24,7 +24,7 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary pages (current child-page inventory): **exactly 10 pages, and all 10 are books**
+Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 are books**
 1. **رساله فلسفی** — book
 2. **شاهنامه‌خوانی** — book
 3. **فصل اول ظهور** — book
@@ -35,6 +35,7 @@ Secondary pages (current child-page inventory): **exactly 10 pages, and all 10 a
 8. **پژواک لایه سوم** — book
 9. **انسان و ماشین‌هایش** — book
 10. **جاعلان تقلید** — book
+11. **مانیفست آشوب‌زده** — book
 
 `inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\n`paragraph-machine.html` is also a **machine surface**, not a book. It is the legacy/standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
@@ -42,7 +43,7 @@ Secondary pages (current child-page inventory): **exactly 10 pages, and all 10 a
 
 `بازشناسی` and `هم‌سنگی` remain two modes of the same shared Paragraph Machine workspace in `index.html`; `paragraph-machine.html` is the separate legacy machine surface for that same functional category. They are not separate engines.
 
-`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۰ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
+`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۱ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ## 3. Two-repository content architecture
 
@@ -83,7 +84,7 @@ Talk Back is a parallel presentation/service layer over the same language-select
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
 
-The current user-facing surfaces are Home, the five realms, 10 book pages, and the Paragraph Machine machine surface. `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
+The current user-facing surfaces are Home, the five realms, 11 book pages, and the Paragraph Machine machine surface. `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
 
 
 
