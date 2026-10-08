@@ -17,7 +17,6 @@
 <link rel="stylesheet" href="css/pages/disturbed-manifesto.css">
 <link rel="stylesheet" href="ui/shared/layout-spec.css">
 <link rel="stylesheet" href="ui/mobile/mobile.css">
-<script src="audio-engine.js"></script>
 <script src="ui/bootstrap.js" defer></script>
 <script src="translations/i18n.js" defer></script>
 </head>
@@ -38,7 +37,7 @@
 <nav aria-label="انتخاب بخش" data-i18n-aria="labels.partNavigation"><div class="part-list" id="part-list"></div></nav>
 </section>
 <section class="visual">
-<div class="reader" id="reader" tabindex="-1" aria-live="polite" aria-atomic="false" data-i18n-aria="labels.partText"></div>
+<article class="reader" id="reader" tabindex="-1" aria-live="polite" aria-atomic="false" data-a11y-read="true" data-i18n-aria="labels.partText"></article>
 </section>
 </div>
 </main>
