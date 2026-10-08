@@ -57,10 +57,12 @@
   function visibleLocalizedText(root){
     if(!root)return'';
     const language=window.SiteI18n?.getLanguage?.()||document.documentElement.lang||'fa';
-    const candidates=[...root.querySelectorAll('.'+language+', [lang="'+language+'"]')];
-    const localized=candidates.find(el=>el.offsetParent!==null&&el.textContent?.trim());
-    const source=localized||root;
-    return String(source.innerText||source.textContent||'').replace(/\\s+/g,' ').trim();
+    const candidates=[root,...root.querySelectorAll('.'+language+', [lang="'+language+'"]')];
+    const localized=candidates.filter(el=>el.offsetParent!==null&&el.textContent?.trim());
+    if(localized.length){
+      return localized.map(el=>String(el.innerText||el.textContent||'').replace(/\\s+/g,' ').trim()).filter(Boolean).join(' ');
+    }
+    return String(root.innerText||root.textContent||'').replace(/\\s+/g,' ').trim();
   }
   function readArticle(article){
     if(!state.accessibility||!article)return false;
