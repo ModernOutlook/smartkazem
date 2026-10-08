@@ -181,3 +181,56 @@ For a new package, ChatGPT should:
 - manifest: `page-specs/emergence.json`
 
 Use it as the pattern for future pages, while still inspecting the target page rather than copying blindly.
+
+
+## 7. Permanent accessibility rule for future content
+
+The accessibility layer is derived at runtime from the rendered localized DOM. It is not a third content repository.
+
+The permanent pipeline is:
+
+`Persian source → EN/AR/ZH translation reservoir → SiteI18n → localized DOM → shared Talk Back`
+
+### Consequence
+
+When a new chapter, episode, paragraph, article, title, button label, or other content item is added:
+
+1. update the authoritative Persian source;
+2. complete the corresponding EN/AR/ZH translation entries;
+3. render the content through the existing page/i18n boundary;
+4. the shared accessibility runtime automatically discovers and reads the new content.
+
+**No separate accessibility-content update is required.**
+
+### Shared runtime responsibilities
+
+The shared accessibility runtime must remain content-agnostic. It derives:
+
+- accessible names from semantic HTML and language-aware i18n labels;
+- navigation targets from the live DOM;
+- long-form reading text from the currently visible active-language content;
+- speech language from the current site language;
+- navigation announcements from current control state;
+- dynamic navigation updates from DOM mutations;
+- language updates from `site:languagechange`.
+
+A new page should therefore not add a custom Talk Back reader merely because it contains new prose.
+
+### When a page-specific accessibility change is legitimate
+
+Only add page-specific accessibility behavior when the interaction model is genuinely new and cannot be expressed through existing semantic HTML/shared runtime behavior.
+
+Examples include a new custom interaction pattern, a new gesture, or a specialized non-standard reading/navigation mechanism.
+
+New content alone is never a reason to modify the shared accessibility engine.
+
+### Future-page completion decision rule
+
+For every future page, ChatGPT should ask:
+
+> **Is this a content change or an interaction-model change?**
+
+- **Content change:** update Persian → translations → runtime; accessibility follows automatically.
+- **Interaction-model change:** inspect the shared accessibility contract first; extend the shared runtime only if necessary, then verify all existing pages/callers.
+
+This rule is mandatory for future page completion.
