@@ -56,12 +56,9 @@
   }
   function visibleLocalizedText(root){
     if(!root)return'';
-    const language=window.SiteI18n?.getLanguage?.()||document.documentElement.lang||'fa';
-    const candidates=[root,...root.querySelectorAll('.'+language+', [lang="'+language+'"]')];
-    const localized=candidates.filter(el=>el.offsetParent!==null&&el.textContent?.trim());
-    if(localized.length){
-      return localized.map(el=>String(el.innerText||el.textContent||'').replace(/\\s+/g,' ').trim()).filter(Boolean).join(' ');
-    }
+    // The visible DOM is already language-selected by the page/runtime.
+    // Read the article once from its rendered text tree; including the root
+    // and every descendant would duplicate the entire article for speech.
     return String(root.innerText||root.textContent||'').replace(/\\s+/g,' ').trim();
   }
   function readArticle(article){
