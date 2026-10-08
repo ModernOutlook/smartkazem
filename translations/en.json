@@ -1201,6 +1201,6 @@
     "proxy": "Proxy",
     "connect": "Connect",
     "connectionSettings": "Connection settings",
-    "localStorageNote": "The API key is not stored in localStorage."
+    "localStorageNote": "Default mode uses a secure server-side proxy; the API key is not shown or stored in the browser."
   }
 }
