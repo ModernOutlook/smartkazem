@@ -7,7 +7,7 @@
 .global-lang{display:flex;gap:2px;align-items:center;justify-content:center;max-width:100%;padding:2px;border:1px solid var(--line);background:rgba(0,0,0,.25);border-radius:20px;direction:ltr;flex-wrap:wrap}
 .global-lang button{border:0;background:transparent;color:var(--muted);padding:6px 8px;border-radius:16px;cursor:pointer;font:700 .62rem/1 Vazirmatn,system-ui,sans-serif;white-space:nowrap;flex:0 1 auto}
 .global-lang button.active{background:rgba(215,174,85,.16);color:var(--text)}
-@media(max-width:520px){.actions{align-items:flex-start;flex-direction:column}.global-lang{align-self:flex-end}}
+@media(max-width:520px){.actions{align-items:flex-start;flex-direction:column}}
 
 /* Extracted from inline presentation block 3. */
 /* Shahnameh Reading: full-page artwork with transparent reading surfaces. */

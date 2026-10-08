@@ -1,6 +1,6 @@
 /* Extracted from legacy paragraph-machine block 1. */
 .global-lang button.active{background:rgba(255,255,255,.14);color:#fff}
-@media(max-width:520px){.global-lang{max-width:calc(100vw - 12px)}.global-lang button{min-width:42px;min-height:42px;padding:8px 7px}}
+
 
 /* Extracted from legacy paragraph-machine block 2. */
 .code-font { font-size: 16px; }
