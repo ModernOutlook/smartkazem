@@ -14,8 +14,8 @@ const PRESET_CONNECTIONS = Object.freeze([
   },
   {
     baseUrl: 'https://openrouter.ai/api/v1',
-    model: 'google/gemma-4-31b-it:free',
-    label: 'Google Gemma 4 31B'
+    model: 'deepseek/deepseek-chat-v3.1:free',
+    label: 'DeepSeek V3.1 (Free)'
   },
   {
     baseUrl: 'https://openrouter.ai/api/v1',
@@ -86,7 +86,17 @@ function ensurePresetHistory(){
   writeHistory(HISTORY_KEYS.model,modelHistory);
 }
 
+function migrateDefaultSettings(){
+  try{
+    const stored=localStorage.getItem('pgm_model');
+    if(stored==='google/gemma-4-26b-a4b-it:free'||stored==='google/gemma-4-31b-it:free'){
+      localStorage.setItem('pgm_model',DEFAULTS.model);
+    }
+  }catch(_){}
+}
+
 function getSettings(){
+  migrateDefaultSettings();
   ensurePresetHistory();
   try{
     return {
