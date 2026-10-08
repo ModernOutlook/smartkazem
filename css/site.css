@@ -858,3 +858,9 @@ html[dir="rtl"] .home-page > .info {
   direction: rtl;
   text-align: right;
 }
+/* Page shells keep a stable physical layout across language direction changes.
+ * Individual content regions explicitly opt into RTL/LTR where required.
+ */
+.page {
+  direction: rtl;
+}
