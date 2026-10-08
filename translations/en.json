@@ -64,7 +64,14 @@
     "previousEpisode": "Previous episode",
     "nextEpisode": "Next episode",
     "episodeReader": "Episode text",
-    "emergence": "Chapter One · The Emergence"
+    "emergence": "Chapter One · The Emergence",
+    "manifestoParts": "Manifesto parts",
+    "partNavigation": "Part selection",
+    "partText": "Part text",
+    "previousPart": "Previous",
+    "nextPart": "Next",
+    "goToPart": "Go to part ",
+    "partOf": "Part {n} of {t}"
   },
   "meta": {
     "brand": "Modern Outlook",
