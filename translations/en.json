@@ -1195,6 +1195,7 @@
     "baseUrlLabel": "Base URL",
     "modelLabel": "Model ID",
     "proxyUrlLabel": "Proxy URL",
+    "proxyUrlPlaceholder": "https://your-worker.workers.dev",
     "connectionMode": "Connection mode",
     "direct": "Direct",
     "proxy": "Proxy",
