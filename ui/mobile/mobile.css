@@ -76,17 +76,6 @@
     min-height: var(--ui-touch-target);
   }
 
-  .lang-switch {
-    top: calc(8px + var(--ui-safe-top));
-    max-width: calc(100vw - 24px);
-  }
-
-  .lang-switch button {
-    min-width: var(--ui-touch-target);
-    min-height: var(--ui-touch-target);
-    padding: 8px 10px;
-  }
-
   .paragraph-page {
     padding:
       var(--ui-safe-top)
@@ -214,19 +203,6 @@
       max(14px, var(--ui-safe-left));
   }
 
-  .global-lang {
-    top: calc(8px + var(--ui-safe-top));
-    max-width: calc(100vw - 20px);
-    border-radius: 20px;
-  }
-
-  .global-lang button {
-    min-width: var(--ui-touch-target);
-    min-height: var(--ui-touch-target);
-    padding: 8px 9px;
-    border-radius: 16px;
-  }
-
   .observation25-page {
     width: 100vw;
     height: 100dvh;
@@ -309,14 +285,6 @@
   .menu-svg {
     width: min(94vw, 72dvh);
     height: min(94vw, 72dvh);
-  }
-
-  .lang-switch { max-width: calc(100vw - 18px); }
-
-  .lang-switch button {
-    min-width: 42px;
-    padding-inline: 7px;
-    font-size: .6rem;
   }
 
   .paragraph-workspace { width: calc(100% - 18px); }
