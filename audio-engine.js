@@ -136,7 +136,7 @@
   function navigationItems(){
     const root=document.querySelector('main')||document.body;
     return [...root.querySelectorAll(NAV_SELECTOR)].filter(el=>{
-      if(el.matches('h1,h2,h3,h4,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
+      if(el.matches('article,[data-a11y-read],h1,h2,h3,h4,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
       if(el.hidden||el.getAttribute('aria-hidden')==='true')return false;
       const rect=el.getBoundingClientRect();
       return rect.width>0&&rect.height>0;
