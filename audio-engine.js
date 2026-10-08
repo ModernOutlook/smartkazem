@@ -101,16 +101,25 @@
     });
   }
   function semanticDescription(el){
-    const role=el.getAttribute('role')||({BUTTON:'دکمه',A:'پیوند',INPUT:'ورودی',TEXTAREA:'متن',SELECT:'انتخاب',SUMMARY:'بازکننده'}[el.tagName]||'');
+    const roleKey=el.getAttribute('role')||el.tagName;
+    const rolePath={
+      BUTTON:'button',A:'link',INPUT:'input',TEXTAREA:'textarea',SELECT:'select',
+      SUMMARY:'summary',heading:'heading',H1:'heading',H2:'heading',H3:'heading',H4:'heading'
+    }[roleKey]||roleKey.toLowerCase();
+    const role=i18nGet('labels.accessibility.roles.'+rolePath,rolePath);
     const name=accessibleName(el);
     const state=[];
-    if(el.hasAttribute('aria-pressed'))state.push(el.getAttribute('aria-pressed')==='true'?'فعال':'غیرفعال');
-    if(el.hasAttribute('aria-expanded'))state.push(el.getAttribute('aria-expanded')==='true'?'باز':'بسته');
-    if(el.checked===true)state.push('انتخاب‌شده');
-    if(el.disabled)state.push('غیرفعال');
-    const href=el.getAttribute('href');
-    const destination=href&&href.startsWith('#')?'':(href?'لینک':'');
-    return [role,name,state.join('، '),destination].filter(Boolean).join('، ');
+    if(el.hasAttribute('aria-pressed'))state.push(i18nGet(
+      el.getAttribute('aria-pressed')==='true'
+        ?'labels.accessibility.states.pressed'
+        :'labels.accessibility.states.notPressed',''));
+    if(el.hasAttribute('aria-expanded'))state.push(i18nGet(
+      el.getAttribute('aria-expanded')==='true'
+        ?'labels.accessibility.states.expanded'
+        :'labels.accessibility.states.collapsed',''));
+    if(el.checked===true)state.push(i18nGet('labels.accessibility.states.checked',''));
+    if(el.disabled)state.push(i18nGet('labels.accessibility.states.disabled',''));
+    return [name,role,state.filter(Boolean).join('، ')].filter(Boolean).join('، ');
   }
   function syncNavigation(){
     navItems=navigationItems();
@@ -130,8 +139,7 @@
     if(!el)return;
     const description=semanticDescription(el);
     if(!description)return;
-    const position='عنصر '+(navIndex+1)+' از '+navItems.length;
-    const text=position+'، '+description;
+    const text=description;
     const region=ensureAccessibilityRegion();
     region.textContent='';
     requestAnimationFrame(()=>{region.textContent=text;});
@@ -145,7 +153,11 @@
     const heading=main?.querySelector('h1,h2,[role="heading"]');
     const pageName=accessibleName(heading)||title||'صفحه';
     const landmarks=[...document.querySelectorAll('main,nav,aside,section[aria-label],section[aria-labelledby]')].filter(el=>el.offsetParent!==null).length;
-    speak('صفحه '+pageName+'، '+navItems.length+' گزینه قابل پیمایش'+(landmarks?'، '+landmarks+' بخش':'')+'. برای حرکت از کلیدهای بالا و پایین استفاده کنید. برای اجرا Enter را بزنید.',{rate:1.04});
+    const pageLabel=i18nGet('labels.accessibility.page','Page');
+    const navigableLabel=i18nGet('labels.accessibility.navigable','navigable items');
+    const landmarksLabel=i18nGet('labels.accessibility.sections','sections');
+    const navigationHelp=i18nGet('labels.accessibility.navigationHelp','Use arrow keys to move. Press Enter to activate.');
+    speak(pageLabel+' '+pageName+'، '+navItems.length+' '+navigableLabel+(landmarks?'، '+landmarks+' '+landmarksLabel:'')+'، '+navigationHelp,{rate:1.04});
   }
   function activateNavigation(){
     const el=navItems[navIndex];
@@ -224,6 +236,7 @@
   function handlePointerUp(event){if(longPressPointer===(event.pointerId??'mouse')){window.clearTimeout(longPressTimer);longPressPointer=null;}}
   function handleClick(event){if(handleTripleClick(event))return;if(suppressNextClick){suppressNextClick=false;event.preventDefault();event.stopImmediatePropagation();return;}const realm=realmFromElement(event.target);setRealm(realm);resume().then(()=>play(realm)).catch(()=>{});if(state.accessibility)speakTarget(event.target);}
   function handleDoubleClick(){if(state.accessibility&&lastSpoken)speak(lastSpoken);}
+  function handleLanguageChange(){if(!state.accessibility)return;syncNavigation();const focused=document.activeElement;const index=navItems.indexOf(focused);if(index>=0)navIndex=index;window.setTimeout(()=>{if(focused&&navItems.includes(focused))announceNavigation(focused);},40);}
   function handleKeyboard(event){handleAccessibilityKeyboard(event);if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
   function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
   function init(){
@@ -239,6 +252,7 @@
     document.addEventListener('pointerdown',handleAccessibilityTouchStart,{capture:true,passive:true});
     document.addEventListener('pointerup',handleAccessibilityTouchEnd,{capture:true,passive:false});
     document.addEventListener('focusin',event=>{if(state.accessibility&&event.target?.matches?.(NAV_SELECTOR)){syncNavigation();const index=navItems.indexOf(event.target);if(index>=0)navIndex=index;announceNavigation(event.target);}}, {capture:true});
+    document.addEventListener('site:languagechange',handleLanguageChange);
     window.addEventListener('pageshow',()=>{resume();if(state.accessibility)window.setTimeout(announcePage,80);});
     document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.enabled&&!state.muted)resume();});
     return getState();
