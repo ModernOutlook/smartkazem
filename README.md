@@ -37,7 +37,7 @@ Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 a
 10. **جاعلان تقلید** — book
 11. **مانیفست آشوب‌زده** — book
 
-`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\n`paragraph-machine.html` is also a **machine surface**, not a book. It is the legacy/standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
+`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\n`paragraph-machine.html` is also a **machine surface**, not a book. It is the standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
 - **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
 
@@ -84,7 +84,7 @@ Talk Back is a parallel presentation/service layer over the same language-select
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
 
-The current user-facing surfaces are Home, the five realms, 11 book pages, and the Paragraph Machine machine surface. `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
+The current user-facing surfaces are Home, the five realms, 11 book pages, and the Paragraph Machine machine surface. **Navigation order is defined only by the site's route hierarchy and canonical DOM order; it is never inferred from file age, commit history, creation time, or which implementation was written first.** `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
 
 
 
@@ -175,7 +175,7 @@ Rules:
 | R | مرجع تقلید |
 | C | اقتصاد سهم |
 
-Order S/T/E/R/C is an invariant. Check navigation, translations, Paragraph Machine, and documentation before changing it.
+Order S/T/E/R/C is an invariant. Child-page order is likewise the order explicitly defined by the site's realm navigation. Check navigation, translations, Paragraph Machine, and documentation before changing it. **Never introduce a chronological/legacy-vs-new ordering rule based on code history or file age.**
 
 ## 8. Paragraph Machine contract
 
@@ -460,6 +460,28 @@ A page is accessibility-complete when:
 
 This means **content synchronization and accessibility synchronization are the same runtime operation**: accessibility consumes the current rendered content rather than maintaining an independent copy.
 
+
+### §21.2 Bootstrap and coverage safeguards
+
+The automatic bootstrap is defensive as well as convenient:
+
+- `translations/i18n.js` first reuses an already loaded `window.SmartKazemAudio` instance.
+- If the page already declares `audio-engine.js`, the i18n runtime reuses that script instead of injecting a second copy.
+- Otherwise the shared engine is injected once and initialized idempotently.
+- This means script-order differences between legacy and newer pages must not create duplicate accessibility engines.
+- The accessibility contract applies to every user-facing HTML surface that follows the shared i18n contract, including books, the home/realm surface, inventory, and the legacy Paragraph Machine surface.
+- Page-specific manifests may describe verification requirements, but they do not create separate accessibility implementations.
+
+When validating a future page, check the shared runtime rather than adding page-specific accessibility code:
+
+1. Fresh/local state → accessibility is off.
+2. Triple primary-pointer click/tap anywhere → toggles accessibility.
+3. A second triple click/tap → toggles it back off.
+4. While off → accessibility gestures do nothing.
+5. While on → the current localized DOM is what is announced/read.
+6. Changing language → accessibility follows the new rendered language.
+7. Dynamic content replacement → the shared navigation model resynchronizes.
+8. No duplicate `audio-engine.js` instance is created.
 
 ### §21.1 Automatic runtime bootstrap
 

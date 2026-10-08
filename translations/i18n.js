@@ -168,7 +168,19 @@
 
   function ensureAccessibilityRuntime(){
     if(window.SmartKazemAudio)return;
-    if(document.querySelector('script[data-smartkazem-accessibility]'))return;
+
+    // Reuse an explicit shared-engine script when a page already declares it.
+    // This prevents a duplicate audio-engine.js load if script ordering changes.
+    const existing = [...document.scripts].find((script) => {
+      if (script.dataset.smartkazemAccessibility === 'true') return true;
+      try {
+        return new URL(script.src, document.baseURI).pathname.endsWith('/audio-engine.js');
+      } catch (_) {
+        return false;
+      }
+    });
+    if(existing)return;
+
     const script=document.createElement('script');
     script.src='audio-engine.js';
     script.defer=true;

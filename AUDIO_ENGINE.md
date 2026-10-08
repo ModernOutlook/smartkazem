@@ -3,7 +3,7 @@
 SmartKazem uses one lightweight page-level Web Audio engine plus an isolated speech accessibility layer.
 
 ## Startup
-- `audio-engine.js` is preloaded and synchronously initialized from the document head.
+- `translations/i18n.js` owns the shared language boundary and automatically bootstraps the shared `audio-engine.js` when needed. Pages that explicitly load the engine are reused rather than duplicated.
 - The engine creates one `AudioContext` and one master gain graph during startup.
 - No external audio files are downloaded.
 - Browsers may keep the context suspended until user activation. The graph is already ready, so the first real pointer gesture can produce sound immediately.
