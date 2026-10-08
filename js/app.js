@@ -251,6 +251,7 @@ document.getElementById('book-close').addEventListener('click', BookNavigation.c
 
 document.getElementById('continuity-shahnameh').addEventListener('click', () => openSecondaryPage('shahnameh.html', 'continuity'));
 document.getElementById('continuity-emergence').addEventListener('click', () => openSecondaryPage('emergence.html', 'continuity'));
+document.getElementById('continuity-disturbed-manifesto').addEventListener('click', () => openSecondaryPage('disturbed-manifesto.html', 'continuity'));
 document.getElementById('structure-treatise').addEventListener('click', () => openSecondaryPage('philosophical-treatise.html', 'structure'));
 document.getElementById('share-human-machines').addEventListener('click', () => BookNavigation.openBook('share', 'humanMachines'));
 document.getElementById('share-forgers').addEventListener('click', () => BookNavigation.openBook('share', 'forgers'));
