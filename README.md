@@ -68,9 +68,12 @@ Talk Back is a parallel presentation/service layer over the same language-select
 ├── observation.html · book
 ├── observation-25.html · book
 ├── echo-layer3.html · book
+├── emergence.html · book
+├── emergence-2.html · book
 ├── philosophical-treatise.html · book
+├── possible-mirror.html · book
 ├── paragraph-machine.html · machine
-├── css/ · site, desktop, splash
+├── css/ · site, desktop, splash, visual-security
 ├── ui/ · bootstrap, mobile, shared layout
 ├── js/ · page/application controllers
 ├── engine/ · domain core
@@ -78,7 +81,9 @@ Talk Back is a parallel presentation/service layer over the same language-select
 ├── adapters/ · UI/service orchestration
 ├── content/ · authoritative content datasets
 ├── translations/ · language catalogs + i18n runtime
-└── .github/workflows/ · quality/deployment
+├── .well-known/security.txt · vulnerability-reporting metadata
+├── SECURITY.md · security policy
+└── .github/workflows/ · quality, security, deployment
 
 
 ## 5. Layer ownership
@@ -197,15 +202,24 @@ Language controls are especially sensitive to narrow portrait widths, RTL/LTR, l
 
 ## 12. Security
 
-Preserve existing CSP and browser security constraints, including HTTPS-only model endpoints and restricted embedding/navigation behavior.
+Preserve the repository's browser-enforced security layer:
+- CSP with least-privilege `connect-src` per page.
+- `Permissions-Policy` and `Referrer-Policy`.
+- No insecure HTTP URLs or `javascript:` URLs in deployed HTML.
+- Restricted framing/embedding and navigation behavior.
+- No committed keys, tokens, passwords, or provider secrets.
+
+The site is static GitHub Pages. Repository files cannot provide arbitrary HTTP response headers, so do not add or rely on server-only header configuration that GitHub Pages will ignore. Use browser-enforced policies and repository CI checks instead.
+
+`css/visual-security.css` is presentation-only. It provides the shared brightness, focus, contrast, transparency, motion, and control-surface layer. It must not acquire navigation, state, content, i18n, engine, service, or adapter logic.
 
 A browser-side API key is not a server-side secret. Never commit keys, tokens, passwords, or provider secrets.
 
 ## 13. Quality and deployment
 
-quality.yml currently checks JavaScript syntax, JSON validity, duplicate HTML IDs, missing local HTML assets, inline scripts, and inline event handlers.
-
-Deployment definitions currently include deploy.yml and deploy-pages.yml; their overlap is known technical debt. Consolidation is a dedicated infrastructure change.
+- `quality.yml` checks JavaScript syntax, JSON validity, duplicate HTML IDs, missing local HTML assets, inline scripts, and inline event handlers.
+- `security.yml` checks deployed HTML for browser-security contracts, insecure HTTP URLs, `javascript:` URLs, and likely committed credentials.
+- `deploy.yml` is the current deployment workflow. Do not assume a second deployment workflow exists; verify the actual `.github/workflows/` tree before changing deployment infrastructure.
 
 ## 14. Known technical debt
 
@@ -216,7 +230,7 @@ Deployment definitions currently include deploy.yml and deploy-pages.yml; their 
 - some controlled innerHTML
 - no complete formatter/linter/type system
 - no full browser smoke-test suite
-- overlapping deployment workflows
+- some legacy HTML pages retain page-local CSS/markup
 - Structure.txt overlaps README
 
 These are boundaries, not reasons for opportunistic rewrites.
