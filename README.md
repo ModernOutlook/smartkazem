@@ -24,19 +24,17 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary surfaces (current child-page inventory):
+Secondary pages (current child-page inventory): **10 pages, all books**
 1. **رساله فلسفی** — book
 2. **شاهنامه‌خوانی** — book
 3. **فصل اول ظهور** — book
 4. **سرزمین مشاهده؛ ۲۵ بار رسیدن** — book
 5. **آینه‌ی ممکن‌ها** — book
 6. **فصل دوم ظهور** — book
-7. **بازشناسی** — Paragraph Machine
-8. **هم‌سنگی** — Paragraph Machine
-9. **سرزمین مشاهده؛ یک رود، یک جریان** — book
-10. **پژواک لایه سوم** — book
-11. **انسان و ماشین‌هایش** — book
-12. **جاعلان تقلید** — book
+7. **سرزمین مشاهده؛ یک رود، یک جریان** — book
+8. **پژواک لایه سوم** — book
+9. **انسان و ماشین‌هایش** — book
+10. **جاعلان تقلید** — book
 
 `paragraph-machine.html` is also a **machine surface**, not a book. It is the legacy/standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
@@ -85,12 +83,12 @@ Talk Back is a parallel presentation/service layer over the same language-select
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
 
-The current user-facing surfaces include Home, the five realms, books, and Paragraph Machine. New user-facing pages must be classified by the page model above before being added.
+The current user-facing surfaces are Home, the five realms, 10 book pages, and the Paragraph Machine machine surface. `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
 
 
 
 /
-├── index.html · home + dynamic child pages (books + Paragraph Machine modes)
+├── index.html · home + dynamic book pages + shared Paragraph Machine workspace
 ├── shahnameh.html · شاهنامه‌خوانی book
 ├── observation.html · سرزمین مشاهده؛ یک رود، یک جریان book
 ├── observation-25.html · سرزمین مشاهده؛ ۲۵ بار رسیدن book
