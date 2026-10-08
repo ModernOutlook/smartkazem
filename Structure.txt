@@ -14,7 +14,7 @@ translations/ — کاتالوگ‌های ترجمهٔ رابط و محتوای 
 engine/ — موتورهای پردازش
 services/ — سرویس‌ها و ارتباط با مدل‌های زبانی
 adapters/ — آداپتورهای اتصال رابط به سرویس‌ها
-فایل‌های HTML مستقل مانند shahnameh.html، observation.html و paragraph-machine.html
+فایل‌های HTML مستقل مانند shahnameh.html و observation.html
 معماری زبان‌ها
 سایت چهار زبان دارد:
 
