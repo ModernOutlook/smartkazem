@@ -21,8 +21,9 @@
 }
 
 /* Shared language-control contract.
- * Every page keeps the same language control available across viewport modes.
- * Page-specific layouts own the control's exact position and visual theme.
+ * Every viewport uses the same language-control presentation.
+ * Page-specific layouts may position/theme the control, but mobile does not
+ * change its desktop size, spacing, radius, or wrapping behavior.
  */
 .global-lang,
 .lang-switch {
@@ -32,7 +33,8 @@
   justify-content: center;
   flex-wrap: wrap;
   gap: 2px;
-  max-width: calc(100vw - 20px);
+  max-width: calc(100vw - 16px);
+  border-radius: 8px !important;
 }
 
 .global-lang button,
@@ -42,46 +44,7 @@
   flex: 0 1 auto;
   white-space: nowrap;
   touch-action: manipulation;
-}
-
-@media (max-width: 1023px) {
-  .global-lang,
-  .lang-switch {
-    max-width: calc(100vw - 16px);
-    border-radius: 20px !important;
-  }
-
-  .global-lang button,
-  .lang-switch button {
-    min-width: var(--ui-touch-target);
-    min-height: var(--ui-touch-target);
-    border-radius: 16px !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .global-lang,
-  .lang-switch {
-    border-radius: 8px !important;
-  }
-
-  .global-lang button,
-  .lang-switch button {
-    min-height: 36px;
-    border-radius: 8px;
-  }
-}
-
-@media (max-width: 359px) {
-  .global-lang,
-  .lang-switch {
-    max-width: calc(100vw - 12px);
-  }
-
-  .global-lang button,
-  .lang-switch button {
-    min-width: 42px;
-  }
+  border-radius: 8px;
 }
 
 /* Direction-change viewport safety.
