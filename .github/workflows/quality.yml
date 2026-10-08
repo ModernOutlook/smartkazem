@@ -72,7 +72,7 @@ jobs:
                   bad.append(f'{p}: inline style block detected; move presentation to CSS')
               if len(re.findall(r'data-site-lang=', s)) != 4:
                   bad.append(f'{p}: shared language selector contract requires exactly four language buttons')
-              if not re.search(r'<html\b[^>]*\blang=["\\\'][^"\\\']+["\\\']', s, re.I):
+              if not re.search(r"<html\b[^>]*\blang=['\"][^'\"]+['\"]", s, re.I):
                   bad.append(f'{p}: missing document language')
           if bad:
               print('\n'.join(bad)); sys.exit(1)
