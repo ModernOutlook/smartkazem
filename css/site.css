@@ -878,3 +878,109 @@ html,body{scrollbar-gutter:stable both-edges}
 
 
 .smartkazem-a11y-announcer{position:fixed;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+
+
+/* ===== Landing main menu visual upgrade =====
+   Visual layer only: preserves realm/core markup, navigation and all
+   landing-page controls. No labels are introduced.
+*/
+.home-page .orbit{
+  isolation:isolate;
+  padding:clamp(6px,1.2vmin,14px);
+}
+
+.home-page .menu-svg{
+  width:min(94vw,94vh);
+  height:min(94vw,94vh);
+  max-width:980px;
+  max-height:980px;
+  overflow:visible;
+  filter:drop-shadow(0 18px 42px rgba(0,0,0,.42));
+}
+
+.home-page .menu-svg > circle:first-of-type{
+  fill:#000;
+  stroke:#000;
+  stroke-width:10;
+  paint-order:stroke fill;
+}
+
+.home-page .menu-svg > circle:nth-of-type(2){
+  stroke:#173b4d;
+  stroke-width:2.5;
+  opacity:.42;
+}
+
+.home-page .realm{
+  transition:filter .28s ease,opacity .28s ease,transform .28s ease;
+  transform-origin:500px 500px;
+}
+
+.home-page .realm > circle:first-child{
+  stroke:rgba(0,0,0,.72);
+  stroke-width:5;
+  paint-order:stroke fill;
+}
+
+.home-page .realm .ring-border{
+  stroke-width:2.25;
+  opacity:.92;
+  vector-effect:non-scaling-stroke;
+}
+
+.home-page #realm-structure .ring-border{filter:drop-shadow(0 0 5px rgba(8,121,184,.35))}
+.home-page #realm-continuity .ring-border{filter:drop-shadow(0 0 5px rgba(225,183,43,.32))}
+.home-page #realm-experience .ring-border{filter:drop-shadow(0 0 6px rgba(182,83,255,.34))}
+.home-page #realm-reference .ring-border{filter:drop-shadow(0 0 6px rgba(233,77,67,.34))}
+.home-page #realm-share .ring-border{filter:drop-shadow(0 0 6px rgba(27,213,138,.34))}
+
+.home-page .realm:hover,
+.home-page .realm:focus-visible{
+  filter:brightness(1.16) saturate(1.12) drop-shadow(0 0 15px currentColor);
+}
+
+.home-page .realm.selected{
+  filter:brightness(1.24) saturate(1.1) drop-shadow(0 0 23px currentColor);
+}
+
+.home-page .realm.selected > circle:first-child{
+  stroke-width:6;
+}
+
+.home-page #core{
+  transition:transform .28s ease,filter .28s ease;
+  transform-origin:500px 500px;
+  filter:drop-shadow(0 0 10px rgba(255,255,255,.78))
+         drop-shadow(0 0 28px rgba(220,255,245,.42));
+}
+
+.home-page #core:hover,
+.home-page #core:focus-visible{
+  filter:brightness(1.14)
+         drop-shadow(0 0 13px rgba(255,255,255,.95))
+         drop-shadow(0 0 34px rgba(220,255,245,.62));
+}
+
+.home-page #core > circle:first-child{
+  opacity:.98;
+}
+
+.home-page #core > circle:last-child{
+  filter:drop-shadow(0 0 7px rgba(255,255,255,.95));
+}
+
+@media (max-width:600px){
+  .home-page .orbit{padding:0}
+  .home-page .menu-svg{
+    width:108vw;
+    height:108vw;
+    max-width:none;
+    max-height:none;
+  }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .home-page .realm,
+  .home-page #core{transition:none}
+}
+\n
