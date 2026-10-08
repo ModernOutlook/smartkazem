@@ -56,7 +56,9 @@
       "page": "Page",
       "navigable": "navigable items",
       "sections": "sections",
-      "navigationHelp": "Use arrow keys to move. Press Enter to activate."
+      "navigationHelp": "Use arrow keys to move. Press Enter to activate.",
+      "article": "Article",
+      "readingArticle": "Reading article"
     },
     "episodeNavigation": "Episode navigation",
     "previousEpisode": "Previous episode",
