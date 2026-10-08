@@ -263,16 +263,33 @@
     return state.accessibility;
   }
   function handleTripleClick(event){
+    // Only genuine pointer/touch clicks may toggle accessibility.
+    // Keyboard/programmatic clicks have detail=0 and must never count.
+    const detail=Number(event.detail)||0;
+    if(detail===0)return false;
     const now=performance.now();
     clickTimes=clickTimes.filter(time=>now-time<=TRIPLE_WINDOW);
-    clickTimes.push(now);
-    if(clickTimes.length<3)return false;
-
-    clickTimes=[];
-    event.preventDefault();
-    event.stopImmediatePropagation();
-    toggleAccessibility();
-    return true;
+    if(detail>=3){
+      clickTimes=[];
+      if(event.cancelable)event.preventDefault();
+      event.stopImmediatePropagation();
+      toggleAccessibility();
+      return true;
+    }
+    if(detail===1){
+      clickTimes.push(now);
+      if(clickTimes.length>=3){
+        clickTimes=[];
+        if(event.cancelable)event.preventDefault();
+        event.stopImmediatePropagation();
+        toggleAccessibility();
+        return true;
+      }
+    }else if(detail===2){
+      // Preserve the sequence for browsers that expose click.detail.
+      clickTimes.push(now);
+    }
+    return false;
   }
   function handlePointerDown(event){
     if(event.button!==undefined&&event.button!==0)return;resume();setRealm(realmFromElement(event.target));if(!state.accessibility)return;
