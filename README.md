@@ -37,11 +37,11 @@ Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 a
 10. **جاعلان تقلید** — book
 11. **مانیفست آشوب‌زده** — book
 
-`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\n`paragraph-machine.html` is also a **machine surface**, not a book. It is the standalone Paragraph Machine interface and is reachable conceptually from both Paragraph Machine entry paths:
+`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
 - **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
 
-`بازشناسی` and `هم‌سنگی` remain two modes of the same shared Paragraph Machine workspace in `index.html`; `paragraph-machine.html` is the separate legacy machine surface for that same functional category. They are not separate engines.
+`بازشناسی` and `هم‌سنگی` are two modes of the same shared Paragraph Machine workspace. No legacy Paragraph Machine surface is maintained.
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۱ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
