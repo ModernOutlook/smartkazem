@@ -92,8 +92,13 @@
     }catch(_){return false;}
   }
   function selectedArticle(){
-    const explicit=document.querySelector('article[data-a11y-read], article.book-body, main article');
-    return explicit||null;
+    // Accessibility is site-wide: prefer the semantic article, then the page
+    // main region, then the page's primary content container. This keeps the
+    // reader independent of any specific book/page implementation.
+    const explicit=document.querySelector(
+      'article[data-a11y-read], article.book-body, main article, main, [role="main"], .container'
+    );
+    return explicit||document.body||null;
   }
   function accessibleName(element){
     if(!element)return'';
