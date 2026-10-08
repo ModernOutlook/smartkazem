@@ -108,17 +108,23 @@
 
     const data = await response.json();
 
-    // Chapter-specific catalogs are layered onto the base site catalog.
-    // This keeps the global i18n runtime as the single language switcher while
-    // allowing long-form chapter content to live in dedicated translation files.
+    // Long-form pages may declare their own translation reservoir at the HTML
+    // boundary. This keeps SiteI18n generic: adding a future page does not
+    // require editing this runtime.
     const pageKey = document.querySelector('meta[name="i18n-page"]')?.content;
-    if (pageKey === 'emergence' || pageKey === 'emergence2' || pageKey === 'layer3' || pageKey === 'disturbedManifesto') {
-      const chapterResponse = await fetch(
-        pageKey === 'emergence2' ? 'translations/emergence-2.json' : pageKey === 'layer3' ? 'translations/echo-layer3.json' : pageKey === 'disturbedManifesto' ? 'translations/disturbed-manifesto.json' : 'translations/emergence.json',
-        { cache: 'no-store' }
-      );
+    const declaredCatalog = document.querySelector('meta[name="i18n-catalog"]')?.content;
+    const legacyCatalogs = {
+      emergence: 'translations/emergence.json',
+      emergence2: 'translations/emergence-2.json',
+      layer3: 'translations/echo-layer3.json',
+      disturbedManifesto: 'translations/disturbed-manifesto.json'
+    };
+    const chapterPath = declaredCatalog || legacyCatalogs[pageKey];
+
+    if (pageKey && chapterPath) {
+      const chapterResponse = await fetch(chapterPath, { cache: 'no-store' });
       if (!chapterResponse.ok) {
-        throw new Error( 'Chapter translation catalog unavailable: ' + pageKey);
+        throw new Error('Chapter translation catalog unavailable: ' + pageKey);
       }
       const chapter = await chapterResponse.json();
       data.chapters = data.chapters || {};
