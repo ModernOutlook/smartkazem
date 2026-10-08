@@ -1,3 +1,5 @@
+.global-lang{position:fixed;z-index:10000;top:12px;left:50%;transform:translateX(-50%);display:flex;align-items:center;justify-content:center;gap:2px;max-width:calc(100vw - 16px);padding:3px;border:1px solid rgba(255,255,255,.18);background:rgba(8,12,16,.72);border-radius:22px;backdrop-filter:blur(10px);direction:ltr;flex-wrap:wrap;box-sizing:border-box}.global-lang button{min-width:40px;min-height:36px;border:0;background:transparent;color:rgba(255,255,255,.72);padding:6px 9px;border-radius:17px;cursor:pointer;font:800 .62rem/1 Vazirmatn,Tahoma,sans-serif;white-space:nowrap}.global-lang button.active{background:rgba(255,255,255,.14);color:#fff}
+
 /* Extracted from legacy paragraph-machine block 1. */
 .global-lang button.active{background:rgba(255,255,255,.14);color:#fff}
 
@@ -10,6 +12,7 @@
   margin-bottom: 10px;
 }
 body {
+  padding-top: 64px;
   white-space:break-spaces;
    word-wrap:break-word;
  }
