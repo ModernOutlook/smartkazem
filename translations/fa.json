@@ -605,6 +605,7 @@
     "baseUrlLabel": "Base URL",
     "modelLabel": "Model ID",
     "proxyUrlLabel": "Proxy URL",
+    "proxyUrlPlaceholder": "https://your-worker.workers.dev",
     "connectionMode": "حالت اتصال",
     "direct": "Direct",
     "proxy": "Proxy",
