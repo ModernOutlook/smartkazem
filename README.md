@@ -98,6 +98,7 @@ The current user-facing surfaces are Home, the five realms, 10 book pages, and t
 ├── echo-layer3.html · پژواک لایه سوم book
 ├── philosophical-treatise.html · رساله فلسفی book
 ├── paragraph-machine.html · legacy/standalone Paragraph Machine surface (machine)
+├── inventory.html · playing-card inventory
 ├── css/ · site, desktop, splash
 ├── ui/ · bootstrap, mobile, shared layout
 ├── js/ · page/application controllers
