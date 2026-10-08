@@ -1194,6 +1194,7 @@
     "baseUrlLabel": "عنوان الخدمة",
     "modelLabel": "معرّف النموذج",
     "proxyUrlLabel": "عنوان Proxy",
+    "proxyUrlPlaceholder": "https://your-worker.workers.dev",
     "connectionMode": "وضع الاتصال",
     "direct": "Direct",
     "proxy": "Proxy",
