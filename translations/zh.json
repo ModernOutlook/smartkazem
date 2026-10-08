@@ -64,7 +64,14 @@
     "previousEpisode": "上一集",
     "nextEpisode": "下一集",
     "episodeReader": "章节文本",
-    "emergence": "第一章 · 涌现"
+    "emergence": "第一章 · 涌现",
+    "manifestoParts": "宣言部分",
+    "partNavigation": "选择部分",
+    "partText": "正文",
+    "previousPart": "上一部分",
+    "nextPart": "下一部分",
+    "goToPart": "前往第 ",
+    "partOf": "第 {n} / {t} 部分"
   },
   "meta": {
     "brand": "现代视野",
