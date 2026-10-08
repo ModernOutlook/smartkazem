@@ -24,12 +24,21 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary surfaces:
-- **Book:** the normal secondary reading surface.
-- **Machine:** Paragraph Machine; potentially a small number of machines.
-- **Album:** a future separate surface.
+Secondary surfaces (current child-page inventory):
+1. **رساله فلسفی** — book
+2. **شاهنامه‌خوانی** — book
+3. **فصل اول ظهور** — book
+4. **سرزمین مشاهده؛ ۲۵ بار رسیدن** — book
+5. **آینه‌ی ممکن‌ها** — book
+6. **فصل دوم ظهور** — book
+7. **بازشناسی** — Paragraph Machine
+8. **هم‌سنگی** — Paragraph Machine
+9. **سرزمین مشاهده؛ یک رود، یک جریان** — book
+10. **پژواک لایه سوم** — book
+11. **انسان و ماشین‌هایش** — book
+12. **جاعلان تقلید** — book
 
-An HTML file, box, panel, overlay, card, or popup is not automatically a page/category. Today, secondary content is primarily books; Paragraph Machine is a machine.
+The two Paragraph Machine entries are two workspace modes/pages, not separate engines. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ## 3. Two-repository content architecture
 
@@ -75,13 +84,16 @@ The current user-facing surfaces include Home, the five realms, books, and Parag
 
 
 /
-├── index.html · home
-├── shahnameh.html · book
-├── observation.html · book
-├── observation-25.html · book
-├── echo-layer3.html · book
-├── philosophical-treatise.html · book
-├── paragraph-machine.html · machine
+├── index.html · home + dynamic child pages (books + Paragraph Machine modes)
+├── shahnameh.html · شاهنامه‌خوانی book
+├── observation.html · سرزمین مشاهده؛ یک رود، یک جریان book
+├── observation-25.html · سرزمین مشاهده؛ ۲۵ بار رسیدن book
+├── possible-mirror.html · آینه‌ی ممکن‌ها book
+├── emergence.html · فصل اول ظهور book
+├── emergence-2.html · فصل دوم ظهور book
+├── echo-layer3.html · پژواک لایه سوم book
+├── philosophical-treatise.html · رساله فلسفی book
+├── paragraph-machine.html · legacy/standalone machine surface
 ├── css/ · site, desktop, splash
 ├── ui/ · bootstrap, mobile, shared layout
 ├── js/ · page/application controllers
