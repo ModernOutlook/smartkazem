@@ -1200,6 +1200,6 @@
     "proxy": "Proxy",
     "connect": "连接",
     "connectionSettings": "连接设置",
-    "localStorageNote": "API 密钥不会存储在 localStorage 中。"
+    "localStorageNote": "默认模式使用安全的服务器端代理；API 密钥不会在浏览器中显示或存储。"
   }
 }
