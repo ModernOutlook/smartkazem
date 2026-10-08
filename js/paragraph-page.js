@@ -4,6 +4,7 @@
 const ENTRY_MODES=Object.freeze({REFERENCE:'reference',EXPERIENCE:'experience'});
 const DOMAIN_ORDER=Object.freeze(['S','T','E','R','C']);
 const STATUS_OPTIONS=Object.freeze([['ok','مطابق'],['warn','مبهم'],['bad','متناقض']]);
+const REALM_I18N_KEYS=Object.freeze({S:'paragraphMachine.realmS',T:'paragraphMachine.realmT',E:'paragraphMachine.realmE',R:'paragraphMachine.realmR',C:'paragraphMachine.realmC'});
 const elements={
  page:document.getElementById('paragraph-page'),
  primaryPanel:document.getElementById('paragraph-primary-panel'),
@@ -49,6 +50,7 @@ function saveSettingsAfterSuccess(){
  loadSettings();
 }
 function updateDirection(){elements.input.dir=['fa','ar'].includes(getLanguage())?'rtl':'ltr'}
+function updateRealmLabels(){elements.choices.forEach(c=>{const key=REALM_I18N_KEYS[c.dataset.domain];if(!key)return;const label=translate(key,c.dataset.domain);c.setAttribute('aria-label',label);const span=c.querySelector('[data-realm-label]');if(span)span.textContent=label;const img=c.querySelector('img');if(img)img.alt=label;});elements.popover.setAttribute('aria-label',translate('paragraphMachine.judgmentDialog','انتخاب قضاوت قلمرو'));}
 function escapeHtml(v){return String(v||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 function getActionLabel(m){return m===ENTRY_MODES.REFERENCE?translate('paragraphMachine.equivalence','هم‌سنگی'):translate('paragraphMachine.recognize','بازشناسی')}
 function getSourceLabel(m){return m===ENTRY_MODES.REFERENCE?translate('paragraphMachine.referenceSource','متن کاربر → ترجمه به فارسی → سنجش'):translate('paragraphMachine.experienceSource','تولید فارسی → سنجش → ترجمه به زبان سایت')}
@@ -130,8 +132,9 @@ document.addEventListener('keydown',e=>{
  }
 });
 document.getElementById('paragraph-close').addEventListener('click',()=>window.SitePages?.closeParagraph?.());
-document.addEventListener('site:languagechange',()=>{updateDirection();if(elements.page.classList.contains('open'))elements.action.textContent=getActionLabel(entryMode)});
+document.addEventListener('site:languagechange',()=>{updateDirection();updateRealmLabels();if(elements.page.classList.contains('open')){elements.action.textContent=getActionLabel(entryMode);elements.source.textContent=getSourceLabel(entryMode)}});
 loadSettings();
+updateRealmLabels();
 document.dispatchEvent(new CustomEvent('paragraph:settings-sync'));
 window.ParagraphPage=Object.freeze({open:openParagraphPage,close:closeParagraphPage});
 })();
