@@ -98,7 +98,7 @@ The current user-facing surfaces are Home, the five realms, 11 book pages, and t
 ├── emergence-2.html · فصل دوم ظهور book
 ├── echo-layer3.html · پژواک لایه سوم book
 ├── philosophical-treatise.html · رساله فلسفی book
-├── paragraph-machine.html · legacy/standalone Paragraph Machine surface (machine)
+├── shared paragraph workspace in index.html · shared Paragraph Machine workspace (machine)
 ├── inventory.html · playing-card inventory utility surface
 ├── css/ · site, desktop, splash
 ├── ui/ · bootstrap, mobile, shared layout
@@ -206,7 +206,7 @@ Translation bridge public operations: toPersian(), fromPersian(), fromPersianBat
 
 llm-client.js is the model-service boundary. UI must not call the model API directly; adapters must not duplicate retry logic.
 
-paragraph-machine.html is a separate/legacy **machine surface**, not a book and not the shared home workspace. It belongs to the same Paragraph Machine category reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **مرجع تقلید → هم‌سنگی → ماشین پاراگراف** paths. The shared current workspace is still the `paragraph-page` surface in `index.html`; the standalone file is maintained as a legacy compatibility surface.
+shared paragraph workspace in index.html is a separate/legacy **machine surface**, not a book and not the shared home workspace. It belongs to the same Paragraph Machine category reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **مرجع تقلید → هم‌سنگی → ماشین پاراگراف** paths. The shared current workspace is still the `paragraph-page` surface in `index.html`; the standalone file is maintained as a legacy compatibility surface.
 
 ## 9. Content and reading ownership
 
