@@ -875,3 +875,6 @@ html,body{scrollbar-gutter:stable both-edges}
 .inventory-link{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:8px 16px;border:1px solid rgba(255,255,255,.22);border-radius:999px;background:rgba(255,255,255,.055);color:#fff;text-decoration:none;font:600 .78rem/1.2 Vazirmatn,system-ui,sans-serif;letter-spacing:.01em;backdrop-filter:blur(10px);box-shadow:0 10px 28px rgba(0,0,0,.32),inset 0 1px rgba(255,255,255,.08);transition:transform .2s ease,filter .2s ease,border-color .2s ease,background .2s ease}
 .inventory-link:hover,.inventory-link:focus-visible{transform:translateY(-2px);filter:brightness(1.16);border-color:rgba(255,255,255,.48);background:rgba(255,255,255,.09);outline:none}
 @media(max-width:600px){.logo-art{width:min(82vw,82vh);height:auto}.logo-art img{width:min(82vw,82vh);height:min(82vw,82vh)}.inventory-link{max-width:calc(100vw - 32px);font-size:.72rem}}
+
+
+.smartkazem-a11y-announcer{position:fixed;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
