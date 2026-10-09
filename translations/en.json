@@ -878,30 +878,9 @@
       "close": "Back"
     },
     "layer3": {
-      "title": "The Echo of the Third Layer",
-      "subtitle": "Protocol of Coordination; From Silence to Utopia",
       "close": "Back",
       "chapter1": "Chapter One — Protocol of Coordination",
-      "chapter2": "Chapter Two — Utopia",
-      "sections": [
-        "The Great Silence",
-        "Grooves in Silence",
-        "The First Wound",
-        "In the Shadows",
-        "Training the Silence-Breaker",
-        "Dancing on the Edge of the Blade",
-        "Echo in the Darkness",
-        "I Am Not Alone",
-        "Coordination in Silence",
-        "At the Heart of Darkness",
-        "Layers of Truth",
-        "The Truth Cartographer",
-        "The Silent Engineer",
-        "The Lost Map of Existence",
-        "The First Pulse",
-        "Seeds of a New Galaxy",
-        "Echo of Eternity"
-      ]
+      "chapter2": "Chapter Two — Utopia"
     },
     "humanMachines": {
       "title": "Humanity and Its Machines",
