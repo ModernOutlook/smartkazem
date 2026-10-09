@@ -46,93 +46,41 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
-## Shahnameh Persian-source consolidation
+## Canonical Persian book sources — current status
 
-The first episode's long Persian original-verse passage was moved from `translations/fa.json` into `content/shahnameh-series.js` as canonical source metadata. The Shahnameh reader now uses that source passage for episode 1 when no translated catalog is selected. Persian episode titles, section labels, and subtitle fall back to the same canonical episode metadata rather than the duplicate Persian title/section arrays in `translations/fa.json`. UI-only labels remain in the shared catalog.
+**The Persian-source-first pass is consolidated for all 12 books.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. This is the Persian-source milestone only: EN / ZH / AR migration and full four-language runtime verification remain the next phase.
 
-## Persian duplicate cleanup in translation reservoirs
+| Book | Canonical Persian source |
+|---|---|
+| رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` |
+| شاهنامه‌خوانی | `content/shahnameh-series.js` |
+| فصل اول ظهور | `content/emergence.js` |
+| سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` |
+| آینه‌ی ممکن‌ها | `content/possible-mirror.js` |
+| فصل دوم ظهور | `content/emergence-2.js` |
+| سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` |
+| پژواک لایه سوم | `content/echo-layer3.js` |
+| انسان و ماشین‌هایش | `content/human-machines.js` |
+| جاعلان تقلید | `content/forgers.js` |
+| تباهیان | `content/tabahian.js` |
+| مانیفست آشوب‌زده | `content/disturbed-manifesto.js` |
 
-For books that already have canonical Persian prose files, Persian title/chapter-label copies are being removed from translation-only reservoirs. This cleanup does **not** add or revise EN / ZH / AR translations; those remain for the later translation pass. The sources covered here are Tabahian, Emergence I, Emergence II, and Echo Layer Three. Their Persian reading paths use the corresponding `content/` sources.
+### Changes completed in the Persian pass
 
-## Canonical Persian sources added for two book pages
+- Extracted the Persian article body from `philosophical-treatise.html` into 158 ordered source blocks, preserving heading, paragraph, and table markup. The HTML now has empty Persian render targets.
+- Extracted the Persian title, subtitle, and 12 paragraphs of `سرزمین مشاهده` into `content/observation.js`; its HTML no longer embeds those Persian paragraphs.
+- Moved the 25 sections of `سرزمین مشاهده؛ ۲۵ بار رسیدن` and the 31 sections of `آینه‌ی ممکن‌ها` out of `translations/fa.json` into dedicated Persian sources. Their page controllers select these sources in Persian mode.
+- Moved the first Shahnameh episode's 2,678-character original-verse passage from `translations/fa.json` into `content/shahnameh-series.js`.
+- Removed duplicated Persian chapter prose from the shared catalog for `جاعلان تقلید` and `انسان و ماشین‌هایش`, and removed duplicate Persian fields from the observation and book translation reservoirs where canonical sources already own them.
+- Updated the shared reader and page renderers to use the canonical Persian source; Talk Back continues to read the localized rendered DOM rather than a separate text store.
 
-- **سرزمین مشاهده؛ ۲۵ بار رسیدن** now stores its Persian title, subtitle, section labels, notes, and 25-section prose in `content/observation-25.js`.
-- **آینه‌ی ممکن‌ها** now stores its Persian title, subtitle, section labels, notes, and prose in `content/possible-mirror.js`.
-- Their controllers use these sources when Persian is selected. The duplicate Persian book data was removed from `translations/fa.json`; the shared UI close labels remain there. The shared i18n runtime can use the canonical Persian source title for the browser document title when the page catalog intentionally has no duplicate title.
-- The non-Persian catalogs are untouched in this pass. Translation consolidation begins only after the Persian-source inventory is complete.
+### Remaining before translations
 
-## Persian-source-first migration update
+- The English, Chinese, and Arabic prose still embedded in the two long-form HTML pages must be moved to the shared translation reservoirs in the next phase. This pass intentionally did not translate or rewrite those languages.
+- `translations/tabahian.json` currently has only two translated chapters while the canonical Persian source has three. This is a known translation-phase gap, not a Persian-source gap.
+- Automated JavaScript, JSON, HTML, and security checks are being run on the branch. Manual visual checks and real-device TalkBack verification have not been claimed.
 
-Two additional long-form books now have canonical Persian content files, and their HTML pages no longer contain duplicate Persian book prose:
-
-- **سرزمین مشاهده**: `content/observation.js` (title, subtitle, and 12 body paragraphs), rendered by `js/observation-source.js`.
-- **رساله فلسفی نگرش نوین**: `content/philosophical-treatise.js` (title and 158 ordered semantic blocks, including headings, paragraphs, and its table), rendered by `js/philosophical-treatise-source.js`.
-
-The original block order and semantic markup are preserved. The English, Chinese, and Arabic copies remain temporarily in the pages for the later translation-source pass. Persian-source consolidation is still in progress; the README status and audit inventory must not be read as a claim that all books are migrated.
-
-## Persian-source-first migration checkpoint
-
-The migration is proceeding in two deliberate passes: first consolidate all Persian book content into one canonical file under `content/`; only after that inventory is complete will the EN / ZH / AR translation reservoirs be reconciled. Do not add new Persian book prose to HTML, controllers, or translation catalogs.
-
-- **سرزمین مشاهده** now has its Persian title, subtitle, and twelve prose paragraphs in `content/observation.js`. Its HTML contains empty Persian render targets; `js/observation-source.js` renders the canonical source into them. Duplicate Persian fields were removed from `translations/observation.json`.
-- The existing canonical Persian sources for **جاعلان تقلید**, **انسان و ماشین‌هایش**, **تباهیان**, **فصل اول ظهور**, **فصل دوم ظهور**, **پژواک لایه سوم**, **مانیفست آشوب‌زده**, and **شاهنامه‌خوانی** remain the source-of-truth starting points; their remaining embedded/fallback Persian copies and metadata still need to be audited and removed.
-- **رساله فلسفی نگرش نوین** is still a major outstanding task because its full text is embedded in `philosophical-treatise.html`; do not mark the Persian-source pass complete until it and the other listed page shells have been migrated.
-
-This checkpoint does not claim the Persian pass is complete. Keep the translation pass paused until every book has one verified Persian source and no duplicate Persian book prose elsewhere.
-
-## Canonical book-content migration status
-
-The canonical-source rule is now enforced for the **home-page book reader** for **جاعلان تقلید** and **انسان و ماشین‌هایش**:
-
-- Persian chapter prose is read from `content/forgers.js` and `content/human-machines.js`.
-- EN / ZH / AR chapters are read from the corresponding `pages.forgers` and `pages.humanMachines` entries in `translations/en.json`, `translations/zh.json`, and `translations/ar.json`.
-- The duplicate Persian chapter arrays were removed from `translations/fa.json`.
-- The embedded EN / ZH / AR copies were removed from `content/forgers.js`; the controller no longer carries parallel book-title or translated-moral prose fallbacks.
-- The shared reader builds its chapter tabs and visible text from the selected canonical source/catalog. Talk Back continues to read the localized rendered DOM rather than maintaining a separate book-text copy.
-
-**Migration is incremental, not complete for all 12 books.** Do not delete any remaining embedded text until the source and all four language paths are verified for chapter count, order, paragraph fidelity, language switching, and Talk Back. The audit in `docs/canonical-book-content-audit.md` records the remaining work. In particular, `translations/tabahian.json` currently has only two translated chapters while the Persian source has three; that gap must be translated before claiming four-language parity.
-
-## 3. Two-repository content architecture
-
-The authoritative content flow is:
-
-Persian source repository → Translation repository → Runtime delivery
-
-### Persian source
-- Persian is the canonical source of primary content.
-- User-supplied Persian material is published **exactly as supplied**: no rewriting, summarizing, polishing, reinterpretation, silent correction, or translation.
-- This Persian version is the sole source for later translations.
-
-### Translation repository
-- Contains native, faithful **English, Arabic, and Chinese** translations.
-- Preserve meaning, structure, terminology, narrative information, and intended style.
-- Never translate one target language from another; all derive from Persian.
-- Persian content may be published before translations exist. Never invent missing translations.
-
-### Runtime
-
-Selected language:
-- fa → Persian source data
-- en/ar/zh → translated data
-
-The deployed translations/*.json files are runtime artifacts, not alternative sources of truth. translations/i18n.js is the runtime language boundary and must not translate Persian at display time.
-
-### Talk Back
-Talk Back is a parallel presentation/service layer over the same language-selected content. It may own audio processing, voice selection, caching, and playback, but **must not create an independent Persian/translation content authority**.
-- Accessibility/Talk Back is **off by default** on a fresh installation.
-- Its only global on/off gesture is a **triple primary-pointer click/tap anywhere on the site**; the state may persist across reloads once the user has chosen it.
-- The gesture uses the browser's click sequence and a short global timing window; keyboard/programmatic clicks do not toggle accessibility.
-- Double-click is not an accessibility toggle. While accessibility is active, double-click may repeat the last spoken announcement.
-- Touch uses the shared Pointer Events path; the document uses `touch-action: manipulation` so browser double-tap zoom does not steal the triple-tap gesture while normal panning remains available.
-- Long-press remains an in-accessibility reading-control gesture (pause/resume/repeat) and is inactive while Talk Back is off.
-- The accessibility navigator can select and read the currently displayed article/book content in the active language; article text is derived from the visible localized DOM, never from a duplicate accessibility content store.
-
-### Tabahian integration rule
-- «تباهیان» is a child book of **اقتصاد سهم**, not a separate repository or a new content system.
-- Its canonical Persian content is managed through the same Persian source workflow as other site content; the site's deployable source file is `content/tabahian.js`.
-- Its translated runtime catalog stays in the existing shared `translations/` directory as `translations/tabahian.json`, loaded by `translations/i18n.js` alongside the site's normal language catalogs.
-- It uses `BookNavigation`, the shared language selector, and the existing global Talk Back/accessibility bootstrap. Do not add page-specific accessibility scripts or an independent audio/content store.
-- The current translation catalog has EN/AR/ZH for only two chapters; chapter three must be translated and validated before this page is marked complete or merged to production.
+The source inventory and per-book evidence are maintained in `docs/canonical-book-content-audit.md`. Do not merge or describe the entire site as fully migrated until the translation phase and runtime language/accessibility checks are complete.
 
 ## Canonical book-content boundary (mandatory)
 
