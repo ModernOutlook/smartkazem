@@ -15,13 +15,13 @@ This inventory tracks the migration to the mandatory single-source book architec
 
 | Book/surface | Canonical Persian source | Persian-source status | Translation/runtime follow-up |
 |---|---|---|---|
-| رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` | Persian prose extracted into 158 ordered semantic blocks; HTML article uses empty Persian targets. | Move embedded EN/ZH/AR prose from HTML into the shared translation reservoir; verify block alignment. |
+| رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` | Persian prose extracted into 158 ordered semantic blocks; HTML article uses empty Persian targets. | EN/ZH/AR prose has been moved into `translations/treatise.json` as 158 ordered blocks per language. Verify rendered block alignment and visual fidelity. |
 | شاهنامه‌خوانی | `content/shahnameh-series.js` | Episode prose, verse, and the long original-verse passage for episode 1 are sourced here. | Finish translating remaining source-backed content; test 81 episode order and filters in four languages. |
 | فصل اول ظهور | `content/emergence.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | Verify all 19 episodes and translated catalog alignment. |
 | سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` | Persian title, subtitle, section labels, and all 25 prose sections moved out of `translations/fa.json`. | Move target-language prose from shared catalogs into the declared translation reservoir; verify section parity. |
 | آینه‌ی ممکن‌ها | `content/possible-mirror.js` | Persian title, subtitle, section labels, and all 31 prose sections moved out of `translations/fa.json`. | Move target-language prose into the shared translation reservoir; verify all sections and interaction behavior. |
 | فصل دوم ظهور | `content/emergence-2.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | Verify all 11 source episodes and translated catalog alignment. |
-| سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` | Persian title, subtitle, and all 12 body paragraphs extracted; HTML uses empty Persian targets. Duplicate Persian fields removed from `translations/observation.json`. | Move EN/ZH/AR prose from HTML into the shared translation reservoir. |
+| سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` | Persian title, subtitle, and all 12 body paragraphs extracted; HTML uses empty Persian targets. Duplicate Persian fields removed from `translations/observation.json`. | EN/ZH/AR prose has been reconciled against the existing `translations/observation.json` reservoir (12 paragraphs per language) and removed from HTML. Verify rendered language switching and paragraph fidelity. |
 | پژواک لایه سوم | `content/echo-layer3.js` | Persian source exists; duplicate Persian title/part labels removed from the translation reservoir. | Verify 17 parts, chapter grouping, and all target-language content. |
 | انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | Verify seven chapters and complete EN/ZH/AR catalog parity. |
 | جاعلان تقلید | `content/forgers.js` | Persian chapter prose is canonical; embedded translations removed from the source JS; duplicate Persian chapter prose removed from `translations/fa.json`. | Verify ten chapters, moral text, and target-language catalogs. |
@@ -75,3 +75,11 @@ Moved the full Persian original-verse passage for episode 1 from `translations/f
 ## Consolidated status (2026-10-09)
 
 The Persian-source-first milestone is complete at the source-boundary level for all 12 listed books. This means a canonical Persian source file exists for each book and the identified duplicate Persian long-form prose was removed from its prior HTML/catalog location. It does **not** mean translations are complete or that visual and TalkBack testing has been performed on a real device. Continue with the translation-source pass only after preserving the current Persian source files as the authoritative references.
+
+
+## Translation-source pass started (2026-10-09)
+
+- **رساله فلسفی نگرش نوین**: extracted 158 EN / ZH / AR blocks from the previous HTML presentation and centralized them in `translations/treatise.json`. Each target language has 158 indexed blocks; the page now has 158 render targets for each of fa/en/zh/ar. Persian blocks are loaded from `content/philosophical-treatise.js`.
+- **سرزمین مشاهده؛ یک رود، یک جریان**: compared the 12 embedded paragraphs per target language against `translations/observation.json`; EN, ZH, and AR each matched exactly in order and text. Removed the duplicate multilingual paragraphs from HTML. The renderer now uses `content/observation.js` for Persian and `translations/observation.json` for EN / ZH / AR.
+- Updated the shared i18n loader to expose declared book translation reservoirs through `bookContent`, so page renderers use the same language-selection pipeline.
+- Translation-source pass remains in progress for the other books. No new translation prose was authored in this step; existing target-language text was centralized and checked for exact alignment.
