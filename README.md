@@ -46,6 +46,15 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
+## Persian-source-first migration update
+
+Two additional long-form books now have canonical Persian content files, and their HTML pages no longer contain duplicate Persian book prose:
+
+- **سرزمین مشاهده**: `content/observation.js` (title, subtitle, and 12 body paragraphs), rendered by `js/observation-source.js`.
+- **رساله فلسفی نگرش نوین**: `content/philosophical-treatise.js` (title and 158 ordered semantic blocks, including headings, paragraphs, and its table), rendered by `js/philosophical-treatise-source.js`.
+
+The original block order and semantic markup are preserved. The English, Chinese, and Arabic copies remain temporarily in the pages for the later translation-source pass. Persian-source consolidation is still in progress; the README status and audit inventory must not be read as a claim that all books are migrated.
+
 ## Persian-source-first migration checkpoint
 
 The migration is proceeding in two deliberate passes: first consolidate all Persian book content into one canonical file under `content/`; only after that inventory is complete will the EN / ZH / AR translation reservoirs be reconciled. Do not add new Persian book prose to HTML, controllers, or translation catalogs.
