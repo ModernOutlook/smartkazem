@@ -66,7 +66,37 @@
     "previousPart": "پیشین",
     "nextPart": "پسین",
     "goToPart": "رفتن به بخش ",
-    "partOf": "بخش {n} از {t}"
+    "partOf": "بخش {n} از {t}",
+    "interfaceLanguage": "زبان رابط",
+    "realmJudgments": "قضاوت قلمروها",
+    "book": "کتاب",
+    "bookChapters": "فصل‌های کتاب",
+    "sectionList": "فهرست بخش‌ها",
+    "episodeNavigation": "پیمایش قسمت‌ها",
+    "previousEpisode": "رفتن به قسمت پیشین",
+    "nextEpisode": "رفتن به قسمت پسین",
+    "emergence1ImageAlt": "تصویر فصل اول ظهور",
+    "emergence2ImageAlt": "تصویر فصل دوم ظهور",
+    "chapterList": "فهرست فصل‌ها",
+    "chapterSections": "بخش‌های فصل",
+    "sectionNavigation": "پیمایش بخش‌ها",
+    "treatiseContents": "فهرست رساله",
+    "episodeSearchPlaceholder": "عنوان یا شماره قسمت…",
+    "homePage": "بازگشت به صفحه اصلی",
+    "cards": "کارت‌ها",
+    "cardInventory": "فهرست کارت‌ها",
+    "jokers": "جوکرها",
+    "spades": "خال پیک",
+    "hearts": "خال دل",
+    "clubs": "خال خاج",
+    "diamonds": "خال خشت",
+    "cardBack": "پشت کارت",
+    "kingdoms": "پادشاهی",
+    "zalAndSam": "زال و خاندان سام",
+    "rostam": "رستم",
+    "kayanids": "کیانیان",
+    "missingEpisodeText": "متن این قسمت در مخزن مربوطه موجود نیست.",
+    "missingTranslation": "ترجمهٔ این بخش در دسترس نیست."
   },
   "meta": {
     "brand": "نگرش نوین",
@@ -556,6 +586,16 @@
     "disturbedManifesto": {
       "title": "مانیفست آشوب‌زده",
       "subtitle": "مانیفست آشوب‌زده در ۱۱ بخش."
+    },
+    "tabahian": {
+      "title": "تباهیان"
+    },
+    "emergence": {
+      "title": "فصل اول ظهور"
+    },
+    "emergence2": {
+      "title": "فصل دوم ظهور",
+      "subtitle": "فصل دوم ظهور در ۱۱ قسمت."
     }
   },
   "paragraphMachine": {
