@@ -27,6 +27,7 @@
       if (!node || paragraph === undefined) return;
       if (language === 'fa') node.innerHTML = paragraph;
       else node.textContent = paragraph;
+      node.className = 'observation-paragraph ' + language;
       node.lang = language;
       node.dir = ['fa', 'ar'].includes(language) ? 'rtl' : 'ltr';
     });
