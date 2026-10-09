@@ -22,4 +22,9 @@
   } else {
     isMobilePresentation.addListener(syncPresentationMode);
   }
+
+  const bookCoverScript = document.createElement('script');
+  bookCoverScript.src = 'js/book-covers.js';
+  bookCoverScript.defer = true;
+  document.head.appendChild(bookCoverScript);
 })();
