@@ -39,3 +39,18 @@ This inventory tracks the migration to the mandatory single-source book architec
 ## Status
 
 The mandatory rule has been added to `README.md` and `docs/ai-page-completion.md`. The table above is the initial source-boundary audit; it is not a claim that all listed migrations have already been implemented.
+
+
+## Runtime migration checkpoint (2026-10-09)
+
+Completed in this checkpoint:
+
+- **جاعلان تقلید**: Persian prose is authoritative in `content/forgers.js`; EN / ZH / AR prose remains only in the shared language catalogs. Embedded translations were removed from the Persian JS source, and duplicate Persian chapter prose/moral was removed from `translations/fa.json`.
+- **انسان و ماشین‌هایش**: Persian prose is authoritative in `content/human-machines.js`; duplicate Persian chapter prose was removed from `translations/fa.json`. EN / ZH / AR prose remains in the shared language catalogs.
+- The shared book-reader controller now reads titles, subtitles, chapters, and the fable moral from source/catalog data rather than hardcoded parallel text fallbacks.
+
+Not yet complete:
+
+- The remaining book pages still require per-page migration and runtime verification.
+- **تباهیان** has three Persian chapters but only two chapters in `translations/tabahian.json`; the missing translated chapter must be completed before removing all Persian duplicate fields from that reservoir.
+- Do not describe the entire repository as fully migrated until the remaining inventory is verified.
