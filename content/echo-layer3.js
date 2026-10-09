@@ -425,7 +425,7 @@ window.EchoLayer3Content={
 
  function catalog(){return window.SiteI18n?.getCatalog?.()||{}}
  function layer(){return catalog().pages?.layer3||{}}
- function chapterCatalog(){return catalog().chapters?.layer3||{}}
+ function chapterCatalog(){return catalog().bookContent?.layer3||catalog().chapters?.layer3||{}}
  function language(){return window.SiteI18n?.getLanguage?.()||"fa"}
  function rtl(){return ["fa","ar"].includes(language())}
  function partData(ch,pi){
@@ -440,8 +440,8 @@ window.EchoLayer3Content={
    document.documentElement.lang=lang;
    document.documentElement.dir=rtl()?"rtl":"ltr";
    document.body.dataset.mode=lang;
-   title.textContent=d.title||book.title?.[lang]||"پژواک لایه سوم";
-   sub.textContent=d.subtitle||"";
+   title.textContent=book.title?.[lang]||d.title||"پژواک لایه سوم";
+   sub.textContent=book.subtitle?.[lang]||d.subtitle||"";
    $("close").setAttribute("aria-label",d.close||"بازگشت");
    tocLabel.textContent=lang==="en"?"Contents":lang==="zh"?"目录":lang==="ar"?"الفهرس":"فهرست";
    chapters.innerHTML="";
