@@ -1,0 +1,22 @@
+{
+  "fa": {
+    "heading": "تصویر جلد کتاب",
+    "placeholder": "جایگاه تصویر جلد این کتاب",
+    "altPrefix": "جلد کتاب"
+  },
+  "en": {
+    "heading": "Book Cover",
+    "placeholder": "Book cover image area",
+    "altPrefix": "Book cover"
+  },
+  "zh": {
+    "heading": "书籍封面",
+    "placeholder": "本书封面图像区域",
+    "altPrefix": "书籍封面"
+  },
+  "ar": {
+    "heading": "غلاف الكتاب",
+    "placeholder": "موضع صورة غلاف هذا الكتاب",
+    "altPrefix": "غلاف الكتاب"
+  }
+}
