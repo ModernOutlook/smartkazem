@@ -155,6 +155,25 @@
       data.bookContent[pageKey] = chapter;
     }
 
+    // Home overlays can declare several dedicated book reservoirs without
+    // adding page-specific fetch logic to this shared loader.
+    const declaredBooks = document.querySelector('meta[name="i18n-catalogs"]')?.content;
+    if (normalizedLanguage !== DEFAULT_LANGUAGE && declaredBooks) {
+      const entries = declaredBooks.split(';').map((entry) => {
+        const separator = entry.indexOf('=');
+        if (separator < 1) return null;
+        return [entry.slice(0, separator).trim(), entry.slice(separator + 1).trim()];
+      }).filter((entry) => entry && entry[0] && entry[1]);
+      data.bookContent = data.bookContent || {};
+      await Promise.all(entries.map(async ([bookKey, path]) => {
+        const bookResponse = await fetch(path, { cache: 'no-store' });
+        if (!bookResponse.ok) {
+          throw new Error('Book translation reservoir unavailable: ' + bookKey);
+        }
+        data.bookContent[bookKey] = await bookResponse.json();
+      }));
+    }
+
     catalogs[normalizedLanguage] = data;
     return data;
   }
