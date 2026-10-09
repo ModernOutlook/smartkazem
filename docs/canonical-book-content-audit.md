@@ -17,10 +17,10 @@ This inventory tracks the migration to the mandatory single-source book architec
 |---|---|---|---|
 | رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` | Persian prose extracted into 158 ordered semantic blocks; HTML article uses empty Persian targets. | EN/ZH/AR prose has been moved into `translations/treatise.json` as 158 ordered blocks per language. Verify rendered block alignment and visual fidelity. |
 | شاهنامه‌خوانی | `content/shahnameh-series.js` | Episode prose, verse, and the long original-verse passage for episode 1 are sourced here. | Finish translating remaining source-backed content; test 81 episode order and filters in four languages. |
-| فصل اول ظهور | `content/emergence.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | Verify all 19 episodes and translated catalog alignment. |
+| فصل اول ظهور | `content/emergence.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | `emergence.html` declares `translations/emergence.json`; renderer prefers `bookContent.emergence`. Verify all 19 episodes and translated catalog alignment. |
 | سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` | Persian title, subtitle, section labels, and all 25 prose sections moved out of `translations/fa.json`. | Move target-language prose from shared catalogs into the declared translation reservoir; verify section parity. |
 | آینه‌ی ممکن‌ها | `content/possible-mirror.js` | Persian title, subtitle, section labels, and all 31 prose sections moved out of `translations/fa.json`. | EN/ZH/AR section labels and prose have been moved to `translations/possible-mirror.json` (31 sections per language). Verify rendered section parity and interaction behavior. |
-| فصل دوم ظهور | `content/emergence-2.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | Verify all 11 source episodes and translated catalog alignment. |
+| فصل دوم ظهور | `content/emergence-2.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | `emergence-2.html` declares `translations/emergence-2.json`; renderer prefers `bookContent.emergence2`. Verify all 11 source episodes and translated catalog alignment. |
 | سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` | Persian title, subtitle, and all 12 body paragraphs extracted; HTML uses empty Persian targets. Duplicate Persian fields removed from `translations/observation.json`. | EN/ZH/AR prose has been reconciled against the existing `translations/observation.json` reservoir (12 paragraphs per language) and removed from HTML. Verify rendered language switching and paragraph fidelity. |
 | پژواک لایه سوم | `content/echo-layer3.js` | Persian source contains 17 ordered parts. | EN/ZH/AR titles, subtitles, part titles, and prose load from `translations/echo-layer3.json` (17 parts per language); duplicated part titles removed from shared catalogs. |
 | انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | Verify seven chapters and complete EN/ZH/AR catalog parity. |
@@ -89,3 +89,10 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 
 - **سرزمین مشاهده؛ ۲۵ بار رسیدن**: moved EN / ZH / AR titles, subtitles, section labels, notes, and 25 prose sections per language from the global catalogs into `translations/observation-25.json`. Removed the duplicated section/prose fields from `translations/en.json`, `translations/zh.json`, and `translations/ar.json`. The page loads the dedicated reservoir via its declared `i18n-catalog` and renders from `bookContent.observation25`.
 - **آینه‌ی ممکن‌ها**: moved EN / ZH / AR titles, subtitles, section labels, notes, and 31 prose sections per language into `translations/possible-mirror.json`. Removed the duplicated section/prose fields from the global catalogs. The page now reads the declared translation reservoir through the shared i18n boundary.
+
+
+## Generic declared-catalog wiring (2026-10-09)
+
+- Added explicit `i18n-catalog` declarations to the two Emergence pages.
+- Removed the legacy page-key-to-catalog filename map from `translations/i18n.js`. Dedicated book catalogs are now fetched through the same declaration-based mechanism for Emergence I/II, Echo Layer Three, and Disturbed Manifesto.
+- This is a runtime boundary cleanup, not a translation-completeness claim. Emergence episode/paragraph alignment and the missing third Tabahian chapter remain audit items.
