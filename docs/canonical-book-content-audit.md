@@ -23,8 +23,8 @@ This inventory tracks the migration to the mandatory single-source book architec
 | فصل دوم ظهور | `content/emergence-2.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | `emergence-2.html` declares `translations/emergence-2.json`; renderer prefers `bookContent.emergence2`. Verify all 11 source episodes and translated catalog alignment. |
 | سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` | Persian title, subtitle, and all 12 body paragraphs extracted; HTML uses empty Persian targets. Duplicate Persian fields removed from `translations/observation.json`. | EN/ZH/AR prose has been reconciled against the existing `translations/observation.json` reservoir (12 paragraphs per language) and removed from HTML. Verify rendered language switching and paragraph fidelity. |
 | پژواک لایه سوم | `content/echo-layer3.js` | Persian source contains 17 ordered parts. | EN/ZH/AR titles, subtitles, part titles, and prose load from `translations/echo-layer3.json` (17 parts per language); duplicated part titles removed from shared catalogs. |
-| انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | Verify seven chapters and complete EN/ZH/AR catalog parity. |
-| جاعلان تقلید | `content/forgers.js` | Persian chapter prose is canonical; embedded translations removed from the source JS; duplicate Persian chapter prose removed from `translations/fa.json`. | Verify ten chapters, moral text, and target-language catalogs. |
+| انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | EN/ZH/AR titles, subtitles, seven chapter titles, and all chapter paragraphs are centralized in `translations/human-machines.json`; global catalogs retain only UI title/subtitle metadata. |
+| جاعلان تقلید | `content/forgers.js` | Persian chapter prose is canonical; embedded translations removed from the source JS; duplicate Persian chapter prose removed from `translations/fa.json`. | EN/ZH/AR titles, subtitles, ten chapter titles, all chapter paragraphs, and moral text are centralized in `translations/forgers.json`; global catalogs retain only UI metadata. |
 | تباهیان | `content/tabahian.js` | Three Persian chapters are canonical in this file. | Translation catalog currently has only two chapters; translate the missing chapter after the Persian inventory is signed off. |
 | مانیفست آشوب‌زده | `content/disturbed-manifesto.js` | Dedicated Persian source exists. | Remove remaining language-specific prose fallbacks and verify all 11 parts in four languages. |
 
@@ -96,3 +96,12 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 - Added explicit `i18n-catalog` declarations to the two Emergence pages.
 - Removed the legacy page-key-to-catalog filename map from `translations/i18n.js`. Dedicated book catalogs are now fetched through the same declaration-based mechanism for Emergence I/II, Echo Layer Three, and Disturbed Manifesto.
 - This is a runtime boundary cleanup, not a translation-completeness claim. Emergence episode/paragraph alignment and the missing third Tabahian chapter remain audit items.
+
+
+## Share Economy translation reservoirs (2026-10-09)
+
+- Extracted all existing EN / ZH / AR content for **جاعلان تقلید** from the global language catalogs into `translations/forgers.json`: 10 chapters per language, with paragraph counts aligned across the three target languages, plus the localized moral text.
+- Extracted all existing EN / ZH / AR content for **انسان و ماشین‌هایش** into `translations/human-machines.json`: 7 chapters per language, with paragraph counts aligned across the three target languages.
+- Removed duplicated long-form chapter arrays from `translations/en.json`, `translations/zh.json`, and `translations/ar.json`; their page entries keep the title/subtitle metadata needed by the home UI.
+- Added a generic `i18n-catalogs` manifest on `index.html`. The shared loader now loads multiple declared reservoirs into `bookContent`, and `js/books.js` localizes chapter metadata and prose from that boundary. The book renderer still uses the canonical Persian `content/` source when Persian is selected.
+- The new reservoirs were assembled from existing translated content; no translated prose was summarized or rewritten during extraction.
