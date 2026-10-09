@@ -255,6 +255,7 @@ document.getElementById('continuity-disturbed-manifesto').addEventListener('clic
 document.getElementById('structure-treatise').addEventListener('click', () => openSecondaryPage('philosophical-treatise.html', 'structure'));
 document.getElementById('share-human-machines').addEventListener('click', () => BookNavigation.openBook('share', 'humanMachines'));
 document.getElementById('share-forgers').addEventListener('click', () => BookNavigation.openBook('share', 'forgers'));
+document.getElementById('share-tabahian').addEventListener('click', () => BookNavigation.openBook('share', 'tabahian'));
 document.getElementById('ref-observation').addEventListener('click', () => openSecondaryPage('observation.html', 'reference'));
 document.getElementById('reference-layer3').addEventListener('click', () => openSecondaryPage('echo-layer3.html', 'reference'));
 document.getElementById('experience-observation25').addEventListener('click', () => openSecondaryPage('observation-25.html', 'experience'));
