@@ -71,7 +71,7 @@ Not yet complete:
 
 ## Canonical Persian source extraction: observation 25 and possible mirror (2026-10-09)
 
-- **سرزمین مشاهده؛ ۲۵ بار رسیدن**: moved its Persian title, subtitle, section labels, section note, and all ${obs.contents.length} prose sections from `translations/fa.json` into `content/observation-25.js`. The page controller now reads this source when Persian is selected.
-- **آینه‌ی ممکن‌ها**: moved its Persian title, subtitle, section labels, section note, and all ${mirror.contents.length} prose sections from `translations/fa.json` into `content/possible-mirror.js`. The page controller now reads this source when Persian is selected.
+- **سرزمین مشاهده؛ ۲۵ بار رسیدن**: moved its Persian title, subtitle, section labels, section note, and all 25 prose sections from `translations/fa.json` into `content/observation-25.js`. The page controller now reads this source when Persian is selected.
+- **آینه‌ی ممکن‌ها**: moved its Persian title, subtitle, section labels, section note, and all 31 prose sections from `translations/fa.json` into `content/possible-mirror.js`. The page controller now reads this source when Persian is selected.
 - Removed the duplicated Persian book fields from `translations/fa.json`; retained the UI close labels. Updated the shared i18n document-title fallback to use a canonical Persian source title when a page intentionally has no duplicate title in the Persian UI catalog.
 - EN / ZH / AR catalogs were not changed in this Persian-first phase.
