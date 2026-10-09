@@ -40,32 +40,13 @@ This inventory tracks the migration to the mandatory single-source book architec
 4. Do not create a separate accessibility text store. Shared Talk Back must read the visible localized content.
 5. Do not mark a book migrated until the HTML/controller duplication audit and all four language modes have been verified.
 
-## Status
+## Current status
 
-The mandatory rule has been added to `README.md` and `docs/ai-page-completion.md`. The table above is the initial source-boundary audit; it is not a claim that all listed migrations have already been implemented.
+The Persian-source-first milestone is complete at the source-boundary level for all 12 books. Each has a canonical Persian file under `content/`, and the identified long-form Persian copies were moved out of HTML or duplicate catalog fields. This is not a claim that target-language translations are centralized or complete, nor that real-device TalkBack/browser testing has been completed.
 
+Known translation-phase gap: `content/tabahian.js` has three Persian chapters, while `translations/tabahian.json` currently contains two translated chapters. Do not begin translation edits until the Persian source inventory has been reviewed; then use the Persian sources listed above as the only reference.
 
-## Runtime migration checkpoint (2026-10-09)
-
-Completed in this checkpoint:
-
-- **جاعلان تقلید**: Persian prose is authoritative in `content/forgers.js`; EN / ZH / AR prose remains only in the shared language catalogs. Embedded translations were removed from the Persian JS source, and duplicate Persian chapter prose/moral was removed from `translations/fa.json`.
-- **انسان و ماشین‌هایش**: Persian prose is authoritative in `content/human-machines.js`; duplicate Persian chapter prose was removed from `translations/fa.json`. EN / ZH / AR prose remains in the shared language catalogs.
-- The shared book-reader controller now reads titles, subtitles, chapters, and the fable moral from source/catalog data rather than hardcoded parallel text fallbacks.
-
-Not yet complete:
-
-- The remaining book pages still require per-page migration and runtime verification.
-- **تباهیان** has three Persian chapters but only two chapters in `translations/tabahian.json`; the missing translated chapter must be completed before removing all Persian duplicate fields from that reservoir.
-- Do not describe the entire repository as fully migrated until the remaining inventory is verified.
-
-
-## Persian-source-first checkpoint (2026-10-09)
-
-- **سرزمین مشاهده**: extracted the Persian title, subtitle, and all 12 body paragraphs into `content/observation.js`. The HTML keeps only empty render targets for those Persian fields; `js/observation-source.js` injects the canonical source. Removed Persian title/subtitle/paragraph fields from `translations/observation.json` so the Persian prose is not duplicated there.
-- Translation content for EN / ZH / AR is deliberately not being migrated in this pass; it remains for the later translation phase.
-- **رساله فلسفی نگرش نوین** remains the largest uncompleted Persian-source extraction: its long-form prose is still embedded in `philosophical-treatise.html`.
-
+## Migration history
 
 ## Additional Persian source extraction (2026-10-09)
 
