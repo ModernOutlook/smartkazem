@@ -75,3 +75,8 @@ Not yet complete:
 - **آینه‌ی ممکن‌ها**: moved its Persian title, subtitle, section labels, section note, and all 31 prose sections from `translations/fa.json` into `content/possible-mirror.js`. The page controller now reads this source when Persian is selected.
 - Removed the duplicated Persian book fields from `translations/fa.json`; retained the UI close labels. Updated the shared i18n document-title fallback to use a canonical Persian source title when a page intentionally has no duplicate title in the Persian UI catalog.
 - EN / ZH / AR catalogs were not changed in this Persian-first phase.
+
+
+## Persian translation-reservoir cleanup (2026-10-09)
+
+Removed duplicate `fa` title and chapter/part-title entries from the translation reservoirs for **تباهیان**, **فصل اول ظهور**, **فصل دوم ظهور**, and **پژواک لایه سوم**. Their Persian chapter text is supplied by their `content/` sources. No EN / ZH / AR prose was edited in this cleanup.
