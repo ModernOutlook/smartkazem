@@ -2,6 +2,82 @@
   'use strict';
 
   const splash = document.getElementById('splash');
+  const logoViewer = document.getElementById('logo-viewer');
+
+  function loadLogoViewerStyles() {
+    if (document.querySelector('link[data-logo-viewer-style]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'css/logo-viewer.css';
+    link.dataset.logoViewerStyle = 'true';
+    document.head.appendChild(link);
+  }
+
+  async function loadLogoViewerLanguage(language) {
+    const normalized = ['fa', 'en', 'zh', 'ar'].includes(language) ? language : 'fa';
+    try {
+      const response = await fetch(`translations/logo-viewer/${normalized}.json`, { cache: 'no-store' });
+      if (!response.ok) throw new Error('Logo viewer translation unavailable');
+      return await response.json();
+    } catch (_) {
+      return null;
+    }
+  }
+
+  async function localizeLogoViewer(language) {
+    if (!logoViewer) return;
+
+    const data = await loadLogoViewerLanguage(language);
+    if (!data) return;
+
+    let slogan = logoViewer.querySelector('.logo-slogan');
+    if (!slogan) {
+      slogan = document.createElement('p');
+      slogan.className = 'logo-slogan';
+      logoViewer.prepend(slogan);
+    }
+    slogan.textContent = data.slogan || '';
+
+    const logoArt = logoViewer.querySelector('.logo-art');
+    const logoImage = logoViewer.querySelector('.logo-art img');
+    const inventory = logoViewer.querySelector('.inventory-link');
+
+    logoViewer.setAttribute('aria-label', data.dialog || '');
+    if (logoArt) logoArt.setAttribute('aria-label', data.logo || '');
+    if (logoImage) logoImage.setAttribute('alt', data.logoAlt || data.logo || '');
+    if (inventory) inventory.textContent = data.inventory || '';
+  }
+
+  function initLogoViewerLocalization() {
+    if (!logoViewer) return;
+    loadLogoViewerStyles();
+
+    const apply = () => {
+      const language = window.SiteI18n?.getLanguage?.() || document.documentElement.lang || 'fa';
+      localizeLogoViewer(language);
+    };
+
+    document.addEventListener('site:languagechange', (event) => {
+      localizeLogoViewer(event.detail?.lang || window.SiteI18n?.getLanguage?.() || 'fa');
+    });
+
+    apply();
+  }
+
+  function initSplash() {
+    initLogoViewerLocalization();
+  }
+
+  const waitForDom = () => {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initSplash, { once: true });
+    } else {
+      initSplash();
+    }
+  };
+
+  waitForDom();
+
   if (!splash) return;
 
   const root = document.documentElement;
