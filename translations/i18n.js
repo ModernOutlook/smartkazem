@@ -181,8 +181,12 @@
 
     const pageKey = document.querySelector('meta[name="i18n-page"]')?.content;
 
+    const canonicalPersianTitle =
+      currentLanguage === DEFAULT_LANGUAGE
+        ? window.SitePagePersianSources?.[pageKey]?.title
+        : '';
     document.title = pageKey
-      ? get('pages.' + pageKey + '.title', get('home.title', document.title))
+      ? get('pages.' + pageKey + '.title', canonicalPersianTitle || get('home.title', document.title))
       : get('home.title', document.title);
 
     document.dispatchEvent(
