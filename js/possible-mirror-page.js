@@ -8,7 +8,12 @@
   if (!tabs || !body || !close) return;
 
   function catalog() {
-    return window.SiteI18n?.getCatalog?.()?.pages?.possibleMirror || {};
+    const language = window.SiteI18n?.getLanguage?.() || 'fa';
+    const ui = window.SiteI18n?.getCatalog?.()?.pages?.possibleMirror || {};
+    if (language === 'fa') return { ...(window.PossibleMirrorPersianSource || {}), close: ui.close };
+    const translated = window.SiteI18n?.getCatalog?.()?.bookContent?.possibleMirror;
+    if (!translated) return { ...ui, sections: [], contents: [] };
+    return { title: translated.title?.[language] || ui.title || '', subtitle: translated.subtitle?.[language] || ui.subtitle || '', sectionNote: translated.sectionNote?.[language] || '', sections: translated.sections?.[language] || [], contents: translated.contents?.[language] || [], close: ui.close };
   }
 
   function setPageLanguage() {

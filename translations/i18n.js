@@ -113,41 +113,12 @@
 
     const data = await response.json();
 
-    // Tabahian uses the site's shared Persian source and translation folder.
-    // Its translated catalog is loaded by the same global i18n boundary used by
-    // every realm book; the shared accessibility runtime reads the rendered DOM.
-    if (normalizedLanguage !== DEFAULT_LANGUAGE) {
-      const tabahianResponse = await fetch('translations/tabahian.json', { cache: 'no-store' });
-      if (!tabahianResponse.ok) {
-        throw new Error('Tabahian translation catalog unavailable');
-      }
-      const tabahian = await tabahianResponse.json();
-      const language = normalizedLanguage;
-      const chapterCountLabels = { en: 'Three chapters', ar: 'ثلاثة فصول', zh: '三章' };
-      data.pages = data.pages || {};
-      data.pages.tabahian = {
-        title: tabahian.title?.[language] || 'The Corrupted',
-        subtitle: chapterCountLabels[language] || '',
-        chapters: (tabahian.chapters || []).map((chapter) => ({
-          title: chapter.title?.[language] || '',
-          paragraphs: chapter.paragraphs?.[language] || [],
-          dot: '#38d9a9'
-        }))
-      };
-    }
-
     // Long-form pages may declare their own translation reservoir at the HTML
     // boundary. This keeps SiteI18n generic: adding a future page does not
     // require editing this runtime.
     const pageKey = document.querySelector('meta[name="i18n-page"]')?.content;
     const declaredCatalog = document.querySelector('meta[name="i18n-catalog"]')?.content;
-    const legacyCatalogs = {
-      emergence: 'translations/emergence.json',
-      emergence2: 'translations/emergence-2.json',
-      layer3: 'translations/echo-layer3.json',
-      disturbedManifesto: 'translations/disturbed-manifesto.json'
-    };
-    const chapterPath = declaredCatalog || legacyCatalogs[pageKey];
+    const chapterPath = declaredCatalog;
 
     if (pageKey && chapterPath) {
       const chapterResponse = await fetch(chapterPath, { cache: 'no-store' });
@@ -157,6 +128,27 @@
       const chapter = await chapterResponse.json();
       data.chapters = data.chapters || {};
       data.chapters[pageKey] = chapter;
+      data.bookContent = data.bookContent || {};
+      data.bookContent[pageKey] = chapter;
+    }
+
+    // Home overlays can declare several dedicated book reservoirs without
+    // adding page-specific fetch logic to this shared loader.
+    const declaredBooks = document.querySelector('meta[name="i18n-catalogs"]')?.content;
+    if (normalizedLanguage !== DEFAULT_LANGUAGE && declaredBooks) {
+      const entries = declaredBooks.split(';').map((entry) => {
+        const separator = entry.indexOf('=');
+        if (separator < 1) return null;
+        return [entry.slice(0, separator).trim(), entry.slice(separator + 1).trim()];
+      }).filter((entry) => entry && entry[0] && entry[1]);
+      data.bookContent = data.bookContent || {};
+      await Promise.all(entries.map(async ([bookKey, path]) => {
+        const bookResponse = await fetch(path, { cache: 'no-store' });
+        if (!bookResponse.ok) {
+          throw new Error('Book translation reservoir unavailable: ' + bookKey);
+        }
+        data.bookContent[bookKey] = await bookResponse.json();
+      }));
     }
 
     catalogs[normalizedLanguage] = data;
@@ -181,8 +173,12 @@
 
     const pageKey = document.querySelector('meta[name="i18n-page"]')?.content;
 
+    const canonicalPersianTitle =
+      currentLanguage === DEFAULT_LANGUAGE
+        ? window.SitePagePersianSources?.[pageKey]?.title
+        : '';
     document.title = pageKey
-      ? get('pages.' + pageKey + '.title', get('home.title', document.title))
+      ? get('pages.' + pageKey + '.title', canonicalPersianTitle || get('home.title', document.title))
       : get('home.title', document.title);
 
     document.dispatchEvent(

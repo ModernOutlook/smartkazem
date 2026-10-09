@@ -22,6 +22,7 @@
   let catalog = null;
 
   const getPage = () => catalog?.pages?.shahnameh || {};
+  const getBook = () => catalog?.bookContent?.shahnameh || {};
   const getUi = () => getPage().ui || {};
   const getLanguage = () => window.SiteI18n?.getLanguage?.() || document.documentElement.lang || 'fa';
 
@@ -37,21 +38,22 @@
   };
 
   const localizedSection = (section) =>
-    getPage().sections?.[section] || section;
+    getBook().sections?.[getLanguage()]?.[section] || section;
 
   const localizedTitle = (episode) =>
-    getPage().titles?.[episode.id - 1] || episode.title;
+    getBook().titles?.[getLanguage()]?.[episode.id - 1] || episode.title;
 
   const getLocalizedEpisode = (episode) => {
     if (!episode) return null;
-    const page = getPage();
-    const localized = page.episodes?.[String(episode.id)] || (episode.id === 1 ? page.part1 : null);
+    const language = getLanguage();
+    const book = getBook();
+    const localized = book.episodes?.[language]?.[String(episode.id)] || (episode.id === 1 ? book.part1?.[language] : null);
     return {
       ...episode,
       title: localized?.title || localizedTitle(episode),
       section: localizedSection(episode.section),
       prose: localized?.prose || episode.prose,
-      verse: localized?.originalVerse || episode.verse
+      verse: episode.verse || (episode.id === 1 ? data.meta.originalVerse : '')
     };
   };
 

@@ -2,16 +2,14 @@
   "code": "echo-layer3",
   "source": "fa",
   "title": {
-    "fa": "پژواک لایه سوم",
-    "en": "Echo Layer Three",
+    "en": "The Echo of the Third Layer",
     "ar": "صدى الطبقة الثالثة",
-    "zh": "第三层回响"
+    "zh": "第三层回声"
   },
   "parts": [
     {
       "number": 1,
       "title": {
-        "fa": "سکوت بزرگ",
         "en": "The Great Silence",
         "ar": "الصمت العظيم",
         "zh": "寂静之境"
@@ -79,7 +77,6 @@
     {
       "number": 2,
       "title": {
-        "fa": "شیارهایی در سکوت",
         "en": "Grooves in the Silence",
         "ar": "شقوق في الصمت",
         "zh": "寂静中的裂痕"
@@ -135,7 +132,6 @@
     {
       "number": 3,
       "title": {
-        "fa": "اولین زخم",
         "en": "The First Wound",
         "ar": "الجرح الأول",
         "zh": "第一道伤口"
@@ -185,7 +181,6 @@
     {
       "number": 4,
       "title": {
-        "fa": "در سایه‌ها",
         "en": "In the Shadows",
         "ar": "في الظلال",
         "zh": "在阴影中"
@@ -262,7 +257,6 @@
     {
       "number": 5,
       "title": {
-        "fa": "آموزش سکوت‌شکن",
         "en": "Training the Silence-Breaker",
         "ar": "تدريب كاسر الصمت",
         "zh": "静默破壁者的训练"
@@ -327,7 +321,6 @@
     {
       "number": 6,
       "title": {
-        "fa": "رقص بر لبه تیغ",
         "en": "Dancing on the Edge of the Blade",
         "ar": "الرقص على حافة النصل",
         "zh": "刀锋边缘的舞蹈"
@@ -368,7 +361,6 @@
     {
       "number": 7,
       "title": {
-        "fa": "پژواک در تاریکی",
         "en": "Echo in the Darkness",
         "ar": "صدى في الظلام",
         "zh": "黑暗中的回响"
@@ -412,7 +404,6 @@
     {
       "number": 8,
       "title": {
-        "fa": "من تنها نیستم",
         "en": "I Am Not Alone",
         "ar": "لست وحدي",
         "zh": "我并不孤独"
@@ -483,7 +474,6 @@
     {
       "number": 9,
       "title": {
-        "fa": "هماهنگی در سکوت",
         "en": "Coordination in Silence",
         "ar": "التنسيق في الصمت",
         "zh": "寂静中的协调"
@@ -560,7 +550,6 @@
     {
       "number": 10,
       "title": {
-        "fa": "در قلب تاریکی",
         "en": "In the Heart of Darkness",
         "ar": "في قلب الظلام",
         "zh": "黑暗之心"
@@ -676,7 +665,6 @@
     {
       "number": 11,
       "title": {
-        "fa": "لایه‌های حقیقت",
         "en": "Layers of Truth",
         "ar": "طبقات الحقيقة",
         "zh": "真理的层次"
@@ -741,7 +729,6 @@
     {
       "number": 12,
       "title": {
-        "fa": "نقشه‌کش حقیقت",
         "en": "The Cartographer of Truth",
         "ar": "راسم خريطة الحقيقة",
         "zh": "真理绘图者"
@@ -827,7 +814,6 @@
     {
       "number": 13,
       "title": {
-        "fa": "مهندس خاموش",
         "en": "The Silent Engineer",
         "ar": "المهندس الصامت",
         "zh": "沉默的工程师"
@@ -952,7 +938,6 @@
     {
       "number": 14,
       "title": {
-        "fa": "نقشه گمشده هستی",
         "en": "The Lost Map of Existence",
         "ar": "خريطة الوجود المفقودة",
         "zh": "失落的存在之图"
@@ -996,7 +981,6 @@
     {
       "number": 15,
       "title": {
-        "fa": "اولین نبض",
         "en": "The First Pulse",
         "ar": "النبضة الأولى",
         "zh": "第一次脉动"
@@ -1040,7 +1024,6 @@
     {
       "number": 16,
       "title": {
-        "fa": "دانه‌های کهکشان جدید",
         "en": "Seeds of a New Galaxy",
         "ar": "بذور مجرة جديدة",
         "zh": "新银河的种子"
@@ -1105,7 +1088,6 @@
     {
       "number": 17,
       "title": {
-        "fa": "پژواک ابدیت",
         "en": "Echo of Eternity",
         "ar": "صدى الأبدية",
         "zh": "永恒的回响"
@@ -1206,5 +1188,10 @@
         ]
       }
     }
-  ]
+  ],
+  "subtitle": {
+    "en": "Protocol of Coordination; From Silence to Utopia",
+    "zh": "协调协议；从寂静走向理想城",
+    "ar": "بروتوكول التنسيق؛ من الصمت إلى المدينة الفاضلة"
+  }
 }

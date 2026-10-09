@@ -234,3 +234,31 @@ For every future page, ChatGPT should ask:
 - **Interaction-model change:** inspect the shared accessibility contract first; extend the shared runtime only if necessary, then verify all existing pages/callers.
 
 This rule is mandatory for future page completion.
+
+## 8. Mandatory canonical book-source boundary
+
+This rule applies to **all books**, not only newly created pages.
+
+### Single-source contract
+
+Each book must declare one canonical Persian source under `content/` and one translation reservoir under `translations/`. Runtime language selection is strict:
+
+- Persian selected: render only the declared Persian source.
+- English, Arabic, or Chinese selected: render only that language's corresponding translation entries.
+- Missing translated content must be reported as missing; do not silently substitute prose from another language or hard-coded controller/HTML copies.
+
+### Presentation-only pages
+
+Book HTML is a shell. It may contain layout, semantic landmarks, controls, empty reader/list containers, and asset references. It must not contain long-form book text in any language. Page-specific JavaScript may render content and implement interactions, but it must not become another text repository.
+
+Book titles, subtitles, chapter/episode headings, moral/epilogue text, placeholders, and accessibility names must be sourced from the declared content/translation catalogs or the shared UI catalog where they are truly UI labels. Do not hard-code a second localized copy in a page controller.
+
+### One canonical data path for every consumer
+
+The same catalog must feed the book reader, realm/home book listing, chapter/episode controls, search/filter surfaces, and Talk Back's visible-content reading. Talk Back reads the localized rendered DOM; it must not maintain a separate book-text store.
+
+### Migration and acceptance
+
+For existing books, audit HTML, controllers, global language catalogs, page-specific translation files, content files, card/listing metadata, and accessibility labels. Extract embedded prose into the correct source/reservoir without changing wording or structure. Resolve divergent duplicates explicitly before deleting old copies. Add/update `page-specs/<book>.json` to identify the canonical paths and renderer.
+
+A book is compliant only after an automated audit confirms no long-form book text or duplicate localized prose remains in HTML/controllers, and runtime checks confirm all four language modes load the expected source and preserve sequence and paragraph boundaries.

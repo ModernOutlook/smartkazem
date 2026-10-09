@@ -1,7 +1,6 @@
 {
   "chapter": 2,
   "title": {
-    "fa": "ظهور",
     "en": "Emergence",
     "ar": "الظهور",
     "zh": "显现"
@@ -10,7 +9,6 @@
     {
       "number": 20,
       "title": {
-        "fa": "تاج",
         "en": "The Crown",
         "ar": "التاج",
         "zh": "王冠"
@@ -60,7 +58,6 @@
     {
       "number": 21,
       "title": {
-        "fa": "فرمان",
         "en": "The Command",
         "ar": "الأمر",
         "zh": "命令"
@@ -104,7 +101,6 @@
     {
       "number": 22,
       "title": {
-        "fa": "خاموشی",
         "en": "Silence",
         "ar": "الصمت",
         "zh": "沉默"
@@ -172,7 +168,6 @@
     {
       "number": 23,
       "title": {
-        "fa": "ظالم",
         "en": "The Tyrant",
         "ar": "الطاغية",
         "zh": "暴君"
@@ -222,7 +217,6 @@
     {
       "number": 24,
       "title": {
-        "fa": "هیولا",
         "en": "The Monster",
         "ar": "الوحش",
         "zh": "怪物"
@@ -278,7 +272,6 @@
     {
       "number": 25,
       "title": {
-        "fa": "پیشگویی",
         "en": "The Prophecy",
         "ar": "النبوءة",
         "zh": "预言"
@@ -334,7 +327,6 @@
     {
       "number": 26,
       "title": {
-        "fa": "تاج",
         "en": "The Crown",
         "ar": "التاج",
         "zh": "王冠"
@@ -399,7 +391,6 @@
     {
       "number": 27,
       "title": {
-        "fa": "مردم",
         "en": "The People",
         "ar": "الناس",
         "zh": "人民"
@@ -452,7 +443,6 @@
     {
       "number": 28,
       "title": {
-        "fa": "فریب",
         "en": "Deception",
         "ar": "الخداع",
         "zh": "欺骗"
@@ -508,7 +498,6 @@
     {
       "number": 29,
       "title": {
-        "fa": "نجات",
         "en": "Salvation",
         "ar": "النجاة",
         "zh": "拯救"
@@ -549,7 +538,6 @@
     {
       "number": 30,
       "title": {
-        "fa": "ندانستن",
         "en": "Not Knowing",
         "ar": "عدم المعرفة",
         "zh": "不知"

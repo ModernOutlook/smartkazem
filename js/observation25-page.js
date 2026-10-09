@@ -4,7 +4,14 @@ const tabs=document.getElementById('observation25-tabs');
 const body=document.getElementById('observation25-body');
 const close=document.getElementById('observation25-close');
 
-function catalog(){return window.SiteI18n?.getCatalog?.()?.pages?.observation25||{}}
+function catalog(){
+  const language=window.SiteI18n?.getLanguage?.()||'fa';
+  const ui=window.SiteI18n?.getCatalog?.()?.pages?.observation25||{};
+  if(language==='fa') return {...(window.Observation25PersianSource||{}),close:ui.close};
+  const translated=window.SiteI18n?.getCatalog?.()?.bookContent?.observation25;
+  if(!translated) return {...ui,sections:[],contents:[]};
+  return {title:translated.title?.[language]||ui.title||'',subtitle:translated.subtitle?.[language]||ui.subtitle||'',sectionNote:translated.sectionNote?.[language]||'',sections:translated.sections?.[language]||[],contents:translated.contents?.[language]||[],close:ui.close};
+}
 function render(){
   const data=catalog();
   const sections=Array.isArray(data.sections)?data.sections:[];

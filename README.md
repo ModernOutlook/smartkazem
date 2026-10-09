@@ -46,47 +46,57 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
-## 3. Two-repository content architecture
+## Canonical Persian book sources — current status
 
-The authoritative content flow is:
+**The Persian-source-first pass is consolidated for all 12 books.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
 
-Persian source repository → Translation repository → Runtime delivery
+| Book | Canonical Persian source |
+|---|---|
+| رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` |
+| شاهنامه‌خوانی | `content/shahnameh-series.js` |
+| فصل اول ظهور | `content/emergence.js` |
+| سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` |
+| آینه‌ی ممکن‌ها | `content/possible-mirror.js` |
+| فصل دوم ظهور | `content/emergence-2.js` |
+| سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` |
+| پژواک لایه سوم | `content/echo-layer3.js` |
+| انسان و ماشین‌هایش | `content/human-machines.js` |
+| جاعلان تقلید | `content/forgers.js` |
+| تباهیان | `content/tabahian.js` |
+| مانیفست آشوب‌زده | `content/disturbed-manifesto.js` |
 
-### Persian source
-- Persian is the canonical source of primary content.
-- User-supplied Persian material is published **exactly as supplied**: no rewriting, summarizing, polishing, reinterpretation, silent correction, or translation.
-- This Persian version is the sole source for later translations.
+### Changes completed in the Persian pass
 
-### Translation repository
-- Contains native, faithful **English, Arabic, and Chinese** translations.
-- Preserve meaning, structure, terminology, narrative information, and intended style.
-- Never translate one target language from another; all derive from Persian.
-- Persian content may be published before translations exist. Never invent missing translations.
+- Extracted the Persian article body from `philosophical-treatise.html` into 158 ordered source blocks, preserving heading, paragraph, and table markup. The HTML now has empty Persian render targets.
+- Extracted the Persian title, subtitle, and 12 paragraphs of `سرزمین مشاهده` into `content/observation.js`; its HTML no longer embeds those Persian paragraphs.
+- Moved the 25 sections of `سرزمین مشاهده؛ ۲۵ بار رسیدن` and the 31 sections of `آینه‌ی ممکن‌ها` out of `translations/fa.json` into dedicated Persian sources. Their page controllers select these sources in Persian mode.
+- Moved the first Shahnameh episode's 2,678-character original-verse passage from `translations/fa.json` into `content/shahnameh-series.js`.
+- Removed duplicated Persian chapter prose from the shared catalog for `جاعلان تقلید` and `انسان و ماشین‌هایش`, and removed duplicate Persian fields from the observation and book translation reservoirs where canonical sources already own them.
+- Updated the shared reader and page renderers to use the canonical Persian source; Talk Back continues to read the localized rendered DOM rather than a separate text store.
 
-### Runtime
+### Remaining before translations
 
-Selected language:
-- fa → Persian source data
-- en/ar/zh → translated data
+- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; **سرزمین مشاهده** uses `translations/observation.json` with 12 paragraphs per language; **سرزمین مشاهده؛ ۲۵ بار رسیدن** and **آینه‌ی ممکن‌ها** use `translations/observation-25.json` and `translations/possible-mirror.json` with 25 and 31 sections per language; **پژواک لایه سوم** uses `translations/echo-layer3.json` with 17 parts per language. These pages load book prose from their dedicated reservoirs rather than duplicated global-catalog entries. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
+- `translations/tabahian.json` now contains all three chapters in EN/ZH/AR, aligned to the canonical Persian source: 38, 59, and 96 paragraphs respectively. The third chapter was translated in full, not summarized; automated paragraph-count checks matched all three target languages to the 96-paragraph Persian source.
+- Automated JavaScript, JSON, HTML, and security checks are being run on the branch. Manual visual checks and real-device TalkBack verification have not been claimed.
 
-The deployed translations/*.json files are runtime artifacts, not alternative sources of truth. translations/i18n.js is the runtime language boundary and must not translate Persian at display time.
+The source inventory and per-book evidence are maintained in `docs/canonical-book-content-audit.md`. Do not merge or describe the entire site as fully migrated until the remaining translation reservoirs, four-language rendering, and accessibility checks are complete.
 
-### Talk Back
-Talk Back is a parallel presentation/service layer over the same language-selected content. It may own audio processing, voice selection, caching, and playback, but **must not create an independent Persian/translation content authority**.
-- Accessibility/Talk Back is **off by default** on a fresh installation.
-- Its only global on/off gesture is a **triple primary-pointer click/tap anywhere on the site**; the state may persist across reloads once the user has chosen it.
-- The gesture uses the browser's click sequence and a short global timing window; keyboard/programmatic clicks do not toggle accessibility.
-- Double-click is not an accessibility toggle. While accessibility is active, double-click may repeat the last spoken announcement.
-- Touch uses the shared Pointer Events path; the document uses `touch-action: manipulation` so browser double-tap zoom does not steal the triple-tap gesture while normal panning remains available.
-- Long-press remains an in-accessibility reading-control gesture (pause/resume/repeat) and is inactive while Talk Back is off.
-- The accessibility navigator can select and read the currently displayed article/book content in the active language; article text is derived from the visible localized DOM, never from a duplicate accessibility content store.
+## Canonical book-content boundary (mandatory)
 
-### Tabahian integration rule
-- «تباهیان» is a child book of **اقتصاد سهم**, not a separate repository or a new content system.
-- Its canonical Persian content is managed through the same Persian source workflow as other site content; the site's deployable source file is `content/tabahian.js`.
-- Its translated runtime catalog stays in the existing shared `translations/` directory as `translations/tabahian.json`, loaded by `translations/i18n.js` alongside the site's normal language catalogs.
-- It uses `BookNavigation`, the shared language selector, and the existing global Talk Back/accessibility bootstrap. Do not add page-specific accessibility scripts or an independent audio/content store.
-- The current translation catalog has EN/AR/ZH for only two chapters; chapter three must be translated and validated before this page is marked complete or merged to production.
+Every book has exactly one canonical Persian content source and one derived translation reservoir. At runtime, the selected language chooses the data source:
+
+- `fa`: render the canonical Persian content from its declared source in `content/`.
+- `en`, `ar`, or `zh`: render the matching language from the book's declared file in `translations/`.
+- The page HTML is a presentation shell only: structure, stable IDs, semantic controls, and script/style references. It must not contain book prose, chapter/episode text, translated copies, or static content placeholders that duplicate a source.
+- Page controllers render the selected source into the shell. They may contain rendering/navigation logic, but no book prose, chapter titles, subtitles, morals, or language-specific fallback copies.
+- Translation catalogs may contain the translations and UI labels for their declared purpose; they must not be used as a second Persian source for long-form book content.
+- Never duplicate a book's prose between HTML, controller JavaScript, a global UI catalog, and a content dataset. When the same text appears in multiple places, remove the non-authoritative copy after wiring and verifying the canonical path.
+- Book cards, home listings, search indexes, accessible reading, and page views must all derive titles and text from the same declared catalog; no parallel hard-coded book metadata.
+- Each book must declare these paths in `page-specs/<book>.json`: Persian source, translation reservoir, presentation shell, renderer/controller, and language selection contract.
+- A book is not compliant merely because its current display looks correct. Verify every language, chapter/episode count and order, paragraph boundaries, navigation, Talk Back, RTL/LTR, and responsive behavior after migration.
+
+**Migration rule:** move content without summarizing, rewriting, reordering, or silently correcting it. Preserve exact source wording and paragraph structure. If two copies differ, do not choose one by guess; compare them and record the discrepancy for resolution before deleting either copy.
 
 ## 4. Repository map
 
@@ -500,3 +510,23 @@ The resulting runtime chain is:
 `Persian source → translation reservoir → SiteI18n → localized DOM → auto-bootstrapped shared Talk Back`
 
 The page still owns its semantic HTML and interaction model; the accessibility engine owns only the generic behavior. Existing explicit `audio-engine.js` inclusions remain safe because the engine is idempotent.
+
+
+## Declared book translation reservoirs (2026-10-09)
+
+- **فصل اول ظهور** and **فصل دوم ظهور** now declare `translations/emergence.json` and `translations/emergence-2.json` directly in their HTML. Their renderers prefer the shared `bookContent` boundary, with the legacy `chapters` view retained only as a compatibility fallback.
+- Removed page-name-to-file hardcoding from `translations/i18n.js`; long-form pages now load a dedicated book catalog only when the page declares `i18n-catalog`. This prevents each new book page from requiring an edit to the shared loader.
+- Translation completeness remains a separate requirement from source centralization. The audit still flags **تباهیان** because its canonical Persian source has three chapters but the translation reservoir contains only two.
+
+
+## Multi-book translation reservoirs (2026-10-09)
+
+The home page can declare more than one long-form translation source using `meta[name="i18n-catalogs"]`, with semicolon-separated `bookKey=path` entries. `translations/i18n.js` loads each declared JSON reservoir into `SiteI18n.getCatalog().bookContent`; book renderers localize the language-keyed titles, subtitles, chapter labels, and paragraph arrays. This keeps long-form prose out of the global language catalogs and avoids adding a per-book fetch branch to the shared loader.
+
+Currently, **جاعلان تقلید** uses `translations/forgers.json` (10 chapters) and **انسان و ماشین‌هایش** uses `translations/human-machines.json` (7 chapters). Their Persian render paths remain backed by `content/forgers.js` and `content/human-machines.js` respectively. Do not claim a translation is complete based only on the presence of a reservoir; compare chapter counts, paragraph alignment, and full-text fidelity against the canonical Persian source.
+
+
+The Shahnameh reader uses `translations/shahnameh.json` for localized episode titles, section labels, and target-language prose. Its page declares this file with `i18n-catalog`; the reader consumes it from `SiteI18n.getCatalog().bookContent.shahnameh`. Original Persian verse remains sourced from `content/shahnameh-series.js`, not copied into each language catalog. The extraction preserves existing translations but does not replace a full 81-episode visual and content review.
+
+
+All three Share Economy books now use the same generic home-page manifest: `forgers=translations/forgers.json;humanMachines=translations/human-machines.json;tabahian=translations/tabahian.json`. The shared loader has no Tabahian-specific fetch branch. `translations/tabahian.json` now contains all three chapters in EN/ZH/AR, with paragraph counts aligned to the canonical Persian source (38, 59, and 96).

@@ -1629,7 +1629,8 @@ const fallbackChapter={
 };
 
 function chapterCatalog(){
-  return window.SiteI18n?.getCatalog?.()?.chapters?.emergence || fallbackChapter;
+  const catalog = window.SiteI18n?.getCatalog?.() || {};
+  return catalog.bookContent?.emergence || catalog.chapters?.emergence || fallbackChapter;
 }
 function languageCode(){
   return window.SiteI18n?.getLanguage?.() || 'fa';
