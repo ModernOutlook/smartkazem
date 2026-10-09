@@ -141,13 +141,7 @@
     // require editing this runtime.
     const pageKey = document.querySelector('meta[name="i18n-page"]')?.content;
     const declaredCatalog = document.querySelector('meta[name="i18n-catalog"]')?.content;
-    const legacyCatalogs = {
-      emergence: 'translations/emergence.json',
-      emergence2: 'translations/emergence-2.json',
-      layer3: 'translations/echo-layer3.json',
-      disturbedManifesto: 'translations/disturbed-manifesto.json'
-    };
-    const chapterPath = declaredCatalog || legacyCatalogs[pageKey];
+    const chapterPath = declaredCatalog;
 
     if (pageKey && chapterPath) {
       const chapterResponse = await fetch(chapterPath, { cache: 'no-store' });
