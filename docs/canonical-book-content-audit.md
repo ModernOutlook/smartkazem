@@ -11,23 +11,27 @@ This inventory tracks the migration to the mandatory single-source book architec
 - Book titles, subtitles, chapter labels, and supplementary prose come from the same book catalog or the shared UI catalog when the text is genuinely interface text.
 - Talk Back reads the selected-language rendered DOM; it never stores book prose independently.
 
-## First-pass findings from the current repository
+## Current source-boundary inventory
 
-| Book/surface | Current observed content boundary | Work required |
-|---|---|---|
-| رساله فلسفی (`philosophical-treatise.html`) | Long-form Persian, English, Chinese, and Arabic text is embedded directly in HTML. | Extract Persian prose to a canonical `content/` source, move EN/AR/ZH to a dedicated translation reservoir, and render into an HTML shell. |
-| سرزمین مشاهده؛ یک رود، یک جریان (`observation.html`) | HTML contains multilingual prose; `translations/observation.json` also contains localized paragraphs. | Reconcile the two copies, keep Persian in `content/`, keep EN/AR/ZH in the translation reservoir, and remove embedded prose from HTML. |
-| سرزمین مشاهده؛ ۲۵ بار رسیدن (`observation-25.html`) | HTML is mostly a shell, but its content source is tied to global language/page catalogs rather than a clearly declared dedicated Persian source. | Declare a canonical source/reservoir pair and make the renderer use them exclusively. |
-| آینه‌ی ممکن‌ها (`possible-mirror.html`) | HTML is mostly a shell; source data is currently represented through shared language catalogs. | Declare dedicated source/reservoir paths and make the page spec/runtime use those paths. |
-| شاهنامه‌خوانی (`shahnameh.html`) | Episode data is in `content/shahnameh-series.js`; page-level title/subtitle and filter UI strings also appear in HTML or controller fallbacks. | Keep episode prose in the source/reservoir; move book metadata and localized filter labels to catalogs; leave only controls and render targets in HTML. |
-| فصل اول ظهور (`emergence.html`) | Persian episode source is in `content/emergence.js`, translations in `translations/emergence.json`; page specs exist. | Audit for remaining controller/HTML fallback prose and ensure every language resolves exclusively from the declared catalogs. |
-| فصل دوم ظهور (`emergence-2.html`) | Persian episode source is in `content/emergence-2.js`; translation data is in `translations/emergence-2.json`; page specs exist. | Audit language-specific controller fallbacks and ensure no duplicate episode text outside the catalogs. |
-| پژواک لایه سوم (`echo-layer3.html`) | Persian source and translations exist as dedicated files. | Verify the page renderer and metadata use only those files; eliminate any duplicated fallback prose. |
-| جاعلان تقلید (`index.html` book reader) | Chapter prose is in `content/forgers.js`, but titles, chapter counts, and fable moral translations are also hard-coded in `js/books.js`. | Move all book-specific text/metadata to the canonical source and translation catalogs; keep `js/books.js` presentation/navigation logic only. |
-| انسان و ماشین‌هایش (`index.html` book reader) | Chapter prose is in `content/human-machines.js`; title/count metadata are hard-coded in `js/books.js`. | Move metadata to catalogs and verify the source/translation structure is aligned. |
-| تباهیان (`index.html` book reader) | Persian chapters are in `content/tabahian.js`; localized book data is in `translations/tabahian.json`; `js/books.js` also hard-codes titles/counts. The translation catalog currently declares two chapters while the expected book structure is three. | Reconcile the actual Persian source count first; complete translations only from confirmed Persian chapters; remove hard-coded metadata and validate chapter alignment. |
-| مانیفست آشوب‌زده (`disturbed-manifesto.html`) | Dedicated source/translation files exist, but the controller includes fallback text. | Remove prose fallbacks and require catalog-backed localized content, with a clear missing-translation state. |
+| Book/surface | Canonical Persian source | Persian-source status | Translation/runtime follow-up |
+|---|---|---|---|
+| رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` | Persian prose extracted into 158 ordered semantic blocks; HTML article uses empty Persian targets. | Move embedded EN/ZH/AR prose from HTML into the shared translation reservoir; verify block alignment. |
+| شاهنامه‌خوانی | `content/shahnameh-series.js` | Episode prose, verse, and the long original-verse passage for episode 1 are sourced here. | Finish translating remaining source-backed content; test 81 episode order and filters in four languages. |
+| فصل اول ظهور | `content/emergence.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | Verify all 19 episodes and translated catalog alignment. |
+| سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` | Persian title, subtitle, section labels, and all 25 prose sections moved out of `translations/fa.json`. | Move target-language prose from shared catalogs into the declared translation reservoir; verify section parity. |
+| آینه‌ی ممکن‌ها | `content/possible-mirror.js` | Persian title, subtitle, section labels, and all 31 prose sections moved out of `translations/fa.json`. | Move target-language prose into the shared translation reservoir; verify all sections and interaction behavior. |
+| فصل دوم ظهور | `content/emergence-2.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | Verify all 11 source episodes and translated catalog alignment. |
+| سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` | Persian title, subtitle, and all 12 body paragraphs extracted; HTML uses empty Persian targets. Duplicate Persian fields removed from `translations/observation.json`. | Move EN/ZH/AR prose from HTML into the shared translation reservoir. |
+| پژواک لایه سوم | `content/echo-layer3.js` | Persian source exists; duplicate Persian title/part labels removed from the translation reservoir. | Verify 17 parts, chapter grouping, and all target-language content. |
+| انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | Verify seven chapters and complete EN/ZH/AR catalog parity. |
+| جاعلان تقلید | `content/forgers.js` | Persian chapter prose is canonical; embedded translations removed from the source JS; duplicate Persian chapter prose removed from `translations/fa.json`. | Verify ten chapters, moral text, and target-language catalogs. |
+| تباهیان | `content/tabahian.js` | Three Persian chapters are canonical in this file. | Translation catalog currently has only two chapters; translate the missing chapter after the Persian inventory is signed off. |
+| مانیفست آشوب‌زده | `content/disturbed-manifesto.js` | Dedicated Persian source exists. | Remove remaining language-specific prose fallbacks and verify all 11 parts in four languages. |
 
+**Persian pass:** canonical source files now exist for all 12 books, and the known long-form Persian duplicates identified in the initial audit have been moved out of HTML or duplicate catalog fields. Shared UI labels and navigation strings may remain in UI catalogs; they are not a second book-prose store.
+
+**Translation pass:** not yet complete. EN/ZH/AR must be centralized and compared against these sources before claiming that every HTML page is presentation-only.
+ 
 ## Important migration safeguards
 
 1. Do not delete embedded text until its exact content has been extracted and compared against the canonical source/reservoir.
@@ -85,3 +89,8 @@ Removed duplicate `fa` title and chapter/part-title entries from the translation
 ## Shahnameh Persian-source consolidation (2026-10-09)
 
 Moved the full Persian original-verse passage for episode 1 from `translations/fa.json` to `content/shahnameh-series.js` (`meta.originalVerse`). Updated the reader to use that canonical source for Persian episode 1. Removed the duplicated Persian `part1`, episode-title list, section list, and subtitle fields from `translations/fa.json`; the remaining Persian catalog entries are UI labels rather than book prose.
+
+
+## Consolidated status (2026-10-09)
+
+The Persian-source-first milestone is complete at the source-boundary level for all 12 listed books. This means a canonical Persian source file exists for each book and the identified duplicate Persian long-form prose was removed from its prior HTML/catalog location. It does **not** mean translations are complete or that visual and TalkBack testing has been performed on a real device. Continue with the translation-source pass only after preserving the current Persian source files as the authoritative references.
