@@ -25,7 +25,7 @@ This inventory tracks the migration to the mandatory single-source book architec
 | پژواک لایه سوم | `content/echo-layer3.js` | Persian source contains 17 ordered parts. | EN/ZH/AR titles, subtitles, part titles, and prose load from `translations/echo-layer3.json` (17 parts per language); duplicated part titles removed from shared catalogs. |
 | انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | EN/ZH/AR titles, subtitles, seven chapter titles, and all chapter paragraphs are centralized in `translations/human-machines.json`; global catalogs retain only UI title/subtitle metadata. |
 | جاعلان تقلید | `content/forgers.js` | Persian chapter prose is canonical; embedded translations removed from the source JS; duplicate Persian chapter prose removed from `translations/fa.json`. | EN/ZH/AR titles, subtitles, ten chapter titles, all chapter paragraphs, and moral text are centralized in `translations/forgers.json`; global catalogs retain only UI metadata. |
-| تباهیان | `content/tabahian.js` | Three Persian chapters are canonical in this file. | `translations/tabahian.json` is now loaded through the generic `i18n-catalogs` manifest, but still contains only two translated chapters; chapter three remains missing. |
+| تباهیان | `content/tabahian.js` | Three Persian chapters are canonical in this file. | `translations/tabahian.json` is loaded through the generic `i18n-catalogs` manifest and now contains all three chapters in EN/ZH/AR; paragraph counts align to Persian (38, 59, 96). |
 | مانیفست آشوب‌زده | `content/disturbed-manifesto.js` | Dedicated Persian source exists. | Remove remaining language-specific prose fallbacks and verify all 11 parts in four languages. |
 
 **Persian pass:** canonical source files now exist for all 12 books, and the known long-form Persian duplicates identified in the initial audit have been moved out of HTML or duplicate catalog fields. Shared UI labels and navigation strings may remain in UI catalogs; they are not a second book-prose store.
@@ -44,7 +44,7 @@ This inventory tracks the migration to the mandatory single-source book architec
 
 The Persian-source-first milestone is complete at the source-boundary level for all 12 books. Each has a canonical Persian file under `content/`, and the identified long-form Persian copies were moved out of HTML or duplicate catalog fields. This is not a claim that target-language translations are centralized or complete, nor that real-device TalkBack/browser testing has been completed.
 
-Known translation-phase gap: `content/tabahian.js` has three Persian chapters, while `translations/tabahian.json` currently contains two translated chapters. Do not begin translation edits until the Persian source inventory has been reviewed; then use the Persian sources listed above as the only reference.
+Translation-phase update (2026-10-09): the third chapter of `content/tabahian.js` has now been translated in full into EN/ZH/AR in `translations/tabahian.json`. Each target language contains 96 paragraphs for chapter three, matching the canonical Persian source. Chapter counts are 38 / 59 / 96 across the three chapters. No summary was substituted for the source prose.
 
 ## Migration history
 
@@ -95,7 +95,7 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 
 - Added explicit `i18n-catalog` declarations to the two Emergence pages.
 - Removed the legacy page-key-to-catalog filename map from `translations/i18n.js`. Dedicated book catalogs are now fetched through the same declaration-based mechanism for Emergence I/II, Echo Layer Three, and Disturbed Manifesto.
-- This is a runtime boundary cleanup, not a translation-completeness claim. Emergence episode/paragraph alignment and the missing third Tabahian chapter remain audit items.
+- This is a runtime boundary cleanup, not by itself a translation-completeness claim. Emergence episode/paragraph alignment remains an audit item; the third Tabahian chapter has since been completed in EN/ZH/AR and paragraph-count checked against Persian.
 
 
 ## Share Economy translation reservoirs (2026-10-09)
@@ -119,4 +119,4 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 
 - Added **تباهیان** to the same `i18n-catalogs` manifest as **جاعلان تقلید** and **انسان و ماشین‌هایش**.
 - Removed the Tabahian-specific fetch/adaptation branch from `translations/i18n.js`. The shared loader now loads all three book reservoirs through the same generic manifest and exposes them under `bookContent`.
-- The Tabahian reservoir now declares its total of three chapters and localized subtitle, but only two translated chapters are present. This structural improvement does not close the missing translation.
+- The Tabahian reservoir declares three chapters and localized subtitles; all three chapters are now translated in EN/ZH/AR. Chapter three contains 96 paragraphs in each language, matching the canonical Persian source.
