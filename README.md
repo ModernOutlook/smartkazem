@@ -517,3 +517,10 @@ The page still owns its semantic HTML and interaction model; the accessibility e
 - **فصل اول ظهور** and **فصل دوم ظهور** now declare `translations/emergence.json` and `translations/emergence-2.json` directly in their HTML. Their renderers prefer the shared `bookContent` boundary, with the legacy `chapters` view retained only as a compatibility fallback.
 - Removed page-name-to-file hardcoding from `translations/i18n.js`; long-form pages now load a dedicated book catalog only when the page declares `i18n-catalog`. This prevents each new book page from requiring an edit to the shared loader.
 - Translation completeness remains a separate requirement from source centralization. The audit still flags **تباهیان** because its canonical Persian source has three chapters but the translation reservoir contains only two.
+
+
+## Multi-book translation reservoirs (2026-10-09)
+
+The home page can declare more than one long-form translation source using `meta[name="i18n-catalogs"]`, with semicolon-separated `bookKey=path` entries. `translations/i18n.js` loads each declared JSON reservoir into `SiteI18n.getCatalog().bookContent`; book renderers localize the language-keyed titles, subtitles, chapter labels, and paragraph arrays. This keeps long-form prose out of the global language catalogs and avoids adding a per-book fetch branch to the shared loader.
+
+Currently, **جاعلان تقلید** uses `translations/forgers.json` (10 chapters) and **انسان و ماشین‌هایش** uses `translations/human-machines.json` (7 chapters). Their Persian render paths remain backed by `content/forgers.js` and `content/human-machines.js` respectively. Do not claim a translation is complete based only on the presence of a reservoir; compare chapter counts, paragraph alignment, and full-text fidelity against the canonical Persian source.
