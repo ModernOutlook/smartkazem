@@ -114,3 +114,4 @@ window.ForgersBookMetadata = Object.freeze({
   moral: 'آنکه مهارت را نمایش می‌دهد، فقط تا آنجا می‌رود که تماشاگر دارد؛ آنکه مهارت را می‌ورزد، تا آنجا که خودش می‌رود. و جنگلی که همه در آن تماشاگرند، سرانجام جز خودِ تماشا چیزی برای دیدن ندارد.'
 });
 window.ForgersCatalog = Object.freeze(bookChapters);
+})();
