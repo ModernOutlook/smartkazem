@@ -48,7 +48,7 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 ## Canonical Persian book sources — current status
 
-**The Persian-source-first pass is consolidated for all 12 books.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for four books has been centralized; the other book reservoirs still require their alignment and completeness checks.
+**The Persian-source-first pass is consolidated for all 12 books.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
 
 | Book | Canonical Persian source |
 |---|---|
@@ -76,7 +76,7 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 ### Remaining before translations
 
-- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; **سرزمین مشاهده** uses `translations/observation.json` with 12 paragraphs per language; **سرزمین مشاهده؛ ۲۵ بار رسیدن** and **آینه‌ی ممکن‌ها** use `translations/observation-25.json` and `translations/possible-mirror.json` with 25 and 31 sections per language. Their HTML pages no longer contain duplicated long-form prose. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
+- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; **سرزمین مشاهده** uses `translations/observation.json` with 12 paragraphs per language; **سرزمین مشاهده؛ ۲۵ بار رسیدن** and **آینه‌ی ممکن‌ها** use `translations/observation-25.json` and `translations/possible-mirror.json` with 25 and 31 sections per language; **پژواک لایه سوم** uses `translations/echo-layer3.json` with 17 parts per language. These pages load book prose from their dedicated reservoirs rather than duplicated global-catalog entries. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
 - `translations/tabahian.json` currently has only two translated chapters while the canonical Persian source has three. This is a known translation-phase gap, not a Persian-source gap.
 - Automated JavaScript, JSON, HTML, and security checks are being run on the branch. Manual visual checks and real-device TalkBack verification have not been claimed.
 
