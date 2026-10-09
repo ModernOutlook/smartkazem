@@ -1,0 +1,21 @@
+#logo-viewer .logo-slogan {
+  position: absolute;
+  top: clamp(18px, 5vh, 54px);
+  left: 5vw;
+  right: 5vw;
+  margin: 0;
+  z-index: 2;
+  text-align: center;
+  direction: inherit;
+  color: #f3d77a;
+  font-size: clamp(1rem, 2.2vw, 1.55rem);
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: .01em;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, .8);
+  pointer-events: none;
+}
+
+#logo-viewer .logo-art {
+  position: relative;
+}
