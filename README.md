@@ -46,6 +46,10 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
+## Persian duplicate cleanup in translation reservoirs
+
+For books that already have canonical Persian prose files, Persian title/chapter-label copies are being removed from translation-only reservoirs. This cleanup does **not** add or revise EN / ZH / AR translations; those remain for the later translation pass. The sources covered here are Tabahian, Emergence I, Emergence II, and Echo Layer Three. Their Persian reading paths use the corresponding `content/` sources.
+
 ## Canonical Persian sources added for two book pages
 
 - **سرزمین مشاهده؛ ۲۵ بار رسیدن** now stores its Persian title, subtitle, section labels, notes, and 25-section prose in `content/observation-25.js`.
