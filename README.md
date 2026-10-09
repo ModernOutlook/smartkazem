@@ -46,6 +46,16 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
+## Persian-source-first migration checkpoint
+
+The migration is proceeding in two deliberate passes: first consolidate all Persian book content into one canonical file under `content/`; only after that inventory is complete will the EN / ZH / AR translation reservoirs be reconciled. Do not add new Persian book prose to HTML, controllers, or translation catalogs.
+
+- **سرزمین مشاهده** now has its Persian title, subtitle, and twelve prose paragraphs in `content/observation.js`. Its HTML contains empty Persian render targets; `js/observation-source.js` renders the canonical source into them. Duplicate Persian fields were removed from `translations/observation.json`.
+- The existing canonical Persian sources for **جاعلان تقلید**, **انسان و ماشین‌هایش**, **تباهیان**, **فصل اول ظهور**, **فصل دوم ظهور**, **پژواک لایه سوم**, **مانیفست آشوب‌زده**, and **شاهنامه‌خوانی** remain the source-of-truth starting points; their remaining embedded/fallback Persian copies and metadata still need to be audited and removed.
+- **رساله فلسفی نگرش نوین** is still a major outstanding task because its full text is embedded in `philosophical-treatise.html`; do not mark the Persian-source pass complete until it and the other listed page shells have been migrated.
+
+This checkpoint does not claim the Persian pass is complete. Keep the translation pass paused until every book has one verified Persian source and no duplicate Persian book prose elsewhere.
+
 ## Canonical book-content migration status
 
 The canonical-source rule is now enforced for the **home-page book reader** for **جاعلان تقلید** and **انسان و ماشین‌هایش**:
