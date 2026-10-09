@@ -3,7 +3,8 @@
 
   const BOOK_KINDS = Object.freeze({
   FORGERS: 'forgers',
-  HUMAN_MACHINES: 'humanMachines'
+  HUMAN_MACHINES: 'humanMachines',
+  TABAHIAN: 'tabahian'
 });
 
   const BOOK_TITLES = Object.freeze({
@@ -18,6 +19,12 @@
     en: ['Humanity and Its Machines', 'Seven Parts'],
     zh: ['人类与他们的机器', '七个部分'],
     ar: ['الإنسان وآلاته', 'سبعة أجزاء']
+  },
+  [BOOK_KINDS.TABAHIAN]: {
+    fa: ['تباهیان', 'سه فصل'],
+    en: ['The Corrupted', 'Three Chapters'],
+    zh: ['腐化者', '三章'],
+    ar: ['الفاسدون', 'ثلاثة فصول']
   }
 });
 
@@ -54,6 +61,7 @@
 function activeChapters() {
   if (getCurrentLanguage() === 'fa') {
     if (activeBookKind === BOOK_KINDS.FORGERS) return window.ForgersCatalog;
+    if (activeBookKind === BOOK_KINDS.TABAHIAN) return window.TabahianCatalog?.chapters || [];
     if (
       activeBookKind === BOOK_KINDS.HUMAN_MACHINES &&
       Array.isArray(window.HumanMachinesCatalog?.chapters)
@@ -64,6 +72,8 @@ function activeChapters() {
 
   const catalog = activeBookCatalog();
   if (catalog) return catalog.chapters;
+
+  if (activeBookKind === BOOK_KINDS.TABAHIAN) return [];
 
   const catalogsByLanguage = {
     zh: window.ForgersCatalogZh,

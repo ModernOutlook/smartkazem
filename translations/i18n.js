@@ -113,6 +113,29 @@
 
     const data = await response.json();
 
+    // Tabahian uses the site's shared Persian source and translation folder.
+    // Its translated catalog is loaded by the same global i18n boundary used by
+    // every realm book; the shared accessibility runtime reads the rendered DOM.
+    if (normalizedLanguage !== DEFAULT_LANGUAGE) {
+      const tabahianResponse = await fetch('translations/tabahian.json', { cache: 'no-store' });
+      if (!tabahianResponse.ok) {
+        throw new Error('Tabahian translation catalog unavailable');
+      }
+      const tabahian = await tabahianResponse.json();
+      const language = normalizedLanguage;
+      const chapterCountLabels = { en: 'Three chapters', ar: 'ثلاثة فصول', zh: '三章' };
+      data.pages = data.pages || {};
+      data.pages.tabahian = {
+        title: tabahian.title?.[language] || 'The Corrupted',
+        subtitle: chapterCountLabels[language] || '',
+        chapters: (tabahian.chapters || []).map((chapter) => ({
+          title: chapter.title?.[language] || '',
+          paragraphs: chapter.paragraphs?.[language] || [],
+          dot: '#38d9a9'
+        }))
+      };
+    }
+
     // Long-form pages may declare their own translation reservoir at the HTML
     // boundary. This keeps SiteI18n generic: adding a future page does not
     // require editing this runtime.

@@ -24,7 +24,7 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 are books**
+Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 are books**
 1. **رساله فلسفی** — book
 2. **شاهنامه‌خوانی** — book
 3. **فصل اول ظهور** — book
@@ -35,7 +35,8 @@ Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 a
 8. **پژواک لایه سوم** — book
 9. **انسان و ماشین‌هایش** — book
 10. **جاعلان تقلید** — book
-11. **مانیفست آشوب‌زده** — book
+11. **تباهیان** — book
+12. **مانیفست آشوب‌زده** — book
 
 `inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
@@ -43,7 +44,7 @@ Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 a
 
 `بازشناسی` and `هم‌سنگی` are two modes of the same shared Paragraph Machine workspace. No legacy Paragraph Machine surface is maintained.
 
-`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۱ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
+`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ## 3. Two-repository content architecture
 
@@ -80,11 +81,18 @@ Talk Back is a parallel presentation/service layer over the same language-select
 - Long-press remains an in-accessibility reading-control gesture (pause/resume/repeat) and is inactive while Talk Back is off.
 - The accessibility navigator can select and read the currently displayed article/book content in the active language; article text is derived from the visible localized DOM, never from a duplicate accessibility content store.
 
+### Tabahian integration rule
+- «تباهیان» is a child book of **اقتصاد سهم**, not a separate repository or a new content system.
+- Its canonical Persian content is managed through the same Persian source workflow as other site content; the site's deployable source file is `content/tabahian.js`.
+- Its translated runtime catalog stays in the existing shared `translations/` directory as `translations/tabahian.json`, loaded by `translations/i18n.js` alongside the site's normal language catalogs.
+- It uses `BookNavigation`, the shared language selector, and the existing global Talk Back/accessibility bootstrap. Do not add page-specific accessibility scripts or an independent audio/content store.
+- The current translation catalog has EN/AR/ZH for only two chapters; chapter three must be translated and validated before this page is marked complete or merged to production.
+
 ## 4. Repository map
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
 
-The current user-facing surfaces are Home, the five realms, 11 book pages, and the Paragraph Machine machine surface. **Navigation order is defined only by the site's route hierarchy and canonical DOM order; it is never inferred from file age, commit history, creation time, or which implementation was written first.** `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
+The current user-facing surfaces are Home, the five realms, 12 book pages, and the Paragraph Machine machine surface. **Navigation order is defined only by the site's route hierarchy and canonical DOM order; it is never inferred from file age, commit history, creation time, or which implementation was written first.** `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
 
 
 
