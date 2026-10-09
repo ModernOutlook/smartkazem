@@ -510,3 +510,10 @@ The resulting runtime chain is:
 `Persian source → translation reservoir → SiteI18n → localized DOM → auto-bootstrapped shared Talk Back`
 
 The page still owns its semantic HTML and interaction model; the accessibility engine owns only the generic behavior. Existing explicit `audio-engine.js` inclusions remain safe because the engine is idempotent.
+
+
+## Declared book translation reservoirs (2026-10-09)
+
+- **فصل اول ظهور** and **فصل دوم ظهور** now declare `translations/emergence.json` and `translations/emergence-2.json` directly in their HTML. Their renderers prefer the shared `bookContent` boundary, with the legacy `chapters` view retained only as a compatibility fallback.
+- Removed page-name-to-file hardcoding from `translations/i18n.js`; long-form pages now load a dedicated book catalog only when the page declares `i18n-catalog`. This prevents each new book page from requiring an edit to the shared loader.
+- Translation completeness remains a separate requirement from source centralization. The audit still flags **تباهیان** because its canonical Persian source has three chapters but the translation reservoir contains only two.
