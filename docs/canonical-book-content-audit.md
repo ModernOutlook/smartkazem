@@ -67,3 +67,11 @@ Not yet complete:
 
 - **رساله فلسفی نگرش نوین**: extracted all 158 Persian article blocks into `content/philosophical-treatise.js`, preserving block order and the original heading/paragraph/table markup. Replaced Persian article copies in HTML with empty render targets and added `js/philosophical-treatise-source.js` to render the canonical source.
 - The English, Chinese, and Arabic copies are intentionally untouched in this Persian-first pass and will be moved into the translation reservoir during the subsequent phase.
+
+
+## Canonical Persian source extraction: observation 25 and possible mirror (2026-10-09)
+
+- **سرزمین مشاهده؛ ۲۵ بار رسیدن**: moved its Persian title, subtitle, section labels, section note, and all ${obs.contents.length} prose sections from `translations/fa.json` into `content/observation-25.js`. The page controller now reads this source when Persian is selected.
+- **آینه‌ی ممکن‌ها**: moved its Persian title, subtitle, section labels, section note, and all ${mirror.contents.length} prose sections from `translations/fa.json` into `content/possible-mirror.js`. The page controller now reads this source when Persian is selected.
+- Removed the duplicated Persian book fields from `translations/fa.json`; retained the UI close labels. Updated the shared i18n document-title fallback to use a canonical Persian source title when a page intentionally has no duplicate title in the Persian UI catalog.
+- EN / ZH / AR catalogs were not changed in this Persian-first phase.
