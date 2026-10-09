@@ -46,6 +46,18 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
+## Canonical book-content migration status
+
+The canonical-source rule is now enforced for the **home-page book reader** for **جاعلان تقلید** and **انسان و ماشین‌هایش**:
+
+- Persian chapter prose is read from `content/forgers.js` and `content/human-machines.js`.
+- EN / ZH / AR chapters are read from the corresponding `pages.forgers` and `pages.humanMachines` entries in `translations/en.json`, `translations/zh.json`, and `translations/ar.json`.
+- The duplicate Persian chapter arrays were removed from `translations/fa.json`.
+- The embedded EN / ZH / AR copies were removed from `content/forgers.js`; the controller no longer carries parallel book-title or translated-moral prose fallbacks.
+- The shared reader builds its chapter tabs and visible text from the selected canonical source/catalog. Talk Back continues to read the localized rendered DOM rather than maintaining a separate book-text copy.
+
+**Migration is incremental, not complete for all 12 books.** Do not delete any remaining embedded text until the source and all four language paths are verified for chapter count, order, paragraph fidelity, language switching, and Talk Back. The audit in `docs/canonical-book-content-audit.md` records the remaining work. In particular, `translations/tabahian.json` currently has only two translated chapters while the Persian source has three; that gap must be translated before claiming four-language parity.
+
 ## 3. Two-repository content architecture
 
 The authoritative content flow is:
