@@ -157,6 +157,8 @@
       const chapter = await chapterResponse.json();
       data.chapters = data.chapters || {};
       data.chapters[pageKey] = chapter;
+      data.bookContent = data.bookContent || {};
+      data.bookContent[pageKey] = chapter;
     }
 
     catalogs[normalizedLanguage] = data;
