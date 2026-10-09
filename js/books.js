@@ -30,8 +30,24 @@
   if (getCurrentLanguage() === 'fa') return null;
 
   try {
-    const catalog = window.SiteI18n?.getCatalog?.()?.pages?.[activeBookKind];
-    return catalog?.chapters?.length ? catalog : null;
+    const catalog = window.SiteI18n?.getCatalog?.() || {};
+    const language = getCurrentLanguage();
+    const book = catalog.bookContent?.[activeBookKind];
+    if (book?.chapters?.length) {
+      return {
+        ...book,
+        title: book.title?.[language] || '',
+        subtitle: book.subtitle?.[language] || '',
+        moral: book.moral?.[language] || '',
+        chapters: book.chapters.map((chapter) => ({
+          ...chapter,
+          title: chapter.title?.[language] || '',
+          paragraphs: chapter.paragraphs?.[language] || []
+        }))
+      };
+    }
+    const legacy = catalog.pages?.[activeBookKind];
+    return legacy?.chapters?.length ? legacy : null;
   } catch (_) {
     return null;
   }
