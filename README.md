@@ -46,6 +46,13 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
+## Canonical Persian sources added for two book pages
+
+- **سرزمین مشاهده؛ ۲۵ بار رسیدن** now stores its Persian title, subtitle, section labels, notes, and 25-section prose in `content/observation-25.js`.
+- **آینه‌ی ممکن‌ها** now stores its Persian title, subtitle, section labels, notes, and prose in `content/possible-mirror.js`.
+- Their controllers use these sources when Persian is selected. The duplicate Persian book data was removed from `translations/fa.json`; the shared UI close labels remain there. The shared i18n runtime can use the canonical Persian source title for the browser document title when the page catalog intentionally has no duplicate title.
+- The non-Persian catalogs are untouched in this pass. Translation consolidation begins only after the Persian-source inventory is complete.
+
 ## Persian-source-first migration update
 
 Two additional long-form books now have canonical Persian content files, and their HTML pages no longer contain duplicate Persian book prose:
