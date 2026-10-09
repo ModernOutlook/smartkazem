@@ -80,3 +80,8 @@ Not yet complete:
 ## Persian translation-reservoir cleanup (2026-10-09)
 
 Removed duplicate `fa` title and chapter/part-title entries from the translation reservoirs for **تباهیان**, **فصل اول ظهور**, **فصل دوم ظهور**, and **پژواک لایه سوم**. Their Persian chapter text is supplied by their `content/` sources. No EN / ZH / AR prose was edited in this cleanup.
+
+
+## Shahnameh Persian-source consolidation (2026-10-09)
+
+Moved the full Persian original-verse passage for episode 1 from `translations/fa.json` to `content/shahnameh-series.js` (`meta.originalVerse`). Updated the reader to use that canonical source for Persian episode 1. Removed the duplicated Persian `part1`, episode-title list, section list, and subtitle fields from `translations/fa.json`; the remaining Persian catalog entries are UI labels rather than book prose.
