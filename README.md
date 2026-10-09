@@ -24,7 +24,7 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 are books**
+Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 are books**
 1. **رساله فلسفی** — book
 2. **شاهنامه‌خوانی** — book
 3. **فصل اول ظهور** — book
@@ -35,6 +35,7 @@ Secondary pages (current child-page inventory): **exactly 11 pages, and all 11 a
 8. **پژواک لایه سوم** — book
 9. **انسان و ماشین‌هایش** — book
 10. **جاعلان تقلید** — book
+11. **تباهیان** — book
 11. **مانیفست آشوب‌زده** — book
 
 `inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
