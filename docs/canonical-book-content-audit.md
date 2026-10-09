@@ -25,7 +25,7 @@ This inventory tracks the migration to the mandatory single-source book architec
 | پژواک لایه سوم | `content/echo-layer3.js` | Persian source contains 17 ordered parts. | EN/ZH/AR titles, subtitles, part titles, and prose load from `translations/echo-layer3.json` (17 parts per language); duplicated part titles removed from shared catalogs. |
 | انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | EN/ZH/AR titles, subtitles, seven chapter titles, and all chapter paragraphs are centralized in `translations/human-machines.json`; global catalogs retain only UI title/subtitle metadata. |
 | جاعلان تقلید | `content/forgers.js` | Persian chapter prose is canonical; embedded translations removed from the source JS; duplicate Persian chapter prose removed from `translations/fa.json`. | EN/ZH/AR titles, subtitles, ten chapter titles, all chapter paragraphs, and moral text are centralized in `translations/forgers.json`; global catalogs retain only UI metadata. |
-| تباهیان | `content/tabahian.js` | Three Persian chapters are canonical in this file. | Translation catalog currently has only two chapters; translate the missing chapter after the Persian inventory is signed off. |
+| تباهیان | `content/tabahian.js` | Three Persian chapters are canonical in this file. | `translations/tabahian.json` is now loaded through the generic `i18n-catalogs` manifest, but still contains only two translated chapters; chapter three remains missing. |
 | مانیفست آشوب‌زده | `content/disturbed-manifesto.js` | Dedicated Persian source exists. | Remove remaining language-specific prose fallbacks and verify all 11 parts in four languages. |
 
 **Persian pass:** canonical source files now exist for all 12 books, and the known long-form Persian duplicates identified in the initial audit have been moved out of HTML or duplicate catalog fields. Shared UI labels and navigation strings may remain in UI catalogs; they are not a second book-prose store.
@@ -113,3 +113,10 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 - Removed duplicate `part1`, `titles`, `sections`, and `episodes` long-form fields from the global language catalogs. The page keeps UI-specific labels, search labels, and visual metadata in the global catalog.
 - The Shahnameh reader now gets translated titles and prose from `bookContent.shahnameh`; original Persian verse falls back to the canonical `content/shahnameh-series.js` source rather than duplicated fields in EN / ZH / AR catalogs.
 - This extraction preserves existing target-language strings; full fidelity review and manual visual testing remain pending.
+
+
+## Generic home-page book manifest (2026-10-09)
+
+- Added **تباهیان** to the same `i18n-catalogs` manifest as **جاعلان تقلید** and **انسان و ماشین‌هایش**.
+- Removed the Tabahian-specific fetch/adaptation branch from `translations/i18n.js`. The shared loader now loads all three book reservoirs through the same generic manifest and exposes them under `bookContent`.
+- The Tabahian reservoir now declares its total of three chapters and localized subtitle, but only two translated chapters are present. This structural improvement does not close the missing translation.
