@@ -8,7 +8,11 @@
   if (!tabs || !body || !close) return;
 
   function catalog() {
-    return window.SiteI18n?.getCatalog?.()?.pages?.possibleMirror || {};
+    const translated = window.SiteI18n?.getCatalog?.()?.pages?.possibleMirror || {};
+    if ((window.SiteI18n?.getLanguage?.() || 'fa') === 'fa') {
+      return { ...(window.PossibleMirrorPersianSource || {}), close: translated.close };
+    }
+    return translated;
   }
 
   function setPageLanguage() {
