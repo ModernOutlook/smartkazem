@@ -250,6 +250,6 @@
     "proxy": "Proxy",
     "connect": "اتصال",
     "connectionSettings": "إعدادات الاتصال",
-    "localStorageNote": "لا يُحفظ مفتاح API في localStorage."
+    "localStorageNote": "يستخدم الوضع الافتراضي وكيلاً آمناً على الخادم؛ لا يتم عرض مفتاح API أو تخزينه في المتصفح."
   }
 }

@@ -293,6 +293,6 @@
     "proxy": "Proxy",
     "connect": "اتصال",
     "connectionSettings": "تنظیمات اتصال",
-    "localStorageNote": "کلید API در localStorage ذخیره نمی‌شود."
+    "localStorageNote": "حالت پیش‌فرض از پروکسی امن سمت سرور استفاده می‌کند؛ کلید API در مرورگر نمایش یا ذخیره نمی‌شود."
   }
 }

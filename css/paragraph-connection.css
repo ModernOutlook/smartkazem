@@ -8,3 +8,5 @@
 .pc-input-wrap.is-disabled{opacity:.42}
 .pc-input:disabled{cursor:not-allowed}
 @media (max-width:600px){#paragraph-proxy-url-wrap{align-items:stretch;flex-direction:column}}
+
+.pc-input-wrap.is-hidden{display:none}
