@@ -48,7 +48,7 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 ## Canonical Persian book sources — current status
 
-**The Persian-source-first pass is consolidated for all 12 books.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. This is the Persian-source milestone only: EN / ZH / AR migration and full four-language runtime verification remain the next phase.
+**The Persian-source-first pass is consolidated for all 12 books.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for the two long-form books has been centralized; the other book reservoirs still require their alignment and completeness checks.
 
 | Book | Canonical Persian source |
 |---|---|
@@ -76,11 +76,11 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 ### Remaining before translations
 
-- The English, Chinese, and Arabic prose still embedded in the two long-form HTML pages must be moved to the shared translation reservoirs in the next phase. This pass intentionally did not translate or rewrite those languages.
+- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; the three target-language versions of **سرزمین مشاهده** are in `translations/observation.json` as 12 paragraphs each. Their HTML pages now use empty language-specific render targets. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
 - `translations/tabahian.json` currently has only two translated chapters while the canonical Persian source has three. This is a known translation-phase gap, not a Persian-source gap.
 - Automated JavaScript, JSON, HTML, and security checks are being run on the branch. Manual visual checks and real-device TalkBack verification have not been claimed.
 
-The source inventory and per-book evidence are maintained in `docs/canonical-book-content-audit.md`. Do not merge or describe the entire site as fully migrated until the translation phase and runtime language/accessibility checks are complete.
+The source inventory and per-book evidence are maintained in `docs/canonical-book-content-audit.md`. Do not merge or describe the entire site as fully migrated until the remaining translation reservoirs, four-language rendering, and accessibility checks are complete.
 
 ## Canonical book-content boundary (mandatory)
 
