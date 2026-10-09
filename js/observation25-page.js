@@ -4,7 +4,11 @@ const tabs=document.getElementById('observation25-tabs');
 const body=document.getElementById('observation25-body');
 const close=document.getElementById('observation25-close');
 
-function catalog(){return window.SiteI18n?.getCatalog?.()?.pages?.observation25||{}}
+function catalog(){
+  const translated=window.SiteI18n?.getCatalog?.()?.pages?.observation25||{};
+  if((window.SiteI18n?.getLanguage?.()||'fa')==='fa') return {...(window.Observation25PersianSource||{}),close:translated.close};
+  return translated;
+}
 function render(){
   const data=catalog();
   const sections=Array.isArray(data.sections)?data.sections:[];
