@@ -61,3 +61,9 @@ Not yet complete:
 - **سرزمین مشاهده**: extracted the Persian title, subtitle, and all 12 body paragraphs into `content/observation.js`. The HTML keeps only empty render targets for those Persian fields; `js/observation-source.js` injects the canonical source. Removed Persian title/subtitle/paragraph fields from `translations/observation.json` so the Persian prose is not duplicated there.
 - Translation content for EN / ZH / AR is deliberately not being migrated in this pass; it remains for the later translation phase.
 - **رساله فلسفی نگرش نوین** remains the largest uncompleted Persian-source extraction: its long-form prose is still embedded in `philosophical-treatise.html`.
+
+
+## Additional Persian source extraction (2026-10-09)
+
+- **رساله فلسفی نگرش نوین**: extracted all 158 Persian article blocks into `content/philosophical-treatise.js`, preserving block order and the original heading/paragraph/table markup. Replaced Persian article copies in HTML with empty render targets and added `js/philosophical-treatise-source.js` to render the canonical source.
+- The English, Chinese, and Arabic copies are intentionally untouched in this Persian-first pass and will be moved into the translation reservoir during the subsequent phase.
