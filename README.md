@@ -88,6 +88,22 @@ Talk Back is a parallel presentation/service layer over the same language-select
 - It uses `BookNavigation`, the shared language selector, and the existing global Talk Back/accessibility bootstrap. Do not add page-specific accessibility scripts or an independent audio/content store.
 - The current translation catalog has EN/AR/ZH for only two chapters; chapter three must be translated and validated before this page is marked complete or merged to production.
 
+## Canonical book-content boundary (mandatory)
+
+Every book has exactly one canonical Persian content source and one derived translation reservoir. At runtime, the selected language chooses the data source:
+
+- `fa`: render the canonical Persian content from its declared source in `content/`.
+- `en`, `ar`, or `zh`: render the matching language from the book's declared file in `translations/`.
+- The page HTML is a presentation shell only: structure, stable IDs, semantic controls, and script/style references. It must not contain book prose, chapter/episode text, translated copies, or static content placeholders that duplicate a source.
+- Page controllers render the selected source into the shell. They may contain rendering/navigation logic, but no book prose, chapter titles, subtitles, morals, or language-specific fallback copies.
+- Translation catalogs may contain the translations and UI labels for their declared purpose; they must not be used as a second Persian source for long-form book content.
+- Never duplicate a book's prose between HTML, controller JavaScript, a global UI catalog, and a content dataset. When the same text appears in multiple places, remove the non-authoritative copy after wiring and verifying the canonical path.
+- Book cards, home listings, search indexes, accessible reading, and page views must all derive titles and text from the same declared catalog; no parallel hard-coded book metadata.
+- Each book must declare these paths in `page-specs/<book>.json`: Persian source, translation reservoir, presentation shell, renderer/controller, and language selection contract.
+- A book is not compliant merely because its current display looks correct. Verify every language, chapter/episode count and order, paragraph boundaries, navigation, Talk Back, RTL/LTR, and responsive behavior after migration.
+
+**Migration rule:** move content without summarizing, rewriting, reordering, or silently correcting it. Preserve exact source wording and paragraph structure. If two copies differ, do not choose one by guess; compare them and record the discrepancy for resolution before deleting either copy.
+
 ## 4. Repository map
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
