@@ -1,7 +1,6 @@
 {
   "schema": "tabahian/v1",
   "title": {
-    "fa": "تباهیان",
     "en": "The Corrupted",
     "ar": "الفاسدون",
     "zh": "腐化者"
@@ -11,7 +10,6 @@
     {
       "number": 1,
       "title": {
-        "fa": "فصل اول",
         "en": "Chapter One",
         "ar": "الفصل الأول",
         "zh": "第一章"
@@ -142,7 +140,6 @@
     {
       "number": 2,
       "title": {
-        "fa": "فصل دوم",
         "en": "Chapter Two",
         "ar": "الفصل الثاني",
         "zh": "第二章"
