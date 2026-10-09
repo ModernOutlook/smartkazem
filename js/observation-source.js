@@ -4,20 +4,34 @@
   const source = window.ObservationPersianSource;
   if (!source) return;
 
-  function renderPersianSource() {
-    document.querySelectorAll('[data-fa-source-field]').forEach((node) => {
-      const field = node.dataset.faSourceField;
-      if (field === 'title' || field === 'subtitle') node.textContent = source[field] || '';
-    });
+  function render() {
+    const language = window.SiteI18n?.getLanguage?.() || document.documentElement.lang || 'fa';
+    const translated = window.SiteI18n?.getCatalog?.()?.bookContent?.observation;
+    const content = language === 'fa' ? source : translated;
+    if (!content) return;
 
-    document.querySelectorAll('[data-fa-source-index]').forEach((node) => {
-      const index = Number(node.dataset.faSourceIndex);
-      if (Number.isInteger(index) && source.paragraphs[index] !== undefined) {
-        node.innerHTML = source.paragraphs[index];
-      }
+    const title = document.getElementById('observation-source-title');
+    const subtitle = document.getElementById('observation-source-subtitle');
+    const localizedTitle = language === 'fa' ? content.title : content.title?.[language];
+    const localizedSubtitle = language === 'fa' ? content.subtitle : content.subtitle?.[language];
+
+    if (title) title.textContent = localizedTitle || '';
+    if (subtitle) subtitle.textContent = localizedSubtitle || '';
+
+    document.querySelectorAll('[data-observation-paragraph-index]').forEach((pair) => {
+      const index = Number(pair.dataset.observationParagraphIndex);
+      const node = pair.querySelector('[data-observation-paragraph]');
+      const paragraph = language === 'fa'
+        ? content.paragraphs?.[index]
+        : content.paragraphs?.[language]?.[index];
+      if (!node || paragraph === undefined) return;
+      if (language === 'fa') node.innerHTML = paragraph;
+      else node.textContent = paragraph;
+      node.lang = language;
+      node.dir = ['fa', 'ar'].includes(language) ? 'rtl' : 'ltr';
     });
   }
 
-  renderPersianSource();
-  document.addEventListener('site:languagechange', renderPersianSource);
+  render();
+  document.addEventListener('site:languagechange', render);
 })();
