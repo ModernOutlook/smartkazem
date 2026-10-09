@@ -527,3 +527,6 @@ Currently, **جاعلان تقلید** uses `translations/forgers.json` (10 chap
 
 
 The Shahnameh reader uses `translations/shahnameh.json` for localized episode titles, section labels, and target-language prose. Its page declares this file with `i18n-catalog`; the reader consumes it from `SiteI18n.getCatalog().bookContent.shahnameh`. Original Persian verse remains sourced from `content/shahnameh-series.js`, not copied into each language catalog. The extraction preserves existing translations but does not replace a full 81-episode visual and content review.
+
+
+All three Share Economy books now use the same generic home-page manifest: `forgers=translations/forgers.json;humanMachines=translations/human-machines.json;tabahian=translations/tabahian.json`. The shared loader has no Tabahian-specific fetch branch. Its dedicated catalog still contains only two translated chapters of the three in the Persian source, so the missing chapter remains an explicit completion task rather than being hidden by the generic wiring.
