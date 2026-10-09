@@ -2,9 +2,9 @@
   "code": "echo-layer3",
   "source": "fa",
   "title": {
-    "en": "Echo Layer Three",
+    "en": "The Echo of the Third Layer",
     "ar": "صدى الطبقة الثالثة",
-    "zh": "第三层回响"
+    "zh": "第三层回声"
   },
   "parts": [
     {
@@ -1188,5 +1188,10 @@
         ]
       }
     }
-  ]
+  ],
+  "subtitle": {
+    "en": "Protocol of Coordination; From Silence to Utopia",
+    "zh": "协调协议；从寂静走向理想城",
+    "ar": "بروتوكول التنسيق؛ من الصمت إلى المدينة الفاضلة"
+  }
 }
