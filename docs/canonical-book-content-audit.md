@@ -16,7 +16,7 @@ This inventory tracks the migration to the mandatory single-source book architec
 | Book/surface | Canonical Persian source | Persian-source status | Translation/runtime follow-up |
 |---|---|---|---|
 | رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` | Persian prose extracted into 158 ordered semantic blocks; HTML article uses empty Persian targets. | EN/ZH/AR prose has been moved into `translations/treatise.json` as 158 ordered blocks per language. Verify rendered block alignment and visual fidelity. |
-| شاهنامه‌خوانی | `content/shahnameh-series.js` | Episode prose, verse, and the long original-verse passage for episode 1 are sourced here. | Finish translating remaining source-backed content; test 81 episode order and filters in four languages. |
+| شاهنامه‌خوانی | `content/shahnameh-series.js` | Episode prose, verse, and the long original-verse passage for episode 1 are sourced here. | EN/ZH/AR episode titles and prose for episodes 1–81 now live in `translations/shahnameh.json`; `shahnameh.html` declares the reservoir and the reader loads it through `bookContent.shahnameh`. Global catalogs retain page UI labels/metadata only. Still test all 81 episode order and filters in four languages. |
 | فصل اول ظهور | `content/emergence.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | `emergence.html` declares `translations/emergence.json`; renderer prefers `bookContent.emergence`. Verify all 19 episodes and translated catalog alignment. |
 | سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` | Persian title, subtitle, section labels, and all 25 prose sections moved out of `translations/fa.json`. | Move target-language prose from shared catalogs into the declared translation reservoir; verify section parity. |
 | آینه‌ی ممکن‌ها | `content/possible-mirror.js` | Persian title, subtitle, section labels, and all 31 prose sections moved out of `translations/fa.json`. | EN/ZH/AR section labels and prose have been moved to `translations/possible-mirror.json` (31 sections per language). Verify rendered section parity and interaction behavior. |
@@ -105,3 +105,11 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 - Removed duplicated long-form chapter arrays from `translations/en.json`, `translations/zh.json`, and `translations/ar.json`; their page entries keep the title/subtitle metadata needed by the home UI.
 - Added a generic `i18n-catalogs` manifest on `index.html`. The shared loader now loads multiple declared reservoirs into `bookContent`, and `js/books.js` localizes chapter metadata and prose from that boundary. The book renderer still uses the canonical Persian `content/` source when Persian is selected.
 - The new reservoirs were assembled from existing translated content; no translated prose was summarized or rewritten during extraction.
+
+
+## Shahnameh translation reservoir (2026-10-09)
+
+- Extracted translated episode titles, section labels, episode prose, and episode-1 translated prose from the EN / ZH / AR global catalogs into `translations/shahnameh.json`: 81 titles, 13 section labels, episode 1 plus episodes 2–81 per language.
+- Removed duplicate `part1`, `titles`, `sections`, and `episodes` long-form fields from the global language catalogs. The page keeps UI-specific labels, search labels, and visual metadata in the global catalog.
+- The Shahnameh reader now gets translated titles and prose from `bookContent.shahnameh`; original Persian verse falls back to the canonical `content/shahnameh-series.js` source rather than duplicated fields in EN / ZH / AR catalogs.
+- This extraction preserves existing target-language strings; full fidelity review and manual visual testing remain pending.
