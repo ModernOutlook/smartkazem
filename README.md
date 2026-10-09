@@ -46,6 +46,10 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
+## Shahnameh Persian-source consolidation
+
+The first episode's long Persian original-verse passage was moved from `translations/fa.json` into `content/shahnameh-series.js` as canonical source metadata. The Shahnameh reader now uses that source passage for episode 1 when no translated catalog is selected. Persian episode titles, section labels, and subtitle fall back to the same canonical episode metadata rather than the duplicate Persian title/section arrays in `translations/fa.json`. UI-only labels remain in the shared catalog.
+
 ## Persian duplicate cleanup in translation reservoirs
 
 For books that already have canonical Persian prose files, Persian title/chapter-label copies are being removed from translation-only reservoirs. This cleanup does **not** add or revise EN / ZH / AR translations; those remain for the later translation pass. The sources covered here are Tabahian, Emergence I, Emergence II, and Echo Layer Three. Their Persian reading paths use the corresponding `content/` sources.
