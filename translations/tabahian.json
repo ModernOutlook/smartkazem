@@ -5,7 +5,7 @@
     "ar": "الفاسدون",
     "zh": "腐化者"
   },
-  "total": 2,
+  "total": 3,
   "chapters": [
     {
       "number": 1,
@@ -330,5 +330,10 @@
         ]
       }
     }
-  ]
+  ],
+  "subtitle": {
+    "en": "Three chapters",
+    "ar": "ثلاثة فصول",
+    "zh": "三章"
+  }
 }
