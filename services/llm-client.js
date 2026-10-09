@@ -30,7 +30,7 @@ const HISTORY_KEYS = Object.freeze({
 });
 const CONNECTION_MODE_KEY = 'pgm_connection_mode';
 const PROXY_URL_KEY = 'pgm_proxy_url';
-const DEFAULT_PROXY_URL = '';
+const DEFAULT_PROXY_URL = 'https://modern-outlook-paragraph-proxy.game-kazem9877.workers.dev';
 let runtimeApiKey = '';
 let connectionMode = 'proxy';
 const MAX_HISTORY = 12;
