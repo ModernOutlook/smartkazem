@@ -51,7 +51,7 @@
       title: localized?.title || localizedTitle(episode),
       section: localizedSection(episode.section),
       prose: localized?.prose || episode.prose,
-      verse: localized?.originalVerse || episode.verse
+      verse: localized?.originalVerse || (episode.id === 1 ? data.meta.originalVerse : episode.verse)
     };
   };
 
