@@ -34,7 +34,7 @@
       const block = language === 'fa' ? source.blocks[index] : translated.blocks[index];
       let content = language === 'fa' ? block?.html : block?.[language];
       if (content == null) return;
-      if (index === 0 && language !== 'fa' && !/^\\s*<h1\\b/i.test(content)) content = '<h1>' + content + '</h1>';
+      if (index === 0 && language !== 'fa' && !content.trimStart().toLowerCase().startsWith('<h1')) content = '<h1>' + content + '</h1>';
       node.lang = language;
       node.dir = language === 'fa' || language === 'ar' ? 'rtl' : 'ltr';
       node.innerHTML = content;
