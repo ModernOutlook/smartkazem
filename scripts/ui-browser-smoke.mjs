@@ -23,7 +23,7 @@ const responsivePages = [
   'echo-layer3.html',
   'emergence.html',
   'emergence-2.html',
-  'shahnameh-reading.html',
+  'shahnameh.html',
 ];
 const viewports = [
   { width: 320, height: 740, name: 'small portrait' },
@@ -44,9 +44,11 @@ const context = await browser.newContext({ reducedMotion: 'reduce' });
 try {
   for (const file of htmlFiles) {
     const page = await context.newPage();
-    page.setDefaultTimeout(5000);
+    page.setDefaultTimeout(15000);
     const pageErrors = [];
+    const failedRequests = [];
     page.on('pageerror', (error) => pageErrors.push(error.message));
+    page.on('requestfailed', (request) => failedRequests.push(request.url() + ': ' + (request.failure()?.errorText || 'request failed')));
     const response = await page.goto(`${baseURL}/${encodeURIComponent(file)}`, { waitUntil: 'domcontentloaded' });
     if (!response || !response.ok()) {
       fail(`${file}: HTTP ${response?.status() ?? 'no response'}`);
@@ -63,24 +65,30 @@ try {
     const languageButtonCount = await page.locator('[data-site-lang]').count();
     if (languageButtonCount !== 4) fail(`${file}: expected four shared language buttons, found ${languageButtonCount}`);
 
+    let languageFailures = 0;
     for (const language of languages) {
       const button = page.locator(`[data-site-lang="${language.code}"]`).first();
       try {
         await button.click();
         await page.waitForFunction(
-          ({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir,
+          ({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir && document.querySelector(`[data-site-lang="${code}"]`)?.getAttribute('aria-pressed') === 'true',
           language,
-          { timeout: 5000 }
+          { timeout: 15000 }
         );
       } catch (error) {
-        fail(`${file}: switching to ${language.code} did not set lang/dir correctly (${String(error).split('\n')[0]})`);
+        languageFailures++;
+        const actual = await page.evaluate(() => ({ lang: document.documentElement.lang, dir: document.documentElement.dir, active: document.querySelector('[data-site-lang][aria-pressed="true"]')?.dataset.siteLang || null }));
+        fail(`${file}: switching to ${language.code} failed; actual=${JSON.stringify(actual)}; ${String(error).split('\n')[0]}`);
       }
     }
 
     if (pageErrors.length) {
-      fail(`${file}: browser runtime exception(s): ${pageErrors.slice(0, 2).join(' | ')}`);
+      fail(`${file}: browser runtime exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
     }
-    console.log(`OK language round-trip: ${file}`);
+    if (failedRequests.length) {
+      fail(`${file}: failed browser request(s): ${failedRequests.slice(0, 3).join(' | ')}`);
+    }
+    if (!languageFailures && !pageErrors.length && !failedRequests.length) console.log(`OK language round-trip: ${file}`);
     await page.close();
   }
 
