@@ -34,6 +34,8 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [ ] en → ar
 - [ ] ar → zh
 - [ ] zh → fa
+- [x] Source scan: the Persian base catalog's shared label keys now have matching key coverage in en/ar/zh; missing shared UI labels were translated.
+- [x] Source fixes: inventory shell/group/card labels, Echo Layer Three navigation labels, Shahnameh search naming, and Emergence II episode numerals/fallback text now respond to the selected language.
 - [ ] Verify translated visible labels, aria-labels, placeholders, tabs, controls, headers, close/back buttons, and live regions.
 - [ ] Repeat language transitions on home, all five realms, every child page, inventory, book readers, and Paragraph Machine.
 
@@ -65,6 +67,6 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [x] JavaScript syntax and JSON catalog validation passed on the runtime-fix commit, before subsequent documentation-only updates.
 - [x] HTML structure and local asset checks passed on the runtime-fix commit, before subsequent documentation-only updates.
 - [x] Semantic page-state usage check passed on the runtime-fix commit, before subsequent documentation-only updates.
-- [ ] Complete an exhaustive four-language control/visible-string audit across every user-facing HTML file; current CI checks do not substitute for this audit.
+- [ ] Complete an exhaustive four-language control/visible-string audit across every user-facing HTML file; the source scan found and fixed several concrete defects, but this does not yet cover every rendered label or long-form translation.
 - [x] Security gate passed on the runtime-fix commit, before subsequent documentation-only updates.
 - [ ] Record browser/device, viewport, language, and result for each manual test.
