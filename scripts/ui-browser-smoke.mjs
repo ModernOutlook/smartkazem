@@ -44,7 +44,7 @@ const context = await browser.newContext({ reducedMotion: 'reduce' });
 try {
   for (const file of htmlFiles) {
     const page = await context.newPage();
-    page.setDefaultTimeout(15000);
+    page.setDefaultTimeout(7000);
     const pageErrors = [];
     const failedRequests = [];
     page.on('pageerror', (error) => pageErrors.push(error.message));
@@ -56,7 +56,7 @@ try {
       continue;
     }
 
-    await page.waitForFunction(() => Boolean(window.SiteI18n && window.SiteI18n.getCatalog()), null, { timeout: 15000 }).catch(() => {});
+    await page.waitForFunction(() => Boolean(window.SiteI18n && window.SiteI18n.getCatalog()), null, { timeout: 5000 }).catch(() => {});
     await page.waitForFunction(() => {
       const lang = document.documentElement.lang;
       return Boolean(document.querySelector(`[data-site-lang="${lang}"][aria-pressed="true"]`));
@@ -90,7 +90,7 @@ try {
         await page.waitForFunction(
           ({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir && document.querySelector(`[data-site-lang="${code}"]`)?.getAttribute('aria-pressed') === 'true',
           language,
-          { timeout: 15000 }
+          { timeout: 5000 }
         );
       } catch (error) {
         languageFailures++;
