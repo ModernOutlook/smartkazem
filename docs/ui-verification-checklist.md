@@ -38,7 +38,8 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [ ] Repeat language transitions on home, all five realms, every child page, inventory, book readers, and Paragraph Machine.
 
 ## Keyboard and assistive technology
-- [ ] Homepage SVG realm selector: semantic role/name, focusability, Enter/Space activation, and selected-state announcement.
+- [x] Source inspected: homepage SVG realm groups have button roles, focusability, arrow-key navigation, and Enter/Space activation; accessible names now use the shared i18n runtime.
+- [ ] Browser/screen-reader verification of realm selection and selected-state announcement.
 - [ ] Keyboard-only navigation through every primary and child surface.
 - [ ] Dialog/overlay focus entry, containment where appropriate, Escape handling, and focus restoration.
 - [ ] Test TalkBack on Android and VoiceOver-compatible behavior with an appropriate screen reader.
