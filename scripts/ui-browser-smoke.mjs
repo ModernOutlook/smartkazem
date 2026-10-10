@@ -77,8 +77,22 @@ try {
         );
       } catch (error) {
         languageFailures++;
-        const actual = await page.evaluate(() => ({ lang: document.documentElement.lang, dir: document.documentElement.dir, active: document.querySelector('[data-site-lang][aria-pressed="true"]')?.dataset.siteLang || null }));
-        fail(`${file}: switching to ${language.code} failed; actual=${JSON.stringify(actual)}; ${String(error).split('\n')[0]}`);
+        const diagnostic = await page.evaluate(async (code) => {
+          const state = () => ({
+            lang: document.documentElement.lang,
+            dir: document.documentElement.dir,
+            active: document.querySelector('[data-site-lang][aria-pressed="true"]')?.dataset.siteLang || null,
+            catalogLoaded: Boolean(window.SiteI18n?.getCatalog()),
+            i18nAvailable: Boolean(window.SiteI18n),
+          });
+          try {
+            const result = await window.SiteI18n?.setLanguage(code);
+            return { ...state(), retry: result || 'SiteI18n unavailable' };
+          } catch (cause) {
+            return { ...state(), retryError: String(cause) };
+          }
+        }, language.code);
+        fail(`${file}: switching to ${language.code} failed; diagnostic=${JSON.stringify(diagnostic)}; ${String(error).split('\n')[0]}`);
       }
     }
 
