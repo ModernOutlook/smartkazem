@@ -54,6 +54,12 @@ try {
       continue;
     }
 
+    const splash = page.locator('#splash');
+    if (await splash.count() && await splash.isVisible()) {
+      await splash.click().catch(() => {});
+      await page.waitForTimeout(150);
+    }
+
     const languageButtonCount = await page.locator('[data-site-lang]').count();
     if (languageButtonCount !== 4) fail(`${file}: expected four shared language buttons, found ${languageButtonCount}`);
 
