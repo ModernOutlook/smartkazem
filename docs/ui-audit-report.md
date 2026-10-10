@@ -67,5 +67,5 @@ This is a source-level audit, not a completed real-browser/device certification.
 3. Complete scan of visible hard-coded UI strings against i18n catalogs.
 4. Real keyboard and TalkBack/VoiceOver checks for SVG navigation, overlays, dynamic book rendering, and paragraph workspace.
 5. Visual realm color/shadow/glass comparison across all parent and child surfaces.
-6. Site quality and security gates passed on the latest runtime/UI-fix commit (`71274875d46fdc5f946d17b24841be901e153da3`); the subsequent commits changed only audit documentation.
+6. Site quality and security gates passed on the latest runtime/UI-fix commit (`0841908d44bc8ffb9049e3b2fb17d010d6113aaf`); the subsequent commits changed only audit documentation.
 7. Reconcile README and `Structure.txt` contradictions only after confirming canonical behavior from actual routes and page controllers.
