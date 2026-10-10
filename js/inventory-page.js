@@ -39,6 +39,7 @@
     const lang = currentLanguage();
     if (lang === 'fa') return card.labelFa;
     if (lang === 'en') return card.labelEn;
+    if (card.suit === 'back' || card.rank === 'back') return lang === 'zh' ? '牌背' : 'ظهر البطاقة';
     if (card.suit === 'joker') {
       return lang === 'zh'
         ? (card.id === 1 ? '小丑牌一' : '小丑牌二')
