@@ -213,7 +213,8 @@
     "layer3": {
       "close": "Back",
       "chapter1": "Chapter One — Protocol of Coordination",
-      "chapter2": "Chapter Two — Utopia"
+      "chapter2": "Chapter Two — Utopia",
+      "title": "The Echo of the Third Layer"
     },
     "humanMachines": {
       "title": "Humanity and Its Machines",
@@ -233,6 +234,12 @@
     },
     "inventory": {
       "title": "Card Inventory — SmartKazem"
+    },
+    "emergence": {
+      "title": "Emergence"
+    },
+    "emergence2": {
+      "title": "Chapter Two: Emergence"
     }
   },
   "paragraphMachine": {
