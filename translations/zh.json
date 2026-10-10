@@ -212,7 +212,8 @@
     "layer3": {
       "close": "返回",
       "chapter1": "第一章——协调协议",
-      "chapter2": "第二章——理想城"
+      "chapter2": "第二章——理想城",
+      "title": "第三层回声"
     },
     "humanMachines": {
       "title": "人类与他们的机器",
@@ -232,6 +233,12 @@
     },
     "inventory": {
       "title": "卡片清单 — SmartKazem"
+    },
+    "emergence": {
+      "title": "显现"
+    },
+    "emergence2": {
+      "title": "第二章：显现"
     }
   },
   "paragraphMachine": {
