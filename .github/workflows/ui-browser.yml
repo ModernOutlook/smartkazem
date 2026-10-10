@@ -38,6 +38,9 @@ jobs:
           cat /tmp/smartkazem-http.log
           exit 1
 
+      - name: Audit four-language HTML translation contracts
+        run: node scripts/i18n-contract-check.mjs
+
       - name: Test language transitions and responsive overflow
         run: node scripts/ui-browser-smoke.mjs
 
