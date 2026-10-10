@@ -24,7 +24,7 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary pages (current child-page inventory): **exactly 13 pages, and all 13 are books**
+Secondary pages (current child-page inventory): **exactly 13 pages, including books and the short story «صفر»**
 1. **رساله فلسفی** — book
 2. **شاهنامه‌خوانی** — book
 3. **فصل اول ظهور** — book
@@ -49,9 +49,9 @@ Secondary pages (current child-page inventory): **exactly 13 pages, and all 13 a
 
 ## Canonical Persian book sources — current status
 
-**The Persian-source-first pass is consolidated for all 13 books.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
+**The Persian-source-first pass is consolidated for all 13 content pages.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
 
-| Book | Canonical Persian source |
+| Content page | Canonical Persian source |
 |---|---|
 | رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` |
 | شاهنامه‌خوانی | `content/shahnameh-series.js` |
