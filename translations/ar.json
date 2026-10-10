@@ -212,7 +212,8 @@
     "layer3": {
       "close": "عودة",
       "chapter1": "الفصل الأول - بروتوكول التنسيق",
-      "chapter2": "الفصل الثاني - المدينة الفاضلة"
+      "chapter2": "الفصل الثاني - المدينة الفاضلة",
+      "title": "صدى الطبقة الثالثة"
     },
     "humanMachines": {
       "title": "الإنسان وآلاته",
@@ -232,6 +233,12 @@
     },
     "inventory": {
       "title": "فهرس البطاقات — SmartKazem"
+    },
+    "emergence": {
+      "title": "الظهور"
+    },
+    "emergence2": {
+      "title": "الفصل الثاني: الظهور"
     }
   },
   "paragraphMachine": {
