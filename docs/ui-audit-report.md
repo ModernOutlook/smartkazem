@@ -57,5 +57,5 @@ This is a source-level audit, not a completed real-browser/device certification.
 3. Complete scan of visible hard-coded UI strings against i18n catalogs.
 4. Real keyboard and TalkBack/VoiceOver checks for SVG navigation, overlays, dynamic book rendering, and paragraph workspace.
 5. Visual realm color/shadow/glass comparison across all parent and child surfaces.
-6. Run repository quality/security workflows on the audit branch and resolve any failures before merging.
+6. Site quality and security gates passed for the runtime-fix commit immediately preceding the latest checklist-only documentation update; confirm branch checks remain green before merging.
 7. Reconcile README and `Structure.txt` contradictions only after confirming canonical behavior from actual routes and page controllers.
