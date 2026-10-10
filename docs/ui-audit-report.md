@@ -26,7 +26,12 @@ This is a source-level audit, not a completed real-browser/device certification.
 
 - The README’s 13-item content inventory (12 books plus the short story `صفر`) and its 12 secondary-book-page count are compatible when the story is treated separately; this is not by itself a defect.
 - The README previously described a standalone legacy Paragraph Machine file despite the actual route structure using only the shared `paragraph-page` workspace in `index.html`. This wording was corrected on the audit branch; both realm entry paths still route to the same workspace.
-- Several inspected standalone child HTML files rely on external page controllers/catalog metadata, as intended, but a complete visible-string scan of all pages and all translation JSON catalogs remains outstanding. A concrete Shahnameh counter localization defect was found and fixed on this branch; full four-language review of all page counters and controls is still pending.
+- A four-language key comparison found that 26 shared UI labels present in the Persian catalog were absent from each of the English, Arabic, and Chinese base catalogs. The missing keys included inventory labels, chapter/section navigation, fallback messages, and image descriptions. The shared catalogs now have matching key coverage for all 56 Persian label keys, with native translations added; this is key-coverage parity, not proof that every long-form translation is complete.
+- `inventory.html` had Persian-only page headings and back navigation; its page title, description, accessibility labels, group names, card names, and card numbering now follow the selected language using the existing translation runtime and shared labels.
+- `echo-layer3.html` had Persian-only language-selector/TOC/section-navigation accessible names and previous/next labels. These now use shared localized labels.
+- Shahnameh search lacked a stable accessible name, and its Persian search heading/placeholder metadata was incomplete when returning to Persian after another language. The controller now localizes the input's accessible name and the Persian catalog supplies the missing values.
+- The Emergence II episode list used Persian numerals in every language and showed a Persian-only missing-text message. Its episode numbers, artwork counter, static headings, and missing-content message now follow the selected language.
+- The Shahnameh artwork counter was also corrected to format its episode number and total using the active language's number formatter. Full page-by-page runtime review remains outstanding.
 - No claim is made that all book translations are complete; README itself records incomplete translation alignment for some reservoirs.
 
 ## Accessibility Issues Found
@@ -46,9 +51,9 @@ This is a source-level audit, not a completed real-browser/device certification.
 
 - README Paragraph Machine documentation now accurately describes the single shared workspace and no longer claims a separate standalone HTML surface is maintained.
 - Minimal accessibility fix: the homepage SVG realm controls and center core now expose localized accessible names through the existing shared i18n runtime; no new translation engine or visual redesign was introduced.
+- The homepage inventory link now uses the shared translated label rather than a permanently bilingual Persian/English caption.
 - Keyboard navigation: the global home handler returned immediately for every key except Escape, making its arrow-key realm-info navigation and Enter activation code unreachable. The handler now separates Escape closing from home-only keyboard navigation and avoids double-processing key events already handled by the SVG realm/core controls.
 - Shahnameh artwork counter: episode numbers and the total count previously mixed hard-coded Persian digits with active-language episode labels. The counter now formats the episode number, zero-padding character, and total through the existing locale-aware number formatter.
-- The README’s page-count language distinguishes 13 content entries (12 books plus the short story `صفر`) from 12 secondary book pages; that count alone is not a contradiction. The Paragraph Machine wording inconsistency identified during the audit has been corrected on this branch: the README now documents `paragraph-page` in `index.html` as the single shared machine surface, with both realm entry paths leading to it.
 - This report separates source observations from unverified behavior. The verification checklist is provided separately.
 
 ## Remaining Risks
@@ -58,5 +63,5 @@ This is a source-level audit, not a completed real-browser/device certification.
 3. Complete scan of visible hard-coded UI strings against i18n catalogs.
 4. Real keyboard and TalkBack/VoiceOver checks for SVG navigation, overlays, dynamic book rendering, and paragraph workspace.
 5. Visual realm color/shadow/glass comparison across all parent and child surfaces.
-6. Site quality and security gates passed for the runtime-fix commit immediately preceding the latest checklist-only documentation update; confirm branch checks remain green before merging.
+6. Re-run site quality and security gates on the current translation/UI fixes and documentation update before merging.
 7. Reconcile README and `Structure.txt` contradictions only after confirming canonical behavior from actual routes and page controllers.
