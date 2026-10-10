@@ -39,6 +39,7 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 
 ## Keyboard and assistive technology
 - [x] Source inspected: homepage SVG realm groups have button roles, focusability, arrow-key navigation, and Enter/Space activation; accessible names now use the shared i18n runtime.
+- [x] Source inspection found and corrected an early-return bug that made the global home arrow/Enter handler unreachable; it now runs only on the home page and avoids duplicating SVG-control key handling.
 - [ ] Browser/screen-reader verification of realm selection and selected-state announcement.
 - [ ] Keyboard-only navigation through every primary and child surface.
 - [ ] Dialog/overlay focus entry, containment where appropriate, Escape handling, and focus restoration.
