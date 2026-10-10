@@ -79,3 +79,9 @@ This is a source-level audit, not a completed real-browser/device certification.
 - The Playwright suite attempts the four supported language transitions on every root-level HTML page and verifies the document's language/direction pair; it also checks document-level horizontal overflow across mobile, tablet, phone-landscape, and desktop viewports on representative pages.
 - The workflow is now part of pull-request CI. Its result must be checked before treating automated browser coverage as passing.
 - This suite is a useful repeatable smoke test, not a replacement for visual inspection, actual touch-target testing, Android TalkBack, screen-reader speech-language checks, or expert review of long-form translations.
+
+
+## Additional defect found by the new contract check
+
+- The exhaustive root-HTML key scan found that the Share Economy realm's “Forgers of Imitation” button referenced `pages.forgers`, while the actual shared catalog key is `home.pages.forgers`. The button's key was corrected to match the existing Persian/English/Arabic/Chinese catalog structure.
+- The first run intentionally failed on this finding and also exposed that whole-catalog key parity is not a valid requirement for page-specific long-form reservoirs. The automated parity assertion has been narrowed to shared `labels.*` keys, while every explicit HTML translation attribute must still resolve in all four base catalogs.
