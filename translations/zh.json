@@ -123,6 +123,10 @@
       "title": "观察之地",
       "close": "关闭"
     },
+    "zero": {
+      "title": "零",
+      "close": "返回"
+    },
     "treatise": {
       "title": "哲学论述",
       "close": "关闭",
