@@ -198,7 +198,9 @@
         "part": "قسمت"
       },
       "visualLabel": "۸۱ داستان، ۸۱ دوره",
-      "visualAlbum": "۸۱ داستان، ۸۱ دوره"
+      "visualAlbum": "۸۱ داستان، ۸۱ دوره",
+      "findTitle": "پیدا کردن قسمت",
+      "searchPlaceholder": "عنوان یا شماره قسمت…"
     },
     "observation25": {
       "close": "بازگشت"
