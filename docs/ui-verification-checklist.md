@@ -35,6 +35,7 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [ ] ar → zh
 - [ ] zh → fa
 - [x] Source scan: the Persian base catalog's shared label keys now have matching key coverage in en/ar/zh; missing shared UI labels were translated.
+- [x] DOM key scan: every `data-i18n*` key in the 12 inspected HTML files resolves in all four base catalogs; missing Persian labels for two homepage subpage buttons were restored.
 - [x] Source fixes: inventory shell/group/card labels, Echo Layer Three navigation labels, Shahnameh search naming, and Emergence II episode numerals/fallback text now respond to the selected language.
 - [x] Source fix: home, Observation 25, Observation, and Possible Mirror language-selector accessible names now use a localized shared label.
 - [x] Source scan: primary pages, realm panels, book panel/tabs, logo dialog, and chapter/section navigation now use localized accessible-name keys; no static Persian `aria-label` without a localization hook remains in the 12 inspected HTML files.
