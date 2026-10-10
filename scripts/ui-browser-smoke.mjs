@@ -86,8 +86,11 @@ try {
             i18nAvailable: Boolean(window.SiteI18n),
           });
           try {
-            const result = await window.SiteI18n?.setLanguage(code);
-            return { ...state(), retry: result || 'SiteI18n unavailable' };
+            const result = await Promise.race([
+              window.SiteI18n?.setLanguage(code),
+              new Promise((resolve) => setTimeout(() => resolve('__diagnostic_timeout__'), 3000)),
+            ]);
+            return { ...state(), retry: result === '__diagnostic_timeout__' ? 'setLanguage did not settle within 3s' : (result || 'SiteI18n unavailable') };
           } catch (cause) {
             return { ...state(), retryError: String(cause) };
           }
