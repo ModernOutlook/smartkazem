@@ -1,0 +1,28 @@
+:root{color-scheme:dark;--zero-blue:#8dcdf5;--zero-ice:#d9f2ff;--zero-line:rgba(141,205,245,.2);--zero-muted:#a9c8dc;--zero-text:#edf8ff}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:#020810;color:var(--zero-text);font-family:Vazirmatn,Tahoma,sans-serif}
+body{overflow-x:hidden}
+.zero-page{min-height:100svh;position:relative;isolation:isolate;background:radial-gradient(ellipse at 50% 0%,rgba(24,100,145,.36),transparent 42%),radial-gradient(ellipse at 8% 68%,rgba(9,65,101,.2),transparent 35%),linear-gradient(155deg,#061421 0%,#07111c 48%,#02060b 100%)}
+.zero-page:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 12% 17%,rgba(177,226,255,.8) 0 1px,transparent 1.8px),radial-gradient(circle at 77% 28%,rgba(90,177,229,.65) 0 1px,transparent 1.8px),radial-gradient(circle at 63% 82%,rgba(135,211,255,.45) 0 1px,transparent 1.8px);background-size:137px 151px,173px 167px,193px 181px;opacity:.4}
+.zero-shell{width:min(100% - 32px,920px);margin:auto;padding:22px 0 28px;position:relative}
+.zero-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--zero-line)}
+.zero-brand{font-size:.7rem;letter-spacing:.16em;color:var(--zero-blue);direction:ltr;white-space:nowrap}.zero-brand span{opacity:.45;margin:0 .4em}
+.zero-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.global-lang{display:flex;align-items:center;gap:3px;padding:3px;border:1px solid var(--zero-line);border-radius:999px;background:rgba(2,10,18,.58)}
+.global-lang button{border:0;border-radius:999px;padding:6px 9px;background:transparent;color:var(--zero-muted);font:600 .72rem Vazirmatn,Tahoma,sans-serif;cursor:pointer}
+.global-lang button.active{background:rgba(93,177,229,.17);color:var(--zero-ice)}
+.zero-back{border:1px solid var(--zero-line);border-radius:12px;padding:8px 13px;background:rgba(5,21,34,.8);color:var(--zero-text);font:600 .8rem Vazirmatn,Tahoma,sans-serif;cursor:pointer}
+.zero-back:hover,.global-lang button:hover{border-color:rgba(141,205,245,.55);color:#fff}
+.zero-article{position:relative;margin:clamp(28px,6vw,64px) auto 0;padding:clamp(22px,5vw,54px);border:1px solid rgba(141,205,245,.17);border-radius:26px;background:linear-gradient(145deg,rgba(11,36,54,.78),rgba(3,12,21,.88));box-shadow:0 28px 90px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.025);overflow:hidden}
+.zero-article:before{content:"";position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,transparent,var(--zero-blue),transparent);opacity:.8}
+.zero-mark{font:300 clamp(3rem,8vw,5.5rem)/1 Georgia,serif;color:rgba(141,205,245,.16);position:absolute;top:18px;right:clamp(18px,4vw,42px);pointer-events:none}
+h1{position:relative;margin:0;text-align:center;font-size:clamp(2rem,5vw,3.25rem);font-weight:600;letter-spacing:.04em;color:var(--zero-ice);text-shadow:0 0 35px rgba(91,177,229,.22)}
+.zero-rule{width:72px;height:1px;margin:22px auto 30px;background:linear-gradient(90deg,transparent,var(--zero-blue),transparent)}
+.zero-story{position:relative;font-size:clamp(.98rem,1.7vw,1.08rem);line-height:2.15;color:#dcecf6;white-space:normal}
+.zero-story p{margin:0 0 1.25em;text-align:justify;text-align-last:start}
+.zero-story p:last-child{margin-bottom:0}
+.zero-story[dir="ltr"] p{text-align:left}
+.zero-footer{padding:22px 0 0;text-align:center;color:rgba(141,205,245,.45);font-size:.63rem;letter-spacing:.13em}
+button:focus-visible{outline:2px solid var(--zero-ice);outline-offset:4px}
+@media(max-width:640px){.zero-shell{width:calc(100% - 22px);padding-top:12px}.zero-header{align-items:flex-start;flex-direction:column}.zero-actions{width:100%;justify-content:space-between}.global-lang button{padding:6px 7px;font-size:.66rem}.zero-article{margin-top:24px;border-radius:19px}.zero-mark{top:12px}.zero-story{line-height:2}.zero-story p{text-align:start}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
