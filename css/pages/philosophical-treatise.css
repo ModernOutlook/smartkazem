@@ -39,7 +39,8 @@ body{margin:0;min-height:100%;background:#020810;color:var(--treatise-text);font
 .treatise-content .moral{margin-top:30px;padding:16px;border:1px solid var(--treatise-line);border-radius:14px;background:rgba(10,48,69,.38)}
 .treatise-block-content{display:block;visibility:visible;min-height:1px}
 html[lang="en"] .treatise-content{direction:ltr;font-family:Georgia,"Times New Roman",serif}
-html[lang="zh"] .treatise-content,html[lang="ar"] .treatise-content{direction:rtl}
+html[lang="zh"] .treatise-content{direction:ltr}
+html[lang="ar"] .treatise-content{direction:rtl}
 html[lang="zh"] .treatise-content .treatise-block-content,html[lang="ar"] .treatise-content .treatise-block-content{font-family:Vazirmatn,Tahoma,sans-serif}
 html[dir="ltr"] .treatise-content p{text-align:start}
 .treatise-footer{padding:22px 0 0;text-align:center;color:rgba(141,205,245,.45);font-size:.63rem;letter-spacing:.13em}
