@@ -18,6 +18,7 @@
     String(value).replace(/\d/g, (digit) => '۰۱۲۳۴۵۶۷۸۹'[digit]);
 
   const language = () => window.SiteI18n?.getLanguage?.() || 'fa';
+  const siteNumber = (value) => new Intl.NumberFormat(language()).format(value);
   const catalog = () => window.SiteI18n?.getCatalog?.() || {};
 
   function label(key, fallback) {
@@ -75,8 +76,8 @@
     heading.id = 'manifesto-reader-heading';
     titleGroup.appendChild(heading);
 
-    const total = lang === 'fa' ? faNumber(source.total) : String(source.total);
-    const number = lang === 'fa' ? faNumber(part.number) : String(part.number);
+    const total = siteNumber(source.total);
+    const number = siteNumber(part.number);
     const partOf = label('partOf', 'Part {n} of {t}')
       .replace('{n}', number)
       .replace('{t}', total);
@@ -154,13 +155,12 @@
     document.querySelectorAll('.part').forEach((button, index) => {
       const active = index === activeIndex;
       button.classList.toggle('active', active);
+      button.textContent = siteNumber(source.parts[index].number);
 
       if (active) button.setAttribute('aria-current', 'step');
       else button.removeAttribute('aria-current');
 
-      const number = lang === 'fa'
-        ? faNumber(source.parts[index].number)
-        : String(source.parts[index].number);
+      const number = siteNumber(source.parts[index].number);
 
       button.setAttribute(
         'aria-label',
@@ -184,7 +184,7 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'part';
-    button.textContent = faNumber(part.number);
+    button.textContent = siteNumber(part.number);
     button.setAttribute('aria-controls', 'reader');
 
     button.addEventListener('click', () => select(index));
