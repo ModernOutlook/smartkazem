@@ -85,7 +85,8 @@ try {
     for (const language of languages) {
       const button = page.locator(`[data-site-lang="${language.code}"]`).first();
       try {
-        await button.click();
+        await button.scrollIntoViewIfNeeded();
+        await button.click({ timeout: 5000 });
         await page.waitForFunction(
           ({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir && document.querySelector(`[data-site-lang="${code}"]`)?.getAttribute('aria-pressed') === 'true',
           language,
@@ -100,6 +101,7 @@ try {
             active: document.querySelector('[data-site-lang][aria-pressed="true"]')?.dataset.siteLang || null,
             catalogLoaded: Boolean(window.SiteI18n?.getCatalog()),
             i18nAvailable: Boolean(window.SiteI18n),
+            button: (() => { const el = document.querySelector(`[data-site-lang="${code}"]`); if (!el) return null; const r = el.getBoundingClientRect(); const x = r.left + r.width / 2; const y = r.top + r.height / 2; const hit = document.elementFromPoint(x, y); return { rect: { x: r.x, y: r.y, width: r.width, height: r.height }, visible: Boolean(r.width && r.height && getComputedStyle(el).visibility !== 'hidden'), hitTag: hit?.tagName || null, hitLang: hit?.closest?.('[data-site-lang]')?.dataset.siteLang || null, hitClass: typeof hit?.className === 'string' ? hit.className : '' }; })(),
             eventsBeforeRetry: [...(window.__languageSmokeEvents || [])],
           });
           const beforeRetry = state();
