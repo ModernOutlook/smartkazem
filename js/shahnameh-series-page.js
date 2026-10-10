@@ -124,7 +124,7 @@
     if (!episode || !elements.artFrame) return;
 
     elements.artIndex.textContent =
-      `${toSiteNumber(episode.id).padStart(2, '۰')} / ۸۱`;
+      `${toSiteNumber(episode.id).padStart(2, toSiteNumber(0))} / ${toSiteNumber(data.meta.totalEpisodes)}`;
     elements.artCaption.textContent =
       `${translate('part', 'قسمت')} ${toSiteNumber(episode.id)} · ${episode.title}`;
 
