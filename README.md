@@ -37,9 +37,9 @@ Secondary pages (current child-page inventory): **exactly 13 pages, including bo
 10. **جاعلان تقلید** — book
 11. **تباهیان** — book
 12. **مانیفست آشوب‌زده** — book
-13. **صفر** — short story / book
+13. **صفر** — short story
 
-`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
+`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page inventory.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
 - **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
 
@@ -47,9 +47,9 @@ Secondary pages (current child-page inventory): **exactly 13 pages, including bo
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
-## Canonical Persian book sources — current status
+## Canonical Persian content sources — current status
 
-**The Persian-source-first pass is consolidated for all 13 content pages.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
+**The Persian-source-first pass is consolidated for all 13 content pages.** Each book or story page has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
 
 | Content page | Canonical Persian source |
 |---|---|
