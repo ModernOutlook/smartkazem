@@ -62,9 +62,9 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [ ] Verify return from each child surface to the exact originating realm.
 
 ## Automated checks
-- [x] JavaScript syntax and JSON catalog validation passed in the current branch's Site quality gate.
-- [x] HTML structure and local asset checks passed in the current branch's Site quality gate.
-- [x] Semantic page-state usage check passed in the current branch's Site quality gate.
+- [x] JavaScript syntax and JSON catalog validation passed on the runtime-fix commit, before subsequent documentation-only updates.
+- [x] HTML structure and local asset checks passed on the runtime-fix commit, before subsequent documentation-only updates.
+- [x] Semantic page-state usage check passed on the runtime-fix commit, before subsequent documentation-only updates.
 - [ ] Complete an exhaustive four-language control/visible-string audit across every user-facing HTML file; current CI checks do not substitute for this audit.
-- [x] Security gate passed on the current branch head.
+- [x] Security gate passed on the runtime-fix commit, before subsequent documentation-only updates.
 - [ ] Record browser/device, viewport, language, and result for each manual test.
