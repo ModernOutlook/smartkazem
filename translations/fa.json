@@ -204,7 +204,8 @@
       "searchPlaceholder": "عنوان یا شماره قسمت…"
     },
     "observation25": {
-      "close": "بازگشت"
+      "close": "بازگشت",
+      "title": "سرزمین مشاهده؛ ۲۵ بار رسیدن"
     },
     "layer3": {
       "title": "پژواک لایه سوم",
@@ -233,7 +234,8 @@
       ]
     },
     "possibleMirror": {
-      "close": "بازگشت"
+      "close": "بازگشت",
+      "title": "آینه‌ی ممکن‌ها"
     },
     "disturbedManifesto": {
       "title": "مانیفست آشوب‌زده",
