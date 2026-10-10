@@ -97,7 +97,8 @@
     "rostam": "رستم",
     "kayanids": "کیانیان",
     "missingEpisodeText": "متن این قسمت در مخزن مربوطه موجود نیست.",
-    "missingTranslation": "ترجمهٔ این بخش در دسترس نیست."
+    "missingTranslation": "ترجمهٔ این بخش در دسترس نیست.",
+    "inventoryDescription": "۵۵ تصویر، با هویت مستقل و ترتیب ثابت."
   },
   "meta": {
     "brand": "نگرش نوین",
