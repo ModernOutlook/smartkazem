@@ -69,9 +69,9 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [ ] Verify return from each child surface to the exact originating realm.
 
 ## Automated checks
-- [x] JavaScript syntax and JSON catalog validation passed on the latest runtime/UI-fix commit (`0841908d44bc8ffb9049e3b2fb17d010d6113aaf`); later commits only updated audit documentation.
-- [x] HTML structure and local asset checks passed on the latest runtime/UI-fix commit (`0841908d44bc8ffb9049e3b2fb17d010d6113aaf`); later commits only updated audit documentation.
-- [x] Semantic page-state usage check passed on the latest runtime/UI-fix commit (`0841908d44bc8ffb9049e3b2fb17d010d6113aaf`); later commits only updated audit documentation.
+- [x] JavaScript syntax and JSON catalog validation passed on the latest runtime/UI-fix commit (`4a0eabdf4c2b6a5f493c97840d16e86873eff3db`); later commits only updated audit documentation.
+- [x] HTML structure and local asset checks passed on the latest runtime/UI-fix commit (`4a0eabdf4c2b6a5f493c97840d16e86873eff3db`); later commits only updated audit documentation.
+- [x] Semantic page-state usage check passed on the latest runtime/UI-fix commit (`4a0eabdf4c2b6a5f493c97840d16e86873eff3db`); later commits only updated audit documentation.
 - [ ] Complete an exhaustive four-language control/visible-string audit across every user-facing HTML file; the source scan found and fixed several concrete defects, but this does not yet cover every rendered label or long-form translation.
-- [x] Security gate passed on the latest runtime/UI-fix commit (`0841908d44bc8ffb9049e3b2fb17d010d6113aaf`); later commits only updated audit documentation.
+- [x] Security gate passed on the latest runtime/UI-fix commit (`4a0eabdf4c2b6a5f493c97840d16e86873eff3db`); later commits only updated audit documentation.
 - [ ] Record browser/device, viewport, language, and result for each manual test.
