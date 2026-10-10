@@ -17,6 +17,7 @@
     "close": "بستن",
     "comingSoon": "به‌زودی",
     "language": "زبان سایت",
+    "skipToContent": "پرش به متن اصلی",
     "audio": "صدا",
     "audioControls": "کنترل صوت",
     "enable": "فعال‌سازی صدا",
@@ -97,7 +98,9 @@
     "rostam": "رستم",
     "kayanids": "کیانیان",
     "missingEpisodeText": "متن این قسمت در مخزن مربوطه موجود نیست.",
-    "missingTranslation": "ترجمهٔ این بخش در دسترس نیست."
+    "missingTranslation": "ترجمهٔ این بخش در دسترس نیست.",
+    "inventoryDescription": "۵۵ تصویر، با هویت مستقل و ترتیب ثابت.",
+    "fiveRealms": "پنج قلمرو"
   },
   "meta": {
     "brand": "نگرش نوین",
@@ -197,10 +200,13 @@
         "part": "قسمت"
       },
       "visualLabel": "۸۱ داستان، ۸۱ دوره",
-      "visualAlbum": "۸۱ داستان، ۸۱ دوره"
+      "visualAlbum": "۸۱ داستان، ۸۱ دوره",
+      "findTitle": "پیدا کردن قسمت",
+      "searchPlaceholder": "عنوان یا شماره قسمت…"
     },
     "observation25": {
-      "close": "بازگشت"
+      "close": "بازگشت",
+      "title": "سرزمین مشاهده؛ ۲۵ بار رسیدن"
     },
     "layer3": {
       "title": "پژواک لایه سوم",
@@ -229,7 +235,8 @@
       ]
     },
     "possibleMirror": {
-      "close": "بازگشت"
+      "close": "بازگشت",
+      "title": "آینه‌ی ممکن‌ها"
     },
     "disturbedManifesto": {
       "title": "مانیفست آشوب‌زده",
@@ -244,6 +251,9 @@
     "emergence2": {
       "title": "فصل دوم ظهور",
       "subtitle": "فصل دوم ظهور در ۱۱ قسمت."
+    },
+    "inventory": {
+      "title": "فهرست کارت‌ها — SmartKazem"
     }
   },
   "paragraphMachine": {

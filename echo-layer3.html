@@ -22,7 +22,7 @@
 </head>
 <body data-mode="fa">
 <main class="page child-page" id="page">
-<div class="global-lang" aria-label="زبان سایت">
+<div class="global-lang" aria-label="زبان رابط" data-i18n-aria="labels.interfaceLanguage">
 <button data-site-lang="zh" type="button">中文</button>
 <button data-site-lang="fa" type="button">فارسی</button>
 <button data-site-lang="en" type="button">English</button>
@@ -30,14 +30,14 @@
 </div>
 <header class="head">
 <div class="head-main"><div class="head-title" id="head-title">پژواک لایه سوم</div><div class="head-sub" id="head-sub">پروتکل هماهنگی</div></div>
-<button class="close" id="close" type="button" aria-label="بازگشت">✕</button>
+<button class="close" id="close" type="button" aria-label="بازگشت" data-i18n-aria="labels.back">✕</button>
 </header>
-<nav class="toc" aria-label="فهرست فصل‌ها" aria-labelledby="toc-label">
-<h2 class="toc-label" id="toc-label">فهرست</h2>
+<nav class="toc" aria-label="فهرست فصل‌ها" aria-labelledby="toc-label" data-i18n-aria="labels.chapterList">
+<h2 class="toc-label" id="toc-label" data-i18n="labels.chapterList">فهرست</h2>
 <div class="chapter-row" id="chapters"></div>
 </nav>
-<nav class="parts" id="parts" aria-label="بخش‌های فصل"></nav>
-<article class="reader" id="reader" tabindex="-1" aria-live="polite" aria-atomic="false" aria-labelledby="reader-title"></article><nav class="navrow" aria-label="پیمایش بخش‌ها"><button class="navbtn" id="prev-part" type="button">پیشین</button><button class="navbtn" id="next-part" type="button">پسین</button></nav>
+<nav class="parts" id="parts" aria-label="بخش‌های فصل" data-i18n-aria="labels.chapterSections"></nav>
+<article class="reader" id="reader" tabindex="-1" aria-live="polite" aria-atomic="false" aria-labelledby="reader-title"></article><nav class="navrow" aria-label="پیمایش بخش‌ها" data-i18n-aria="labels.sectionNavigation"><button class="navbtn" id="prev-part" type="button" data-i18n="labels.previousPart">پیشین</button><button class="navbtn" id="next-part" type="button" data-i18n="labels.nextPart">پسین</button></nav>
 </main>
 <script src="translations/i18n.js"></script>
 <script src="content/echo-layer3.js"></script>

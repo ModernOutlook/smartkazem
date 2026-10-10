@@ -55,6 +55,10 @@
     }
   }
 
+  function siteNumber(value) {
+    return new Intl.NumberFormat(window.SiteI18n?.getLanguage?.() || document.documentElement.lang || 'fa').format(value);
+  }
+
   function render() {
     const data = catalog();
     const sections = Array.isArray(data.sections) ? data.sections : [];
@@ -99,7 +103,7 @@
       const heading = document.createElement('h1');
       const badge = document.createElement('span');
       badge.className = 'section-number';
-      badge.textContent = String(index + 1);
+      badge.textContent = siteNumber(index + 1);
 
       const headingText = document.createElement('span');
       headingText.textContent = label;

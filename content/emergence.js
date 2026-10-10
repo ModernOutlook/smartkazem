@@ -1617,6 +1617,7 @@ const close=document.getElementById('emergence-close');
 let current=0;
 
 const faNumber=n=>String(n).replace(/\d/g,d=>'۰۱۲۳۴۵۶۷۸۹'[d]);
+const siteNumber=n=>new Intl.NumberFormat(languageCode()).format(n);
 const fallbackChapter={
   title:{fa:'ظهور',en:'Emergence',ar:'الظهور',zh:'显现'},
   ui:{
@@ -1674,11 +1675,11 @@ function renderList(){
     const b=document.createElement('button');
     b.className='episode'+(i===current?' active':'');
     b.type='button';
-    b.setAttribute('aria-label',`${title} — ${i+1} / ${episodes.length}`);
+    b.setAttribute('aria-label',`${title} — ${siteNumber(i+1)} / ${siteNumber(episodes.length)}`);
     b.setAttribute('aria-controls','reader');
     if(i===current) b.setAttribute('aria-current','step');
     else b.removeAttribute('aria-current');
-    b.innerHTML=`<span class="n">${faNumber(ep.number)}</span>`;
+    b.innerHTML=`<span class="n">${siteNumber(ep.number)}</span>`;
     b.addEventListener('click',()=>select(i,true));
     list.appendChild(b);
   });

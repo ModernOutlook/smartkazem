@@ -260,31 +260,42 @@
     getCatalog: () => catalogs[currentLanguage] || null
   });
 
+  function installLanguageControls() {
+    // Bind directly to each control rather than relying on a bubbling document
+    // listener. Page-level interaction handlers may stop propagation; language
+    // selection must still work consistently for every language, including RTL.
+    document.querySelectorAll('[data-site-lang]').forEach((button) => {
+      if (button.dataset.siteLangBound === 'true') return;
+      button.dataset.siteLangBound = 'true';
+
+      button.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const language = normalizeLanguage(button.dataset.siteLang);
+
+        try {
+          localStorage.setItem(STORAGE_KEY, language);
+          localStorage.setItem(LEGACY_STORAGE_KEY, language);
+        } catch (_) {}
+
+        setLanguage(language).catch((error) => {
+          // Keep the current language usable if a catalog is temporarily
+          // unavailable; expose the failure for diagnostics instead of an
+          // unhandled promise rejection.
+          console.error('[SiteI18n] Language switch failed:', language, error);
+        });
+      });
+    });
+  }
+
   document.addEventListener(
     'DOMContentLoaded',
     () => {
+      installLanguageControls();
       init();
       installObserver();
     },
     { once: true }
   );
-
-  document.addEventListener('click', (event) => {
-    const button =
-      event.target.closest && event.target.closest('[data-site-lang]');
-
-    if (!button) return;
-
-    event.preventDefault();
-    event.stopPropagation();
-
-    const language = normalizeLanguage(button.dataset.siteLang);
-
-    try {
-      localStorage.setItem(STORAGE_KEY, language);
-      localStorage.setItem(LEGACY_STORAGE_KEY, language);
-    } catch (_) {}
-
-    setLanguage(language);
-  });
 })();

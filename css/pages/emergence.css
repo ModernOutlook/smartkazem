@@ -14,3 +14,4 @@
 .global-lang{display:flex;gap:4px;align-items:center}.global-lang button{border:1px solid var(--line);background:rgba(0,0,0,.22);color:var(--muted);padding:6px 8px;border-radius:8px;cursor:pointer;font:500 .68rem/1 Vazirmatn,system-ui,sans-serif}.global-lang button.active{color:var(--gold2);border-color:rgba(240,213,139,.46);background:rgba(215,174,85,.13)}
 
 :focus-visible{outline:3px solid #f0d58b;outline-offset:3px}.episode[aria-current="true"]{box-shadow:0 0 0 2px rgba(240,213,139,.65)}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+.skip-link{position:absolute;z-index:1000;top:8px;left:8px;transform:translateY(-160%);padding:10px 14px;border-radius:8px;background:#f0d58b;color:#111;font-weight:700}.skip-link:focus{transform:translateY(0);outline:3px solid #fff;outline-offset:3px}

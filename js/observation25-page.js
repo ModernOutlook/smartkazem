@@ -12,6 +12,7 @@ function catalog(){
   if(!translated) return {...ui,sections:[],contents:[]};
   return {title:translated.title?.[language]||ui.title||'',subtitle:translated.subtitle?.[language]||ui.subtitle||'',sectionNote:translated.sectionNote?.[language]||'',sections:translated.sections?.[language]||[],contents:translated.contents?.[language]||[],close:ui.close};
 }
+function siteNumber(value){return new Intl.NumberFormat(window.SiteI18n?.getLanguage?.()||document.documentElement.lang||'fa').format(value);}
 function render(){
   const data=catalog();
   const sections=Array.isArray(data.sections)?data.sections:[];
@@ -35,7 +36,7 @@ function render(){
     const h=document.createElement('h1');
     const badge=document.createElement('span');
     badge.className='section-number';
-    badge.textContent=String(index+1);
+    badge.textContent=siteNumber(index+1);
     const text=document.createElement('span');
     text.textContent=label;
     h.appendChild(badge); h.appendChild(text);

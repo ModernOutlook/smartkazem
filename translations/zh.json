@@ -72,7 +72,36 @@
     "previousPart": "上一部分",
     "nextPart": "下一部分",
     "goToPart": "前往第 ",
-    "partOf": "第 {n} / {t} 部分"
+    "partOf": "第 {n} / {t} 部分",
+    "interfaceLanguage": "界面语言",
+    "realmJudgments": "领域判断",
+    "book": "书籍",
+    "bookChapters": "书籍章节",
+    "sectionList": "章节列表",
+    "emergence1ImageAlt": "《显现》第一章图片",
+    "emergence2ImageAlt": "《显现》第二章图片",
+    "chapterList": "章节目录",
+    "chapterSections": "章节分段",
+    "sectionNavigation": "分段导航",
+    "treatiseContents": "论述目录",
+    "episodeSearchPlaceholder": "输入集数标题或编号…",
+    "homePage": "返回主页",
+    "cards": "卡片",
+    "cardInventory": "卡片清单",
+    "jokers": "小丑牌",
+    "spades": "黑桃",
+    "hearts": "红桃",
+    "clubs": "梅花",
+    "diamonds": "方块",
+    "cardBack": "牌背",
+    "kingdoms": "王国",
+    "zalAndSam": "扎尔与萨姆家族",
+    "rostam": "鲁斯塔姆",
+    "kayanids": "凯扬王朝",
+    "missingEpisodeText": "此集文本在对应内容库中不可用。",
+    "missingTranslation": "此部分暂无译文。",
+    "inventoryDescription": "55 张图片，各有独立标识并按固定顺序排列。",
+    "fiveRealms": "五个领域"
   },
   "meta": {
     "brand": "现代视野",
@@ -184,7 +213,8 @@
     "layer3": {
       "close": "返回",
       "chapter1": "第一章——协调协议",
-      "chapter2": "第二章——理想城"
+      "chapter2": "第二章——理想城",
+      "title": "第三层回声"
     },
     "humanMachines": {
       "title": "人类与他们的机器",
@@ -201,6 +231,15 @@
     },
     "tabahian": {
       "title": "腐化者"
+    },
+    "inventory": {
+      "title": "卡片清单 — SmartKazem"
+    },
+    "emergence": {
+      "title": "显现"
+    },
+    "emergence2": {
+      "title": "第二章：显现"
     }
   },
   "paragraphMachine": {

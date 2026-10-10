@@ -226,7 +226,7 @@ Translation bridge public operations: toPersian(), fromPersian(), fromPersianBat
 
 llm-client.js is the model-service boundary. UI must not call the model API directly; adapters must not duplicate retry logic.
 
-shared paragraph workspace in index.html is a separate/legacy **machine surface**, not a book and not the shared home workspace. It belongs to the same Paragraph Machine category reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **مرجع تقلید → هم‌سنگی → ماشین پاراگراف** paths. The shared current workspace is still the `paragraph-page` surface in `index.html`; the standalone file is maintained as a legacy compatibility surface.
+The `paragraph-page` workspace in `index.html` is the single shared **machine surface** for Paragraph Machine; it is not a book or a second machine. It is reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **مرجع تقلید → هم‌سنگی → ماشین پاراگراف** paths. There is no separate standalone Paragraph Machine HTML page in the current route structure.
 
 ## 9. Content and reading ownership
 

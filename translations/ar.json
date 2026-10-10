@@ -72,7 +72,36 @@
     "previousPart": "السابق",
     "nextPart": "التالي",
     "goToPart": "الانتقال إلى الجزء ",
-    "partOf": "الجزء {n} من {t}"
+    "partOf": "الجزء {n} من {t}",
+    "interfaceLanguage": "لغة الواجهة",
+    "realmJudgments": "أحكام المجالات",
+    "book": "كتاب",
+    "bookChapters": "فصول الكتاب",
+    "sectionList": "قائمة الأقسام",
+    "emergence1ImageAlt": "صورة الفصل الأول من الظهور",
+    "emergence2ImageAlt": "صورة الفصل الثاني من الظهور",
+    "chapterList": "قائمة الفصول",
+    "chapterSections": "أقسام الفصل",
+    "sectionNavigation": "التنقل بين الأقسام",
+    "treatiseContents": "فهرس الرسالة",
+    "episodeSearchPlaceholder": "عنوان الحلقة أو رقمها…",
+    "homePage": "العودة إلى الصفحة الرئيسية",
+    "cards": "البطاقات",
+    "cardInventory": "فهرس البطاقات",
+    "jokers": "الجوكر",
+    "spades": "البستوني",
+    "hearts": "القلوب",
+    "clubs": "النوادي",
+    "diamonds": "الديناري",
+    "cardBack": "ظهر البطاقة",
+    "kingdoms": "الممالك",
+    "zalAndSam": "زال وبيت سام",
+    "rostam": "رستم",
+    "kayanids": "السلالة الكيانية",
+    "missingEpisodeText": "نص هذه الحلقة غير متوفر في مستودعها.",
+    "missingTranslation": "ترجمة هذا القسم غير متاحة.",
+    "inventoryDescription": "٥٥ صورة، لكل منها هوية مستقلة وترتيب ثابت.",
+    "fiveRealms": "المجالات الخمسة"
   },
   "meta": {
     "brand": "النظرة الحديثة",
@@ -184,7 +213,8 @@
     "layer3": {
       "close": "عودة",
       "chapter1": "الفصل الأول - بروتوكول التنسيق",
-      "chapter2": "الفصل الثاني - المدينة الفاضلة"
+      "chapter2": "الفصل الثاني - المدينة الفاضلة",
+      "title": "صدى الطبقة الثالثة"
     },
     "humanMachines": {
       "title": "الإنسان وآلاته",
@@ -201,6 +231,15 @@
     },
     "tabahian": {
       "title": "الفاسدون"
+    },
+    "inventory": {
+      "title": "فهرس البطاقات — SmartKazem"
+    },
+    "emergence": {
+      "title": "الظهور"
+    },
+    "emergence2": {
+      "title": "الفصل الثاني: الظهور"
     }
   },
   "paragraphMachine": {
