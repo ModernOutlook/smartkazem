@@ -71,3 +71,11 @@ This is a source-level audit, not a completed real-browser/device certification.
 5. Visual realm color/shadow/glass comparison across all parent and child surfaces.
 6. Site quality and security gates passed on the latest runtime/UI-fix commit (`4a0eabdf4c2b6a5f493c97840d16e86873eff3db`); the subsequent commits changed only audit documentation.
 7. Reconcile README and `Structure.txt` contradictions only after confirming canonical behavior from actual routes and page controllers.
+
+
+## Follow-up: browser automation
+
+- Added `scripts/ui-browser-smoke.mjs` and `.github/workflows/ui-browser.yml`.
+- The Playwright suite attempts the four supported language transitions on every root-level HTML page and verifies the document's language/direction pair; it also checks document-level horizontal overflow across mobile, tablet, phone-landscape, and desktop viewports on representative pages.
+- The workflow is now part of pull-request CI. Its result must be checked before treating automated browser coverage as passing.
+- This suite is a useful repeatable smoke test, not a replacement for visual inspection, actual touch-target testing, Android TalkBack, screen-reader speech-language checks, or expert review of long-form translations.
