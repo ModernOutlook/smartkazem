@@ -36,6 +36,7 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [ ] zh → fa
 - [x] Source scan: the Persian base catalog's shared label keys now have matching key coverage in en/ar/zh; missing shared UI labels were translated.
 - [x] Source fixes: inventory shell/group/card labels, Echo Layer Three navigation labels, Shahnameh search naming, and Emergence II episode numerals/fallback text now respond to the selected language.
+- [x] Source fix: Observation reader Chinese content/header/tabs now use LTR, while Arabic retains RTL.
 - [ ] Verify translated visible labels, aria-labels, placeholders, tabs, controls, headers, close/back buttons, and live regions.
 - [ ] Repeat language transitions on home, all five realms, every child page, inventory, book readers, and Paragraph Machine.
 
