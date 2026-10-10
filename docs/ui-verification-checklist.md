@@ -74,4 +74,5 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [x] Semantic page-state usage check passed on the latest runtime/UI-fix commit (`4a0eabdf4c2b6a5f493c97840d16e86873eff3db`); later commits only updated audit documentation.
 - [ ] Complete an exhaustive four-language control/visible-string audit across every user-facing HTML file; the source scan found and fixed several concrete defects, but this does not yet cover every rendered label or long-form translation.
 - [x] Security gate passed on the latest runtime/UI-fix commit (`4a0eabdf4c2b6a5f493c97840d16e86873eff3db`); later commits only updated audit documentation.
-- [ ] Record browser/device, viewport, language, and result for each manual test.
+- [x] Added a GitHub Actions Playwright smoke suite (`scripts/ui-browser-smoke.mjs`) to exercise four-language transitions on every root HTML page and horizontal overflow at 320, 360, 390, 430, 768, 844×390, 1024, and 1365px on representative pages. Its first CI run is pending; do not treat coverage as a pass until the run completes.
+- [ ] Record real-device/browser, viewport, language, and result for each manual test; Android TalkBack and long-form translation review remain human checks.
