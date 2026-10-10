@@ -24,8 +24,8 @@ This is a source-level audit, not a completed real-browser/device certification.
 
 ## Translation Issues Found
 
-- README has inconsistent child-page totals/classification. One section says 13 child pages and includes 13 named content pages; another says there are 12 secondary pages and that all are books. The short story `صفر` is separately called a short story, so the classification/count language needs one canonical definition.
-- The README gives contradictory descriptions of the Paragraph Machine: it says the shared workspace is in `index.html`, but elsewhere describes a standalone/legacy surface as independent and makes conflicting claims about whether it is maintained. Confirm against current routes and actual linked files, then remove stale statements.
+- The README’s 13-item content inventory (12 books plus the short story `صفر`) and its 12 secondary-book-page count are compatible when the story is treated separately; this is not by itself a defect.
+- The README’s Paragraph Machine description is inconsistent: it describes the shared `paragraph-page` workspace in `index.html` as both the current shared workspace and a separate/legacy machine surface, and says a standalone file is maintained. Confirm actual route/navigation usage before revising the documentation.
 - Several inspected standalone child HTML files rely on external page controllers/catalog metadata, as intended, but a complete visible-string scan of all pages and all translation JSON catalogs remains outstanding.
 - No claim is made that all book translations are complete; README itself records incomplete translation alignment for some reservoirs.
 
@@ -33,7 +33,7 @@ This is a source-level audit, not a completed real-browser/device certification.
 
 - `audio-engine.js` contains a shared audio/accessibility runtime; `translations/i18n.js` is the shared language runtime. This supports the intended architecture, but does not by itself prove that speech always consumes the currently rendered DOM.
 - The dynamic rendering lifecycle for books, paragraph results, language changes, and overlays requires runtime testing for live-region announcements, focus restoration, and speech language.
-- Homepage realm navigation uses SVG-based interactive elements according to the audit brief. Keyboard and screen-reader semantics need an element-by-element inspection and browser/assistive-technology verification before declaring compliance.
+- Homepage realm navigation uses SVG-based interactive elements. The five realm groups already have button roles, keyboard focus, and arrow/Enter/Space handlers, but their accessible names were hard-coded in Persian. The central core also had a hard-coded Persian accessible name. The page now marks these names for the shared i18n runtime (`data-i18n-aria`) so the names follow the selected language.
 - TalkBack/VoiceOver compatibility has not been tested on real devices in this pass.
 
 ## Realm Identity Issues Found
@@ -44,8 +44,9 @@ This is a source-level audit, not a completed real-browser/device certification.
 
 ## Fixed Issues
 
-- No application behavior or styling was changed in this source-inspection pass. Without viewport/browser tests, making broad CSS substitutions would risk violating the minimal-change and no-regression contracts.
-- This report records concrete documentation inconsistencies and separates source observations from unverified behavior. The verification checklist is provided separately.
+- Minimal accessibility fix: the homepage SVG realm controls and center core now expose localized accessible names through the existing shared i18n runtime; no new translation engine or visual redesign was introduced.
+- The README’s page-count language distinguishes 13 content entries (12 books plus the short story `صفر`) from 12 secondary book pages; that count alone is not a contradiction. The README does contain a genuine Paragraph Machine wording inconsistency: one section calls the shared workspace in `index.html` a separate/legacy machine surface while also describing it as the current shared workspace, and says a standalone file is maintained. Reconcile this wording against actual navigation before editing the README.
+- This report separates source observations from unverified behavior. The verification checklist is provided separately.
 
 ## Remaining Risks
 
