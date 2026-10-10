@@ -25,7 +25,7 @@ This is a source-level audit, not a completed real-browser/device certification.
 ## Translation Issues Found
 
 - The README’s 13-item content inventory (12 books plus the short story `صفر`) and its 12 secondary-book-page count are compatible when the story is treated separately; this is not by itself a defect.
-- The README’s Paragraph Machine description is inconsistent: it describes the shared `paragraph-page` workspace in `index.html` as both the current shared workspace and a separate/legacy machine surface, and says a standalone file is maintained. Confirm actual route/navigation usage before revising the documentation.
+- The README previously described a standalone legacy Paragraph Machine file despite the actual route structure using only the shared `paragraph-page` workspace in `index.html`. This wording was corrected on the audit branch; both realm entry paths still route to the same workspace.
 - Several inspected standalone child HTML files rely on external page controllers/catalog metadata, as intended, but a complete visible-string scan of all pages and all translation JSON catalogs remains outstanding.
 - No claim is made that all book translations are complete; README itself records incomplete translation alignment for some reservoirs.
 
@@ -44,6 +44,7 @@ This is a source-level audit, not a completed real-browser/device certification.
 
 ## Fixed Issues
 
+- README Paragraph Machine documentation now accurately describes the single shared workspace and no longer claims a separate standalone HTML surface is maintained.
 - Minimal accessibility fix: the homepage SVG realm controls and center core now expose localized accessible names through the existing shared i18n runtime; no new translation engine or visual redesign was introduced.
 - The README’s page-count language distinguishes 13 content entries (12 books plus the short story `صفر`) from 12 secondary book pages; that count alone is not a contradiction. The README does contain a genuine Paragraph Machine wording inconsistency: one section calls the shared workspace in `index.html` a separate/legacy machine surface while also describing it as the current shared workspace, and says a standalone file is maintained. Reconcile this wording against actual navigation before editing the README.
 - This report separates source observations from unverified behavior. The verification checklist is provided separately.
