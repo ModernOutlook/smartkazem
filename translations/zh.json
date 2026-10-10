@@ -10,6 +10,7 @@
     "structure": "结构殿堂",
     "reference": "模仿权威",
     "forgers": "《模仿的伪造者》",
+    "zero": "零",
     "treatise": "哲学论述",
     "observation": "观察之地",
     "back": "返回",
@@ -121,6 +122,10 @@
     "observation": {
       "title": "观察之地",
       "close": "关闭"
+    },
+    "zero": {
+      "title": "零",
+      "close": "返回"
     },
     "treatise": {
       "title": "哲学论述",

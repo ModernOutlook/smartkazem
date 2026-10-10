@@ -10,6 +10,7 @@
     "structure": "بنية القاعة",
     "reference": "سلطة التقليد",
     "forgers": "مزوّرو التقليد",
+    "zero": "الصفر",
     "treatise": "رسالة فلسفية",
     "observation": "أرض الملاحظة",
     "back": "عودة",
@@ -121,6 +122,10 @@
     "observation": {
       "title": "أرض الملاحظة",
       "close": "إغلاق"
+    },
+    "zero": {
+      "title": "الصفر",
+      "close": "رجوع"
     },
     "treatise": {
       "title": "رسالة فلسفية",

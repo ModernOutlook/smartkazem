@@ -10,6 +10,7 @@
     "structure": "ساختار تالار",
     "reference": "مرجع تقلید",
     "forgers": "جاعلان تقلید",
+    "zero": "صفر",
     "treatise": "رساله فلسفی",
     "observation": "سرزمین مشاهده",
     "back": "بازگشت",
@@ -146,6 +147,10 @@
     "observation": {
       "title": "سرزمین مشاهده",
       "close": "بستن"
+    },
+    "zero": {
+      "title": "صفر",
+      "close": "بازگشت"
     },
     "treatise": {
       "title": "رساله فلسفی",

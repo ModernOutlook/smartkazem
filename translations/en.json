@@ -10,6 +10,7 @@
     "structure": "Structure of the Hall",
     "reference": "Reference of Imitation",
     "forgers": "The Forgers of Imitation",
+    "zero": "Zero",
     "treatise": "A Philosophical Treatise",
     "observation": "The Land of Observation",
     "back": "Back",
@@ -122,6 +123,10 @@
     "observation": {
       "title": "The Land of Observation",
       "close": "Close"
+    },
+    "zero": {
+      "title": "Zero",
+      "close": "Back"
     },
     "treatise": {
       "title": "A Philosophical Treatise",

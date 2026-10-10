@@ -24,7 +24,7 @@ Primary realms, in invariant order:
 
 S → T → E → R → C
 
-Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 are books**
+Secondary pages (current child-page inventory): **exactly 13 pages, including books and the short story «صفر»**
 1. **رساله فلسفی** — book
 2. **شاهنامه‌خوانی** — book
 3. **فصل اول ظهور** — book
@@ -37,8 +37,9 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 10. **جاعلان تقلید** — book
 11. **تباهیان** — book
 12. **مانیفست آشوب‌زده** — book
+13. **صفر** — short story
 
-`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page/book inventory.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
+`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page inventory.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
 - **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
 
@@ -46,11 +47,11 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
-## Canonical Persian book sources — current status
+## Canonical Persian content sources — current status
 
-**The Persian-source-first pass is consolidated for all 12 books.** Each book has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
+**The Persian-source-first pass is consolidated for all 13 content pages.** Each book or story page has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
 
-| Book | Canonical Persian source |
+| Content page | Canonical Persian source |
 |---|---|
 | رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` |
 | شاهنامه‌خوانی | `content/shahnameh-series.js` |
@@ -64,6 +65,7 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 | جاعلان تقلید | `content/forgers.js` |
 | تباهیان | `content/tabahian.js` |
 | مانیفست آشوب‌زده | `content/disturbed-manifesto.js` |
+| صفر | `content/zero.js` |
 
 ### Changes completed in the Persian pass
 
@@ -76,7 +78,7 @@ Secondary pages (current child-page inventory): **exactly 12 pages, and all 12 a
 
 ### Remaining before translations
 
-- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; **سرزمین مشاهده** uses `translations/observation.json` with 12 paragraphs per language; **سرزمین مشاهده؛ ۲۵ بار رسیدن** and **آینه‌ی ممکن‌ها** use `translations/observation-25.json` and `translations/possible-mirror.json` with 25 and 31 sections per language; **پژواک لایه سوم** uses `translations/echo-layer3.json` with 17 parts per language. These pages load book prose from their dedicated reservoirs rather than duplicated global-catalog entries. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
+- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; **سرزمین مشاهده** uses `translations/observation.json` with 12 paragraphs per language; **سرزمین مشاهده؛ ۲۵ بار رسیدن** and **آینه‌ی ممکن‌ها** use `translations/observation-25.json` and `translations/possible-mirror.json` with 25 and 31 sections per language; **پژواک لایه سوم** uses `translations/echo-layer3.json` with 17 parts per language. These pages load book prose from their dedicated reservoirs rather than duplicated global-catalog entries. The `zero` story is declared in `content/zero.js` with aligned EN/ZH/AR prose in `translations/zero.json`. Its runtime is `zero.html` + `js/zero-page.js`, and `page-specs/zero.json` declares the canonical relationship. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
 - `translations/tabahian.json` now contains all three chapters in EN/ZH/AR, aligned to the canonical Persian source: 38, 59, and 96 paragraphs respectively. The third chapter was translated in full, not summarized; automated paragraph-count checks matched all three target languages to the 96-paragraph Persian source.
 - Automated JavaScript, JSON, HTML, and security checks are being run on the branch. Manual visual checks and real-device TalkBack verification have not been claimed.
 
