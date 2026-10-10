@@ -26,7 +26,7 @@ This is a source-level audit, not a completed real-browser/device certification.
 
 - The README’s 13-item content inventory (12 books plus the short story `صفر`) and its 12 secondary-book-page count are compatible when the story is treated separately; this is not by itself a defect.
 - The README previously described a standalone legacy Paragraph Machine file despite the actual route structure using only the shared `paragraph-page` workspace in `index.html`. This wording was corrected on the audit branch; both realm entry paths still route to the same workspace.
-- Several inspected standalone child HTML files rely on external page controllers/catalog metadata, as intended, but a complete visible-string scan of all pages and all translation JSON catalogs remains outstanding.
+- Several inspected standalone child HTML files rely on external page controllers/catalog metadata, as intended, but a complete visible-string scan of all pages and all translation JSON catalogs remains outstanding. A concrete Shahnameh counter localization defect was found and fixed on this branch; full four-language review of all page counters and controls is still pending.
 - No claim is made that all book translations are complete; README itself records incomplete translation alignment for some reservoirs.
 
 ## Accessibility Issues Found
@@ -46,6 +46,7 @@ This is a source-level audit, not a completed real-browser/device certification.
 
 - README Paragraph Machine documentation now accurately describes the single shared workspace and no longer claims a separate standalone HTML surface is maintained.
 - Minimal accessibility fix: the homepage SVG realm controls and center core now expose localized accessible names through the existing shared i18n runtime; no new translation engine or visual redesign was introduced.
+- Shahnameh artwork counter: episode numbers and the total count previously mixed hard-coded Persian digits with active-language episode labels. The counter now formats the episode number, zero-padding character, and total through the existing locale-aware number formatter.
 - The README’s page-count language distinguishes 13 content entries (12 books plus the short story `صفر`) from 12 secondary book pages; that count alone is not a contradiction. The Paragraph Machine wording inconsistency identified during the audit has been corrected on this branch: the README now documents `paragraph-page` in `index.html` as the single shared machine surface, with both realm entry paths leading to it.
 - This report separates source observations from unverified behavior. The verification checklist is provided separately.
 
