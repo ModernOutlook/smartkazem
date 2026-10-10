@@ -532,3 +532,8 @@ The Shahnameh reader uses `translations/shahnameh.json` for localized episode ti
 
 
 All three Share Economy books now use the same generic home-page manifest: `forgers=translations/forgers.json;humanMachines=translations/human-machines.json;tabahian=translations/tabahian.json`. The shared loader has no Tabahian-specific fetch branch. `translations/tabahian.json` now contains all three chapters in EN/ZH/AR, with paragraph counts aligned to the canonical Persian source (38, 59, and 96).
+
+
+## Reader design reference
+
+The short-story reader `zero.html` establishes the child-page reading surface: a compact shared-language header, clear return action, a centered deep-blue article card, visible keyboard focus, responsive spacing, and reduced-motion support. Long-form readers such as `philosophical-treatise.html` should reuse this visual family while retaining their own navigation and content structure. Long-form text must continue to render from the canonical Persian source and the declared translation reservoir; do not duplicate prose in HTML or introduce a page-specific language/accessibility system.

@@ -1,0 +1,49 @@
+{
+  "schema": "page-completion/v1",
+  "page": "treatise",
+  "source": {
+    "path": "content/philosophical-treatise.js",
+    "authority": "fa",
+    "content_key": "PhilosophicalTreatisePersianSource"
+  },
+  "translations": {
+    "path": "translations/treatise.json",
+    "languages": ["en", "ar", "zh"],
+    "derived_from": "source"
+  },
+  "runtime": {
+    "html": "philosophical-treatise.html",
+    "controller": "js/philosophical-treatise-source.js",
+    "navigation": "js/reading-page.js",
+    "i18n": "translations/i18n.js"
+  },
+  "accessibility": {
+    "required": true,
+    "features": [
+      "semantic-article-and-section-headings",
+      "shared-site-language-controls",
+      "language-aware-content-rendering",
+      "shared-talkback-runtime",
+      "semantic-section-navigation",
+      "keyboard-operable-controls",
+      "visible-focus",
+      "reduced-motion",
+      "rtl-ltr",
+      "responsive-content-and-tables",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
+    ],
+    "verification": [
+      "source-block-count",
+      "translation-block-alignment",
+      "keyboard-only",
+      "screen-reader-semantics",
+      "language-switching",
+      "rtl-ltr",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
+    ]
+  }
+}

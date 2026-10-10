@@ -129,6 +129,7 @@
     },
     "treatise": {
       "title": "哲学论述",
+      "tabsLabel": "论述目录",
       "close": "关闭",
       "tabs": [
         "序言",
