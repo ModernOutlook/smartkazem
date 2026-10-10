@@ -33,6 +33,7 @@ This is a source-level audit, not a completed real-browser/device certification.
 - `echo-layer3.html` had Persian-only language-selector/TOC/section-navigation accessible names and previous/next labels. These now use shared localized labels.
 - Shahnameh search lacked a stable accessible name, and its Persian search heading/placeholder metadata was incomplete when returning to Persian after another language. The controller now localizes the input's accessible name and the Persian catalog supplies the missing values.
 - The Emergence II episode list used Persian numerals in every language and showed a Persian-only missing-text message. Its episode numbers, artwork counter, static headings, and missing-content message now follow the selected language.
+- The same numeral pattern was present in the Emergence I episode list, Observation 25 and Possible Mirror section badges, and Disturbed Manifesto part navigation. These counters and their spoken position labels now use the active language's number formatter, including after language changes.
 - Shahnameh search now has a stable localized accessible name, and the Persian search heading/placeholder metadata is complete for language round-trips. The artwork counter uses the active language's number formatter. Full page-by-page runtime review remains outstanding.
 - No claim is made that all book translations are complete; README itself records incomplete translation alignment for some reservoirs.
 
