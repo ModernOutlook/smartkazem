@@ -130,6 +130,7 @@
     },
     "treatise": {
       "title": "A Philosophical Treatise",
+      "tabsLabel": "Treatise contents",
       "close": "Close",
       "tabs": [
         "Preface",
