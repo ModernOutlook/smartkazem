@@ -166,22 +166,27 @@
 }
 
   function handleEscape(event) {
-  if (event.key !== 'Escape') return;
+  if (event.key === 'Escape') {
+    if (logoViewer.classList.contains('open')) {
+      closeLogoViewer();
+      return;
+    }
 
-  if (logoViewer.classList.contains('open')) {
-    closeLogoViewer();
+    const openPage = Object.keys(ESCAPE_HANDLERS).find((key) => {
+      const page = document.getElementById(PAGE_IDS[key]);
+      return page?.classList.contains('is-active');
+    });
+
+    if (openPage) ESCAPE_HANDLERS[openPage]();
     return;
   }
 
-  const openPage = Object.keys(ESCAPE_HANDLERS).find((key) => {
-    const page = document.getElementById(PAGE_IDS[key]);
-    return page?.classList.contains('is-active');
-  });
+  const homePage = document.getElementById(PAGE_IDS.home);
+  if (!homePage?.classList.contains('is-active')) return;
 
-  if (openPage) {
-    ESCAPE_HANDLERS[openPage]();
-    return;
-  }
+  // Realm controls and the center core handle their own key events.
+  // Avoid applying a second navigation action when those events bubble here.
+  if (event.target instanceof Element && event.target.closest('.realm, #core')) return;
 
   const activeId = window.HomeRealmInfo?.getActiveId?.() || 'structure';
   const index = REALM_ORDER.indexOf(activeId);
