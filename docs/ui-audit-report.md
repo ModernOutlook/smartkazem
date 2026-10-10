@@ -54,6 +54,7 @@ This is a source-level audit, not a completed real-browser/device certification.
 - README Paragraph Machine documentation now accurately describes the single shared workspace and no longer claims a separate standalone HTML surface is maintained.
 - Minimal accessibility fix: the homepage SVG realm controls and center core now expose localized accessible names through the existing shared i18n runtime; no new translation engine or visual redesign was introduced.
 - The homepage inventory link now uses the shared translated label rather than a permanently bilingual Persian/English caption.
+- Four language-selector containers (home, Observation 25, Observation, and Possible Mirror) lacked translated accessible names. They now use the shared localized `labels.language` key, matching the other child pages.
 - Keyboard navigation: the global home handler returned immediately for every key except Escape, making its arrow-key realm-info navigation and Enter activation code unreachable. The handler now separates Escape closing from home-only keyboard navigation and avoids double-processing key events already handled by the SVG realm/core controls.
 - Shahnameh artwork counter: episode numbers and the total count previously mixed hard-coded Persian digits with active-language episode labels. The counter now formats the episode number, zero-padding character, and total through the existing locale-aware number formatter.
 - This report separates source observations from unverified behavior. The verification checklist is provided separately.
