@@ -56,6 +56,22 @@ try {
       continue;
     }
 
+    await page.waitForFunction(() => Boolean(window.SiteI18n && window.SiteI18n.getCatalog()), null, { timeout: 15000 }).catch(() => {});
+    await page.waitForFunction(() => {
+      const lang = document.documentElement.lang;
+      return Boolean(document.querySelector(`[data-site-lang="${lang}"][aria-pressed="true"]`));
+    }, null, { timeout: 5000 }).catch(() => {});
+    await page.evaluate(() => {
+      window.__languageSmokeEvents = [];
+      document.addEventListener('click', (event) => {
+        const button = event.target.closest?.('[data-site-lang]');
+        if (button) window.__languageSmokeEvents.push({ type: 'click-capture', requested: button.dataset.siteLang, lang: document.documentElement.lang });
+      }, true);
+      document.addEventListener('site:languagechange', (event) => {
+        window.__languageSmokeEvents.push({ type: 'languagechange', lang: event.detail?.lang, dir: document.documentElement.dir });
+      });
+    });
+
     const splash = page.locator('#splash');
     if (await splash.count() && await splash.isVisible()) {
       await splash.click().catch(() => {});
@@ -84,13 +100,15 @@ try {
             active: document.querySelector('[data-site-lang][aria-pressed="true"]')?.dataset.siteLang || null,
             catalogLoaded: Boolean(window.SiteI18n?.getCatalog()),
             i18nAvailable: Boolean(window.SiteI18n),
+            eventsBeforeRetry: [...(window.__languageSmokeEvents || [])],
           });
+          const beforeRetry = state();
           try {
             const result = await Promise.race([
               window.SiteI18n?.setLanguage(code),
               new Promise((resolve) => setTimeout(() => resolve('__diagnostic_timeout__'), 3000)),
             ]);
-            return { ...state(), retry: result === '__diagnostic_timeout__' ? 'setLanguage did not settle within 3s' : (result || 'SiteI18n unavailable') };
+            return { beforeRetry, afterRetry: state(), retry: result === '__diagnostic_timeout__' ? 'setLanguage did not settle within 3s' : (result || 'SiteI18n unavailable') };
           } catch (cause) {
             return { ...state(), retryError: String(cause) };
           }
