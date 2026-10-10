@@ -124,6 +124,10 @@
       "title": "The Land of Observation",
       "close": "Close"
     },
+    "zero": {
+      "title": "Zero",
+      "close": "Back"
+    },
     "treatise": {
       "title": "A Philosophical Treatise",
       "close": "Close",
