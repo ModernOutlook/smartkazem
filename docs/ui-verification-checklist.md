@@ -40,6 +40,7 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [x] Source fix: home, Observation 25, Observation, and Possible Mirror language-selector accessible names now use a localized shared label.
 - [x] Source scan: primary pages, realm panels, book panel/tabs, logo dialog, and chapter/section navigation now use localized accessible-name keys; no static Persian `aria-label` without a localization hook remains in the 12 inspected HTML files.
 - [x] Source fixes: Observation reader and Philosophical Treatise content now use LTR for Chinese and preserve RTL for Arabic.
+- [x] Source fix: Emergence I/II, Observation 25, Possible Mirror, Disturbed Manifesto, and Shahnameh counters now format numbers for the selected language.
 - [ ] Verify translated visible labels, aria-labels, placeholders, tabs, controls, headers, close/back buttons, and live regions.
 - [ ] Repeat language transitions on home, all five realms, every child page, inventory, book readers, and Paragraph Machine.
 
