@@ -37,6 +37,7 @@ Status legend: `[x]` source declaration inspected; `[ ]` runtime/manual verifica
 - [x] Source scan: the Persian base catalog's shared label keys now have matching key coverage in en/ar/zh; missing shared UI labels were translated.
 - [x] Source fixes: inventory shell/group/card labels, Echo Layer Three navigation labels, Shahnameh search naming, and Emergence II episode numerals/fallback text now respond to the selected language.
 - [x] Source fix: home, Observation 25, Observation, and Possible Mirror language-selector accessible names now use a localized shared label.
+- [x] Source scan: primary pages, realm panels, book panel/tabs, logo dialog, and chapter/section navigation now use localized accessible-name keys; no static Persian `aria-label` without a localization hook remains in the 12 inspected HTML files.
 - [x] Source fixes: Observation reader and Philosophical Treatise content now use LTR for Chinese and preserve RTL for Arabic.
 - [ ] Verify translated visible labels, aria-labels, placeholders, tabs, controls, headers, close/back buttons, and live regions.
 - [ ] Repeat language transitions on home, all five realms, every child page, inventory, book readers, and Paragraph Machine.
