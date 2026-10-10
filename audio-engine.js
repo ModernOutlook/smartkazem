@@ -267,12 +267,19 @@
     return state.accessibility;
   }
   function handleTripleClick(event){
-    // Only genuine pointer/touch clicks may toggle accessibility.
-    // Keyboard/programmatic clicks have detail=0 and must never count.
+    // Accessibility gestures must never consume ordinary controls, especially
+    // the shared language selector. Count only repeated clicks on the same
+    // non-interactive target so quick taps on different controls stay usable.
     const detail=Number(event.detail)||0;
     if(detail===0)return false;
+    const target=event.target instanceof Element?event.target:null;
+    if(!target)return false;
+    if(target.closest('button,a,input,select,textarea,summary,[role="button"],[role="link"],[contenteditable="true"],[data-site-lang],#splash,.lang-switch,[data-no-triple-click]')){
+      clickTimes=[];
+      return false;
+    }
     const now=performance.now();
-    clickTimes=clickTimes.filter(time=>now-time<=TRIPLE_WINDOW);
+    clickTimes=clickTimes.filter(entry=>now-entry.time<=TRIPLE_WINDOW&&entry.target===target);
     if(detail>=3){
       clickTimes=[];
       if(event.cancelable)event.preventDefault();
@@ -281,7 +288,7 @@
       return true;
     }
     if(detail===1){
-      clickTimes.push(now);
+      clickTimes.push({time:now,target});
       if(clickTimes.length>=3){
         clickTimes=[];
         if(event.cancelable)event.preventDefault();
@@ -291,7 +298,7 @@
       }
     }else if(detail===2){
       // Preserve the sequence for browsers that expose click.detail.
-      clickTimes.push(now);
+      clickTimes.push({time:now,target});
     }
     return false;
   }
