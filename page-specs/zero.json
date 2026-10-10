@@ -1,0 +1,50 @@
+{
+  "schema": "page-completion/v1",
+  "page": "zero",
+  "source": {
+    "path": "content/zero.js",
+    "authority": "fa",
+    "content_key": "ZeroPersianSource"
+  },
+  "translations": {
+    "path": "translations/zero.json",
+    "languages": [
+      "en",
+      "ar",
+      "zh"
+    ],
+    "derived_from": "source"
+  },
+  "runtime": {
+    "html": "zero.html",
+    "controller": "js/zero-page.js",
+    "i18n": "translations/i18n.js"
+  },
+  "accessibility": {
+    "required": true,
+    "features": [
+      "semantic-article-and-heading",
+      "shared-site-language-controls",
+      "language-aware-content-rendering",
+      "live-region-content-update",
+      "native-back-button",
+      "visible-focus",
+      "reduced-motion",
+      "rtl-ltr",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
+    ],
+    "verification": [
+      "source-paragraph-count",
+      "translation-paragraph-alignment",
+      "keyboard-only",
+      "screen-reader-semantics",
+      "language-switching",
+      "rtl-ltr",
+      "mobile-portrait",
+      "mobile-landscape",
+      "desktop"
+    ]
+  }
+}
