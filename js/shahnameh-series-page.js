@@ -250,7 +250,10 @@
     if (title) title.textContent = labels.shahnameh || title.textContent;
     if (subtitle) subtitle.textContent = page.subtitle || subtitle.textContent;
     if (findTitle) findTitle.textContent = page.findTitle || findTitle.textContent;
-    if (search) search.placeholder = page.searchPlaceholder || search.placeholder;
+    if (search) {
+      search.placeholder = page.searchPlaceholder || labels.episodeSearchPlaceholder || search.placeholder;
+      search.setAttribute('aria-label', page.findTitle || labels.episodeSearchPlaceholder || 'Find an episode');
+    }
     if (visualLabel) visualLabel.textContent = page.visualLabel || visualLabel.textContent;
     if (back) back.textContent = labels.back || back.textContent;
     if (elements.artPrevious) elements.artPrevious.textContent = ui.previous || 'پیشین';
