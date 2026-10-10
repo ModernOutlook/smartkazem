@@ -7,6 +7,10 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ui-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   browser-smoke:
     runs-on: ubuntu-latest
@@ -25,7 +29,7 @@ jobs:
       - name: Install Playwright
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
 
       - name: Start static site
         run: |
