@@ -17,7 +17,7 @@
 </head>
 <body>
   <main class="inventory-page">
-    <div class="lang-switch" aria-label="زبان رابط">
+    <div class="lang-switch" aria-label="زبان رابط" data-i18n-aria="labels.interfaceLanguage">
       <button id="ui-zh" data-site-lang="zh" type="button">中文</button>
       <button id="ui-fa" data-site-lang="fa" type="button">فارسی</button>
       <button id="ui-en" data-site-lang="en" type="button">English</button>
@@ -27,13 +27,13 @@
     <header class="inventory-header">
       <div class="inventory-heading">
         <p class="inventory-eyebrow">SMARTKAZEM · INVENTORY</p>
-        <h1>فهرست کارت‌ها</h1>
-        <p>۵۵ تصویر، با هویت مستقل و ترتیب ثابت.</p>
+        <h1 data-i18n="labels.cardInventory">فهرست کارت‌ها</h1>
+        <p data-i18n="labels.inventoryDescription">۵۵ تصویر، با هویت مستقل و ترتیب ثابت.</p>
       </div>
-      <a class="inventory-home" href="index.html" aria-label="بازگشت به صفحه اصلی">بازگشت</a>
+      <a class="inventory-home" href="index.html" aria-label="بازگشت به صفحه اصلی" data-i18n="labels.homePage">بازگشت</a>
     </header>
 
-    <section class="inventory-grid" id="inventory-grid" aria-label="کارت‌ها"></section>
+    <section class="inventory-grid" id="inventory-grid" aria-label="کارت‌ها" data-i18n-aria="labels.cards"></section>
   </main>
 
   <script src="translations/i18n.js"></script>
