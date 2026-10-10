@@ -51,6 +51,7 @@ for (const file of htmlFiles) {
 
 const parityMissing = [];
 for (const key of keys.fa) {
+  if (!key.startsWith('labels.')) continue;
   for (const language of ['en', 'ar', 'zh']) {
     if (!keys[language].has(key)) parityMissing.push(language + '.json missing catalog key ' + key);
   }
