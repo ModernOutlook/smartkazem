@@ -220,6 +220,78 @@ for (const route of sharedRoutes) {
   await page.close();
 }
 
+
+const sharedBooks = [
+  { kind: 'forgers', label: 'Forgers' },
+  { kind: 'humanMachines', label: 'Human and its Machines' },
+  { kind: 'tabahian', label: 'Tabahian' },
+];
+
+for (const book of sharedBooks) {
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const pageErrors = [];
+  const failedRequests = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('requestfailed', (request) => failedRequests.push(request.url() + ': ' + (request.failure()?.errorText || 'request failed')));
+  const response = await page.goto(`${baseURL}/index.html`, { waitUntil: 'domcontentloaded' });
+  if (!response || !response.ok()) {
+    fail(`shared book ${book.kind}: HTTP ${response?.status() ?? 'no response'}`);
+    await page.close();
+    continue;
+  }
+
+  await page.waitForFunction(() => Boolean(window.BookNavigation && window.SiteI18n?.getCatalog()), null, { timeout: 7000 }).catch(() => {});
+  const splash = page.locator('#splash');
+  if (await splash.count() && await splash.isVisible()) {
+    await splash.click().catch(() => {});
+    await page.waitForTimeout(100);
+  }
+
+  try {
+    await page.evaluate((kind) => window.BookNavigation.openBook('share', kind), book.kind);
+    await page.waitForFunction(() => document.querySelector('#book-page.is-active') && document.querySelector('#book-body')?.children.length, null, { timeout: 5000 });
+  } catch (error) {
+    fail(`shared book ${book.kind}: did not open/render; ${String(error).split('\\n')[0]}`);
+  }
+
+  for (const language of languages) {
+    try {
+      await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
+      await page.waitForFunction(({ code, dir }) =>
+        document.documentElement.lang === code &&
+        document.documentElement.dir === dir &&
+        document.querySelector(`[data-site-lang="${code}"]`)?.getAttribute('aria-pressed') === 'true' &&
+        document.querySelector('#book-page.is-active') !== null,
+      language, { timeout: 5000 });
+      const populated = await page.locator('#book-body').evaluate((el) => Boolean(el.textContent.trim() || el.children.length));
+      if (!populated) fail(`shared book ${book.kind}: content became empty in ${language.code}`);
+    } catch (error) {
+      fail(`shared book ${book.kind}: language ${language.code} transition failed; ${String(error).split('\\n')[0]}`);
+      break;
+    }
+  }
+
+  if (pageErrors.length) fail(`shared book ${book.kind}: browser exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
+  if (failedRequests.length) fail(`shared book ${book.kind}: failed request(s): ${failedRequests.slice(0, 3).join(' | ')}`);
+
+  for (const viewport of viewports) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.waitForTimeout(75);
+    const metrics = await page.evaluate(() => ({ innerWidth: innerWidth, documentWidth: document.documentElement.scrollWidth }));
+    if (metrics.documentWidth > metrics.innerWidth + 2) fail(`shared book ${book.kind} @ ${viewport.name}: horizontal overflow ${metrics.documentWidth}>${metrics.innerWidth}`);
+  }
+
+  try {
+    await page.locator('#book-close').click({ timeout: 5000 });
+    await page.waitForFunction(() => !document.querySelector('#book-page')?.classList.contains('is-active'), null, { timeout: 5000 });
+  } catch (error) {
+    fail(`shared book ${book.kind}: close/return action failed; ${String(error).split('\\n')[0]}`);
+  }
+  console.log(`OK shared book workspace: ${book.label}`);
+  await page.close();
+}
+
   for (const route of sharedRoutes) {
     const page = await context.newPage();
     page.setDefaultTimeout(5000);
