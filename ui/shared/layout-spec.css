@@ -1,30 +1,21 @@
 :root {
-  /* SmartKazem shared presentation contract */
   --ui-touch-target: 44px;
   --ui-control-height: 44px;
-
   --ui-space-1: 4px;
   --ui-space-2: 8px;
   --ui-space-3: 12px;
   --ui-space-4: 16px;
   --ui-space-5: 24px;
   --ui-space-6: 32px;
-
   --ui-radius-sm: 8px;
   --ui-radius-md: 14px;
   --ui-radius-lg: 18px;
-
   --ui-safe-top: env(safe-area-inset-top, 0px);
   --ui-safe-right: env(safe-area-inset-right, 0px);
   --ui-safe-bottom: env(safe-area-inset-bottom, 0px);
   --ui-safe-left: env(safe-area-inset-left, 0px);
 }
 
-/* Shared language-control contract.
- * Every viewport uses the same language-control presentation.
- * Page-specific layouts may position/theme the control, but mobile does not
- * change its desktop size, spacing, radius, or wrapping behavior.
- */
 .global-lang,
 .lang-switch {
   box-sizing: border-box;
@@ -47,10 +38,6 @@
   border-radius: 8px;
 }
 
-/* Direction-change viewport safety.
- * Language switching changes document direction globally. Keep the physical
- * viewport/shell bounded while allowing inner components to honor RTL/LTR.
- */
 html,
 body {
   width: 100%;
@@ -96,12 +83,42 @@ body {
   overflow-wrap: anywhere;
 }
 
+/* Direction-independent geometry for the home screen and the five realm
+ * surfaces. Their physical composition must not mirror/reorder when the
+ * document language changes; only text flow should change. Child/book pages
+ * intentionally retain their own RTL/LTR layout contracts. */
+.home-page,
+.structure-page,
+.continuity-page,
+.experience-page,
+.reference-page,
+.share-page {
+  direction: ltr;
+}
 
-/* Shared child-page layout contract.
- * Reference pattern: فصل اول ظهور / فصل دوم ظهور.
- * Every child page keeps the same responsive geometry while retaining its
- * own visual theme and page-specific components.
- */
+.home-page > .info,
+.structure-page .structure-head,
+.continuity-page .continuity-head,
+.experience-page .experience-head,
+.reference-page .reference-head,
+.share-page .share-head,
+.structure-page .structure-actions,
+.continuity-page .continuity-actions,
+.experience-page .experience-actions,
+.reference-page .reference-actions,
+.share-page .share-actions {
+  direction: rtl;
+}
+
+html[dir="ltr"] .home-page > .info,
+html[dir="ltr"] .structure-page .structure-head,
+html[dir="ltr"] .continuity-page .continuity-head,
+html[dir="ltr"] .experience-page .experience-head,
+html[dir="ltr"] .reference-page .reference-head,
+html[dir="ltr"] .share-page .share-head {
+  direction: ltr;
+}
+
 .child-page {
   min-width: 0;
   max-width: 100%;
@@ -171,21 +188,17 @@ body {
     width: min(calc(100% - 18px), 1180px);
     padding-inline: 0;
   }
-
   .child-page .top {
     display: block;
   }
-
   .child-page .actions {
     width: 100%;
     margin-top: 14px;
     align-items: flex-start;
   }
-
   .child-page .title h1 {
     overflow-wrap: anywhere;
   }
-
   .child-page .controls,
   .child-page .reader,
   .child-page .book-body {
