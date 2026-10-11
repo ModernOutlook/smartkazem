@@ -119,6 +119,95 @@ html[dir="ltr"] .share-page .share-head {
   direction: ltr;
 }
 
+/* Keep realm headers/actions physically stable. Text direction is isolated
+ * to the title/button content so changing language cannot reorder controls. */
+.structure-page .structure-head,
+.continuity-page .continuity-head,
+.experience-page .experience-head,
+.reference-page .reference-head,
+.share-page .share-head,
+.structure-page .structure-actions,
+.continuity-page .continuity-actions,
+.experience-page .experience-actions,
+.reference-page .reference-actions,
+.share-page .share-actions {
+  direction: ltr !important;
+}
+
+.structure-page .structure-title,
+.continuity-page .continuity-title,
+.experience-page .experience-title,
+.reference-page .reference-title,
+.share-page .share-title,
+.structure-page .structure-action,
+.continuity-page .continuity-action,
+.experience-page .experience-action,
+.reference-page .reference-action,
+.share-page .share-story-action {
+  direction: inherit;
+}
+
+html[dir="rtl"] .structure-page .structure-title,
+html[dir="rtl"] .continuity-page .continuity-title,
+html[dir="rtl"] .experience-page .experience-title,
+html[dir="rtl"] .reference-page .reference-title,
+html[dir="rtl"] .share-page .share-title,
+html[dir="rtl"] .structure-page .structure-action,
+html[dir="rtl"] .continuity-page .continuity-action,
+html[dir="rtl"] .experience-page .experience-action,
+html[dir="rtl"] .reference-page .reference-action,
+html[dir="rtl"] .share-page .share-story-action {
+  direction: rtl;
+}
+
+html[dir="ltr"] .structure-page .structure-title,
+html[dir="ltr"] .continuity-page .continuity-title,
+html[dir="ltr"] .experience-page .experience-title,
+html[dir="ltr"] .reference-page .reference-title,
+html[dir="ltr"] .share-page .share-title,
+html[dir="ltr"] .structure-page .structure-action,
+html[dir="ltr"] .continuity-page .continuity-action,
+html[dir="ltr"] .experience-page .experience-action,
+html[dir="ltr"] .reference-page .reference-action,
+html[dir="ltr"] .share-page .share-story-action {
+  direction: ltr;
+}
+
+/* The five-ring home control must always be a complete, centered SVG. */
+.home-page .orbit {
+  direction: ltr !important;
+  min-width: 0;
+  min-height: 0;
+  overflow: visible;
+}
+
+.home-page .menu-svg {
+  display: block;
+  width: min(94vw, 78dvh, 100%);
+  height: auto;
+  max-width: 620px;
+  max-height: 620px;
+  min-width: 0;
+  min-height: 0;
+  margin: auto;
+  overflow: visible !important;
+  flex: none;
+}
+
+@media (max-width: 1023px) {
+  .home-page .orbit {
+    width: 100%;
+    height: 100%;
+    place-items: center;
+  }
+
+  .home-page .menu-svg {
+    width: min(94vw, 78dvh, calc(100% - 20px));
+    max-width: 620px;
+    max-height: 620px;
+  }
+}
+
 .child-page {
   min-width: 0;
   max-width: 100%;
