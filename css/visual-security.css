@@ -35,7 +35,7 @@ body::after {
   outline-offset: 3px;
 }
 
-:where(button, .btn, .realm-action, .global-lang, .lang-switch, .book-tab) {
+:where(button, .btn, .realm-action, .lang-switch, .book-tab) {
   border-color: var(--sk-border);
 }
 
