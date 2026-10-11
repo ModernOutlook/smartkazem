@@ -17,7 +17,7 @@
   min-height:100svh;
   background:
     linear-gradient(180deg,rgba(3,7,13,.08) 0%,rgba(3,7,13,.16) 52%,rgba(3,7,13,.34) 100%),
-    url("content/shahnameh-BG.jpg") center top / cover no-repeat;
+    url("../../content/shahnameh-BG.jpg") center top / cover no-repeat;
 }
 .shahnameh-page::before{
   content:"";
