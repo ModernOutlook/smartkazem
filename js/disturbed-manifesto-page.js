@@ -98,24 +98,6 @@
 
     reader.appendChild(section);
 
-    const nav = document.createElement('div');
-    nav.className = 'navrow';
-    nav.setAttribute('aria-label', label('partNavigation', 'Part navigation'));
-
-    const previous = createText('button', label('previousPart', 'Previous'), 'btn');
-    previous.type = 'button';
-    previous.id = 'prev-bottom';
-    previous.disabled = activeIndex === 0;
-    previous.addEventListener('click', () => select(activeIndex - 1, true));
-
-    const next = createText('button', label('nextPart', 'Next'), 'btn');
-    next.type = 'button';
-    next.id = 'next-bottom';
-    next.disabled = activeIndex === source.total - 1;
-    next.addEventListener('click', () => select(activeIndex + 1, true));
-
-    nav.append(previous, next);
-    reader.appendChild(nav);
   }
 
   function applyLanguage() {

@@ -161,6 +161,14 @@ for (const route of sharedRoutes) {
   try {
     await page.waitForFunction((key) => window.SharedPages?.getActive() === key && document.querySelector('#shared-page-host .child-page.is-active'), route.route, { timeout: 7000 });
     await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
+    const geometry = await page.evaluate(() => {
+      const app = document.querySelector('#app')?.getBoundingClientRect();
+      const root = document.querySelector('#shared-page-host .child-page.is-active')?.getBoundingClientRect();
+      return app && root ? { app: { x: app.x, y: app.y, width: app.width, height: app.height }, root: { x: root.x, y: root.y, width: root.width, height: root.height } } : null;
+    });
+    if (!geometry || Math.abs(geometry.app.width - geometry.root.width) > 2 || Math.abs(geometry.app.height - geometry.root.height) > 2 || Math.abs(geometry.app.x - geometry.root.x) > 2 || Math.abs(geometry.app.y - geometry.root.y) > 2) {
+      fail(`shared route ${route.route}: child page does not fill shared shell; geometry=${JSON.stringify(geometry)}`);
+    }
   } catch (error) {
     fail(`shared route ${route.route}: fragment/content did not mount; ${String(error).split('\\n')[0]}`);
   }
@@ -187,7 +195,8 @@ for (const route of sharedRoutes) {
   }
 
   if (!route.preserveNavigation) {
-    const forbidden = await page.locator('#art-prev, #art-next, #prev-part, #next-part, #prev-bottom, #next-bottom').count();
+    const activePage = page.locator('#shared-page-host .child-page.is-active');
+    const forbidden = await activePage.locator('#art-prev, #art-next, #prev, #next, #prev-part, #next-part, #prev-bottom, #next-bottom').count();
     if (forbidden) fail(`shared route ${route.route}: non-Shahnameh previous/next controls found (${forbidden})`);
   } else {
     if (await page.locator('#art-prev').count() !== 1 || await page.locator('#art-next').count() !== 1) {
