@@ -4,12 +4,6 @@
     <header class="zero-header">
       <div class="zero-brand">MODERN OUTLOOK <span aria-hidden="true">/</span> S</div>
       <div class="zero-actions">
-        <nav class="global-lang" aria-label="زبان سایت" data-i18n-aria="labels.language">
-          <button data-site-lang="zh" type="button">中文</button>
-          <button data-site-lang="fa" type="button">فارسی</button>
-          <button data-site-lang="en" type="button">English</button>
-          <button data-site-lang="ar" type="button">العربية</button>
-        </nav>
         <button class="zero-back" id="zero-back" type="button" data-i18n="labels.back">بازگشت</button>
       </div>
     </header>
