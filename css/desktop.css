@@ -25,10 +25,26 @@
   /* Home / five realms */
   .home-page {
     display: grid;
-    grid-template-columns: minmax(520px, 1fr) 420px;
+    /* Explicit areas keep the orbit and information panel in fixed physical
+       columns regardless of the document's RTL/LTR direction. */
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px);
+    grid-template-areas: "orbit info";
     align-items: center;
     gap: var(--ui-space-6);
     padding: var(--ui-space-4) 4rem;
+  }
+
+  .home-page > .orbit {
+    grid-area: orbit;
+    min-width: 0;
+  }
+
+  .home-page > .info {
+    grid-area: info;
+    min-width: 0;
+  }
+
+  /* Book reader */
   }
 
   .orbit {
