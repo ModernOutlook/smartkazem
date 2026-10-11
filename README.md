@@ -263,7 +263,7 @@ A browser-side API key is not a server-side secret. Never commit keys, tokens, p
 
 ## 13. Quality, security, and deployment
 
-`quality.yml` enforces the maintenance contract: JavaScript syntax, JSON validity, duplicate HTML IDs, missing local HTML assets, inline-script/event-handler restrictions, externalized presentation CSS, document language, and the four-button shared language contract.
+`quality.yml` enforces the maintenance contract: JavaScript syntax, JSON validity, duplicate HTML IDs, missing local HTML assets, inline-script/event-handler restrictions, externalized presentation CSS, document language, and the landing-only language-selector contract.
 
 `security.yml` checks every HTML page for the browser-security metadata contract, insecure `http://` URLs, `javascript:` URLs, and likely committed credentials. The legacy Paragraph Machine is not exempt.
 
