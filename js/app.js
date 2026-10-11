@@ -135,6 +135,10 @@
 }
 
   function openSecondaryPage(path, origin) {
+    if (window.SharedPages) {
+      window.SharedPages.open(path, origin).catch((error) => console.error('[SharedPages]', error));
+      return;
+    }
     try { sessionStorage.setItem(SECONDARY_RETURN_KEY, origin); } catch (_) {}
     window.location.href = path;
   }

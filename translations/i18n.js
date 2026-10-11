@@ -190,6 +190,33 @@
     return normalizedLanguage;
   }
 
+
+  async function setPage(pageKey, catalogPath, blocks) {
+    let pageMeta = document.querySelector('meta[name="i18n-page"]');
+    if (!pageMeta) { pageMeta = document.createElement('meta'); pageMeta.name = 'i18n-page'; document.head.appendChild(pageMeta); }
+    pageMeta.content = pageKey || 'home';
+    let catalogMeta = document.querySelector('meta[name="i18n-catalog"]');
+    if (!catalogMeta) { catalogMeta = document.createElement('meta'); catalogMeta.name = 'i18n-catalog'; document.head.appendChild(catalogMeta); }
+    if (catalogPath) catalogMeta.content = catalogPath; else catalogMeta.remove();
+    let blocksMeta = document.querySelector('meta[name="i18n-blocks"]');
+    if (blocks) {
+      if (!blocksMeta) { blocksMeta = document.createElement('meta'); blocksMeta.name = 'i18n-blocks'; document.head.appendChild(blocksMeta); }
+      blocksMeta.content = blocks;
+    } else if (blocksMeta) blocksMeta.remove();
+    if (catalogPath) {
+      const response = await fetch(catalogPath, {cache:'no-store'});
+      if (!response.ok) throw new Error('Page catalog unavailable: ' + pageKey);
+      const chapter = await response.json();
+      Object.values(catalogs).forEach(data => {
+        data.chapters = data.chapters || {};
+        data.bookContent = data.bookContent || {};
+        data.chapters[pageKey] = chapter;
+        data.bookContent[pageKey] = chapter;
+      });
+    }
+    return setLanguage(currentLanguage || getLanguage());
+  }
+
   function ensureAccessibilityRuntime(){
     if(window.SmartKazemAudio)return;
 
@@ -255,6 +282,7 @@
     KEY: STORAGE_KEY,
     getLanguage,
     setLanguage,
+    setPage,
     load,
     get: (path, fallback = '') => get(path, fallback),
     getCatalog: () => catalogs[currentLanguage] || null

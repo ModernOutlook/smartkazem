@@ -1,0 +1,25 @@
+
+<section class="observation25-page child-page">
+  <div class="observation25-scene" aria-hidden="true">
+    <div class="observation25-river"></div>
+    <div class="observation25-ring r1"></div><div class="observation25-ring r2"></div>
+    <div class="observation25-ring r3"></div><div class="observation25-ring r4"></div>
+    <div class="observation25-island i1"></div><div class="observation25-island i2"></div><div class="observation25-island i3"></div>
+    <div class="observation25-light"></div>
+  </div>
+  
+  <header class="observation25-head">
+    <div class="observation25-title">
+      <strong id="observation25-title">سرزمین مشاهده؛ ۲۵ بار رسیدن</strong>
+      <span id="observation25-subtitle">جلد دوم رسالهٔ فلسفی نگرش نوین</span>
+    </div>
+    <button class="observation25-close" id="observation25-close" type="button" data-i18n-aria="pages.observation25.close" aria-label="بازگشت">✕</button>
+  </header>
+  <div class="observation25-shell">
+    <nav class="observation25-tabs" id="observation25-tabs" aria-label="فهرست بخش‌ها" data-i18n-aria="labels.sectionList"></nav>
+    <article class="observation25-body" id="observation25-body"></article>
+  </div>
+</section>
+
+
+
