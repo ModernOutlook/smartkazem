@@ -161,7 +161,7 @@ for (const route of sharedRoutes) {
   try {
     await page.waitForFunction((key) => window.SharedPages?.getActive() === key && document.querySelector('#shared-page-host .child-page.is-active'), route.route, { timeout: 7000 });
     await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
-    const initialContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
+    const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
     if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
     const geometry = await page.evaluate(() => {
       const app = document.querySelector('#app')?.getBoundingClientRect();
