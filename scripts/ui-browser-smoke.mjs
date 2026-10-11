@@ -159,7 +159,8 @@ try {
         return result;
       }, selectors);
       const compareGeometry = (before, after, label) => {
-        for (const selector of Object.keys(before || {})) {
+        let viewportDiagnosticsLogged = false;
+        for (const selector of Object.keys(before || {}).filter((key) => !key.startsWith('__'))) {
           const a = before[selector], b = after && after[selector];
           if (!a || !b) {
             if (a !== b) fail(label + ': missing geometry for ' + selector);
@@ -168,6 +169,13 @@ try {
           for (const key of ['x', 'y', 'width', 'height']) {
             if (Math.abs(a[key] - b[key]) > 2) {
               fail(label + ': ' + selector + ' shifted (' + key + ': ' + a[key] + ' -> ' + b[key] + ')');
+              if (!viewportDiagnosticsLogged) {
+                console.error('DIAGNOSTIC ' + label + ': ' + JSON.stringify({
+                  before: before.__viewport,
+                  after: after && after.__viewport,
+                }));
+                viewportDiagnosticsLogged = true;
+              }
               break;
             }
           }
