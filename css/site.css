@@ -96,8 +96,14 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
 .lang-switch button.active{background:rgba(255,255,255,.12);color:#fff}
 
 .page{
-  position:absolute;inset:0;
-  width:100%;height:100%;aspect-ratio:3/4;
+  /* Let the opposing insets size the absolute page. Combining inset:0 with
+     width:100% over-constrains the horizontal axis; CSS resolves that conflict
+     differently for RTL and LTR, which shifts the entire page by 30px. */
+  position:absolute;
+  inset:0;
+  width:auto;
+  height:auto;
+  aspect-ratio:auto;
 }
 .page.book-page{z-index:100;display:none;background:
 radial-gradient(ellipse at 52% 18%,rgba(194,255,194,.98),transparent 24%),
