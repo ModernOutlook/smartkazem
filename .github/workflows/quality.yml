@@ -78,7 +78,11 @@ jobs:
                   bad.append(f'{p}: language buttons are only permitted on index.html')
               if not re.search(r"<html\b[^>]*\blang=['\"][^'\"]+['\"]", s, re.I):
                   bad.append(f'{p}: missing document language')
+          for p in pathlib.Path('content/page-templates').glob('*.fragment'):
+              s=p.read_text(encoding='utf-8')
+              if re.search(r'data-site-lang=', s):
+                  bad.append(f'{p}: language buttons are only permitted on index.html')
           if bad:
               print('\n'.join(bad)); sys.exit(1)
-          print('HTML checks passed')
+          print('HTML and shared-fragment checks passed')
           PY
