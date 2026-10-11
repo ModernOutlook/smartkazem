@@ -1611,8 +1611,6 @@ const reader=document.getElementById('reader');
 const main=document.querySelector('main.page');
 const episodeHeading=document.getElementById('episode-list-heading');
 const episodeNav=document.querySelector('.controls nav');
-const prev=document.getElementById('prev');
-const next=document.getElementById('next');
 const close=document.getElementById('emergence-close');
 let current=0;
 
@@ -1706,18 +1704,12 @@ function render(){
     ? paragraphs.map(p=>`<p class="prose">${p}</p>`).join('')
     : `<div class="placeholder">${placeholder.replace(/\n/g,'<br>')}</div>`;
   reader.setAttribute('aria-label',labels.reader);
-  reader.innerHTML=`<div class="reader-head"><div><div class="story-label">${chapterTitle}</div><h2 id="episode-reader-heading">${title}</h2><p>${storyDescription}</p></div></div><div class="block">${body}</div><div class="navrow reader-nav" aria-label="${labels.navigation}"><button class="btn" id="prev-bottom" type="button" aria-label="${labels.previous}">${labels.previous}</button><button class="btn" id="next-bottom" type="button" aria-label="${labels.next}">${labels.next}</button></div>`;
+  reader.innerHTML=`<div class="reader-head"><div><div class="story-label">${chapterTitle}</div><h2 id="episode-reader-heading">${title}</h2><p>${storyDescription}</p></div></div><div class="block">${body}</div>`;
   reader.setAttribute('aria-labelledby','episode-reader-heading');
-  document.getElementById('prev-bottom')?.addEventListener('click',()=>select((current+episodes.length-1)%episodes.length,true));
-  document.getElementById('next-bottom')?.addEventListener('click',()=>select((current+1)%episodes.length,true));
   document.querySelector('.title h1').textContent=chapterTitle;
   document.querySelector('.title p').textContent=description;
   document.querySelectorAll('.story-label').forEach(el=>{el.textContent=chapterTitle});
-  document.getElementById('art-caption').textContent=chapterTitle;
-  prev.textContent=labels.previous;
-  next.textContent=labels.next;
-  prev.setAttribute('aria-label',labels.previous);
-  next.setAttribute('aria-label',labels.next);
+  
   close.textContent=labels.close;
   close.setAttribute('aria-label',labels.close);
   document.querySelector('.skip-link').textContent=labels.skip;
@@ -1744,8 +1736,6 @@ episodes.forEach((episode,index)=>{
   const b=document.createElement('button');
   b.type='button';
 });
-prev.addEventListener('click',()=>moveBy(-1));
-next.addEventListener('click',()=>moveBy(1));
 close.addEventListener('click',()=>{if(history.length>1) history.back(); else window.location.href='index.html';});
 list.addEventListener('keydown',event=>{
   const buttons=[...list.querySelectorAll('button')];
@@ -1753,6 +1743,7 @@ list.addEventListener('keydown',event=>{
   if(index>=0) handleEpisodeKeydown(event,index);
 });
 document.addEventListener('site:languagechange',()=>{
+  if(!main?.isConnected)return;
   render();
 });
 // initial render

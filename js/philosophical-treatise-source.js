@@ -42,6 +42,6 @@
   }
   createReadingSurface();
   render();
-  document.addEventListener('site:languagechange', render);
+  document.addEventListener('site:languagechange', () => { if (!root?.isConnected) return; render(); });
   document.addEventListener('DOMContentLoaded', render, { once: true });
 })();

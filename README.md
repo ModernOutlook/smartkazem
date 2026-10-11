@@ -39,7 +39,7 @@ Secondary pages (current child-page inventory): **exactly 13 pages, including bo
 12. **مانیفست آشوب‌زده** — book
 13. **صفر** — short story
 
-`inventory.html` is a separate utility/catalog surface for the playing-card asset inventory; it is not part of the realm child-page inventory.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
+The playing-card inventory is also rendered inside the shared runtime from `content/page-templates/inventory.fragment`; no separate inventory document is used.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
 - **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
 
@@ -78,7 +78,7 @@ Secondary pages (current child-page inventory): **exactly 13 pages, including bo
 
 ### Remaining before translations
 
-- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; **سرزمین مشاهده** uses `translations/observation.json` with 12 paragraphs per language; **سرزمین مشاهده؛ ۲۵ بار رسیدن** and **آینه‌ی ممکن‌ها** use `translations/observation-25.json` and `translations/possible-mirror.json` with 25 and 31 sections per language; **پژواک لایه سوم** uses `translations/echo-layer3.json` with 17 parts per language. These pages load book prose from their dedicated reservoirs rather than duplicated global-catalog entries. The `zero` story is declared in `content/zero.js` with aligned EN/ZH/AR prose in `translations/zero.json`. Its runtime is `zero.html` + `js/zero-page.js`, and `page-specs/zero.json` declares the canonical relationship. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
+- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; **سرزمین مشاهده** uses `translations/observation.json` with 12 paragraphs per language; **سرزمین مشاهده؛ ۲۵ بار رسیدن** and **آینه‌ی ممکن‌ها** use `translations/observation-25.json` and `translations/possible-mirror.json` with 25 and 31 sections per language; **پژواک لایه سوم** uses `translations/echo-layer3.json` with 17 parts per language. These pages load book prose from their dedicated reservoirs rather than duplicated global-catalog entries. The `zero` story is declared in `content/zero.js` with aligned EN/ZH/AR prose in `translations/zero.json`. Its runtime is the shared `index.html` shell plus `content/page-templates/zero.fragment` and `js/zero-page.js`, and `page-specs/zero.json` declares the canonical relationship. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
 - `translations/tabahian.json` now contains all three chapters in EN/ZH/AR, aligned to the canonical Persian source: 38, 59, and 96 paragraphs respectively. The third chapter was translated in full, not summarized; automated paragraph-count checks matched all three target languages to the 96-paragraph Persian source.
 - Automated JavaScript, JSON, HTML, and security checks are being run on the branch. Manual visual checks and real-device TalkBack verification have not been claimed.
 
@@ -110,16 +110,10 @@ The current user-facing surfaces are Home, the five realms, 12 book pages, and t
 
 /
 ├── index.html · home + dynamic book pages + shared Paragraph Machine workspace
-├── shahnameh.html · شاهنامه‌خوانی book
-├── observation.html · سرزمین مشاهده؛ یک رود، یک جریان book
-├── observation-25.html · سرزمین مشاهده؛ ۲۵ بار رسیدن book
-├── possible-mirror.html · آینه‌ی ممکن‌ها book
-├── emergence.html · فصل اول ظهور book
-├── emergence-2.html · فصل دوم ظهور book
-├── echo-layer3.html · پژواک لایه سوم book
-├── philosophical-treatise.html · رساله فلسفی book
+├── index.html · single shared shell for home, realms, all child pages, inventory, and Paragraph Machine
+├── js/shared-pages.js · fragment loader, route state, and shared page lifecycle
+├── content/page-templates/*.fragment · all child-page and inventory presentation fragments
 ├── shared paragraph workspace in index.html · shared Paragraph Machine workspace (machine)
-├── inventory.html · playing-card inventory utility surface
 ├── css/ · site, desktop, splash
 ├── ui/ · bootstrap, mobile, shared layout
 ├── js/ · page/application controllers
@@ -234,7 +228,7 @@ Authoritative content belongs in content/*.js or the defined Persian/translation
 
 Shahnameh ownership:
 
-shahnameh.html → js/shahnameh-series-page.js → content/shahnameh-series.js → translations/i18n.js
+index.html → js/shared-pages.js → content/page-templates/shahnameh.fragment → js/shahnameh-series-page.js → content/shahnameh-series.js → translations/i18n.js
 
 Fix Shahnameh-specific defects in its own surface first; change global i18n only when the defect is demonstrably global.
 
@@ -536,4 +530,4 @@ All three Share Economy books now use the same generic home-page manifest: `forg
 
 ## Reader design reference
 
-The short-story reader `zero.html` establishes the child-page reading surface: a compact shared-language header, clear return action, a centered deep-blue article card, visible keyboard focus, responsive spacing, and reduced-motion support. Long-form readers such as `philosophical-treatise.html` should reuse this visual family while retaining their own navigation and content structure. Long-form text must continue to render from the canonical Persian source and the declared translation reservoir; do not duplicate prose in HTML or introduce a page-specific language/accessibility system.
+The short-story reader `content/page-templates/zero.fragment` establishes the child-page reading surface: a compact shared-language header, clear return action, a centered deep-blue article card, visible keyboard focus, responsive spacing, and reduced-motion support. Long-form readers such as `philosophical-treatise.html` should reuse this visual family while retaining their own navigation and content structure. Long-form text must continue to render from the canonical Persian source and the declared translation reservoir; do not duplicate prose in HTML or introduce a page-specific language/accessibility system.

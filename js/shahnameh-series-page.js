@@ -293,7 +293,7 @@
   function init() {
     catalog = window.SiteI18n?.getCatalog?.() || null;
     bindEvents();
-    document.addEventListener('site:languagechange', applyLanguage);
+    document.addEventListener('site:languagechange', () => { if (!elements.episodeList?.isConnected) return; applyLanguage(); });
     renderEpisodeList();
     renderReader();
     syncArtwork();

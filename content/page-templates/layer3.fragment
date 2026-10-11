@@ -1,0 +1,16 @@
+
+<main class="page child-page layer3-page" id="page">
+
+<header class="head">
+<div class="head-main"><div class="head-title" id="head-title">پژواک لایه سوم</div><div class="head-sub" id="head-sub">پروتکل هماهنگی</div></div>
+<button class="close" id="close" type="button" aria-label="بازگشت" data-i18n-aria="labels.back">✕</button>
+</header>
+<nav class="toc" aria-label="فهرست فصل‌ها" aria-labelledby="toc-label" data-i18n-aria="labels.chapterList">
+<h2 class="toc-label" id="toc-label" data-i18n="labels.chapterList">فهرست</h2>
+<div class="chapter-row" id="chapters"></div>
+</nav>
+<nav class="parts" id="parts" aria-label="بخش‌های فصل" data-i18n-aria="labels.chapterSections"></nav>
+<article class="reader" id="reader" tabindex="-1" aria-live="polite" aria-atomic="false" aria-labelledby="reader-title"></article>
+</main>
+
+

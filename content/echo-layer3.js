@@ -420,7 +420,7 @@ window.EchoLayer3Content={
  "use strict";
  const C=window.EchoLayer3Content;
  const $=id=>document.getElementById(id);
- const title=$("head-title"),sub=$("head-sub"),chapters=$("chapters"),parts=$("parts"),reader=$("reader"),tocLabel=$("toc-label"),prev=$("prev-part"),next=$("next-part");
+ const title=$("head-title"),sub=$("head-sub"),chapters=$("chapters"),parts=$("parts"),reader=$("reader"),tocLabel=$("toc-label");
  let activeChapter=0,activePart=0;
 
  function catalog(){return window.SiteI18n?.getCatalog?.()||{}}
@@ -506,10 +506,6 @@ window.EchoLayer3Content={
      const para=document.createElement("p");para.textContent=text;story.appendChild(para);
    });
    reader.appendChild(story);
-   prev.disabled=activePart===0;
-   next.disabled=activePart===ch.parts.length-1;
-   prev.setAttribute("aria-label",lang==="en"?"Previous part":lang==="ar"?"الجزء السابق":lang==="zh"?"上一部分":"بخش پیشین");
-   next.setAttribute("aria-label",lang==="en"?"Next part":lang==="ar"?"الجزء التالي":lang==="zh"?"下一部分":"بخش پسین");
  }
  function move(delta){
    const ch=C.chapters[activeChapter];
@@ -519,10 +515,9 @@ window.EchoLayer3Content={
    renderPart();
    focusReader();
  }
- prev.addEventListener("click",()=>move(-1));
- next.addEventListener("click",()=>move(1));
  document.addEventListener("keydown",event=>{
-   if(event.altKey||event.ctrlKey||event.metaKey)return;
+   if(!title?.isConnected)return;
+    if(event.altKey||event.ctrlKey||event.metaKey)return;
    const target=event.target;
    if(target.matches?.("input,textarea,select,[contenteditable='true']"))return;
    if(event.key==="ArrowLeft"||event.key==="ArrowRight"){
@@ -534,7 +529,7 @@ window.EchoLayer3Content={
      const ch=C.chapters[activeChapter]; if(ch?.parts.length){activePart=ch.parts.length-1;renderPart();focusReader()}
    }
  });
- document.addEventListener("site:languagechange",()=>render());
+ document.addEventListener("site:languagechange",()=>{if(!title?.isConnected)return;render()});
  document.addEventListener("DOMContentLoaded",render,{once:true});
  if(document.readyState!=="loading")render();
  $("close").addEventListener("click",()=>{if(history.length>1)history.back();else window.location.href="index.html"});

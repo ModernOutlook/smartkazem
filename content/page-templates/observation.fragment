@@ -1,0 +1,24 @@
+<section class="page child-page observation-page">
+<header class="book-head"><div class="book-title" id="observation-book-title" data-i18n="pages.observation.title">📖 سرزمین مشاهده</div><button class="book-close" id="close" data-i18n-aria="pages.observation.close" aria-label="بستن">✕</button></header>
+<article class="book-body" id="body">
+<div class="head">
+<h1 id="observation-source-title"></h1>
+<p class="sub" id="observation-source-subtitle"></p>
+</div>
+<div class="pair" data-observation-paragraph-index="0"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="1"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="2"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="3"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="4"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="5"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="6"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="7"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="8"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="9"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="10"><p class="observation-paragraph" data-observation-paragraph></p></div>
+<div class="pair" data-observation-paragraph-index="11"><p class="observation-paragraph" data-observation-paragraph></p></div>
+</article>
+</section>
+
+
+

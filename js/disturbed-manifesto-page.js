@@ -217,10 +217,12 @@
   });
 
   document.addEventListener('keydown', (event) => {
+    if (!list?.isConnected) return;
     if (event.key === 'Escape') close.click();
   });
 
   document.addEventListener('site:languagechange', () => {
+    if (!list?.isConnected) return;
     applyLanguage();
     render();
   });

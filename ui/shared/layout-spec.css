@@ -300,3 +300,7 @@ html[dir="ltr"] .share-page .share-story-action {
     width: min(calc(100% - 20px), 1180px);
   }
 }
+
+
+/* Shared child-page fragments participate in the app's single page stack. */
+#shared-page-host { display: contents; }

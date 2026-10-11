@@ -1,7 +1,7 @@
 :root{color-scheme:dark;--treatise-blue:#8dcdf5;--treatise-ice:#d9f2ff;--treatise-line:rgba(141,205,245,.2);--treatise-muted:#a9c8dc;--treatise-text:#edf8ff}
 *{box-sizing:border-box}
-html{min-height:100%;scroll-behavior:smooth;background:#020810}
-body{margin:0;min-height:100%;background:#020810;color:var(--treatise-text);font-family:Vazirmatn,Tahoma,sans-serif}
+html{scroll-behavior:smooth}
+.treatise-page{color:var(--treatise-text);font-family:Vazirmatn,Tahoma,sans-serif}
 .treatise-page{min-height:100svh;position:relative;isolation:isolate;background:radial-gradient(ellipse at 50% 0%,rgba(24,100,145,.36),transparent 42%),radial-gradient(ellipse at 8% 68%,rgba(9,65,101,.2),transparent 35%),linear-gradient(155deg,#061421 0%,#07111c 48%,#02060b 100%)}
 .treatise-page:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 12% 17%,rgba(177,226,255,.8) 0 1px,transparent 1.8px),radial-gradient(circle at 77% 28%,rgba(90,177,229,.65) 0 1px,transparent 1.8px),radial-gradient(circle at 63% 82%,rgba(135,211,255,.45) 0 1px,transparent 1.8px);background-size:137px 151px,173px 167px,193px 181px;opacity:.4}
 .treatise-shell{width:min(100% - 32px,980px);margin:auto;padding:22px 0 28px;position:relative}
