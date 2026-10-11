@@ -129,7 +129,7 @@ The current user-facing surfaces are Home, the five realms, 12 book pages, and t
 
 The architecture is enforced, not only documented:
 - user-facing HTML pages must not contain inline `<style>` blocks or inline event handlers;
-- the shared language contract requires four language controls (`fa/en/zh/ar`) on each user-facing page;
+- the language selector (`fa/en/zh/ar`) exists only on the landing page (`index.html`); all shared child pages use the persisted language selected there and must not render duplicate language controls;
 - every user-facing HTML document must declare its language;
 - page presentation belongs in external CSS layers (`css/`, `ui/mobile/`, or page-specific CSS under `css/pages/`);
 - dynamic UI should prefer `textContent`, `replaceChildren()`, and explicit DOM APIs over avoidable dynamic HTML injection;
@@ -253,7 +253,7 @@ Every layout change must consider:
 
 Preserve semantic buttons, type="button", keyboard interaction, appropriate aria-label/aria-pressed/aria-live, visible focus, and correct lang/dir.
 
-Language controls are especially sensitive to narrow portrait widths, RTL/LTR, long labels, and header positioning.
+The landing-page language control is especially sensitive to narrow portrait widths, RTL/LTR, long labels, and header positioning. Child pages must not contain their own language selector.
 
 ## 12. Security
 
@@ -308,7 +308,7 @@ These are boundaries, not reasons for opportunistic rewrites.
 ### After editing
 Verify as applicable: JS syntax, JSON validity, HTML structure, local assets, language switching, affected navigation, mobile/desktop, RTL/LTR, accessibility, and the quality/security gates. If a presentation change can be made without touching behavior, keep it in CSS.
 
-For every user-facing page, explicitly verify the shared language selector in portrait/landscape and RTL/LTR before considering the change complete.
+Verify the landing-page language selector in portrait/landscape and RTL/LTR, then confirm that all child pages inherit the selected language without rendering their own language controls.
 
 For Paragraph Machine also verify evaluation/generation paths, S/T/E/R/C judgment, 144/34/900 limits, translation boundary, and batch cardinality.
 
