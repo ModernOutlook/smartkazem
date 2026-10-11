@@ -119,8 +119,65 @@ try {
       }
     }
 
+    if (file === 'index.html') {
+      const measure = async (selectors) => page.evaluate((items) => Object.fromEntries(items.map((selector) => {
+        const element = document.querySelector(selector);
+        if (!element) return [selector, null];
+        const rect = element.getBoundingClientRect();
+        return [selector, { x: rect.x, y: rect.y, width: rect.width, height: rect.height }];
+      })), selectors);
+      const compareGeometry = (before, after, label) => {
+        for (const selector of Object.keys(before || {})) {
+          const a = before[selector], b = after?.[selector];
+          if (!a || !b) {
+            if (a !== b) fail(\`\${label}: missing geometry for \${selector}\`);
+            continue;
+          }
+          for (const key of ['x', 'y', 'width', 'height']) {
+            if (Math.abs(a[key] - b[key]) > 2) {
+              fail(\`\${label}: \${selector} shifted on language direction change (\${key}: \${a[key]} → \${b[key]})\`);
+              break;
+            }
+          }
+        }
+      };
+
+      const landingSelectors = ['.home-page', '.home-page .orbit', '.home-page .menu-svg', '.home-page > .info'];
+      await page.locator('[data-site-lang="fa"]').click();
+      await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
+      const landingBaseline = await measure(landingSelectors);
+      for (const language of languages) {
+        await page.locator(\`[data-site-lang="\${language.code}"]\`).click();
+        await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+        compareGeometry(landingBaseline, await measure(landingSelectors), \`landing RTL/LTR \${language.code}\`);
+      }
+
+      const realmCases = [
+        { id: 'structure', root: '#structure-page', parts: ['.structure-head', '.structure-actions'], close: '#structure-close' },
+        { id: 'continuity', root: '#continuity-page', parts: ['.continuity-head', '.continuity-actions'], close: '#continuity-close' },
+        { id: 'experience', root: '#experience-page', parts: ['.experience-head', '.experience-actions'], close: '#experience-close' },
+        { id: 'reference', root: '#reference-page', parts: ['.reference-head', '.reference-actions'], close: '#reference-close' },
+        { id: 'share', root: '#share-page', parts: ['.share-head', '.share-actions'], close: '#share-close' },
+      ];
+      for (const realm of realmCases) {
+        await page.locator(\`#realm-\${realm.id}\`).click();
+        await page.waitForFunction((selector) => document.querySelector(selector)?.classList.contains('is-active'), realm.root);
+        const selectors = [realm.root, ...realm.parts.map((part) => \`\${realm.root} \${part}\`)];
+        await page.locator('[data-site-lang="fa"]').click();
+        await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
+        const baseline = await measure(selectors);
+        for (const language of languages) {
+          await page.locator(\`[data-site-lang="\${language.code}"]\`).click();
+          await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+          compareGeometry(baseline, await measure(selectors), \`\${realm.id} realm RTL/LTR \${language.code}\`);
+        }
+        await page.locator(realm.close).click();
+        await page.waitForFunction(() => document.querySelector('#home-page')?.classList.contains('is-active'));
+      }
+    }
+
     if (pageErrors.length) {
-      fail(`${file}: browser runtime exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
+      fail(\`\${file}: browser runtime exception(s): \${pageErrors.slice(0, 3).join(' | ')}\`);
     }
     if (failedRequests.length) {
       fail(`${file}: failed browser request(s): ${failedRequests.slice(0, 3).join(' | ')}`);
