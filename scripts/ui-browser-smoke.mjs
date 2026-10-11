@@ -158,10 +158,23 @@ try {
         { id: 'share', root: '#share-page', parts: ['.share-head', '.share-actions'], close: '#share-close' },
       ];
       for (const realm of realmCases) {
-        const realmLocator = page.locator('#realm-' + realm.id);
-        const realmBox = await realmLocator.boundingBox();
-        if (!realmBox) throw new Error('Missing territory geometry: ' + realm.id);
-        await realmLocator.click({ position: { x: realmBox.width / 2, y: realmBox.height * 0.15 } });
+        // The SVG territories are concentric, so clicking the center of a
+        // group's bounding box lands on a different, inner ring. Click the
+        // exposed annulus of each intended territory instead.
+        const universeBox = await page.locator('#universe').boundingBox();
+        if (!universeBox) throw new Error('Missing territory SVG geometry: ' + realm.id);
+        const annulusRadius = {
+          structure: 410,
+          continuity: 330,
+          experience: 250,
+          reference: 175,
+          share: 100,
+        }[realm.id];
+        if (!annulusRadius) throw new Error('Missing non-overlapping annulus radius: ' + realm.id);
+        await page.mouse.click(
+          universeBox.x + universeBox.width / 2,
+          universeBox.y + universeBox.height * (0.5 - annulusRadius / 1000),
+        );
         await page.waitForFunction((selector) => document.querySelector(selector)?.classList.contains('is-active'), realm.root);
         const selectors = [realm.root].concat(realm.parts.map((part) => realm.root + ' ' + part));
         await page.locator('[data-site-lang="fa"]').click();
