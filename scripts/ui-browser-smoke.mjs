@@ -120,12 +120,44 @@ try {
     }
 
     if (file === 'index.html') {
-      const measure = async (selectors) => page.evaluate((items) => Object.fromEntries(items.map((selector) => {
-        const element = document.querySelector(selector);
-        if (!element) return [selector, null];
-        const rect = element.getBoundingClientRect();
-        return [selector, { x: rect.x, y: rect.y, width: rect.width, height: rect.height }];
-      })), selectors);
+      const measure = async (selectors) => page.evaluate((items) => {
+        const result = Object.fromEntries(items.map((selector) => {
+          const element = document.querySelector(selector);
+          if (!element) return [selector, null];
+          const rect = element.getBoundingClientRect();
+          return [selector, { x: rect.x, y: rect.y, width: rect.width, height: rect.height }];
+        }));
+        // Capture the viewport shell and its computed layout contract around
+        // every direction transition so a geometry failure points to the
+        // owning ancestor instead of only reporting a downstream 30px shift.
+        result.__viewport = {
+          innerWidth: window.innerWidth,
+          clientWidth: document.documentElement.clientWidth,
+          scrollX: window.scrollX,
+          scrollY: window.scrollY,
+          shell: Object.fromEntries(['html', 'body', '#app'].map((selector) => {
+            const element = document.querySelector(selector);
+            if (!element) return [selector, null];
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return [selector, {
+              x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+              clientWidth: element.clientWidth, scrollWidth: element.scrollWidth,
+              clientHeight: element.clientHeight, scrollHeight: element.scrollHeight,
+              direction: style.direction, writingMode: style.writingMode,
+              display: style.display, position: style.position,
+              widthStyle: style.width, maxWidth: style.maxWidth,
+              overflowX: style.overflowX, overflowY: style.overflowY,
+              justifyItems: style.justifyItems, alignItems: style.alignItems,
+              gridTemplateColumns: style.gridTemplateColumns,
+              gridTemplateAreas: style.gridTemplateAreas,
+              marginLeft: style.marginLeft, marginRight: style.marginRight,
+              transform: style.transform,
+            }];
+          })),
+        };
+        return result;
+      }, selectors);
       const compareGeometry = (before, after, label) => {
         for (const selector of Object.keys(before || {})) {
           const a = before[selector], b = after && after[selector];
