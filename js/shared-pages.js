@@ -4,7 +4,7 @@ const manifest={"treatise":{"file":"content/page-templates/treatise.fragment","p
 const host=document.getElementById('shared-page-host');
 const app=document.getElementById('app');
 if(!host||!app)return;
-host.style.display='contents';
+
 const roots=new Map(),loadedScripts=new Set(),styleLinks=new Map();
 let activeKey=null,activeContainer=null,origin='home',pendingHistoryClose=false;
 const aliases={'philosophical-treatise':'treatise','observation-25':'observation25','possible-mirror':'possibleMirror','emergence-2':'emergence2','echo-layer3':'layer3','disturbed-manifesto':'disturbedManifesto'};
