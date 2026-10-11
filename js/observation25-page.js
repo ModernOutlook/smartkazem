@@ -79,5 +79,5 @@ function render(){
 }
 close.addEventListener('click',()=>{if(history.length>1) history.back(); else window.location.href='index.html';});
 document.addEventListener('site:languagechange',()=>{if(!tabs?.isConnected)return;render();});
-document.addEventListener('DOMContentLoaded',()=>setTimeout(render,0),{once:true});
+render();
 })();
