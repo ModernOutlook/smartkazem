@@ -119,6 +119,132 @@ try {
       }
     }
 
+    if (file === 'index.html') {
+      const measure = async (selectors) => page.evaluate((items) => {
+        const result = Object.fromEntries(items.map((selector) => {
+          const element = document.querySelector(selector);
+          if (!element) return [selector, null];
+          const rect = element.getBoundingClientRect();
+          return [selector, { x: rect.x, y: rect.y, width: rect.width, height: rect.height }];
+        }));
+        // Capture the viewport shell and its computed layout contract around
+        // every direction transition so a geometry failure points to the
+        // owning ancestor instead of only reporting a downstream 30px shift.
+        result.__viewport = {
+          innerWidth: window.innerWidth,
+          clientWidth: document.documentElement.clientWidth,
+          scrollX: window.scrollX,
+          scrollY: window.scrollY,
+          shell: Object.fromEntries(['html', 'body', '#app', '.home-page', '.home-page > .orbit', '.home-page > .info'].map((selector) => {
+            const element = document.querySelector(selector);
+            if (!element) return [selector, null];
+            const rect = element.getBoundingClientRect();
+            const style = getComputedStyle(element);
+            return [selector, {
+              x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+              clientWidth: element.clientWidth, scrollWidth: element.scrollWidth,
+              clientHeight: element.clientHeight, scrollHeight: element.scrollHeight,
+              direction: style.direction, writingMode: style.writingMode,
+              display: style.display, position: style.position,
+              widthStyle: style.width, maxWidth: style.maxWidth,
+              overflowX: style.overflowX, overflowY: style.overflowY,
+              justifyItems: style.justifyItems, alignItems: style.alignItems,
+              gridTemplateColumns: style.gridTemplateColumns,
+              gridTemplateRows: style.gridTemplateRows,
+              gridTemplateAreas: style.gridTemplateAreas,
+              gridArea: style.gridArea,
+              gridColumnStart: style.gridColumnStart,
+              gridColumnEnd: style.gridColumnEnd,
+              gridRowStart: style.gridRowStart,
+              gridRowEnd: style.gridRowEnd,
+              justifyItems: style.justifyItems, alignItems: style.alignItems,
+              justifySelf: style.justifySelf, alignSelf: style.alignSelf,
+              inset: style.inset, left: style.left, right: style.right,
+              paddingInline: style.paddingInline, boxSizing: style.boxSizing,
+              marginLeft: style.marginLeft, marginRight: style.marginRight,
+              transform: style.transform,
+            }];
+          })),
+        };
+        return result;
+      }, selectors);
+      const compareGeometry = (before, after, label) => {
+        let viewportDiagnosticsLogged = false;
+        for (const selector of Object.keys(before || {}).filter((key) => !key.startsWith('__'))) {
+          const a = before[selector], b = after && after[selector];
+          if (!a || !b) {
+            if (a !== b) fail(label + ': missing geometry for ' + selector);
+            continue;
+          }
+          for (const key of ['x', 'y', 'width', 'height']) {
+            if (Math.abs(a[key] - b[key]) > 2) {
+              fail(label + ': ' + selector + ' shifted (' + key + ': ' + a[key] + ' -> ' + b[key] + ')');
+              if (!viewportDiagnosticsLogged) {
+                console.error('DIAGNOSTIC ' + label + ': ' + JSON.stringify({
+                  before: before.__viewport,
+                  after: after && after.__viewport,
+                }));
+                viewportDiagnosticsLogged = true;
+              }
+              break;
+            }
+          }
+        }
+      };
+      const landingSelectors = ['.home-page', '.home-page .orbit', '.home-page .menu-svg', '.home-page > .info'];
+      await page.locator('[data-site-lang="fa"]').click();
+      await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
+      const landingBaseline = await measure(landingSelectors);
+      console.info('LAYOUT SNAPSHOT fa/rtl baseline ' + JSON.stringify(landingBaseline.__viewport));
+      for (const language of languages) {
+        await page.locator('[data-site-lang="' + language.code + '"]').click();
+        await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+        const afterDirectionChange = await measure(landingSelectors);
+        console.info('LAYOUT SNAPSHOT fa/rtl -> ' + language.code + '/' + language.dir + ' ' + JSON.stringify({
+          before: landingBaseline.__viewport,
+          after: afterDirectionChange.__viewport,
+        }));
+        compareGeometry(landingBaseline, afterDirectionChange, 'landing RTL/LTR ' + language.code);
+      }
+      const realmCases = [
+        { id: 'structure', root: '#structure-page', parts: ['.structure-head', '.structure-actions'], close: '#structure-close' },
+        { id: 'continuity', root: '#continuity-page', parts: ['.continuity-head', '.continuity-actions'], close: '#continuity-close' },
+        { id: 'experience', root: '#experience-page', parts: ['.experience-head', '.experience-actions'], close: '#experience-close' },
+        { id: 'reference', root: '#reference-page', parts: ['.reference-head', '.reference-actions'], close: '#reference-close' },
+        { id: 'share', root: '#share-page', parts: ['.share-head', '.share-actions'], close: '#share-close' },
+      ];
+      for (const realm of realmCases) {
+        // The SVG territories are concentric, so clicking the center of a
+        // group's bounding box lands on a different, inner ring. Click the
+        // exposed annulus of each intended territory instead.
+        const universeBox = await page.locator('#universe').boundingBox();
+        if (!universeBox) throw new Error('Missing territory SVG geometry: ' + realm.id);
+        const annulusRadius = {
+          structure: 410,
+          continuity: 330,
+          experience: 250,
+          reference: 175,
+          share: 100,
+        }[realm.id];
+        if (!annulusRadius) throw new Error('Missing non-overlapping annulus radius: ' + realm.id);
+        await page.mouse.click(
+          universeBox.x + universeBox.width / 2,
+          universeBox.y + universeBox.height * (0.5 - annulusRadius / 1000),
+        );
+        await page.waitForFunction((selector) => document.querySelector(selector)?.classList.contains('is-active'), realm.root);
+        const selectors = [realm.root].concat(realm.parts.map((part) => realm.root + ' ' + part));
+        await page.locator('[data-site-lang="fa"]').click();
+        await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
+        const baseline = await measure(selectors);
+        for (const language of languages) {
+          await page.locator('[data-site-lang="' + language.code + '"]').click();
+          await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+          compareGeometry(baseline, await measure(selectors), realm.id + ' realm RTL/LTR ' + language.code);
+        }
+        await page.locator(realm.close).click();
+        await page.waitForFunction(() => document.querySelector('#home-page')?.classList.contains('is-active'));
+      }
+    }
     if (pageErrors.length) {
       fail(`${file}: browser runtime exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
     }

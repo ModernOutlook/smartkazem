@@ -53,7 +53,8 @@ jobs:
           python3 - <<'PY'
           import pathlib, re, sys
           bad=[]
-          for p in pathlib.Path('.').glob('*.html'):
+          for p in pathlib.Path('.').rglob('*.html'):
+              if '.git' in p.parts: continue
               s=p.read_text(encoding='utf-8')
               ids=re.findall(r'\bid=["\']([^"\']+)["\']',s)
               dup=sorted({x for x in ids if ids.count(x)>1})
@@ -70,11 +71,19 @@ jobs:
                   bad.append(f'{p}: inline event handler detected')
               if re.search(r'<style\b', s, re.I):
                   bad.append(f'{p}: inline style block detected; move presentation to CSS')
-              if len(re.findall(r'data-site-lang=', s)) != 4:
-                  bad.append(f'{p}: shared language selector contract requires exactly four language buttons')
+              language_controls = len(re.findall(r'data-site-lang=', s))
+              if p.name == 'index.html':
+                  if language_controls != 4:
+                      bad.append(f'{p}: landing page must contain exactly four language buttons')
+              elif language_controls:
+                  bad.append(f'{p}: language buttons are only permitted on index.html')
               if not re.search(r"<html\b[^>]*\blang=['\"][^'\"]+['\"]", s, re.I):
                   bad.append(f'{p}: missing document language')
+          for p in pathlib.Path('content/page-templates').glob('*.fragment'):
+              s=p.read_text(encoding='utf-8')
+              if re.search(r'data-site-lang=', s):
+                  bad.append(f'{p}: language buttons are only permitted on index.html')
           if bad:
               print('\n'.join(bad)); sys.exit(1)
-          print('HTML checks passed')
+          print('HTML and shared-fragment checks passed')
           PY

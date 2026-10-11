@@ -19,13 +19,24 @@
 
   body { min-height: 100dvh; }
 
-  .app,
-  .page {
-    width: 100vw;
+  .app {
+    width: 100%;
     min-width: 320px;
     max-width: none;
     height: 100dvh;
     min-height: 100dvh;
+    max-height: none;
+    aspect-ratio: auto;
+  }
+
+  /* Pages are absolutely positioned with inset:0; let those insets determine
+     their width instead of reintroducing the RTL/LTR over-constraint. */
+  .page {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+    height: auto;
+    min-height: 0;
     max-height: none;
     aspect-ratio: auto;
   }

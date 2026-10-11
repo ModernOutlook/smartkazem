@@ -4,12 +4,6 @@
     <header class="treatise-header">
       <div class="treatise-brand">MODERN OUTLOOK <span aria-hidden="true">/</span> S</div>
       <div class="treatise-actions">
-        <nav class="global-lang" aria-label="زبان سایت" data-i18n-aria="labels.language">
-          <button data-site-lang="zh" type="button">中文</button>
-          <button data-site-lang="fa" type="button">فارسی</button>
-          <button data-site-lang="en" type="button">English</button>
-          <button data-site-lang="ar" type="button">العربية</button>
-        </nav>
         <button class="treatise-back" id="close" type="button" data-i18n="labels.back">بازگشت</button>
       </div>
     </header>
