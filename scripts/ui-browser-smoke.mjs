@@ -158,7 +158,7 @@ try {
         { id: 'share', root: '#share-page', parts: ['.share-head', '.share-actions'], close: '#share-close' },
       ];
       for (const realm of realmCases) {
-        await page.locator('#realm-' + realm.id).click();
+        await page.locator('#realm-' + realm.id).click({ position: { x: 0.5, y: 0.15 } });
         await page.waitForFunction((selector) => document.querySelector(selector)?.classList.contains('is-active'), realm.root);
         const selectors = [realm.root].concat(realm.parts.map((part) => realm.root + ' ' + part));
         await page.locator('[data-site-lang="fa"]').click();
