@@ -89,7 +89,8 @@ body {
 .experience-page,
 .reference-page,
 .share-page {
-  direction: ltr;
+  direction: ltr !important;
+  writing-mode: horizontal-tb !important;
 }
 
 .home-page > .info,
