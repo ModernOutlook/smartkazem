@@ -135,7 +135,7 @@ try {
           clientWidth: document.documentElement.clientWidth,
           scrollX: window.scrollX,
           scrollY: window.scrollY,
-          shell: Object.fromEntries(['html', 'body', '#app'].map((selector) => {
+          shell: Object.fromEntries(['html', 'body', '#app', '.home-page', '.home-page > .orbit', '.home-page > .info'].map((selector) => {
             const element = document.querySelector(selector);
             if (!element) return [selector, null];
             const rect = element.getBoundingClientRect();
@@ -150,7 +150,17 @@ try {
               overflowX: style.overflowX, overflowY: style.overflowY,
               justifyItems: style.justifyItems, alignItems: style.alignItems,
               gridTemplateColumns: style.gridTemplateColumns,
+              gridTemplateRows: style.gridTemplateRows,
               gridTemplateAreas: style.gridTemplateAreas,
+              gridArea: style.gridArea,
+              gridColumnStart: style.gridColumnStart,
+              gridColumnEnd: style.gridColumnEnd,
+              gridRowStart: style.gridRowStart,
+              gridRowEnd: style.gridRowEnd,
+              justifyItems: style.justifyItems, alignItems: style.alignItems,
+              justifySelf: style.justifySelf, alignSelf: style.alignSelf,
+              inset: style.inset, left: style.left, right: style.right,
+              paddingInline: style.paddingInline, boxSizing: style.boxSizing,
               marginLeft: style.marginLeft, marginRight: style.marginRight,
               transform: style.transform,
             }];
@@ -185,10 +195,16 @@ try {
       await page.locator('[data-site-lang="fa"]').click();
       await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
       const landingBaseline = await measure(landingSelectors);
+      console.info('LAYOUT SNAPSHOT fa/rtl baseline ' + JSON.stringify(landingBaseline.__viewport));
       for (const language of languages) {
         await page.locator('[data-site-lang="' + language.code + '"]').click();
         await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
-        compareGeometry(landingBaseline, await measure(landingSelectors), 'landing RTL/LTR ' + language.code);
+        const afterDirectionChange = await measure(landingSelectors);
+        console.info('LAYOUT SNAPSHOT fa/rtl -> ' + language.code + '/' + language.dir + ' ' + JSON.stringify({
+          before: landingBaseline.__viewport,
+          after: afterDirectionChange.__viewport,
+        }));
+        compareGeometry(landingBaseline, afterDirectionChange, 'landing RTL/LTR ' + language.code);
       }
       const realmCases = [
         { id: 'structure', root: '#structure-page', parts: ['.structure-head', '.structure-actions'], close: '#structure-close' },
