@@ -174,7 +174,7 @@
     else window.location.href = 'index.html';
   });
 
-  document.addEventListener('site:languagechange', render);
+  document.addEventListener('site:languagechange', () => { if (!tabs?.isConnected) return; render(); });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', render, { once: true });

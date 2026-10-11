@@ -38,7 +38,7 @@
     article.dir = ['fa', 'ar'].includes(language) ? 'rtl' : 'ltr';
   }
 
-  document.addEventListener('site:languagechange', render);
+  document.addEventListener('site:languagechange', () => { if (!document.getElementById('zero-story')?.isConnected) return; render(); });
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', render, { once: true });
   } else {

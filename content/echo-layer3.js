@@ -516,7 +516,8 @@ window.EchoLayer3Content={
    focusReader();
  }
  document.addEventListener("keydown",event=>{
-   if(event.altKey||event.ctrlKey||event.metaKey)return;
+   if(!title?.isConnected)return;
+    if(event.altKey||event.ctrlKey||event.metaKey)return;
    const target=event.target;
    if(target.matches?.("input,textarea,select,[contenteditable='true']"))return;
    if(event.key==="ArrowLeft"||event.key==="ArrowRight"){
@@ -528,7 +529,7 @@ window.EchoLayer3Content={
      const ch=C.chapters[activeChapter]; if(ch?.parts.length){activePart=ch.parts.length-1;renderPart();focusReader()}
    }
  });
- document.addEventListener("site:languagechange",()=>render());
+ document.addEventListener("site:languagechange",()=>{if(!title?.isConnected)return;render()});
  document.addEventListener("DOMContentLoaded",render,{once:true});
  if(document.readyState!=="loading")render();
  $("close").addEventListener("click",()=>{if(history.length>1)history.back();else window.location.href="index.html"});

@@ -1743,6 +1743,7 @@ list.addEventListener('keydown',event=>{
   if(index>=0) handleEpisodeKeydown(event,index);
 });
 document.addEventListener('site:languagechange',()=>{
+  if(!main?.isConnected)return;
   render();
 });
 // initial render

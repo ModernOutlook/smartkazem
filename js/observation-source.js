@@ -34,5 +34,5 @@
   }
 
   render();
-  document.addEventListener('site:languagechange', render);
+  document.addEventListener('site:languagechange', () => { if (!document.getElementById('observation-source-title')?.isConnected) return; render(); });
 })();
