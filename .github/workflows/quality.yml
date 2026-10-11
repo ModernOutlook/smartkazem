@@ -53,7 +53,8 @@ jobs:
           python3 - <<'PY'
           import pathlib, re, sys
           bad=[]
-          for p in pathlib.Path('.').glob('*.html'):
+          for p in pathlib.Path('.').rglob('*.html'):
+              if '.git' in p.parts: continue
               s=p.read_text(encoding='utf-8')
               ids=re.findall(r'\bid=["\']([^"\']+)["\']',s)
               dup=sorted({x for x in ids if ids.count(x)>1})
