@@ -161,6 +161,8 @@ for (const route of sharedRoutes) {
   try {
     await page.waitForFunction((key) => window.SharedPages?.getActive() === key && document.querySelector('#shared-page-host .child-page.is-active'), route.route, { timeout: 7000 });
     await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
+    const initialContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
+    if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
     const geometry = await page.evaluate(() => {
       const app = document.querySelector('#app')?.getBoundingClientRect();
       const root = document.querySelector('#shared-page-host .child-page.is-active')?.getBoundingClientRect();
@@ -188,6 +190,8 @@ for (const route of sharedRoutes) {
         document.querySelector(`[data-site-lang="${code}"]`)?.getAttribute('aria-pressed') === 'true' &&
         window.SharedPages?.getActive() === key,
       { ...language, key: route.route }, { timeout: 5000 });
+      const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
+      if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
     } catch (error) {
       fail(`shared route ${route.route}: language ${language.code} transition failed; ${String(error).split('\\n')[0]}`);
       break;
