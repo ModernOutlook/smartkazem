@@ -111,5 +111,5 @@
   }
 
   render();
-  document.addEventListener('site:languagechange', render);
+  document.addEventListener('site:languagechange', () => { if (!grid?.isConnected) return; render(); });
 })();

@@ -129,14 +129,175 @@ try {
     await page.close();
   }
 
-  for (const file of responsivePages) {
-    if (!htmlFiles.includes(file)) {
-      console.log(`SKIP responsive viewport sweep: ${file} not present in repository root`);
-      continue;
+
+const sharedRoutes = [
+  { route: 'treatise', content: '#treatise-content', close: '#close' },
+  { route: 'shahnameh', content: '#episode-list', close: '#back', preserveNavigation: true },
+  { route: 'emergence', content: '#episode-list', close: '#emergence-close' },
+  { route: 'observation25', content: '#observation25-tabs', close: '#observation25-close' },
+  { route: 'possibleMirror', content: '#possible-mirror-tabs', close: '#possible-mirror-close' },
+  { route: 'emergence2', content: '#episode-list', close: '#emergence2-close' },
+  { route: 'observation', content: '#observation-source-title', close: '#close' },
+  { route: 'layer3', content: '#chapters', close: '#close' },
+  { route: 'disturbedManifesto', content: '#part-list', close: '#manifesto-close' },
+  { route: 'zero', content: '#zero-story', close: '#zero-back' },
+  { route: 'inventory', content: '#inventory-grid', close: 'a.inventory-home' },
+];
+
+for (const route of sharedRoutes) {
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const pageErrors = [];
+  const failedRequests = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('requestfailed', (request) => failedRequests.push(request.url() + ': ' + (request.failure()?.errorText || 'request failed')));
+  const response = await page.goto(`${baseURL}/index.html?page=${encodeURIComponent(route.route)}`, { waitUntil: 'domcontentloaded' });
+  if (!response || !response.ok()) {
+    fail(`shared route ${route.route}: HTTP ${response?.status() ?? 'no response'}`);
+    await page.close();
+    continue;
+  }
+
+  try {
+    await page.waitForFunction((key) => window.SharedPages?.getActive() === key && document.querySelector('#shared-page-host .child-page.is-active'), route.route, { timeout: 7000 });
+    await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
+    const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
+    if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
+    const geometry = await page.evaluate(() => {
+      const app = document.querySelector('#app')?.getBoundingClientRect();
+      const root = document.querySelector('#shared-page-host .child-page.is-active')?.getBoundingClientRect();
+      return app && root ? { app: { x: app.x, y: app.y, width: app.width, height: app.height }, root: { x: root.x, y: root.y, width: root.width, height: root.height } } : null;
+    });
+    if (!geometry || Math.abs(geometry.app.width - geometry.root.width) > 2 || Math.abs(geometry.app.height - geometry.root.height) > 2 || Math.abs(geometry.app.x - geometry.root.x) > 2 || Math.abs(geometry.app.y - geometry.root.y) > 2) {
+      fail(`shared route ${route.route}: child page does not fill shared shell; geometry=${JSON.stringify(geometry)}`);
     }
+  } catch (error) {
+    fail(`shared route ${route.route}: fragment/content did not mount; ${String(error).split('\\n')[0]}`);
+  }
+
+  const splash = page.locator('#splash');
+  if (await splash.count() && await splash.isVisible()) {
+    await splash.click().catch(() => {});
+    await page.waitForTimeout(100);
+  }
+
+  for (const language of languages) {
+    try {
+      await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
+      await page.waitForFunction(({ code, dir, key }) =>
+        document.documentElement.lang === code &&
+        document.documentElement.dir === dir &&
+        document.querySelector(`[data-site-lang="${code}"]`)?.getAttribute('aria-pressed') === 'true' &&
+        window.SharedPages?.getActive() === key,
+      { ...language, key: route.route }, { timeout: 5000 });
+      const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
+      if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
+    } catch (error) {
+      fail(`shared route ${route.route}: language ${language.code} transition failed; ${String(error).split('\\n')[0]}`);
+      break;
+    }
+  }
+
+  if (!route.preserveNavigation) {
+    const activePage = page.locator('#shared-page-host .child-page.is-active');
+    const forbidden = await activePage.locator('#art-prev, #art-next, #prev, #next, #prev-part, #next-part, #prev-bottom, #next-bottom').count();
+    if (forbidden) fail(`shared route ${route.route}: non-Shahnameh previous/next controls found (${forbidden})`);
+  } else {
+    if (await page.locator('#art-prev').count() !== 1 || await page.locator('#art-next').count() !== 1) {
+      fail('shared route shahnameh: its dedicated previous/next controls are missing');
+    }
+  }
+
+  if (pageErrors.length) fail(`shared route ${route.route}: browser exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
+  if (failedRequests.length) fail(`shared route ${route.route}: failed request(s): ${failedRequests.slice(0, 3).join(' | ')}`);
+
+  try {
+    await page.locator(route.close).first().click({ timeout: 5000 });
+    await page.waitForFunction(() => window.SharedPages?.getActive() === null, null, { timeout: 5000 });
+  } catch (error) {
+    fail(`shared route ${route.route}: close/return action failed; ${String(error).split('\\n')[0]}`);
+  }
+  await page.close();
+}
+
+
+const sharedBooks = [
+  { kind: 'forgers', label: 'Forgers' },
+  { kind: 'humanMachines', label: 'Human and its Machines' },
+  { kind: 'tabahian', label: 'Tabahian' },
+];
+
+for (const book of sharedBooks) {
+  const page = await context.newPage();
+  page.setDefaultTimeout(7000);
+  const pageErrors = [];
+  const failedRequests = [];
+  page.on('pageerror', (error) => pageErrors.push(error.message));
+  page.on('requestfailed', (request) => failedRequests.push(request.url() + ': ' + (request.failure()?.errorText || 'request failed')));
+  const response = await page.goto(`${baseURL}/index.html`, { waitUntil: 'domcontentloaded' });
+  if (!response || !response.ok()) {
+    fail(`shared book ${book.kind}: HTTP ${response?.status() ?? 'no response'}`);
+    await page.close();
+    continue;
+  }
+
+  await page.waitForFunction(() => Boolean(window.BookNavigation && window.SiteI18n?.getCatalog()), null, { timeout: 7000 }).catch(() => {});
+  const splash = page.locator('#splash');
+  if (await splash.count() && await splash.isVisible()) {
+    await splash.click().catch(() => {});
+    await page.waitForTimeout(100);
+  }
+
+  try {
+    await page.evaluate((kind) => window.BookNavigation.openBook('share', kind), book.kind);
+    await page.waitForFunction(() => document.querySelector('#book-page.is-active') && document.querySelector('#book-body')?.children.length, null, { timeout: 5000 });
+  } catch (error) {
+    fail(`shared book ${book.kind}: did not open/render; ${String(error).split('\\n')[0]}`);
+  }
+
+  for (const language of languages) {
+    try {
+      await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
+      await page.waitForFunction(({ code, dir }) =>
+        document.documentElement.lang === code &&
+        document.documentElement.dir === dir &&
+        document.querySelector(`[data-site-lang="${code}"]`)?.getAttribute('aria-pressed') === 'true' &&
+        document.querySelector('#book-page.is-active') !== null,
+      language, { timeout: 5000 });
+      const populated = await page.locator('#book-body').evaluate((el) => Boolean(el.textContent.trim() || el.children.length));
+      if (!populated) fail(`shared book ${book.kind}: content became empty in ${language.code}`);
+    } catch (error) {
+      fail(`shared book ${book.kind}: language ${language.code} transition failed; ${String(error).split('\\n')[0]}`);
+      break;
+    }
+  }
+
+  if (pageErrors.length) fail(`shared book ${book.kind}: browser exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
+  if (failedRequests.length) fail(`shared book ${book.kind}: failed request(s): ${failedRequests.slice(0, 3).join(' | ')}`);
+
+  for (const viewport of viewports) {
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
+    await page.waitForTimeout(75);
+    const metrics = await page.evaluate(() => ({ innerWidth: innerWidth, documentWidth: document.documentElement.scrollWidth }));
+    if (metrics.documentWidth > metrics.innerWidth + 2) fail(`shared book ${book.kind} @ ${viewport.name}: horizontal overflow ${metrics.documentWidth}>${metrics.innerWidth}`);
+  }
+
+  try {
+    await page.locator('#book-close').click({ timeout: 5000 });
+    await page.waitForFunction(() => !document.querySelector('#book-page')?.classList.contains('is-active'), null, { timeout: 5000 });
+  } catch (error) {
+    fail(`shared book ${book.kind}: close/return action failed; ${String(error).split('\\n')[0]}`);
+  }
+  console.log(`OK shared book workspace: ${book.label}`);
+  await page.close();
+}
+
+  for (const route of sharedRoutes) {
     const page = await context.newPage();
     page.setDefaultTimeout(5000);
-    await page.goto(`${baseURL}/${encodeURIComponent(file)}`, { waitUntil: 'domcontentloaded' });
+    await page.goto(`${baseURL}/index.html?page=${encodeURIComponent(route.route)}`, { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction((key) => window.SharedPages?.getActive() === key && document.querySelector('#shared-page-host .child-page.is-active'), route.route, { timeout: 7000 }).catch(() => {});
+    await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 }).catch(() => {});
     for (const viewport of viewports) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.waitForTimeout(100);
@@ -146,10 +307,10 @@ try {
         bodyWidth: document.body.scrollWidth,
       }));
       if (metrics.documentWidth > metrics.innerWidth + 2) {
-        fail(`${file} @ ${viewport.name} (${viewport.width}px): document horizontal overflow ${metrics.documentWidth}>${metrics.innerWidth}`);
+        fail(`shared route ${route.route} @ ${viewport.name} (${viewport.width}px): document horizontal overflow ${metrics.documentWidth}>${metrics.innerWidth}`);
       }
     }
-    console.log(`OK responsive viewport sweep: ${file}`);
+    console.log(`OK responsive viewport sweep: ${route.route}`);
     await page.close();
   }
 } finally {
