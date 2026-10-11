@@ -15,7 +15,10 @@
   }
 
   .app {
-    width: 100vw;
+    /* Match the body's content box, not the viewport unit. 100vw can include
+       the scrollbar gutter; when the root direction flips, grid placement of
+       this oversized child can shift the entire application horizontally. */
+    width: 100%;
     height: 100dvh;
     max-width: none;
     max-height: none;
