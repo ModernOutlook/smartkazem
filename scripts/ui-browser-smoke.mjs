@@ -130,12 +130,12 @@ try {
         for (const selector of Object.keys(before || {})) {
           const a = before[selector], b = after?.[selector];
           if (!a || !b) {
-            if (a !== b) fail(\`\${label}: missing geometry for \${selector}\`);
+            if (a !== b) fail(`${label}: missing geometry for ${selector}`);
             continue;
           }
           for (const key of ['x', 'y', 'width', 'height']) {
             if (Math.abs(a[key] - b[key]) > 2) {
-              fail(\`\${label}: \${selector} shifted on language direction change (\${key}: \${a[key]} → \${b[key]})\`);
+              fail(`${label}: ${selector} shifted on language direction change (${key}: ${a[key]} → ${b[key]})`);
               break;
             }
           }
@@ -147,9 +147,9 @@ try {
       await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
       const landingBaseline = await measure(landingSelectors);
       for (const language of languages) {
-        await page.locator(\`[data-site-lang="\${language.code}"]\`).click();
+        await page.locator(`[data-site-lang="${language.code}"]`).click();
         await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
-        compareGeometry(landingBaseline, await measure(landingSelectors), \`landing RTL/LTR \${language.code}\`);
+        compareGeometry(landingBaseline, await measure(landingSelectors), `landing RTL/LTR ${language.code}`);
       }
 
       const realmCases = [
@@ -160,16 +160,16 @@ try {
         { id: 'share', root: '#share-page', parts: ['.share-head', '.share-actions'], close: '#share-close' },
       ];
       for (const realm of realmCases) {
-        await page.locator(\`#realm-\${realm.id}\`).click();
+        await page.locator(`#realm-${realm.id}`).click();
         await page.waitForFunction((selector) => document.querySelector(selector)?.classList.contains('is-active'), realm.root);
-        const selectors = [realm.root, ...realm.parts.map((part) => \`\${realm.root} \${part}\`)];
+        const selectors = [realm.root, ...realm.parts.map((part) => `${realm.root} ${part}`)];
         await page.locator('[data-site-lang="fa"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
         const baseline = await measure(selectors);
         for (const language of languages) {
-          await page.locator(\`[data-site-lang="\${language.code}"]\`).click();
+          await page.locator(`[data-site-lang="${language.code}"]`).click();
           await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
-          compareGeometry(baseline, await measure(selectors), \`\${realm.id} realm RTL/LTR \${language.code}\`);
+          compareGeometry(baseline, await measure(selectors), `${realm.id} realm RTL/LTR ${language.code}`);
         }
         await page.locator(realm.close).click();
         await page.waitForFunction(() => document.querySelector('#home-page')?.classList.contains('is-active'));
@@ -177,7 +177,7 @@ try {
     }
 
     if (pageErrors.length) {
-      fail(\`\${file}: browser runtime exception(s): \${pageErrors.slice(0, 3).join(' | ')}\`);
+      fail(`${file}: browser runtime exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
     }
     if (failedRequests.length) {
       fail(`${file}: failed browser request(s): ${failedRequests.slice(0, 3).join(' | ')}`);
