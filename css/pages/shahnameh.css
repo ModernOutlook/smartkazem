@@ -4,10 +4,7 @@
 
 /* Extracted from inline presentation block 2. */
 .top,.actions,.title{min-width:0}.actions{max-width:100%}
-.global-lang{position:absolute;z-index:20;top:calc(12px + var(--ui-safe-top));left:50%;transform:translateX(-50%);display:flex;gap:2px;align-items:center;justify-content:center;max-width:calc(100% - 16px);padding:3px;border:1px solid var(--line);background:rgba(0,0,0,.35);border-radius:22px;direction:ltr;flex-wrap:wrap;box-sizing:border-box}
-.global-lang button{min-width:40px;min-height:36px;border:0;background:transparent;color:var(--muted);padding:6px 8px;border-radius:16px;cursor:pointer;font:700 .62rem/1 Vazirmatn,system-ui,sans-serif;white-space:nowrap;flex:0 1 auto}
-.global-lang button.active{background:rgba(215,174,85,.16);color:var(--text)}
-@media(max-width:520px){.actions{align-items:flex-start;flex-direction:column}.top{padding-top:58px}}
+@media(max-width:520px){.actions{align-items:flex-start;flex-direction:column}.top{padding-top:18px}}
 
 /* Extracted from inline presentation block 3. */
 /* Shahnameh Reading: full-page artwork with transparent reading surfaces. */
