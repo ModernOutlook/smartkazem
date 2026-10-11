@@ -549,6 +549,13 @@ background-size:131px 149px,163px 137px,157px 173px,139px 151px,181px 127px;opac
   display: grid;
 }
 
+/* Explicit single-column placement prevents the home grid's implicit columns
+ * from reversing when html[dir] changes. Keep physical realm geometry fixed. */
+.page.home-page.is-active {
+  grid-template-columns: minmax(0, 1fr);
+  grid-auto-flow: row;
+}
+
 .page.book-page.is-active {
   display: block;
 }
