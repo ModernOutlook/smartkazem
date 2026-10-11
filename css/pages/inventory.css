@@ -7,8 +7,8 @@
   --inventory-muted:rgba(231,245,239,.62);
   --inventory-glow:rgba(223,255,240,.2);
 }
-html,body{margin:0;min-height:100%;background:var(--inventory-bg);color:var(--inventory-text)}
-body{font-family:Vazirmatn,system-ui,sans-serif;overflow-x:hidden}
+html{scroll-behavior:smooth}
+.inventory-page{color:var(--inventory-text);font-family:Vazirmatn,system-ui,sans-serif;overflow-x:clip}
 .inventory-page{
   min-height:100svh;
   padding:calc(78px + var(--ui-safe-top)) max(18px,var(--ui-safe-right)) 48px max(18px,var(--ui-safe-left));

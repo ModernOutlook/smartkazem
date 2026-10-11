@@ -1,6 +1,6 @@
 
 <a class="skip-link" href="#reader" data-i18n="labels.skipToContent">پرش به متن قسمت</a>
-<main class="page child-page" id="main-content"><div class="shell">
+<main class="page child-page emergence-page" id="main-content"><div class="shell">
 <header class="top"><div class="title"><div class="eyebrow">Modern Outlook</div><h1>فصل اول ظهور</h1><p>روایتی دربارهٔ ترس، حقیقت و انتخاب؛ فصل نخست در ۱۹ قسمت.</p></div><div class="actions"><button class="btn" id="emergence-close" type="button" data-i18n="labels.back">بازگشت</button></div></header>
 <section class="controls" aria-labelledby="episode-list-heading"><h3 id="episode-list-heading">قسمت‌های فصل اول</h3><nav aria-label="انتخاب قسمت" data-i18n-aria="labels.episodeNavigation"><div class="episode-list" id="episode-list"></div></nav></section>
 <article class="reader" id="reader" tabindex="-1" aria-live="polite" aria-atomic="false"></article>

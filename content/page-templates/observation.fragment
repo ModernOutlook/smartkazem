@@ -1,4 +1,4 @@
-<section class="page child-page">
+<section class="page child-page observation-page">
 <header class="book-head"><div class="book-title" id="observation-book-title" data-i18n="pages.observation.title">📖 سرزمین مشاهده</div><button class="book-close" id="close" data-i18n-aria="pages.observation.close" aria-label="بستن">✕</button></header>
 <article class="book-body" id="body">
 <div class="head">
