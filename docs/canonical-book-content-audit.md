@@ -160,10 +160,3 @@ These browser tests run the PR branch through Playwright using the workflow's lo
 
 Emergence II episodes 23–30 still need a deliberate source-to-translation paragraph-boundary review. The Persian source contains many single newlines (roughly 74–124 per episode), but the current source parser splits only on blank lines, so it produces one paragraph per episode; EN/AR/ZH each contain 8–16 paragraph entries. The single newlines could be line breaks within prose/dialogue rather than paragraph separators. Runtime rendering has been verified against each catalog, but this separate fidelity/segmentation question is not certified and must not be silently normalized.
 
-<!-- emergence-2-paragraph-alignment-2026-10-12 -->
-
-### Emergence II paragraph alignment (episodes 20–30)
-
-Persian source structure is canonical: every non-empty source line is one paragraph and blank lines are separators. EN/AR/ZH translation content is conserved and re-bound to the ordered Persian line sequence. Reproducible manifest: `docs/emergence-2-paragraph-manifest.json`.
-
-Counts: 20=90, 21=118, 22=125, 23=125, 24=99, 25=105, 26=98, 27=89, 28=110, 29=87, 30=75.
