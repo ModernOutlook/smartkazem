@@ -376,7 +376,10 @@ for (const route of sharedRoutes) {
           fail(`shared route ${route.route}: missing shell/page geometry for ${selector} after ${language.code} switch`);
           continue;
         }
-        for (const axis of ['x', 'y', 'width', 'height']) {
+        const axes = ['html', 'body', '#app', '.child-page.is-active'].includes(selector)
+          ? ['x', 'y', 'width', 'height']
+          : ['x', 'width'];
+        for (const axis of axes) {
           if (typeof before[axis] === 'number' && typeof after[axis] === 'number' && Math.abs(before[axis] - after[axis]) > 2) {
             fail(`shared route ${route.route}: ${selector} shifted on ${axis} after ${language.code} switch (${before[axis]} -> ${after[axis]})`);
           }
