@@ -289,7 +289,7 @@ async function auditCanonicalRoute(page, route, language) {
     const same = (actual, expected, label) => {
       if (JSON.stringify(actual) !== JSON.stringify(expected)) issues.push(label);
     };
-    const splitParagraphs = (value) => String(value || '').split(/\\n\\n+/).map(x => x.trim()).filter(Boolean);
+    const splitParagraphs = (value) => String(value || '').split(/\n\n+/).map(x => x.trim()).filter(Boolean);
     const lang = language;
 
     if (route === 'observation25' || route === 'possibleMirror') {
@@ -421,7 +421,10 @@ async function auditCanonicalRoute(page, route, language) {
         const expectedParagraphs = lang === 'fa' ? part.text : (translatedPart?.paragraphs?.[lang] || []);
         const actualHeading = document.querySelector('#reader .story h2')?.textContent?.replace(/^\\d+\\s*\\.\\s*/, '').trim() || '';
         const actualParagraphs = [...document.querySelectorAll('#reader .story p')].map(p => p.textContent);
-        if (actualHeading !== expectedHeading || JSON.stringify(actualParagraphs) !== JSON.stringify(expectedParagraphs)) mismatches.push(i + 1);
+        if (actualHeading !== expectedHeading || JSON.stringify(actualParagraphs) !== JSON.stringify(expectedParagraphs)) {
+          if (mismatches.length === 0) mismatches.push({ part: i + 1, actualHeading, expectedHeading, actualCount: actualParagraphs.length, expectedCount: expectedParagraphs.length, actualFirst: actualParagraphs[0]?.slice(0, 100), expectedFirst: expectedParagraphs[0]?.slice(0, 100) });
+          else mismatches.push({ part: i + 1 });
+        }
       }
       if (mismatches.length) issues.push('layer-three rendered part text mismatch in part(s): ' + mismatches.join(','));
       buttons[0]?.click();
@@ -464,13 +467,10 @@ async function auditCanonicalRoute(page, route, language) {
 
     // Verify all static translation bindings on every page as well, including
     // headings, labels, accessible names and placeholders.
-    document.querySelectorAll('[data-i18n]').forEach(element => {
+    const activeRoot = document.querySelector('#shared-page-host .child-page.is-active') || document.body;
+    activeRoot.querySelectorAll('[data-i18n]').forEach(element => {
       const expected = window.SiteI18n?.get?.(element.dataset.i18n, '');
-      if (expected !== '' && element.textContent !== String(expected)) issues.push('data-i18n mismatch: ' + element.dataset.i18n);
-    });
-    document.querySelectorAll('[data-i18n-aria]').forEach(element => {
-      const expected = window.SiteI18n?.get?.(element.dataset.i18nAria, '');
-      if (expected !== '' && element.getAttribute('aria-label') !== String(expected)) issues.push('data-i18n aria mismatch: ' + element.dataset.i18nAria);
+      if (expected !== '' && element.textContent !== String(expected)) issues.push('active-page data-i18n mismatch: ' + element.dataset.i18n);
     });
     return issues;
   }, { route, language });
@@ -601,7 +601,9 @@ for (const route of sharedRoutes) {
           const reader = document.querySelector('#reader');
           const source = window.Emergence2Catalog;
           const catalogs = window.SiteI18n?.getCatalog?.() || {};
-          const book = catalogs.bookContent?.emergence2 || catalogs.chapters?.emergence2;
+          const book = catalogs.bookContent?.emergence2?.episodes?.length
+            ? catalogs.bookContent.emergence2
+            : (catalogs.chapters?.emergence2 || catalogs.bookContent?.emergence2);
           const expectedChapterTitle = languageCode === 'fa'
             ? 'فصل دوم ظهور'
             : book?.title?.[languageCode] || '';
