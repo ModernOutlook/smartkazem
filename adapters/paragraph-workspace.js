@@ -16,34 +16,74 @@
       }, {});
     }
     if (translatedCriteriaCache.has(lang)) return translatedCriteriaCache.get(lang);
+
     const canonicalItems = core.CRITERIA_TRANSLATION_ITEMS;
-    const translated = await window.ParagraphTranslation.fromPersianBatch(
-      canonicalItems.map(item => item.id + ': ' + item.text), lang
-    );
-    if (!Array.isArray(translated) || translated.length !== canonicalItems.length ||
-        translated.some(value => typeof value !== 'string' || !value.trim())) {
-      throw new Error('ترجمهٔ معیارهای داوری کامل یا معتبر نیست؛ ارزیابی انجام نشد.');
+    let lastIssue = '';
+    for (let attempt = 0; attempt < 2; attempt += 1) {
+      const translated = await window.ParagraphTranslation.fromPersianBatch(
+        canonicalItems.map(item => item.id + ': ' + item.text), lang
+      );
+      if (!Array.isArray(translated) || translated.length !== canonicalItems.length ||
+          translated.some(value => typeof value !== 'string' || !value.trim())) {
+        lastIssue = 'translation count or empty item';
+        continue;
+      }
+
+      const cleanItems = translated.map((value, index) => {
+        const expectedId = canonicalItems[index].id;
+        const prefix = value.match(/^\\s*([MSTERC]\\d+)\\s*[:：-]\\s*/);
+        if (prefix && prefix[1] !== expectedId) {
+          throw new Error('شناسهٔ معیار ترجمه‌شده با اصل مرجع مطابقت ندارد: ' + expectedId);
+        }
+        return prefix ? value.slice(prefix[0].length).trim() : value.trim();
+      });
+      if (cleanItems.some(value => !value)) {
+        lastIssue = 'translated criterion is empty';
+        continue;
+      }
+
+      let verification;
+      try {
+        verification = await window.ParagraphLLM.complete([
+          {
+            role: 'system',
+            content: 'You are a strict bilingual auditor of philosophical criteria. Compare each target-language translation with its Persian source. Judge whether it preserves the complete claim, negation, modality-independent logical relation, and scope. Do not judge whether the principle is true. Return only JSON: {"checks":[{"id":"M1","faithful":true,"issue":""}]}. Include one check per input item in the same order. Set faithful=false for any omission, addition, reversal, or meaningful ambiguity.'
+          },
+          {
+            role: 'user',
+            content: JSON.stringify({
+              targetLanguage: LANGUAGE_NAMES[lang],
+              items: canonicalItems.map((item, index) => ({
+                id: item.id,
+                sourcePersian: item.text,
+                translation: cleanItems[index]
+              }))
+            })
+          }
+        ], { temperature: 0.1 });
+      } catch (error) {
+        lastIssue = String(error && error.message || 'translation verification failed');
+        continue;
+      }
+
+      const checks = verification && verification.checks;
+      const validChecks = Array.isArray(checks) && checks.length === canonicalItems.length &&
+        checks.every((check, index) => check && check.id === canonicalItems[index].id && typeof check.faithful === 'boolean');
+      if (validChecks && checks.every(check => check.faithful === true)) {
+        const byId = new Map();
+        cleanItems.forEach((value, index) => byId.set(canonicalItems[index].id, value));
+        const criteria = core.DOMAIN_ORDER.reduce((result, domain) => {
+          result[domain] = core.ALL_CRITERIA[domain].map(item => byId.get(item.id));
+          return result;
+        }, {});
+        translatedCriteriaCache.set(lang, criteria);
+        return criteria;
+      }
+      lastIssue = validChecks
+        ? checks.filter(check => !check.faithful).map(check => check.id + ': ' + String(check.issue || 'meaning drift')).join('; ')
+        : 'invalid criterion-verification schema';
     }
-    const byId = new Map();
-    translated.forEach((value, index) => {
-      const expectedId = canonicalItems[index].id;
-      const separator = value.indexOf(':');
-      const prefix = separator >= 0 ? value.slice(0, separator).trim() : '';
-      if (/^[MSTERC]\\d+$/.test(prefix) && prefix !== expectedId) {
-        throw new Error('شناسهٔ معیار ترجمه‌شده با اصل مرجع مطابقت ندارد: ' + expectedId);
-      }
-      const cleaned = (prefix === expectedId ? value.slice(separator + 1) : value).trim();
-      if (!cleaned) {
-        throw new Error('ترجمهٔ معیار ' + expectedId + ' ساختار قابل‌اعتماد ندارد.');
-      }
-      byId.set(expectedId, cleaned);
-    });
-    const criteria = core.DOMAIN_ORDER.reduce((result, domain) => {
-      result[domain] = core.ALL_CRITERIA[domain].map(item => byId.get(item.id));
-      return result;
-    }, {});
-    translatedCriteriaCache.set(lang, criteria);
-    return criteria;
+    throw new Error('ترجمهٔ معیارهای ' + LANGUAGE_NAMES[lang] + ' از نظر معنایی تأیید نشد؛ برای جلوگیری از تغییر اصول، داوری متوقف شد. ' + lastIssue);
   }
 
   async function evaluateText(text, language) {
