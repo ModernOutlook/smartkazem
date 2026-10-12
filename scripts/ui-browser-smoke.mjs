@@ -144,6 +144,7 @@ try {
               x: rect.x, y: rect.y, width: rect.width, height: rect.height,
               clientWidth: element.clientWidth, scrollWidth: element.scrollWidth,
               clientHeight: element.clientHeight, scrollHeight: element.scrollHeight,
+              scrollLeft: element.scrollLeft,
               direction: style.direction, writingMode: style.writingMode,
               display: style.display, position: style.position,
               widthStyle: style.width, maxWidth: style.maxWidth,
@@ -170,13 +171,21 @@ try {
       }, selectors);
       const compareGeometry = (before, after, label) => {
         let viewportDiagnosticsLogged = false;
-        for (const selector of Object.keys(before || {}).filter((key) => !key.startsWith('__'))) {
-          const a = before[selector], b = after && after[selector];
+        const selectorsToCompare = [
+          ...Object.keys(before || {}).filter((key) => !key.startsWith('__')),
+          ...['html', 'body', '#app'].filter((selector) => before?.__viewport?.shell?.[selector] && after?.__viewport?.shell?.[selector]),
+        ];
+        for (const selector of selectorsToCompare) {
+          const a = before[selector] || before?.__viewport?.shell?.[selector];
+          const b = (after && after[selector]) || after?.__viewport?.shell?.[selector];
           if (!a || !b) {
             if (a !== b) fail(label + ': missing geometry for ' + selector);
             continue;
           }
-          for (const key of ['x', 'y', 'width', 'height']) {
+          const axes = ['html', 'body', '#app'].includes(selector)
+            ? ['x', 'y', 'width', 'height']
+            : ['x', 'width'];
+          for (const key of axes) {
             if (Math.abs(a[key] - b[key]) > 2) {
               fail(label + ': ' + selector + ' shifted (' + key + ': ' + a[key] + ' -> ' + b[key] + ')');
               if (!viewportDiagnosticsLogged) {
@@ -204,6 +213,9 @@ try {
           before: landingBaseline.__viewport,
           after: afterDirectionChange.__viewport,
         }));
+        if (afterDirectionChange.__viewport.shell['#app']?.scrollLeft !== 0) {
+          fail('landing RTL/LTR ' + language.code + ': #app has nonzero horizontal scroll offset (' + afterDirectionChange.__viewport.shell['#app']?.scrollLeft + ')');
+        }
         compareGeometry(landingBaseline, afterDirectionChange, 'landing RTL/LTR ' + language.code);
       }
       const realmCases = [
@@ -263,10 +275,10 @@ const sharedRoutes = [
   { route: 'observation25', content: '#observation25-tabs', close: '#observation25-close' },
   { route: 'possibleMirror', content: '#possible-mirror-tabs', close: '#possible-mirror-close' },
   { route: 'emergence2', content: '#episode-list', close: '#emergence2-close' },
-  { route: 'observation', content: '#observation-source-title', close: '#close' },
+  { route: 'observation', content: '#observation-source-title', close: '#close', measure: ['.observation-page', '.book-head', '.book-body'] },
   { route: 'layer3', content: '#chapters', close: '#close' },
-  { route: 'disturbedManifesto', content: '#part-list', close: '#manifesto-close' },
-  { route: 'zero', content: '#zero-story', close: '#zero-back' },
+  { route: 'disturbedManifesto', content: '#part-list', close: '#manifesto-close', measure: ['.disturbed-manifesto-page', '.top', '.reader'] },
+  { route: 'zero', content: '#zero-story', close: '#zero-back', measure: ['.zero-page', '.zero-header', '.zero-article'] },
   { route: 'inventory', content: '#inventory-grid', close: 'a.inventory-home' },
 ];
 
@@ -284,27 +296,90 @@ for (const route of sharedRoutes) {
     continue;
   }
 
+  let measureRouteGeometry;
+  let routeGeometryBaseline;
   try {
     await page.waitForFunction((key) => window.SharedPages?.getActive() === key && document.querySelector('#shared-page-host .child-page.is-active'), route.route, { timeout: 7000 });
     await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
+    const splash = page.locator('#splash');
+    if (await splash.count() && await splash.isVisible()) {
+      await splash.click().catch(() => {});
+      await page.waitForTimeout(100);
+    }
     const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
     if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
+    measureRouteGeometry = async () => page.evaluate((selectors) => {
+      const root = document.querySelector('#shared-page-host .child-page.is-active');
+      const rectOf = (element) => {
+        if (!element) return null;
+        const rect = element.getBoundingClientRect();
+        const style = getComputedStyle(element);
+        return {
+          x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+          direction: style.direction, writingMode: style.writingMode,
+          display: style.display, position: style.position,
+          widthStyle: style.width, maxWidth: style.maxWidth,
+          inlineWidth: element.style.width, inlineHeight: element.style.height,
+          inlineInset: element.style.inset,
+          clientWidth: element.clientWidth, scrollWidth: element.scrollWidth,
+          scrollLeft: element.scrollLeft,
+          offsetLeft: element.offsetLeft, offsetTop: element.offsetTop,
+          zoom: style.zoom, translate: style.translate, scale: style.scale,
+          offsetParent: element.offsetParent ? {
+            id: element.offsetParent.id, className: element.offsetParent.className,
+            x: element.offsetParent.getBoundingClientRect().x,
+            y: element.offsetParent.getBoundingClientRect().y,
+            width: element.offsetParent.getBoundingClientRect().width,
+            height: element.offsetParent.getBoundingClientRect().height,
+            direction: getComputedStyle(element.offsetParent).direction,
+            clientWidth: element.offsetParent.clientWidth,
+            scrollWidth: element.offsetParent.scrollWidth,
+            scrollLeft: element.offsetParent.scrollLeft,
+          } : null,
+          overflowX: style.overflowX, overflowY: style.overflowY,
+          gridTemplateColumns: style.gridTemplateColumns,
+          gridTemplateAreas: style.gridTemplateAreas, gridArea: style.gridArea,
+          gridColumnStart: style.gridColumnStart, gridColumnEnd: style.gridColumnEnd,
+          inset: style.inset, left: style.left, right: style.right,
+          marginLeft: style.marginLeft, marginRight: style.marginRight,
+          transform: style.transform,
+        };
+      };
+      const result = {
+        __shell: Object.fromEntries(['html', 'body', '#app', '#shared-page-host', '[data-shared-route]', '.child-page.is-active'].map((selector) => {
+          const element = document.querySelector(selector);
+          return [selector, rectOf(element)];
+        })),
+        __viewport: {
+          innerWidth: window.innerWidth, clientWidth: document.documentElement.clientWidth,
+          scrollX: window.scrollX, scrollY: window.scrollY,
+          documentScrollWidth: document.documentElement.scrollWidth,
+          bodyScrollWidth: document.body.scrollWidth,
+        },
+      };
+      for (const selector of selectors) {
+        const element = root && (root.matches(selector) ? root : root.querySelector(selector));
+        result[selector] = rectOf(element);
+      }
+      return result;
+    }, route.measure || []);
+    await page.locator('[data-site-lang="fa"]').first().click({ timeout: 5000 });
+    await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl', null, { timeout: 5000 });
+    routeGeometryBaseline = await measureRouteGeometry();
+    if (routeGeometryBaseline.__shell['#app']?.scrollLeft !== 0) {
+      fail('shared route ' + route.route + ': #app has nonzero horizontal scroll offset in fa/rtl (' + routeGeometryBaseline.__shell['#app']?.scrollLeft + ')');
+    }
+    console.info('LAYOUT SNAPSHOT ' + route.route + ' fa/rtl baseline ' + JSON.stringify(routeGeometryBaseline));
     const geometry = await page.evaluate(() => {
       const app = document.querySelector('#app')?.getBoundingClientRect();
       const root = document.querySelector('#shared-page-host .child-page.is-active')?.getBoundingClientRect();
       return app && root ? { app: { x: app.x, y: app.y, width: app.width, height: app.height }, root: { x: root.x, y: root.y, width: root.width, height: root.height } } : null;
     });
-    if (!geometry || Math.abs(geometry.app.width - geometry.root.width) > 2 || Math.abs(geometry.app.height - geometry.root.height) > 2 || Math.abs(geometry.app.x - geometry.root.x) > 2 || Math.abs(geometry.app.y - geometry.root.y) > 2) {
+    if (!geometry || Math.abs(geometry.app.width - geometry.root.width) > 2 || Math.abs(geometry.app.x - geometry.root.x) > 2 || Math.abs(geometry.app.y - geometry.root.y) > 2) {
       fail(`shared route ${route.route}: child page does not fill shared shell; geometry=${JSON.stringify(geometry)}`);
     }
   } catch (error) {
     fail(`shared route ${route.route}: fragment/content did not mount; ${String(error).split('\\n')[0]}`);
-  }
-
-  const splash = page.locator('#splash');
-  if (await splash.count() && await splash.isVisible()) {
-    await splash.click().catch(() => {});
-    await page.waitForTimeout(100);
   }
 
   for (const language of languages) {
@@ -318,6 +393,30 @@ for (const route of sharedRoutes) {
       { ...language, key: route.route }, { timeout: 5000 });
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
+      const currentGeometry = await measureRouteGeometry();
+      if (currentGeometry.__shell['#app']?.scrollLeft !== 0) {
+        fail('shared route ' + route.route + ': #app has nonzero horizontal scroll offset after ' + language.code + ' switch (' + currentGeometry.__shell['#app']?.scrollLeft + ')');
+      }
+      console.info('LAYOUT SNAPSHOT ' + route.route + ' -> ' + language.code + ' ' + JSON.stringify(currentGeometry));
+      const geometrySelectors = ['html', 'body', '#app', '.child-page.is-active', ...(route.measure || [])];
+      for (const selector of geometrySelectors) {
+        const before = selector.startsWith('__') ? routeGeometryBaseline[selector] : (routeGeometryBaseline[selector] || routeGeometryBaseline.__shell?.[selector]);
+        const after = selector.startsWith('__') ? currentGeometry[selector] : (currentGeometry[selector] || currentGeometry.__shell?.[selector]);
+        if (!before || !after) {
+          fail(`shared route ${route.route}: missing shell/page geometry for ${selector} after ${language.code} switch`);
+          continue;
+        }
+        const axes = ['html', 'body', '#app'].includes(selector)
+          ? ['x', 'y', 'width', 'height']
+          : selector === '.child-page.is-active'
+            ? ['x', 'y', 'width']
+            : ['x', 'width'];
+        for (const axis of axes) {
+          if (typeof before[axis] === 'number' && typeof after[axis] === 'number' && Math.abs(before[axis] - after[axis]) > 2) {
+            fail(`shared route ${route.route}: ${selector} shifted on ${axis} after ${language.code} switch (${before[axis]} -> ${after[axis]})`);
+          }
+        }
+      }
     } catch (error) {
       fail(`shared route ${route.route}: language ${language.code} transition failed; ${String(error).split('\\n')[0]}`);
       break;

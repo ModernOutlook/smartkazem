@@ -27,7 +27,7 @@ button:focus-visible{outline:2px solid #fff;outline-offset:4px}
   width:var(--page-w);
   height:var(--page-h);
   aspect-ratio:3/4;
-  overflow:hidden;
+  overflow:clip;
   isolation:isolate;
   background:#01050a;
   box-shadow:0 0 0 1px rgba(130,190,240,.12),0 30px 100px rgba(0,0,0,.9);
@@ -169,7 +169,7 @@ font-size:.82rem;line-height:2;color:#f2ffe9;text-shadow:0 1px 8px rgba(0,0,0,.1
 /* ===== Landing page stability / interaction layer ===== */
 html{width:100%;min-height:100%;background:#000}
 body{width:100%;min-height:100vh;min-height:100dvh;overflow:hidden}
-.app{contain:layout paint;overflow:hidden}
+.app{contain:layout paint;overflow:clip}
 .home-page{overflow:hidden}
 .menu-svg{touch-action:manipulation;user-select:none;-webkit-user-select:none}
 .realm{outline:none}
@@ -871,9 +871,6 @@ html[dir="rtl"] .home-page > .info {
   text-align: right;
 }
 
-
-/* Keep scrollbar geometry stable while the document switches RTL/LTR. */
-html,body{scrollbar-gutter:stable both-edges}
 
 /* Center-circle logo viewer → inventory navigation. */
 .logo-art{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;height:auto;max-height:none}
