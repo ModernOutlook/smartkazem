@@ -7,8 +7,7 @@ def srcs(t):
  if len(v)!=11: raise RuntimeError(f'expected 11 source strings, got {len(v)}')
  return [{'number':20+i,'lines':[x.strip() for x in json.loads('"'+r+'"').splitlines() if x.strip()]} for i,r in enumerate(v)]
 def sentences(t):
- out=[]; st=0; terms=set('.!?؟。！？'); cjk=set('。！？'); close=set('»”’\"\'”)]}')
- i=0
+ out=[]; st=0; terms=set('.!?؟。！？'); cjk=set('。！？'); close=set('»”’\"\'”)]}'); i=0
  while i<len(t):
   ch=t[i]
   if ch not in terms: i+=1; continue
@@ -46,7 +45,7 @@ def align(lines,pars,model,ep,lang):
   out.append(text); rows.append({'index':i+1,'translationSentenceStart':a+1,'translationSentenceEnd':a+k,'similarity':round(q,4),'confidenceException':exc and q<.18})
  return out,rows
 def main():
- data=json.loads(T.read_text(encoding='utf8')); model=SentenceTransformer('paraphrase-multilingual-MiniLM-L12-v2'); man={'schema':3,'rule':'one non-empty Persian source line = one translation paragraph','method':'monotonic multilingual semantic alignment of existing translation sentences; no generated or reordered text','episodes':[]}
+ data=json.loads(T.read_text(encoding='utf8')); model=SentenceTransformer('sentence-transformers/LaBSE'); man={'schema':4,'rule':'one non-empty Persian source line = one translation paragraph','method':'monotonic LaBSE multilingual semantic alignment of existing translation sentences; no generated or reordered text','episodes':[]}
  for ep in srcs(S.read_text(encoding='utf8')):
   row=next(x for x in data['episodes'] if x['number']==ep['number']); a={}; d={}
   for lang in ('en','ar','zh'):
