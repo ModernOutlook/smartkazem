@@ -394,17 +394,75 @@ for (const route of sharedRoutes) {
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
       if (route.route === 'emergence2') {
-        const readerState = await page.evaluate(() => {
+        // Compare the rendered reader against the actual canonical data loaded
+        // by the page: Persian sourceData for fa, and the selected language's
+        // translation catalog for en/ar/zh. Exercise every episode, not only
+        // the initially selected one, and keep a non-first episode active
+        // across language changes.
+        const audit = await page.evaluate((languageCode) => {
           const reader = document.querySelector('#reader');
+          const source = window.Emergence2Catalog;
+          const catalogs = window.SiteI18n?.getCatalog?.() || {};
+          const book = catalogs.bookContent?.emergence2 || catalogs.chapters?.emergence2;
+          const expectedChapterTitle = languageCode === 'fa'
+            ? 'فصل دوم ظهور'
+            : book?.title?.[languageCode] || '';
+          const issues = [];
+          if (document.documentElement.lang !== languageCode) issues.push('html lang mismatch');
+          const expectedDir = ['fa', 'ar'].includes(languageCode) ? 'rtl' : 'ltr';
+          if (document.documentElement.dir !== expectedDir) issues.push('html dir mismatch');
+          if ((document.querySelector('#page-title')?.textContent || '').trim() !== expectedChapterTitle) {
+            issues.push('chapter title differs from canonical catalog');
+          }
+          const buttons = [...document.querySelectorAll('#episode-list .episode')];
+          if (!Array.isArray(source?.episodes) || source.episodes.length !== 11 || buttons.length !== 11) {
+            issues.push('expected 11 canonical episodes and 11 rendered selectors');
+          }
+          const episodeResults = [];
+          for (let index = 0; index < Math.min(11, source?.episodes?.length || 0); index++) {
+            buttons[index]?.click();
+            const base = source.episodes[index];
+            const localized = book?.episodes?.[index];
+            const expectedTitle = languageCode === 'fa'
+              ? base.title
+              : (typeof localized?.title === 'string' ? localized.title : localized?.title?.[languageCode]);
+            const expectedParagraphs = languageCode === 'fa'
+              ? (Array.isArray(base.paragraphs) ? base.paragraphs : [])
+              : (Array.isArray(localized?.paragraphs?.[languageCode]) ? localized.paragraphs[languageCode] : []);
+            const actualTitle = reader?.querySelector('h2')?.textContent?.trim() || '';
+            const actualParagraphs = [...(reader?.querySelectorAll('.prose') || [])].map(node => node.textContent);
+            const placeholder = Boolean(reader?.querySelector('.placeholder'));
+            const rawObject = reader?.textContent?.includes('[object Object]') || false;
+            const titleMatches = actualTitle === (expectedTitle || '');
+            const paragraphsMatch = JSON.stringify(actualParagraphs) === JSON.stringify(expectedParagraphs);
+            if (!expectedTitle || !expectedParagraphs.length || !titleMatches || !paragraphsMatch || placeholder || rawObject) {
+              episodeResults.push({
+                number: base.number,
+                titleMatches,
+                paragraphsMatch,
+                expectedParagraphCount: expectedParagraphs.length,
+                actualParagraphCount: actualParagraphs.length,
+                placeholder,
+                rawObject
+              });
+            }
+          }
+          // Leave episode 24 (index 4) active so the next language transition
+          // proves that the controller preserves the selected episode.
+          buttons[4]?.click();
+          const activeNumber = source.episodes[4]?.number;
+          const activeButtonNumber = buttons.findIndex(button => button.classList.contains('active'));
           return {
-            heading: reader?.querySelector('h2')?.textContent?.trim() || '',
-            paragraphs: [...(reader?.querySelectorAll('.prose') || [])].map(node => node.textContent.trim()).filter(Boolean),
-            placeholder: Boolean(reader?.querySelector('.placeholder')),
-            rawObject: reader?.textContent?.includes('[object Object]') || false
+            expectedChapterTitle,
+            actualChapterTitle: (document.querySelector('#page-title')?.textContent || '').trim(),
+            activeNumber,
+            activeButtonNumber,
+            episodeResults,
+            issues
           };
-        });
-        if (!readerState.heading || readerState.rawObject || readerState.placeholder || !readerState.paragraphs.length) {
-          fail(`Emergence II: ${language.code} did not render a localized episode (heading=${readerState.heading || 'empty'}, paragraphs=${readerState.paragraphs.length}, placeholder=${readerState.placeholder}, rawObject=${readerState.rawObject})`);
+        }, language.code);
+        if (audit.issues.length || audit.episodeResults.length || audit.activeButtonNumber !== 4) {
+          fail(`Emergence II canonical-content mismatch in ${language.code}: ${JSON.stringify(audit)}`);
         }
       }
       const currentGeometry = await measureRouteGeometry();
