@@ -263,6 +263,7 @@ document.getElementById('continuity-emergence').addEventListener('click', () => 
 document.getElementById('continuity-disturbed-manifesto').addEventListener('click', () => openSecondaryPage('disturbed-manifesto.html', 'continuity'));
 document.getElementById('structure-treatise').addEventListener('click', () => openSecondaryPage('philosophical-treatise.html', 'structure'));
 document.getElementById('structure-zero').addEventListener('click', () => openSecondaryPage('zero.html', 'structure'));
+document.getElementById('structure-quantum-maze').addEventListener('click', () => openSecondaryPage('quantum-maze', 'structure'));
 document.getElementById('share-human-machines').addEventListener('click', () => BookNavigation.openBook('share', 'humanMachines'));
 document.getElementById('share-forgers').addEventListener('click', () => BookNavigation.openBook('share', 'forgers'));
 document.getElementById('share-tabahian').addEventListener('click', () => BookNavigation.openBook('share', 'tabahian'));
