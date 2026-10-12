@@ -19,7 +19,7 @@ async function main() {
   assert.equal(core.DOMAIN_NAMES.R, 'شبیه‌سازی');
   assert.equal(core.DOMAIN_NAMES.C, 'سهام');
   assert.deepEqual(
-    core.DOMAIN_ORDER.map(domain => core.ALL_CRITERIA[domain].length),
+    Array.from(core.DOMAIN_ORDER, domain => core.ALL_CRITERIA[domain].length),
     [9, 9, 11, 10, 10]
   );
 
