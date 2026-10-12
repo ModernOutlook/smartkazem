@@ -515,6 +515,10 @@ The page still owns its semantic HTML and interaction model; the accessibility e
 - Translation completeness remains a separate requirement from source centralization. The audit still flags **تباهیان** because its canonical Persian source has three chapters but the translation reservoir contains only two.
 
 
+## Emergence II translation alignment (2026-10-12)
+
+- Compared all 11 canonical Persian episodes (20–30) with the EN/AR/ZH reservoir. Episode 20’s opening translation paragraph had merged two Persian paragraphs; the boundary is now restored in all three languages without summarizing or deleting content. The machine-readable page manifest now points to the dedicated `translations/emergence-2.json` reservoir.
+
 ## Multi-book translation reservoirs (2026-10-09)
 
 The home page can declare more than one long-form translation source using `meta[name="i18n-catalogs"]`, with semicolon-separated `bookKey=path` entries. `translations/i18n.js` loads each declared JSON reservoir into `SiteI18n.getCatalog().bookContent`; book renderers localize the language-keyed titles, subtitles, chapter labels, and paragraph arrays. This keeps long-form prose out of the global language catalogs and avoids adding a per-book fetch branch to the shared loader.
