@@ -555,3 +555,11 @@ The UI Playwright workflow now checks rendered prose against the actual canonica
 The browser workflow runs Playwright against the PR branch served by a local HTTP server in GitHub Actions. This verifies the actual page runtime built from the proposed code, but is not a claim that the deployed production site has already been tested.
 
 The independent source-format audit for Emergence II episodes 23–30 remains open. Their Persian source strings contain single-newline breaks throughout, while the current parser groups each episode into one paragraph and the translations use 8–16 paragraph entries. These line breaks may be soft line breaks rather than paragraph boundaries; do not automatically split or rewrite the Persian text until that distinction is established.
+
+<!-- emergence-2-paragraph-alignment-2026-10-12 -->
+
+### Emergence II paragraph alignment (episodes 20–30)
+
+Persian source structure is canonical: every non-empty source line is one paragraph and blank lines are separators. EN/AR/ZH translation content is conserved and re-bound to the ordered Persian line sequence. Reproducible manifest: `docs/emergence-2-paragraph-manifest.json`.
+
+Counts: 20=90, 21=118, 22=125, 23=125, 24=99, 25=105, 26=98, 27=89, 28=110, 29=87, 30=75.
