@@ -541,3 +541,17 @@ The short-story reader `content/page-templates/zero.fragment` establishes the ch
 ### Emergence II runtime language-rendering fix (2026-10-12)
 
 The `emergence2` shared-page controller must unwrap the language-keyed reservoir fields before rendering: `episode.title[language]` and `episode.paragraphs[language]`. Passing the objects directly produced `[object Object]` and the missing-episode fallback. The browser smoke test now verifies real localized prose for EN, AR, and ZH, not merely a non-empty reader container. This is separate from the still-pending paragraph-fidelity audit of Persian episodes 23–30.
+
+
+### Canonical-content browser verification (2026-10-12)
+
+The UI Playwright workflow now checks rendered prose against the actual canonical data loaded by each page, rather than treating a non-empty reader as proof of success.
+
+- **Emergence II:** all 11 episodes (20–30) are checked in FA/EN/AR/ZH. For each language, the rendered episode title and every rendered paragraph must exactly match the Persian source object or the selected language's translation reservoir. The test also checks the chapter title, document `lang`/`dir`, absence of placeholders and raw object output, and preservation of the active episode while switching languages.
+- **Other shared content pages:** canonical text checks cover all treatise blocks, all 81 Shahnameh episodes, Emergence I episodes, Observation, Observation 25, Possible Mirror, Layer 3, Disturbed Manifesto, Zero, and every chapter of Forgers, Human and its Machines, and Tabahian. The tests compare the visible DOM text with the page's Persian source or language-specific catalog data.
+- **Site-wide checks:** every HTML page is exercised through the four language controls; shared-page routes also verify language bindings, and the workflow retains its responsive viewport and horizontal-overflow sweep.
+- **Direction correction:** the shared book reader now uses RTL for Persian/Arabic and LTR for English/Chinese. Previously, Chinese was incorrectly forced to RTL.
+
+The browser workflow runs Playwright against the PR branch served by a local HTTP server in GitHub Actions. This verifies the actual page runtime built from the proposed code, but is not a claim that the deployed production site has already been tested.
+
+The independent source-format audit for Emergence II episodes 23–30 remains open. Their Persian source strings contain single-newline breaks throughout, while the current parser groups each episode into one paragraph and the translations use 8–16 paragraph entries. These line breaks may be soft line breaks rather than paragraph boundaries; do not automatically split or rewrite the Persian text until that distinction is established.
