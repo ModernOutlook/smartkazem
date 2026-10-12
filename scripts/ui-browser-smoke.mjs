@@ -144,6 +144,7 @@ try {
               x: rect.x, y: rect.y, width: rect.width, height: rect.height,
               clientWidth: element.clientWidth, scrollWidth: element.scrollWidth,
               clientHeight: element.clientHeight, scrollHeight: element.scrollHeight,
+              scrollLeft: element.scrollLeft,
               direction: style.direction, writingMode: style.writingMode,
               display: style.display, position: style.position,
               widthStyle: style.width, maxWidth: style.maxWidth,
@@ -212,6 +213,9 @@ try {
           before: landingBaseline.__viewport,
           after: afterDirectionChange.__viewport,
         }));
+        if (afterDirectionChange.__viewport.shell['#app']?.scrollLeft !== 0) {
+          fail('landing RTL/LTR ' + language.code + ': #app has nonzero horizontal scroll offset (' + afterDirectionChange.__viewport.shell['#app']?.scrollLeft + ')');
+        }
         compareGeometry(landingBaseline, afterDirectionChange, 'landing RTL/LTR ' + language.code);
       }
       const realmCases = [
@@ -362,6 +366,9 @@ for (const route of sharedRoutes) {
     await page.locator('[data-site-lang="fa"]').first().click({ timeout: 5000 });
     await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl', null, { timeout: 5000 });
     routeGeometryBaseline = await measureRouteGeometry();
+    if (routeGeometryBaseline.__shell['#app']?.scrollLeft !== 0) {
+      fail('shared route ' + route.route + ': #app has nonzero horizontal scroll offset in fa/rtl (' + routeGeometryBaseline.__shell['#app']?.scrollLeft + ')');
+    }
     console.info('LAYOUT SNAPSHOT ' + route.route + ' fa/rtl baseline ' + JSON.stringify(routeGeometryBaseline));
     const geometry = await page.evaluate(() => {
       const app = document.querySelector('#app')?.getBoundingClientRect();
@@ -387,6 +394,9 @@ for (const route of sharedRoutes) {
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
       const currentGeometry = await measureRouteGeometry();
+      if (currentGeometry.__shell['#app']?.scrollLeft !== 0) {
+        fail('shared route ' + route.route + ': #app has nonzero horizontal scroll offset after ' + language.code + ' switch (' + currentGeometry.__shell['#app']?.scrollLeft + ')');
+      }
       console.info('LAYOUT SNAPSHOT ' + route.route + ' -> ' + language.code + ' ' + JSON.stringify(currentGeometry));
       const geometrySelectors = ['html', 'body', '#app', '.child-page.is-active', ...(route.measure || [])];
       for (const selector of geometrySelectors) {
