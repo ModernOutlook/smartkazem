@@ -3,7 +3,12 @@
 'use strict';
 const ENTRY_MODES=Object.freeze({REFERENCE:'reference',EXPERIENCE:'experience'});
 const DOMAIN_ORDER=Object.freeze(['S','T','E','R','C']);
-const STATUS_OPTIONS=Object.freeze([['ok','مطابق'],['warn','مبهم'],['bad','متناقض']]);
+const STATUS_OPTIONS=Object.freeze({
+ fa:[['ok','مطابق'],['warn','مبهم'],['bad','متناقض']],
+ en:[['ok','Consistent'],['warn','Ambiguous'],['bad','Contradictory']],
+ zh:[['ok','一致'],['warn','模糊'],['bad','矛盾']],
+ ar:[['ok','متوافق'],['warn','ملتبس'],['bad','متناقض']]
+});
 const REALM_LABELS=Object.freeze({
  fa:{S:'ساختار',T:'تداوم',E:'تجربه',R:'شبیه‌سازی',C:'سهام'},
  en:{S:'Structure',T:'Continuity',E:'Experience',R:'Simulation',C:'Shares'},
@@ -30,6 +35,7 @@ let entryMode=ENTRY_MODES.EXPERIENCE,currentResults=[];
 let judgmentReturnFocus=null;
 const userJudgments=Object.create(null);
 function getLanguage(){const lang=window.SiteI18n?.getLanguage?.()||'fa';return REALM_LABELS[lang]?lang:'fa'}
+function getStatusOptions(){return STATUS_OPTIONS[getLanguage()]||STATUS_OPTIONS.fa}
 function translate(k,f){return window.SiteI18n?.get?.(k,f)||f}
 function renderHistoryList(id,values){
  const list=document.getElementById(id);if(!list)return;
@@ -58,7 +64,7 @@ function getSourceLabel(m){
 function clearRealmState(){elements.choices.forEach(c=>{c.classList.remove('judgment-ok','judgment-warn','judgment-bad','realm-output');delete c.dataset.judgment;c.removeAttribute('aria-pressed')})}
 function generateRandomTargetJudgments(){
  clearRealmState();
- DOMAIN_ORDER.forEach(d=>{userJudgments[d]=STATUS_OPTIONS[Math.floor(Math.random()*STATUS_OPTIONS.length)][0]});
+ DOMAIN_ORDER.forEach(d=>{userJudgments[d]=getStatusOptions()[Math.floor(Math.random()*getStatusOptions().length)][0]});
  elements.choices.forEach(c=>{const d=c.dataset.domain;c.dataset.target=userJudgments[d];c.classList.add('judgment-'+userJudgments[d],'realm-output');c.setAttribute('aria-pressed','true')});
 }
 function recognitionReady(){return entryMode===ENTRY_MODES.EXPERIENCE&&currentResults.length===1&&DOMAIN_ORDER.every(d=>Boolean(userJudgments[d]))}
@@ -123,7 +129,7 @@ function openJudgmentPopover(button){
  const d=button.dataset.domain,name=button.querySelector('span')?.textContent||'';
  elements.choices.forEach(choice=>choice.setAttribute('aria-expanded',String(choice===button)));
  elements.popover.className='pm-judgment-popover pm-domain-'+d;
- elements.popover.innerHTML='<strong>'+escapeHtml(name)+'</strong><div class="pm-judgment-options">'+STATUS_OPTIONS.map(([v,l])=>'<button type="button" data-status="'+v+'" class="pm-choice-'+v+'">'+l+'</button>').join('')+'</div>';
+ elements.popover.innerHTML='<strong>'+escapeHtml(name)+'</strong><div class="pm-judgment-options">'+getStatusOptions().map(([v,l])=>'<button type="button" data-status="'+v+'" class="pm-choice-'+v+'">'+l+'</button>').join('')+'</div>';
  elements.popover.hidden=false;
  elements.popover.querySelectorAll('[data-status]').forEach(o=>o.addEventListener('click',()=>{userJudgments[d]=o.dataset.status;button.dataset.judgment=o.dataset.status;button.classList.remove('judgment-ok','judgment-warn','judgment-bad');button.classList.add('judgment-'+o.dataset.status);closeJudgmentPopover({restoreFocus:true});updateActionState()}));
  elements.popover.querySelector('[data-status]')?.focus({preventScroll:true});
