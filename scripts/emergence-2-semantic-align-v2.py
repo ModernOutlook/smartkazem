@@ -29,10 +29,12 @@ def align(lines,pars,model,ep,lang):
  e=model.encode(lines+trg,convert_to_tensor=True,normalize_embeddings=True); sim=util.cos_sim(e[:m],e[m:]).cpu().numpy()
  neg=-10**9; dp=[[neg]*(n+1) for _ in range(m+1)]; bk=[[None]*(n+1) for _ in range(m+1)]; dp[0][0]=0
  for i in range(m):
+  sl=len(re.sub(r'\s+','',lines[i]))
   for j in range(n):
    if dp[i][j]<=neg/2: continue
    for k in range(1,min(16,n-j)+1):
-    q=float(sim[i,j:j+k].mean()); val=dp[i][j]+q-.055*(k-1)
+    q=float(sim[i,j:j+k].mean()); tl=sum(len(re.sub(r'\s+','',x)) for x in trg[j:j+k]); penalty=1.0 if sl<=20 and tl>80 else 0.0
+    val=dp[i][j]+q-.055*(k-1)-penalty
     if val>dp[i+1][j+k]: dp[i+1][j+k]=val; bk[i+1][j+k]=(j,k,q)
  if bk[m][n] is None: raise RuntimeError(f'Episode {ep} {lang}: no complete alignment source={m} target={n}')
  g=[None]*m; j=n
