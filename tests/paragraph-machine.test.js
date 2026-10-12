@@ -34,6 +34,9 @@ async function main() {
   assert.equal(core.validateEvaluation({ judgment: validJudgment }), validJudgment);
   assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, C: { status: 'unknown', reason: 'bad' } } }), /قلمرو C/);
   assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, R: { status: 'ok', reason: ' ' } } }), /دلیل داوری/);
+  assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, X: { status: 'warn', reason: 'extra' } } }), /دقیقاً پنج قلمرو/);
+  assert.throws(() => core.validateGeneratedResult({ paragraphs: [{ text: 'Text', judgment: validJudgment }] }, 1), /تولیدی نامعتبر/);
+  assert.throws(() => core.validateEvaluation({ judgment: validJudgment, extra: true }), /ساختار پاسخ داوری/);
 
   const criteria = core.DOMAIN_ORDER.reduce((result, domain) => {
     result[domain] = core.ALL_CRITERIA[domain].map(item => item.text);
