@@ -139,8 +139,8 @@
     const criteria = DOMAIN_ORDER.map(domain => {
       const items = criteriaByDomain && criteriaByDomain[domain];
       if (!Array.isArray(items) || items.length !== ALL_CRITERIA[domain].length) throw new Error('معیارهای قلمرو ' + domain + ' ناقص یا نامعتبرند.');
-      return domain + ' (' + realmNames[domain] + '):\\n' + items.map((item, index) => '- ' + ALL_CRITERIA[domain][index].id + ': ' + item).join('\\n');
-    }).join('\\n\\n');
+      return domain + ' (' + realmNames[domain] + '):\n' + items.map((item, index) => '- ' + ALL_CRITERIA[domain][index].id + ': ' + item).join('\n');
+    }).join('\n\n');
     return [
       'You are the independent judgment engine for Paragraph Machine. Evaluate only the supplied paragraph against the explicit criteria below. Do not use general world knowledge or external philosophical assumptions as judging standards.',
       'Paragraph language: ' + language + '. The criteria below have been translated into that same language. Interpret the paragraph in its original language; never translate or rewrite the paragraph as a preprocessing step.',
