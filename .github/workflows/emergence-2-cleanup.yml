@@ -1,0 +1,40 @@
+name: Emergence II cleanup
+
+on:
+  push:
+    branches: ["fix/emergence-2-paragraph-alignment"]
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          ref: fix/emergence-2-paragraph-alignment
+
+      - name: Restore translation and remove unverified generator
+        run: |
+          git fetch origin main --depth=1
+          git checkout origin/main -- translations/emergence-2.json
+          rm -f docs/emergence-2-paragraph-manifest.json
+          rm -f scripts/emergence-2-content-realign*.mjs scripts/.emergence-2-realign-trigger
+          rm -f .github/workflows/emergence-2-realign.yml
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          marker = '<!-- emergence-2-paragraph-alignment-2026-10-12 -->'
+          pattern = re.compile(r'\n' + re.escape(marker) + r'.*?\nCounts: [^\n]*\.\n', re.S)
+          for name in ['README.md', 'docs/canonical-book-content-audit.md']:
+              p = Path(name)
+              s = p.read_text()
+              p.write_text(pattern.sub('\n', s))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Revert unverified Emergence II paragraph rewrite [skip ci]'
+          git push origin HEAD:fix/emergence-2-paragraph-alignment
