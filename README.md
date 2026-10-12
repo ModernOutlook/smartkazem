@@ -211,8 +211,8 @@ Judgment contract:
 - ok = منطبق; warn = مبهم; bad = متناقض
 
 Entry modes:
-- **هم‌سنگی:** user text → toPersian → evaluatePersian → core → judgment → translated result → UI.
-- **بازشناسی:** count/mode → generatePersian → core → judgment → translated result → UI.
+- **هم‌سنگی:** original user text → criteria translated to the same language → independent judgment → UI. The user's paragraph is never translated as a preprocessing step.
+- **بازشناسی:** generate in the selected site language → independently judge the generated paragraph using criteria in that language → compare with the user's five selections.
 
 These are distinct paths: evaluation must not accidentally become generation.
 
@@ -329,7 +329,7 @@ For Paragraph Machine also verify evaluation/generation paths, S/T/E/R/C judgmen
 3. Four languages: fa/en/zh/ar.
 4. Persian as authoritative primary content.
 5. Realm order: S/T/E/R/C.
-6. Paragraph Machine Persian internal processing.
+6. Paragraph Machine keeps Persian as the immutable canonical source of criteria; paragraphs are judged in their original/selected language.
 7. Paragraph limits: 144 / 34 / 900.
 8. Shared Paragraph Machine core/service boundaries.
 9. Shared i18n boundary.
