@@ -618,6 +618,11 @@ for (const route of sharedRoutes) {
           if (!Array.isArray(source?.episodes) || source.episodes.length !== 11 || buttons.length !== 11) {
             issues.push('expected 11 canonical episodes and 11 rendered selectors');
           }
+          const activeBeforeAudit = buttons.findIndex(button => button.classList.contains('active'));
+          const expectedPreservedIndex = languageCode === 'fa' ? 0 : 4;
+          if (activeBeforeAudit !== expectedPreservedIndex) {
+            issues.push('active episode was not preserved across language change (expected selector index ' + expectedPreservedIndex + ', found ' + activeBeforeAudit + ')');
+          }
           const episodeResults = [];
           for (let index = 0; index < Math.min(11, source?.episodes?.length || 0); index++) {
             buttons[index]?.click();
