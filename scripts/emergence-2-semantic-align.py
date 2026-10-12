@@ -21,11 +21,21 @@ def source_episodes(text):
 
 
 def split_sentences(text):
+    """Split multilingual prose without assuming whitespace after punctuation.
+
+    Chinese/Japanese text commonly places the next sentence immediately after
+    。！？, so a whitespace-gated splitter collapses an entire paragraph into one
+    unit and makes monotonic alignment impossible. Latin/Arabic/Persian prose
+    still uses the whitespace boundary rule to avoid splitting decimals or
+    punctuation occurring inside a sentence.
+    """
     out, start, i = [], 0, 0
     terminal = set('.!?؟。！？')
+    cjk_terminal = set('。！？')
     closers = set('»”’\"\'”)]}')
     while i < len(text):
-        if text[i] not in terminal:
+        ch = text[i]
+        if ch not in terminal:
             i += 1
             continue
         while i + 1 < len(text) and text[i + 1] in '.!?…！？':
@@ -33,7 +43,11 @@ def split_sentences(text):
         j = i + 1
         while j < len(text) and text[j] in closers:
             j += 1
-        if j >= len(text) or text[j].isspace():
+
+        # CJK sentence terminators do not require a following space. For other
+        # scripts, require whitespace/end-of-text so internal punctuation is kept.
+        boundary = ch in cjk_terminal or j >= len(text) or text[j].isspace()
+        if boundary:
             while j < len(text) and text[j].isspace():
                 j += 1
             piece = text[start:j].strip()
@@ -54,16 +68,13 @@ def align_lines(lines, paragraphs, model, lang, episode):
     if not target_sentences:
         raise RuntimeError(f'Episode {episode} {lang}: no translation sentences')
 
-    # Encode in one batch. The model is multilingual and preserves order; it is
-    # used only to decide where existing translated sentences belong. No text is
-    # generated, translated, shortened, or reordered.
     embeddings = model.encode(lines + target_sentences, convert_to_tensor=True, normalize_embeddings=True)
     src_emb = embeddings[:len(lines)]
     trg_emb = embeddings[len(lines):]
     sims = util.cos_sim(src_emb, trg_emb).cpu().numpy()
 
     m, n = len(lines), len(target_sentences)
-    max_group = 12
+    max_group = 16
     neg = -10**9
     dp = [[neg] * (n + 1) for _ in range(m + 1)]
     back = [[None] * (n + 1) for _ in range(m + 1)]
@@ -76,8 +87,6 @@ def align_lines(lines, paragraphs, model, lang, episode):
             for k in range(1, min(max_group, n - j) + 1):
                 block = sims[i, j:j+k]
                 mean = float(block.mean())
-                # Small penalty discourages swallowing unrelated adjacent lines,
-                # while still allowing a Persian line to map to multiple translated sentences.
                 score = mean - 0.055 * (k - 1)
                 val = dp[i][j] + score
                 if val > dp[i+1][j+k]:
@@ -85,7 +94,10 @@ def align_lines(lines, paragraphs, model, lang, episode):
                     back[i+1][j+k] = (j, k, mean)
 
     if back[m][n] is None:
-        raise RuntimeError(f'Episode {episode} {lang}: no complete monotonic alignment')
+        raise RuntimeError(
+            f'Episode {episode} {lang}: no complete monotonic alignment '
+            f'(source lines={m}, translation sentences={n})'
+        )
 
     groups = [None] * m
     j = n
