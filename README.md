@@ -536,3 +536,8 @@ All three Share Economy books now use the same generic home-page manifest: `forg
 ## Reader design reference
 
 The short-story reader `content/page-templates/zero.fragment` establishes the child-page reading surface: a compact shared-language header, clear return action, a centered deep-blue article card, visible keyboard focus, responsive spacing, and reduced-motion support. Long-form readers such as `philosophical-treatise.html` should reuse this visual family while retaining their own navigation and content structure. Long-form text must continue to render from the canonical Persian source and the declared translation reservoir; do not duplicate prose in HTML or introduce a page-specific language/accessibility system.
+
+
+### Emergence II runtime language-rendering fix (2026-10-12)
+
+The `emergence2` shared-page controller must unwrap the language-keyed reservoir fields before rendering: `episode.title[language]` and `episode.paragraphs[language]`. Passing the objects directly produced `[object Object]` and the missing-episode fallback. The browser smoke test now verifies real localized prose for EN, AR, and ZH, not merely a non-empty reader container. This is separate from the still-pending paragraph-fidelity audit of Persian episodes 23–30.
