@@ -54,7 +54,7 @@
     return translations[0] || '';
   }
 
-  async function fromPersianBatch(texts, targetLanguage) {
+  async function fromPersianBatch(texts, targetLanguage, guidance = '') {
     if (!Array.isArray(texts) || !texts.length || targetLanguage === 'fa') {
       return texts;
     }
@@ -70,7 +70,8 @@
             '\nتعداد متن‌ها: ' +
             texts.length +
             '\nمتن‌ها:\n' +
-            texts.map((text, index) => '[' + index + '] ' + text).join('\n\n')
+            texts.map((text, index) => '[' + index + '] ' + text).join('\n\n') +
+            (guidance ? '\n\nTranslation quality correction: ' + String(guidance).slice(0, 1200) : '')
         }
       ],
       { temperature: TRANSLATION_TEMPERATURE }
