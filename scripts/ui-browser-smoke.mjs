@@ -364,6 +364,41 @@ async function auditCanonicalRoute(page, route, language) {
       buttons[0]?.click();
     }
 
+    if (route === 'layer3') {
+      const source = window.EchoLayer3Content;
+      const book = catalog.bookContent?.layer3 || catalog.chapters?.layer3 || {};
+      const chapter = source?.chapters?.[0];
+      const buttons = [...document.querySelectorAll('#parts .part')];
+      const expectedTitle = book.title?.[lang] || catalog.pages?.layer3?.title || '';
+      if (!chapter?.parts?.length || buttons.length !== chapter.parts.length) issues.push('layer-three part count differs from canonical source');
+      if (!expectedTitle || document.querySelector('#head-title')?.textContent?.trim() !== expectedTitle) issues.push('layer-three page title differs from canonical content');
+      const mismatches = [];
+      for (let i = 0; i < Math.min(buttons.length, chapter?.parts?.length || 0); i++) {
+        buttons[i].click();
+        const part = chapter.parts[i];
+        const translatedPart = book.parts?.[i];
+        const expectedHeading = translatedPart?.title?.[lang] || catalog.pages?.layer3?.sections?.[i] || part.titleFallback;
+        const expectedParagraphs = lang === 'fa' ? part.text : (translatedPart?.paragraphs?.[lang] || []);
+        const actualHeading = document.querySelector('#reader .story h2')?.textContent?.replace(/^\\d+\\s*\\.\\s*/, '').trim() || '';
+        const actualParagraphs = [...document.querySelectorAll('#reader .story p')].map(p => p.textContent);
+        if (actualHeading !== expectedHeading || JSON.stringify(actualParagraphs) !== JSON.stringify(expectedParagraphs)) mismatches.push(i + 1);
+      }
+      if (mismatches.length) issues.push('layer-three rendered part text mismatch in part(s): ' + mismatches.join(','));
+      buttons[0]?.click();
+    }
+
+    if (route === 'zero') {
+      const source = window.ZeroPersianSource;
+      const book = catalog.bookContent?.zero || catalog.chapters?.zero || catalog.pages?.zero || {};
+      const expectedTitle = lang === 'fa' ? source?.title : (book.title?.[lang] || '');
+      const expectedParagraphs = lang === 'fa' ? source?.paragraphs : (book.paragraphs?.[lang] || []);
+      const actualTitle = document.querySelector('#zero-title')?.textContent?.trim() || '';
+      const actualParagraphs = [...document.querySelectorAll('#zero-story p')].map(p => p.textContent.trim());
+      if (!expectedTitle || actualTitle !== expectedTitle) issues.push('zero story title differs from canonical content');
+      if (!expectedParagraphs?.length) issues.push('zero canonical paragraphs are missing');
+      same(actualParagraphs, (expectedParagraphs || []).map(p => p.trim()), 'zero rendered paragraphs differ from canonical content');
+    }
+
     if (route === 'shahnameh') {
       const source = window.ShahnamehSeries;
       const book = catalog.bookContent?.shahnameh || {};
@@ -512,7 +547,7 @@ for (const route of sharedRoutes) {
       { ...language, key: route.route }, { timeout: 5000 });
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
-      if (['observation25', 'possibleMirror', 'observation', 'disturbedManifesto', 'shahnameh'].includes(route.route)) {
+      if (['observation25', 'possibleMirror', 'observation', 'disturbedManifesto', 'shahnameh', 'layer3', 'zero'].includes(route.route)) {
         const canonicalIssues = await auditCanonicalRoute(page, route.route, language.code);
         if (canonicalIssues.length) fail(`shared route ${route.route}: canonical content audit failed in ${language.code}: ${canonicalIssues.join(' | ')}`);
       }
