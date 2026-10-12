@@ -101,7 +101,7 @@
         ];
         if (attempt > 0) {
           messages.push({
-            role: 'assistant',
+            role: 'user',
             content: 'The previous response failed schema validation: ' + String(lastError && lastError.message || 'invalid output') + '. Return a corrected JSON judgment object only. Re-evaluate the original paragraph; do not change the paragraph.'
           });
         }
