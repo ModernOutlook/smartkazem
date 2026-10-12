@@ -292,6 +292,11 @@ for (const route of sharedRoutes) {
   try {
     await page.waitForFunction((key) => window.SharedPages?.getActive() === key && document.querySelector('#shared-page-host .child-page.is-active'), route.route, { timeout: 7000 });
     await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
+    const splash = page.locator('#splash');
+    if (await splash.count() && await splash.isVisible()) {
+      await splash.click().catch(() => {});
+      await page.waitForTimeout(100);
+    }
     const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
     if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
     const measureRouteGeometry = async () => page.evaluate((selectors) => {
@@ -346,12 +351,6 @@ for (const route of sharedRoutes) {
     }
   } catch (error) {
     fail(`shared route ${route.route}: fragment/content did not mount; ${String(error).split('\\n')[0]}`);
-  }
-
-  const splash = page.locator('#splash');
-  if (await splash.count() && await splash.isVisible()) {
-    await splash.click().catch(() => {});
-    await page.waitForTimeout(100);
   }
 
   for (const language of languages) {
