@@ -186,8 +186,9 @@ function selectChapter(index) {
 
   bookBody.setAttribute('role', 'tabpanel');
   bookBody.setAttribute('aria-labelledby', `book-tab-${index}`);
-  bookBody.classList.toggle('lang-en', getCurrentLanguage() === 'en');
-  bookBody.dir = getCurrentLanguage() === 'en' ? 'ltr' : 'rtl';
+  const language = getCurrentLanguage();
+  bookBody.classList.toggle('lang-en', language === 'en');
+  bookBody.dir = ['fa', 'ar'].includes(language) ? 'rtl' : 'ltr';
   bookBody.replaceChildren(fragment);
   bookBody.scrollTop = 0;
 }
