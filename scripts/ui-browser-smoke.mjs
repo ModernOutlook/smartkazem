@@ -282,6 +282,125 @@ const sharedRoutes = [
   { route: 'inventory', content: '#inventory-grid', close: 'a.inventory-home' },
 ];
 
+async function auditCanonicalRoute(page, route, language) {
+  return page.evaluate(({ route, language }) => {
+    const catalog = window.SiteI18n?.getCatalog?.() || {};
+    const issues = [];
+    const same = (actual, expected, label) => {
+      if (JSON.stringify(actual) !== JSON.stringify(expected)) issues.push(label);
+    };
+    const splitParagraphs = (value) => String(value || '').split(/\\n\\n+/).map(x => x.trim()).filter(Boolean);
+    const lang = language;
+
+    if (route === 'observation25' || route === 'possibleMirror') {
+      const is25 = route === 'observation25';
+      const source = is25 ? window.Observation25PersianSource : window.PossibleMirrorPersianSource;
+      const book = catalog.bookContent?.[is25 ? 'observation25' : 'possibleMirror'];
+      const expected = lang === 'fa' ? source : {
+        title: book?.title?.[lang],
+        subtitle: book?.subtitle?.[lang],
+        sectionNote: book?.sectionNote?.[lang],
+        sections: book?.sections?.[lang],
+        contents: book?.contents?.[lang]
+      };
+      const prefix = is25 ? 'observation25' : 'possible-mirror';
+      const actualTitle = document.querySelector('#' + prefix + '-title')?.textContent?.trim() || '';
+      const actualSubtitle = document.querySelector('#' + prefix + '-subtitle')?.textContent?.trim() || '';
+      if (!expected?.title || actualTitle !== expected.title) issues.push('page title differs from canonical content');
+      if (!expected?.subtitle || actualSubtitle !== expected.subtitle) issues.push('page subtitle differs from canonical content');
+      const sectionSelector = is25 ? '.observation25-section' : '.possible-mirror-section';
+      const actualSections = [...document.querySelectorAll(sectionSelector)].map(section => ({
+        label: section.querySelector('h1 span:last-child')?.textContent?.trim() || '',
+        note: section.querySelector('.section-note')?.textContent?.trim() || '',
+        paragraphs: [...section.querySelectorAll(is25 ? '.observation25-content p' : '.possible-mirror-content p')].map(p => p.textContent.trim())
+      }));
+      const expectedSections = (expected.sections || []).map((label, index) => ({
+        label,
+        note: expected.sectionNote || '',
+        paragraphs: splitParagraphs(expected.contents?.[index])
+      }));
+      if (!expected.sections?.length || !expected.contents?.length) issues.push('canonical section/content arrays are missing');
+      same(actualSections, expectedSections, 'rendered sections or paragraph text differ from canonical content');
+    }
+
+    if (route === 'observation') {
+      const source = window.ObservationPersianSource;
+      const book = catalog.bookContent?.observation;
+      const title = lang === 'fa' ? source?.title : book?.title?.[lang];
+      const subtitle = lang === 'fa' ? source?.subtitle : book?.subtitle?.[lang];
+      const expected = lang === 'fa' ? source?.paragraphs : book?.paragraphs?.[lang];
+      const actual = [...document.querySelectorAll('[data-observation-paragraph]')].map(node => node.textContent.trim());
+      const expectedText = (expected || []).map(value => {
+        const holder = document.createElement('div');
+        if (lang === 'fa') holder.innerHTML = value;
+        else holder.textContent = value;
+        return holder.textContent.trim();
+      });
+      if (!title || document.querySelector('#observation-source-title')?.textContent?.trim() !== title) issues.push('observation title differs from canonical content');
+      if (!subtitle || document.querySelector('#observation-source-subtitle')?.textContent?.trim() !== subtitle) issues.push('observation subtitle differs from canonical content');
+      if (!expected?.length) issues.push('canonical observation paragraphs are missing');
+      same(actual, expectedText, 'observation paragraph text differs from canonical content');
+    }
+
+    if (route === 'disturbedManifesto') {
+      const source = window.DisturbedManifestoSource;
+      const translated = catalog.chapters?.disturbedManifesto?.parts?.[lang];
+      const expectedParts = lang === 'fa' ? source?.parts : translated;
+      const expectedTitle = lang === 'fa' ? source?.title :
+        (catalog.chapters?.disturbedManifesto?.title?.[lang] || catalog.pages?.disturbedManifesto?.title || source?.title);
+      if (!expectedTitle || document.querySelector('#page-title')?.textContent?.trim() !== expectedTitle) issues.push('manifesto page title differs from canonical content');
+      const buttons = [...document.querySelectorAll('#part-list .part')];
+      if (!expectedParts?.length || buttons.length !== expectedParts.length) issues.push('manifesto part list does not match canonical part count');
+      const actualParts = [];
+      for (let i = 0; i < Math.min(buttons.length, expectedParts?.length || 0); i++) {
+        buttons[i].click();
+        actualParts.push({
+          title: document.querySelector('#reader h2')?.textContent?.trim() || '',
+          paragraphs: [...document.querySelectorAll('#reader .prose')].map(p => p.textContent.trim())
+        });
+      }
+      const canonicalParts = (expectedParts || []).map(part => ({ title: part.title, paragraphs: part.paragraphs || [] }));
+      same(actualParts, canonicalParts, 'manifesto rendered parts differ from canonical part titles/paragraphs');
+      buttons[0]?.click();
+    }
+
+    if (route === 'shahnameh') {
+      const source = window.ShahnamehSeries;
+      const book = catalog.bookContent?.shahnameh || {};
+      const episodes = source?.episodes || [];
+      const buttons = [...document.querySelectorAll('#episode-list button.episode')];
+      if (!episodes.length || buttons.length !== episodes.length) issues.push('Shahnameh episode selectors do not match source episode count');
+      const mismatches = [];
+      for (let i = 0; i < Math.min(episodes.length, buttons.length); i++) {
+        buttons[i].click();
+        const episode = episodes[i];
+        const localized = book.episodes?.[lang]?.[String(episode.id)] || (episode.id === 1 ? book.part1?.[lang] : null);
+        const expectedTitle = localized?.title || book.titles?.[lang]?.[episode.id - 1] || episode.title;
+        const expectedProse = localized?.prose || episode.prose || '';
+        const actualTitle = document.querySelector('#reader h2')?.textContent?.trim() || '';
+        const actualProse = document.querySelector('#reader > .block.prose > .prose')?.textContent?.trim() || '';
+        if (actualTitle !== expectedTitle || actualProse !== expectedProse) {
+          mismatches.push(episode.id);
+        }
+      }
+      if (mismatches.length) issues.push('Shahnameh rendered title/prose mismatch in episode(s): ' + mismatches.join(','));
+      buttons[0]?.click();
+    }
+
+    // Verify all static translation bindings on every page as well, including
+    // headings, labels, accessible names and placeholders.
+    document.querySelectorAll('[data-i18n]').forEach(element => {
+      const expected = window.SiteI18n?.get?.(element.dataset.i18n, '');
+      if (expected !== '' && element.textContent !== String(expected)) issues.push('data-i18n mismatch: ' + element.dataset.i18n);
+    });
+    document.querySelectorAll('[data-i18n-aria]').forEach(element => {
+      const expected = window.SiteI18n?.get?.(element.dataset.i18nAria, '');
+      if (expected !== '' && element.getAttribute('aria-label') !== String(expected)) issues.push('data-i18n aria mismatch: ' + element.dataset.i18nAria);
+    });
+    return issues;
+  }, { route, language });
+}
+
 for (const route of sharedRoutes) {
   const page = await context.newPage();
   page.setDefaultTimeout(7000);
@@ -393,6 +512,10 @@ for (const route of sharedRoutes) {
       { ...language, key: route.route }, { timeout: 5000 });
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
+      if (['observation25', 'possibleMirror', 'observation', 'disturbedManifesto', 'shahnameh'].includes(route.route)) {
+        const canonicalIssues = await auditCanonicalRoute(page, route.route, language.code);
+        if (canonicalIssues.length) fail(`shared route ${route.route}: canonical content audit failed in ${language.code}: ${canonicalIssues.join(' | ')}`);
+      }
       if (route.route === 'emergence2') {
         // Compare the rendered reader against the actual canonical data loaded
         // by the page: Persian sourceData for fa, and the selected language's
