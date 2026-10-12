@@ -426,7 +426,7 @@ async function auditCanonicalRoute(page, route, language) {
           else mismatches.push({ part: i + 1 });
         }
       }
-      if (mismatches.length) issues.push('layer-three rendered part text mismatch in part(s): ' + mismatches.join(','));
+      if (mismatches.length) issues.push('layer-three rendered part text mismatch: ' + JSON.stringify(mismatches.slice(0, 4)));
       buttons[0]?.click();
     }
 
@@ -768,7 +768,7 @@ for (const book of sharedBooks) {
         const translated = catalog.bookContent?.[kind];
         let source;
         if (kind === 'forgers') source = window.ForgersCatalog || [];
-        else if (kind === 'humanMachines') source = window.HumanMachinesCatalog || [];
+        else if (kind === 'humanMachines') source = window.HumanMachinesCatalog?.chapters || [];
         else source = window.TabahianCatalog?.chapters || [];
         const expected = language === 'fa' ? source : (translated?.chapters || []).map(chapter => ({
           ...chapter,
