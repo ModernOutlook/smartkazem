@@ -315,6 +315,17 @@ for (const route of sharedRoutes) {
           direction: style.direction, writingMode: style.writingMode,
           display: style.display, position: style.position,
           widthStyle: style.width, maxWidth: style.maxWidth,
+          inlineWidth: element.style.width, inlineHeight: element.style.height,
+          inlineInset: element.style.inset,
+          offsetLeft: element.offsetLeft, offsetTop: element.offsetTop,
+          zoom: style.zoom, translate: style.translate, scale: style.scale,
+          offsetParent: element.offsetParent ? {
+            id: element.offsetParent.id, className: element.offsetParent.className,
+            x: element.offsetParent.getBoundingClientRect().x,
+            y: element.offsetParent.getBoundingClientRect().y,
+            width: element.offsetParent.getBoundingClientRect().width,
+            height: element.offsetParent.getBoundingClientRect().height,
+          } : null,
           overflowX: style.overflowX, overflowY: style.overflowY,
           gridTemplateColumns: style.gridTemplateColumns,
           gridTemplateAreas: style.gridTemplateAreas, gridArea: style.gridArea,
@@ -325,7 +336,7 @@ for (const route of sharedRoutes) {
         };
       };
       const result = {
-        __shell: Object.fromEntries(['html', 'body', '#app', '#shared-page-host', '.child-page.is-active'].map((selector) => {
+        __shell: Object.fromEntries(['html', 'body', '#app', '#shared-page-host', '[data-shared-route]', '.child-page.is-active'].map((selector) => {
           const element = document.querySelector(selector);
           return [selector, rectOf(element)];
         })),
