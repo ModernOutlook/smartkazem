@@ -1,54 +1,169 @@
-/* Paragraph Machine Core — internal language: Persian */
-(function(){'use strict';
-const MAX_WORDS = 144;
-const MAX_WORD_LENGTH = 34;
-const MAX_CHARS = 900;
-const DOMAIN_ORDER = ['S', 'T', 'E', 'R', 'C'];
-const DOMAIN_NAMES={S:'ساختار تالار',T:'تداوم عالم',E:'قلمرو تجربه',R:'مرجع تقلید',C:'اقتصاد سهم'};
-const STATUS_LABELS={ok:'منطبق',warn:'مبهم',bad:'متناقض'};
-const SYSTEM_PROMPT="تو یک ماشین تولید و سنجش پاراگراف هستی. وظیفه‌ات این است:\n\n ۱. بر اساس «رساله فلسفی نگرش نوین» که در ادامه می‌آید، پاراگراف‌هایی غیرتکرار، مستقل از هم تولید کنی.\n\n ۲. هر پاراگراف را با ماتریس داوری در ۵ قلمرو ارزیابی کنی.\n\n ## محدودیت‌های سخت (اجباری)\n\n - هر پاراگراف حداکثر 144 کلمه باشد.\n\n - هیچ کلمه‌ای در متن پاراگراف نباید بیش از 34 حرف داشته باشد.\n\n - مجموع طول متن هر پاراگراف (با احتساب فاصله‌ها) حداکثر 900 حرف باشد.\n\n - این سه محدودیت بر محتوا اولویت دارند. اگر لازم شد، محتوا را فشرده کن.\n\n ## رساله فلسفی نگرش نوین (خلاصه‌ی قواعد)\n\n اصول مشترک (M):\n\n - M1: اصالت رابطه بر شیء\n\n - M2: قانون تراکم متناسب (نشانگر ↔ نزدیکی واقعی)\n\n - M3: دوگانگی energeia/entelecheia (حضور در فرایند + محاسبه در پایان)\n\n ۱. ساختار تالار (S):\n\n - S1: تفکیک آغاز/پایان/مرکز\n\n - S2: مرکز = تقارن آغاز و پایان\n\n - S3: شتاب ∝ زاویه با محور آغاز→پایان\n\n - S4: واگرایی → رکود در فقدان (نه نیستی)\n\n ۲. تداوم عالم (T):\n\n - T1: وحدت ظرفیت، کثرت تحقق\n\n - T2: هر رویداد فضای امکان را تنگ‌تر می‌کند\n\n - T3: یقین نسبت به کل = حد، نه مالکیت\n\n - T4: جزء و کل: دور هرمنوتیکی\n\n ۳. قلمرو تجربه (E):\n\n - E1: تعادل = تقارن پویا (نه سکون)\n\n - E2: گذار نیازمند نقطه‌ی عطف\n\n - E3: برهم‌نهی: مطلق با مطلق، نسبی با نسبی\n\n - E4: شادی ≡ هم‌راستایی اراده ≡ دقت تفسیری\n\n - E5: راز/برهنگی مطلق = نقض گرادیان\n\n - E6: حقیقت ≠ واقعیت\n\n ۴. مرجع تقلید / اقتدار شبیه‌سازی (R):\n\n - R1: افق شبیه‌ساز محدود به چشم‌انداز مرجع\n\n - R2: مشروعیت اقتدار = همگرایی مرجع به کانون\n\n - R3: اصالت بر اساس هم‌راستایی، نه منشأ\n\n - R4: تکامل = تغییر قواعد تولیدکننده‌ی گزینه‌ها\n\n ۵. اقتصاد سهم (C):\n\n - C1: کثرت = میدان، فردیت = سهم\n\n - C2: کمونیسم = رازِ سهم / سرمایه‌داری = برهنگیِ سهم\n\n - C3: هر گره سهم متناسب با جایگاه حقیقی\n\n - C4: فقدان اجتماعی = واگرایی، نه نابودی\n\n ## پروتکل داوری\n\n - ✅ منطبق: پاراگراف با اصل صریح قلمرو سازگار است.\n\n - ⚠️ مبهم: پاراگراف نه تأیید صریح دارد نه رد صریح، ولی مفهومش قابل انتساب به قلمرو است. (R-ADJ-1)\n\n - ❌ متناقض: پاراگراف اصل مشخصی را نقض می‌کند.\n\n - R-ADJ-2: کلمات تعلیقی («شاید»، «ممکن است») در سطح پاراگراف، ⚠️ را به کل قلمرو تعمیم می‌دهند.\n\n - R-ADJ-3: ⚠️ وقتی رخ می‌دهد که نه تأیید صریح، نه رد صریح، ولی مفهوم قابل انتساب باشد.\n\n ## فرمت خروجی (اجباری - فقط JSON معتبر، بدون markdown)\n\n {\n\n   \"paragraphs\": [\n\n     {\n\n       \"text\": \"متن پاراگراف...\",\n\n       \"judgment\": {\n\n         \"S\": {\"status\": \"ok|warn|bad\", \"reason\": \"ارجاع به شناسه\"},\n\n         \"T\": {\"status\": \"ok|warn|bad\", \"reason\": \"...\"},\n\n         \"E\": {\"status\": \"ok|warn|bad\", \"reason\": \"...\"},\n\n         \"R\": {\"status\": \"ok|warn|bad\", \"reason\": \"...\"},\n\n         \"C\": {\"status\": \"ok|warn|bad\", \"reason\": \"...\"}\n\n       }\n\n     }\n\n   ]\n\n }\n\n فقط JSON برگردان. هیچ توضیح اضافه‌ای نده.";
-const MODE_INSTRUCTIONS={mixed:'ترکیبی: در هر مجموعه ترکیبی از وضعیت‌های منطبق، مبهم و متناقض ایجاد کن.', 'all-ok':'همه‌ی پاراگراف‌ها باید کاملاً منطبق با هر ۵ قلمرو باشند (همه منطبق).','all-bad':'همه‌ی پاراگراف‌ها باید کاملاً متناقض با هر ۵ قلمرو باشند ولی درونی منسجم.','all-warn':'همه‌ی پاراگراف‌ها باید در هر ۵ قلمرو مبهم باشند.','cross':'هر پاراگراف باید در چند قلمرو منطبق و در چند قلمرو متناقض باشد.'};
-function normalizeText(text) {
-  return String(text || '').replace(/\r\n?/g, '\n').trim();
-}
-function countWords(text) {
-  const normalized = normalizeText(text);
-  return normalized ? normalized.split(/\s+/).filter(Boolean).length : 0;
-}
-function countChars(text) { return Array.from(normalizeText(text)).length; }
-function wordLength(w){return Array.from(String(w||'').replace(/[.,!?;:،؛؟»«\"'()\[\]{}]/g,'')).length}
-function findLongWords(text){return normalizeText(text).split(/\s+/).filter(Boolean).filter(w=>wordLength(w)>MAX_WORD_LENGTH)}
-function breakLongWords(text){return normalizeText(text).split(/\s+/).filter(Boolean).map(w=>wordLength(w)<=MAX_WORD_LENGTH?w:Array.from(w).reduce((a,c,i)=>{const n=Math.floor(i/MAX_WORD_LENGTH);(a[n]??=[]).push(c);return a},[]).map(x=>x.join('')).join(' ')).join(' ')}
-function enforceWordLimit(text,maxWords){const words=normalizeText(text).split(/\s+/).filter(Boolean);return words.length<=maxWords?{text:normalizeText(text),truncated:false}:{text:words.slice(0,maxWords).join(' '),truncated:true}}
-function enforceCharLimit(text,maxChars){const s=normalizeText(text);if(Array.from(s).length<=maxChars)return{text:s,truncated:false};let cut=Array.from(s).slice(0,maxChars).join('');const i=cut.lastIndexOf(' ');if(i>maxChars*.7)cut=cut.slice(0,i);return{text:cut.trim(),truncated:true}}
-function processText(text){const original=normalizeText(text),lw=findLongWords(original);let processed=breakLongWords(original);const wl=enforceWordLimit(processed,MAX_WORDS);processed=wl.text;const cl=enforceCharLimit(processed,MAX_CHARS);processed=cl.text;const rem=findLongWords(processed);return{text:processed,originalWordCount:countWords(original),originalCharCount:countChars(original),finalWordCount:countWords(processed),finalCharCount:countChars(processed),longWordsFound:lw,remainingLongWords:rem,truncated:wl.truncated||cl.truncated,truncatedByWord:wl.truncated,truncatedByChar:cl.truncated,violations:{wordLimit:false,charLimit:false,wordLength:rem.length>0}}}
-function validateJudgment(judgment) {
-  if (!judgment || typeof judgment !== 'object') throw new Error('ساختار داوری نامعتبر است.');
-  for (const domain of DOMAIN_ORDER) {
-    const item = judgment[domain];
-    if (!item || !['ok', 'warn', 'bad'].includes(item.status)) {
-      throw new Error('داوری قلمرو ' + domain + ' نامعتبر است.');
-    }
-    if (typeof item.reason !== 'string' || !item.reason.trim()) {
-      throw new Error('دلیل داوری قلمرو ' + domain + ' نامعتبر است.');
-    }
+/* Paragraph Machine Core — canonical criteria in Persian; judgments are language-local. */
+(function () {
+  'use strict';
+
+  const MAX_WORDS = 144;
+  const MAX_WORD_LENGTH = 34;
+  const MAX_CHARS = 900;
+  const DOMAIN_ORDER = ['S', 'T', 'E', 'R', 'C'];
+  const DOMAIN_NAMES = Object.freeze({ S: 'ساختار', T: 'تداوم', E: 'تجربه', R: 'شبیه‌سازی', C: 'سهام' });
+  const STATUS_LABELS = Object.freeze({ ok: 'مطابق', warn: 'مبهم', bad: 'متناقض' });
+
+  // This Persian set is the immutable semantic source of truth. Keep principle IDs stable.
+  const COMMON_CRITERIA = Object.freeze([
+    { id: 'M1', text: 'معنا و هویت یک چیز را نمی‌توان مستقل از روابط آن با چیزهای دیگر به‌طور کامل توضیح داد.' },
+    { id: 'M2', text: 'تراکم و شدت نشانگرها باید با نزدیکی واقعی به کانون تناسب داشته باشد.' },
+    { id: 'M3', text: 'کانون در سراسر فرایند حضور راهنما دارد و صورت کامل آن پس از تکمیل آرایش قابل محاسبه است.' }
+  ]);
+  const REALM_CRITERIA = Object.freeze({
+    S: Object.freeze([
+      { id: 'S1', text: 'آغاز، پایان و مرکز موقعیت‌هایی متمایزند و نباید یکی فرض شوند.' },
+      { id: 'S2', text: 'مرکز با تقارن آغاز و پایان تعریف می‌شود، نه با یکسان بودن با آغاز یا پایان.' },
+      { id: 'S3', text: 'شتاب با زاویه نسبت به محور جهت‌دار آغاز به پایان ارتباط دارد.' },
+      { id: 'S4', text: 'واگرایی از جهت کلی می‌تواند به رکود یا فقدان بینجامد، بی‌آنکه گره نابود شود.' },
+      { id: 'S5', text: 'موقعیت یک نقطه باید با روابطش در کل آرایش سنجیده شود، نه فقط با ویژگی‌های منفرد آن.' },
+      { id: 'S6', text: 'تغییر موقعیت نسبت به آغاز، پایان یا مرکز می‌تواند معنای ساختاری را تغییر دهد.' }
+    ]),
+    T: Object.freeze([
+      { id: 'T1', text: 'وحدت ظرفیت با کثرت تحقق‌های آن سازگار است.' },
+      { id: 'T2', text: 'هر رخداد شبکه را تغییر می‌دهد و فضای امکان‌های آینده را محدود یا بازآرایی می‌کند.' },
+      { id: 'T3', text: 'یقین نسبت به کل حد شناختی و جهت‌نماست، نه مالکیت کل به‌وسیله بخشی محدود.' },
+      { id: 'T4', text: 'فهم جزء و کل به‌طور متقابل به یکدیگر وابسته است.' },
+      { id: 'T5', text: 'وضعیت اکنون را نمی‌توان به‌طور کامل جدا از تاریخ علّی، زمانی و رابطه‌ای آن توضیح داد.' },
+      { id: 'T6', text: 'تحقق یک امکان به معنای تحقق هم‌زمان همه امکان‌های ناسازگار با آن نیست.' }
+    ]),
+    E: Object.freeze([
+      { id: 'E1', text: 'تعادل تقارن پویاست، نه سکون مطلق.' },
+      { id: 'E2', text: 'گذار ساختاری به نقطه عطف نیاز دارد.' },
+      { id: 'E3', text: 'برهم‌نهی باید در سطح مناسب رخ دهد: مطلق با مطلق و نسبی با نسبی.' },
+      { id: 'E4', text: 'شادی با هم‌راستایی اراده در خواست، اندیشه، احساس، تصمیم و عمل و نیز با دقت تفسیری پیوند دارد.' },
+      { id: 'E5', text: 'راز مطلق و برهنگی مطلق دو حد افراطی‌اند که گرادیان تناسب را نقض می‌کنند.' },
+      { id: 'E6', text: 'حقیقت با واقعیت یکی نیست: حقیقت ساختار رابطه‌ای است و واقعیت صورت تجربه‌شده از جایگاه شناختی است.' },
+      { id: 'E7', text: 'جایگاه مشاهده‌گر بر تجربه اثر می‌گذارد؛ تفاوت تجربه‌ها به‌تنهایی تکثر حقیقت را اثبات نمی‌کند.' },
+      { id: 'E8', text: 'برای اثبات گذار ساختاری، نقش نقطه عطف باید نشان داده شود؛ صرف تغییر به‌تنهایی کافی نیست.' }
+    ]),
+    R: Object.freeze([
+      { id: 'R1', text: 'افق شبیه‌سازی به چشم‌انداز مرجع محدود است.' },
+      { id: 'R2', text: 'مشروعیت اقتدار شبیه‌سازی‌شده با همگرایی مرجع به کانون سنجیده می‌شود.' },
+      { id: 'R3', text: 'اصالت بر اساس هم‌راستایی و انسجام سنجیده می‌شود، نه صرفاً منشأ.' },
+      { id: 'R4', text: 'تکامل بنیادی شامل تغییر قواعد تولیدکننده گزینه‌هاست، نه فقط انتخاب از میان گزینه‌های موجود.' },
+      { id: 'R5', text: 'چند چشم‌انداز شناختی می‌توانند با یک حقیقت نسبت داشته باشند؛ تکثر تفسیر به‌تنهایی تکثر حقیقت را ثابت نمی‌کند.' },
+      { id: 'R6', text: 'شبیه‌سازی می‌تواند گذرگاهی برای شناخت و تکامل باشد، اما بازتولید الگوها با تغییر قواعد مولد یکی نیست.' },
+      { id: 'R7', text: 'در شبیه‌سازی کامل، تشخیص کارکردی دو الگو ممکن است در سطح تجربه دشوار یا ناممکن باشد، بی‌آنکه هویت خالق آن‌ها یکسان باشد.' }
+    ]),
+    C: Object.freeze([
+      { id: 'C1', text: 'کثرت میدان را می‌سازد و فردیت سهم متمایز هر گره در آن میدان است.' },
+      { id: 'C2', text: 'حذف سهم فردی به سوی راز مطلق سهم می‌رود؛ جداکردن سهم از زمینه رابطه‌ای به سوی برهنگی مطلق سهم می‌رود.' },
+      { id: 'C3', text: 'سهم هر گره باید با جایگاه حقیقی آن در شبکه تناسب داشته باشد.' },
+      { id: 'C4', text: 'رابطه هر جزء با کل باید حفظ شود؛ پیوند ناکافی می‌تواند رکود یا فقدان ایجاد کند و ادعای سهم یا پیوندِ بی‌تناسب می‌تواند به بی‌نظمی و واگرایی بینجامد.' },
+      { id: 'C5', text: 'مالکیت نشانگری از سهم در ساختار مشترک است، نه هدف نهایی و نه امری ذاتاً منفی.' },
+      { id: 'C6', text: 'فقدان اجتماعی ناشی از واگرایی به معنای نابودی گره نیست؛ گره ممکن است باقی بماند اما نتواند ظرفیت خود را در کل محقق کند.' },
+      { id: 'C7', text: 'نظم درست میان دو قطب، میانگین عددی دلخواه نیست؛ بازگشت به تناسب حقیقی جزء و کل است.' }
+    ])
+  });
+
+  const ALL_CRITERIA = Object.freeze(DOMAIN_ORDER.reduce((all, domain) => {
+    all[domain] = Object.freeze([...COMMON_CRITERIA, ...REALM_CRITERIA[domain]]);
+    return all;
+  }, {}));
+  const CRITERIA_TRANSLATION_ITEMS = Object.freeze([
+    ...COMMON_CRITERIA.map(item => ({ id: item.id, text: item.text })),
+    ...DOMAIN_ORDER.flatMap(domain => REALM_CRITERIA[domain].map(item => ({ id: item.id, text: item.text })))
+  ]);
+  const MODE_INSTRUCTIONS = Object.freeze({
+    mixed: 'Create a varied paragraph: its meaning should explicitly align with some principles, leave others unaddressed, and where natural directly conflict with a specific principle. Do not attach or predict judgment labels.',
+    'all-ok': 'Write a paragraph that explicitly supports the principles in all five realms and violates none.',
+    'all-bad': 'Write a coherent paragraph that explicitly and definitely violates at least one principle in each realm.',
+    'all-warn': 'Write a paragraph that does not explicitly confirm or definitely violate any realm principle.',
+    cross: 'Write a paragraph whose meaning aligns with some realms and definitely violates at least one principle in other realms.'
+  });
+
+  function normalizeText(text) { return String(text || '').replace(/\r\n?/g, '\n').trim(); }
+  function countWords(text) { const s = normalizeText(text); return s ? s.split(/\s+/).filter(Boolean).length : 0; }
+  function countChars(text) { return Array.from(normalizeText(text)).length; }
+  function wordLength(word) { return Array.from(String(word || '').replace(/[.,!?;:،؛؟»«"\u0027()\[\]{}]/g, '')).length; }
+  function findLongWords(text) { return normalizeText(text).split(/\s+/).filter(Boolean).filter(word => wordLength(word) > MAX_WORD_LENGTH); }
+  function breakLongWords(text) {
+    return normalizeText(text).split(/\s+/).filter(Boolean).map(word => wordLength(word) <= MAX_WORD_LENGTH ? word :
+      Array.from(word).reduce((parts, char, index) => { const part = Math.floor(index / MAX_WORD_LENGTH); (parts[part] ||= []).push(char); return parts; }, []).map(part => part.join('')).join(' ')).join(' ');
   }
-  return judgment;
-}
-function validateResult(parsed,expectedCount){if(!parsed||!Array.isArray(parsed.paragraphs))throw new Error('ساختار پاسخ نامعتبر است.');if(Number.isInteger(expectedCount)&&parsed.paragraphs.length!==expectedCount)throw new Error('تعداد پاراگراف‌های پاسخ با درخواست برابر نیست.');return{paragraphs:parsed.paragraphs.map(p=>{if(!p||typeof p.text!=='string'||!p.text.trim())throw new Error('متن پاراگراف نامعتبر است.');const processed=processText(p.text);if(processed.violations.wordLimit||processed.violations.charLimit||processed.violations.wordLength)throw new Error('پاراگراف پس از پردازش هنوز محدودیت‌های سخت را نقض می‌کند.');return{text:processed.text,judgment:validateJudgment(p.judgment)}})}}
-function buildGenerationPrompt(options = {}) {
-  const count = options.count || 1;
-  const mode = options.mode || 'mixed';
-  const input = options.input || '';
-  const task = options.task || 'generate';
-  return [
-    task === 'evaluate' ? 'این متن را ارزیابی کن و پاراگراف جدید تولید نکن.' : 'پاراگراف تولید کن.',
-    input ? 'متن ورودی:\n' + input : '',
-    'تعداد پاراگراف: ' + count,
-    MODE_INSTRUCTIONS[mode] || MODE_INSTRUCTIONS.mixed,
-    'محدودیت‌ها: هر پاراگراف حداکثر ۱۴۴ کلمه، هر کلمه حداکثر ۳۴ حرف و مجموع حروف حداکثر ۹۰۰.',
-    'خروجی فقط JSON معتبر با ساختار مشخص‌شده در دستور سیستم.'
-  ].filter(Boolean).join('\n\n');
-}
-window.ParagraphMachineCore=Object.freeze({MAX_WORDS,MAX_WORD_LENGTH,MAX_CHARS,DOMAIN_NAMES,STATUS_LABELS,SYSTEM_PROMPT,MODE_INSTRUCTIONS,normalizeText,countWords,countChars,findLongWords,processText,validateResult,buildGenerationPrompt});
+  function enforceWordLimit(text, maxWords) { const words = normalizeText(text).split(/\s+/).filter(Boolean); return words.length <= maxWords ? { text: normalizeText(text), truncated: false } : { text: words.slice(0, maxWords).join(' '), truncated: true }; }
+  function enforceCharLimit(text, maxChars) {
+    const s = normalizeText(text); if (Array.from(s).length <= maxChars) return { text: s, truncated: false };
+    let cut = Array.from(s).slice(0, maxChars).join(''); const index = cut.lastIndexOf(' '); if (index > maxChars * .7) cut = cut.slice(0, index);
+    return { text: cut.trim(), truncated: true };
+  }
+  function processText(text) {
+    const original = normalizeText(text), longWords = findLongWords(original);
+    let processed = breakLongWords(original);
+    const wordResult = enforceWordLimit(processed, MAX_WORDS); processed = wordResult.text;
+    const charResult = enforceCharLimit(processed, MAX_CHARS); processed = charResult.text;
+    const remaining = findLongWords(processed);
+    return { text: processed, originalWordCount: countWords(original), originalCharCount: countChars(original),
+      finalWordCount: countWords(processed), finalCharCount: countChars(processed), longWordsFound: longWords,
+      remainingLongWords: remaining, truncated: wordResult.truncated || charResult.truncated,
+      truncatedByWord: wordResult.truncated, truncatedByChar: charResult.truncated,
+      violations: { wordLimit: countWords(processed) > MAX_WORDS, charLimit: countChars(processed) > MAX_CHARS, wordLength: remaining.length > 0 } };
+  }
+  function validateJudgment(judgment) {
+    if (!judgment || typeof judgment !== 'object' || Array.isArray(judgment)) throw new Error('ساختار داوری نامعتبر است.');
+    for (const domain of DOMAIN_ORDER) {
+      const item = judgment[domain];
+      if (!item || !['ok', 'warn', 'bad'].includes(item.status)) throw new Error('داوری قلمرو ' + domain + ' نامعتبر است.');
+      if (typeof item.reason !== 'string' || !item.reason.trim()) throw new Error('دلیل داوری قلمرو ' + domain + ' نامعتبر است.');
+    }
+    return judgment;
+  }
+  function validateEvaluation(parsed) {
+    return validateJudgment(parsed && parsed.judgment);
+  }
+  function validateGeneratedResult(parsed, expectedCount) {
+    if (!parsed || !Array.isArray(parsed.paragraphs)) throw new Error('ساختار پاسخ تولید نامعتبر است.');
+    if (Number.isInteger(expectedCount) && parsed.paragraphs.length !== expectedCount) throw new Error('تعداد پاراگراف‌های پاسخ با درخواست برابر نیست.');
+    return { paragraphs: parsed.paragraphs.map(item => {
+      if (!item || typeof item.text !== 'string' || !item.text.trim()) throw new Error('متن پاراگراف نامعتبر است.');
+      const processed = processText(item.text);
+      if (processed.finalWordCount > MAX_WORDS || processed.finalCharCount > MAX_CHARS || processed.remainingLongWords.length) throw new Error('پاراگراف محدودیت‌های سخت را نقض می‌کند.');
+      return { text: processed.text };
+    }) };
+  }
+  function buildSystemPrompt(criteriaByDomain, language) {
+    const criteria = DOMAIN_ORDER.map(domain => {
+      const items = criteriaByDomain && criteriaByDomain[domain];
+      if (!Array.isArray(items) || items.length !== ALL_CRITERIA[domain].length) throw new Error('معیارهای قلمرو ' + domain + ' ناقص یا نامعتبرند.');
+      return domain + ' (' + DOMAIN_NAMES[domain] + '):\n' + items.map((item, index) => '- ' + ALL_CRITERIA[domain][index].id + ': ' + item).join('\n');
+    }).join('\n\n');
+    return [
+      'You are the independent judgment engine for Paragraph Machine. Evaluate only the supplied paragraph against the explicit criteria below. Do not use general world knowledge or external philosophical assumptions as judging standards.',
+      'Paragraph language: ' + language + '. The criteria below have been translated into that same language. Interpret the paragraph in its original language; never translate or rewrite the paragraph as a preprocessing step.',
+      'Canonical criteria are the Persian source principles translated faithfully. Their IDs are stable. Evaluate each realm independently, including shared M1-M3 wherever semantically relevant.',
+      'Status protocol for each realm: ok means at least one principle is explicitly confirmed and no principle in that realm is violated; bad means at least one specific principle is explicitly and definitely violated; warn means no explicit confirmation and no definite violation. A definite violation overrides confirmations of other principles in the same realm. Silence, partial reference, overlap, or deferral is warn. Uncertainty is warn.',
+      'Modal words such as “perhaps” or “possibly” do not automatically cause warn: evaluate the proposition content independently of the modal word. Words equivalent to “only” or “same” are signals, not decisions by themselves. A contradiction must identify a specific principle and a definite conflict.',
+      'Return exactly one JSON object: {"judgment":{"S":{"status":"ok|warn|bad","reason":"..."},"T":{"status":"ok|warn|bad","reason":"..."},"E":{"status":"ok|warn|bad","reason":"..."},"R":{"status":"ok|warn|bad","reason":"..."},"C":{"status":"ok|warn|bad","reason":"..."}}}. Reasons must cite principle IDs and be written in the paragraph language. Do not add keys or prose.',
+      'Canonical criteria, with language-local renderings:',
+      criteria
+    ].join('\n\n');
+  }
+  function buildGenerationPrompt(options = {}) {
+    const count = options.count || 1;
+    const mode = options.mode || 'mixed';
+    const language = options.language || 'fa';
+    return [
+      'Generate ' + count + ' distinct paragraph(s) in the language whose code is "' + language + '".',
+      MODE_INSTRUCTIONS[mode] || MODE_INSTRUCTIONS.mixed,
+      'Do not generate judgments or status labels. The independent evaluator will judge the finished paragraph later.',
+      'Hard limits for each paragraph: at most 144 words, no word longer than 34 characters, and at most 900 characters including spaces.',
+      'Return only valid JSON: {"paragraphs":[{"text":"..."}]}. No markdown or extra keys.'
+    ].join('\n\n');
+  }
+  function buildEvaluationPrompt(text) {
+    return 'Evaluate the following original-language paragraph using only the system criteria. Preserve its meaning; do not generate, translate, summarize, or rewrite it. Return only the judgment JSON schema specified in the system instructions.\n\nPARAGRAPH:\n' + text;
+  }
+
+  window.ParagraphMachineCore = Object.freeze({
+    MAX_WORDS, MAX_WORD_LENGTH, MAX_CHARS, DOMAIN_ORDER, DOMAIN_NAMES, STATUS_LABELS,
+    COMMON_CRITERIA, REALM_CRITERIA, ALL_CRITERIA, CRITERIA_TRANSLATION_ITEMS, MODE_INSTRUCTIONS,
+    normalizeText, countWords, countChars, findLongWords, processText, validateJudgment,
+    validateEvaluation, validateGeneratedResult, buildSystemPrompt, buildGenerationPrompt, buildEvaluationPrompt
+  });
 })();
