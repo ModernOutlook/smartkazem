@@ -25,7 +25,7 @@ jobs:
           node-version: 22
 
       - name: Build and validate Emergence II alignment
-        run: node scripts/emergence-2-content-realign.mjs --write
+        run: node scripts/emergence-2-content-realign-v2.mjs --write
 
       - name: Commit generated alignment and manifest
         run: |
