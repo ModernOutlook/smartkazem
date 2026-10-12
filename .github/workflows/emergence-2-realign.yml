@@ -37,4 +37,6 @@ jobs:
             exit 0
           fi
           git commit -m 'Realign Emergence II translation paragraphs [skip ci]'
+          git fetch origin fix/emergence-2-paragraph-alignment
+          git rebase origin/fix/emergence-2-paragraph-alignment
           git push origin HEAD:fix/emergence-2-paragraph-alignment
