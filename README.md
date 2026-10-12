@@ -517,7 +517,8 @@ The page still owns its semantic HTML and interaction model; the accessibility e
 
 ## Emergence II translation alignment (2026-10-12)
 
-- Compared all 11 canonical Persian episodes (20–30) with the EN/AR/ZH reservoir. Episode 20’s opening translation paragraph had merged two Persian paragraphs; the boundary is now restored in all three languages without summarizing or deleting content. The machine-readable page manifest now points to the dedicated `translations/emergence-2.json` reservoir.
+- Compared the canonical Persian source with the EN/AR/ZH reservoir. Episode 20’s opening translation paragraph had merged two Persian paragraphs; the boundary is now restored in all three languages. The manifest now points to `translations/emergence-2.json`.
+- **Completion remains blocked:** Persian episodes 23–30 use single-newline separators, but the current source parser splits only on blank lines. Each is therefore rendered as one Persian paragraph while the translation arrays contain 8–16 paragraphs. Do not claim paragraph-level parity until the source structure and target-language boundaries are reconciled.
 
 ## Multi-book translation reservoirs (2026-10-09)
 
