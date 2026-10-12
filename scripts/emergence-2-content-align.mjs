@@ -18,17 +18,17 @@ function splitSentences(text) {
   const out = [];
   let start = 0;
   for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (!'.!?؟。！？'.includes(c)) continue;
+    if (!'.!?؟。！？'.includes(text[i])) continue;
     while (i + 1 < text.length && '.!?…！？'.includes(text[i + 1])) i++;
     let j = i + 1;
-    while (j < text.length && ' \t\r\n»”’\"\'”)]}'.includes(text[j])) j++;
-    if (j >= text.length || /\s/.test(text[j])) {
-      const s = text.slice(start, j).trim();
-      if (s) out.push(s);
-      start = j;
-      i = j - 1;
-    }
+    while (j < text.length && '»”’\"\'”)]}'.includes(text[j])) j++;
+    const boundary = j >= text.length || /\s/.test(text[j]);
+    if (!boundary) continue;
+    while (j < text.length && /\s/.test(text[j])) j++;
+    const s = text.slice(start, j).trim();
+    if (s) out.push(s);
+    start = j;
+    i = j - 1;
   }
   const tail = text.slice(start).trim();
   if (tail) out.push(tail);
@@ -64,8 +64,7 @@ const source = extractSourceEpisodes(fs.readFileSync(SOURCE, 'utf8'));
 const data = JSON.parse(fs.readFileSync(TRANSLATIONS, 'utf8'));
 const manifest = { schema: 1, rule: 'one non-empty Persian source line = one translation paragraph', episodes: [] };
 
-for (let i = 0; i < source.length; i++) {
-  const ep = source[i];
+for (const ep of source) {
   const target = data.episodes.find(x => x.number === ep.number);
   if (!target) throw new Error(`Missing translation episode ${ep.number}`);
   const aligned = {};
