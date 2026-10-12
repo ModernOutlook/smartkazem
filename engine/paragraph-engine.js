@@ -122,9 +122,11 @@
     if (Number.isInteger(expectedCount) && parsed.paragraphs.length !== expectedCount) throw new Error('تعداد پاراگراف‌های پاسخ با درخواست برابر نیست.');
     return { paragraphs: parsed.paragraphs.map(item => {
       if (!item || typeof item.text !== 'string' || !item.text.trim()) throw new Error('متن پاراگراف نامعتبر است.');
-      const processed = processText(item.text);
-      if (processed.finalWordCount > MAX_WORDS || processed.finalCharCount > MAX_CHARS || processed.remainingLongWords.length) throw new Error('پاراگراف محدودیت‌های سخت را نقض می‌کند.');
-      return { text: processed.text };
+      const original = normalizeText(item.text);
+      if (countWords(original) > MAX_WORDS || countChars(original) > MAX_CHARS || findLongWords(original).length) {
+        throw new Error('پاراگراف محدودیت‌های سخت را نقض می‌کند.');
+      }
+      return { text: original };
     }) };
   }
   function buildSystemPrompt(criteriaByDomain, language) {
