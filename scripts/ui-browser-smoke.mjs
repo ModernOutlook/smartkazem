@@ -419,7 +419,7 @@ async function auditCanonicalRoute(page, route, language) {
         const translatedPart = book.parts?.[i];
         const expectedHeading = translatedPart?.title?.[lang] || catalog.pages?.layer3?.sections?.[i] || part.titleFallback;
         const expectedParagraphs = lang === 'fa' ? part.text : (translatedPart?.paragraphs?.[lang] || []);
-        const actualHeading = document.querySelector('#reader .story h2')?.textContent?.replace(/^\\d+\\s*\\.\\s*/, '').trim() || '';
+        const actualHeading = document.querySelector('#reader .story h2')?.textContent?.replace(/^\d+\s*\.\s*/, '').trim() || '';
         const actualParagraphs = [...document.querySelectorAll('#reader .story p')].map(p => p.textContent);
         if (actualHeading !== expectedHeading || JSON.stringify(actualParagraphs) !== JSON.stringify(expectedParagraphs)) {
           if (mismatches.length === 0) mismatches.push({ part: i + 1, actualHeading, expectedHeading, actualCount: actualParagraphs.length, expectedCount: expectedParagraphs.length, actualFirst: actualParagraphs[0]?.slice(0, 100), expectedFirst: expectedParagraphs[0]?.slice(0, 100) });
