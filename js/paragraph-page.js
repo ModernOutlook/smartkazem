@@ -94,9 +94,8 @@ function renderPrimaryParagraphs(results){
 }
 async function evaluateReference(){
  const raw=elements.input.value;
- const text=raw.trim();
- if(!text)throw new Error(translate('paragraphMachine.empty','متنی وارد نشده است.'));
- return [await window.ParagraphWorkspaceAdapter.evaluateText(text,getLanguage())];
+ if(!raw.trim())throw new Error(translate('paragraphMachine.empty','متنی وارد نشده است.'));
+ return [await window.ParagraphWorkspaceAdapter.evaluateText(raw,getLanguage())];
 }
 async function generateExperience(){
  const lang=getLanguage();
