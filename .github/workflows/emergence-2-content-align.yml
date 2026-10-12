@@ -16,30 +16,30 @@ jobs:
         with:
           ref: fix/emergence-2-paragraph-alignment
 
-      - uses: actions/setup-node@v4.4.0
-        with:
-          node-version: 22
+      - name: Install semantic alignment dependency
+        run: python3 -m pip install --disable-pip-version-check sentence-transformers
 
-      - name: Align translations to every Persian source line
-        run: node scripts/emergence-2-content-align.mjs
+      - name: Align existing translations to every Persian source line
+        run: python3 scripts/emergence-2-semantic-align.py
 
-      - name: Validate generated content
+      - name: Validate generated content and conservation
         run: |
-          node --input-type=module <<'NODE'
-          import fs from 'node:fs';
-          const d = JSON.parse(fs.readFileSync('translations/emergence-2.json', 'utf8'));
-          const m = JSON.parse(fs.readFileSync('docs/emergence-2-paragraph-manifest.json', 'utf8'));
-          if (m.episodes.length !== 11) throw new Error('Expected 11 episodes');
-          for (const ep of m.episodes) {
-            const row = d.episodes.find(x => x.number === ep.number);
-            if (!row) throw new Error(`Missing episode ${ep.number}`);
-            const n = ep.sourceParagraphCount;
-            for (const lang of ['en','ar','zh']) {
-              if (row.paragraphs[lang].length !== n) throw new Error(`Episode ${ep.number} ${lang}: count mismatch`);
-              if (row.paragraphs[lang].some(x => !x.trim() || /\[object Object\]|placeholder/i.test(x))) throw new Error(`Episode ${ep.number} ${lang}: invalid paragraph`);
-            }
-          }
-          NODE
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('translations/emergence-2.json').read_text())
+          m = json.loads(Path('docs/emergence-2-paragraph-manifest.json').read_text())
+          assert len(m['episodes']) == 11
+          for ep in m['episodes']:
+              row = next(x for x in d['episodes'] if x['number'] == ep['number'])
+              n = ep['sourceParagraphCount']
+              assert len(ep['paragraphs']) == n
+              for lang in ('en','ar','zh'):
+                  assert len(row['paragraphs'][lang]) == n
+                  assert all(x.strip() and '[object Object]' not in x and 'placeholder' not in x.lower() for x in row['paragraphs'][lang])
+                  assert all(0.18 <= p['alignment'][lang]['similarity'] <= 1 for p in ep['paragraphs'])
+          print('11 episodes and all 33 translation arrays validated.')
+          PY
 
       - name: Commit aligned translation reservoir and manifest
         run: |
