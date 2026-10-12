@@ -7,7 +7,7 @@
     <div class="qm-top"><div class="qm-levels" role="group" aria-label="سطح">
       <button type="button" data-lv="easy" aria-pressed="true">آسان</button><button type="button" data-lv="medium" aria-pressed="false">متوسط</button><button type="button" data-lv="hard" aria-pressed="false">سخت</button><button type="button" data-lv="boss" aria-pressed="false">Boss</button>
     </div><button type="button" data-new>هزارتوی تازه</button></div>
-    <div class="qm-stats"><div class="qm-stat"><b data-s="wallet">۵۰۰۰</b><span>سکه</span></div><div class="qm-stat is-steps"><b data-s="steps">۰</b><span>گام موجود</span></div><div class="qm-stat"><b data-s="used">۰</b><span>گام رفته</span></div><div class="qm-stat"><b data-s="price">۱</b><span>قیمت گام بعدی</span></div></div>
+    <div class="qm-stats"><div class="qm-stat"><b data-s="wallet">—</b><span>سکه</span></div><div class="qm-stat is-steps"><b data-s="steps">۰</b><span>گام موجود</span></div><div class="qm-stat"><b data-s="used">۰</b><span>گام رفته</span></div><div class="qm-stat"><b data-s="price">۱</b><span>قیمت گام بعدی</span></div></div>
     <p class="qm-tier"></p><div class="qm-board"><canvas aria-label="نقشه هزارتو"></canvas></div><div class="qm-quanta" aria-hidden="true"></div>
     <div class="qm-buy"><small>خرید گام:</small><button type="button" data-buy="1"></button><button type="button" data-buy="5"></button><button type="button" data-buy="10"></button></div>
     <p class="qm-msg" aria-live="polite">برای حرکت، اول گام بخر.</p>
