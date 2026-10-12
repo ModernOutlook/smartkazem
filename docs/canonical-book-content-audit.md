@@ -20,7 +20,7 @@ This inventory tracks the migration to the mandatory single-source book architec
 | فصل اول ظهور | `content/emergence.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | `emergence.html` declares `translations/emergence.json`; renderer prefers `bookContent.emergence`. Verify all 19 episodes and translated catalog alignment. |
 | سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` | Persian title, subtitle, section labels, and all 25 prose sections moved out of `translations/fa.json`. | Move target-language prose from shared catalogs into the declared translation reservoir; verify section parity. |
 | آینه‌ی ممکن‌ها | `content/possible-mirror.js` | Persian title, subtitle, section labels, and all 31 prose sections moved out of `translations/fa.json`. | EN/ZH/AR section labels and prose have been moved to `translations/possible-mirror.json` (31 sections per language). Verify rendered section parity and interaction behavior. |
-| فصل دوم ظهور | `content/emergence-2.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | `emergence-2.html` declares `translations/emergence-2.json`; renderer prefers `bookContent.emergence2`. Verify all 11 source episodes and translated catalog alignment. |
+| فصل دوم ظهور | `content/emergence-2.js` | Canonical Persian source contains 11 ordered episodes (20–30). | `translations/emergence-2.json` contains EN/AR/ZH for all 11 episodes; episode 20’s previously combined opening paragraph has been split in all three languages to match the 12 Persian paragraphs. Remaining per-language paragraph counts align across all episodes. |
 | سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` | Persian title, subtitle, and all 12 body paragraphs extracted; HTML uses empty Persian targets. Duplicate Persian fields removed from `translations/observation.json`. | EN/ZH/AR prose has been reconciled against the existing `translations/observation.json` reservoir (12 paragraphs per language) and removed from HTML. Verify rendered language switching and paragraph fidelity. |
 | پژواک لایه سوم | `content/echo-layer3.js` | Persian source contains 17 ordered parts. | EN/ZH/AR titles, subtitles, part titles, and prose load from `translations/echo-layer3.json` (17 parts per language); duplicated part titles removed from shared catalogs. |
 | انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | EN/ZH/AR titles, subtitles, seven chapter titles, and all chapter paragraphs are centralized in `translations/human-machines.json`; global catalogs retain only UI title/subtitle metadata. |
@@ -120,3 +120,11 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 - Added **تباهیان** to the same `i18n-catalogs` manifest as **جاعلان تقلید** and **انسان و ماشین‌هایش**.
 - Removed the Tabahian-specific fetch/adaptation branch from `translations/i18n.js`. The shared loader now loads all three book reservoirs through the same generic manifest and exposes them under `bookContent`.
 - The Tabahian reservoir declares three chapters and localized subtitles; all three chapters are now translated in EN/ZH/AR. Chapter three contains 96 paragraphs in each language, matching the canonical Persian source.
+
+
+## Emergence II translation alignment correction (2026-10-12)
+
+- Compared the canonical Persian episode source with `translations/emergence-2.json`.
+- Found that episode 20’s first target-language paragraph had combined two distinct Persian paragraphs in EN, AR, and ZH.
+- Restored the source boundary in all three translations without removing or summarizing prose. Episode order (20–30) and all other paragraph boundaries remain unchanged.
+- Corrected `page-specs/emergence2.json` to name the dedicated reservoir `translations/emergence-2.json` rather than the generic `translations/{lang}.json` template.
