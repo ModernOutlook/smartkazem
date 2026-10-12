@@ -138,3 +138,24 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 - Updated the controller to select `title[language]` and `paragraphs[language]`, with array validation and a safe empty fallback.
 - Extended the browser smoke test to assert that EN/AR/ZH each render a non-empty localized heading and prose, without a placeholder or raw object string.
 - The independent source paragraph-boundary audit for episodes 23–30 remains open; runtime localization correctness does not certify translation fidelity.
+
+
+## Four-language canonical-content browser audit (2026-10-12)
+
+The Playwright browser smoke test was expanded from structural/non-empty checks to exact rendered-content comparisons.
+
+- **Emergence II:** all 11 episodes are exercised in FA/EN/AR/ZH. The test checks each episode's heading and complete paragraph array against the active canonical source/catalog, verifies the chapter title and `html[lang]`/`html[dir]`, rejects missing-text placeholders and `[object Object]`, and asserts that episode 24 remains selected through language changes.
+- **Other shared pages:** exact DOM-to-catalog checks cover the philosophical treatise's full block sequence, the 81-episode Shahnameh, Emergence I's translated episodes, Observation, Observation 25, Possible Mirror, all Layer 3 parts, all Disturbed Manifesto parts, Zero, and every chapter in the three shared books (Forgers, Human and its Machines, Tabahian).
+- **Shared book direction:** corrected the reader's direction rule so FA/AR are RTL and EN/ZH are LTR.
+- **Global UI:** language switching is exercised on every HTML page; shared routes additionally check active-page translation bindings. Existing responsive viewport and overflow checks remain enabled.
+
+GitHub Actions validation on the PR branch:
+- UI browser smoke: run 90 — success.
+- Site quality gate: run 1070 — success.
+- Security gate: run 387 — success.
+
+These browser tests run the PR branch through Playwright using the workflow's local static HTTP server. They validate the actual browser-rendered runtime for the proposed commit, not the already-deployed production URL.
+
+### Remaining independent source-format question
+
+Emergence II episodes 23–30 still need a deliberate source-to-translation paragraph-boundary review. The Persian source contains many single newlines (roughly 74–124 per episode), but the current source parser splits only on blank lines, so it produces one paragraph per episode; EN/AR/ZH each contain 8–16 paragraph entries. The single newlines could be line breaks within prose/dialogue rather than paragraph separators. Runtime rendering has been verified against each catalog, but this separate fidelity/segmentation question is not certified and must not be silently normalized.
