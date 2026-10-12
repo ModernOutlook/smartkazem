@@ -107,6 +107,8 @@
   }
   function validateJudgment(judgment) {
     if (!judgment || typeof judgment !== 'object' || Array.isArray(judgment)) throw new Error('ساختار داوری نامعتبر است.');
+    const keys = Object.keys(judgment);
+    if (keys.length !== DOMAIN_ORDER.length || keys.some(key => !DOMAIN_ORDER.includes(key))) throw new Error('ساختار داوری باید دقیقاً پنج قلمرو داشته باشد.');
     for (const domain of DOMAIN_ORDER) {
       const item = judgment[domain];
       if (!item || !['ok', 'warn', 'bad'].includes(item.status)) throw new Error('داوری قلمرو ' + domain + ' نامعتبر است.');
@@ -115,13 +117,16 @@
     return judgment;
   }
   function validateEvaluation(parsed) {
-    return validateJudgment(parsed && parsed.judgment);
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || Object.keys(parsed).length !== 1 || !Object.prototype.hasOwnProperty.call(parsed, 'judgment')) {
+      throw new Error('ساختار پاسخ داوری نامعتبر است.');
+    }
+    return validateJudgment(parsed.judgment);
   }
   function validateGeneratedResult(parsed, expectedCount) {
-    if (!parsed || !Array.isArray(parsed.paragraphs)) throw new Error('ساختار پاسخ تولید نامعتبر است.');
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || Object.keys(parsed).length !== 1 || !Array.isArray(parsed.paragraphs)) throw new Error('ساختار پاسخ تولید نامعتبر است.');
     if (Number.isInteger(expectedCount) && parsed.paragraphs.length !== expectedCount) throw new Error('تعداد پاراگراف‌های پاسخ با درخواست برابر نیست.');
     return { paragraphs: parsed.paragraphs.map(item => {
-      if (!item || typeof item.text !== 'string' || !item.text.trim()) throw new Error('متن پاراگراف نامعتبر است.');
+      if (!item || typeof item.text !== 'string' || !item.text.trim() || Object.keys(item).length !== 1 || Object.prototype.hasOwnProperty.call(item, 'judgment')) throw new Error('متن پاراگراف تولیدی نامعتبر است.');
       const original = normalizeText(item.text);
       if (countWords(original) > MAX_WORDS || countChars(original) > MAX_CHARS || findLongWords(original).length) {
         throw new Error('پاراگراف محدودیت‌های سخت را نقض می‌کند.');
