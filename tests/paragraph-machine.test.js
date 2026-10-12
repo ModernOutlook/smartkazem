@@ -100,7 +100,7 @@ async function main() {
   const generated = await adapter.generateParagraphs(1, 'mixed', 'en');
   assert.equal(generated[0].text, 'A generated English paragraph.');
   assert.match(generationPrompt, /language whose code is "en"/);
-  assert.doesNotMatch(generationPrompt, /judgment.*status/i);
+  assert.doesNotMatch(generationPrompt, /\"judgment\"\\s*:/i);
   await adapter.evaluateText(generated[0].text, 'en');
   assert.equal(generationCalls, 1);
   assert.equal(judgmentCalls, 2, 'generation and judgment must be separate model calls');
