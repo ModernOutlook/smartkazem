@@ -170,8 +170,13 @@ try {
       }, selectors);
       const compareGeometry = (before, after, label) => {
         let viewportDiagnosticsLogged = false;
-        for (const selector of Object.keys(before || {}).filter((key) => !key.startsWith('__'))) {
-          const a = before[selector], b = after && after[selector];
+        const selectorsToCompare = [
+          ...Object.keys(before || {}).filter((key) => !key.startsWith('__')),
+          ...['html', 'body', '#app'].filter((selector) => before?.__viewport?.shell?.[selector] && after?.__viewport?.shell?.[selector]),
+        ];
+        for (const selector of selectorsToCompare) {
+          const a = before[selector] || before?.__viewport?.shell?.[selector];
+          const b = (after && after[selector]) || after?.__viewport?.shell?.[selector];
           if (!a || !b) {
             if (a !== b) fail(label + ': missing geometry for ' + selector);
             continue;
@@ -327,8 +332,10 @@ for (const route of sharedRoutes) {
       }
       return result;
     }, route.measure || []);
+    await page.locator('[data-site-lang="fa"]').first().click({ timeout: 5000 });
+    await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl', null, { timeout: 5000 });
     const routeGeometryBaseline = await measureRouteGeometry();
-    console.info('LAYOUT SNAPSHOT ' + route.route + ' fa/initial ' + JSON.stringify(routeGeometryBaseline));
+    console.info('LAYOUT SNAPSHOT ' + route.route + ' fa/rtl baseline ' + JSON.stringify(routeGeometryBaseline));
     const geometry = await page.evaluate(() => {
       const app = document.querySelector('#app')?.getBoundingClientRect();
       const root = document.querySelector('#shared-page-host .child-page.is-active')?.getBoundingClientRect();
