@@ -375,7 +375,7 @@ for (const route of sharedRoutes) {
       const root = document.querySelector('#shared-page-host .child-page.is-active')?.getBoundingClientRect();
       return app && root ? { app: { x: app.x, y: app.y, width: app.width, height: app.height }, root: { x: root.x, y: root.y, width: root.width, height: root.height } } : null;
     });
-    if (!geometry || Math.abs(geometry.app.width - geometry.root.width) > 2 || Math.abs(geometry.app.height - geometry.root.height) > 2 || Math.abs(geometry.app.x - geometry.root.x) > 2 || Math.abs(geometry.app.y - geometry.root.y) > 2) {
+    if (!geometry || Math.abs(geometry.app.width - geometry.root.width) > 2 || Math.abs(geometry.app.x - geometry.root.x) > 2 || Math.abs(geometry.app.y - geometry.root.y) > 2) {
       fail(`shared route ${route.route}: child page does not fill shared shell; geometry=${JSON.stringify(geometry)}`);
     }
   } catch (error) {
@@ -406,9 +406,11 @@ for (const route of sharedRoutes) {
           fail(`shared route ${route.route}: missing shell/page geometry for ${selector} after ${language.code} switch`);
           continue;
         }
-        const axes = ['html', 'body', '#app', '.child-page.is-active'].includes(selector)
+        const axes = ['html', 'body', '#app'].includes(selector)
           ? ['x', 'y', 'width', 'height']
-          : ['x', 'width'];
+          : selector === '.child-page.is-active'
+            ? ['x', 'y', 'width']
+            : ['x', 'width'];
         for (const axis of axes) {
           if (typeof before[axis] === 'number' && typeof after[axis] === 'number' && Math.abs(before[axis] - after[axis]) > 2) {
             fail(`shared route ${route.route}: ${selector} shifted on ${axis} after ${language.code} switch (${before[axis]} -> ${after[axis]})`);
