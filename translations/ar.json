@@ -240,6 +240,11 @@
     },
     "emergence2": {
       "title": "الفصل الثاني: الظهور"
+    },
+    "quantumMaze": {
+      "title": "المتاهة الكمومية",
+      "subtitle": "اعثر على طريقك عبر الممرات",
+      "close": "عودة"
     }
   },
   "paragraphMachine": {
