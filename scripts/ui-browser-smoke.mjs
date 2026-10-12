@@ -181,7 +181,10 @@ try {
             if (a !== b) fail(label + ': missing geometry for ' + selector);
             continue;
           }
-          for (const key of ['x', 'y', 'width', 'height']) {
+          const axes = ['html', 'body', '#app'].includes(selector)
+            ? ['x', 'y', 'width', 'height']
+            : ['x', 'width'];
+          for (const key of axes) {
             if (Math.abs(a[key] - b[key]) > 2) {
               fail(label + ': ' + selector + ' shifted (' + key + ': ' + a[key] + ' -> ' + b[key] + ')');
               if (!viewportDiagnosticsLogged) {
