@@ -393,6 +393,20 @@ for (const route of sharedRoutes) {
       { ...language, key: route.route }, { timeout: 5000 });
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
+      if (route.route === 'emergence2') {
+        const readerState = await page.evaluate(() => {
+          const reader = document.querySelector('#reader');
+          return {
+            heading: reader?.querySelector('h2')?.textContent?.trim() || '',
+            paragraphs: [...(reader?.querySelectorAll('.prose') || [])].map(node => node.textContent.trim()).filter(Boolean),
+            placeholder: Boolean(reader?.querySelector('.placeholder')),
+            rawObject: reader?.textContent?.includes('[object Object]') || false
+          };
+        });
+        if (!readerState.heading || readerState.rawObject || readerState.placeholder || !readerState.paragraphs.length) {
+          fail(`Emergence II: ${language.code} did not render a localized episode (heading=${readerState.heading || 'empty'}, paragraphs=${readerState.paragraphs.length}, placeholder=${readerState.placeholder}, rawObject=${readerState.rawObject})`);
+        }
+      }
       const currentGeometry = await measureRouteGeometry();
       if (currentGeometry.__shell['#app']?.scrollLeft !== 0) {
         fail('shared route ' + route.route + ': #app has nonzero horizontal scroll offset after ' + language.code + ' switch (' + currentGeometry.__shell['#app']?.scrollLeft + ')');
