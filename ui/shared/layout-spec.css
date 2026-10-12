@@ -301,31 +301,3 @@ html[dir="ltr"] .share-page .share-story-action {
 
 /* Shared child-page fragments participate in the app's single page stack. */
 #shared-page-host { display: contents; }
-
-/* Keep the remaining affected surfaces on the same physical-layout contract
- * as the home/realm screens. The outer shell is always LTR so flex/grid
- * placement cannot mirror when html[dir] changes; reading regions opt back
- * into the active language direction below. */
-.zero-page,
-.disturbed-manifesto-page,
-.observation-page {
-  direction: ltr !important;
-  writing-mode: horizontal-tb !important;
-}
-
-html[dir="rtl"] .zero-page .zero-story,
-html[dir="rtl"] .disturbed-manifesto-page .title,
-html[dir="rtl"] .disturbed-manifesto-page .reader-head,
-html[dir="rtl"] .disturbed-manifesto-page .prose,
-html[dir="rtl"] .observation-page .book-body {
-  direction: rtl;
-}
-
-html[dir="ltr"] .zero-page .zero-story,
-html[dir="ltr"] .disturbed-manifesto-page .title,
-html[dir="ltr"] .disturbed-manifesto-page .reader-head,
-html[dir="ltr"] .disturbed-manifesto-page .prose,
-html[dir="ltr"] .observation-page .book-body {
-  direction: ltr;
-}
-
