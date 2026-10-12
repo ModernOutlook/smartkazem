@@ -289,6 +289,8 @@ for (const route of sharedRoutes) {
     continue;
   }
 
+  let measureRouteGeometry;
+  let routeGeometryBaseline;
   try {
     await page.waitForFunction((key) => window.SharedPages?.getActive() === key && document.querySelector('#shared-page-host .child-page.is-active'), route.route, { timeout: 7000 });
     await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
@@ -299,7 +301,7 @@ for (const route of sharedRoutes) {
     }
     const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
     if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
-    const measureRouteGeometry = async () => page.evaluate((selectors) => {
+    measureRouteGeometry = async () => page.evaluate((selectors) => {
       const root = document.querySelector('#shared-page-host .child-page.is-active');
       const rectOf = (element) => {
         if (!element) return null;
@@ -339,7 +341,7 @@ for (const route of sharedRoutes) {
     }, route.measure || []);
     await page.locator('[data-site-lang="fa"]').first().click({ timeout: 5000 });
     await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl', null, { timeout: 5000 });
-    const routeGeometryBaseline = await measureRouteGeometry();
+    routeGeometryBaseline = await measureRouteGeometry();
     console.info('LAYOUT SNAPSHOT ' + route.route + ' fa/rtl baseline ' + JSON.stringify(routeGeometryBaseline));
     const geometry = await page.evaluate(() => {
       const app = document.querySelector('#app')?.getBoundingClientRect();
