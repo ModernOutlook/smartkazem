@@ -51,6 +51,17 @@ body {
   overflow-x: clip;
 }
 
+/* Anchor the shared application to the physical viewport, not to the body's
+ * direction-sensitive grid-item alignment. This prevents the app shell from
+ * acquiring a left/right offset when html[dir] changes. */
+.app {
+  position: fixed;
+  inset: 0;
+  width: auto;
+  height: 100dvh;
+  aspect-ratio: auto;
+}
+
 .app > *,
 .page > *,
 .book-shell > *,
