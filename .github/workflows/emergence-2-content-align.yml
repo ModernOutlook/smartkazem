@@ -1,0 +1,54 @@
+name: Emergence II content alignment
+
+on:
+  push:
+    branches: ["fix/emergence-2-paragraph-alignment"]
+
+permissions:
+  contents: write
+
+jobs:
+  align:
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.4.0
+        with:
+          ref: fix/emergence-2-paragraph-alignment
+
+      - uses: actions/setup-node@v4.4.0
+        with:
+          node-version: 22
+
+      - name: Align translations to every Persian source line
+        run: node scripts/emergence-2-content-align.mjs
+
+      - name: Validate generated content
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const d = JSON.parse(fs.readFileSync('translations/emergence-2.json', 'utf8'));
+          const m = JSON.parse(fs.readFileSync('docs/emergence-2-paragraph-manifest.json', 'utf8'));
+          if (m.episodes.length !== 11) throw new Error('Expected 11 episodes');
+          for (const ep of m.episodes) {
+            const row = d.episodes.find(x => x.number === ep.number);
+            if (!row) throw new Error(`Missing episode ${ep.number}`);
+            const n = ep.sourceParagraphCount;
+            for (const lang of ['en','ar','zh']) {
+              if (row.paragraphs[lang].length !== n) throw new Error(`Episode ${ep.number} ${lang}: count mismatch`);
+              if (row.paragraphs[lang].some(x => !x.trim() || /\[object Object\]|placeholder/i.test(x))) throw new Error(`Episode ${ep.number} ${lang}: invalid paragraph`);
+            }
+          }
+          NODE
+
+      - name: Commit aligned translation reservoir and manifest
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add translations/emergence-2.json docs/emergence-2-paragraph-manifest.json
+          if git diff --cached --quiet; then
+            echo 'No generated changes.'
+            exit 0
+          fi
+          git commit -m 'Align Emergence II translations to Persian line boundaries [skip ci]'
+          git push origin HEAD:fix/emergence-2-paragraph-alignment
