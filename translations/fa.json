@@ -254,6 +254,11 @@
     },
     "inventory": {
       "title": "فهرست کارت‌ها — SmartKazem"
+    },
+    "quantumMaze": {
+      "title": "هزارتو",
+      "subtitle": "از میان راهروها، مسیر خودت را پیدا کن",
+      "close": "بازگشت"
     }
   },
   "paragraphMachine": {

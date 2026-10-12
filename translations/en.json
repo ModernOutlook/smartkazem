@@ -241,6 +241,11 @@
     },
     "emergence2": {
       "title": "Chapter Two: Emergence"
+    },
+    "quantumMaze": {
+      "title": "Quantum Maze",
+      "subtitle": "Find your way through the corridors",
+      "close": "Back"
     }
   },
   "paragraphMachine": {

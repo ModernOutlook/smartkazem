@@ -1,0 +1,17 @@
+<main class="qm-page child-page" aria-labelledby="quantum-maze-title" lang="fa" dir="rtl">
+  <header class="qm-page-head">
+    <div><p class="qm-eyebrow">STRUCTURE OF THE HALL · S</p><h1 id="quantum-maze-title" data-i18n="pages.quantumMaze.title">هزارتو</h1><p data-i18n="pages.quantumMaze.subtitle">از میان راهروها، مسیر خودت را پیدا کن</p></div>
+    <button id="quantum-maze-close" class="qm-close" type="button" aria-label="بازگشت" data-i18n-aria="labels.back">✕</button>
+  </header>
+  <section id="quantum-maze-game" class="qm" tabindex="0" aria-label="هزارتوی کوانتومی">
+    <div class="qm-top"><div class="qm-levels" role="group" aria-label="سطح">
+      <button type="button" data-lv="easy" aria-pressed="true">آسان</button><button type="button" data-lv="medium" aria-pressed="false">متوسط</button><button type="button" data-lv="hard" aria-pressed="false">سخت</button><button type="button" data-lv="boss" aria-pressed="false">Boss</button>
+    </div><button type="button" data-new>هزارتوی تازه</button></div>
+    <div class="qm-stats"><div class="qm-stat"><b data-s="wallet">—</b><span>سکه</span></div><div class="qm-stat is-steps"><b data-s="steps">۰</b><span>گام موجود</span></div><div class="qm-stat"><b data-s="used">۰</b><span>گام رفته</span></div><div class="qm-stat"><b data-s="price">۱</b><span>قیمت گام بعدی</span></div></div>
+    <p class="qm-tier"></p><div class="qm-board"><canvas aria-label="نقشه هزارتو"></canvas></div><div class="qm-quanta" aria-hidden="true"></div>
+    <div class="qm-buy"><small>خرید گام:</small><button type="button" data-buy="1"></button><button type="button" data-buy="5"></button><button type="button" data-buy="10"></button></div>
+    <p class="qm-msg" aria-live="polite">برای حرکت، اول گام بخر.</p>
+    <div class="qm-pad" aria-label="جهت‌ها"><button type="button" data-d="0" aria-label="بالا">▲</button><button type="button" data-d="3" aria-label="چپ">◀</button><button type="button" data-d="2" aria-label="پایین">▼</button><button type="button" data-d="1" aria-label="راست">▶</button></div>
+    <p class="qm-seed"></p>
+  </section>
+</main>
