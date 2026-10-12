@@ -27,8 +27,13 @@
     const byId = new Map();
     translated.forEach((value, index) => {
       const expectedId = canonicalItems[index].id;
-      const cleaned = value.replace(new RegExp('^\\s*' + expectedId.replace(/[.*+?^${}()|[\\]\\\\]/g, '\\$&') + '\\s*[:：-]\\s*'), '').trim();
-      if (!cleaned || new RegExp('^' + expectedId + '\\s*[:：-]').test(cleaned)) {
+      const separator = value.indexOf(':');
+      const prefix = separator >= 0 ? value.slice(0, separator).trim() : '';
+      if (/^[MSTERC]\\d+$/.test(prefix) && prefix !== expectedId) {
+        throw new Error('شناسهٔ معیار ترجمه‌شده با اصل مرجع مطابقت ندارد: ' + expectedId);
+      }
+      const cleaned = (prefix === expectedId ? value.slice(separator + 1) : value).trim();
+      if (!cleaned) {
         throw new Error('ترجمهٔ معیار ' + expectedId + ' ساختار قابل‌اعتماد ندارد.');
       }
       byId.set(expectedId, cleaned);
