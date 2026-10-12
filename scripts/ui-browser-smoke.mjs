@@ -686,6 +686,39 @@ for (const book of sharedBooks) {
       language, { timeout: 5000 });
       const populated = await page.locator('#book-body').evaluate((el) => Boolean(el.textContent.trim() || el.children.length));
       if (!populated) fail(`shared book ${book.kind}: content became empty in ${language.code}`);
+      const canonicalBookAudit = await page.evaluate(({ kind, language }) => {
+        const catalog = window.SiteI18n?.getCatalog?.() || {};
+        const translated = catalog.bookContent?.[kind];
+        let source;
+        if (kind === 'forgers') source = window.ForgersCatalog || [];
+        else if (kind === 'humanMachines') source = window.HumanMachinesCatalog || [];
+        else source = window.TabahianCatalog?.chapters || [];
+        const expected = language === 'fa' ? source : (translated?.chapters || []).map(chapter => ({
+          ...chapter,
+          title: chapter.title?.[language] || '',
+          paragraphs: chapter.paragraphs?.[language] || []
+        }));
+        const issues = [];
+        const expectedDir = ['fa', 'ar'].includes(language) ? 'rtl' : 'ltr';
+        if (document.documentElement.dir !== expectedDir) issues.push('document direction mismatch');
+        if (document.querySelector('#book-body')?.dir !== expectedDir) issues.push('book reader direction mismatch');
+        const tabs = [...document.querySelectorAll('#book-tabs .book-tab')];
+        if (!expected.length || tabs.length !== expected.length) issues.push('chapter selector count differs from canonical chapter count');
+        const mismatches = [];
+        for (let index = 0; index < Math.min(expected.length, tabs.length); index++) {
+          tabs[index].click();
+          const chapter = document.querySelector('#book-body .chapter');
+          const actualTitle = chapter?.querySelector('h2')?.textContent?.trim() || '';
+          const actualParagraphs = [...(chapter?.querySelectorAll(':scope > p') || [])].map(p => p.textContent);
+          if (actualTitle !== expected[index].title || JSON.stringify(actualParagraphs) !== JSON.stringify(expected[index].paragraphs || [])) {
+            mismatches.push(index + 1);
+          }
+        }
+        tabs[0]?.click();
+        if (mismatches.length) issues.push('rendered chapter title/paragraph mismatch in chapter(s): ' + mismatches.join(','));
+        return issues;
+      }, { kind: book.kind, language: language.code });
+      if (canonicalBookAudit.length) fail(`shared book ${book.kind}: canonical content audit failed in ${language.code}: ${canonicalBookAudit.join(' | ')}`);
     } catch (error) {
       fail(`shared book ${book.kind}: language ${language.code} transition failed; ${String(error).split('\\n')[0]}`);
       break;
