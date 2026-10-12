@@ -7,7 +7,7 @@
     "content_key": "episodes"
   },
   "translations": {
-    "path": "translations/{lang}.json",
+    "path": "translations/emergence-2.json",
     "languages": [
       "en",
       "ar",
@@ -23,7 +23,6 @@
   "accessibility": {
     "required": true,
     "features": [
-      
       "semantic-episode-navigation",
       "aria-current-active-episode",
       "aria-controls",
