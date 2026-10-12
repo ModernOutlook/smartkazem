@@ -60,6 +60,25 @@ body {
   width: auto;
   height: 100dvh;
   aspect-ratio: auto;
+  /* The app is a physical viewport shell. Keep its scroll origin LTR so RTL
+     content overflow cannot shift every absolutely positioned child. */
+  direction: ltr;
+}
+
+html[dir="rtl"] .app > .page,
+html[dir="rtl"] #shared-page-host [data-shared-route] > .page {
+  direction: rtl;
+}
+
+html[dir="ltr"] .app > .page,
+html[dir="ltr"] #shared-page-host [data-shared-route] > .page {
+  direction: ltr;
+}
+
+/* Shared-route wrappers also use a physical LTR scroll origin; the page root
+   above owns the actual reading direction for the active language. */
+#shared-page-host [data-shared-route] {
+  direction: ltr;
 }
 
 .app > *,
