@@ -364,6 +364,46 @@ async function auditCanonicalRoute(page, route, language) {
       buttons[0]?.click();
     }
 
+    if (route === 'treatise') {
+      const source = window.PhilosophicalTreatisePersianSource;
+      const translated = catalog.bookContent?.treatise;
+      const blocks = lang === 'fa' ? source?.blocks : translated?.blocks;
+      const actualBlocks = [...document.querySelectorAll('#treatise-content .pair .treatise-block-content')];
+      if (!blocks?.length || actualBlocks.length !== blocks.length) issues.push('treatise block count differs from canonical source');
+      const mismatches = [];
+      for (let i = 0; i < Math.min(actualBlocks.length, blocks?.length || 0); i++) {
+        const expectedHtml = lang === 'fa' ? blocks[i]?.html : blocks[i]?.[lang];
+        const holder = document.createElement('div');
+        holder.innerHTML = expectedHtml || '';
+        if (actualBlocks[i].textContent.trim() !== holder.textContent.trim()) mismatches.push(i);
+        const expectedDir = ['fa', 'ar'].includes(lang) ? 'rtl' : 'ltr';
+        if (actualBlocks[i].getAttribute('dir') !== expectedDir) issues.push('treatise block direction mismatch at block ' + i);
+      }
+      if (mismatches.length) issues.push('treatise rendered text differs from canonical block(s): ' + mismatches.slice(0, 12).join(','));
+    }
+
+    if (route === 'emergence') {
+      const book = catalog.bookContent?.emergence || catalog.chapters?.emergence || {};
+      const episodes = book.episodes || [];
+      const buttons = [...document.querySelectorAll('#episode-list .episode')];
+      if (!episodes.length || buttons.length !== episodes.length) issues.push('Emergence I episode count differs from canonical catalog');
+      const mismatches = [];
+      for (let i = 0; i < Math.min(buttons.length, episodes.length); i++) {
+        buttons[i].click();
+        const expectedTitle = episodes[i]?.title?.[lang];
+        const expectedParagraphs = episodes[i]?.paragraphs?.[lang];
+        const actualTitle = document.querySelector('#reader h2')?.textContent?.trim() || '';
+        const actualParagraphs = [...document.querySelectorAll('#reader .prose')].map(p => p.textContent);
+        if (lang === 'fa') {
+          if (!actualTitle || !actualParagraphs.length || document.querySelector('#reader .placeholder')) mismatches.push(i + 1);
+        } else if (!expectedTitle || !expectedParagraphs?.length || actualTitle !== expectedTitle || JSON.stringify(actualParagraphs) !== JSON.stringify(expectedParagraphs)) {
+          mismatches.push(i + 1);
+        }
+      }
+      if (mismatches.length) issues.push('Emergence I rendered episode content mismatch in episode(s): ' + mismatches.join(','));
+      buttons[0]?.click();
+    }
+
     if (route === 'layer3') {
       const source = window.EchoLayer3Content;
       const book = catalog.bookContent?.layer3 || catalog.chapters?.layer3 || {};
@@ -547,7 +587,7 @@ for (const route of sharedRoutes) {
       { ...language, key: route.route }, { timeout: 5000 });
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
-      if (['observation25', 'possibleMirror', 'observation', 'disturbedManifesto', 'shahnameh', 'layer3', 'zero'].includes(route.route)) {
+      if (['treatise', 'shahnameh', 'emergence', 'observation25', 'possibleMirror', 'emergence2', 'observation', 'layer3', 'disturbedManifesto', 'zero'].includes(route.route)) {
         const canonicalIssues = await auditCanonicalRoute(page, route.route, language.code);
         if (canonicalIssues.length) fail(`shared route ${route.route}: canonical content audit failed in ${language.code}: ${canonicalIssues.join(' | ')}`);
       }
