@@ -21,7 +21,9 @@
     let lastIssue = '';
     for (let attempt = 0; attempt < 2; attempt += 1) {
       const translated = await window.ParagraphTranslation.fromPersianBatch(
-        canonicalItems.map(item => item.id + ': ' + item.text), lang
+        canonicalItems.map(item => item.id + ': ' + item.text),
+        lang,
+        attempt > 0 ? 'A previous semantic audit flagged these issues: ' + lastIssue + '. Correct the identified meaning drift while preserving the exact logical scope, negation, and relation of each Persian source criterion.' : ''
       );
       if (!Array.isArray(translated) || translated.length !== canonicalItems.length ||
           translated.some(value => typeof value !== 'string' || !value.trim())) {
