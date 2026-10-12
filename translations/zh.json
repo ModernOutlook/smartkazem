@@ -240,6 +240,11 @@
     },
     "emergence2": {
       "title": "第二章：显现"
+    },
+    "quantumMaze": {
+      "title": "量子迷宫",
+      "subtitle": "在迷宫中找到自己的道路",
+      "close": "返回"
     }
   },
   "paragraphMachine": {
