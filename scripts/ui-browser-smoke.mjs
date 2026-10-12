@@ -263,10 +263,10 @@ const sharedRoutes = [
   { route: 'observation25', content: '#observation25-tabs', close: '#observation25-close' },
   { route: 'possibleMirror', content: '#possible-mirror-tabs', close: '#possible-mirror-close' },
   { route: 'emergence2', content: '#episode-list', close: '#emergence2-close' },
-  { route: 'observation', content: '#observation-source-title', close: '#close' },
+  { route: 'observation', content: '#observation-source-title', close: '#close', measure: ['.observation-page', '.book-head', '.book-body'] },
   { route: 'layer3', content: '#chapters', close: '#close' },
-  { route: 'disturbedManifesto', content: '#part-list', close: '#manifesto-close' },
-  { route: 'zero', content: '#zero-story', close: '#zero-back' },
+  { route: 'disturbedManifesto', content: '#part-list', close: '#manifesto-close', measure: ['.disturbed-manifesto-page', '.top', '.reader'] },
+  { route: 'zero', content: '#zero-story', close: '#zero-back', measure: ['.zero-page', '.zero-header', '.zero-article'] },
   { route: 'inventory', content: '#inventory-grid', close: 'a.inventory-home' },
 ];
 
@@ -289,6 +289,15 @@ for (const route of sharedRoutes) {
     await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
     const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
     if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
+    const measureRouteGeometry = async () => page.evaluate((selectors) => Object.fromEntries(
+      selectors.map((selector) => {
+        const element = document.querySelector('#shared-page-host .child-page.is-active ' + selector);
+        if (!element) return [selector, null];
+        const rect = element.getBoundingClientRect();
+        return [selector, { x: rect.x, y: rect.y, width: rect.width, height: rect.height }];
+      }),
+    ), route.measure || []);
+    const routeGeometryBaseline = route.measure ? await measureRouteGeometry() : null;
     const geometry = await page.evaluate(() => {
       const app = document.querySelector('#app')?.getBoundingClientRect();
       const root = document.querySelector('#shared-page-host .child-page.is-active')?.getBoundingClientRect();
@@ -318,6 +327,22 @@ for (const route of sharedRoutes) {
       { ...language, key: route.route }, { timeout: 5000 });
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
+      if (route.measure && routeGeometryBaseline) {
+        const currentGeometry = await measureRouteGeometry();
+        for (const selector of route.measure) {
+          const before = routeGeometryBaseline[selector];
+          const after = currentGeometry[selector];
+          if (!before || !after) {
+            fail(`shared route ${route.route}: missing geometry for ${selector} after ${language.code} switch`);
+            continue;
+          }
+          for (const axis of ['x', 'y', 'width', 'height']) {
+            if (Math.abs(before[axis] - after[axis]) > 2) {
+              fail(`shared route ${route.route}: ${selector} shifted on ${axis} after ${language.code} switch (${before[axis]} -> ${after[axis]})`);
+            }
+          }
+        }
+      }
     } catch (error) {
       fail(`shared route ${route.route}: language ${language.code} transition failed; ${String(error).split('\\n')[0]}`);
       break;
