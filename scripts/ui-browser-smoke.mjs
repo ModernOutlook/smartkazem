@@ -289,15 +289,46 @@ for (const route of sharedRoutes) {
     await page.waitForSelector(route.content, { state: 'attached', timeout: 7000 });
     const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
     if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
-    const measureRouteGeometry = async () => page.evaluate((selectors) => Object.fromEntries(
-      selectors.map((selector) => {
-        const element = document.querySelector('#shared-page-host .child-page.is-active ' + selector);
-        if (!element) return [selector, null];
+    const measureRouteGeometry = async () => page.evaluate((selectors) => {
+      const root = document.querySelector('#shared-page-host .child-page.is-active');
+      const rectOf = (element) => {
+        if (!element) return null;
         const rect = element.getBoundingClientRect();
-        return [selector, { x: rect.x, y: rect.y, width: rect.width, height: rect.height }];
-      }),
-    ), route.measure || []);
-    const routeGeometryBaseline = route.measure ? await measureRouteGeometry() : null;
+        const style = getComputedStyle(element);
+        return {
+          x: rect.x, y: rect.y, width: rect.width, height: rect.height,
+          direction: style.direction, writingMode: style.writingMode,
+          display: style.display, position: style.position,
+          widthStyle: style.width, maxWidth: style.maxWidth,
+          overflowX: style.overflowX, overflowY: style.overflowY,
+          gridTemplateColumns: style.gridTemplateColumns,
+          gridTemplateAreas: style.gridTemplateAreas, gridArea: style.gridArea,
+          gridColumnStart: style.gridColumnStart, gridColumnEnd: style.gridColumnEnd,
+          inset: style.inset, left: style.left, right: style.right,
+          marginLeft: style.marginLeft, marginRight: style.marginRight,
+          transform: style.transform,
+        };
+      };
+      const result = {
+        __shell: Object.fromEntries(['html', 'body', '#app', '#shared-page-host', '.child-page.is-active'].map((selector) => {
+          const element = document.querySelector(selector);
+          return [selector, rectOf(element)];
+        })),
+        __viewport: {
+          innerWidth: window.innerWidth, clientWidth: document.documentElement.clientWidth,
+          scrollX: window.scrollX, scrollY: window.scrollY,
+          documentScrollWidth: document.documentElement.scrollWidth,
+          bodyScrollWidth: document.body.scrollWidth,
+        },
+      };
+      for (const selector of selectors) {
+        const element = root && (root.matches(selector) ? root : root.querySelector(selector));
+        result[selector] = rectOf(element);
+      }
+      return result;
+    }, route.measure || []);
+    const routeGeometryBaseline = await measureRouteGeometry();
+    console.info('LAYOUT SNAPSHOT ' + route.route + ' fa/initial ' + JSON.stringify(routeGeometryBaseline));
     const geometry = await page.evaluate(() => {
       const app = document.querySelector('#app')?.getBoundingClientRect();
       const root = document.querySelector('#shared-page-host .child-page.is-active')?.getBoundingClientRect();
@@ -327,19 +358,19 @@ for (const route of sharedRoutes) {
       { ...language, key: route.route }, { timeout: 5000 });
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
-      if (route.measure && routeGeometryBaseline) {
-        const currentGeometry = await measureRouteGeometry();
-        for (const selector of route.measure) {
-          const before = routeGeometryBaseline[selector];
-          const after = currentGeometry[selector];
-          if (!before || !after) {
-            fail(`shared route ${route.route}: missing geometry for ${selector} after ${language.code} switch`);
-            continue;
-          }
-          for (const axis of ['x', 'y', 'width', 'height']) {
-            if (Math.abs(before[axis] - after[axis]) > 2) {
-              fail(`shared route ${route.route}: ${selector} shifted on ${axis} after ${language.code} switch (${before[axis]} -> ${after[axis]})`);
-            }
+      const currentGeometry = await measureRouteGeometry();
+      console.info('LAYOUT SNAPSHOT ' + route.route + ' -> ' + language.code + ' ' + JSON.stringify(currentGeometry));
+      const geometrySelectors = ['html', 'body', '#app', '.child-page.is-active', ...(route.measure || [])];
+      for (const selector of geometrySelectors) {
+        const before = selector.startsWith('__') ? routeGeometryBaseline[selector] : (routeGeometryBaseline[selector] || routeGeometryBaseline.__shell?.[selector]);
+        const after = selector.startsWith('__') ? currentGeometry[selector] : (currentGeometry[selector] || currentGeometry.__shell?.[selector]);
+        if (!before || !after) {
+          fail(`shared route ${route.route}: missing shell/page geometry for ${selector} after ${language.code} switch`);
+          continue;
+        }
+        for (const axis of ['x', 'y', 'width', 'height']) {
+          if (typeof before[axis] === 'number' && typeof after[axis] === 'number' && Math.abs(before[axis] - after[axis]) > 2) {
+            fail(`shared route ${route.route}: ${selector} shifted on ${axis} after ${language.code} switch (${before[axis]} -> ${after[axis]})`);
           }
         }
       }
