@@ -110,6 +110,9 @@
         return { text: original, judgment };
       } catch (error) {
         lastError = error;
+        const message = String(error && error.message || '');
+        const repairable = /ساختار داوری|داوری قلمرو|دلیل داوری|پاسخ مدل خالی|JSON معتبر برنگرداند/.test(message);
+        if (!repairable) throw error;
       }
     }
     throw new Error('داوری به‌دلیل پاسخ نامعتبر مدل انجام نشد. لطفاً دوباره تلاش کنید. (' + String(lastError && lastError.message || 'invalid output') + ')');
