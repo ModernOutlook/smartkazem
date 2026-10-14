@@ -76,10 +76,13 @@ try {
     }
 
     // Compare each clipped ring's actual pixels with the same realm page's original
-    // background scene rendered at the same CSS dimensions and opacity.
+    // background scene rendered at the visible annulus at matching viewport scale and opacity.
     const svgBoxForCompare = await page.locator('#universe').boundingBox();
     if (svgBoxForCompare) {
-      const scale = svgBoxForCompare.width / 1000;
+      const scale = Math.ceil(svgBoxForCompare.width) / 1000;
+      const svgShotBuffer = await page.locator('#universe').screenshot();
+      fs.writeFileSync(path.join(output, `${viewport.name}-menu-svg.png`), svgShotBuffer);
+      const actualMenu = PNG.sync.read(svgShotBuffer);
       for (const realm of realms) {
         const sourceId = await page.evaluate((args) => {
           const original = document.querySelector('#' + args.id + '-page');
@@ -107,31 +110,39 @@ try {
           continue;
         }
         const source = page.locator('#' + sourceId);
+        const topbar = page.locator('.topbar');
+        const priorVisibility = await topbar.evaluate(el => el.style.visibility);
+        await topbar.evaluate(el => el.style.setProperty('visibility', 'hidden', 'important'));
         const sourceShot = await source.screenshot();
         await source.evaluate(el => el.remove());
-        const ringShot = await page.locator(`#realm-${realm.id} .realm-ring-background`).screenshot();
+        await topbar.evaluate((el, value) => { if (value) el.style.visibility = value; else el.style.removeProperty('visibility'); }, priorVisibility);
         fs.writeFileSync(path.join(output, `${viewport.name}-source-${realm.id}.png`), sourceShot);
-        fs.writeFileSync(path.join(output, `${viewport.name}-ring-${realm.id}.png`), ringShot);
         const expected = PNG.sync.read(sourceShot);
-        const actual = PNG.sync.read(ringShot);
-        if (expected.width !== actual.width || expected.height !== actual.height) {
-          fail(`${viewport.name}/${realm.id}: source/ring screenshot dimensions differ (${expected.width}x${expected.height} vs ${actual.width}x${actual.height})`);
-          continue;
-        }
+        const commonWidth = Math.min(expected.width, actualMenu.width);
+        const commonHeight = Math.min(expected.height, actualMenu.height);
+        const ex = Math.floor((expected.width - commonWidth) / 2);
+        const ax = Math.floor((actualMenu.width - commonWidth) / 2);
+        const ey = Math.floor((expected.height - commonHeight) / 2);
+        const ay = Math.floor((actualMenu.height - commonHeight) / 2);
         let compared = 0;
         let different = 0;
-        const cx = (expected.width - 1) / 2;
-        const cy = (expected.height - 1) / 2;
-        const radiusPx = realm.radius * scale - 3;
-        for (let y = 0; y < expected.height; y++) {
-          for (let x = 0; x < expected.width; x++) {
-            if (Math.hypot(x - cx, y - cy) > radiusPx) continue;
+        const cx = (commonWidth - 1) / 2;
+        const cy = (commonHeight - 1) / 2;
+        const scaleX = commonWidth / 1000;
+        const scaleY = commonHeight / 1000;
+        const innerRadius = ({ structure: 365, continuity: 285, experience: 205, reference: 125, share: 0 })[realm.id];
+        for (let y = 0; y < commonHeight; y++) {
+          for (let x = 0; x < commonWidth; x++) {
+            const radiusUser = Math.hypot((x - cx) / scaleX, (y - cy) / scaleY);
+            if (radiusUser > realm.radius - 3 / Math.min(scaleX, scaleY)) continue;
+            if (innerRadius && radiusUser < innerRadius + 3 / Math.min(scaleX, scaleY)) continue;
             compared++;
-            const offset = (y * expected.width + x) * 4;
-            if (expected.data[offset] !== actual.data[offset] ||
-                expected.data[offset + 1] !== actual.data[offset + 1] ||
-                expected.data[offset + 2] !== actual.data[offset + 2] ||
-                expected.data[offset + 3] !== actual.data[offset + 3]) different++;
+            const expectedOffset = ((y + ey) * expected.width + (x + ex)) * 4;
+            const actualOffset = ((y + ay) * actualMenu.width + (x + ax)) * 4;
+            if (expected.data[expectedOffset] !== actualMenu.data[actualOffset] ||
+                expected.data[expectedOffset + 1] !== actualMenu.data[actualOffset + 1] ||
+                expected.data[expectedOffset + 2] !== actualMenu.data[actualOffset + 2] ||
+                expected.data[expectedOffset + 3] !== actualMenu.data[actualOffset + 3]) different++;
           }
         }
         const percent = compared ? different * 100 / compared : 100;
