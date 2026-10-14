@@ -25,7 +25,10 @@ jobs:
 
       - name: Check JavaScript syntax
         run: |
-          find . -type f -name '*.js' -not -path './.git/*' -print0 | xargs -0 -n1 node --check
+          find . -type f \( -name '*.js' -o -name '*.mjs' \) -not -path './.git/*' -print0 | xargs -0 -n1 node --check
+
+      - name: Test Five Realms gameplay engine
+        run: node --test games/five-realms/tests/*.test.mjs
 
       - name: Test Paragraph Machine contracts
         run: node tests/paragraph-machine.test.js
