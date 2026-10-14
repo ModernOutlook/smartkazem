@@ -294,7 +294,8 @@
       "forgivenRealm": "If multiple realms tie for the most cards, choose which realm's wrong answer is forgiven.",
       "jokerChooseCard": "Choose a card to take with the joker",
       "extraExchange": "You earned one extra exchange. Exchange once more to end your turn.",
-      "fullyOwnedFree": "This realm's question part is free because you own all its badges."
+      "fullyOwnedFree": "This realm's question part is free because you own all its badges.",
+      "luckyCard": "Lucky card"
     }
   },
   "paragraphMachine": {
