@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { createEngine, createSeededRng, createDeck, evaluateHand, scoreFewCards } from "../engine/index.mjs";
 const config=JSON.parse(await readFile(new URL("../data/config.json",import.meta.url),"utf8"));
 const card=(rank,suit)=>({id:`${rank}-${suit}`,rank,suit,realm:({spades:"blue",diamonds:"yellow",hearts:"red",clubs:"green"})[suit],joker:false});
-const hand=(ranks,suits=[])=>ranks.map((r,i)=>card(r,suits[i]||"spades"));
+const hand=(ranks,suits=null)=>ranks.map((r,i)=>card(r,suits?.[i]||["spades","hearts","diamonds","clubs","spades"][i%5]));
 test("seeded RNG and deck are deterministic; deck contains 54 unique cards",()=>{assert.deepEqual(createDeck(config,createSeededRng(42)),createDeck(config,createSeededRng(42)));const d=createDeck(config,createSeededRng(9));assert.equal(d.length,54);assert.equal(new Set(d.map(c=>c.id)).size,54);assert.equal(d.filter(c=>c.joker).length,2);});
 test("all five-card poker rankings and exact configured points",()=>{
  const cases=[
@@ -16,14 +16,14 @@ test("all five-card poker rankings and exact configured points",()=>{
  [hand(["2","5","7","9","K"],["hearts","hearts","hearts","hearts","hearts"]), "flush",10],
  [hand(["2","2","2","9","9"]), "fullHouse",12],
  [hand(["2","2","2","2","K"]), "fourOfAKind",16],
- [hand(["5","6","7","8","9"]), "straightFlush",20],
- [hand(["10","J","Q","K","A"]), "royalFlush",25]
+ [hand(["5","6","7","8","9"],["spades","spades","spades","spades","spades"]), "straightFlush",20],
+ [hand(["10","J","Q","K","A"],["spades","spades","spades","spades","spades"]), "royalFlush",25]
  ];
  for(const [cards,category,points] of cases){const result=evaluateHand(cards,config);assert.equal(result.category,category);assert.equal(result.points,points);}
 });
 test("ace-low and ace-high straights work; no wrap-around",()=>{
  assert.equal(evaluateHand(hand(["A","2","3","4","5"]),config).category,"straight");
- assert.equal(evaluateHand(hand(["10","J","Q","K","A"]),config).category,"royalFlush");
+ assert.equal(evaluateHand(hand(["10","J","Q","K","A"],["spades","spades","spades","spades","spades"]),config).category,"royalFlush");
  assert.notEqual(evaluateHand(hand(["Q","K","A","2","3"]),config).category,"straight");
 });
 test("few-card count scoring and structural mode option",()=>{
