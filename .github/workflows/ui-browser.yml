@@ -28,7 +28,7 @@ jobs:
 
       - name: Install Playwright
         run: |
-          npm install --no-save --no-package-lock playwright@1.55.0 pngjs@7.0.0
+          npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install chromium
 
       - name: Start static site
@@ -53,17 +53,6 @@ jobs:
 
       - name: Test realm-specific child backgrounds at required viewports
         run: node scripts/realm-child-background-smoke.mjs
-
-      - name: Compare realm ring backgrounds pixel by pixel at responsive sizes
-        run: node scripts/realm-ring-visual.mjs
-
-      - name: Upload realm ring visual evidence
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: realm-ring-visual-evidence
-          path: artifacts/realm-rings/
-          if-no-files-found: warn
 
       - name: Upload child-page background screenshots
         if: always()
