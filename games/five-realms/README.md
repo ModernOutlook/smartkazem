@@ -56,14 +56,10 @@ node --test games/five-realms/tests/*.test.mjs
 
 **Decision (user-approved 2026-10-15):** `x=12`: 72 badges per realm, distributed as 12 badges worth 3, 24 worth 2, and 36 worth 1. The total badge value `T` is 120 per realm. Updated `data/config.json` to match. Badge prices and discounts must use this approved `T=120` value; other unresolved mechanics remain open.
 
-### Other known incomplete behavior
+### Remaining release gates
 
-- Joker exchange is not yet implemented as a player-chosen card swap; the current exchange action still draws randomly.
-- The extra exchange-turn chain for an unowned-to-owned realm swap is not implemented; current behavior ends the action.
-- The question UI is placeholder-only and does not yet load the five question records from `data/questions.json`.
-- The “wrong answer in most-held realm” forgiveness choice is not exposed in the UI.
-- Lucky-card retention and realm-completion rewards are not fully implemented.
-- Bank schedule and points are stored in hundredths, but deposit-limit, early withdrawal, and interest timing need full rule-level tests.
-- The sound event hook is connected to the public site audio API, but event-by-event sound behavior is unverified.
-
-Do not merge while these acceptance-critical rules remain incomplete.
+- **Validation still required:** the automated Node suite and current GitHub Actions results have not yet been confirmed passing for the latest changes. Browser smoke tests, mobile/RTL/accessibility checks, and event-by-event audio behavior have not been verified.
+- Realm color/name mapping remains provisional in `data/realms.json`; keep the mapping data-driven until the author confirms it.
+- The five question sets remain explicit `PLACEHOLDER` records. Do not invent or rewrite the author's philosophical question content.
+- The final winner calculation currently compares spendable points, then owned badge value. Whether the bank balance should count toward final points remains an author decision; do not merge until this scoring detail is confirmed.
+- Keep PR #164 in draft until automated tests and browser acceptance checks pass and the remaining content/configuration decisions are resolved.
