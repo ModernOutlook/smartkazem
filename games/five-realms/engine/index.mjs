@@ -83,6 +83,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
       if(own){own.lucky=true;continue;}
       const deckIndex=state.deck.findIndex(c=>c.id===id);
       let card=deckIndex>=0?state.deck.splice(deckIndex,1)[0]:null;
+      if(!card){const discardIndex=state.discard.findIndex(c=>c.id===id);if(discardIndex>=0)card=state.discard.splice(discardIndex,1)[0];}
       if(!card){
         for(const other of state.players){
           if(other.id===player.id)continue;
