@@ -80,9 +80,16 @@ try {
     const svgBoxForCompare = await page.locator('#universe').boundingBox();
     if (svgBoxForCompare) {
       const scale = Math.ceil(svgBoxForCompare.width) / 1000;
-      const svgShotBuffer = await page.locator('#universe').screenshot();
+      await page.mouse.move(0, 0);
+      const fullPageShot = PNG.sync.read(await page.screenshot({ fullPage: false }));
+      const cropX = Math.max(0, Math.round(svgBoxForCompare.x));
+      const cropY = Math.max(0, Math.round(svgBoxForCompare.y));
+      const cropWidth = Math.min(Math.round(svgBoxForCompare.width), fullPageShot.width - cropX);
+      const cropHeight = Math.min(Math.round(svgBoxForCompare.height), fullPageShot.height - cropY);
+      const actualMenu = new PNG({ width: cropWidth, height: cropHeight });
+      PNG.bitblt(fullPageShot, actualMenu, cropX, cropY, cropWidth, cropHeight, 0, 0);
+      const svgShotBuffer = PNG.sync.write(actualMenu);
       fs.writeFileSync(path.join(output, `${viewport.name}-menu-svg.png`), svgShotBuffer);
-      const actualMenu = PNG.sync.read(svgShotBuffer);
       for (const realm of realms) {
         const sourceId = await page.evaluate((args) => {
           const original = document.querySelector('#' + args.id + '-page');
