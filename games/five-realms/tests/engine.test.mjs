@@ -51,7 +51,24 @@ test("badge discount, 95% resale and pool ownership",()=>{
  p.points=10000;
  const bought=engine.buyBadge(state,p,"blue");assert.equal(bought.ok,true);
  assert.equal(bought.price,300);
- const sold=engine.sellBadge(p,bought.badge.id);assert.equal(sold.price,285);assert.equal(p.points,9985);
+ const sold=engine.sellBadge(state,p,bought.badge.id);assert.equal(sold.price,285);assert.equal(p.points,9985);
+});
+test("joker exchange keeps the joker and grants a chosen card from the deck",()=>{
+ const engine=createEngine(config,{seed:7}),state=engine.newGame(["A","B"]),p=state.players[0];
+ const joker=state.deck.find(c=>c.joker);state.deck=state.deck.filter(c=>!c.joker);p.hand.push(joker);
+ const chosen=state.deck[0],before=p.hand.length;
+ const result=engine.act(state,p.id,{type:"exchange",returnedCardId:joker.id,chosenCardId:chosen.id});
+ assert.equal(result.ok,true);assert.equal(result.jokerRetained,true);
+ assert.equal(p.hand.length,before+1);assert.ok(p.hand.some(c=>c.id===joker.id));assert.ok(p.hand.some(c=>c.id===chosen.id));
+});
+test("question action requires answers and forgives the selected tied maximum realm",()=>{
+ const engine=createEngine(config,{seed:19}),state=engine.newGame(["A","B"]),p=state.players[0];
+ p.hand=[{id:"a",rank:"A",suit:"spades",realm:"blue",joker:false,lucky:false},{id:"b",rank:"2",suit:"diamonds",realm:"yellow",joker:false,lucky:false}];
+ const missing=engine.act(state,p.id,{type:"question",answers:{parts:{}}});
+ assert.equal(missing.ok,false);assert.equal(missing.reason,"missing-answer");
+ const parts=Object.fromEntries(["blue","yellow","purple","red","green"].map(realm=>[realm,{correct:false}]));
+ const result=engine.act(state,p.id,{type:"question",answers:{parts,forgivenRealm:"blue"}});
+ assert.equal(result.ok,true);
 });
 test("bank schedule matches configured rates for 3, 3.5, and 0.5 units",()=>{
  for(const [amount,expectedPrincipal,expectedInterest] of [[3,300,30],[3.5,350,35],[0.5,50,-5]]) {
