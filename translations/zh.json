@@ -287,7 +287,8 @@
       "emptyBank": "没有有效存款。",
       "questionPlaceholder": "PLACEHOLDER 问题：为每个领域选择一个示例答案。",
       "placeholderOption": "PLACEHOLDER 选项",
-      "winner": "获胜者："
+      "winner": "获胜者：",
+      "menu": "五领域游戏"
     }
   },
   "paragraphMachine": {
