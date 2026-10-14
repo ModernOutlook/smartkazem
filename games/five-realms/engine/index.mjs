@@ -132,6 +132,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
     state.currentPlayer=(state.currentPlayer+1)%state.players.length;
     if(state.currentPlayer===0)state.round++;
     if(Object.values(state.badgePool).every(pool=>pool.length===0)||state.round>config.game.maxRounds){
+      if(state.round>config.game.maxRounds)state.round=config.game.maxRounds;
       state.over=true;state.winnerIds=currentWinners(state);events.emit("game-over",{round:state.round,winnerIds:state.winnerIds});
     }else beginTurn(state,state.players[state.currentPlayer]);
     return state;
@@ -201,9 +202,10 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
     if(returned.lucky&&!returned.joker)return {ok:false,reason:"lucky-card-protected"};
     if(returned.joker||returned.suit==="joker"){
       if(!chosenCardId)return {ok:false,reason:"joker-choice-required"};
-      const chosenIndex=state.deck.findIndex(c=>c.id===chosenCardId);
-      if(chosenIndex<0)return {ok:false,reason:"chosen-card-unavailable"};
-      const chosen=state.deck.splice(chosenIndex,1)[0];player.hand.push(chosen);
+      let chosenIndex=state.deck.findIndex(c=>c.id===chosenCardId),chosen;
+      if(chosenIndex>=0)chosen=state.deck.splice(chosenIndex,1)[0];
+      else {chosenIndex=state.discard.findIndex(c=>c.id===chosenCardId);if(chosenIndex<0)return {ok:false,reason:"chosen-card-unavailable"};chosen=state.discard.splice(chosenIndex,1)[0];}
+      player.hand.push(chosen);
       events.emit("joker-swapped",{playerId:player.id,jokerId:returned.id,cardId:chosen.id,realm:"purple"});
       finishAction(state,player);return {ok:true,card:chosen,jokerRetained:true};
     }
@@ -252,5 +254,5 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
     }
     return result;
   }
-  return Object.freeze({newGame,act,evaluateHand:cards=>evaluateHand(cards,config),buyBadge,sellBadge,bankDeposit,bankWithdraw,accrueBank,realmOwned,ownedValue,realmTotal,events,config,availableExchangeCards:state=>state.deck.filter(c=>!c.joker)});
+  return Object.freeze({newGame,act,evaluateHand:cards=>evaluateHand(cards,config),buyBadge,sellBadge,bankDeposit,bankWithdraw,accrueBank,realmOwned,ownedValue,realmTotal,events,config,availableExchangeCards:state=>[...state.deck,...state.discard].filter(c=>!c.joker)});
 }
