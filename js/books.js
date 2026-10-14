@@ -201,6 +201,7 @@ function openBook(from = 'home', kind = BOOK_KINDS.FORGERS) {
   bookTitle.textContent = title ? `📖 ${title} — ${subtitle || ''}` : '';
 
   window.SitePages?.showPage('book');
+  window.RealmBackgrounds?.apply(document.getElementById('book-page'), from === 'share' ? 'share' : null);
   document.getElementById('book-close')?.focus({ preventScroll: true });
   buildBookTabs(0);
   selectChapter(0);
