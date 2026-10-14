@@ -108,7 +108,17 @@ if (root && !root.dataset.initialized) {
       const formset=document.createElement("fieldset");const legend=document.createElement("legend");legend.textContent=t("questionPlaceholder","PLACEHOLDER question: select a placeholder answer for each realm.");formset.append(legend);
       REALM_IDS.forEach(realm=>{const wrap=document.createElement("div");wrap.className="fr-choice-list";const label=document.createElement("strong");label.textContent=realmLabel(realm);wrap.append(label);for(let i=0;i<4;i++){const l=document.createElement("label");const input=document.createElement("input");input.type="radio";input.name="fr-q-"+realm;input.value=String(i);input.checked=i===0;l.append(input,document.createTextNode(" "+t("placeholderOption","PLACEHOLDER option")+" "+(i+1)));wrap.append(l);}formset.append(wrap);});
       form.append(formset);
-      submit(t("confirm","Confirm"),()=>{const parts={};REALM_IDS.forEach(realm=>{const chosen=$('input[name="fr-q-'+realm+'"]:checked',form);parts[realm]={correct:chosen?.value==="0"};});const result=engine.act(state,player.id,{type:"question",answers:{parts}});advance(result);});
+      const counts=Object.fromEntries(REALM_IDS.map(realm=>[realm,player.hand.filter(card=>card.realm===realm).length]));
+      const maxHeld=Math.max(...Object.values(counts));
+      const tiedRealms=REALM_IDS.filter(realm=>counts[realm]===maxHeld);
+      let forgivenSelect=null;
+      if(tiedRealms.length>1){
+        const label=document.createElement("label");label.append(document.createTextNode(t("forgivenRealm","Choose which tied realm's wrong answer is forgiven")));
+        forgivenSelect=document.createElement("select");
+        tiedRealms.forEach(realm=>{const option=document.createElement("option");option.value=realm;option.textContent=realmLabel(realm);forgivenSelect.append(option);});
+        label.append(forgivenSelect);form.append(label);
+      }
+      submit(t("confirm","Confirm"),()=>{const parts={};REALM_IDS.forEach(realm=>{const chosen=$('input[name="fr-q-'+realm+'"]:checked',form);parts[realm]={correct:chosen?.value==="0"};});const answers={parts};if(forgivenSelect)answers.forgivenRealm=forgivenSelect.value;const result=engine.act(state,player.id,{type:"question",answers});advance(result);});
     }
   }
   $("#fr-player-count").addEventListener("change",refreshNameInputs);
