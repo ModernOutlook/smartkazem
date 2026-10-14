@@ -75,7 +75,7 @@ export function createEngine(config, {seed = Date.now(), onEvent = () => {}} = {
   function newGame(playerNames) {
     if (!Array.isArray(playerNames) || playerNames.length < config.game.minPlayers || playerNames.length > config.game.maxPlayers) throw new RangeError("Player count is outside configured limits.");
     const deck = createDeck(config, rng);
-    const state = {round:1,currentPlayer:0,players:playerNames.map((name,id)=>({id,name:String(name),hand:[],points:money(config.game.startingPoints),badges:[],bank:null,bankTurn:0})),deck,badgePool:Object.fromEntries(REALM_IDS.map(realm=>[realm:Array.from({length:config.realms[realm].badgeCount},(_,i)=>({id:`${realm}-${i+1}`,realm,value:badgeValueAt(i,config.realms[realm])}))])),over:false,history:[]};
+    const state = {round:1,currentPlayer:0,players:playerNames.map((name,id)=>({id,name:String(name),hand:[],points:money(config.game.startingPoints),badges:[],bank:null,bankTurn:0})),deck,badgePool:Object.fromEntries(REALM_IDS.map(realm=>[realm,Array.from({length:config.realms[realm].badgeCount},(_,i)=>({id:`${realm}-${i+1}`,realm,value:badgeValueAt(i,config.realms[realm])}))])),over:false,history:[]};
     for (const player of state.players) for (let i=0;i<config.game.startingCards;i++) player.hand.push(drawFrom(state));
     events.emit("turn-start",{playerId:state.players[0].id,round:state.round});
     return state;
