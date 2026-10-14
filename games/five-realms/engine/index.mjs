@@ -115,8 +115,9 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
   }
   function beginTurn(state,player){
     if(player.bank){
+      const previousTurns=player.bank.turns;
       const interest=accrueBank(player);
-      if(interest!==0)events.emit("bank-interest",{playerId:player.id,amount:interest,principal:player.bank?.principal??null,turns:player.bank?.turns??0});
+      if(player.bank&&player.bank.turns!==previousTurns)events.emit("bank-interest",{playerId:player.id,amount:interest,principal:player.bank.principal,turns:player.bank.turns,negativeFormula:player.bank.negativeFormula});
     }
     events.emit("turn-start",{playerId:player.id,round:state.round});
   }
@@ -169,6 +170,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
   function accrueBank(player){
     if(!player.bank||player.bank.turns>=config.bank.interestTurns)return 0;
     const s=player.bank.principal/scale,p=2*Math.floor(s)-s;
+    player.bank.negativeFormula=p<0;
     const interest=money(p*config.bank.interestRates[player.bank.turns]);
     player.bank.principal+=interest;player.bank.turns++;return interest;
   }
