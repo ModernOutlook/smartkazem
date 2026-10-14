@@ -295,7 +295,8 @@
       "jokerChooseCard": "Choose a card to take with the joker",
       "extraExchange": "You earned one extra exchange. Exchange once more to end your turn.",
       "fullyOwnedFree": "This realm's question part is free because you own all its badges.",
-      "luckyCard": "Lucky card"
+      "luckyCard": "Lucky card",
+      "bankNegativeFormula": "negative-interest formula applies (deposit below one point)"
     }
   },
   "paragraphMachine": {
