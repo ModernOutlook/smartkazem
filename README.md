@@ -191,6 +191,49 @@ Rules:
 
 Order S/T/E/R/C is an invariant. Child-page order is likewise the order explicitly defined by the site's realm navigation. Check navigation, translations, Paragraph Machine, and documentation before changing it. **Never introduce a chronological/legacy-vs-new ordering rule based on code history or file age.**
 
+## Shared realm backgrounds for child surfaces
+
+The five original JPEGs are the source of truth. The shared renderer in `js/shared-pages.js` owns the realm-to-image mapping and applies the background to the rendered page root. Paths are resolved against `document.baseURI`, so direct child-page URLs and GitHub Pages deployments under `/smartkazem/` stay subpath-compatible. The image is rendered with `contain`, centered at the top, no-repeat, and a separate dark gradient layer; this keeps the entire square source composition recognizable on desktop, portrait, and landscape screens instead of cropping defining elements. The background scrolls with the page and has no pointer/touch layer. Foreground cards and controls retain their existing stacking and behavior.
+
+### Child-page coverage matrix
+
+| Child page / surface | Owning realm | Original image | Application mechanism |
+|---|---|---|---|
+| رساله فلسفی | ساختار تالار | `adapters/ساختار تالار.jpg` | Shared route manifest → page root |
+| صفر | ساختار تالار | `adapters/ساختار تالار.jpg` | Shared route manifest → page root |
+| هزارتوی کوانتومی | ساختار تالار | `adapters/ساختار تالار.jpg` | Shared route manifest → page root |
+| شاهنامه‌خوانی | تداوم عالم | `adapters/تداوم عالم.jpg` | Shared route manifest → page root |
+| فصل اول ظهور | تداوم عالم | `adapters/تداوم عالم.jpg` | Shared route manifest → page root |
+| مانیفست آشوب‌زده | تداوم عالم | `adapters/تداوم عالم.jpg` | Shared route manifest → page root |
+| سرزمین مشاهده؛ ۲۵ بار رسیدن | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
+| آینه‌ی ممکن‌ها | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
+| فصل دوم ظهور | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
+| سرزمین مشاهده؛ یک رود، یک جریان | مرجع تقلید | `adapters/مرجع تقلید.jpg` | Shared route manifest → page root |
+| پژواک لایه سوم | مرجع تقلید | `adapters/مرجع تقلید.jpg` | Shared route manifest → page root |
+| انسان و ماشین‌هایش | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
+| جاعلان تقلید | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
+| تباهیان | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
+
+The Paragraph Machine is a shared workspace, not a separate child document. It is reachable from both قلمرو تجربه and مرجع تقلید; its presentation therefore follows the actual entry mode: experience background for بازشناسی and imitation-reference background for هم‌سنگی. The card inventory is opened from the home/logo surface rather than a primary realm and is intentionally excluded. The home page and five realm landing surfaces are also excluded.
+
+### Original JPEG integrity
+
+The source JPEGs were supplied in PR #163 and are kept byte-for-byte unchanged. Dimensions and byte sizes were read from the original JPEG streams; SHA-256 values below were computed from the decoded source bytes.
+
+| Source path | Dimensions | Bytes | SHA-256 |
+|---|---:|---:|---|
+| `adapters/ساختار تالار.jpg` | 1024 × 1023 | 319,822 | `123e2a5a53275846f5b4ed58cbac90a2653fd31a50a7918ec53ebfddadbce70c` |
+| `adapters/تداوم عالم.jpg` | 1024 × 1024 | 244,108 | `4a9e451ee6745694eb3ba26653e6f660b4625f675d08f40191e068b5239462b5` |
+| `adapters/قلمرو تجربه.jpg` | 1050 × 1050 | 161,964 | `9146fb600b66b52f658b9c0c5273b36cba5abbec0c85799c523b51f466490e5f` |
+| `adapters/مرجع تقلید.jpg` | 1425 × 1425 | 513,125 | `97249cf98ab4d5cb7d649d9abf8eb16d7c6a71c5d59d0173522cfc0e76cf8562` |
+| `adapters/اقتصاد سهم.jpg` | 1126 × 1126 | 243,856 | `9437fd46315ff9a32bb0a317eddba9bcce460598fdd140979f7730029046c4df` |
+
+The original JPEGs remain in their existing PR paths rather than being re-encoded or renamed. No page-specific background declarations or new dependencies are required.
+
+### Verification targets
+
+The responsive visual matrix is 1440 × 900, 390 × 844, and 844 × 390. Validate every child surface, direct URL and in-site entry, all four site languages, RTL/LTR, focus visibility, dialogs, return-to-parent navigation, no horizontal overflow, and successful requests for the five JPEGs. Browser/device verification must be reported separately from automated CI; a passing lint job alone is not visual or TalkBack evidence.
+
 ## 8. Paragraph Machine contract
 
 Architecture:
