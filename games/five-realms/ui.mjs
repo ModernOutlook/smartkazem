@@ -48,7 +48,7 @@ if (root && !root.dataset.initialized) {
     $("#fr-round").textContent = state.round;
     $("#fr-current").textContent = player.name;
     $("#fr-points").textContent = points(player.points);
-    $("#fr-bank").textContent = player.bank ? points(player.bank.principal) : "0";
+    $("#fr-bank").textContent = player.bank ? points(player.bank.principal)+(player.bank.negativeFormula?" · "+t("bankNegativeFormula","negative-interest formula applies"):"") : "0";
     $("#fr-hand").replaceChildren();
     player.hand.forEach(card => {
       const button = document.createElement("button");
