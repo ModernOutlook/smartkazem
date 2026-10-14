@@ -87,32 +87,32 @@ if (root && !root.dataset.initialized) {
     if(action==="exchange"){
       if(!player.hand.length){setMessage("emptyHand","No cards to exchange.");return;}
       const card=select(player.hand.map(c=>({value:c.id,label:cardText(c)+" "+suitSymbol(c)+" · "+realmLabel(c.realm)})),t("returnCard","Card to return"));
-      submit(t("confirm","Confirm"),()=>{const result=engine.act(state,player.id,{type:"exchange",returnedCardId:card.value});if(result.ok){emitSound("card-drawn",{playerId:player.id});advance(result);}else setMessage("actionFailed","Action failed.");});
+      submit(t("confirm","Confirm"),()=>{const result=engine.act(state,player.id,{type:"exchange",returnedCardId:card.value});if(result.ok){advance(result);}else setMessage("actionFailed","Action failed.");});
     } else if(action==="score"){
       const chosen=player.hand.filter(c=>selected.has(c.id) && !c.joker);
       const preview=document.createElement("p");preview.textContent=chosen.length ? t("selectedCards","Selected cards: ")+chosen.length+" · "+points(engine.evaluateHand(chosen).points*config.game.roundingScale)+" "+t("points","points") : t("selectUpToFive","Select 1 to 5 cards above.");form.append(preview);
-      submit(t("scoreHand","Score hand"),()=>{const ids=player.hand.filter(c=>selected.has(c.id) && !c.joker).map(c=>c.id);if(!ids.length||ids.length>config.game.handSize){setMessage("selectUpToFive","Select 1 to 5 cards.");return;}const result=engine.act(state,player.id,{type:"score",cardIds:ids});if(result.ok){emitSound("hand-scored",{playerId:player.id,points:result.points});advance(result);}});
+      submit(t("scoreHand","Score hand"),()=>{const ids=player.hand.filter(c=>selected.has(c.id) && !c.joker).map(c=>c.id);if(!ids.length||ids.length>config.game.handSize){setMessage("selectUpToFive","Select 1 to 5 cards.");return;}const result=engine.act(state,player.id,{type:"score",cardIds:ids});if(result.ok){advance(result);}});
     } else if(action==="buy"){
       const realm=select(REALM_IDS.map(r=>({value:r,label:realmLabel(r)})),t("realm","Realm"));
       const badge=()=>state.badgePool[realm.value]?.[0];
-      submit(t("buyBadge","Buy badge"),()=>{const b=badge();if(!b){setMessage("unavailable","No badges remain in this realm.");return;}const result=engine.act(state,player.id,{type:"buy-badge",realm:realm.value,badgeId:b.id});if(result.ok){emitSound("badge-bought",{realm:realm.value});advance(result);}else setMessage("actionFailed","Not enough points or badge unavailable.");});
+      submit(t("buyBadge","Buy badge"),()=>{const b=badge();if(!b){setMessage("unavailable","No badges remain in this realm.");return;}const result=engine.act(state,player.id,{type:"buy-badge",realm:realm.value,badgeId:b.id});if(result.ok){advance(result);}else setMessage("actionFailed","Not enough points or badge unavailable.");});
     } else if(action==="sell"){
       const badge=select(player.badges.map(b=>({value:b.id,label:realmLabel(b.realm)+" · "+b.value}),),t("sellBadge","Badge to sell"));
-      submit(t("sellBadge","Sell badge"),()=>{const result=engine.act(state,player.id,{type:"sell-badge",badgeId:badge.value});if(result.ok){emitSound("badge-sold");advance(result);}else setMessage("actionFailed","Action failed.");});
+      submit(t("sellBadge","Sell badge"),()=>{const result=engine.act(state,player.id,{type:"sell-badge",badgeId:badge.value});if(result.ok){advance(result);}else setMessage("actionFailed","Action failed.");});
     } else if(action==="deposit"){
       const amount=document.createElement("input");amount.type="number";amount.min="0";amount.step="0.01";amount.inputMode="decimal";field(t("depositAmount","Deposit amount"),amount);
-      submit(t("deposit","Deposit"),()=>{const result=engine.act(state,player.id,{type:"deposit",amount:moneyInput(amount.value)});if(result.ok){emitSound("deposit");advance(result);}else setMessage("actionFailed","Deposit is above the allowed limit.");});
+      submit(t("deposit","Deposit"),()=>{const result=engine.act(state,player.id,{type:"deposit",amount:moneyInput(amount.value)});if(result.ok){advance(result);}else setMessage("actionFailed","Deposit is above the allowed limit.");});
     } else if(action==="withdraw"){
-      submit(t("withdraw","Withdraw"),()=>{const result=engine.act(state,player.id,{type:"withdraw"});if(result.ok){emitSound("withdraw");advance(result);}else setMessage("emptyBank","No active deposit.");});
+      submit(t("withdraw","Withdraw"),()=>{const result=engine.act(state,player.id,{type:"withdraw"});if(result.ok){advance(result);}else setMessage("emptyBank","No active deposit.");});
     } else if(action==="question"){
       const formset=document.createElement("fieldset");const legend=document.createElement("legend");legend.textContent=t("questionPlaceholder","PLACEHOLDER question: select a placeholder answer for each realm.");formset.append(legend);
       REALM_IDS.forEach(realm=>{const wrap=document.createElement("div");wrap.className="fr-choice-list";const label=document.createElement("strong");label.textContent=realmLabel(realm);wrap.append(label);for(let i=0;i<4;i++){const l=document.createElement("label");const input=document.createElement("input");input.type="radio";input.name="fr-q-"+realm;input.value=String(i);input.checked=i===0;l.append(input,document.createTextNode(" "+t("placeholderOption","PLACEHOLDER option")+" "+(i+1)));wrap.append(l);}formset.append(wrap);});
       form.append(formset);
-      submit(t("confirm","Confirm"),()=>{const parts={};REALM_IDS.forEach(realm=>{const chosen=$('input[name="fr-q-'+realm+'"]:checked',form);parts[realm]={correct:chosen?.value==="0"};});const result=engine.act(state,player.id,{type:"question",answers:{parts}});emitSound("answer-correct",{playerId:player.id});advance(result);});
+      submit(t("confirm","Confirm"),()=>{const parts={};REALM_IDS.forEach(realm=>{const chosen=$('input[name="fr-q-'+realm+'"]:checked',form);parts[realm]={correct:chosen?.value==="0"};});const result=engine.act(state,player.id,{type:"question",answers:{parts}});advance(result);});
     }
   }
   $("#fr-player-count").addEventListener("change",refreshNameInputs);
-  $("#fr-start").addEventListener("click",async()=>{try{if(!config)await loadConfig();engine=createEngine(config,{seed:Date.now(),onEvent:event=>emitSound(event.type,event.detail)});const names=$$("[data-player-name]").map((input,i)=>input.value.trim()||t("player","Player")+" "+(i+1));state=engine.newGame(names);awaitingReveal=false;refresh();emitSound("turn-start",{playerId:current().id});}catch(error){$("#fr-action-message").textContent=error.message;}});
+  $("#fr-start").addEventListener("click",async()=>{try{if(!config)await loadConfig();engine=createEngine(config,{seed:Date.now(),onEvent:event=>emitSound(event.type,event.detail)});const names=$$("[data-player-name]").map((input,i)=>input.value.trim()||t("player","Player")+" "+(i+1));state=engine.newGame(names);awaitingReveal=false;refresh();}catch(error){$("#fr-action-message").textContent=error.message;}});
   $("#fr-reveal").addEventListener("click",()=>{awaitingReveal=false;refresh();});
   $$("#five-realms-game [data-action]").forEach(button=>button.addEventListener("click",()=>actionForm(button.dataset.action)));
   $("#fr-restart").addEventListener("click",()=>{state=null;selected.clear();$("#fr-game-over").hidden=true;$("#fr-setup").hidden=false;$("#fr-play").hidden=true;refreshNameInputs();});
