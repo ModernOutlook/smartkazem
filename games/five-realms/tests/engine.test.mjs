@@ -130,3 +130,17 @@ test("new game enforces 2-5 players and starts with configured hand size",()=>{
  assert.equal(state.players[0].hand.length,5);assert.equal(state.players[0].points,0);
  assert.throws(()=>engine.newGame(["solo"]),/Player count/);
 });
+
+test("final winner score excludes bank principal and accrued interest",()=>{
+ const engine=createEngine(config,{seed:51}),state=engine.newGame(["A","B"]);
+ const [a,b]=state.players;
+ a.points=100;b.points=200;
+ a.bank={principal:100000,turns:5}; // A's bank balance must not overtake B's spendable points.
+ state.round=config.game.maxRounds;
+ state.currentPlayer=1;
+ const card=b.hand.find(c=>!c.joker);
+ const result=engine.act(state,b.id,{type:"score",cardIds:[card.id]});
+ assert.equal(result.ok,true);
+ assert.equal(state.over,true);
+ assert.deepEqual(state.winnerIds,[b.id]);
+});
