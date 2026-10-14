@@ -301,7 +301,8 @@
       "emptyBank": "سپرده فعالی وجود ندارد.",
       "questionPlaceholder": "PLACEHOLDER پرسش: برای هر قلمرو یک پاسخ آزمایشی انتخاب کنید.",
       "placeholderOption": "گزینه PLACEHOLDER",
-      "winner": "برنده: "
+      "winner": "برنده: ",
+      "menu": "بازی ۵ قلمرو"
     }
   },
   "paragraphMachine": {
