@@ -17,7 +17,8 @@ if (root && !root.dataset.initialized) {
   const announce = (message) => { $("#fr-announcer").textContent = ""; requestAnimationFrame(() => { $("#fr-announcer").textContent = message; }); };
   const emitSound = (type, detail = {}) => {
     document.dispatchEvent(new CustomEvent("site:game-sound", {detail:{game:"five-realms",type,...detail}}));
-    window.SiteGameSound?.emit?.(type, detail);
+    const realm = detail.realm || ({ "card-drawn":"blue", "answer-correct":"yellow", "answer-wrong":"red", "hand-scored":"purple", "badge-bought":"green", "badge-sold":"green", "deposit":"yellow", "withdraw":"yellow", "realm-completed":"purple", "turn-start":"blue", "game-over":"green" })[type] || "share";
+    window.SiteAudio?.play?.(realm);
     announce(t(type, type.replaceAll("-", " ")));
   };
   const current = () => state?.players[state.currentPlayer];
