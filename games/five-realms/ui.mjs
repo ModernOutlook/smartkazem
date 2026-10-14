@@ -6,13 +6,7 @@ const root = $("#five-realms-game");
 if (root && !root.dataset.initialized) {
   root.dataset.initialized = "true";
   const t = (key, fallback = "") => window.SiteI18n?.get("pages.fiveRealms." + key, fallback) || fallback;
-  const labels = {
-    blue: {name:"ساختار تالار", suit:"♠", color:"blue"},
-    yellow: {name:"تداوم عالم", suit:"♦", color:"yellow"},
-    purple: {name:"مرجع تقلید", suit:"🃏", color:"purple"},
-    red: {name:"قلمرو تجربه", suit:"♥", color:"red"},
-    green: {name:"اقتصاد سهم", suit:"♣", color:"green"}
-  };
+  let realmsData = [];
   let config, engine, state, selected = new Set(), pendingAction = null, awaitingReveal = false;
   const announce = (message) => { $("#fr-announcer").textContent = ""; requestAnimationFrame(() => { $("#fr-announcer").textContent = message; }); };
   const emitSound = (type, detail = {}) => {
@@ -22,16 +16,23 @@ if (root && !root.dataset.initialized) {
     announce(t(type, type.replaceAll("-", " ")));
   };
   const current = () => state?.players[state.currentPlayer];
-  const realmLabel = (realm) => labels[realm]?.name || realm;
+  const realmLabel = (realm) => {
+    const data = realmsData.find(item => item.id === realm);
+    return data ? (window.SiteI18n?.get(data.i18nKey, data.name) || data.name) : realm;
+  };
   const suitSymbol = (card) => card.joker ? "🃏" : ({spades:"♠",diamonds:"♦",hearts:"♥",clubs:"♣"})[card.suit] || "";
   const cardText = (card) => card.joker ? "JOKER" : card.rank;
   const setMessage = (key, fallback) => { $("#fr-action-message").textContent = t(key, fallback); announce(t(key, fallback)); };
   const points = value => (value / config.game.roundingScale).toLocaleString(window.SiteI18n?.getLanguage?.() || "fa", {maximumFractionDigits:2});
   const moneyInput = raw => Math.round(Number(raw) * config.game.roundingScale);
   async function loadConfig() {
-    const response = await fetch("games/five-realms/data/config.json");
-    if (!response.ok) throw new Error("Five Realms config could not be loaded");
-    config = await response.json();
+    const [configResponse, realmsResponse] = await Promise.all([
+      fetch("games/five-realms/data/config.json"),
+      fetch("games/five-realms/data/realms.json")
+    ]);
+    if (!configResponse.ok || !realmsResponse.ok) throw new Error("Five Realms data could not be loaded");
+    config = await configResponse.json();
+    realmsData = (await realmsResponse.json()).realms;
   }
   function refreshNameInputs() {
     const count = Number($("#fr-player-count").value);
@@ -48,10 +49,11 @@ if (root && !root.dataset.initialized) {
     player.hand.forEach(card => {
       const button = document.createElement("button");
       button.type = "button"; button.className = "fr-card"; button.dataset.realm = card.realm;
+      button.style.setProperty("--fr-card-realm-color", realmsData.find(item => item.id === card.realm)?.color || "#c9d5cc");
       button.setAttribute("aria-pressed", String(selected.has(card.id)));
       button.setAttribute("aria-label", cardText(card) + " " + suitSymbol(card) + ", " + realmLabel(card.realm));
       button.innerHTML = '<span>'+cardText(card)+' '+suitSymbol(card)+'</span><small>'+realmLabel(card.realm)+'</small>';
-      button.addEventListener("click",()=>{ selected.has(card.id) ? selected.delete(card.id) : selected.add(card.id); refresh(); });
+      button.addEventListener("click",()=>{ if (card.joker) { setMessage("jokerNoPoker","Jokers cannot enter poker hands; use an exchange action."); return; } selected.has(card.id) ? selected.delete(card.id) : selected.add(card.id); refresh(); });
       $("#fr-hand").append(button);
     });
     $("#fr-badges").textContent = player.badges.length ? player.badges.map(b=>realmLabel(b.realm)+" · "+b.value).join(" / ") : t("noBadges","هنوز نشانی ندارید");
@@ -87,9 +89,9 @@ if (root && !root.dataset.initialized) {
       const card=select(player.hand.map(c=>({value:c.id,label:cardText(c)+" "+suitSymbol(c)+" · "+realmLabel(c.realm)})),t("returnCard","Card to return"));
       submit(t("confirm","Confirm"),()=>{const result=engine.act(state,player.id,{type:"exchange",returnedCardId:card.value});if(result.ok){emitSound("card-drawn",{playerId:player.id});advance(result);}else setMessage("actionFailed","Action failed.");});
     } else if(action==="score"){
-      const chosen=player.hand.filter(c=>selected.has(c.id));
+      const chosen=player.hand.filter(c=>selected.has(c.id) && !c.joker);
       const preview=document.createElement("p");preview.textContent=chosen.length ? t("selectedCards","Selected cards: ")+chosen.length+" · "+points(engine.evaluateHand(chosen).points*config.game.roundingScale)+" "+t("points","points") : t("selectUpToFive","Select 1 to 5 cards above.");form.append(preview);
-      submit(t("scoreHand","Score hand"),()=>{const ids=player.hand.filter(c=>selected.has(c.id)).map(c=>c.id);if(!ids.length||ids.length>config.game.handSize){setMessage("selectUpToFive","Select 1 to 5 cards.");return;}const result=engine.act(state,player.id,{type:"score",cardIds:ids});if(result.ok){emitSound("hand-scored",{playerId:player.id,points:result.points});advance(result);}});
+      submit(t("scoreHand","Score hand"),()=>{const ids=player.hand.filter(c=>selected.has(c.id) && !c.joker).map(c=>c.id);if(!ids.length||ids.length>config.game.handSize){setMessage("selectUpToFive","Select 1 to 5 cards.");return;}const result=engine.act(state,player.id,{type:"score",cardIds:ids});if(result.ok){emitSound("hand-scored",{playerId:player.id,points:result.points});advance(result);}});
     } else if(action==="buy"){
       const realm=select(REALM_IDS.map(r=>({value:r,label:realmLabel(r)})),t("realm","Realm"));
       const badge=()=>state.badgePool[realm.value]?.[0];
