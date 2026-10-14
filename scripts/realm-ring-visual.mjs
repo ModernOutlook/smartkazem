@@ -110,6 +110,8 @@ try {
         const sourceShot = await source.screenshot();
         await source.evaluate(el => el.remove());
         const ringShot = await page.locator(`#realm-${realm.id} .realm-ring-background`).screenshot();
+        fs.writeFileSync(path.join(output, `${viewport.name}-source-${realm.id}.png`), sourceShot);
+        fs.writeFileSync(path.join(output, `${viewport.name}-ring-${realm.id}.png`), ringShot);
         const expected = PNG.sync.read(sourceShot);
         const actual = PNG.sync.read(ringShot);
         if (expected.width !== actual.width || expected.height !== actual.height) {
