@@ -61,32 +61,64 @@
           <pattern id="greenGradient" patternUnits="userSpaceOnUse" width="1000" height="1000"><rect width="1000" height="1000" fill="url(#shareSky)"/><ellipse cx="520" cy="180" rx="280" ry="240" fill="url(#shareGlow)"/><ellipse cx="180" cy="580" rx="300" ry="320" fill="#2ab484" opacity=".7"/><g fill="#effff7"><circle cx="80" cy="120" r="2"/><circle cx="250" cy="180" r="2"/><circle cx="740" cy="100" r="2"/><circle cx="910" cy="310" r="2"/><circle cx="420" cy="450" r="1.8"/></g></pattern>
           <radialGradient id="whiteCore"><stop offset="0%" stop-color="#fff"/><stop offset="25%" stop-color="#fffff5"/><stop offset="50%" stop-color="#dffff0" stop-opacity=".9"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient>
           <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
+        <clipPath id="ringClip-structure" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="445"/></clipPath>
+          <clipPath id="ringClip-continuity" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="365"/></clipPath>
+          <clipPath id="ringClip-experience" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="285"/></clipPath>
+          <clipPath id="ringClip-reference" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="205"/></clipPath>
+          <clipPath id="ringClip-share" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="125"/></clipPath>
+</defs>
         <circle cx="500" cy="500" r="490" fill="#010405"/>
         <circle cx="500" cy="500" r="470" fill="none" stroke="#12384b" stroke-width="3" opacity=".25"/>
         <g class="realm" data-id="structure" id="realm-structure" role="button" tabindex="0" aria-label="ساختار تالار" data-i18n-aria="labels.structure">
-          <circle cx="500" cy="500" r="445" fill="url(#blueGradient)" opacity=".94"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-structure)" style="pointer-events:none" opacity=".94"><div xmlns="http://www.w3.org/1999/xhtml" class="structure-page" style="display:block!important;position:relative!important;inset:auto!important;width:1000px!important;height:1000px!important;overflow:hidden!important;pointer-events:none!important"><div class="structure-space" aria-hidden="true">
+<div class="structure-arch a1"></div><div class="structure-arch a2"></div><div class="structure-arch a3"></div>
+<div class="structure-column c1"></div><div class="structure-column c2"></div><div class="structure-column c3"></div><div class="structure-column c4"></div>
+<div class="structure-banner b1"></div><div class="structure-banner b2"></div><div class="structure-spire"></div><div class="structure-light"></div><div class="structure-floor"></div>
+</div></div></foreignObject>
           <circle class="ring-border" cx="500" cy="500" r="445" stroke="#0879b8"/>
           <circle class="ring-border" cx="500" cy="500" r="438" stroke="#0c5d82" opacity=".35"/>
           
         </g>
         <g class="realm" data-id="continuity" id="realm-continuity" role="button" tabindex="0" aria-label="تداوم عالم" data-i18n-aria="labels.continuity">
-          <circle cx="500" cy="500" r="365" fill="url(#goldGradient)" opacity=".96"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-continuity)" style="pointer-events:none" opacity=".96"><div xmlns="http://www.w3.org/1999/xhtml" class="continuity-page" style="display:block!important;position:relative!important;inset:auto!important;width:1000px!important;height:1000px!important;overflow:hidden!important;pointer-events:none!important"><div class="continuity-space" aria-hidden="true">
+<div class="continuity-moon"></div>
+<div class="continuity-island i1"></div><div class="continuity-island i2"></div><div class="continuity-island i3"></div><div class="continuity-island i4"></div>
+<div class="continuity-tower t1"></div><div class="continuity-tower t2"></div><div class="continuity-tower t3"></div>
+<div class="continuity-waterfall w1"></div><div class="continuity-waterfall w2"></div><div class="continuity-waterfall w3"></div>
+<div class="continuity-ring r1"></div><div class="continuity-ring r2"></div><div class="continuity-ring r3"></div>
+<div class="continuity-terrace"></div>
+</div></div></foreignObject>
           <circle class="ring-border" cx="500" cy="500" r="365" stroke="#e1b72b"/>
           
         </g>
         <g class="realm" data-id="experience" id="realm-experience" role="button" tabindex="0" aria-label="قلمرو تجربه" data-i18n-aria="labels.experience">
-          <circle cx="500" cy="500" r="285" fill="url(#purpleGradient)" opacity=".97"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-experience)" style="pointer-events:none" opacity=".97"><div xmlns="http://www.w3.org/1999/xhtml" class="experience-page" style="display:block!important;position:relative!important;inset:auto!important;width:1000px!important;height:1000px!important;overflow:hidden!important;pointer-events:none!important"><div class="experience-space" aria-hidden="true">
+<div class="experience-tree"></div>
+<div class="experience-island i1"></div><div class="experience-island i2"></div><div class="experience-island i3"></div><div class="experience-island i4"></div><div class="experience-island i5"></div>
+<div class="experience-city"></div>
+<div class="experience-waterfall w1"></div><div class="experience-waterfall w2"></div><div class="experience-waterfall w3"></div>
+<div class="experience-ring r1"></div><div class="experience-ring r2"></div><div class="experience-ring r3"></div>
+<div class="experience-screen s1"></div><div class="experience-screen s2"></div><div class="experience-screen s3"></div><div class="experience-screen s4"></div>
+<div class="experience-figure"></div><div class="experience-platform"></div>
+</div></div></foreignObject>
           <circle class="ring-border" cx="500" cy="500" r="285" stroke="#b653ff"/>
           
         </g>
         <g class="realm" data-id="reference" id="realm-reference" role="button" tabindex="0" aria-label="مرجع تقلید" data-i18n-aria="labels.reference">
-          <circle cx="500" cy="500" r="205" fill="url(#redGradient)" opacity=".98"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-reference)" style="pointer-events:none" opacity=".98"><div xmlns="http://www.w3.org/1999/xhtml" class="reference-page" style="display:block!important;position:relative!important;inset:auto!important;width:1000px!important;height:1000px!important;overflow:hidden!important;pointer-events:none!important"><div class="reference-scene" aria-hidden="true"><div class="ref-ring r1"></div><div class="ref-ring r2"></div><div class="ref-ring r3"></div><div class="ref-ring r4"></div><div class="ref-castle"></div><div class="ref-platform p1"></div><div class="ref-platform p2"></div><div class="ref-platform p3"></div><div class="ref-beam b1"></div><div class="ref-beam b2"></div><div class="ref-beam b3"></div><div class="ref-observer"></div></div></div></foreignObject>
           <circle class="ring-border" cx="500" cy="500" r="205" stroke="#e94d43"/>
           
         </g>
         <g class="realm" data-id="share" id="realm-share" role="button" tabindex="0" aria-label="اقتصاد سهم" data-i18n-aria="labels.share">
-          <circle cx="500" cy="500" r="125" fill="url(#greenGradient)" opacity=".98"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-share)" style="pointer-events:none" opacity=".98"><div xmlns="http://www.w3.org/1999/xhtml" class="share-page" style="display:block!important;position:relative!important;inset:auto!important;width:1000px!important;height:1000px!important;overflow:hidden!important;pointer-events:none!important"><div class="share-space" aria-hidden="true">
+<div class="share-moon"></div>
+<div class="share-island i1"></div><div class="share-island i2"></div><div class="share-island i3"></div><div class="share-island i4"></div><div class="share-island i5"></div>
+<div class="share-city"></div>
+<div class="share-ring r1"></div><div class="share-ring r2"></div><div class="share-ring r3"></div><div class="share-ring r4"></div>
+<div class="share-waterfall w1"></div><div class="share-waterfall w2"></div><div class="share-waterfall w3"></div>
+<div class="share-coin c1"></div><div class="share-coin c2"></div><div class="share-coin c3"></div>
+<div class="share-terrace"></div>
+</div></div></foreignObject>
           <circle class="ring-border" cx="500" cy="500" r="125" stroke="#1bd58a"/>
           
         </g>
