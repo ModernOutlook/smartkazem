@@ -79,16 +79,26 @@ try {
     if (!svgBox) fail(`${viewport.name}: cannot measure menu SVG`);
     else {
       for (const realm of realms) {
-        await page.evaluate(() => document.querySelectorAll('.realm.selected').forEach(el => el.classList.remove('selected')));
         const x = svgBox.x + svgBox.width * (500 + realm.radius - 8) / 1000;
         const y = svgBox.y + svgBox.height * 500 / 1000;
-        await page.mouse.click(x, y);
+        const before = await page.locator(realm.selector).evaluate(el => ({
+          filter: getComputedStyle(el).filter,
+          bounds: (() => { const r=el.getBoundingClientRect(); return {x:r.x,y:r.y,width:r.width,height:r.height}; })()
+        }));
+        await page.mouse.move(x, y);
         await page.waitForTimeout(80);
-        const selected = await page.locator('.realm.selected').evaluateAll(nodes => nodes.map(node => node.dataset.id));
-        if (selected.length !== 1 || selected[0] !== realm.id) {
-          fail(`${viewport.name}/${realm.id}: expected only ${realm.id} selected, got ${selected.join(',') || 'none'}`);
+        const after = await page.locator(realm.selector).evaluate(el => ({
+          filter: getComputedStyle(el).filter,
+          bounds: (() => { const r=el.getBoundingClientRect(); return {x:r.x,y:r.y,width:r.width,height:r.height}; })()
+        }));
+        if (after.filter === before.filter || after.filter === 'none') {
+          fail(`${viewport.name}/${realm.id}: hover selection effect did not activate (${before.filter} -> ${after.filter})`);
         }
-        await page.screenshot({ path: path.join(output, `${viewport.name}-selected-${realm.id}.png`), fullPage: false });
+        if (Math.abs(after.bounds.x-before.bounds.x)>0.1 || Math.abs(after.bounds.y-before.bounds.y)>0.1 ||
+            Math.abs(after.bounds.width-before.bounds.width)>0.1 || Math.abs(after.bounds.height-before.bounds.height)>0.1) {
+          fail(`${viewport.name}/${realm.id}: hover effect changed ring geometry`);
+        }
+        await page.screenshot({ path: path.join(output, `${viewport.name}-hover-${realm.id}.png`), fullPage: false });
       }
     }
     if (errors.length) fail(`${viewport.name}: browser errors: ${errors.slice(0, 3).join(' | ')}`);
@@ -103,5 +113,5 @@ if (failures) {
   console.error(`Realm ring visual checks failed: ${failures} issue(s).`);
   process.exitCode = 1;
 } else {
-  console.log('Realm ring checks passed: exact page background classes, circular clipping, and selection across desktop, mobile portrait, and mobile landscape. Screenshots saved to artifacts/realm-rings/.');
+  console.log('Realm ring checks passed: exact page background classes, circular clipping, and hover selection across desktop, mobile portrait, and mobile landscape. Screenshots saved to artifacts/realm-rings/.');
 }
