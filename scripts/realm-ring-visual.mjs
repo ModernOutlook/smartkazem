@@ -91,18 +91,22 @@ try {
           clone.id = 'visual-reference-' + args.id;
           clone.querySelectorAll('header, .realm-actions, .share-story-action').forEach(node => node.remove());
           clone.style.setProperty('display', 'block', 'important');
-          clone.style.setProperty('position', 'fixed', 'important');
+          clone.style.setProperty('position', 'absolute', 'important');
           clone.style.setProperty('inset', 'auto', 'important');
-          clone.style.setProperty('left', '0', 'important');
-          clone.style.setProperty('top', '0', 'important');
+          const app = document.querySelector('#app');
+          const svg = document.querySelector('#universe');
+          const appRect = app.getBoundingClientRect();
+          const svgRect = svg.getBoundingClientRect();
+          clone.style.setProperty('left', `${svgRect.left - appRect.left}px`, 'important');
+          clone.style.setProperty('top', `${svgRect.top - appRect.top}px`, 'important');
           clone.style.setProperty('width', '1000px', 'important');
           clone.style.setProperty('height', '1000px', 'important');
           clone.style.setProperty('transform', `scale(${args.scale})`, 'important');
           clone.style.setProperty('transform-origin', 'top left', 'important');
           clone.style.setProperty('clip-path', `circle(${args.radius}px at 500px 500px)`, 'important');
           clone.style.setProperty('opacity', '1', 'important');
-          clone.style.setProperty('z-index', '99999', 'important');
-          document.body.appendChild(clone);
+          clone.style.setProperty('z-index', '10', 'important');
+          app.appendChild(clone);
           return clone.id;
         }, { id: realm.id, scale, radius: realm.radius });
         if (!sourceId) {
@@ -110,7 +114,7 @@ try {
           continue;
         }
         const source = page.locator('#' + sourceId);
-        const topbar = page.locator('.topbar');
+        const topbar = page.locator('.lang-switch');
         const priorVisibility = await topbar.evaluate(el => el.style.visibility);
         await topbar.evaluate(el => el.style.setProperty('visibility', 'hidden', 'important'));
         const sourceShot = await source.screenshot();
