@@ -25,7 +25,8 @@ const context = await browser.newContext({ reducedMotion: 'reduce' });
 
 try {
   for (const viewport of viewports) {
-    const page = await context.newPage({ viewport: { width: viewport.width, height: viewport.height } });
+    const page = await context.newPage();
+    await page.setViewportSize({ width: viewport.width, height: viewport.height });
     page.setDefaultTimeout(7000);
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
