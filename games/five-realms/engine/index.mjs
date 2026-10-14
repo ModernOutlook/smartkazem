@@ -242,6 +242,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
     if(state.over)return {ok:false,reason:"game-over"};
     const player=state.players.find(p=>p.id===playerId);
     if(!player||state.players[state.currentPlayer].id!==playerId)return {ok:false,reason:"not-your-turn"};
+    if(state.exchangeBonusAvailable&&action.type!=="exchange")return {ok:false,reason:"extra-exchange-required"};
     let result;
     switch(action.type){
       case "question":result=questionAction(state,player,action.answers||{});break;
