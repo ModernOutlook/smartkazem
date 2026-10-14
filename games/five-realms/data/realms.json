@@ -1,0 +1,35 @@
+{
+  "realms": [
+    {
+      "id": "blue",
+      "name": "ساختار تالار",
+      "color": "#2786e8",
+      "suit": "♠"
+    },
+    {
+      "id": "yellow",
+      "name": "تداوم عالم",
+      "color": "#e8b82c",
+      "suit": "♦"
+    },
+    {
+      "id": "purple",
+      "name": "قلمرو تجربه",
+      "color": "#a66be8",
+      "suit": "JOKER"
+    },
+    {
+      "id": "red",
+      "name": "مرجع تقلید",
+      "color": "#e54b52",
+      "suit": "♥"
+    },
+    {
+      "id": "green",
+      "name": "اقتصاد سهم",
+      "color": "#38ad72",
+      "suit": "♣"
+    }
+  ],
+  "note": "Realm-to-color mapping is provisional configuration, not an author-confirmed mapping."
+}
