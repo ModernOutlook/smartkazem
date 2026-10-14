@@ -58,7 +58,7 @@ node --test games/five-realms/tests/*.test.mjs
 
 ### Remaining release gates
 
-- **Validation still required:** the automated Node suite and current GitHub Actions results have not yet been confirmed passing for the latest changes. Browser smoke tests, mobile/RTL/accessibility checks, and event-by-event audio behavior have not been verified.
+- **Automated validation passed on commit `4eadec3914e208c194c8777b405bf10e47aede79`:** the quality gate ran all 15 Five Realms engine tests successfully, checked JavaScript/ES-module syntax, validated JSON, passed Paragraph Machine contracts, and passed HTML/local-asset checks. Security gate also passed. Browser smoke tests are still pending; mobile/RTL/accessibility and event-by-event audio behavior have not yet been verified.
 - Realm color/name mapping remains provisional in `data/realms.json`; keep the mapping data-driven until the author confirms it.
 - The five question sets remain explicit `PLACEHOLDER` records. Do not invent or rewrite the author's philosophical question content.
 - The final winner calculation currently compares spendable points, then owned badge value. Whether the bank balance should count toward final points remains an author decision; do not merge until this scoring detail is confirmed.
