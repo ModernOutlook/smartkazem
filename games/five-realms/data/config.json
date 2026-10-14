@@ -27,11 +27,11 @@
   "realms": {
     "blue": {
       "suit": "spades",
-      "badgeCount": 12,
+      "badgeCount": 72,
       "badgeValues": {
-        "1": 6,
-        "2": 4,
-        "3": 2
+        "1": 36,
+        "2": 24,
+        "3": 12
       },
       "luckyCard": {
         "rank": "A",
@@ -41,11 +41,11 @@
     },
     "yellow": {
       "suit": "diamonds",
-      "badgeCount": 12,
+      "badgeCount": 72,
       "badgeValues": {
-        "1": 6,
-        "2": 4,
-        "3": 2
+        "1": 36,
+        "2": 24,
+        "3": 12
       },
       "luckyCard": {
         "rank": "2",
@@ -55,11 +55,11 @@
     },
     "purple": {
       "suit": "jokers",
-      "badgeCount": 12,
+      "badgeCount": 72,
       "badgeValues": {
-        "1": 6,
-        "2": 4,
-        "3": 2
+        "1": 36,
+        "2": 24,
+        "3": 12
       },
       "luckyCards": [
         {
@@ -77,11 +77,11 @@
     },
     "red": {
       "suit": "hearts",
-      "badgeCount": 12,
+      "badgeCount": 72,
       "badgeValues": {
-        "1": 6,
-        "2": 4,
-        "3": 2
+        "1": 36,
+        "2": 24,
+        "3": 12
       },
       "luckyCard": {
         "rank": "4",
@@ -91,11 +91,11 @@
     },
     "green": {
       "suit": "clubs",
-      "badgeCount": 12,
+      "badgeCount": 72,
       "badgeValues": {
-        "1": 6,
-        "2": 4,
-        "3": 2
+        "1": 36,
+        "2": 24,
+        "3": 12
       },
       "luckyCard": {
         "rank": "5",
