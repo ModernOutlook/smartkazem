@@ -387,6 +387,16 @@ The palette order is invariant and is part of the site's visual identity. A page
 - Shahnameh remains a flagship visual surface; its image-rich composition is not a baseline that every page must imitate.
 - Visual refinement must not alter navigation, state, content, i18n, accessibility semantics, service boundaries, or business rules.
 
+### Structure realm child-page background
+All child pages opened directly from **ساختار تالار (S)** currently share the supplied architectural/concentric background image:
+
+- رساله فلسفی → `css/pages/philosophical-treatise.css`
+- صفر → `css/pages/zero.css`
+- هزارتو → `css/pages/quantum-maze.css`
+- Shared asset → `assets/structure-child-background.jpg`
+
+The image is used as the page-level atmospheric background with a restrained dark readability overlay. This is a presentation-only rule: navigation, content ownership, i18n, accessibility, and page controllers remain unchanged. Future child pages opened from **ساختار تالار** should reuse this background family unless a deliberate visual redesign is requested.
+
 ### Maintenance rule
 When improving a visual surface, inspect both the owning page and its parent realm. Prefer a presentation-only CSS change when structure and behavior already satisfy the contract. New visual motifs should belong to the realm family rather than becoming an unrelated sixth design language.
 
