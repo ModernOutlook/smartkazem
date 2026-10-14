@@ -288,7 +288,8 @@
       "emptyBank": "No active deposit.",
       "questionPlaceholder": "PLACEHOLDER question: choose a sample answer for each realm.",
       "placeholderOption": "PLACEHOLDER option",
-      "winner": "Winner: "
+      "winner": "Winner: ",
+      "menu": "Five Realms game"
     }
   },
   "paragraphMachine": {
