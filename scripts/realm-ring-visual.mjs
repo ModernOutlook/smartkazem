@@ -81,29 +81,34 @@ try {
     if (svgBoxForCompare) {
       const scale = svgBoxForCompare.width / 1000;
       for (const realm of realms) {
-        const source = page.locator('#' + realm.id + '-page');
-        await source.evaluate((el, args) => {
-          el.style.setProperty('display', 'block', 'important');
-          el.style.setProperty('position', 'fixed', 'important');
-          el.style.setProperty('inset', 'auto', 'important');
-          el.style.setProperty('left', '0', 'important');
-          el.style.setProperty('top', '0', 'important');
-          el.style.setProperty('width', '1000px', 'important');
-          el.style.setProperty('height', '1000px', 'important');
-          el.style.setProperty('transform', `scale(${args.scale})`, 'important');
-          el.style.setProperty('transform-origin', 'top left', 'important');
-          el.style.setProperty('clip-path', `circle(${args.radius}px at 500px 500px)`, 'important');
-          el.style.setProperty('opacity', '1', 'important');
-          el.style.setProperty('z-index', '99999', 'important');
-          el.querySelectorAll('header, .realm-actions, .share-story-action').forEach(node => {
-            node.style.setProperty('display', 'none', 'important');
-          });
-        }, { scale, radius: realm.radius });
+        const sourceId = await page.evaluate((args) => {
+          const original = document.querySelector('#' + args.id + '-page');
+          if (!original) return '';
+          const clone = original.cloneNode(true);
+          clone.id = 'visual-reference-' + args.id;
+          clone.querySelectorAll('header, .realm-actions, .share-story-action').forEach(node => node.remove());
+          clone.style.setProperty('display', 'block', 'important');
+          clone.style.setProperty('position', 'fixed', 'important');
+          clone.style.setProperty('inset', 'auto', 'important');
+          clone.style.setProperty('left', '0', 'important');
+          clone.style.setProperty('top', '0', 'important');
+          clone.style.setProperty('width', '1000px', 'important');
+          clone.style.setProperty('height', '1000px', 'important');
+          clone.style.setProperty('transform', `scale(${args.scale})`, 'important');
+          clone.style.setProperty('transform-origin', 'top left', 'important');
+          clone.style.setProperty('clip-path', `circle(${args.radius}px at 500px 500px)`, 'important');
+          clone.style.setProperty('opacity', '1', 'important');
+          clone.style.setProperty('z-index', '99999', 'important');
+          document.body.appendChild(clone);
+          return clone.id;
+        }, { id: realm.id, scale, radius: realm.radius });
+        if (!sourceId) {
+          fail(`${viewport.name}/${realm.id}: could not clone the source realm background`);
+          continue;
+        }
+        const source = page.locator('#' + sourceId);
         const sourceShot = await source.screenshot();
-        await source.evaluate(el => {
-          el.removeAttribute('style');
-          el.querySelectorAll('header, .realm-actions, .share-story-action').forEach(node => node.removeAttribute('style'));
-        });
+        await source.evaluate(el => el.remove());
         const ringShot = await page.locator(`#realm-${realm.id} .realm-ring-background`).screenshot();
         const expected = PNG.sync.read(sourceShot);
         const actual = PNG.sync.read(ringShot);
