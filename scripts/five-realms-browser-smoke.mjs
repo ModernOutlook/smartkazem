@@ -35,6 +35,18 @@ try {
       const play = document.querySelector('#fr-play');
       return play && !play.hidden && document.querySelectorAll('#fr-hand .fr-card').length === 5;
     });
+    try {
+      await page.waitForFunction(() => {
+        const images = [...document.querySelectorAll('#fr-hand .fr-card-image')];
+        return images.length === 5 && images.every(image => image.complete && image.naturalWidth > 0);
+      });
+    } catch {
+      fail(`${viewport.name}: hand did not load all five inventory card images`);
+    }
+    const handImages = await page.locator('#fr-hand .fr-card-image').evaluateAll(images => images.map(image => image.getAttribute('src')));
+    if (handImages.length !== 5 || handImages.some(src => !src?.startsWith('content/'))) {
+      fail(`${viewport.name}: hand cards are not using the shared inventory artwork`);
+    }
     if ((await page.locator('#fr-current').innerText()) !== 'Browser Alice') fail(`${viewport.name}: first player is not active after game start`);
 
     // Score one non-joker card, then verify the private-hand handoff to player two.

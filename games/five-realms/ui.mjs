@@ -55,10 +55,34 @@ if (root && !root.dataset.initialized) {
       button.type = "button"; button.className = "fr-card"; button.dataset.realm = card.realm;
       button.style.setProperty("--fr-card-realm-color", realmsData.find(item => item.id === card.realm)?.color || "#c9d5cc");
       button.setAttribute("aria-pressed", String(selected.has(card.id)));
-      button.setAttribute("aria-label", cardText(card) + " " + suitSymbol(card) + ", " + realmLabel(card.realm));
-      const face=document.createElement("span");face.textContent=cardText(card)+" "+suitSymbol(card);
-      const realmCaption=document.createElement("small");realmCaption.textContent=realmLabel(card.realm);
-      if(card.lucky){const luckyCaption=document.createElement("small");luckyCaption.textContent=t("luckyCard","Lucky card");button.append(face,realmCaption,luckyCaption);}else button.append(face,realmCaption);
+      button.setAttribute("aria-label", cardText(card) + " " + suitSymbol(card) + ", " + realmLabel(card.realm) + (card.lucky ? ", " + t("luckyCard","Lucky card") : ""));
+      const catalog = window.PlayingCardsCatalog;
+      const catalogRank = ({A:"ace",K:"king",Q:"queen",J:"jack"})[card.rank] || String(card.rank);
+      const catalogCard = card.joker
+        ? catalog?.byId?.[Number(String(card.id).split("-").at(-1)) === 2 ? 2 : 1]
+        : catalog?.cards?.find(entry => entry.suit === card.suit && entry.rank === catalogRank);
+      const image = document.createElement("img");
+      image.className = "fr-card-image";
+      image.alt = cardText(card) + " " + suitSymbol(card) + ", " + realmLabel(card.realm);
+      image.decoding = "async";
+      image.loading = "lazy";
+      image.draggable = false;
+      const imagePath = catalogCard && catalog?.imagePath(catalogCard);
+      if (imagePath) image.src = imagePath;
+      else {
+        image.classList.add("fr-card-image-fallback");
+        image.alt = "";
+      }
+      const accessibleLabel = document.createElement("span");
+      accessibleLabel.className = "fr-sr-only";
+      accessibleLabel.textContent = cardText(card) + " " + suitSymbol(card);
+      button.append(image, accessibleLabel);
+      if (card.lucky) {
+        const luckyCaption = document.createElement("span");
+        luckyCaption.className = "fr-card-lucky";
+        luckyCaption.textContent = t("luckyCard","Lucky card");
+        button.append(luckyCaption);
+      }
       button.addEventListener("click",()=>{ if (card.joker) { setMessage("jokerNoPoker","Jokers cannot enter poker hands; use an exchange action."); return; } if(!selected.has(card.id)&&selected.size>=config.game.handSize){setMessage("selectUpToFive","Select no more than five cards.");return;} selected.has(card.id) ? selected.delete(card.id) : selected.add(card.id); refresh(); });
       $("#fr-hand").append(button);
     });

@@ -39,7 +39,18 @@ Secondary pages (current child-page inventory): **exactly 13 pages, including bo
 12. **مانیفست آشوب‌زده** — book
 13. **صفر** — short story
 
-The playing-card inventory is also rendered inside the shared runtime from `content/page-templates/inventory.fragment`; no separate inventory document is used.\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
+The playing-card inventory is also rendered inside the shared runtime from `content/page-templates/inventory.fragment`; no separate inventory document is used.
+
+### Shared playing-card image mapping (mandatory)
+
+Every surface that displays playing cards must use the same mapped image assets as the **Card Inventory** and the **Five Realms game hand**. Reuse `window.PlayingCardsCatalog` from `content/playing-cards.js` and resolve artwork through `PlayingCardsCatalog.imagePath(card)`; identify cards through the catalog's existing IDs, ranks, and suits rather than constructing image paths or drawing a separate text-only card representation.
+
+- The Card Inventory and the Five Realms **دست شما** hand are the reference implementations for mapped card artwork.
+- Any other page, panel, game state, preview, or card listing that renders a playing card must use the same catalog mapping and image files.
+- Do not duplicate card images, create parallel rank/suit-to-file mappings, or substitute independently styled text cards where the mapped artwork is expected.
+- Preserve semantic/accessibility labels, selection and state indicators, joker identity, and responsive image proportions around the shared artwork.
+- When adding or changing a card-rendering surface, inspect all callers of `PlayingCardsCatalog`, then verify that each displayed image resolves and loads in desktop, mobile portrait, and mobile landscape layouts.
+\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
 - **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
 
