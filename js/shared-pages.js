@@ -44,6 +44,13 @@ async function open(route,from='home',options={}){const key=routeKey(route);if(!
 function close(){if(history.state?.sharedPage&&!pendingHistoryClose){pendingHistoryClose=true;history.back();return;}showOrigin();}
 
 document.addEventListener('click',event=>{
+ const entry=event.target instanceof Element?event.target.closest('[data-five-realms-link]'):null;
+ if(!entry)return;
+ event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+ open('five-realms','share').catch(error=>console.error('[SharedPages]',error));
+},true);
+
+document.addEventListener('click',event=>{
  const link=event.target instanceof Element?event.target.closest('a[data-inventory-link],a.inventory-home'):null;
  if(!link)return;
  if(link.matches('[data-inventory-link]')){
