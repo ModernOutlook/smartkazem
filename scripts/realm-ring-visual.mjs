@@ -91,41 +91,57 @@ try {
       const svgShotBuffer = PNG.sync.write(actualMenu);
       fs.writeFileSync(path.join(output, `${viewport.name}-menu-svg.png`), svgShotBuffer);
       for (const realm of realms) {
-        const sourceId = await page.evaluate((args) => {
-          const original = document.querySelector('#' + args.id + '-page');
-          if (!original) return '';
-          const clone = original.cloneNode(true);
-          clone.id = 'visual-reference-' + args.id;
-          clone.querySelectorAll('header, .realm-actions, .share-story-action').forEach(node => node.remove());
-          clone.style.setProperty('display', 'block', 'important');
-          clone.style.setProperty('position', 'absolute', 'important');
-          clone.style.setProperty('inset', 'auto', 'important');
-          const app = document.querySelector('#app');
+        const referenceState = await page.evaluate((args) => {
+          const sourcePage = document.querySelector('#' + args.id + '-page');
+          const sceneClass = ({
+            structure: 'structure-space',
+            continuity: 'continuity-space',
+            experience: 'experience-space',
+            reference: 'reference-scene',
+            share: 'share-space'
+          })[args.id];
+          const sourceScene = sourcePage?.querySelector('.' + sceneClass);
+          if (!sourceScene) return null;
           const svg = document.querySelector('#universe');
-          const appRect = app.getBoundingClientRect();
-          const svgRect = svg.getBoundingClientRect();
-          clone.style.setProperty('left', `${svgRect.left - appRect.left}px`, 'important');
-          clone.style.setProperty('top', `${svgRect.top - appRect.top}px`, 'important');
-          clone.style.setProperty('width', '1000px', 'important');
-          clone.style.setProperty('height', '1000px', 'important');
-          clone.style.setProperty('transform', `scale(${args.scale})`, 'important');
-          clone.style.setProperty('transform-origin', 'top left', 'important');
-          clone.style.setProperty('clip-path', `circle(${args.radius}px at 500px 500px)`, 'important');
-          clone.style.setProperty('opacity', '1', 'important');
-          clone.style.setProperty('z-index', '10', 'important');
-          app.appendChild(clone);
-          return clone.id;
-        }, { id: realm.id, scale, radius: realm.radius });
-        if (!sourceId) {
-          fail(`${viewport.name}/${realm.id}: could not clone the source realm background`);
+          const groupState = [...svg.querySelectorAll('.realm')].map(group => ({
+            group,
+            visibility: group.style.visibility
+          }));
+          const core = svg.querySelector('#core');
+          const coreVisibility = core?.style.visibility ?? '';
+          groupState.forEach(({group}) => { group.style.visibility = 'hidden'; });
+          if (core) core.style.visibility = 'hidden';
+          const foreignObject = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');
+          foreignObject.setAttribute('x', '0');
+          foreignObject.setAttribute('y', '0');
+          foreignObject.setAttribute('width', '1000');
+          foreignObject.setAttribute('height', '1000');
+          foreignObject.setAttribute('clip-path', `url(#ringClip-${args.id})`);
+          foreignObject.setAttribute('opacity', '1');
+          foreignObject.setAttribute('class', 'realm-ring-layer');
+          const wrapper = document.createElementNS('http://www.w3.org/1999/xhtml', 'div');
+          wrapper.className = 'page realm-ring-background ' + args.id + '-page';
+          wrapper.appendChild(sourceScene.cloneNode(true));
+          foreignObject.appendChild(wrapper);
+          svg.appendChild(foreignObject);
+          return { foreignObject, groupState, core, coreVisibility };
+        }, { id: realm.id });
+        if (!referenceState) {
+          fail(`${viewport.name}/${realm.id}: could not render a reference background layer`);
           continue;
         }
-        const source = page.locator('#' + sourceId);
         const topbar = page.locator('.lang-switch');
         const priorVisibility = await topbar.evaluate(el => el.style.visibility);
         await topbar.evaluate(el => el.style.setProperty('visibility', 'hidden', 'important'));
-        const sourceShot = await source.screenshot();
-        await source.evaluate(el => el.remove());
+        const sourceFull = PNG.sync.read(await page.screenshot({ fullPage: false }));
+        const sourceMenu = new PNG({ width: cropWidth, height: cropHeight });
+        PNG.bitblt(sourceFull, sourceMenu, cropX, cropY, cropWidth, cropHeight, 0, 0);
+        const sourceShot = PNG.sync.write(sourceMenu);
+        await page.evaluate((state) => {
+          state.foreignObject.remove();
+          state.groupState.forEach(({group, visibility}) => { group.style.visibility = visibility; });
+          if (state.core) state.core.style.visibility = state.coreVisibility;
+        }, referenceState);
         await topbar.evaluate((el, value) => { if (value) el.style.visibility = value; else el.style.removeProperty('visibility'); }, priorVisibility);
         fs.writeFileSync(path.join(output, `${viewport.name}-source-${realm.id}.png`), sourceShot);
         const expected = PNG.sync.read(sourceShot);
