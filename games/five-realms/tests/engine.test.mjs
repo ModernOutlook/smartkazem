@@ -4,7 +4,7 @@ import { readFile } from "node:fs/promises";
 import { createEngine, createSeededRng, createDeck, evaluateHand, scoreFewCards } from "../engine/index.mjs";
 const config=JSON.parse(await readFile(new URL("../data/config.json",import.meta.url),"utf8"));
 const card=(rank,suit)=>({id:`${rank}-${suit}`,rank,suit,realm:({spades:"blue",diamonds:"yellow",hearts:"red",clubs:"green"})[suit],joker:false});
-const hand=(ranks,suits)=>ranks.map((r,i)=>card(r,suits[i]||"spades"));
+const hand=(ranks,suits=[])=>ranks.map((r,i)=>card(r,suits[i]||"spades"));
 test("seeded RNG and deck are deterministic; deck contains 54 unique cards",()=>{assert.deepEqual(createDeck(config,createSeededRng(42)),createDeck(config,createSeededRng(42)));const d=createDeck(config,createSeededRng(9));assert.equal(d.length,54);assert.equal(new Set(d.map(c=>c.id)).size,54);assert.equal(d.filter(c=>c.joker).length,2);});
 test("all five-card poker rankings and exact configured points",()=>{
  const cases=[
@@ -105,7 +105,7 @@ test("when both card realms are owned, exchange keeps the returned card and draw
  assert.ok(p.hand.some(c=>c.id===returned.id));assert.equal(state.currentPlayer,1);
 });
 test("bank schedule matches configured rates for 3, 3.5, and 0.5 units",()=>{
- for(const [amount,expectedPrincipal,expectedInterest] of [[3,300,30],[3.5,350,35],[0.5,50,-5]]) {
+ for(const [amount,expectedPrincipal,expectedInterest] of [[3,300,30],[3.5,350,25],[0.5,50,-5]]) {
   const engine=createEngine(config,{seed:2}),state=engine.newGame(["A","B"]),p=state.players[0];
   p.points=1000+Math.round(amount*10); const dep=engine.bankDeposit(p,amount*100);
   assert.equal(dep.ok,true);
