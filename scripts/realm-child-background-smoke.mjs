@@ -58,8 +58,8 @@ async function assertBackground(page, realm, asset, label) {
   if (!state) { fail(label + ': no realm-background page root'); return; }
   if (state.realm !== realm) fail(label + ': expected realm ' + realm + ', got ' + state.realm);
   if (!decodeURIComponent(state.backgroundImage).includes(asset)) fail(label + ': background image does not include ' + asset);
-  if (state.backgroundRepeat !== 'no-repeat') fail(label + ': expected no-repeat, got ' + state.backgroundRepeat);
-  if (state.backgroundAttachment !== 'scroll') fail(label + ': expected scrolling background, got ' + state.backgroundAttachment);
+  if (!state.backgroundRepeat.split(',').every((value) => value.trim() === 'no-repeat')) fail(label + ': expected every background layer to use no-repeat, got ' + state.backgroundRepeat);
+  if (!state.backgroundAttachment.split(',').every((value) => value.trim() === 'scroll')) fail(label + ': expected every background layer to scroll with the page, got ' + state.backgroundAttachment);
   if (state.scrollWidth > state.clientWidth + 1) fail(label + ': horizontal overflow ' + state.scrollWidth + ' > ' + state.clientWidth);
 }
 
