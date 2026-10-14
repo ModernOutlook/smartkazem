@@ -291,7 +291,10 @@
       "winner": "Winner: ",
       "menu": "Five Realms game",
       "jokerNoPoker": "Jokers cannot enter poker hands; use an exchange action.",
-      "forgivenRealm": "If multiple realms tie for the most cards, choose which realm's wrong answer is forgiven."
+      "forgivenRealm": "If multiple realms tie for the most cards, choose which realm's wrong answer is forgiven.",
+      "jokerChooseCard": "Choose a card to take with the joker",
+      "extraExchange": "You earned one extra exchange. Exchange once more to end your turn.",
+      "fullyOwnedFree": "This realm's question part is free because you own all its badges."
     }
   },
   "paragraphMachine": {
