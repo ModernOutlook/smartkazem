@@ -289,7 +289,8 @@
       "questionPlaceholder": "PLACEHOLDER question: choose a sample answer for each realm.",
       "placeholderOption": "PLACEHOLDER option",
       "winner": "Winner: ",
-      "menu": "Five Realms game"
+      "menu": "Five Realms game",
+      "jokerNoPoker": "Jokers cannot enter poker hands; use an exchange action."
     }
   },
   "paragraphMachine": {
