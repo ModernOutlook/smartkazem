@@ -1,6 +1,7 @@
 import { chromium } from 'playwright';
 import fs from 'node:fs';
 import path from 'node:path';
+import { PNG } from 'pngjs';
 
 const baseURL = process.env.SMARTKAZEM_BASE_URL || 'http://127.0.0.1:4173';
 const output = path.join(process.cwd(), 'artifacts', 'realm-rings');
@@ -71,6 +72,66 @@ try {
     for (const realm of inspection.realms) {
       if (!realm.groupExists || !realm.foreignObjectExists || !realm.wrapperExists || !realm.sceneExists || !realm.hasBackground || !realm.clipPath) {
         fail(`${viewport.name}/${realm.id}: missing exact page background layer or circular clip (${JSON.stringify(realm)})`);
+      }
+    }
+
+    // Compare each clipped ring's actual pixels with the same realm page's original
+    // background scene rendered at the same CSS dimensions and opacity.
+    const svgBoxForCompare = await page.locator('#universe').boundingBox();
+    if (svgBoxForCompare) {
+      const scale = svgBoxForCompare.width / 1000;
+      for (const realm of realms) {
+        const source = page.locator('#' + realm.id + '-page');
+        await source.evaluate((el, args) => {
+          el.style.setProperty('display', 'block', 'important');
+          el.style.setProperty('position', 'fixed', 'important');
+          el.style.setProperty('inset', 'auto', 'important');
+          el.style.setProperty('left', '0', 'important');
+          el.style.setProperty('top', '0', 'important');
+          el.style.setProperty('width', '1000px', 'important');
+          el.style.setProperty('height', '1000px', 'important');
+          el.style.setProperty('transform', `scale(${args.scale})`, 'important');
+          el.style.setProperty('transform-origin', 'top left', 'important');
+          el.style.setProperty('clip-path', `circle(${args.radius}px at 500px 500px)`, 'important');
+          el.style.setProperty('opacity', '1', 'important');
+          el.style.setProperty('z-index', '99999', 'important');
+          el.querySelectorAll('header, .realm-actions, .share-story-action').forEach(node => {
+            node.style.setProperty('display', 'none', 'important');
+          });
+        }, { scale, radius: realm.radius });
+        const sourceShot = await source.screenshot();
+        await source.evaluate(el => {
+          el.removeAttribute('style');
+          el.querySelectorAll('header, .realm-actions, .share-story-action').forEach(node => node.removeAttribute('style'));
+        });
+        const ringShot = await page.locator(`#realm-${realm.id} .realm-ring-background`).screenshot();
+        const expected = PNG.sync.read(sourceShot);
+        const actual = PNG.sync.read(ringShot);
+        if (expected.width !== actual.width || expected.height !== actual.height) {
+          fail(`${viewport.name}/${realm.id}: source/ring screenshot dimensions differ (${expected.width}x${expected.height} vs ${actual.width}x${actual.height})`);
+          continue;
+        }
+        let compared = 0;
+        let different = 0;
+        const cx = (expected.width - 1) / 2;
+        const cy = (expected.height - 1) / 2;
+        const radiusPx = realm.radius * scale - 3;
+        for (let y = 0; y < expected.height; y++) {
+          for (let x = 0; x < expected.width; x++) {
+            if (Math.hypot(x - cx, y - cy) > radiusPx) continue;
+            compared++;
+            const offset = (y * expected.width + x) * 4;
+            if (expected.data[offset] !== actual.data[offset] ||
+                expected.data[offset + 1] !== actual.data[offset + 1] ||
+                expected.data[offset + 2] !== actual.data[offset + 2] ||
+                expected.data[offset + 3] !== actual.data[offset + 3]) different++;
+          }
+        }
+        const percent = compared ? different * 100 / compared : 100;
+        console.log(`PIXEL ${viewport.name}/${realm.id}: ${different}/${compared} differing interior pixels (${percent.toFixed(4)}%)`);
+        if (different > 0) {
+          fail(`${viewport.name}/${realm.id}: background is not pixel-identical to the realm page (${different} interior pixel differences)`);
+        }
       }
     }
 
