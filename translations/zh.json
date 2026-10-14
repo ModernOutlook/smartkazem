@@ -288,7 +288,8 @@
       "questionPlaceholder": "PLACEHOLDER 问题：为每个领域选择一个示例答案。",
       "placeholderOption": "PLACEHOLDER 选项",
       "winner": "获胜者：",
-      "menu": "五领域游戏"
+      "menu": "五领域游戏",
+      "jokerNoPoker": "小丑牌不能进入扑克手牌，请使用交换行动。"
     }
   },
   "paragraphMachine": {
