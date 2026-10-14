@@ -69,7 +69,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
   const rng=createSeededRng(seed),events=createEventEmitter();events.on(onEvent);
   const scale=config.game.roundingScale;
   const money=n=>Math.round(roundHalfUp(Number(n),scale)*scale);
-  const drawFrom=state=>{if(!state.deck.length)state.deck=createDeck(config,rng);return state.deck.pop();};
+  const drawFrom=state=>{if(!state.deck.length&&state.discard.length)state.deck=shuffle(state.discard,rng),state.discard=[];if(!state.deck.length)throw new Error("No cards remain in the deck or discard pile.");return state.deck.pop();};
   const allCards=state=>[...state.deck,...state.players.flatMap(p=>p.hand)];
   function badgeValueAt(index,realm){const values=[];for(const value of [3,2,1])for(let i=0;i<(realm.badgeValues[value]||0);i++)values.push(value);return values[index]??1;}
   function ownedValue(player,realm){return player.badges.filter(b=>b.realm===realm).reduce((s,b)=>s+b.value,0);}
@@ -121,7 +121,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
   }
   function newGame(playerNames){
     if(!Array.isArray(playerNames)||playerNames.length<config.game.minPlayers||playerNames.length>config.game.maxPlayers)throw new RangeError("Player count is outside configured limits.");
-    const state={round:1,currentPlayer:0,players:playerNames.map((name,id)=>({id,name:String(name).trim()||`Player ${id+1}`,hand:[],points:money(config.game.startingPoints),badges:[],bank:null,completedRealms:[]})),deck:createDeck(config,rng),badgePool:Object.fromEntries(REALM_IDS.map(realm=>[realm,Array.from({length:config.realms[realm].badgeCount},(_,i)=>({id:`${realm}-${i+1}`,realm,value:badgeValueAt(i,config.realms[realm])}))])),over:false,history:[],exchangeBonusAvailable:false,exchangeBonusUsed:false};
+    const state={round:1,currentPlayer:0,players:playerNames.map((name,id)=>({id,name:String(name).trim()||`Player ${id+1}`,hand:[],points:money(config.game.startingPoints),badges:[],bank:null,completedRealms:[]})),deck:createDeck(config,rng),discard:[],badgePool:Object.fromEntries(REALM_IDS.map(realm=>[realm,Array.from({length:config.realms[realm].badgeCount},(_,i)=>({id:`${realm}-${i+1}`,realm,value:badgeValueAt(i,config.realms[realm])}))])),over:false,history:[],exchangeBonusAvailable:false,exchangeBonusUsed:false};
     for(const player of state.players)for(let i=0;i<config.game.startingCards;i++)player.hand.push(drawFrom(state));
     beginTurn(state,state.players[0]);return state;
   }
@@ -171,6 +171,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
     player.bank.principal+=interest;player.bank.turns++;return interest;
   }
   function questionAction(state,player,answers){
+    for(const realm of REALM_IDS)if(!realmOwned(player,realm)&&typeof answers.parts?.[realm]?.correct!=="boolean")return {ok:false,reason:"missing-answer",realm};
     const counts=Object.fromEntries(REALM_IDS.map(realm=>[realm,player.hand.filter(c=>c.realm===realm).length]));
     const max=Math.max(...Object.values(counts)),tied=REALM_IDS.filter(realm=>counts[realm]===max);
     const forgiven=answers.forgivenRealm&&tied.includes(answers.forgivenRealm)?answers.forgivenRealm:null;
@@ -197,7 +198,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
   function exchangeAction(state,player,returnedCardId,chosenCardId){
     const index=player.hand.findIndex(c=>c.id===returnedCardId);if(index<0)return {ok:false,reason:"card-not-owned"};
     const returned=player.hand[index];
-    if(returned.lucky)return {ok:false,reason:"lucky-card-protected"};
+    if(returned.lucky&&!returned.joker)return {ok:false,reason:"lucky-card-protected"};
     if(returned.joker||returned.suit==="joker"){
       if(!chosenCardId)return {ok:false,reason:"joker-choice-required"};
       const chosenIndex=state.deck.findIndex(c=>c.id===chosenCardId);
@@ -231,7 +232,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
     if(!Array.isArray(cardIds)||new Set(cardIds).size!==cardIds.length)return {ok:false,reason:"invalid-card-selection"};
     const selected=cardIds.map(id=>player.hand.find(c=>c.id===id));if(selected.some(c=>!c))return {ok:false,reason:"card-not-owned"};
     const result=evaluateHand(selected,config);player.points+=money(result.points);
-    const consumed=selected.filter(c=>!c.lucky);player.hand=player.hand.filter(c=>!consumed.some(x=>x.id===c.id));
+    const consumed=selected.filter(c=>!c.lucky);player.hand=player.hand.filter(c=>!consumed.some(x=>x.id===c.id));state.discard.push(...consumed);
     events.emit("hand-scored",{playerId:player.id,...result});finishAction(state,player);return {ok:true,...result};
   }
   function act(state,playerId,action){
