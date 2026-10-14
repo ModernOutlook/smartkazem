@@ -48,6 +48,9 @@ jobs:
       - name: Test language transitions and responsive overflow
         run: node scripts/ui-browser-smoke.mjs
 
+      - name: Test realm-specific child backgrounds at required viewports
+        run: node scripts/realm-child-background-smoke.mjs
+
       - name: Compare realm ring backgrounds pixel by pixel at responsive sizes
         run: node scripts/realm-ring-visual.mjs
 
@@ -57,6 +60,14 @@ jobs:
         with:
           name: realm-ring-visual-evidence
           path: artifacts/realm-rings/
+          if-no-files-found: warn
+
+      - name: Upload child-page background screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: realm-child-background-screenshots
+          path: artifacts/realm-child-backgrounds/
           if-no-files-found: warn
 
       - name: Stop static site
