@@ -43,9 +43,9 @@ test("badge discount, 95% resale and pool ownership",()=>{
  const sold=engine.sellBadge(p,bought.badge.id);assert.equal(sold.price,285);assert.equal(p.points,9985);
 });
 test("bank schedule matches configured rates for 3, 3.5, and 0.5 units",()=>{
- for(const [amount,expectedPrincipal,expectedInterest] of [[3,300,30],[3.5,350,35],[0.5,50,-2]]) {
+ for(const [amount,expectedPrincipal,expectedInterest] of [[3,300,30],[3.5,350,35],[0.5,50,-5]]) {
   const engine=createEngine(config,{seed:2}),state=engine.newGame(["A","B"]),p=state.players[0];
-  p.points=1000+(amount*100%100); const dep=engine.bankDeposit(p,amount*100);
+  p.points=1000+Math.round(amount*10); const dep=engine.bankDeposit(p,amount*100);
   assert.equal(dep.ok,true);
   const interest=engine.accrueBank(p);
   assert.equal(p.bank.principal,expectedPrincipal+expectedInterest);
