@@ -55,8 +55,10 @@ if (root && !root.dataset.initialized) {
       button.style.setProperty("--fr-card-realm-color", realmsData.find(item => item.id === card.realm)?.color || "#c9d5cc");
       button.setAttribute("aria-pressed", String(selected.has(card.id)));
       button.setAttribute("aria-label", cardText(card) + " " + suitSymbol(card) + ", " + realmLabel(card.realm));
-      button.innerHTML = '<span>'+cardText(card)+' '+suitSymbol(card)+'</span><small>'+realmLabel(card.realm)+'</small>';
-      button.addEventListener("click",()=>{ if (card.joker) { setMessage("jokerNoPoker","Jokers cannot enter poker hands; use an exchange action."); return; } selected.has(card.id) ? selected.delete(card.id) : selected.add(card.id); refresh(); });
+      const face=document.createElement("span");face.textContent=cardText(card)+" "+suitSymbol(card);
+      const realmCaption=document.createElement("small");realmCaption.textContent=realmLabel(card.realm);
+      if(card.lucky){const luckyCaption=document.createElement("small");luckyCaption.textContent=t("luckyCard","Lucky card");button.append(face,realmCaption,luckyCaption);}else button.append(face,realmCaption);
+      button.addEventListener("click",()=>{ if (card.joker) { setMessage("jokerNoPoker","Jokers cannot enter poker hands; use an exchange action."); return; } if(!selected.has(card.id)&&selected.size>=config.game.handSize){setMessage("selectUpToFive","Select no more than five cards.");return;} selected.has(card.id) ? selected.delete(card.id) : selected.add(card.id); refresh(); });
       $("#fr-hand").append(button);
     });
     $("#fr-badges").textContent = player.badges.length ? player.badges.map(b=>realmLabel(b.realm)+" · "+b.value).join(" / ") : t("noBadges","هنوز نشانی ندارید");
