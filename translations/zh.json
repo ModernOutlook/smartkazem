@@ -293,7 +293,8 @@
       "forgivenRealm": "如果多个领域持有的牌数并列最多，请选择哪个领域的错误答案可获免罚。",
       "jokerChooseCard": "选择一张要用小丑牌换取的牌",
       "extraExchange": "你获得了一次额外交换。再交换一次即可结束回合。",
-      "fullyOwnedFree": "你拥有此领域的全部徽章，因此此题部分免费。"
+      "fullyOwnedFree": "你拥有此领域的全部徽章，因此此题部分免费。",
+      "luckyCard": "幸运牌"
     }
   },
   "paragraphMachine": {
