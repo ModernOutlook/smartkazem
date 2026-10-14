@@ -22,7 +22,7 @@ node --test games/five-realms/tests/*.test.mjs
 
 - Win condition: all badges claimed or the configured 30-round limit; most points wins, ties use owned badge value.
 - Start: two to five local players, five cards each, zero points.
-- Each realm currently has 12 badges: two worth 3, four worth 2, six worth 1. The values sum to 20; the handoff's general 6x / 10x badge-value statement is not reconciled yet, so this pool is provisional.
+- **Approved badge pool (2026-10-15):** each realm has 72 badges: 12 worth 3, 24 worth 2, and 36 worth 1. Total value per realm is 120 (`10x`, with `x=12`).
 - Realm color/name mapping in `realms.json` is provisional and must be confirmed by the author.
 - Purple badge base price multiplier is provisionally 0.5 to express “purple is cheapest”; blue/Ace premium is not applied.
 - Badge price uses additive owned-value discount `price × (1 − ownedValue / (2T))`; this is currently applied per realm's configured total value.
@@ -44,13 +44,13 @@ node --test games/five-realms/tests/*.test.mjs
 
 ## Ambiguity decision log
 
-### Level 3 — badge pool count/value contradiction (OPEN; user decision required)
+### Level 3 — badge pool count/value contradiction (RESOLVED 2026-10-15)
 
 **Question:** The handoff says each realm has (6x) badges with (x) badges worth 3, (2x) worth 2, and (3x) worth 1, so total badge value is (10x). The current config instead defines 12 badges per realm (2 worth 3, 4 worth 2, 6 worth 1), which totals 20 and corresponds to (x=2), not (x=12). The README's previous provisional 12-badge pool is implementation history, not an approved rule.
 
 **Alternatives:** (A) Treat (x=2) as the intended pool: 12 badges per realm, value total 20. (B) Treat 12 as (x): 72 badges per realm, value total 120. These produce substantially different game duration, badge availability, discounts, and end-game pacing.
 
-**Status:** Not approved. Current config remains provisional and the badge pool, badge pricing, and completion behavior must not be described as finalized until the author decides.
+**Decision (user-approved 2026-10-15):** `x=12`: 72 badges per realm, distributed as 12 badges worth 3, 24 worth 2, and 36 worth 1. The total badge value `T` is 120 per realm. Updated `data/config.json` to match. Badge prices and discounts must use this approved `T=120` value; other unresolved mechanics remain open.
 
 ### Other known incomplete behavior
 
