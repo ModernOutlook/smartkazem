@@ -4,31 +4,36 @@
       "id": "blue",
       "name": "ساختار تالار",
       "color": "#2786e8",
-      "suit": "♠"
+      "suit": "♠",
+      "i18nKey": "labels.structure"
     },
     {
       "id": "yellow",
       "name": "تداوم عالم",
       "color": "#e8b82c",
-      "suit": "♦"
+      "suit": "♦",
+      "i18nKey": "labels.continuity"
     },
     {
       "id": "purple",
       "name": "قلمرو تجربه",
       "color": "#a66be8",
-      "suit": "JOKER"
+      "suit": "JOKER",
+      "i18nKey": "labels.experience"
     },
     {
       "id": "red",
       "name": "مرجع تقلید",
       "color": "#e54b52",
-      "suit": "♥"
+      "suit": "♥",
+      "i18nKey": "labels.reference"
     },
     {
       "id": "green",
       "name": "اقتصاد سهم",
       "color": "#38ad72",
-      "suit": "♣"
+      "suit": "♣",
+      "i18nKey": "labels.share"
     }
   ],
   "note": "Realm-to-color mapping is provisional configuration, not an author-confirmed mapping."
