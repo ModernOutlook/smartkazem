@@ -35,6 +35,17 @@ test("jokers are rejected from poker hands and six-card hands are rejected",()=>
  assert.throws(()=>evaluateHand([{id:"joker-1",rank:"JOKER",suit:"joker",joker:true}],config),/Jokers/);
  assert.throws(()=>evaluateHand(Array.from({length:6},(_,i)=>card(String(i+2),"spades")),config),/1 to handSize/);
 });
+test("approved x=12 badge pool has 72 badges and total value 120 per realm",()=>{
+ const engine=createEngine(config,{seed:11}),state=engine.newGame(["A","B"]);
+ for(const realm of ["blue","yellow","purple","red","green"]){
+  const pool=state.badgePool[realm];
+  assert.equal(pool.length,72);
+  assert.equal(pool.filter(b=>b.value===3).length,12);
+  assert.equal(pool.filter(b=>b.value===2).length,24);
+  assert.equal(pool.filter(b=>b.value===1).length,36);
+  assert.equal(engine.realmTotal(realm),120);
+ }
+});
 test("badge discount, 95% resale and pool ownership",()=>{
  const engine=createEngine(config,{seed:1}),state=engine.newGame(["A","B"]),p=state.players[0];
  p.points=10000;
