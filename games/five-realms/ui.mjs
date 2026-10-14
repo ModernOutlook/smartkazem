@@ -6,7 +6,7 @@ const root = $("#five-realms-game");
 if (root && !root.dataset.initialized) {
   root.dataset.initialized = "true";
   const t = (key, fallback = "") => window.SiteI18n?.get("pages.fiveRealms." + key, fallback) || fallback;
-  let realmsData = [];
+  let realmsData = [], questionsData = [], currentQuestion = null;
   let config, engine, state, selected = new Set(), pendingAction = null, awaitingReveal = false;
   const announce = (message) => { $("#fr-announcer").textContent = ""; requestAnimationFrame(() => { $("#fr-announcer").textContent = message; }); };
   const emitSound = (type, detail = {}) => {
@@ -26,13 +26,16 @@ if (root && !root.dataset.initialized) {
   const points = value => (value / config.game.roundingScale).toLocaleString(window.SiteI18n?.getLanguage?.() || "fa", {maximumFractionDigits:2});
   const moneyInput = raw => Math.round(Number(raw) * config.game.roundingScale);
   async function loadConfig() {
-    const [configResponse, realmsResponse] = await Promise.all([
+    const [configResponse, realmsResponse, questionsResponse] = await Promise.all([
       fetch("games/five-realms/data/config.json"),
-      fetch("games/five-realms/data/realms.json")
+      fetch("games/five-realms/data/realms.json"),
+      fetch("games/five-realms/data/questions.json")
     ]);
-    if (!configResponse.ok || !realmsResponse.ok) throw new Error("Five Realms data could not be loaded");
+    if (!configResponse.ok || !realmsResponse.ok || !questionsResponse.ok) throw new Error("Five Realms data could not be loaded");
     config = await configResponse.json();
     realmsData = (await realmsResponse.json()).realms;
+    questionsData = (await questionsResponse.json()).questions || [];
+    if (!questionsData.length) throw new Error("No question sets are configured");
   }
   function refreshNameInputs() {
     const count = Number($("#fr-player-count").value);
@@ -63,8 +66,8 @@ if (root && !root.dataset.initialized) {
     $("#fr-setup").hidden = true;
     $("#fr-game-over").hidden = !state.over;
     if (state.over) {
-      const winner = [...state.players].sort((a,b)=>b.points-a.points || b.badges.reduce((s,x)=>s+x.value,0)-a.badges.reduce((s,x)=>s+x.value,0))[0];
-      $("#fr-winner").textContent = winner ? t("winner","Winner: ") + winner.name : "";
+      const winners = (state.winnerIds || []).map(id=>state.players.find(p=>p.id===id)).filter(Boolean);
+      $("#fr-winner").textContent = winners.length ? t("winner","Winner: ") + winners.map(p=>p.name).join(" / ") : "";
       $("#fr-play").hidden = true;
     }
   }
@@ -73,6 +76,7 @@ if (root && !root.dataset.initialized) {
     if (!result?.ok && result?.ok !== undefined) { setMessage("actionFailed","That action could not be completed."); return; }
     selected.clear(); pendingAction = null; $("#fr-action-form").replaceChildren();
     refresh();
+    if (result?.turnContinues && !state.over) { setMessage("extraExchange","You earned one extra exchange. Exchange once more to end your turn."); return; }
     if (!state.over) {
       $("#fr-pass-name").textContent = t("passTo","Pass the device to") + " " + current().name;
       $("#fr-pass").hidden = false; $("#fr-play").hidden = true; awaitingReveal = true;
@@ -85,9 +89,14 @@ if (root && !root.dataset.initialized) {
     const submit = (text,fn) => {const b=document.createElement("button");b.type="button";b.className="fr-primary";b.textContent=text;b.addEventListener("click",fn);form.append(b);};
     const player=current();
     if(action==="exchange"){
-      if(!player.hand.length){setMessage("emptyHand","No cards to exchange.");return;}
-      const card=select(player.hand.map(c=>({value:c.id,label:cardText(c)+" "+suitSymbol(c)+" · "+realmLabel(c.realm)})),t("returnCard","Card to return"));
-      submit(t("confirm","Confirm"),()=>{const result=engine.act(state,player.id,{type:"exchange",returnedCardId:card.value});if(result.ok){advance(result);}else setMessage("actionFailed","Action failed.");});
+      const exchangeCards=player.hand.filter(card=>!card.lucky||card.joker);
+      if(!exchangeCards.length){setMessage("actionFailed","No exchangeable cards are available.");return;}
+      const card=select(exchangeCards.map(c=>({value:c.id,label:cardText(c)+" "+suitSymbol(c)+" · "+realmLabel(c.realm)})),t("returnCard","Card to exchange"));
+      const chosenCard=select(engine.availableExchangeCards(state).map(c=>({value:c.id,label:cardText(c)+" "+suitSymbol(c)+" · "+realmLabel(c.realm)})),t("jokerChooseCard","Card to take with joker"));
+      const chosenLabel=chosenCard.closest("label");
+      const updateJokerChoice=()=>{const isJoker=!!player.hand.find(c=>c.id===card.value)?.joker;chosenLabel.hidden=!isJoker;chosenCard.required=isJoker;};
+      card.addEventListener("change",updateJokerChoice);updateJokerChoice();
+      submit(t("confirm","Confirm"),()=>{const selectedCard=player.hand.find(c=>c.id===card.value);const result=engine.act(state,player.id,{type:"exchange",returnedCardId:card.value,...(selectedCard?.joker?{chosenCardId:chosenCard.value}:{})});if(result.ok){advance(result);}else setMessage(result.reason==="chosen-card-unavailable"?"unavailable":"actionFailed",result.reason==="chosen-card-unavailable"?"That card is no longer available.":"Action failed.");});
     } else if(action==="score"){
       const chosen=player.hand.filter(c=>selected.has(c.id) && !c.joker);
       const preview=document.createElement("p");preview.textContent=chosen.length ? t("selectedCards","Selected cards: ")+chosen.length+" · "+points(engine.evaluateHand(chosen).points*config.game.roundingScale)+" "+t("points","points") : t("selectUpToFive","Select 1 to 5 cards above.");form.append(preview);
@@ -105,8 +114,28 @@ if (root && !root.dataset.initialized) {
     } else if(action==="withdraw"){
       submit(t("withdraw","Withdraw"),()=>{const result=engine.act(state,player.id,{type:"withdraw"});if(result.ok){advance(result);}else setMessage("emptyBank","No active deposit.");});
     } else if(action==="question"){
-      const formset=document.createElement("fieldset");const legend=document.createElement("legend");legend.textContent=t("questionPlaceholder","PLACEHOLDER question: select a placeholder answer for each realm.");formset.append(legend);
-      REALM_IDS.forEach(realm=>{const wrap=document.createElement("div");wrap.className="fr-choice-list";const label=document.createElement("strong");label.textContent=realmLabel(realm);wrap.append(label);for(let i=0;i<4;i++){const l=document.createElement("label");const input=document.createElement("input");input.type="radio";input.name="fr-q-"+realm;input.value=String(i);input.checked=i===0;l.append(input,document.createTextNode(" "+t("placeholderOption","PLACEHOLDER option")+" "+(i+1)));wrap.append(l);}formset.append(wrap);});
+      if(!questionsData.length){setMessage("actionFailed","No question sets are configured.");return;}
+      currentQuestion=questionsData[Math.floor(Math.random()*questionsData.length)];
+      const formset=document.createElement("fieldset");
+      const legend=document.createElement("legend");
+      legend.textContent=currentQuestion.placeholder?t("questionPlaceholder","Placeholder question set"):t("question","Question");
+      formset.append(legend);
+      REALM_IDS.forEach(realm=>{
+        const wrap=document.createElement("div");wrap.className="fr-choice-list";
+        const label=document.createElement("strong");label.textContent=realmLabel(realm);wrap.append(label);
+        const part=currentQuestion.parts?.[realm]||{prompt:"",options:[],answerIndex:-1};
+        const prompt=document.createElement("p");prompt.textContent=part.prompt||"";wrap.append(prompt);
+        if(engine.realmOwned(player,realm)){
+          const free=document.createElement("p");free.textContent=t("fullyOwnedFree","This realm's question part is free because you own all its badges.");wrap.append(free);
+        }else{
+          (part.options||[]).forEach((optionText,i)=>{
+            const label=document.createElement("label"),input=document.createElement("input");
+            input.type="radio";input.name="fr-q-"+realm;input.value=String(i);
+            label.append(input,document.createTextNode(" "+optionText));wrap.append(label);
+          });
+        }
+        formset.append(wrap);
+      });
       form.append(formset);
       const counts=Object.fromEntries(REALM_IDS.map(realm=>[realm,player.hand.filter(card=>card.realm===realm).length]));
       const maxHeld=Math.max(...Object.values(counts));
@@ -118,7 +147,19 @@ if (root && !root.dataset.initialized) {
         tiedRealms.forEach(realm=>{const option=document.createElement("option");option.value=realm;option.textContent=realmLabel(realm);forgivenSelect.append(option);});
         label.append(forgivenSelect);form.append(label);
       }
-      submit(t("confirm","Confirm"),()=>{const parts={};REALM_IDS.forEach(realm=>{const chosen=$('input[name="fr-q-'+realm+'"]:checked',form);parts[realm]={correct:chosen?.value==="0"};});const answers={parts};if(forgivenSelect)answers.forgivenRealm=forgivenSelect.value;const result=engine.act(state,player.id,{type:"question",answers});advance(result);});
+      submit(t("confirm","Confirm"),()=>{
+        const parts={};
+        for(const realm of REALM_IDS){
+          if(engine.realmOwned(player,realm))continue;
+          const chosen=$('input[name="fr-q-'+realm+'"]:checked',form);
+          if(!chosen){setMessage("actionFailed","Choose one answer for every realm that is not fully owned.");return;}
+          parts[realm]={correct:Number(chosen.value)===Number(currentQuestion.parts?.[realm]?.answerIndex)};
+        }
+        const answers={parts};if(forgivenSelect)answers.forgivenRealm=forgivenSelect.value;
+        const result=engine.act(state,player.id,{type:"question",answers});
+        if(result.ok)advance(result);else setMessage("actionFailed","Complete the answers before confirming.");
+      });
+
     }
   }
   $("#fr-player-count").addEventListener("change",refreshNameInputs);
