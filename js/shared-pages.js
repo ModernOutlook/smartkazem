@@ -8,7 +8,8 @@ const REALM_ASSETS=Object.freeze({
  reference:'adapters/مرجع تقلید.jpg',
  share:'adapters/اقتصاد سهم.jpg'
 });
-function applyRealmBackground(element,realm){
+const READABLE_PANELS=Object.freeze({observation:'.book-body',layer3:'.reader'});
+function applyRealmBackground(element,realm,route){
  const asset=REALM_ASSETS[realm];
  if(!element||!asset)return false;
  const url=new URL(asset,document.baseURI).href;
@@ -18,6 +19,8 @@ function applyRealmBackground(element,realm){
  element.style.backgroundSize='contain';
  element.style.backgroundRepeat='no-repeat';
  element.style.backgroundAttachment='scroll';
+ const readablePanel=READABLE_PANELS[route]?element.querySelector(READABLE_PANELS[route]):null;
+ if(readablePanel)readablePanel.style.backgroundColor='rgba(243,244,242,.86)';
  element.dataset.realmBackground=realm;
  return true;
 }
@@ -37,7 +40,7 @@ function hideAppPages(){app.querySelectorAll(':scope > .page').forEach(p=>p.clas
 async function loadRoot(key){if(roots.has(key))return roots.get(key);const response=await fetch(manifest[key].file,{cache:'no-store'});if(!response.ok)throw new Error('Unable to load page template '+key);const markup=await response.text();const container=document.createElement('div');container.dataset.sharedRoute=key;container.style.position='absolute';container.style.inset='0';container.style.width='auto';container.style.height='auto';container.style.overflow='hidden';container.innerHTML=markup;container.querySelectorAll('.global-lang,.lang-switch').forEach(n=>n.remove());roots.set(key,container);return container;}
 async function loadScripts(key){for(const src of manifest[key].scripts||[]){const scriptKey=key+':'+src;if(loadedScripts.has(scriptKey))continue;await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=src;script.onload=()=>{loadedScripts.add(scriptKey);resolve();};script.onerror=()=>reject(new Error('Failed page script '+src));document.body.appendChild(script);});}}
 function showOrigin(){if(activeContainer)activeContainer.remove();activeContainer=null;activeKey=null;syncStyles('');setMeta('i18n-page','home');setMeta('i18n-catalog','');setMeta('i18n-blocks','');const methods={share:'openShare',experience:'openExperience',continuity:'openContinuity',structure:'openStructure',reference:'openReference',home:'returnHome'};window.SitePages?.[methods[origin]||'returnHome']?.();window.SiteI18n?.setPage?.('home','','').catch(()=>{});history.replaceState({},'',location.pathname+location.hash);}
-async function open(route,from='home',options={}){const key=routeKey(route);if(!key)return false;if(activeContainer)activeContainer.remove();activeContainer=null;activeKey=key;origin=from||origin||'home';hideAppPages();await ensureStyles(key);syncStyles(key);const container=await loadRoot(key);host.appendChild(container);activeContainer=container;const pageRoot=container.querySelector('.child-page,.page');if(pageRoot){pageRoot.classList.add('page','is-active');pageRoot.style.position='absolute';pageRoot.style.inset='0';pageRoot.style.width='auto';pageRoot.style.maxWidth='100%';pageRoot.style.height='auto';pageRoot.style.minHeight='0';pageRoot.style.overflowY='auto';applyRealmBackground(pageRoot,manifest[key].realm);}setMeta('i18n-page',manifest[key].page);setMeta('i18n-catalog',manifest[key].catalog);setMeta('i18n-blocks',manifest[key].blocks||'');await window.SiteI18n?.setPage?.(manifest[key].page,manifest[key].catalog,manifest[key].blocks||'');await loadScripts(key);if(options.push!==false)history.pushState({sharedPage:key,origin},'',location.pathname+'?page='+encodeURIComponent(key));return true;}
+async function open(route,from='home',options={}){const key=routeKey(route);if(!key)return false;if(activeContainer)activeContainer.remove();activeContainer=null;activeKey=key;origin=from||origin||'home';hideAppPages();await ensureStyles(key);syncStyles(key);const container=await loadRoot(key);host.appendChild(container);activeContainer=container;const pageRoot=container.querySelector('.child-page,.page');if(pageRoot){pageRoot.classList.add('page','is-active');pageRoot.style.position='absolute';pageRoot.style.inset='0';pageRoot.style.width='auto';pageRoot.style.maxWidth='100%';pageRoot.style.height='auto';pageRoot.style.minHeight='0';pageRoot.style.overflowY='auto';applyRealmBackground(pageRoot,manifest[key].realm,key);}setMeta('i18n-page',manifest[key].page);setMeta('i18n-catalog',manifest[key].catalog);setMeta('i18n-blocks',manifest[key].blocks||'');await window.SiteI18n?.setPage?.(manifest[key].page,manifest[key].catalog,manifest[key].blocks||'');await loadScripts(key);if(options.push!==false)history.pushState({sharedPage:key,origin},'',location.pathname+'?page='+encodeURIComponent(key));return true;}
 function close(){if(history.state?.sharedPage&&!pendingHistoryClose){pendingHistoryClose=true;history.back();return;}showOrigin();}
 
 document.addEventListener('click',event=>{
