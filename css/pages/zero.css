@@ -2,7 +2,7 @@
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 .zero-page{color:var(--zero-text);font-family:Vazirmatn,Tahoma,sans-serif;overflow-x:clip}
-.zero-page{min-height:100svh;position:relative;isolation:isolate;background:radial-gradient(ellipse at 50% 0%,rgba(24,100,145,.36),transparent 42%),radial-gradient(ellipse at 8% 68%,rgba(9,65,101,.2),transparent 35%),linear-gradient(155deg,#061421 0%,#07111c 48%,#02060b 100%)}
+.zero-page{min-height:100svh;position:relative;isolation:isolate;background:linear-gradient(rgba(2,14,21,.42),rgba(1,7,13,.66)),url("../../assets/structure-child-background.jpg") center/cover fixed no-repeat}
 .zero-page:before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(circle at 12% 17%,rgba(177,226,255,.8) 0 1px,transparent 1.8px),radial-gradient(circle at 77% 28%,rgba(90,177,229,.65) 0 1px,transparent 1.8px),radial-gradient(circle at 63% 82%,rgba(135,211,255,.45) 0 1px,transparent 1.8px);background-size:137px 151px,173px 167px,193px 181px;opacity:.4}
 .zero-shell{width:min(100% - 32px,920px);margin:auto;padding:22px 0 28px;position:relative}
 .zero-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:1px solid var(--zero-line)}
