@@ -289,7 +289,8 @@
       "placeholderOption": "PLACEHOLDER 选项",
       "winner": "获胜者：",
       "menu": "五领域游戏",
-      "jokerNoPoker": "小丑牌不能进入扑克手牌，请使用交换行动。"
+      "jokerNoPoker": "小丑牌不能进入扑克手牌，请使用交换行动。",
+      "forgivenRealm": "如果多个领域持有的牌数并列最多，请选择哪个领域的错误答案可获免罚。"
     }
   },
   "paragraphMachine": {
