@@ -124,7 +124,8 @@ try {
           wrapper.appendChild(sourceScene.cloneNode(true));
           foreignObject.appendChild(wrapper);
           svg.appendChild(foreignObject);
-          return { foreignObject, groupState, core, coreVisibility };
+          window.__realmVisualReferenceState = { foreignObject, groupState, core, coreVisibility };
+          return true;
         }, { id: realm.id });
         if (!referenceState) {
           fail(`${viewport.name}/${realm.id}: could not render a reference background layer`);
@@ -137,11 +138,14 @@ try {
         const sourceMenu = new PNG({ width: cropWidth, height: cropHeight });
         PNG.bitblt(sourceFull, sourceMenu, cropX, cropY, cropWidth, cropHeight, 0, 0);
         const sourceShot = PNG.sync.write(sourceMenu);
-        await page.evaluate((state) => {
+        await page.evaluate(() => {
+          const state = window.__realmVisualReferenceState;
+          if (!state) return;
           state.foreignObject.remove();
           state.groupState.forEach(({group, visibility}) => { group.style.visibility = visibility; });
           if (state.core) state.core.style.visibility = state.coreVisibility;
-        }, referenceState);
+          delete window.__realmVisualReferenceState;
+        });
         await topbar.evaluate((el, value) => { if (value) el.style.visibility = value; else el.style.removeProperty('visibility'); }, priorVisibility);
         fs.writeFileSync(path.join(output, `${viewport.name}-source-${realm.id}.png`), sourceShot);
         const expected = PNG.sync.read(sourceShot);
