@@ -1,11 +1,11 @@
 # بازی ۵ قلمرو — Five Realms
 
-Pure rules engine foundation. No site entry point or realm navigation is wired yet.
+Five Realms hot-seat game with a data-driven rules engine and shared-site entry point. Core gameplay mechanics are implemented on this branch; automated and browser validation are still pending.
 
 ## Layout
 
-- `engine/index.mjs`: deterministic RNG, deck, poker evaluator, event emitter, and initial game/action APIs.
-- `data/config.json`: gameplay numbers and provisional defaults.
+- `engine/index.mjs`: deterministic RNG, deck/discard recycling, poker evaluator, turn lifecycle, badges, lucky cards, questions, exchanges, and bank rules.
+- `data/config.json`: gameplay numbers, including the approved 72-badge pool per realm.
 - `data/realms.json`: realm names/color/suit presentation data.
 - `data/questions.json`: five clearly marked placeholder question sets.
 - `tests/engine.test.mjs`: dependency-free Node test suite.
@@ -26,11 +26,15 @@ node --test games/five-realms/tests/*.test.mjs
 - Realm color/name mapping in `realms.json` is provisional and must be confirmed by the author.
 - Purple badge base price multiplier is provisionally 0.5 to express “purple is cheapest”; blue/Ace premium is not applied.
 - Badge price uses additive owned-value discount `price × (1 − ownedValue / (2T))`; this is currently applied per realm's configured total value.
-- Poker few-card scoring defaults to `count`; `structural` is documented in the handoff but not yet implemented.
+- Poker few-card scoring defaults to the approved `count` mode: 1→1, 2→2, 3→6, 4→16. A distinct structural scoring mode is not specified and is not selectable.
 - Question answers are placeholders, not author-approved philosophical content.
 - Bank deposit limit uses the exact fractional points balance. The specified principal formula `2 × floor(s) − s` can be negative for deposits below one point; this is retained and flagged.
 - Badge sale returns 95% of recorded purchase price, rounded half-up to hundredths.
-- Lucky cards, exchange joker swaps, the extra exchange chain, fully-owned realm rewards, question-answer evaluation, complete turn validation, and sound-event coverage need further implementation/verification before gameplay is considered complete.
+- Implemented: lucky cards are granted on first full realm ownership, stay in the hand, survive poker scoring and wrong-answer penalties, and cannot be returned through ordinary exchange. Purple jokers remain in hand when used to take a chosen available non-joker card; only one exchange action can be made per turn, so the two jokers are used on separate turns.
+- Implemented: exchange from an unowned realm into an owned realm grants one additional exchange before the turn ends; when both the returned-card realm and drawn-card realm are owned, the returned card stays in hand and two cards are drawn.
+- Implemented: question records load from `data/questions.json`; answers are evaluated against `answerIndex`; fully owned realm parts are free; wrong answers return a non-lucky card; the wrong answer in a most-held realm is forgiven, with a player choice if several realms tie.
+- Implemented: bank interest accrues at the start of the owner's turns for up to five turns; withdrawal stops future interest; sold badges return to the shared pool; game-over winners are selected by points, then total owned badge value.
+- Question prompts and options remain explicit `PLACEHOLDER` records. The mechanics work with the placeholder answer keys, but author-approved question content must replace them before a content-complete release.
 - This is an engine foundation, not yet acceptance-ready; the test suite is a first gate, not a claim that all handoff requirements pass.
 
 ## Site integration progress
