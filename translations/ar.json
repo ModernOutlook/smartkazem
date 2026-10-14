@@ -287,7 +287,8 @@
       "emptyBank": "لا يوجد إيداع نشط.",
       "questionPlaceholder": "سؤال PLACEHOLDER: اختر إجابة تجريبية لكل مجال.",
       "placeholderOption": "خيار PLACEHOLDER",
-      "winner": "الفائز: "
+      "winner": "الفائز: ",
+      "menu": "لعبة المجالات الخمسة"
     }
   },
   "paragraphMachine": {
