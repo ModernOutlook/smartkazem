@@ -150,7 +150,7 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
   }
   function sellBadge(state,player,badgeId){
     const index=player.badges.findIndex(b=>b.id===badgeId);if(index<0)return {ok:false,reason:"not-owned"};
-    const [badge]=player.badges.splice(index,1),price=money(badge.purchasePrice*config.game.exchangeResaleRate);
+    const [badge]=player.badges.splice(index,1),price=Math.floor(badge.purchasePrice*config.game.exchangeResaleRate+0.5);
     player.points+=price;state.badgePool[badge.realm].push({...badge,purchasePrice:undefined});
     events.emit("badge-sold",{playerId:player.id,realm:badge.realm,badgeId:badge.id,price});
     return {ok:true,price,badge};
