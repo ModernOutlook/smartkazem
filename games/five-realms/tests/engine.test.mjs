@@ -51,7 +51,7 @@ test("badge discount, 95% resale and pool ownership",()=>{
  p.points=10000;
  const bought=engine.buyBadge(state,p,"blue");assert.equal(bought.ok,true);
  assert.equal(bought.price,300);
- const sold=engine.sellBadge(state,p,bought.badge.id);assert.equal(sold.price,285);assert.equal(p.points,9985);
+ const sold=engine.sellBadge(state,p,bought.badge.id);assert.equal(sold.price,285);assert.equal(p.points,9985);assert.equal(state.badgePool.blue.length,72);
 });
 test("joker exchange keeps the joker and grants a chosen card from the deck",()=>{
  const engine=createEngine(config,{seed:7}),state=engine.newGame(["A","B"]),p=state.players[0];
@@ -69,6 +69,39 @@ test("question action requires answers and forgives the selected tied maximum re
  const parts=Object.fromEntries(["blue","yellow","purple","red","green"].map(realm=>[realm,{correct:false}]));
  const result=engine.act(state,p.id,{type:"question",answers:{parts,forgivenRealm:"blue"}});
  assert.equal(result.ok,true);
+});
+test("realm ownership grants a permanent lucky card and poker scoring preserves it",()=>{
+ const engine=createEngine(config,{seed:27}),state=engine.newGame(["A","B"]),p=state.players[0];
+ p.points=100000000;
+ while(state.badgePool.blue.length){const bought=engine.buyBadge(state,p,"blue");assert.equal(bought.ok,true);}
+ const lucky=p.hand.find(c=>c.id==="A-spades");
+ assert.ok(lucky);assert.equal(lucky.lucky,true);assert.equal(engine.realmOwned(p,"blue"),true);
+ const chosen=p.hand.filter(c=>!c.joker).slice(0,5);
+ if(!chosen.some(c=>c.id==="A-spades"))chosen[0]=lucky;
+ const result=engine.act(state,p.id,{type:"score",cardIds:chosen.map(c=>c.id)});
+ assert.equal(result.ok,true);assert.ok(p.hand.some(c=>c.id==="A-spades"&&c.lucky));
+});
+test("unowned-to-owned exchange grants exactly one extra exchange before turn advances",()=>{
+ const engine=createEngine(config,{seed:31}),state=engine.newGame(["A","B"]),p=state.players[0];
+ p.badges=state.badgePool.blue.splice(0).map(b=>({...b,purchasePrice:0}));
+ p.hand=[{id:"return-yellow",rank:"2",suit:"diamonds",realm:"yellow",joker:false,lucky:false}];
+ const incoming=state.deck.find(c=>c.realm==="blue");state.deck=state.deck.filter(c=>c.id!==incoming.id);state.deck.push(incoming);
+ const first=engine.act(state,p.id,{type:"exchange",returnedCardId:"return-yellow"});
+ assert.equal(first.ok,true);assert.equal(first.extraExchange,true);assert.equal(state.currentPlayer,0);
+ const secondCard=p.hand.find(c=>!c.lucky&&!c.joker);
+ const second=engine.act(state,p.id,{type:"exchange",returnedCardId:secondCard.id});
+ assert.equal(second.ok,true);assert.equal(state.currentPlayer,1);
+});
+test("when both card realms are owned, exchange keeps the returned card and draws two",()=>{
+ const engine=createEngine(config,{seed:33}),state=engine.newGame(["A","B"]),p=state.players[0];
+ p.badges=[...state.badgePool.blue.splice(0),...state.badgePool.yellow.splice(0)];
+ const returned={id:"return-blue",rank:"A",suit:"spades",realm:"blue",joker:false,lucky:false};
+ p.hand=[returned];const incoming=state.deck.find(c=>c.realm==="yellow");
+ state.deck=state.deck.filter(c=>c.id!==incoming.id);state.deck.push(incoming);
+ const before=p.hand.length;
+ const result=engine.act(state,p.id,{type:"exchange",returnedCardId:returned.id});
+ assert.equal(result.ok,true);assert.equal(result.returned,false);assert.equal(p.hand.length,before+2);
+ assert.ok(p.hand.some(c=>c.id===returned.id));assert.equal(state.currentPlayer,1);
 });
 test("bank schedule matches configured rates for 3, 3.5, and 0.5 units",()=>{
  for(const [amount,expectedPrincipal,expectedInterest] of [[3,300,30],[3.5,350,35],[0.5,50,-5]]) {
