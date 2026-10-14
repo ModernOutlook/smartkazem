@@ -46,6 +46,7 @@
     rememberFocus();
     paragraphOrigin = kind;
     showPage('paragraph');
+    window.RealmBackgrounds?.apply(pages.paragraph, kind === 'reference' ? 'reference' : 'experience');
     focusPage('paragraph');
     window.ParagraphPage?.open(kind);
     homeController.clearInfo();
