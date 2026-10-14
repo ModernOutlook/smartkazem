@@ -25,7 +25,7 @@ jobs:
           mapfile -t html_files < <(find . -type f -name '*.html' -not -path './.git/*')
           filtered_html=("${html_files[@]}")
 
-          if grep -RIn 'http://' "${filtered_html[@]}"; then
+          # The XHTML namespace URI required by SVG foreignObject is an identifier, not a fetchable resource.\n          if grep -RIn 'http://' "${filtered_html[@]}" | sed 's|xmlns="http://www.w3.org/1999/xhtml"||g' | grep -q 'http://'; then
             echo "Insecure HTTP URL found in HTML."
             exit 1
           fi
