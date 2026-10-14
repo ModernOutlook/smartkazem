@@ -114,6 +114,17 @@ test("bank schedule matches configured rates for 3, 3.5, and 0.5 units",()=>{
   assert.equal(interest,expectedInterest);
  }
 });
+test("bank interest accrues only when the owner starts a later turn and flags negative formula",()=>{
+ const events=[],engine=createEngine(config,{seed:45,onEvent:event=>events.push(event)}),state=engine.newGame(["A","B"]),a=state.players[0],b=state.players[1];
+ a.points=1005;
+ const deposited=engine.act(state,a.id,{type:"deposit",amount:50});
+ assert.equal(deposited.ok,true);assert.equal(state.currentPlayer,1);
+ const card=b.hand.find(c=>!c.joker);
+ const scored=engine.act(state,b.id,{type:"score",cardIds:[card.id]});
+ assert.equal(scored.ok,true);assert.equal(state.currentPlayer,0);
+ assert.equal(a.bank.principal,45);assert.equal(a.bank.turns,1);assert.equal(a.bank.negativeFormula,true);
+ assert.ok(events.some(event=>event.type==="bank-interest"&&event.detail.negativeFormula===true));
+});
 test("new game enforces 2-5 players and starts with configured hand size",()=>{
  const engine=createEngine(config,{seed:3}),state=engine.newGame(["A","B"]);
  assert.equal(state.players[0].hand.length,5);assert.equal(state.players[0].points,0);
