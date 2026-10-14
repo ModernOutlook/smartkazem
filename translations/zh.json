@@ -294,7 +294,8 @@
       "jokerChooseCard": "选择一张要用小丑牌换取的牌",
       "extraExchange": "你获得了一次额外交换。再交换一次即可结束回合。",
       "fullyOwnedFree": "你拥有此领域的全部徽章，因此此题部分免费。",
-      "luckyCard": "幸运牌"
+      "luckyCard": "幸运牌",
+      "bankNegativeFormula": "适用负利息公式（存款低于 1 分）"
     }
   },
   "paragraphMachine": {
