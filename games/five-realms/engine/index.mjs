@@ -121,12 +121,23 @@ export function createEngine(config, {seed = Date.now(), onEvent = () => {}} = {
     const forgiven=answers.forgivenRealm && tied.includes(answers.forgivenRealm)?answers.forgivenRealm:null;
     let delta=0;
     for(const realm of REALM_IDS) {
-      const part=answers.parts?.[realm], correct=realmOwned(player,realm)||part?.correct===true;
-      const wrong=!correct&&part?.correct===false&&realm!==forgiven;
-      if(correct){player.hand.push(drawFrom(state));delta++;}
-      else if(wrong&&player.hand.length){const removed=player.hand.splice(Math.floor(rng()*player.hand.length),1)[0];state.deck.push(removed);delta--;}
+      const part=answers.parts?.[realm];
+      const correct=realmOwned(player,realm)||part?.correct===true;
+      const answeredWrong=!realmOwned(player,realm)&&part?.correct===false;
+      const penalized=answeredWrong&&realm!==forgiven;
+      if(correct){
+        const card=drawFrom(state); player.hand.push(card); delta++;
+        events.emit("answer-correct",{playerId:player.id,realm});
+        events.emit("card-drawn",{playerId:player.id,cardId:card.id,reason:"question"});
+      } else if(answeredWrong) {
+        events.emit("answer-wrong",{playerId:player.id,realm,forgiven:realm===forgiven});
+        if(penalized&&player.hand.length){
+          const removed=player.hand.splice(Math.floor(rng()*player.hand.length),1)[0];
+          state.deck.push(removed); delta--;
+        }
+      }
     }
-    events.emit("answer-correct",{playerId:player.id,delta}); finishAction(state,player); return {delta};
+    finishAction(state,player); return {delta};
   }
   function exchangeAction(state,player,returnedCardId,chosenCardId) {
     const i=player.hand.findIndex(c=>c.id===returnedCardId); if(i<0) return {ok:false,reason:"card-not-owned"};
