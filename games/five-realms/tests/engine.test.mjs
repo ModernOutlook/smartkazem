@@ -88,6 +88,7 @@ test("unowned-to-owned exchange grants exactly one extra exchange before turn ad
  const incoming=state.deck.find(c=>c.realm==="blue");state.deck=state.deck.filter(c=>c.id!==incoming.id);state.deck.push(incoming);
  const first=engine.act(state,p.id,{type:"exchange",returnedCardId:"return-yellow"});
  assert.equal(first.ok,true);assert.equal(first.extraExchange,true);assert.equal(state.currentPlayer,0);
+ const blocked=engine.act(state,p.id,{type:"score",cardIds:[p.hand[0].id]});assert.equal(blocked.ok,false);assert.equal(blocked.reason,"extra-exchange-required");
  const secondCard=p.hand.find(c=>!c.lucky&&!c.joker);
  const second=engine.act(state,p.id,{type:"exchange",returnedCardId:secondCard.id});
  assert.equal(second.ok,true);assert.equal(state.currentPlayer,1);
