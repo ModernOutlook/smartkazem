@@ -290,7 +290,8 @@
       "placeholderOption": "PLACEHOLDER option",
       "winner": "Winner: ",
       "menu": "Five Realms game",
-      "jokerNoPoker": "Jokers cannot enter poker hands; use an exchange action."
+      "jokerNoPoker": "Jokers cannot enter poker hands; use an exchange action.",
+      "forgivenRealm": "If multiple realms tie for the most cards, choose which realm's wrong answer is forgiven."
     }
   },
   "paragraphMachine": {
