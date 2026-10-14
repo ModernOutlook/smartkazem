@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "deck": {
+    "ranks": [
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "10",
+      "J",
+      "Q",
+      "K",
+      "A"
+    ],
+    "suits": [
+      "spades",
+      "diamonds",
+      "hearts",
+      "clubs"
+    ],
+    "jokers": 2
+  },
+  "realms": {
+    "blue": {
+      "suit": "spades",
+      "badgeCount": 12,
+      "badgeValues": {
+        "1": 6,
+        "2": 4,
+        "3": 2
+      },
+      "luckyCard": {
+        "rank": "A",
+        "suit": "spades"
+      },
+      "basePriceMultiplier": 1
+    },
+    "yellow": {
+      "suit": "diamonds",
+      "badgeCount": 12,
+      "badgeValues": {
+        "1": 6,
+        "2": 4,
+        "3": 2
+      },
+      "luckyCard": {
+        "rank": "2",
+        "suit": "diamonds"
+      },
+      "basePriceMultiplier": 1
+    },
+    "purple": {
+      "suit": "jokers",
+      "badgeCount": 12,
+      "badgeValues": {
+        "1": 6,
+        "2": 4,
+        "3": 2
+      },
+      "luckyCards": [
+        {
+          "rank": "JOKER",
+          "suit": "joker",
+          "id": "joker-1"
+        },
+        {
+          "rank": "JOKER",
+          "suit": "joker",
+          "id": "joker-2"
+        }
+      ],
+      "basePriceMultiplier": 0.5
+    },
+    "red": {
+      "suit": "hearts",
+      "badgeCount": 12,
+      "badgeValues": {
+        "1": 6,
+        "2": 4,
+        "3": 2
+      },
+      "luckyCard": {
+        "rank": "4",
+        "suit": "hearts"
+      },
+      "basePriceMultiplier": 1
+    },
+    "green": {
+      "suit": "clubs",
+      "badgeCount": 12,
+      "badgeValues": {
+        "1": 6,
+        "2": 4,
+        "3": 2
+      },
+      "luckyCard": {
+        "rank": "5",
+        "suit": "clubs"
+      },
+      "basePriceMultiplier": 1
+    }
+  },
+  "game": {
+    "minPlayers": 2,
+    "maxPlayers": 5,
+    "startingCards": 5,
+    "startingPoints": 0,
+    "maxRounds": 30,
+    "questionParts": 5,
+    "questionOptions": 4,
+    "handSize": 5,
+    "roundingScale": 100,
+    "exchangeResaleRate": 0.95
+  },
+  "poker": {
+    "points": {
+      "highCard": 1,
+      "pair": 2,
+      "twoPair": 4,
+      "threeOfAKind": 6,
+      "straight": 8,
+      "flush": 10,
+      "fullHouse": 12,
+      "fourOfAKind": 16,
+      "straightFlush": 20,
+      "royalFlush": 25
+    },
+    "fewCardMode": "count",
+    "fewCardPoints": [
+      0,
+      1,
+      2,
+      6,
+      16
+    ],
+    "aceLow": true,
+    "aceHigh": true
+  },
+  "badges": {
+    "values": [
+      3,
+      2,
+      1
+    ],
+    "valueMultiplier": 1,
+    "discountShareDivisor": 2
+  },
+  "bank": {
+    "maxDepositFactor": 10,
+    "interestRates": [
+      0.1,
+      0.15,
+      0.25,
+      0.35,
+      0.15
+    ],
+    "interestTurns": 5,
+    "principalFormula": "2*floor(s)-s"
+  },
+  "turn": {
+    "forgiveWrongInMostHeldRealm": true,
+    "fullyOwnedPartFree": true,
+    "exchangeExtraIfFromUnownedToOwned": true,
+    "ownedToOwnedExtraDraw": true,
+    "exchangeExtraDraws": 1
+  },
+  "rounds": {
+    "tieBreak": "ownedBadgeValue"
+  }
+}
