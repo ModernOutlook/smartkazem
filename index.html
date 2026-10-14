@@ -44,39 +44,86 @@
     <div class="orbit" aria-label="پنج قلمرو" data-i18n-aria="paragraphMachine.realms">
       <svg class="menu-svg" id="universe" viewBox="0 0 1000 1000" role="group" aria-label="پنج قلمرو" data-i18n-aria="labels.fiveRealms">
         <defs>
-          <radialGradient id="blueGradient"><stop offset="0%" stop-color="#174d68"/><stop offset="55%" stop-color="#0a3045"/><stop offset="100%" stop-color="#03141e"/></radialGradient>
-          <radialGradient id="goldGradient"><stop offset="0%" stop-color="#e3bf55"/><stop offset="55%" stop-color="#bd951e"/><stop offset="100%" stop-color="#735a10"/></radialGradient>
-          <radialGradient id="purpleGradient"><stop offset="0%" stop-color="#9c4ce8"/><stop offset="55%" stop-color="#64239b"/><stop offset="100%" stop-color="#2d104b"/></radialGradient>
-          <radialGradient id="redGradient"><stop offset="0%" stop-color="#c44b40"/><stop offset="55%" stop-color="#8d2924"/><stop offset="100%" stop-color="#42100e"/></radialGradient>
-          <radialGradient id="greenGradient"><stop offset="0%" stop-color="#15c77c"/><stop offset="55%" stop-color="#07844f"/><stop offset="100%" stop-color="#034126"/></radialGradient>
+          <!-- Realm textures mirror the five realm-page backgrounds: matching atmosphere, light fields, and star detail. -->
+          <linearGradient id="structureSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#020b18"/><stop offset="43%" stop-color="#06264a"/><stop offset="72%" stop-color="#0b4380"/><stop offset="100%" stop-color="#061b34"/></linearGradient>
+          <radialGradient id="structureGlow"><stop offset="0%" stop-color="#4faeff" stop-opacity=".95"/><stop offset="100%" stop-color="#195b9f" stop-opacity="0"/></radialGradient>
+          <pattern id="blueGradient" patternUnits="userSpaceOnUse" width="1000" height="1000"><rect width="1000" height="1000" fill="url(#structureSky)"/><ellipse cx="780" cy="620" rx="310" ry="270" fill="url(#structureGlow)"/><ellipse cx="540" cy="200" rx="360" ry="340" fill="#195b9f" opacity=".4"/><ellipse cx="200" cy="580" rx="350" ry="360" fill="#0c4f91" opacity=".58"/><g fill="#d9f0ff"><circle cx="180" cy="120" r="2"/><circle cx="430" cy="80" r="2"/><circle cx="670" cy="140" r="2"/><circle cx="840" cy="280" r="2"/><circle cx="320" cy="340" r="1.7"/><circle cx="760" cy="480" r="1.4"/><circle cx="120" cy="740" r="1.5"/></g></pattern>
+          <linearGradient id="continuitySky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#21160d"/><stop offset="31%" stop-color="#68431b"/><stop offset="63%" stop-color="#c3832b"/><stop offset="83%" stop-color="#f1c56a"/><stop offset="100%" stop-color="#7d4b1d"/></linearGradient>
+          <radialGradient id="continuitySun" cx="36%" cy="18%" r="40%"><stop offset="0%" stop-color="#ffe599"/><stop offset="15%" stop-color="#f7b843" stop-opacity=".8"/><stop offset="100%" stop-color="#f7b843" stop-opacity="0"/></radialGradient>
+          <pattern id="goldGradient" patternUnits="userSpaceOnUse" width="1000" height="1000"><rect width="1000" height="1000" fill="url(#continuitySky)"/><rect width="1000" height="1000" fill="url(#continuitySun)"/><ellipse cx="720" cy="700" rx="380" ry="300" fill="#ffcb56" opacity=".45"/><g fill="#fff0bd"><circle cx="120" cy="100" r="2"/><circle cx="270" cy="230" r="2"/><circle cx="630" cy="100" r="2"/><circle cx="860" cy="230" r="2"/><circle cx="480" cy="340" r="1.7"/></g></pattern>
+          <linearGradient id="experienceSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#080013"/><stop offset="40%" stop-color="#22064b"/><stop offset="69%" stop-color="#6423a2"/><stop offset="100%" stop-color="#d7a0ff"/></linearGradient>
+          <radialGradient id="experienceGlow"><stop offset="0%" stop-color="#ae49ff" stop-opacity=".8"/><stop offset="100%" stop-color="#ae49ff" stop-opacity="0"/></radialGradient>
+          <pattern id="purpleGradient" patternUnits="userSpaceOnUse" width="1000" height="1000"><rect width="1000" height="1000" fill="url(#experienceSky)"/><ellipse cx="420" cy="320" rx="300" ry="280" fill="url(#experienceGlow)"/><ellipse cx="780" cy="650" rx="310" ry="310" fill="#6924cf" opacity=".65"/><g fill="#f7e4ff"><circle cx="100" cy="130" r="2"/><circle cx="340" cy="170" r="2"/><circle cx="680" cy="120" r="2"/><circle cx="890" cy="310" r="2"/><circle cx="510" cy="480" r="1.8"/></g></pattern>
+          <linearGradient id="referenceSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#170000"/><stop offset="38%" stop-color="#4b0605"/><stop offset="70%" stop-color="#b91e13"/><stop offset="100%" stop-color="#250000"/></linearGradient>
+          <pattern id="redGradient" patternUnits="userSpaceOnUse" width="1000" height="1000"><rect width="1000" height="1000" fill="url(#referenceSky)"/><ellipse cx="500" cy="160" rx="320" ry="260" fill="#ff6455" opacity=".72"/><ellipse cx="820" cy="420" rx="340" ry="360" fill="#ff1c14" opacity=".68"/><ellipse cx="240" cy="640" rx="380" ry="380" fill="#b40a08" opacity=".62"/><ellipse cx="500" cy="760" rx="320" ry="320" fill="#ff9648" opacity=".38"/><g fill="#ffe8dc"><circle cx="120" cy="120" r="2"/><circle cx="240" cy="270" r="1.7"/><circle cx="420" cy="90" r="2"/><circle cx="680" cy="180" r="2"/><circle cx="860" cy="100" r="2"/><circle cx="910" cy="480" r="1.7"/><circle cx="90" cy="550" r="1.6"/><circle cx="580" cy="480" r="1.7"/></g></pattern>
+          <linearGradient id="shareSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#04251e"/><stop offset="39%" stop-color="#0a8d67"/><stop offset="72%" stop-color="#73d9ad"/><stop offset="100%" stop-color="#e8f8d7"/></linearGradient>
+          <radialGradient id="shareGlow"><stop offset="0%" stop-color="#c2ffc2" stop-opacity=".98"/><stop offset="100%" stop-color="#c2ffc2" stop-opacity="0"/></radialGradient>
+          <pattern id="greenGradient" patternUnits="userSpaceOnUse" width="1000" height="1000"><rect width="1000" height="1000" fill="url(#shareSky)"/><ellipse cx="520" cy="180" rx="280" ry="240" fill="url(#shareGlow)"/><ellipse cx="180" cy="580" rx="300" ry="320" fill="#2ab484" opacity=".7"/><g fill="#effff7"><circle cx="80" cy="120" r="2"/><circle cx="250" cy="180" r="2"/><circle cx="740" cy="100" r="2"/><circle cx="910" cy="310" r="2"/><circle cx="420" cy="450" r="1.8"/></g></pattern>
           <radialGradient id="whiteCore"><stop offset="0%" stop-color="#fff"/><stop offset="25%" stop-color="#fffff5"/><stop offset="50%" stop-color="#dffff0" stop-opacity=".9"/><stop offset="100%" stop-color="#fff" stop-opacity="0"/></radialGradient>
           <filter id="glow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="8" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-        </defs>
+        <clipPath id="ringClip-structure" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="445"/></clipPath>
+          <clipPath id="ringClip-continuity" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="365"/></clipPath>
+          <clipPath id="ringClip-experience" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="285"/></clipPath>
+          <clipPath id="ringClip-reference" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="205"/></clipPath>
+          <clipPath id="ringClip-share" clipPathUnits="userSpaceOnUse"><circle cx="500" cy="500" r="125"/></clipPath>
+</defs>
         <circle cx="500" cy="500" r="490" fill="#010405"/>
         <circle cx="500" cy="500" r="470" fill="none" stroke="#12384b" stroke-width="3" opacity=".25"/>
         <g class="realm" data-id="structure" id="realm-structure" role="button" tabindex="0" aria-label="ساختار تالار" data-i18n-aria="labels.structure">
-          <circle cx="500" cy="500" r="445" fill="url(#blueGradient)" opacity=".94"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-structure)" class="realm-ring-layer" opacity="1"><div xmlns="http://www.w3.org/1999/xhtml" class="page realm-ring-background structure-page"><div class="structure-space" aria-hidden="true">
+<div class="structure-arch a1"></div><div class="structure-arch a2"></div><div class="structure-arch a3"></div>
+<div class="structure-column c1"></div><div class="structure-column c2"></div><div class="structure-column c3"></div><div class="structure-column c4"></div>
+<div class="structure-banner b1"></div><div class="structure-banner b2"></div><div class="structure-spire"></div><div class="structure-light"></div><div class="structure-floor"></div>
+</div></div></foreignObject>
+          <circle cx="500" cy="500" r="445" fill="transparent"/>
           <circle class="ring-border" cx="500" cy="500" r="445" stroke="#0879b8"/>
           <circle class="ring-border" cx="500" cy="500" r="438" stroke="#0c5d82" opacity=".35"/>
           
         </g>
         <g class="realm" data-id="continuity" id="realm-continuity" role="button" tabindex="0" aria-label="تداوم عالم" data-i18n-aria="labels.continuity">
-          <circle cx="500" cy="500" r="365" fill="url(#goldGradient)" opacity=".96"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-continuity)" class="realm-ring-layer" opacity="1"><div xmlns="http://www.w3.org/1999/xhtml" class="page realm-ring-background continuity-page"><div class="continuity-space" aria-hidden="true">
+<div class="continuity-moon"></div>
+<div class="continuity-island i1"></div><div class="continuity-island i2"></div><div class="continuity-island i3"></div><div class="continuity-island i4"></div>
+<div class="continuity-tower t1"></div><div class="continuity-tower t2"></div><div class="continuity-tower t3"></div>
+<div class="continuity-waterfall w1"></div><div class="continuity-waterfall w2"></div><div class="continuity-waterfall w3"></div>
+<div class="continuity-ring r1"></div><div class="continuity-ring r2"></div><div class="continuity-ring r3"></div>
+<div class="continuity-terrace"></div>
+</div></div></foreignObject>
+          <circle cx="500" cy="500" r="365" fill="transparent"/>
           <circle class="ring-border" cx="500" cy="500" r="365" stroke="#e1b72b"/>
           
         </g>
         <g class="realm" data-id="experience" id="realm-experience" role="button" tabindex="0" aria-label="قلمرو تجربه" data-i18n-aria="labels.experience">
-          <circle cx="500" cy="500" r="285" fill="url(#purpleGradient)" opacity=".97"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-experience)" class="realm-ring-layer" opacity="1"><div xmlns="http://www.w3.org/1999/xhtml" class="page realm-ring-background experience-page"><div class="experience-space" aria-hidden="true">
+<div class="experience-tree"></div>
+<div class="experience-island i1"></div><div class="experience-island i2"></div><div class="experience-island i3"></div><div class="experience-island i4"></div><div class="experience-island i5"></div>
+<div class="experience-city"></div>
+<div class="experience-waterfall w1"></div><div class="experience-waterfall w2"></div><div class="experience-waterfall w3"></div>
+<div class="experience-ring r1"></div><div class="experience-ring r2"></div><div class="experience-ring r3"></div>
+<div class="experience-screen s1"></div><div class="experience-screen s2"></div><div class="experience-screen s3"></div><div class="experience-screen s4"></div>
+<div class="experience-figure"></div><div class="experience-platform"></div>
+</div></div></foreignObject>
+          <circle cx="500" cy="500" r="285" fill="transparent"/>
           <circle class="ring-border" cx="500" cy="500" r="285" stroke="#b653ff"/>
           
         </g>
         <g class="realm" data-id="reference" id="realm-reference" role="button" tabindex="0" aria-label="مرجع تقلید" data-i18n-aria="labels.reference">
-          <circle cx="500" cy="500" r="205" fill="url(#redGradient)" opacity=".98"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-reference)" class="realm-ring-layer" opacity="1"><div xmlns="http://www.w3.org/1999/xhtml" class="page realm-ring-background reference-page"><div class="reference-scene" aria-hidden="true"><div class="ref-ring r1"></div><div class="ref-ring r2"></div><div class="ref-ring r3"></div><div class="ref-ring r4"></div><div class="ref-castle"></div><div class="ref-platform p1"></div><div class="ref-platform p2"></div><div class="ref-platform p3"></div><div class="ref-beam b1"></div><div class="ref-beam b2"></div><div class="ref-beam b3"></div><div class="ref-observer"></div></div></div></foreignObject>
+          <circle cx="500" cy="500" r="205" fill="transparent"/>
           <circle class="ring-border" cx="500" cy="500" r="205" stroke="#e94d43"/>
           
         </g>
         <g class="realm" data-id="share" id="realm-share" role="button" tabindex="0" aria-label="اقتصاد سهم" data-i18n-aria="labels.share">
-          <circle cx="500" cy="500" r="125" fill="url(#greenGradient)" opacity=".98"/>
+          <foreignObject x="0" y="0" width="1000" height="1000" clip-path="url(#ringClip-share)" class="realm-ring-layer" opacity="1"><div xmlns="http://www.w3.org/1999/xhtml" class="page realm-ring-background share-page"><div class="share-space" aria-hidden="true">
+<div class="share-moon"></div>
+<div class="share-island i1"></div><div class="share-island i2"></div><div class="share-island i3"></div><div class="share-island i4"></div><div class="share-island i5"></div>
+<div class="share-city"></div>
+<div class="share-ring r1"></div><div class="share-ring r2"></div><div class="share-ring r3"></div><div class="share-ring r4"></div>
+<div class="share-waterfall w1"></div><div class="share-waterfall w2"></div><div class="share-waterfall w3"></div>
+<div class="share-coin c1"></div><div class="share-coin c2"></div><div class="share-coin c3"></div>
+<div class="share-terrace"></div>
+</div></div></foreignObject>
+          <circle cx="500" cy="500" r="125" fill="transparent"/>
           <circle class="ring-border" cx="500" cy="500" r="125" stroke="#1bd58a"/>
           
         </g>
