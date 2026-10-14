@@ -987,3 +987,15 @@ html[dir="rtl"] .home-page > .info {
   .home-page #core{transition:none}
 }
 \n
+
+/* Reuse the exact realm-page scene inside the clipped landing-menu rings. */
+.menu-svg foreignObject.realm-ring-layer{pointer-events:none}
+.menu-svg .realm-ring-background{
+  display:block!important;
+  position:relative!important;
+  inset:auto!important;
+  width:1000px!important;
+  height:1000px!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+}
