@@ -44,7 +44,7 @@ if (root && !root.dataset.initialized) {
   function refresh() {
     if (!state) return;
     const player = current();
-    $("#five-realms-game [data-action]").forEach(button=>{button.disabled=!!state.exchangeBonusAvailable&&button.dataset.action!=="exchange";});
+    $$("#five-realms-game [data-action]").forEach(button=>{button.disabled=!!state.exchangeBonusAvailable&&button.dataset.action!=="exchange";});
     $("#fr-round").textContent = state.round;
     $("#fr-current").textContent = player.name;
     $("#fr-points").textContent = points(player.points);
