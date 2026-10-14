@@ -302,7 +302,8 @@
       "questionPlaceholder": "PLACEHOLDER پرسش: برای هر قلمرو یک پاسخ آزمایشی انتخاب کنید.",
       "placeholderOption": "گزینه PLACEHOLDER",
       "winner": "برنده: ",
-      "menu": "بازی ۵ قلمرو"
+      "menu": "بازی ۵ قلمرو",
+      "jokerNoPoker": "جوکر وارد دست پوکر نمی‌شود؛ برای آن کنش مبادله را انتخاب کنید."
     }
   },
   "paragraphMachine": {
