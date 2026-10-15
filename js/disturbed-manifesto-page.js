@@ -32,7 +32,7 @@
     return translated?.[activeIndex] || null;
   }
 
-  function activeTitle() {
+  function activePartForIndex(index) {\n    if (language() === 'fa') return source.parts[index];\n    const translated = catalog()?.chapters?.disturbedManifesto?.parts?.[language()];\n    return translated?.[index] || source.parts[index];\n  }\n\n  function activeTitle() {
     if (language() === 'fa') return source.title;
     return catalog()?.chapters?.disturbedManifesto?.title?.[language()] ||
       catalog()?.pages?.disturbedManifesto?.title ||
@@ -136,8 +136,12 @@
 
     document.querySelectorAll('.part').forEach((button, index) => {
       const active = index === activeIndex;
+      const part = activePartForIndex(index) || source.parts[index];
       button.classList.toggle('active', active);
-      button.textContent = siteNumber(source.parts[index].number);
+      button.setAttribute('role', 'tab');
+      button.setAttribute('aria-selected', String(active));
+      button.tabIndex = active ? 0 : -1;
+      button.textContent = `${siteNumber(part.number)} · ${part.title}`;
 
       if (active) button.setAttribute('aria-current', 'step');
       else button.removeAttribute('aria-current');
@@ -159,15 +163,15 @@
     activeIndex = index;
     render();
 
-    if (moveFocus) reader.focus({ preventScroll: false });
+    if (moveFocus) list.children[index]?.focus({ preventScroll: true });
   }
 
-  source.parts.forEach((part, index) => {
+  list.setAttribute('role', 'tablist');\n  list.setAttribute('aria-orientation', 'horizontal');\n  source.parts.forEach((part, index) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'part';
     button.textContent = siteNumber(part.number);
-    button.setAttribute('aria-controls', 'reader');
+    button.setAttribute('role', 'tab');\n    button.setAttribute('aria-controls', 'reader');
 
     button.addEventListener('click', () => select(index));
 
