@@ -8,7 +8,7 @@
       </div>
     </header>
     <nav class="treatise-tabs" id="tabs" aria-label="فهرست رساله" data-i18n-aria="pages.treatise.tabsLabel">
-      <button class="treatise-tab book-tab active" data-target="preface" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.0">پیش‌گفتار</span></button>
+      <button class="treatise-tab book-tab active" data-target="preface" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-separator" aria-hidden="true"> · </span><span class="tab-label" data-i18n="pages.treatise.tabs.0">پیش‌گفتار</span></button>
       <button class="treatise-tab book-tab" data-target="r1" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.1">ساختار تالار</span></button>
       <button class="treatise-tab book-tab" data-target="r2" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.2">تداوم عالم</span></button>
       <button class="treatise-tab book-tab" data-target="r3" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.3">تجربه</span></button>
