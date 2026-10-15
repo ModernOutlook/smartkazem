@@ -30,6 +30,7 @@
       returnButton.hidden=false;return;
     }
     statusNode.textContent=t('connected','حساب بانکی به بازی فعال متصل است.');
+    returnButton.hidden=false;
     account.hidden=false;
     $('#tadbir-player').textContent=s.playerName;
     $('#tadbir-points').textContent=number(s.points);
