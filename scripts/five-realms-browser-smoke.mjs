@@ -78,13 +78,27 @@ try {
       }
     }
 
-    // Verify the non-question primary action panels remain reachable.
-    for (const action of ['buy', 'sell', 'deposit', 'withdraw']) {
+    // Badge actions remain in the game; bank actions live only in Tadbir.
+    for (const action of ['buy', 'sell']) {
       await page.locator(`[data-action="${action}"]`).click();
       if (!(await page.locator('#fr-action-form').locator('button').count())) {
         fail(`${viewport.name}: ${action} action did not expose a confirm control`);
       }
     }
+    if (await page.locator('[data-action="deposit"], [data-action="withdraw"]').count()) {
+      fail(`${viewport.name}: deposit/withdraw controls are still exposed in the game action panel`);
+    }
+    await page.evaluate(() => window.SharedPages.open('tadbir', 'continuity'));
+    await page.waitForSelector('#tadbir-title');
+    await page.waitForFunction(() => !document.querySelector('#tadbir-account')?.hidden);
+    if ((await page.locator('#tadbir-player').innerText()) !== 'Browser Alice') {
+      fail(`${viewport.name}: Tadbir is not connected to the active in-game player`);
+    }
+    if (!(await page.locator('#tadbir-deposit-form').isVisible())) {
+      fail(`${viewport.name}: Tadbir deposit form is unavailable for the active player`);
+    }
+    await page.locator('#tadbir-return-game').click();
+    await page.waitForFunction(() => document.querySelector('#fr-play') && !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Alice');
 
     // Isolate the recognition UI from network credentials while exercising the shared adapter contract.
     await page.evaluate(() => {
