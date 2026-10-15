@@ -6,7 +6,7 @@
 <button class="close" id="close" type="button" aria-label="بازگشت" data-i18n-aria="labels.back">✕</button>
 </header>
 <nav class="toc" aria-label="فهرست فصل‌ها" aria-labelledby="toc-label" data-i18n-aria="labels.chapterList">
-<h2 class="toc-label" id="toc-label" data-i18n="labels.chapterList">فهرست</h2>
+<h2 class="toc-label" id="toc-label" data-i18n="labels.chapterList">فهرست فصل‌ها</h2>
 <div class="chapter-row" id="chapters"></div>
 </nav>
 <nav class="parts" id="parts" aria-label="بخش‌های فصل" data-i18n-aria="labels.chapterSections"></nav>
