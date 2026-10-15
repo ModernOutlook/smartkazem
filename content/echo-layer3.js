@@ -446,17 +446,25 @@ window.EchoLayer3Content={
    tocLabel.textContent=window.SiteI18n?.get?.("labels.chapterList","")||({en:"Contents",zh:"目录",ar:"الفهرس",fa:"فهرست فصل‌ها"}[lang]||"فهرست فصل‌ها");
    chapters.innerHTML="";
    parts.innerHTML="";
+   chapters.setAttribute("role","tablist");
+   chapters.setAttribute("aria-orientation","horizontal");
+   parts.setAttribute("role","tablist");
+   parts.setAttribute("aria-orientation","horizontal");
    reader.innerHTML="";
 
    source.chapters.forEach((ch,ci)=>{
      const b=document.createElement("button");
      b.className="chapter"+(ci===activeChapter?" active":"");
      b.type="button";
-     b.textContent=d[ch.titleKey]||ch.id;
+     b.textContent=new Intl.NumberFormat(lang).format(ci+1)+" · "+(d[ch.titleKey]||ch.id);
      b.disabled=!ch.parts.length;
+     b.id="layer3-chapter-tab-"+ci;
+     b.setAttribute("role","tab");
+     b.setAttribute("aria-selected",String(ci===activeChapter));
+     b.tabIndex=ci===activeChapter?0:-1;
      b.setAttribute("aria-current",ci===activeChapter?"true":"false");
      b.setAttribute("aria-controls","reader");
-     b.addEventListener("click",()=>{activeChapter=ci;activePart=0;render();focusReader()});
+     b.addEventListener("click",()=>{activeChapter=ci;activePart=0;render();chapters.children[ci]?.focus({preventScroll:true})});
      chapters.appendChild(b);
    });
 
@@ -469,11 +477,15 @@ window.EchoLayer3Content={
      const b=document.createElement("button");
      b.className="part"+(pi===activePart?" active":"");
      b.type="button";
-     b.textContent=(pi+1)+" . "+label;
+     b.textContent=new Intl.NumberFormat(lang).format(pi+1)+" · "+label;
+     b.id="layer3-part-tab-"+pi;
+     b.setAttribute("role","tab");
+     b.setAttribute("aria-selected",String(pi===activePart));
+     b.tabIndex=pi===activePart?0:-1;
      b.setAttribute("aria-current",pi===activePart?"true":"false");
      b.setAttribute("aria-controls","reader");
-     b.setAttribute("aria-label",label);
-     b.addEventListener("click",()=>{activePart=pi;renderPart();focusReader()});
+     b.setAttribute("aria-label",new Intl.NumberFormat(lang).format(pi+1)+" · "+label);
+     b.addEventListener("click",()=>{activePart=pi;renderPart()});
      parts.appendChild(b);
    });
 
@@ -490,10 +502,16 @@ window.EchoLayer3Content={
    const lang=language(),d=layer(),book=chapterCatalog(),ch=C.chapters[activeChapter],p=ch.parts[activePart],t=partData(ch,activePart);
    if(!p)return;
    parts.querySelectorAll(".part").forEach((b,i)=>{
-     b.classList.toggle("active",i===activePart);
-     b.setAttribute("aria-current",i===activePart?"true":"false");
+     const active=i===activePart;
+     b.classList.toggle("active",active);
+     b.setAttribute("aria-selected",String(active));
+     b.tabIndex=active?0:-1;
+     b.setAttribute("aria-current",active?"true":"false");
    });
    reader.innerHTML="";
+   reader.setAttribute("role","tabpanel");
+   reader.tabIndex=0;
+   reader.setAttribute("aria-labelledby","layer3-part-tab-"+activePart);
    const top=document.createElement("div");top.className="reader-head";
    const h=document.createElement("h1");h.id="reader-title";h.textContent=d.title||book.title?.[lang]||"پژواک لایه سوم";
    const sp=document.createElement("p");sp.textContent=(d[ch.titleKey]||"")+" — "+(t?.title?.[lang]||((d.sections||[])[activePart]||p.titleFallback));
