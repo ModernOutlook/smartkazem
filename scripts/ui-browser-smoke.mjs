@@ -527,7 +527,7 @@ for (const route of sharedRoutes) {
           if (!tabs.length) continue;
           for (const tab of tabs) {
             const label = tab.textContent.trim();
-            if (!/^\\p{N}+\\s*[·.]/u.test(label)) issues.push('tab label is missing its section number: ' + label);
+            if (!/^\p{N}+\s*[·.]/u.test(label)) issues.push('tab label is missing its section number: ' + label);
           }
           const target = tabs.find(tab => !tab.disabled && tab.getAttribute('aria-selected') !== 'true');
           if (target) target.click();
