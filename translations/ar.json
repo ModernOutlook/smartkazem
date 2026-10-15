@@ -296,7 +296,18 @@
       "fullyOwnedFree": "هذا الجزء من السؤال مجاني لأنك تملك جميع شارات هذا المجال.",
       "luckyCard": "بطاقة الحظ",
       "bankNegativeFormula": "تنطبق صيغة الفائدة السالبة (إيداع أقل من نقطة واحدة)"
-    }
+    ,
+    "questionGenerating": "جارٍ إنشاء فقرة وتقييم المجالات الخمسة...",
+    "questionServiceUnavailable": "مسار التعرّف في آلة الفقرات غير متاح.",
+    "questionGenerationFailed": "لم تُنشئ آلة الفقرات فقرة صالحة.",
+    "questionJudgmentFailed": "الحكم المرجعي للمجالات الخمسة غير مكتمل أو غير صالح.",
+    "recognitionParagraph": "الفقرة المطلوب التعرّف عليها",
+    "judgeFiveRealms": "أحكام المجالات الخمسة",
+    "judgeAllRealms": "اختر حكمًا واحدًا لكل مجال من المجالات الخمسة.",
+    "recognitionCorrect": "تتطابق أحكامك مع الحكم المرجعي للآلة في المجالات الخمسة.",
+    "recognitionIncorrect": "لا تتطابق أحكامك مع الحكم المرجعي للآلة في المجالات الخمسة.",
+    "retry": "إعادة المحاولة"
+  }
   },
   "paragraphMachine": {
     "title": "آلة الفقرات",
