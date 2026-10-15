@@ -518,7 +518,7 @@ The page still owns its semantic HTML and interaction model; the accessibility e
 ## Emergence II translation alignment (2026-10-12)
 
 - Compared the canonical Persian source with the EN/AR/ZH reservoir. Episode 20’s opening translation paragraph had merged two Persian paragraphs; the boundary is now restored in all three languages. The manifest now points to `translations/emergence-2.json`.
-- **Paragraph rule:** every non-empty line in the canonical Persian episode string is one paragraph. EN/AR/ZH are aligned to the same ordered paragraph count by regrouping existing translated sentences only; translated wording and order are preserved. The renderer uses the same non-empty-line rule for Persian. The alignment manifest records every corresponding FA/EN/AR/ZH paragraph.
+- **Paragraph rule:** every non-empty line in the canonical Persian episode string is one paragraph. EN/AR/ZH are aligned to the same ordered paragraph count by regrouping existing translated sentences only; translated wording and order are preserved. The renderer uses the same non-empty-line rule for Persian. The compact alignment manifest records each Persian source-line index and its ordered EN/AR/ZH sentence ranges.
 
 ## Multi-book translation reservoirs (2026-10-09)
 
