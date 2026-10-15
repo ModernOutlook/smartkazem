@@ -12,7 +12,7 @@
       <div class="zero-mark" aria-hidden="true">0</div>
       <h1 id="zero-title">صفر</h1>
       <div class="zero-rule" aria-hidden="true"></div>
-      <div class="zero-story" id="zero-story" aria-live="polite"></div>
+      <div class="zero-story" id="zero-story" role="tabpanel" aria-labelledby="zero-tab-label" aria-live="polite"></div>
     </article>
     <footer class="zero-footer" aria-hidden="true">ساختار تالار · STRUCTURE OF THE HALL</footer>
   </div>
