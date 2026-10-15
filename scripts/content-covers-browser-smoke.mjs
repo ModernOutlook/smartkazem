@@ -72,6 +72,23 @@ try {
       await page.close();
     }
   }
+
+  // Explicitly protect the two user-requested exclusions.
+  {
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    await page.goto(baseURL + '/index.html?page=shahnameh', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => window.SharedPages?.getActive() === 'shahnameh');
+    if (await page.locator('[data-content-cover]').count()) failures.push('Shahnameh Reading must remain excluded from content covers');
+    await page.close();
+  }
+  {
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
+    await page.goto(baseURL + '/index.html', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => Boolean(window.SitePages && window.ContentCovers));
+    await page.evaluate(() => window.SitePages.openParagraph('experience'));
+    if (await page.locator('#paragraph-page [data-content-cover]').count()) failures.push('Paragraph Machine must remain excluded from content covers');
+    await page.close();
+  }
 } finally {
   await browser.close();
 }
