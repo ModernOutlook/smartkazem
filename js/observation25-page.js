@@ -95,7 +95,7 @@
       if (contents[index]) {
         const article = document.createElement('div');
         article.className = 'observation25-content';
-        contents[index].split(/\\n\\n+/).forEach(paragraph => {
+        contents[index].split(/\n\n+/).forEach(paragraph => {
           if (!paragraph.trim()) return;
           const p = document.createElement('p');
           p.textContent = paragraph.trim();
