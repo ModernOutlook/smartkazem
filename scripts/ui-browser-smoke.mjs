@@ -31,13 +31,64 @@ const viewports = [
   { width: 390, height: 844, name: 'portrait' },
   { width: 430, height: 932, name: 'large portrait' },
   { width: 768, height: 1024, name: 'tablet portrait' },
+  { width: 640, height: 360, name: 'small phone landscape' },
   { width: 844, height: 390, name: 'phone landscape' },
   { width: 1024, height: 768, name: 'desktop threshold' },
+  { width: 900, height: 1200, name: 'desktop portrait' },
+  { width: 1200, height: 1600, name: 'large desktop portrait' },
   { width: 1365, height: 900, name: 'desktop' },
+  { width: 1920, height: 1080, name: 'wide desktop' },
 ];
 
 let failures = 0;
 const fail = (message) => { failures++; console.error('FAIL ' + message); };
+
+const headerTargets = {
+  treatise: ['.treatise-brand', '.treatise-actions'],
+  shahnameh: ['.title', '.actions'],
+  emergence: ['.title', '.actions'],
+  observation25: ['.observation25-title', '.observation25-close'],
+  possibleMirror: ['.possible-mirror-title', '.possible-mirror-close'],
+  emergence2: ['.title', '.actions'],
+  observation: ['.book-title', '.book-close'],
+  layer3: ['.head-main', '.close'],
+  disturbedManifesto: ['.title', '.actions'],
+  zero: ['.zero-brand', '.zero-actions'],
+  inventory: ['.inventory-heading', '.inventory-home'],
+  forgers: ['.book-title', '.book-close'],
+  humanMachines: ['.book-title', '.book-close'],
+  tabahian: ['.book-title', '.book-close'],
+};
+async function auditLanguageHeader(page, rootSelector, targetSelectors, label) {
+  const issues = await page.evaluate(({ rootSelector, targetSelectors }) => {
+    const language = document.querySelector('.lang-switch');
+    if (!language) return ['shared language selector is missing'];
+    const lr = language.getBoundingClientRect();
+    const intersects = (a, b) => a.left < b.right - 1 && a.right > b.left + 1 && a.top < b.bottom - 1 && a.bottom > b.top + 1;
+    const problems = [];
+    if (lr.left < -1 || lr.right > innerWidth + 1 || lr.top < -1 || lr.bottom > innerHeight + 1) {
+      problems.push('language selector is outside the viewport');
+    }
+    for (const button of language.querySelectorAll('[data-site-lang]')) {
+      const r = button.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1 || r.left < -1 || r.right > innerWidth + 1) {
+        problems.push('language button is clipped: ' + button.dataset.siteLang);
+      }
+    }
+    const root = document.querySelector(rootSelector);
+    if (!root) return problems.concat('page root not found: ' + rootSelector);
+    for (const selector of targetSelectors) {
+      const element = root.matches(selector) ? root : root.querySelector(selector);
+      if (!element) continue;
+      const r = element.getBoundingClientRect();
+      if (r.width && r.height && intersects(lr, r)) {
+        problems.push('language selector overlaps ' + selector);
+      }
+    }
+    return problems;
+  }, { rootSelector, targetSelectors });
+  for (const issue of issues) fail(label + ': ' + issue);
+}
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ reducedMotion: 'reduce' });
 
@@ -875,6 +926,11 @@ for (const book of sharedBooks) {
     for (const viewport of viewports) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.waitForTimeout(100);
+      for (const language of languages) {
+        await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
+        await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language, { timeout: 5000 });
+        await auditLanguageHeader(page, '#shared-page-host .child-page.is-active', headerTargets[route.route] || ['header:first-of-type'], `shared route ${route.route} @ ${viewport.name} ${language.code}`);
+      }
       const metrics = await page.evaluate(() => ({
         innerWidth: window.innerWidth,
         documentWidth: document.documentElement.scrollWidth,
