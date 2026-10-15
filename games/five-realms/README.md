@@ -25,7 +25,7 @@ node --test games/five-realms/tests/*.test.mjs
 - Start: two to five local players, five cards each, zero points.
 - **Approved badge pool (2026-10-15):** each realm has 72 badges: 12 worth 3, 24 worth 2, and 36 worth 1. Total value per realm is 120 (`10x`, with `x=12`).
 - **Author-approved realm identity and color mapping (2026-10-15):** blue = Structure of the Hall (`#164E63`), yellow = Continuity of the Universe (`#B89B45`), purple = Realm of Experience (`#7542A6`), red = Simulation (`#C94F55`, Paragraph Machine realm `R`), green = Share Economy (`#218653`). The mapping is stored in `data/realms.json`.
-- Purple badge base price multiplier is provisionally 0.5 to express “purple is cheapest”; blue/Ace premium is not applied.
+- **Approved badge pricing decision (2026-10-15):** purple badge base price multiplier is `0.5`, so purple badges cost half their normal base price before the owned-value discount. The blue/Ace premium is approved in principle but remains unresolved: its amount and calculation method must be decided before final release. Until then, the blue multiplier remains `1` and no Ace premium is applied.
 - Badge price uses additive owned-value discount `price × (1 − ownedValue / (2T))`; this is currently applied per realm's configured total value.
 - Poker few-card scoring defaults to the approved `count` mode: 1→1, 2→2, 3→6, 4→16. A distinct structural scoring mode is not specified and is not selectable.
 - Each question is one live-generated paragraph. The five user judgments (`S/T/E/R/C`) use the Paragraph Machine statuses: consistent/matching, ambiguous, or contradictory. Exact correctness requires all five statuses to match the independently generated reference judgment.
