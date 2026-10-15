@@ -1747,10 +1747,6 @@ function handleEpisodeKeydown(event,index){
   if(event.key==='ArrowRight'){event.preventDefault();moveBy(rtl?-1:1);return;}
   if(event.key==='ArrowLeft'){event.preventDefault();moveBy(rtl?1:-1);}
 }
-episodes.forEach((episode,index)=>{
-  const b=document.createElement('button');
-  b.type='button';
-});
 close.addEventListener('click',()=>{if(history.length>1) history.back(); else window.location.href='index.html';});
 list.addEventListener('keydown',event=>{
   const buttons=[...list.querySelectorAll('button')];
