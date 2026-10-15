@@ -26,7 +26,6 @@ if (root && !root.dataset.initialized) {
   const points = value => (value / config.game.roundingScale).toLocaleString(window.SiteI18n?.getLanguage?.() || "fa", {maximumFractionDigits:2});
   const moneyInput = raw => Math.round(Number(raw) * config.game.roundingScale);
   const REALM_TO_DOMAIN = Object.freeze({blue:"S",yellow:"T",purple:"E",red:"R",green:"C"});
-  const DOMAIN_TO_REALM = Object.freeze({S:"blue",T:"yellow",E:"purple",R:"red",C:"green"});
   const JUDGMENT_OPTIONS = Object.freeze({
     fa:[["ok","مطابق"],["warn","مبهم"],["bad","متناقض"]],
     en:[["ok","Consistent"],["warn","Ambiguous"],["bad","Contradictory"]],
