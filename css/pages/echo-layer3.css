@@ -18,3 +18,5 @@
 
 @media(max-width:520px){.reader{padding:18px 14px 34px}}
 @media(orientation:portrait) and (max-width:1023px){.head{padding-top:calc(56px + var(--ui-safe-top));}.head-main{min-width:0;max-width:calc(100% - 56px);overflow-wrap:anywhere}}
+
+.layer3-page,.layer3-page .reader{overflow-anchor:none}
