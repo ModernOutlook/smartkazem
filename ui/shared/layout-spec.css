@@ -399,3 +399,9 @@ html[dir="ltr"] .share-page .share-story-action {
 #shared-page-host .child-page.qm-page {
   padding-top: var(--ui-language-clearance);
 }
+
+/* Paragraph Machine is a workspace in the main app, but its heading must
+   obey the same reserved band as every child-page header. */
+#app .paragraph-page .paragraph-workspace {
+  padding-top: var(--ui-language-clearance);
+}
