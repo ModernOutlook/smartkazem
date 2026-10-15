@@ -304,7 +304,7 @@ try {
         await page.locator('[data-site-lang="fa"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
         const baseline = await measure(selectors);
-        for (const language of languagesForViewport(viewport)) {
+        for (const language of languages) {
           await page.locator('[data-site-lang="' + language.code + '"]').click();
           await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
           compareGeometry(baseline, await measure(selectors), realm.id + ' realm RTL/LTR ' + language.code);
