@@ -335,6 +335,18 @@ try {
           await auditLanguageHeader(page, '#home-page', ['.topbar #x-social'], 'home @ ' + viewport.name + ' ' + language.code);
         }
       }
+      await page.evaluate(() => window.SitePages?.openParagraph('experience'));
+      await page.waitForFunction(() => document.querySelector('#paragraph-page')?.classList.contains('is-active'));
+      for (const viewport of viewports) {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.waitForTimeout(60);
+        for (const language of languages) {
+          await page.locator('[data-site-lang="' + language.code + '"]').click();
+          await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+          await auditLanguageHeader(page, '#paragraph-page', ['.paragraph-head > div', '#paragraph-close'], 'Paragraph Machine @ ' + viewport.name + ' ' + language.code);
+        }
+      }
+      await page.locator('#paragraph-close').click();
     }
     if (pageErrors.length) {
       fail(`${file}: browser runtime exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
