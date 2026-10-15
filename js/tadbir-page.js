@@ -65,5 +65,6 @@
   });
   startButton.addEventListener('click',()=>window.SharedPages?.open?.('five-realms','share').catch(error=>setMessage(error.message,true)));
   document.addEventListener('site:languagechange',render);
+  document.addEventListener('shared-page:opened',event=>{if(event.detail?.key==='tadbir')render();});
   render();
 })();
