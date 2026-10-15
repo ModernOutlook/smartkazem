@@ -47,3 +47,6 @@ html[dir="ltr"] .treatise-content p{text-align:start}
 button:focus-visible,.treatise-tab:focus-visible{outline:2px solid var(--treatise-ice);outline-offset:3px}
 @media(max-width:640px){.treatise-shell{width:calc(100% - 22px);padding-top:12px}.treatise-header{align-items:flex-start;flex-direction:column}.treatise-actions{width:100%;justify-content:space-between;gap:7px}.global-lang button{padding:6px 7px;font-size:.66rem}.treatise-tabs{top:5px;margin-top:13px;border-radius:12px}.treatise-tab{padding:8px 10px;font-size:.72rem}.treatise-article{margin-top:13px;padding:clamp(18px,5vw,30px);border-radius:19px}.treatise-mark{top:12px}.treatise-content{line-height:2}.treatise-content p{text-align:start}.treatise-content table{display:block;max-width:100%;overflow-x:auto}.treatise-content .pair:first-child{padding-top:8px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
+
+.treatise-tab{display:inline-flex;align-items:center;gap:.45rem}.treatise-tab .tab-number{font-variant-numeric:tabular-nums;opacity:.78;white-space:nowrap}
