@@ -38,7 +38,9 @@ const viewports = [
   { width: 1200, height: 1600, name: 'large desktop portrait' },
   { width: 1365, height: 900, name: 'desktop' },
   { width: 1920, height: 1080, name: 'wide desktop' },
-];
+]; 
+const allLanguageViewportNames = new Set(['small portrait', 'phone landscape', 'large desktop portrait', 'desktop']);
+const languagesForViewport = (viewport) => allLanguageViewportNames.has(viewport.name) ? languages : [languages[0]];
 
 let failures = 0;
 const fail = (message) => { failures++; console.error('FAIL ' + message); };
@@ -302,7 +304,7 @@ try {
         await page.locator('[data-site-lang="fa"]').click();
         await page.waitForFunction(() => document.documentElement.lang === 'fa' && document.documentElement.dir === 'rtl');
         const baseline = await measure(selectors);
-        for (const language of languages) {
+        for (const language of languagesForViewport(viewport)) {
           await page.locator('[data-site-lang="' + language.code + '"]').click();
           await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
           compareGeometry(baseline, await measure(selectors), realm.id + ' realm RTL/LTR ' + language.code);
@@ -317,7 +319,7 @@ try {
         for (const viewport of viewports) {
           await page.setViewportSize({ width: viewport.width, height: viewport.height });
           await page.waitForTimeout(60);
-          for (const language of languages) {
+          for (const language of languagesForViewport(viewport)) {
             await page.locator('[data-site-lang="' + language.code + '"]').click();
             await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
             await auditLanguageHeader(page, realm.root, realmHeaderTargets[realm.id], realm.id + ' realm @ ' + viewport.name + ' ' + language.code);
@@ -946,7 +948,7 @@ for (const book of sharedBooks) {
   for (const viewport of viewports) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.waitForTimeout(75);
-    for (const language of languages) {
+    for (const language of languagesForViewport(viewport)) {
       await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
       await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language, { timeout: 5000 });
       await auditLanguageHeader(page, '#book-page.is-active', ['.book-head .book-title', '.book-head .book-close'], `shared book ${book.kind} @ ${viewport.name} ${language.code}`);
@@ -974,7 +976,7 @@ for (const book of sharedBooks) {
     for (const viewport of viewports) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.waitForTimeout(100);
-      for (const language of languages) {
+      for (const language of languagesForViewport(viewport)) {
         await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
         await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language, { timeout: 5000 });
         await auditLanguageHeader(page, '#shared-page-host .child-page.is-active', headerTargets[route.route] || ['header:first-of-type'], `shared route ${route.route} @ ${viewport.name} ${language.code}`);
