@@ -26,3 +26,6 @@ html{scroll-behavior:smooth}
 button:focus-visible{outline:2px solid var(--zero-ice);outline-offset:4px}
 @media(max-width:640px){.zero-shell{width:calc(100% - 22px);padding-top:12px}.zero-header{align-items:flex-start;flex-direction:column}.zero-actions{width:100%;justify-content:space-between}.global-lang button{padding:6px 7px;font-size:.66rem}.zero-article{margin-top:24px;border-radius:19px}.zero-mark{top:12px}.zero-story{line-height:2}.zero-story p{text-align:start}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+
+.zero-tabs{display:flex;align-items:center;gap:8px;margin:0 0 16px}.zero-tab{display:inline-flex;align-items:center;gap:.55rem;min-height:40px;padding:8px 14px;border:1px solid rgba(255,255,255,.22);border-radius:9px;background:rgba(0,0,0,.2);color:inherit;font:inherit;font-weight:700}.zero-tab-number{opacity:.72;font-variant-numeric:tabular-nums}
