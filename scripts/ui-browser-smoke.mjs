@@ -283,6 +283,16 @@ const sharedRoutes = [
 ];
 
 async function auditCanonicalRoute(page, route, language) {
+  if (route === 'treatise') {
+    await page.waitForFunction((languageCode) => {
+      const source = window.PhilosophicalTreatisePersianSource;
+      const catalog = window.SiteI18n?.getCatalog?.() || {};
+      const blocks = languageCode === 'fa' ? source?.blocks : catalog.bookContent?.treatise?.blocks;
+      const rendered = [...document.querySelectorAll('#treatise-content .pair .treatise-block-content')];
+      return Array.isArray(blocks) && blocks.length > 0 && rendered.length === blocks.length
+        && rendered.every((node) => node.textContent.trim().length > 0);
+    }, language, { timeout: 7000 });
+  }
   return page.evaluate(({ route, language }) => {
     const catalog = window.SiteI18n?.getCatalog?.() || {};
     const issues = [];
