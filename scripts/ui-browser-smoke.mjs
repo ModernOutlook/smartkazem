@@ -534,6 +534,8 @@ for (const route of sharedRoutes) {
           const selected = tabs.filter(tab => tab.getAttribute('aria-selected') === 'true');
           if (selected.length !== 1) issues.push('tablist does not have exactly one selected tab');
           if (window.scrollX !== before.x || window.scrollY !== before.y) issues.push('tab selection moved the document viewport');
+          tabs[0]?.click();
+          if (window.scrollX !== before.x || window.scrollY !== before.y) issues.push('restoring the first tab moved the document viewport');
         }
         return issues;
       });
