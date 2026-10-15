@@ -117,8 +117,9 @@ try {
     }
     await page.locator('#fr-action-form button').last().click();
     await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
-    if (!(await page.locator('#fr-action-message').innerText()).includes('منطبق است')) {
-      fail(`${viewport.name}: exact five-realm recognition match was not reported as correct`);
+    const recognitionMessage = await page.locator('#fr-action-message').innerText();
+    if (!/منطبق است|match.*reference|参考判断一致|تتطابق أحكامك/.test(recognitionMessage)) {
+      fail(`${viewport.name}: exact five-realm recognition match was not reported as correct: ${recognitionMessage}`);
     }
 
     const metrics = await page.evaluate(() => ({
