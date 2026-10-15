@@ -33,7 +33,7 @@ if (root && !root.dataset.initialized) {
     ar:[["ok","متوافق"],["warn","ملتبس"],["bad","متناقض"]]
   });
   async function populateRecognitionQuestion(form, player) {
-    const actionButtons = $("#five-realms-game [data-action]");
+    const actionButtons = [...document.querySelectorAll("#five-realms-game [data-action]")];
     actionButtons.forEach(button => { button.disabled = true; });
     const loading = document.createElement("p");
     loading.className = "fr-question-loading";
