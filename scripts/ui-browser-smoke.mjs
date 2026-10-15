@@ -304,8 +304,33 @@ try {
           await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
           compareGeometry(baseline, await measure(selectors), realm.id + ' realm RTL/LTR ' + language.code);
         }
+        const realmHeaderTargets = {
+          structure: ['.structure-title', '.structure-close'],
+          continuity: ['.continuity-title', '.continuity-close'],
+          experience: ['.experience-title', '.experience-close'],
+          reference: ['.reference-title', '.reference-close'],
+          share: ['.share-title', '.share-close'],
+        };
+        for (const viewport of viewports) {
+          await page.setViewportSize({ width: viewport.width, height: viewport.height });
+          await page.waitForTimeout(60);
+          for (const language of languages) {
+            await page.locator('[data-site-lang="' + language.code + '"]').click();
+            await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+            await auditLanguageHeader(page, realm.root, realmHeaderTargets[realm.id], realm.id + ' realm @ ' + viewport.name + ' ' + language.code);
+          }
+        }
         await page.locator(realm.close).click();
         await page.waitForFunction(() => document.querySelector('#home-page')?.classList.contains('is-active'));
+      }
+      for (const viewport of viewports) {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.waitForTimeout(60);
+        for (const language of languages) {
+          await page.locator('[data-site-lang="' + language.code + '"]').click();
+          await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+          await auditLanguageHeader(page, '#home-page', ['.topbar #x-social'], 'home @ ' + viewport.name + ' ' + language.code);
+        }
       }
     }
     if (pageErrors.length) {
