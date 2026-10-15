@@ -20,7 +20,7 @@ This inventory tracks the migration to the mandatory single-source book architec
 | فصل اول ظهور | `content/emergence.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | `emergence.html` declares `translations/emergence.json`; renderer prefers `bookContent.emergence`. Verify all 19 episodes and translated catalog alignment. |
 | سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` | Persian title, subtitle, section labels, and all 25 prose sections moved out of `translations/fa.json`. | Move target-language prose from shared catalogs into the declared translation reservoir; verify section parity. |
 | آینه‌ی ممکن‌ها | `content/possible-mirror.js` | Persian title, subtitle, section labels, and all 31 prose sections moved out of `translations/fa.json`. | EN/ZH/AR section labels and prose have been moved to `translations/possible-mirror.json` (31 sections per language). Verify rendered section parity and interaction behavior. |
-| فصل دوم ظهور | `content/emergence-2.js` | Persian episode source exists; duplicate Persian title fields removed from translation reservoir. | `emergence-2.html` declares `translations/emergence-2.json`; renderer prefers `bookContent.emergence2`. Verify all 11 source episodes and translated catalog alignment. |
+| فصل دوم ظهور | `content/emergence-2.js` | Canonical Persian source contains 11 ordered episodes (20–30). | EN/AR/ZH prose exists for all 11 episodes. Controller now selects `title[language]` and `paragraphs[language]` from the language-keyed reservoir instead of passing the objects to the DOM. Episode 20's combined opening translation paragraph has been split in all three languages. Every non-empty Persian source line in all 11 episodes now maps to one paragraph in FA/EN/AR/ZH; the compact manifest records source-line indices and translated sentence ranges. |
 | سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` | Persian title, subtitle, and all 12 body paragraphs extracted; HTML uses empty Persian targets. Duplicate Persian fields removed from `translations/observation.json`. | EN/ZH/AR prose has been reconciled against the existing `translations/observation.json` reservoir (12 paragraphs per language) and removed from HTML. Verify rendered language switching and paragraph fidelity. |
 | پژواک لایه سوم | `content/echo-layer3.js` | Persian source contains 17 ordered parts. | EN/ZH/AR titles, subtitles, part titles, and prose load from `translations/echo-layer3.json` (17 parts per language); duplicated part titles removed from shared catalogs. |
 | انسان و ماشین‌هایش | `content/human-machines.js` | Persian chapter prose is canonical; duplicate Persian chapter arrays removed from `translations/fa.json`. | EN/ZH/AR titles, subtitles, seven chapter titles, and all chapter paragraphs are centralized in `translations/human-machines.json`; global catalogs retain only UI title/subtitle metadata. |
@@ -95,7 +95,7 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 
 - Added explicit `i18n-catalog` declarations to the two Emergence pages.
 - Removed the legacy page-key-to-catalog filename map from `translations/i18n.js`. Dedicated book catalogs are now fetched through the same declaration-based mechanism for Emergence I/II, Echo Layer Three, and Disturbed Manifesto.
-- This is a runtime boundary cleanup, not by itself a translation-completeness claim. Emergence episode/paragraph alignment remains an audit item; the third Tabahian chapter has since been completed in EN/ZH/AR and paragraph-count checked against Persian.
+- This is a runtime boundary cleanup, not by itself a translation-completeness claim. Emergence II paragraph alignment is verified separately by its source-line manifest and four-language browser audit; the third Tabahian chapter has since been completed in EN/ZH/AR and paragraph-count checked against Persian.
 
 
 ## Share Economy translation reservoirs (2026-10-09)
@@ -120,3 +120,42 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 - Added **تباهیان** to the same `i18n-catalogs` manifest as **جاعلان تقلید** and **انسان و ماشین‌هایش**.
 - Removed the Tabahian-specific fetch/adaptation branch from `translations/i18n.js`. The shared loader now loads all three book reservoirs through the same generic manifest and exposes them under `bookContent`.
 - The Tabahian reservoir declares three chapters and localized subtitles; all three chapters are now translated in EN/ZH/AR. Chapter three contains 96 paragraphs in each language, matching the canonical Persian source.
+
+
+## Emergence II translation alignment correction (2026-10-12)
+
+- Compared the canonical Persian episode source with `translations/emergence-2.json`.
+- Found that episode 20’s first target-language paragraph had combined two distinct Persian paragraphs in EN, AR, and ZH.
+- Restored the source boundary in all three translations without removing or summarizing prose.
+- The canonical paragraph convention is explicit: every non-empty line in a Persian episode string is one paragraph; blank lines are separators only. The same ordered paragraph count is required in EN/AR/ZH. The renderer and alignment utility now follow this rule for all 11 episodes (20–30).
+- Corrected `page-specs/emergence2.json` to name the dedicated reservoir `translations/emergence-2.json` rather than the generic `translations/{lang}.json` template.
+
+
+## Emergence II runtime language-rendering correction (2026-10-12)
+
+- Confirmed the dedicated reservoir is loaded by `SharedPages` through `translations/i18n.js` into `SiteI18n.getCatalog().bookContent.emergence2`.
+- The page controller had passed the language-keyed `title` object and `paragraphs` object directly to the renderer. This caused `[object Object]` headings and the missing-text fallback because the renderer expected a string and an array.
+- Updated the controller to select `title[language]` and `paragraphs[language]`, with array validation and a safe empty fallback.
+- Extended the browser smoke test to assert that EN/AR/ZH each render a non-empty localized heading and prose, without a placeholder or raw object string.
+- The source paragraph-boundary audit for all episodes is complete: each non-empty Persian line maps to exactly one paragraph in FA/EN/AR/ZH, and the alignment utility verifies that translated text is conserved.
+
+
+## Four-language canonical-content browser audit (2026-10-12)
+
+The Playwright browser smoke test was expanded from structural/non-empty checks to exact rendered-content comparisons.
+
+- **Emergence II:** all 11 episodes are exercised in FA/EN/AR/ZH. The test checks each episode's heading and complete paragraph array against the active canonical source/catalog, verifies the chapter title and `html[lang]`/`html[dir]`, rejects missing-text placeholders and `[object Object]`, and asserts that episode 24 remains selected through language changes.
+- **Other shared pages:** exact DOM-to-catalog checks cover the philosophical treatise's full block sequence, the 81-episode Shahnameh, Emergence I's translated episodes, Observation, Observation 25, Possible Mirror, all Layer 3 parts, all Disturbed Manifesto parts, Zero, and every chapter in the three shared books (Forgers, Human and its Machines, Tabahian).
+- **Shared book direction:** corrected the reader's direction rule so FA/AR are RTL and EN/ZH are LTR.
+- **Global UI:** language switching is exercised on every HTML page; shared routes additionally check active-page translation bindings. Existing responsive viewport and overflow checks remain enabled.
+
+GitHub Actions validation on the PR branch:
+- UI browser smoke: run 90 — success.
+- Site quality gate: run 1070 — success.
+- Security gate: run 387 — success.
+
+These browser tests run the PR branch through Playwright using the workflow's local static HTTP server. They validate the actual browser-rendered runtime for the proposed commit, not the already-deployed production URL.
+
+### Emergence II paragraph rule and verification
+
+Every non-empty line in the canonical Persian source is one paragraph, including single-newline-separated lines; blank lines are ignored. The FA renderer splits on non-empty lines. The EN/AR/ZH alignment utility splits existing translated prose into ordered sentence units (including Chinese 。！？ boundaries) and regroups those units monotonically to produce exactly one translated paragraph per Persian source line. It verifies that the whitespace-insensitive character stream is unchanged, so no translated wording is generated, deleted, reordered, or rewritten. The compact manifest records every source-line index and the corresponding ordered translated-sentence ranges for each language. Browser checks verify exact rendered paragraph arrays in FA/EN/AR/ZH.

@@ -4,16 +4,19 @@
   "source": {
     "path": "content/emergence-2.js",
     "authority": "fa",
-    "content_key": "episodes"
+    "content_key": "episodes",
+    "paragraph_rule": "one non-empty line = one paragraph; blank lines are ignored"
   },
   "translations": {
-    "path": "translations/{lang}.json",
+    "path": "translations/emergence-2.json",
     "languages": [
       "en",
       "ar",
       "zh"
     ],
-    "derived_from": "source"
+    "derived_from": "source",
+    "paragraph_rule": "exactly one translated paragraph per non-empty Persian source line; preserve translated wording and order",
+    "alignment_manifest": "docs/emergence-2-paragraph-manifest.json"
   },
   "runtime": {
     "html": "emergence-2.html",
@@ -23,7 +26,6 @@
   "accessibility": {
     "required": true,
     "features": [
-      
       "semantic-episode-navigation",
       "aria-current-active-episode",
       "aria-controls",

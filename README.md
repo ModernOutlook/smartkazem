@@ -569,6 +569,11 @@ The page still owns its semantic HTML and interaction model; the accessibility e
 - Translation completeness remains a separate requirement from source centralization. The audit still flags **تباهیان** because its canonical Persian source has three chapters but the translation reservoir contains only two.
 
 
+## Emergence II translation alignment (2026-10-12)
+
+- Compared the canonical Persian source with the EN/AR/ZH reservoir. Episode 20’s opening translation paragraph had merged two Persian paragraphs; the boundary is now restored in all three languages. The manifest now points to `translations/emergence-2.json`.
+- **Paragraph rule:** every non-empty line in the canonical Persian episode string is one paragraph. EN/AR/ZH are aligned to the same ordered paragraph count by regrouping existing translated sentences only; translated wording and order are preserved. The renderer uses the same non-empty-line rule for Persian. The compact alignment manifest records each Persian source-line index and its ordered EN/AR/ZH sentence ranges.
+
 ## Multi-book translation reservoirs (2026-10-09)
 
 The home page can declare more than one long-form translation source using `meta[name="i18n-catalogs"]`, with semicolon-separated `bookKey=path` entries. `translations/i18n.js` loads each declared JSON reservoir into `SiteI18n.getCatalog().bookContent`; book renderers localize the language-keyed titles, subtitles, chapter labels, and paragraph arrays. This keeps long-form prose out of the global language catalogs and avoids adding a per-book fetch branch to the shared loader.
@@ -585,3 +590,23 @@ All three Share Economy books now use the same generic home-page manifest: `forg
 ## Reader design reference
 
 The short-story reader `content/page-templates/zero.fragment` establishes the child-page reading surface: a compact shared-language header, clear return action, a centered deep-blue article card, visible keyboard focus, responsive spacing, and reduced-motion support. Long-form readers such as `philosophical-treatise.html` should reuse this visual family while retaining their own navigation and content structure. Long-form text must continue to render from the canonical Persian source and the declared translation reservoir; do not duplicate prose in HTML or introduce a page-specific language/accessibility system.
+
+
+### Emergence II runtime language-rendering fix (2026-10-12)
+
+The `emergence2` shared-page controller must unwrap the language-keyed reservoir fields before rendering: `episode.title[language]` and `episode.paragraphs[language]`. Passing the objects directly produced `[object Object]` and the missing-episode fallback. The browser smoke test now verifies real localized prose for EN, AR, and ZH, not merely a non-empty reader container. The paragraph audit now enforces one non-empty source line per paragraph in all four languages, with the translated character stream preserved.
+
+
+### Canonical-content browser verification (2026-10-12)
+
+The UI Playwright workflow now checks rendered prose against the actual canonical data loaded by each page, rather than treating a non-empty reader as proof of success.
+
+- **Emergence II:** all 11 episodes (20–30) are checked in FA/EN/AR/ZH. For each language, the rendered episode title and every rendered paragraph must exactly match the Persian source object or the selected language's translation reservoir. The test also checks the chapter title, document `lang`/`dir`, absence of placeholders and raw object output, and preservation of the active episode while switching languages.
+- **Other shared content pages:** canonical text checks cover all treatise blocks, all 81 Shahnameh episodes, Emergence I episodes, Observation, Observation 25, Possible Mirror, Layer 3, Disturbed Manifesto, Zero, and every chapter of Forgers, Human and its Machines, and Tabahian. The tests compare the visible DOM text with the page's Persian source or language-specific catalog data.
+- **Site-wide checks:** every HTML page is exercised through the four language controls; shared-page routes also verify language bindings, and the workflow retains its responsive viewport and horizontal-overflow sweep.
+- **Direction correction:** the shared book reader now uses RTL for Persian/Arabic and LTR for English/Chinese. Previously, Chinese was incorrectly forced to RTL.
+
+The browser workflow runs Playwright against the PR branch served by a local HTTP server in GitHub Actions. This verifies the actual page runtime built from the proposed code, but is not a claim that the deployed production site has already been tested.
+
+**Emergence II paragraph contract:** every non-empty line in each Persian source episode is a paragraph, including lines separated by a single newline. Blank lines are separators and are not paragraphs. Each EN/AR/ZH episode must expose the same number of paragraphs in the same order. The alignment utility splits existing translated text at sentence boundaries and monotonically regroups those unchanged sentence units to the Persian line count; it does not generate, summarize, rewrite, or reorder translation prose. Chinese sentence splitting recognizes 。！？ without requiring spaces. The browser audit checks exact rendered paragraph arrays in all four languages.
+

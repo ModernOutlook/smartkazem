@@ -282,6 +282,215 @@ const sharedRoutes = [
   { route: 'inventory', content: '#inventory-grid', close: 'a.inventory-home' },
 ];
 
+async function auditCanonicalRoute(page, route, language) {
+  if (route === 'treatise') {
+    await page.waitForFunction((languageCode) => {
+      const source = window.PhilosophicalTreatisePersianSource;
+      const catalog = window.SiteI18n?.getCatalog?.() || {};
+      const blocks = languageCode === 'fa' ? source?.blocks : catalog.bookContent?.treatise?.blocks;
+      const rendered = [...document.querySelectorAll('#treatise-content .pair .treatise-block-content')];
+      return Array.isArray(blocks) && blocks.length > 0 && rendered.length === blocks.length
+        && rendered.every((node) => node.textContent.trim().length > 0);
+    }, language, { timeout: 7000 });
+  }
+  return page.evaluate(({ route, language }) => {
+    const catalog = window.SiteI18n?.getCatalog?.() || {};
+    const issues = [];
+    const same = (actual, expected, label) => {
+      if (JSON.stringify(actual) !== JSON.stringify(expected)) issues.push(label);
+    };
+    const splitParagraphs = (value) => String(value || '').split(/\n\n+/).map(x => x.trim()).filter(Boolean);
+    const lang = language;
+
+    if (route === 'observation25' || route === 'possibleMirror') {
+      const is25 = route === 'observation25';
+      const source = is25 ? window.Observation25PersianSource : window.PossibleMirrorPersianSource;
+      const book = catalog.bookContent?.[is25 ? 'observation25' : 'possibleMirror'];
+      const expected = lang === 'fa' ? source : {
+        title: book?.title?.[lang],
+        subtitle: book?.subtitle?.[lang],
+        sectionNote: book?.sectionNote?.[lang],
+        sections: book?.sections?.[lang],
+        contents: book?.contents?.[lang]
+      };
+      const prefix = is25 ? 'observation25' : 'possible-mirror';
+      const actualTitle = document.querySelector('#' + prefix + '-title')?.textContent?.trim() || '';
+      const actualSubtitle = document.querySelector('#' + prefix + '-subtitle')?.textContent?.trim() || '';
+      if (!expected?.title || actualTitle !== expected.title) issues.push('page title differs from canonical content');
+      if (!expected?.subtitle || actualSubtitle !== expected.subtitle) issues.push('page subtitle differs from canonical content');
+      const sectionSelector = is25 ? '.observation25-section' : '.possible-mirror-section';
+      const actualSections = [...document.querySelectorAll(sectionSelector)].map(section => ({
+        label: section.querySelector('h1 span:last-child')?.textContent?.trim() || '',
+        note: section.querySelector('.section-note')?.textContent?.trim() || '',
+        paragraphs: [...section.querySelectorAll(is25 ? '.observation25-content p' : '.possible-mirror-content p')].map(p => p.textContent.trim())
+      }));
+      const expectedSections = (expected.sections || []).map((label, index) => ({
+        label,
+        note: expected.sectionNote || '',
+        paragraphs: splitParagraphs(expected.contents?.[index])
+      }));
+      if (!expected.sections?.length || !expected.contents?.length) issues.push('canonical section/content arrays are missing');
+      same(actualSections, expectedSections, 'rendered sections or paragraph text differ from canonical content');
+    }
+
+    if (route === 'observation') {
+      const source = window.ObservationPersianSource;
+      const book = catalog.bookContent?.observation;
+      const title = lang === 'fa' ? source?.title : book?.title?.[lang];
+      const subtitle = lang === 'fa' ? source?.subtitle : book?.subtitle?.[lang];
+      const expected = lang === 'fa' ? source?.paragraphs : book?.paragraphs?.[lang];
+      const actual = [...document.querySelectorAll('[data-observation-paragraph]')].map(node => node.textContent.trim());
+      const expectedText = (expected || []).map(value => {
+        const holder = document.createElement('div');
+        if (lang === 'fa') holder.innerHTML = value;
+        else holder.textContent = value;
+        return holder.textContent.trim();
+      });
+      if (!title || document.querySelector('#observation-source-title')?.textContent?.trim() !== title) issues.push('observation title differs from canonical content');
+      if (!subtitle || document.querySelector('#observation-source-subtitle')?.textContent?.trim() !== subtitle) issues.push('observation subtitle differs from canonical content');
+      if (!expected?.length) issues.push('canonical observation paragraphs are missing');
+      same(actual, expectedText, 'observation paragraph text differs from canonical content');
+    }
+
+    if (route === 'disturbedManifesto') {
+      const source = window.DisturbedManifestoSource;
+      const translated = catalog.chapters?.disturbedManifesto?.parts?.[lang];
+      const expectedParts = lang === 'fa' ? source?.parts : translated;
+      const expectedTitle = lang === 'fa' ? source?.title :
+        (catalog.chapters?.disturbedManifesto?.title?.[lang] || catalog.pages?.disturbedManifesto?.title || source?.title);
+      if (!expectedTitle || document.querySelector('#page-title')?.textContent?.trim() !== expectedTitle) issues.push('manifesto page title differs from canonical content');
+      const buttons = [...document.querySelectorAll('#part-list .part')];
+      if (!expectedParts?.length || buttons.length !== expectedParts.length) issues.push('manifesto part list does not match canonical part count');
+      const actualParts = [];
+      for (let i = 0; i < Math.min(buttons.length, expectedParts?.length || 0); i++) {
+        buttons[i].click();
+        actualParts.push({
+          title: document.querySelector('#reader h2')?.textContent?.trim() || '',
+          paragraphs: [...document.querySelectorAll('#reader .prose')].map(p => p.textContent.trim())
+        });
+      }
+      const canonicalParts = (expectedParts || []).map(part => ({ title: part.title, paragraphs: part.paragraphs || [] }));
+      same(actualParts, canonicalParts, 'manifesto rendered parts differ from canonical part titles/paragraphs');
+      buttons[0]?.click();
+    }
+
+    if (route === 'treatise') {
+      const source = window.PhilosophicalTreatisePersianSource;
+      const translated = catalog.bookContent?.treatise;
+      const blocks = lang === 'fa' ? source?.blocks : translated?.blocks;
+      const actualBlocks = [...document.querySelectorAll('#treatise-content .pair .treatise-block-content')];
+      if (!blocks?.length || actualBlocks.length !== blocks.length) issues.push('treatise block count differs from canonical source');
+      const mismatches = [];
+      for (let i = 0; i < Math.min(actualBlocks.length, blocks?.length || 0); i++) {
+        const expectedHtml = lang === 'fa' ? blocks[i]?.html : blocks[i]?.[lang];
+        const holder = document.createElement('div');
+        holder.innerHTML = expectedHtml || '';
+        if (actualBlocks[i].textContent.trim() !== holder.textContent.trim()) mismatches.push(i);
+        const expectedDir = ['fa', 'ar'].includes(lang) ? 'rtl' : 'ltr';
+        if (actualBlocks[i].getAttribute('dir') !== expectedDir) issues.push('treatise block direction mismatch at block ' + i);
+      }
+      if (mismatches.length) issues.push('treatise rendered text differs from canonical block(s): ' + mismatches.slice(0, 12).join(','));
+    }
+
+    if (route === 'emergence') {
+      const book = catalog.bookContent?.emergence || catalog.chapters?.emergence || {};
+      const episodes = book.episodes || [];
+      const buttons = [...document.querySelectorAll('#episode-list .episode')];
+      if (!episodes.length || buttons.length !== episodes.length) issues.push('Emergence I episode count differs from canonical catalog');
+      const mismatches = [];
+      for (let i = 0; i < Math.min(buttons.length, episodes.length); i++) {
+        buttons[i].click();
+        const expectedTitle = episodes[i]?.title?.[lang];
+        const expectedParagraphs = episodes[i]?.paragraphs?.[lang];
+        const actualTitle = document.querySelector('#reader h2')?.textContent?.trim() || '';
+        const actualParagraphs = [...document.querySelectorAll('#reader .prose')].map(p => p.textContent);
+        if (lang === 'fa') {
+          if (!actualTitle || !actualParagraphs.length || document.querySelector('#reader .placeholder')) mismatches.push(i + 1);
+        } else if (!expectedTitle || !expectedParagraphs?.length || actualTitle !== expectedTitle || JSON.stringify(actualParagraphs) !== JSON.stringify(expectedParagraphs)) {
+          mismatches.push(i + 1);
+        }
+      }
+      if (mismatches.length) issues.push('Emergence I rendered episode content mismatch in episode(s): ' + mismatches.join(','));
+      buttons[0]?.click();
+    }
+
+    if (route === 'layer3') {
+      const source = window.EchoLayer3Content;
+      const book = catalog.bookContent?.layer3 || catalog.chapters?.layer3 || {};
+      const chapter = source?.chapters?.[0];
+      const buttons = [...document.querySelectorAll('#parts .part')];
+      const expectedTitle = book.title?.[lang] || catalog.pages?.layer3?.title || '';
+      if (!chapter?.parts?.length || buttons.length !== chapter.parts.length) issues.push('layer-three part count differs from canonical source');
+      if (!expectedTitle || document.querySelector('#head-title')?.textContent?.trim() !== expectedTitle) issues.push('layer-three page title differs from canonical content');
+      const mismatches = [];
+      for (let i = 0; i < Math.min(buttons.length, chapter?.parts?.length || 0); i++) {
+        buttons[i].click();
+        const part = chapter.parts[i];
+        const translatedPart = book.parts?.[i];
+        const expectedHeading = translatedPart?.title?.[lang] || catalog.pages?.layer3?.sections?.[i] || part.titleFallback;
+        const expectedParagraphs = lang === 'fa' ? part.text : (translatedPart?.paragraphs?.[lang] || []);
+        const actualHeading = document.querySelector('#reader .story h2')?.textContent?.replace(/^\d+\s*\.\s*/, '').trim() || '';
+        const actualParagraphs = [...document.querySelectorAll('#reader .story p')].map(p => p.textContent);
+        if (actualHeading !== expectedHeading || JSON.stringify(actualParagraphs) !== JSON.stringify(expectedParagraphs)) {
+          if (mismatches.length === 0) mismatches.push({ part: i + 1, actualHeading, expectedHeading, actualCount: actualParagraphs.length, expectedCount: expectedParagraphs.length, actualFirst: actualParagraphs[0]?.slice(0, 100), expectedFirst: expectedParagraphs[0]?.slice(0, 100) });
+          else mismatches.push({ part: i + 1 });
+        }
+      }
+      if (mismatches.length) issues.push('layer-three rendered part text mismatch: ' + JSON.stringify(mismatches.slice(0, 4)));
+      buttons[0]?.click();
+    }
+
+    if (route === 'zero') {
+      const source = window.ZeroPersianSource;
+      const book = catalog.bookContent?.zero || catalog.chapters?.zero || catalog.pages?.zero || {};
+      const expectedTitle = lang === 'fa' ? source?.title : (book.title?.[lang] || '');
+      const expectedParagraphs = lang === 'fa' ? source?.paragraphs : (book.paragraphs?.[lang] || []);
+      const actualTitle = document.querySelector('#zero-title')?.textContent?.trim() || '';
+      const actualParagraphs = [...document.querySelectorAll('#zero-story p')].map(p => p.textContent.trim());
+      if (!expectedTitle || actualTitle !== expectedTitle) issues.push('zero story title differs from canonical content');
+      if (!expectedParagraphs?.length) issues.push('zero canonical paragraphs are missing');
+      same(actualParagraphs, (expectedParagraphs || []).map(p => p.trim()), 'zero rendered paragraphs differ from canonical content');
+    }
+
+    if (route === 'shahnameh') {
+      const source = window.ShahnamehSeries;
+      const book = catalog.bookContent?.shahnameh || {};
+      const episodes = source?.episodes || [];
+      const buttons = [...document.querySelectorAll('#episode-list button.episode')];
+      if (!episodes.length || buttons.length !== episodes.length) issues.push('Shahnameh episode selectors do not match source episode count');
+      const mismatches = [];
+      for (let i = 0; i < Math.min(episodes.length, buttons.length); i++) {
+        buttons[i].click();
+        const episode = episodes[i];
+        const localized = book.episodes?.[lang]?.[String(episode.id)] || (episode.id === 1 ? book.part1?.[lang] : null);
+        const expectedTitle = localized?.title || book.titles?.[lang]?.[episode.id - 1] || episode.title;
+        const expectedProse = localized?.prose || episode.prose || '';
+        const actualTitle = document.querySelector('#reader h2')?.textContent?.trim() || '';
+        const actualProse = document.querySelector('#reader > .block.prose > .prose')?.textContent?.trim() || '';
+        if (actualTitle !== expectedTitle || actualProse !== expectedProse) {
+          mismatches.push(episode.id);
+        }
+      }
+      if (mismatches.length) issues.push('Shahnameh rendered title/prose mismatch in episode(s): ' + mismatches.join(','));
+      buttons[0]?.click();
+    }
+
+    // Verify all static translation bindings on every page as well, including
+    // headings, labels, accessible names and placeholders.
+    const activeRoot = document.querySelector('#shared-page-host .child-page.is-active') || document.body;
+    activeRoot.querySelectorAll('[data-i18n]').forEach(element => {
+      const expected = window.SiteI18n?.get?.(element.dataset.i18n, '');
+      const actualText = element.textContent.trim().normalize('NFC');
+      const expectedText = String(expected).trim().normalize('NFC');
+      if (expected !== '' && actualText !== expectedText) {
+        issues.push('active-page data-i18n mismatch: ' + element.dataset.i18n
+          + ' expected=' + JSON.stringify(expectedText) + ' actual=' + JSON.stringify(actualText));
+      }
+    });
+    return issues;
+  }, { route, language });
+}
+
 for (const route of sharedRoutes) {
   const page = await context.newPage();
   page.setDefaultTimeout(7000);
@@ -393,6 +602,89 @@ for (const route of sharedRoutes) {
       { ...language, key: route.route }, { timeout: 5000 });
       const localizedContent = await page.evaluate((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content);
       if (!localizedContent) fail(`shared route ${route.route}: content region became empty in ${language.code}`);
+      if (['treatise', 'shahnameh', 'emergence', 'observation25', 'possibleMirror', 'emergence2', 'observation', 'layer3', 'disturbedManifesto', 'zero'].includes(route.route)) {
+        const canonicalIssues = await auditCanonicalRoute(page, route.route, language.code);
+        if (canonicalIssues.length) fail(`shared route ${route.route}: canonical content audit failed in ${language.code}: ${canonicalIssues.join(' | ')}`);
+      }
+      if (route.route === 'emergence2') {
+        // Compare the rendered reader against the actual canonical data loaded
+        // by the page: Persian sourceData for fa, and the selected language's
+        // translation catalog for en/ar/zh. Exercise every episode, not only
+        // the initially selected one, and keep a non-first episode active
+        // across language changes.
+        const audit = await page.evaluate((languageCode) => {
+          const reader = document.querySelector('#reader');
+          const source = window.Emergence2Catalog;
+          const catalogs = window.SiteI18n?.getCatalog?.() || {};
+          const book = catalogs.bookContent?.emergence2?.episodes?.length
+            ? catalogs.bookContent.emergence2
+            : (catalogs.chapters?.emergence2 || catalogs.bookContent?.emergence2);
+          const expectedChapterTitle = languageCode === 'fa'
+            ? 'فصل دوم ظهور'
+            : book?.title?.[languageCode] || '';
+          const issues = [];
+          if (document.documentElement.lang !== languageCode) issues.push('html lang mismatch');
+          const expectedDir = ['fa', 'ar'].includes(languageCode) ? 'rtl' : 'ltr';
+          if (document.documentElement.dir !== expectedDir) issues.push('html dir mismatch');
+          if ((document.querySelector('#page-title')?.textContent || '').trim() !== expectedChapterTitle) {
+            issues.push('chapter title differs from canonical catalog');
+          }
+          const buttons = [...document.querySelectorAll('#episode-list .episode')];
+          if (!Array.isArray(source?.episodes) || source.episodes.length !== 11 || buttons.length !== 11) {
+            issues.push('expected 11 canonical episodes and 11 rendered selectors');
+          }
+          const activeBeforeAudit = buttons.findIndex(button => button.classList.contains('active'));
+          const expectedPreservedIndex = languageCode === 'fa' ? 0 : 4;
+          if (activeBeforeAudit !== expectedPreservedIndex) {
+            issues.push('active episode was not preserved across language change (expected selector index ' + expectedPreservedIndex + ', found ' + activeBeforeAudit + ')');
+          }
+          const episodeResults = [];
+          for (let index = 0; index < Math.min(11, source?.episodes?.length || 0); index++) {
+            buttons[index]?.click();
+            const base = source.episodes[index];
+            const localized = book?.episodes?.[index];
+            const expectedTitle = languageCode === 'fa'
+              ? base.title
+              : (typeof localized?.title === 'string' ? localized.title : localized?.title?.[languageCode]);
+            const expectedParagraphs = languageCode === 'fa'
+              ? (Array.isArray(base.paragraphs) ? base.paragraphs : [])
+              : (Array.isArray(localized?.paragraphs?.[languageCode]) ? localized.paragraphs[languageCode] : []);
+            const actualTitle = reader?.querySelector('h2')?.textContent?.trim() || '';
+            const actualParagraphs = [...(reader?.querySelectorAll('.prose') || [])].map(node => node.textContent);
+            const placeholder = Boolean(reader?.querySelector('.placeholder'));
+            const rawObject = reader?.textContent?.includes('[object Object]') || false;
+            const titleMatches = actualTitle === (expectedTitle || '');
+            const paragraphsMatch = JSON.stringify(actualParagraphs) === JSON.stringify(expectedParagraphs);
+            if (!expectedTitle || !expectedParagraphs.length || !titleMatches || !paragraphsMatch || placeholder || rawObject) {
+              episodeResults.push({
+                number: base.number,
+                titleMatches,
+                paragraphsMatch,
+                expectedParagraphCount: expectedParagraphs.length,
+                actualParagraphCount: actualParagraphs.length,
+                placeholder,
+                rawObject
+              });
+            }
+          }
+          // Leave episode 24 (index 4) active so the next language transition
+          // proves that the controller preserves the selected episode.
+          buttons[4]?.click();
+          const activeNumber = source.episodes[4]?.number;
+          const activeButtonNumber = buttons.findIndex(button => button.classList.contains('active'));
+          return {
+            expectedChapterTitle,
+            actualChapterTitle: (document.querySelector('#page-title')?.textContent || '').trim(),
+            activeNumber,
+            activeButtonNumber,
+            episodeResults,
+            issues
+          };
+        }, language.code);
+        if (audit.issues.length || audit.episodeResults.length || audit.activeButtonNumber !== 4) {
+          fail(`Emergence II canonical-content mismatch in ${language.code}: ${JSON.stringify(audit)}`);
+        }
+      }
       const currentGeometry = await measureRouteGeometry();
       if (currentGeometry.__shell['#app']?.scrollLeft !== 0) {
         fail('shared route ' + route.route + ': #app has nonzero horizontal scroll offset after ' + language.code + ' switch (' + currentGeometry.__shell['#app']?.scrollLeft + ')');
@@ -491,6 +783,39 @@ for (const book of sharedBooks) {
       language, { timeout: 5000 });
       const populated = await page.locator('#book-body').evaluate((el) => Boolean(el.textContent.trim() || el.children.length));
       if (!populated) fail(`shared book ${book.kind}: content became empty in ${language.code}`);
+      const canonicalBookAudit = await page.evaluate(({ kind, language }) => {
+        const catalog = window.SiteI18n?.getCatalog?.() || {};
+        const translated = catalog.bookContent?.[kind];
+        let source;
+        if (kind === 'forgers') source = window.ForgersCatalog || [];
+        else if (kind === 'humanMachines') source = window.HumanMachinesCatalog?.chapters || [];
+        else source = window.TabahianCatalog?.chapters || [];
+        const expected = language === 'fa' ? source : (translated?.chapters || []).map(chapter => ({
+          ...chapter,
+          title: chapter.title?.[language] || '',
+          paragraphs: chapter.paragraphs?.[language] || []
+        }));
+        const issues = [];
+        const expectedDir = ['fa', 'ar'].includes(language) ? 'rtl' : 'ltr';
+        if (document.documentElement.dir !== expectedDir) issues.push('document direction mismatch');
+        if (document.querySelector('#book-body')?.dir !== expectedDir) issues.push('book reader direction mismatch');
+        const tabs = [...document.querySelectorAll('#book-tabs .book-tab')];
+        if (!expected.length || tabs.length !== expected.length) issues.push('chapter selector count differs from canonical chapter count');
+        const mismatches = [];
+        for (let index = 0; index < Math.min(expected.length, tabs.length); index++) {
+          tabs[index].click();
+          const chapter = document.querySelector('#book-body .chapter');
+          const actualTitle = chapter?.querySelector('h2')?.textContent?.trim() || '';
+          const actualParagraphs = [...(chapter?.querySelectorAll(':scope > p') || [])].map(p => p.textContent);
+          if (actualTitle !== expected[index].title || JSON.stringify(actualParagraphs) !== JSON.stringify(expected[index].paragraphs || [])) {
+            mismatches.push(index + 1);
+          }
+        }
+        tabs[0]?.click();
+        if (mismatches.length) issues.push('rendered chapter title/paragraph mismatch in chapter(s): ' + mismatches.join(','));
+        return issues;
+      }, { kind: book.kind, language: language.code });
+      if (canonicalBookAudit.length) fail(`shared book ${book.kind}: canonical content audit failed in ${language.code}: ${canonicalBookAudit.join(' | ')}`);
     } catch (error) {
       fail(`shared book ${book.kind}: language ${language.code} transition failed; ${String(error).split('\\n')[0]}`);
       break;
