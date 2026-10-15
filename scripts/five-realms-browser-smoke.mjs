@@ -49,8 +49,10 @@ try {
     }
     if ((await page.locator('#fr-current').innerText()) !== 'Browser Alice') fail(`${viewport.name}: first player is not active after game start`);
 
-    // Score one non-joker card, then verify the private-hand handoff to player two.
-    await page.locator('#fr-hand .fr-card').filter({ hasNotText: 'JOKER' }).first().click();
+    // Score three non-joker cards to earn enough points for a badge purchase.
+    const initialScoringCards = page.locator('#fr-hand .fr-card').filter({ hasNotText: 'JOKER' });
+    if (await initialScoringCards.count() < 3) fail(`${viewport.name}: fewer than three scoreable cards were dealt`);
+    for (let i = 0; i < 3; i++) await initialScoringCards.nth(i).click();
     await page.locator('[data-action="score"]').click();
     await page.locator('#fr-action-form button').last().click();
     await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
@@ -89,13 +91,7 @@ try {
       }
     }
 
-    // Badge actions remain in the game; bank actions live only in Tadbir.
-    for (const action of ['buy', 'sell']) {
-      await page.locator(`[data-action="${action}"]`).click();
-      if (!(await page.locator('#fr-action-form').locator('button').count())) {
-        fail(`${viewport.name}: ${action} action did not expose a confirm control`);
-      }
-    }
+    // Bank controls must be absent from the game and Tadbir must connect to the active player's account.
     if (await page.locator('[data-action="deposit"], [data-action="withdraw"]').count()) {
       fail(`${viewport.name}: deposit/withdraw controls are still exposed in the game action panel`);
     }
@@ -110,6 +106,46 @@ try {
     }
     await page.locator('#tadbir-return-game').click();
     await page.waitForFunction(() => document.querySelector('#fr-play') && !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Alice');
+
+    // Complete a real badge purchase and verify that the turn advances.
+    await page.locator('[data-action="buy"]').click();
+    const buyRealm = page.locator('#fr-action-form select').first();
+    await buyRealm.selectOption('purple');
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) {
+      fail(`${viewport.name}: successful badge purchase did not advance to player two`);
+    }
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Bob');
+
+    // Player two scores, handing the device back so player one can sell the badge.
+    const bobScoringCards = page.locator('#fr-hand .fr-card').filter({ hasNotText: 'JOKER' });
+    if (await bobScoringCards.count() < 1) fail(`${viewport.name}: player two has no scoreable card`);
+    await bobScoringCards.first().click();
+    await page.locator('[data-action="score"]').click();
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Alice');
+
+    // Complete a real badge sale and verify Alice's owned-badge count returns to zero.
+    await page.locator('[data-action="sell"]').click();
+    const sellBadge = page.locator('#fr-action-form select').first();
+    if (await sellBadge.locator('option').count() !== 1) {
+      fail(`${viewport.name}: the purchased badge was not available for sale`);
+    }
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) {
+      fail(`${viewport.name}: successful badge sale did not advance to player two`);
+    }
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Bob');
+    const aliceScoreRow = page.locator('#fr-scoreboard tbody tr').filter({ hasText: 'Browser Alice' });
+    if ((await aliceScoreRow.locator('td').nth(2).innerText()).trim() !== '0') {
+      fail(`${viewport.name}: sold badge still appears in Alice's owned-badge count`);
+    }
 
     // Isolate the recognition UI from network credentials while exercising the shared adapter contract.
     await page.evaluate(() => {
