@@ -6,6 +6,7 @@
   const close = document.getElementById('possible-mirror-close');
 
   if (!tabs || !body || !close) return;
+  let activeIndex = 0;
 
   function catalog() {
     const language = window.SiteI18n?.getLanguage?.() || 'fa';
@@ -44,7 +45,6 @@
       section.hidden = !active;
     });
 
-    body.scrollTop = 0;
     const activeSection = sections[index];
     if (activeSection) {
       announce(activeSection.querySelector('h1')?.textContent || '');
@@ -89,7 +89,7 @@
       tab.setAttribute('aria-controls', `possible-mirror-section-${index}`);
       tab.id = `possible-mirror-tab-${index}`;
       tab.tabIndex = index === 0 ? 0 : -1;
-      tab.textContent = label;
+      tab.textContent = `${siteNumber(index + 1)} · ${label}`;
       tabs.appendChild(tab);
 
       const section = document.createElement('section');
@@ -142,13 +142,15 @@
       return;
     }
 
-    setActiveSection(0);
+    activeIndex = Math.min(activeIndex, sections.length - 1);
+    setActiveSection(activeIndex);
   }
 
   tabs.addEventListener('click', (event) => {
     const tab = event.target.closest('.possible-mirror-tab');
     if (!tab || !tabs.contains(tab)) return;
-    setActiveSection(Number(tab.dataset.index));
+    activeIndex = Number(tab.dataset.index);
+    setActiveSection(activeIndex);
   });
 
   tabs.addEventListener('keydown', (event) => {
@@ -165,7 +167,8 @@
 
     if (next !== current) {
       event.preventDefault();
-      setActiveSection(next, true);
+      activeIndex = next;
+      setActiveSection(activeIndex, true);
     }
   });
 
