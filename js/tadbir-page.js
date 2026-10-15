@@ -36,7 +36,7 @@
     $('#tadbir-points').textContent=number(s.points);
     $('#tadbir-bank').textContent=s.bankActive?number(s.bankPrincipal):'0';
     $('#tadbir-interest-turns').textContent=String(s.bankTurns||0);
-    depositForm.hidden=false;
+    depositForm.hidden=!!s.bankActive;
     const amount=$('#tadbir-amount');
     amount.max=String(s.maxDeposit??0);
     amount.value='';
