@@ -405,3 +405,9 @@ html[dir="ltr"] .share-page .share-story-action {
 #app .paragraph-page .paragraph-workspace {
   padding-top: var(--ui-language-clearance);
 }
+
+/* The three shared catalog books use the app-level reader shell rather than
+   #shared-page-host; reserve the same language band there as well. */
+#app > .book-page .book-head {
+  padding-top: var(--ui-language-clearance);
+}
