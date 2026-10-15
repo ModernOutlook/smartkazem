@@ -86,7 +86,12 @@
       section.setAttribute('aria-labelledby', tab.id);
       section.tabIndex = 0;
       const heading = document.createElement('h1');
-      heading.textContent = `${siteNumber(index + 1)} · ${label}`;
+      const badge = document.createElement('span');
+      badge.className = 'section-number';
+      badge.textContent = siteNumber(index + 1);
+      const headingText = document.createElement('span');
+      headingText.textContent = label;
+      heading.append(badge, headingText);
       section.appendChild(heading);
       const note = document.createElement('p');
       note.className = 'section-note';
