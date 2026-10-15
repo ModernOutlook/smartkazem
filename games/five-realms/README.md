@@ -1,13 +1,13 @@
 # بازی ۵ قلمرو — Five Realms
 
-Five Realms is a local hot-seat card-game demo for 2–5 players, integrated into the SmartKazem shared-page runtime. The rules engine and browser smoke coverage are included. A launchable demo is not yet a content-complete release while the question bank and author-owned configuration decisions remain unresolved.
+Five Realms is a local hot-seat card-game demo for 2–5 players, integrated into the SmartKazem shared-page runtime. The rules engine and browser smoke coverage are included. The question flow now generates a paragraph and its reference judgment through the existing Paragraph Machine recognition pipeline and default backend settings. Remaining author-owned game configuration decisions are documented below.
 
 ## Layout
 
 - `engine/index.mjs`: deterministic RNG, deck/discard recycling, poker evaluator, turn lifecycle, badges, lucky cards, questions, exchanges, and bank rules.
 - `data/config.json`: gameplay numbers, including the approved 72-badge pool per realm.
 - `data/realms.json`: realm names/color/suit presentation data.
-- `data/questions.json`: five clearly marked placeholder question sets.
+- Question generation and reference evaluation are delegated to `window.ParagraphWorkspaceAdapter`, the same adapter used by Paragraph Machine recognition; no local placeholder question bank is loaded.
 - `tests/engine.test.mjs`: dependency-free Node test suite.
 - `scripts/five-realms-browser-smoke.mjs`: Playwright smoke coverage for desktop, mobile portrait, and mobile landscape.
 
@@ -28,14 +28,14 @@ node --test games/five-realms/tests/*.test.mjs
 - Purple badge base price multiplier is provisionally 0.5 to express “purple is cheapest”; blue/Ace premium is not applied.
 - Badge price uses additive owned-value discount `price × (1 − ownedValue / (2T))`; this is currently applied per realm's configured total value.
 - Poker few-card scoring defaults to the approved `count` mode: 1→1, 2→2, 3→6, 4→16. A distinct structural scoring mode is not specified and is not selectable.
-- Question answers are placeholders, not author-approved philosophical content.
+- Each question is one live-generated paragraph. The five user judgments (`S/T/E/R/C`) use the Paragraph Machine statuses: consistent/matching, ambiguous, or contradictory. Exact correctness requires all five statuses to match the independently generated reference judgment.
 - Bank deposit limit uses the exact fractional points balance. The specified principal formula `2 × floor(s) − s` can be negative for deposits below one point; this is retained and flagged.
 - Badge sale returns 95% of recorded purchase price, rounded half-up to hundredths.
 - Implemented: lucky cards are granted on first full realm ownership, stay in the hand, survive poker scoring and wrong-answer penalties, and cannot be returned through ordinary exchange. Purple jokers remain in hand when used to take a chosen available non-joker card; only one exchange action can be made per turn, so the two jokers are used on separate turns.
 - Implemented: exchange from an unowned realm into an owned realm grants one additional exchange before the turn ends; when both the returned-card realm and drawn-card realm are owned, the returned card stays in hand and two cards are drawn.
-- Implemented: question records load from `data/questions.json`; answers are evaluated against `answerIndex`; fully owned realm parts are free; wrong answers return a non-lucky card; the wrong answer in a most-held realm is forgiven, with a player choice if several realms tie.
+- Implemented: the question action stays inside the game page and requests one paragraph through `ParagraphWorkspaceAdapter.generateParagraphs(1, 'mixed', language)`, then independently evaluates it through `ParagraphWorkspaceAdapter.evaluateText`. The UI renders five realm judgment boxes with the same three statuses as Paragraph Machine. Exact five-realm matching determines recognition correctness; existing card rewards, wrong-answer penalties, full-ownership forgiveness, and tied-most-held-realm forgiveness remain game mechanics.
 - Implemented: bank interest accrues at the start of the owner's turns for up to five turns; withdrawal stops future interest; sold badges return to the shared pool; game-over winners are selected by spendable points only, then total owned badge value. Bank principal and accrued interest do not count unless withdrawn before the game ends.
-- Question prompts and options remain explicit `PLACEHOLDER` records. The mechanics work with the placeholder answer keys, but author-approved question content must replace them before a content-complete release.
+- Question generation and reference evaluation use the existing Paragraph Machine LLM client and its default backend configuration. The game does not introduce a second LLM configuration path. Live questions require a working LLM connection; the game remains on the same page if generation or evaluation fails, and offers retry.
 - The game can be launched as a mechanics demo, but it must not be presented as a finished, author-approved game until the placeholder question bank and open rules/configuration decisions are resolved.
 
 ## Site integration progress
@@ -61,6 +61,6 @@ node --test games/five-realms/tests/*.test.mjs
 
 - Automated validation must be checked against the latest branch commit before any merge. The browser smoke suite now includes a dedicated Five Realms interaction run; mobile/RTL/accessibility and event-by-event audio behavior still require acceptance checks.
 - Realm color/name mapping remains provisional in `data/realms.json`; keep the mapping data-driven until the author confirms it.
-- The five question sets remain explicit `PLACEHOLDER` records. Do not invent or rewrite the author's philosophical question content.
+- Five Realms no longer maintains a separate static question bank; the live Paragraph Machine recognition pipeline is the source of question paragraphs and reference judgments.
 - **Final bank scoring (user-approved 2026-10-15, option B):** bank principal and accrued interest do not count toward final score. Winners are ranked by spendable points only, then total owned badge value. A player must withdraw the balance before game end for it to contribute to spendable points.
 - Keep PR #164 in draft until automated tests and browser acceptance checks pass and the remaining content/configuration decisions are resolved.
