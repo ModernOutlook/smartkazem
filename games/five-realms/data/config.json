@@ -37,7 +37,8 @@
         "rank": "A",
         "suit": "spades"
       },
-      "basePriceMultiplier": 1
+      "basePriceMultiplier": 1,
+      "acePurchaseDiscount": 0.2
     },
     "yellow": {
       "suit": "diamonds",
