@@ -1717,9 +1717,10 @@ function render(){
   const body=paragraphs.length
     ? paragraphs.map(p=>`<p class="prose">${p}</p>`).join('')
     : `<div class="placeholder">${placeholder.replace(/\n/g,'<br>')}</div>`;
-  reader.setAttribute('role','tabpanel');\n  reader.setAttribute('aria-label',labels.reader);\n  reader.setAttribute('aria-labelledby',`emergence-episode-tab-${current}`);
+  reader.setAttribute('role','tabpanel');
+  reader.setAttribute('aria-label',labels.reader);
   reader.innerHTML=`<div class="reader-head"><div><div class="story-label">${chapterTitle}</div><h2 id="episode-reader-heading">${title}</h2><p>${storyDescription}</p></div></div><div class="block">${body}</div>`;
-  reader.setAttribute('aria-labelledby','episode-reader-heading');
+  reader.setAttribute('aria-labelledby',`emergence-episode-tab-${current}`);
   document.querySelector('.title h1').textContent=chapterTitle;
   document.querySelector('.title p').textContent=description;
   document.querySelectorAll('.story-label').forEach(el=>{el.textContent=chapterTitle});
@@ -1733,7 +1734,7 @@ function render(){
 function select(index,moveFocus=false){
   current=(index+episodes.length)%episodes.length;
   render();
-  if(moveFocus) requestAnimationFrame(()=>reader.focus({preventScroll:false}));
+  if(moveFocus) list.children[current]?.focus({preventScroll:true});
 }
 function moveBy(delta,moveFocus=true){
   select(current+delta,moveFocus);
