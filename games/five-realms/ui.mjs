@@ -306,16 +306,20 @@ if (root && !root.dataset.initialized) {
     if(result.ok){pendingBankResult=result;pendingBankPlayerId=player.id;awaitingReveal=true;}
     return result;
   }
-  async function returnFromBankMachine() {
-    const opened=await window.SharedPages?.open?.("five-realms","share");
-    if(!opened)return false;
-    if(pendingBankResult){const result=pendingBankResult;pendingBankResult=null;pendingBankPlayerId=null;advance(result);}
-    else if(awaitingReveal&&!state.over){
+  function restoreGamePage() {
+    if(!state)return;
+    if(pendingBankResult){const result=pendingBankResult;pendingBankResult=null;pendingBankPlayerId=null;advance(result);return;}
+    if(awaitingReveal&&!state.over){
       $("#fr-pass-name").textContent=t("passTo","Pass the device to")+" "+current().name;
       $("#fr-pass").hidden=false;$("#fr-play").hidden=true;$("#fr-setup").hidden=true;$("#fr-game-over").hidden=true;
-    } else refresh();
-    return true;
+      return;
+    }
+    refresh();
   }
+  async function returnFromBankMachine() {
+    return !!(await window.SharedPages?.open?.("five-realms","share"));
+  }
+  document.addEventListener("shared-page:opened",event=>{if(event.detail?.key==="five-realms")restoreGamePage();});
   window.FiveRealmsBankMachine=Object.freeze({
     getStatus:bankMachineStatus,
     deposit:amount=>performBankAction("deposit",amount),
