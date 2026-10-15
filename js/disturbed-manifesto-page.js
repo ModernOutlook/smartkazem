@@ -37,7 +37,8 @@
     const translated = catalog()?.chapters?.disturbedManifesto?.parts?.[language()];
     return translated?.[index] || source.parts[index];
   }
-\n  function activeTitle() {
+
+  function activeTitle() {
     if (language() === 'fa') return source.title;
     return catalog()?.chapters?.disturbedManifesto?.title?.[language()] ||
       catalog()?.pages?.disturbedManifesto?.title ||
