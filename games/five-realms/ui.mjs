@@ -8,7 +8,7 @@ if (root && !root.dataset.initialized) {
   const t = (key, fallback = "") => window.SiteI18n?.get("pages.fiveRealms." + key, fallback) || fallback;
   let realmsData = [], currentQuestion = null;
   let config, engine, state, selected = new Set(), pendingAction = null, awaitingReveal = false, pendingBankResult = null, pendingBankPlayerId = null;
-  const announce = (message) => { $("#fr-announcer").textContent = ""; requestAnimationFrame(() => { $("#fr-announcer").textContent = message; }); };
+  const announce = (message) => { const target=$("#fr-announcer",root); if(!target)return; target.textContent = ""; requestAnimationFrame(() => { target.textContent = message; }); };
   const emitSound = (type, detail = {}) => {
     document.dispatchEvent(new CustomEvent("site:game-sound", {detail:{game:"five-realms",type,...detail}}));
     const realm = detail.realm || ({ "card-drawn":"blue", "answer-correct":"yellow", "answer-wrong":"red", "hand-scored":"purple", "badge-bought":"green", "badge-sold":"green", "deposit":"yellow", "withdraw":"yellow", "realm-completed":"purple", "turn-start":"blue", "game-over":"green" })[type] || "share";
