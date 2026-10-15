@@ -26,8 +26,6 @@
           <button type="button" data-action="score" data-i18n="pages.fiveRealms.scoreHand">امتیازگیری از دست</button>
           <button type="button" data-action="buy" data-i18n="pages.fiveRealms.buyBadge">خرید نشان</button>
           <button type="button" data-action="sell" data-i18n="pages.fiveRealms.sellBadge">فروش نشان</button>
-          <button type="button" data-action="deposit" data-i18n="pages.fiveRealms.deposit">سپرده‌گذاری</button>
-          <button type="button" data-action="withdraw" data-i18n="pages.fiveRealms.withdraw">برداشت</button>
         </div>
         <div id="fr-action-form" class="fr-action-form"></div>
       </section>
