@@ -635,7 +635,7 @@ Every secondary page whose primary purpose is reading a textual work must end wi
 
 Upload all page-cover images to:
 
-`assets/content-covers/`
+`content/page-templates/`
 
 Use the exact lowercase ASCII filenames below, with the `.jpg` extension. The path is relative to the repository root and must be referenced without hard-coded deployment-domain prefixes so GitHub Pages subpath deployment continues to work.
 
@@ -660,5 +660,5 @@ Use the exact lowercase ASCII filenames below, with the `.jpg` extension. The pa
 - Keep the original uploaded image unchanged. Use a predictable, accessible image element with meaningful localized alternative text derived from the page's canonical title; do not duplicate article prose in the alt text.
 - The frame is a presentation element only. It must not alter the canonical Persian source, translation reservoirs, section order, page navigation, language selection, or shared Talk Back behavior.
 - If an image has not yet been uploaded, retain the reserved 3:4 frame as a neutral, non-interactive placeholder; do not show a broken-image icon or invent replacement artwork.
-- When a new textual-content child page is added, include the same end-of-page 3:4 cover frame, propose its unique lowercase ASCII kebab-case filename, and add that filename to this README table before requesting/uploading the image. Reuse the same `assets/content-covers/` directory; do not create per-page image folders.
+- When a new textual-content child page is added, include the same end-of-page 3:4 cover frame, propose its unique lowercase ASCII kebab-case filename, and add that filename to this README table before requesting/uploading the image. Reuse the same `content/page-templates/` directory; do not create per-page image folders.
 - شاهنامه‌خوانی and the Paragraph Machine remain excluded unless the user explicitly changes this scope.
