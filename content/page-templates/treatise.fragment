@@ -8,13 +8,13 @@
       </div>
     </header>
     <nav class="treatise-tabs" id="tabs" aria-label="فهرست رساله" data-i18n-aria="pages.treatise.tabsLabel">
-      <button class="treatise-tab book-tab active" data-i18n="pages.treatise.tabs.0" data-target="preface" type="button">پیش‌گفتار</button>
-      <button class="treatise-tab book-tab" data-i18n="pages.treatise.tabs.1" data-target="r1" type="button">ساختار تالار</button>
-      <button class="treatise-tab book-tab" data-i18n="pages.treatise.tabs.2" data-target="r2" type="button">تداوم عالم</button>
-      <button class="treatise-tab book-tab" data-i18n="pages.treatise.tabs.3" data-target="r3" type="button">تجربه</button>
-      <button class="treatise-tab book-tab" data-i18n="pages.treatise.tabs.4" data-target="r4" type="button">اقتدار شبیه‌سازی</button>
-      <button class="treatise-tab book-tab" data-i18n="pages.treatise.tabs.5" data-target="r5" type="button">اقتصاد سهم‌ها</button>
-      <button class="treatise-tab book-tab" data-i18n="pages.treatise.tabs.6" data-target="postscript" type="button">پس‌گفتار</button>
+      <button class="treatise-tab book-tab active" data-target="preface" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.0">پیش‌گفتار</span></button>
+      <button class="treatise-tab book-tab" data-target="r1" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.1">ساختار تالار</span></button>
+      <button class="treatise-tab book-tab" data-target="r2" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.2">تداوم عالم</span></button>
+      <button class="treatise-tab book-tab" data-target="r3" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.3">تجربه</span></button>
+      <button class="treatise-tab book-tab" data-target="r4" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.4">اقتدار شبیه‌سازی</span></button>
+      <button class="treatise-tab book-tab" data-target="r5" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.5">اقتصاد سهم‌ها</span></button>
+      <button class="treatise-tab book-tab" data-target="postscript" type="button"><span class="tab-number" aria-hidden="true"></span><span class="tab-label" data-i18n="pages.treatise.tabs.6">پس‌گفتار</span></button>
     </nav>
     <article class="treatise-article" id="body" aria-label="رساله فلسفی نگرش نوین" data-i18n-aria="labels.treatise">
       <div class="treatise-mark" aria-hidden="true">S</div>
