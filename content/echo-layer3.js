@@ -443,7 +443,7 @@ window.EchoLayer3Content={
    title.textContent=book.title?.[lang]||d.title||"پژواک لایه سوم";
    sub.textContent=book.subtitle?.[lang]||d.subtitle||"";
    $("close").setAttribute("aria-label",d.close||"بازگشت");
-   tocLabel.textContent=lang==="en"?"Contents":lang==="zh"?"目录":lang==="ar"?"الفهرس":"فهرست";
+   tocLabel.textContent=window.SiteI18n?.get?.("labels.chapterList","")||({en:"Contents",zh:"目录",ar:"الفهرس",fa:"فهرست فصل‌ها"}[lang]||"فهرست فصل‌ها");
    chapters.innerHTML="";
    parts.innerHTML="";
    reader.innerHTML="";
