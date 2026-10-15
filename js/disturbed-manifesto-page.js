@@ -32,7 +32,12 @@
     return translated?.[activeIndex] || null;
   }
 
-  function activePartForIndex(index) {\n    if (language() === 'fa') return source.parts[index];\n    const translated = catalog()?.chapters?.disturbedManifesto?.parts?.[language()];\n    return translated?.[index] || source.parts[index];\n  }\n\n  function activeTitle() {
+  function activePartForIndex(index) {
+    if (language() === 'fa') return source.parts[index];
+    const translated = catalog()?.chapters?.disturbedManifesto?.parts?.[language()];
+    return translated?.[index] || source.parts[index];
+  }
+\n  function activeTitle() {
     if (language() === 'fa') return source.title;
     return catalog()?.chapters?.disturbedManifesto?.title?.[language()] ||
       catalog()?.pages?.disturbedManifesto?.title ||
@@ -148,10 +153,7 @@
 
       const number = siteNumber(source.parts[index].number);
 
-      button.setAttribute(
-        'aria-label',
-        label('goToPart', 'Go to part ') + number
-      );
+      button.setAttribute('aria-label', `${number} · ${activePartForIndex(index)?.title || ''}`);
     });
 
     renderReader();
@@ -166,12 +168,16 @@
     if (moveFocus) list.children[index]?.focus({ preventScroll: true });
   }
 
-  list.setAttribute('role', 'tablist');\n  list.setAttribute('aria-orientation', 'horizontal');\n  source.parts.forEach((part, index) => {
+  list.setAttribute('role', 'tablist');
+  list.setAttribute('aria-orientation', 'horizontal');\n  source.parts.forEach((part, index) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'part';
-    button.textContent = siteNumber(part.number);
-    button.setAttribute('role', 'tab');\n    button.setAttribute('aria-controls', 'reader');
+    button.textContent = `${siteNumber(part.number)} · ${part.title}`;
+    button.setAttribute('role', 'tab');
+    button.setAttribute('aria-controls', 'reader');
+    button.setAttribute('aria-selected', String(index === activeIndex));
+    button.tabIndex = index === activeIndex ? 0 : -1;
 
     button.addEventListener('click', () => select(index));
 
