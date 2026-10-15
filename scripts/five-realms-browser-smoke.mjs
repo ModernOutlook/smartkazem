@@ -122,6 +122,22 @@ try {
       fail(`${viewport.name}: exact five-realm recognition match was not reported as correct: ${recognitionMessage}`);
     }
 
+    // One mismatched realm must make the overall recognition result incorrect.
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Bob');
+    await page.locator('[data-action="question"]').click();
+    await page.waitForSelector('.fr-question-paragraph .fr-question-text');
+    const mismatchingStatuses = {blue:'bad',yellow:'warn',purple:'bad',red:'ok',green:'warn'};
+    for (const [realm,status] of Object.entries(mismatchingStatuses)) {
+      await page.locator(`.fr-judgment-realm[data-realm="${realm}"] input[value="${status}"]`).check();
+    }
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    const incorrectMessage = await page.locator('#fr-action-message').innerText();
+    if (!/منطبق نیست|do not match|并不完全一致|لا تتطابق/.test(incorrectMessage)) {
+      fail(`${viewport.name}: a mismatched realm was not reported as an incorrect recognition: ${incorrectMessage}`);
+    }
+
     const metrics = await page.evaluate(() => ({
       viewportWidth: innerWidth,
       documentWidth: document.documentElement.scrollWidth,
