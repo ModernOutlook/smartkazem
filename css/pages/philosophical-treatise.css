@@ -50,3 +50,6 @@ button:focus-visible,.treatise-tab:focus-visible{outline:2px solid var(--treatis
 
 
 .treatise-tab{display:inline-flex;align-items:center;gap:.45rem}.treatise-tab .tab-number{font-variant-numeric:tabular-nums;opacity:.78;white-space:nowrap}
+
+
+.treatise-page,.treatise-page .treatise-article{overflow-anchor:none}
