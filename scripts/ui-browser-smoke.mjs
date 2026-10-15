@@ -331,7 +331,7 @@ try {
       for (const viewport of viewports) {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.waitForTimeout(60);
-        for (const language of languages) {
+        for (const language of languagesForViewport(viewport)) {
           await page.locator('[data-site-lang="' + language.code + '"]').click();
           await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
           await auditLanguageHeader(page, '#home-page', ['.topbar #x-social'], 'home @ ' + viewport.name + ' ' + language.code);
@@ -342,7 +342,7 @@ try {
       for (const viewport of viewports) {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.waitForTimeout(60);
-        for (const language of languages) {
+        for (const language of languagesForViewport(viewport)) {
           await page.locator('[data-site-lang="' + language.code + '"]').click();
           await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
           await auditLanguageHeader(page, '#paragraph-page', ['.paragraph-head > div', '#paragraph-close'], 'Paragraph Machine @ ' + viewport.name + ' ' + language.code);
