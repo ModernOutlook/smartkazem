@@ -540,7 +540,7 @@ The short-story reader `content/page-templates/zero.fragment` establishes the ch
 
 ### Emergence II runtime language-rendering fix (2026-10-12)
 
-The `emergence2` shared-page controller must unwrap the language-keyed reservoir fields before rendering: `episode.title[language]` and `episode.paragraphs[language]`. Passing the objects directly produced `[object Object]` and the missing-episode fallback. The browser smoke test now verifies real localized prose for EN, AR, and ZH, not merely a non-empty reader container. This is separate from the still-pending paragraph-fidelity audit of Persian episodes 23–30.
+The `emergence2` shared-page controller must unwrap the language-keyed reservoir fields before rendering: `episode.title[language]` and `episode.paragraphs[language]`. Passing the objects directly produced `[object Object]` and the missing-episode fallback. The browser smoke test now verifies real localized prose for EN, AR, and ZH, not merely a non-empty reader container. The paragraph audit now enforces one non-empty source line per paragraph in all four languages, with the translated character stream preserved.
 
 
 ### Canonical-content browser verification (2026-10-12)
