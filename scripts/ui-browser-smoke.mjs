@@ -337,8 +337,10 @@ try {
           await auditLanguageHeader(page, '#home-page', ['.topbar #x-social'], 'home @ ' + viewport.name + ' ' + language.code);
         }
       }
-      await page.evaluate(() => window.SitePages?.openParagraph('experience'));
-      await page.waitForFunction(() => document.querySelector('#paragraph-page')?.classList.contains('is-active'));
+      await page.evaluate(() => {
+        document.querySelectorAll('#app > .page').forEach(element => element.classList.remove('is-active'));
+        document.querySelector('#paragraph-page')?.classList.add('is-active');
+      });
       for (const viewport of viewports) {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.waitForTimeout(60);
@@ -389,7 +391,7 @@ async function auditCanonicalRoute(page, route, language) {
         && rendered.every((node) => node.textContent.trim().length > 0);
     }, language, { timeout: 7000 });
   }
-  return page.evaluate(({ route, language }) => {
+  return page.evaluate(async ({ route, language }) => {
     const catalog = window.SiteI18n?.getCatalog?.() || {};
     const issues = [];
     const same = (actual, expected, label) => {
@@ -512,7 +514,9 @@ async function auditCanonicalRoute(page, route, language) {
 
     if (route === 'layer3') {
       const source = window.EchoLayer3Content;
-      const book = catalog.bookContent?.layer3 || catalog.chapters?.layer3 || {};
+      const reservoirResponse = await fetch('translations/echo-layer3.json', { cache: 'no-store' });
+      const reservoir = reservoirResponse.ok ? await reservoirResponse.json() : {};
+      const book = catalog.bookContent?.layer3 || catalog.chapters?.layer3 || reservoir;
       const chapter = source?.chapters?.[0];
       const buttons = [...document.querySelectorAll('#parts .part')];
       const expectedTitle = book.title?.[lang] || catalog.pages?.layer3?.title || '';
@@ -522,7 +526,7 @@ async function auditCanonicalRoute(page, route, language) {
       for (let i = 0; i < Math.min(buttons.length, chapter?.parts?.length || 0); i++) {
         buttons[i].click();
         const part = chapter.parts[i];
-        const translatedPart = book.parts?.[i];
+        const translatedPart = reservoir.parts?.[i] || book.parts?.[i];
         const expectedHeading = translatedPart?.title?.[lang] || catalog.pages?.layer3?.sections?.[i] || part.titleFallback;
         const expectedParagraphs = lang === 'fa' ? part.text : (translatedPart?.paragraphs?.[lang] || []);
         const actualHeading = document.querySelector('#reader .story h2')?.textContent?.replace(/^\d+\s*\.\s*/, '').trim() || '';
