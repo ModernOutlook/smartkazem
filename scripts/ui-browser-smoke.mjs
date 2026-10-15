@@ -517,6 +517,28 @@ for (const route of sharedRoutes) {
     }
     const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
     if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
+    if (!route.preserveNavigation) {
+      const tabAudit = await page.evaluate(() => {
+        const lists = [...document.querySelectorAll('#shared-page-host .child-page.is-active [role="tablist"]')];
+        const issues = [];
+        const before = { x: window.scrollX, y: window.scrollY };
+        for (const list of lists) {
+          const tabs = [...list.querySelectorAll('[role="tab"]')];
+          if (!tabs.length) continue;
+          for (const tab of tabs) {
+            const label = tab.textContent.trim();
+            if (!/^\\p{N}+\\s*[·.]/u.test(label)) issues.push('tab label is missing its section number: ' + label);
+          }
+          const target = tabs.find(tab => !tab.disabled && tab.getAttribute('aria-selected') !== 'true');
+          if (target) target.click();
+          const selected = tabs.filter(tab => tab.getAttribute('aria-selected') === 'true');
+          if (selected.length !== 1) issues.push('tablist does not have exactly one selected tab');
+          if (window.scrollX !== before.x || window.scrollY !== before.y) issues.push('tab selection moved the document viewport');
+        }
+        return issues;
+      });
+      for (const issue of tabAudit) fail(`shared route ${route.route}: ${issue}`);
+    }
     measureRouteGeometry = async () => page.evaluate((selectors) => {
       const root = document.querySelector('#shared-page-host .child-page.is-active');
       const rectOf = (element) => {
