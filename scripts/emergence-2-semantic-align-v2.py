@@ -169,10 +169,7 @@ def main():
             'paragraphs': [
                 {
                     'index': index + 1,
-                    'fa': episode['lines'][index],
-                    'en': aligned['en'][index],
-                    'ar': aligned['ar'][index],
-                    'zh': aligned['zh'][index],
+                    'sourceLine': index + 1,
                     'alignment': {
                         'en': details['en'][index],
                         'ar': details['ar'][index],
