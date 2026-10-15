@@ -146,6 +146,14 @@ try {
     if ((await aliceScoreRow.locator('td').nth(2).innerText()).trim() !== '0') {
       fail(`${viewport.name}: sold badge still appears in Alice's owned-badge count`);
     }
+    // Return to Alice so the recognition checks begin from the same known turn.
+    const bobFollowupCard = page.locator('#fr-hand .fr-card').filter({ hasNotText: 'JOKER' }).first();
+    await bobFollowupCard.click();
+    await page.locator('[data-action="score"]').click();
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Alice');
 
     // Isolate the recognition UI from network credentials while exercising the shared adapter contract.
     await page.evaluate(() => {
