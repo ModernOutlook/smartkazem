@@ -7,6 +7,7 @@
         <button class="zero-back" id="zero-back" type="button" data-i18n="labels.back">بازگشت</button>
       </div>
     </header>
+    <nav class="zero-tabs" aria-label="فصل داستان" role="tablist"><button class="zero-tab" type="button" role="tab" aria-selected="true" aria-controls="zero-story"><span class="zero-tab-number"></span><span class="zero-tab-label" id="zero-tab-label">صفر</span></button></nav>
     <article class="zero-article" aria-labelledby="zero-title">
       <div class="zero-mark" aria-hidden="true">0</div>
       <h1 id="zero-title">صفر</h1>
