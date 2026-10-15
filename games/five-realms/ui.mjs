@@ -310,7 +310,10 @@ if (root && !root.dataset.initialized) {
     const opened=await window.SharedPages?.open?.("five-realms","share");
     if(!opened)return false;
     if(pendingBankResult){const result=pendingBankResult;pendingBankResult=null;pendingBankPlayerId=null;advance(result);}
-    else refresh();
+    else if(awaitingReveal&&!state.over){
+      $("#fr-pass-name").textContent=t("passTo","Pass the device to")+" "+current().name;
+      $("#fr-pass").hidden=false;$("#fr-play").hidden=true;$("#fr-setup").hidden=true;$("#fr-game-over").hidden=true;
+    } else refresh();
     return true;
   }
   window.FiveRealmsBankMachine=Object.freeze({
