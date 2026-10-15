@@ -63,7 +63,7 @@ test("badge discount, blue Ace 20% final-price discount, 95% resale and pool own
  p.badges.push({id:"blue-test-owned",realm:"blue",value:3,purchasePrice:0});
  const ownedAndAce=engine.buyBadge(state,p,"blue");
  assert.equal(ownedAndAce.ok,true);
- assert.equal(ownedAndAce.price,237.6); // 3 × (1 - 3 / (2 × 120)) × 0.8.
+ assert.equal(ownedAndAce.price,237); // 3 × (1 - 3 / (2 × 120)) × 0.8 = 2.37 points, stored as hundredths.
 });
 test("joker exchange keeps the joker and grants a chosen card from the deck",()=>{
  const engine=createEngine(config,{seed:7}),state=engine.newGame(["A","B"]),p=state.players[0];
