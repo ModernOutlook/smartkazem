@@ -1,8 +1,12 @@
 import { createEngine, REALM_IDS } from "./engine/index.mjs";
 
-const $ = (selector, root = document) => root.querySelector(selector);
-const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-const root = $("#five-realms-game");
+let root = null;
+const $ = (selector, scope = document) => scope.querySelector(selector) || root?.querySelector(selector) || null;
+const $ = (selector, scope = document) => {
+  const matches=[...scope.querySelectorAll(selector)];
+  return matches.length || scope!==document ? matches : root ? [...root.querySelectorAll(selector)] : [];
+};
+root = $("#five-realms-game");
 if (root && !root.dataset.initialized) {
   root.dataset.initialized = "true";
   const t = (key, fallback = "") => window.SiteI18n?.get("pages.fiveRealms." + key, fallback) || fallback;
