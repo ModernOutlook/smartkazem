@@ -296,7 +296,18 @@
       "fullyOwnedFree": "你拥有此领域的全部徽章，因此此题部分免费。",
       "luckyCard": "幸运牌",
       "bankNegativeFormula": "适用负利息公式（存款低于 1 分）"
-    }
+    ,
+    "questionGenerating": "正在生成段落并评估五个领域……",
+    "questionServiceUnavailable": "段落机器的识别流程当前不可用。",
+    "questionGenerationFailed": "段落机器未能生成有效段落。",
+    "questionJudgmentFailed": "五个领域的参考判断不完整或无效。",
+    "recognitionParagraph": "待识别段落",
+    "judgeFiveRealms": "判断五个领域",
+    "judgeAllRealms": "请为五个领域分别选择一种判断。",
+    "recognitionCorrect": "你的五个领域判断均与机器的参考判断一致。",
+    "recognitionIncorrect": "你的判断与机器的五个领域参考判断并不完全一致。",
+    "retry": "重试"
+  }
   },
   "paragraphMachine": {
     "title": "段落机器",
