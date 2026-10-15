@@ -97,7 +97,7 @@ function buildBookTabs(activeIndex = 0) {
     const button = createElement(
       'button',
       `book-tab${index === activeIndex ? ' active' : ''}`,
-      chapter.title
+      `${new Intl.NumberFormat(getCurrentLanguage()).format(chapter.number ?? index + 1)} · ${chapter.title}`
     );
 
     button.type = 'button';
@@ -185,12 +185,12 @@ function selectChapter(index) {
   }
 
   bookBody.setAttribute('role', 'tabpanel');
+  bookBody.tabIndex = 0;
   bookBody.setAttribute('aria-labelledby', `book-tab-${index}`);
   const language = getCurrentLanguage();
   bookBody.classList.toggle('lang-en', language === 'en');
   bookBody.dir = ['fa', 'ar'].includes(language) ? 'rtl' : 'ltr';
   bookBody.replaceChildren(fragment);
-  bookBody.scrollTop = 0;
 }
 
 function openBook(from = 'home', kind = BOOK_KINDS.FORGERS) {

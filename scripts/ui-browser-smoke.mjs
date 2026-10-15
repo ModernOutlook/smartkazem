@@ -31,13 +31,69 @@ const viewports = [
   { width: 390, height: 844, name: 'portrait' },
   { width: 430, height: 932, name: 'large portrait' },
   { width: 768, height: 1024, name: 'tablet portrait' },
+  { width: 640, height: 360, name: 'small phone landscape' },
   { width: 844, height: 390, name: 'phone landscape' },
   { width: 1024, height: 768, name: 'desktop threshold' },
+  { width: 900, height: 1200, name: 'desktop portrait' },
+  { width: 1200, height: 1600, name: 'large desktop portrait' },
   { width: 1365, height: 900, name: 'desktop' },
-];
+  { width: 1920, height: 1080, name: 'wide desktop' },
+]; 
+const allLanguageViewportNames = new Set(['small portrait', 'phone landscape', 'large desktop portrait', 'desktop']);
+const languagesForViewport = (viewport) => allLanguageViewportNames.has(viewport.name) ? languages : [languages[0]];
 
 let failures = 0;
 const fail = (message) => { failures++; console.error('FAIL ' + message); };
+
+const headerTargets = {
+  treatise: ['.treatise-brand', '.treatise-actions'],
+  shahnameh: ['.title', '.actions'],
+  emergence: ['.title', '.actions'],
+  observation25: ['.observation25-title', '.observation25-close'],
+  possibleMirror: ['.possible-mirror-title', '.possible-mirror-close'],
+  emergence2: ['.title', '.actions'],
+  observation: ['.book-title', '.book-close'],
+  layer3: ['.head-main', '.close'],
+  disturbedManifesto: ['.title', '.actions'],
+  zero: ['.zero-brand', '.zero-actions'],
+  inventory: ['.inventory-heading', '.inventory-home'],
+  'five-realms': ['.fr-head > div', '.fr-close'],
+  tadbir: ['.tadbir-head > div', '.tadbir-head .tadbir-button'],
+  'quantum-maze': ['.qm-page-head > div', '.qm-close'],
+  forgers: ['.book-title', '.book-close'],
+  humanMachines: ['.book-title', '.book-close'],
+  tabahian: ['.book-title', '.book-close'],
+};
+async function auditLanguageHeader(page, rootSelector, targetSelectors, label) {
+  const issues = await page.evaluate(({ rootSelector, targetSelectors }) => {
+    const language = document.querySelector('.lang-switch');
+    if (!language) return ['shared language selector is missing'];
+    const lr = language.getBoundingClientRect();
+    const intersects = (a, b) => a.left < b.right - 1 && a.right > b.left + 1 && a.top < b.bottom - 1 && a.bottom > b.top + 1;
+    const problems = [];
+    if (lr.left < -1 || lr.right > innerWidth + 1 || lr.top < -1 || lr.bottom > innerHeight + 1) {
+      problems.push('language selector is outside the viewport');
+    }
+    for (const button of language.querySelectorAll('[data-site-lang]')) {
+      const r = button.getBoundingClientRect();
+      if (r.width < 1 || r.height < 1 || r.left < -1 || r.right > innerWidth + 1) {
+        problems.push('language button is clipped: ' + button.dataset.siteLang);
+      }
+    }
+    const root = document.querySelector(rootSelector);
+    if (!root) return problems.concat('page root not found: ' + rootSelector);
+    for (const selector of targetSelectors) {
+      const element = root.matches(selector) ? root : root.querySelector(selector);
+      if (!element) continue;
+      const r = element.getBoundingClientRect();
+      if (r.width && r.height && intersects(lr, r)) {
+        problems.push('language selector overlaps ' + selector);
+      }
+    }
+    return problems;
+  }, { rootSelector, targetSelectors });
+  for (const issue of issues) fail(label + ': ' + issue);
+}
 const browser = await chromium.launch({ headless: true });
 const context = await browser.newContext({ reducedMotion: 'reduce' });
 
@@ -253,9 +309,48 @@ try {
           await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
           compareGeometry(baseline, await measure(selectors), realm.id + ' realm RTL/LTR ' + language.code);
         }
+        const realmHeaderTargets = {
+          structure: ['.structure-title', '.structure-close'],
+          continuity: ['.continuity-title', '.continuity-close'],
+          experience: ['.experience-title', '.experience-close'],
+          reference: ['.reference-title', '.reference-close'],
+          share: ['.share-title', '.share-close'],
+        };
+        for (const viewport of viewports) {
+          await page.setViewportSize({ width: viewport.width, height: viewport.height });
+          await page.waitForTimeout(60);
+          for (const language of languagesForViewport(viewport)) {
+            await page.locator('[data-site-lang="' + language.code + '"]').click();
+            await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+            await auditLanguageHeader(page, realm.root, realmHeaderTargets[realm.id], realm.id + ' realm @ ' + viewport.name + ' ' + language.code);
+          }
+        }
         await page.locator(realm.close).click();
         await page.waitForFunction(() => document.querySelector('#home-page')?.classList.contains('is-active'));
       }
+      for (const viewport of viewports) {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.waitForTimeout(60);
+        for (const language of languagesForViewport(viewport)) {
+          await page.locator('[data-site-lang="' + language.code + '"]').click();
+          await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+          await auditLanguageHeader(page, '#home-page', ['.topbar #x-social'], 'home @ ' + viewport.name + ' ' + language.code);
+        }
+      }
+      await page.evaluate(() => {
+        document.querySelectorAll('#app > .page').forEach(element => element.classList.remove('is-active'));
+        document.querySelector('#paragraph-page')?.classList.add('is-active');
+      });
+      for (const viewport of viewports) {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.waitForTimeout(60);
+        for (const language of languagesForViewport(viewport)) {
+          await page.locator('[data-site-lang="' + language.code + '"]').click();
+          await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language);
+          await auditLanguageHeader(page, '#paragraph-page', ['.paragraph-head > div', '#paragraph-close'], 'Paragraph Machine @ ' + viewport.name + ' ' + language.code);
+        }
+      }
+      await page.locator('#paragraph-close').click();
     }
     if (pageErrors.length) {
       fail(`${file}: browser runtime exception(s): ${pageErrors.slice(0, 3).join(' | ')}`);
@@ -280,6 +375,9 @@ const sharedRoutes = [
   { route: 'disturbedManifesto', content: '#part-list', close: '#manifesto-close', measure: ['.disturbed-manifesto-page', '.top', '.reader'] },
   { route: 'zero', content: '#zero-story', close: '#zero-back', measure: ['.zero-page', '.zero-header', '.zero-article'] },
   { route: 'inventory', content: '#inventory-grid', close: 'a.inventory-home' },
+  { route: 'five-realms', content: '#five-realms-game', close: '#five-realms-close' },
+  { route: 'tadbir', content: '.tadbir-shell', close: '#tadbir-close' },
+  { route: 'quantum-maze', content: '#quantum-maze-game', close: '#quantum-maze-close' },
 ];
 
 async function auditCanonicalRoute(page, route, language) {
@@ -293,7 +391,7 @@ async function auditCanonicalRoute(page, route, language) {
         && rendered.every((node) => node.textContent.trim().length > 0);
     }, language, { timeout: 7000 });
   }
-  return page.evaluate(({ route, language }) => {
+  return page.evaluate(async ({ route, language }) => {
     const catalog = window.SiteI18n?.getCatalog?.() || {};
     const issues = [];
     const same = (actual, expected, label) => {
@@ -416,7 +514,9 @@ async function auditCanonicalRoute(page, route, language) {
 
     if (route === 'layer3') {
       const source = window.EchoLayer3Content;
-      const book = catalog.bookContent?.layer3 || catalog.chapters?.layer3 || {};
+      const reservoirResponse = await fetch('translations/echo-layer3.json', { cache: 'no-store' });
+      const reservoir = reservoirResponse.ok ? await reservoirResponse.json() : {};
+      const book = catalog.bookContent?.layer3 || catalog.chapters?.layer3 || reservoir;
       const chapter = source?.chapters?.[0];
       const buttons = [...document.querySelectorAll('#parts .part')];
       const expectedTitle = book.title?.[lang] || catalog.pages?.layer3?.title || '';
@@ -426,7 +526,7 @@ async function auditCanonicalRoute(page, route, language) {
       for (let i = 0; i < Math.min(buttons.length, chapter?.parts?.length || 0); i++) {
         buttons[i].click();
         const part = chapter.parts[i];
-        const translatedPart = book.parts?.[i];
+        const translatedPart = reservoir.parts?.[i] || book.parts?.[i];
         const expectedHeading = translatedPart?.title?.[lang] || catalog.pages?.layer3?.sections?.[i] || part.titleFallback;
         const expectedParagraphs = lang === 'fa' ? part.text : (translatedPart?.paragraphs?.[lang] || []);
         const actualHeading = document.querySelector('#reader .story h2')?.textContent?.replace(/^\d+\s*\.\s*/, '').trim() || '';
@@ -517,6 +617,30 @@ for (const route of sharedRoutes) {
     }
     const initialContent = await page.waitForFunction((selector) => { const el = document.querySelector(selector); return Boolean(el && (el.textContent.trim() || el.children.length)); }, route.content, { timeout: 5000 }).then(() => true).catch(() => false);
     if (!initialContent) fail(`shared route ${route.route}: content region is empty after mount`);
+    if (!route.preserveNavigation) {
+      const tabAudit = await page.evaluate(() => {
+        const lists = [...document.querySelectorAll('#shared-page-host .child-page.is-active [role="tablist"]')];
+        const issues = [];
+        const before = { x: window.scrollX, y: window.scrollY };
+        for (const list of lists) {
+          const tabs = [...list.querySelectorAll('[role="tab"]')];
+          if (!tabs.length) continue;
+          for (const tab of tabs) {
+            const label = tab.textContent.trim();
+            if (!/^\p{N}+\s*[·.]/u.test(label)) issues.push('tab label is missing its section number: ' + label);
+          }
+          const target = tabs.find(tab => !tab.disabled && tab.getAttribute('aria-selected') !== 'true');
+          if (target) target.click();
+          const selected = tabs.filter(tab => tab.getAttribute('aria-selected') === 'true');
+          if (selected.length !== 1) issues.push('tablist does not have exactly one selected tab');
+          if (window.scrollX !== before.x || window.scrollY !== before.y) issues.push('tab selection moved the document viewport');
+          tabs[0]?.click();
+          if (window.scrollX !== before.x || window.scrollY !== before.y) issues.push('restoring the first tab moved the document viewport');
+        }
+        return issues;
+      });
+      for (const issue of tabAudit) fail(`shared route ${route.route}: ${issue}`);
+    }
     measureRouteGeometry = async () => page.evaluate((selectors) => {
       const root = document.querySelector('#shared-page-host .child-page.is-active');
       const rectOf = (element) => {
@@ -828,6 +952,11 @@ for (const book of sharedBooks) {
   for (const viewport of viewports) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.waitForTimeout(75);
+    for (const language of languagesForViewport(viewport)) {
+      await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
+      await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language, { timeout: 5000 });
+      await auditLanguageHeader(page, '#book-page.is-active', ['.book-head .book-title', '.book-head .book-close'], `shared book ${book.kind} @ ${viewport.name} ${language.code}`);
+    }
     const metrics = await page.evaluate(() => ({ innerWidth: innerWidth, documentWidth: document.documentElement.scrollWidth }));
     if (metrics.documentWidth > metrics.innerWidth + 2) fail(`shared book ${book.kind} @ ${viewport.name}: horizontal overflow ${metrics.documentWidth}>${metrics.innerWidth}`);
   }
@@ -851,6 +980,11 @@ for (const book of sharedBooks) {
     for (const viewport of viewports) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.waitForTimeout(100);
+      for (const language of languagesForViewport(viewport)) {
+        await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
+        await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language, { timeout: 5000 });
+        await auditLanguageHeader(page, '#shared-page-host .child-page.is-active', headerTargets[route.route] || ['header:first-of-type'], `shared route ${route.route} @ ${viewport.name} ${language.code}`);
+      }
       const metrics = await page.evaluate(() => ({
         innerWidth: window.innerWidth,
         documentWidth: document.documentElement.scrollWidth,

@@ -13,3 +13,9 @@
 
 :focus-visible{outline:3px solid #f0d58b;outline-offset:3px}.episode[aria-current="true"]{box-shadow:0 0 0 2px rgba(240,213,139,.65)}@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 .skip-link{position:absolute;z-index:1000;top:8px;left:8px;transform:translateY(-160%);padding:10px 14px;border-radius:8px;background:#f0d58b;color:#111;font-weight:700}.skip-link:focus{transform:translateY(0);outline:3px solid #fff;outline-offset:3px}
+
+
+.episode-list{display:flex;flex-wrap:wrap;gap:8px}.episode{aspect-ratio:auto;min-height:42px;max-width:100%;padding:9px 13px;display:inline-flex;align-items:center;justify-content:center;white-space:normal;text-align:start;line-height:1.55}.episode[role=tab]{flex:0 1 auto}
+
+
+.emergence-page,.emergence-page .reader{overflow-anchor:none}

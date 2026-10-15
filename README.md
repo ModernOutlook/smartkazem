@@ -243,7 +243,7 @@ The original JPEGs remain in their existing PR paths rather than being re-encode
 
 ### Verification targets
 
-The responsive visual matrix is 1440 × 900, 390 × 844, and 844 × 390. Validate every child surface, direct URL and in-site entry, all four site languages, RTL/LTR, focus visibility, dialogs, return-to-parent navigation, no horizontal overflow, and successful requests for the five JPEGs. Browser/device verification must be reported separately from automated CI; a passing lint job alone is not visual or TalkBack evidence.
+The responsive visual matrix includes 320 × 740, 360 × 800, 390 × 844, 430 × 932, 640 × 360, 844 × 390, 768 × 1024, 900 × 1200, 1024 × 768, 1200 × 1600, 1365 × 900, 1440 × 900, and 1920 × 1080. Validate every child surface, direct URL and in-site entry, all four site languages, RTL/LTR, focus visibility, dialogs, return-to-parent navigation, no horizontal overflow, and successful requests for the five JPEGs. Browser/device verification must be reported separately from automated CI; a passing lint job alone is not visual or TalkBack evidence.
 
 ## 8. Paragraph Machine contract
 
@@ -307,7 +307,7 @@ Every layout change must consider:
 
 Preserve semantic buttons, type="button", keyboard interaction, appropriate aria-label/aria-pressed/aria-live, visible focus, and correct lang/dir.
 
-The landing-page language control is especially sensitive to narrow portrait widths, RTL/LTR, long labels, and header positioning. Child pages must not contain their own language selector.
+The landing-page language control is especially sensitive to narrow portrait widths, RTL/LTR, long labels, and header positioning. Child pages must not contain their own language selector. The single fixed selector owns a reserved top band of `64px + env(safe-area-inset-top)` across every orientation and breakpoint. All child-page, realm, and game headers must place their visible titles and actions below that band; do not rely on portrait-only offsets or allow the selector to cover header content. Keep the four language buttons on one visible row and within the viewport.
 
 ## 12. Security
 
@@ -362,7 +362,7 @@ These are boundaries, not reasons for opportunistic rewrites.
 ### After editing
 Verify as applicable: JS syntax, JSON validity, HTML structure, local assets, language switching, affected navigation, mobile/desktop, RTL/LTR, accessibility, and the quality/security gates. If a presentation change can be made without touching behavior, keep it in CSS.
 
-Verify the landing-page language selector in portrait/landscape and RTL/LTR, then confirm that all child pages inherit the selected language without rendering their own language controls.
+Verify the landing-page language selector in portrait/landscape and RTL/LTR, then confirm that all child pages inherit the selected language without rendering their own language controls. At every responsive viewport and in all four languages, assert that the selector remains fully visible and does not intersect any page-header title or action.
 
 For Paragraph Machine also verify evaluation/generation paths, S/T/E/R/C judgment, 144/34/900 limits, translation boundary, and batch cardinality.
 
@@ -610,3 +610,55 @@ The browser workflow runs Playwright against the PR branch served by a local HTT
 
 **Emergence II paragraph contract:** every non-empty line in each Persian source episode is a paragraph, including lines separated by a single newline. Blank lines are separators and are not paragraphs. Each EN/AR/ZH episode must expose the same number of paragraphs in the same order. The alignment utility splits existing translated text at sentence boundaries and monotonically regroups those unchanged sentence units to the Persian line count; it does not generate, summarize, rewrite, or reorder translation prose. Chinese sentence splitting recognizes 。！？ without requiring spaces. The browser audit checks exact rendered paragraph arrays in all four languages.
 
+
+
+## Content-section navigation contract
+
+Every text-bearing secondary page uses a consistent, localized section-navigation pattern, except **شاهنامه‌خوانی**, whose episode-list and artwork navigation are a deliberate separate experience. The Paragraph Machine is a tool/workspace, not a content page, and is outside this rule.
+
+- Each tab or section heading displays both the localized section number and its canonical name (for example, `۳ · عنوان بخش`). Numbers use the active language's number formatter.
+- Selecting a tab changes only the content visible in its reading panel. It must not call `scrollIntoView`, reset a reader's `scrollTop`, move focus to the reading panel, or otherwise move the document viewport. Keyboard navigation keeps focus on the selected tab with `focus({ preventScroll: true })`.
+- Multi-section books use their existing canonical chapter/part/episode/section data. Do not invent headings, reorder content, or split/merge source paragraphs to create navigation.
+- Works whose canonical source is one continuous, undivided text retain one numbered tab for the complete work; this applies to **سرزمین مشاهده؛ یک رود، یک جریان** and **صفر**. Their prose remains intact and is not artificially divided.
+- The shared book reader (`جاعلان تقلید`, `انسان و ماشین‌هایش`, and `تباهیان`), **رساله فلسفی**, **فصل اول ظهور**, **فصل دوم ظهور**, **سرزمین مشاهده؛ ۲۵ بار رسیدن**, **آینه‌ی ممکن‌ها**, **پژواک لایه سوم**, and **مانیفست آشوب‌زده** all follow the same no-scroll selection behavior.
+- Tabs must retain semantic tablist/tab/tabpanel relationships, visible focus, RTL/LTR behavior, mobile wrapping/overflow, and the selected section when the language changes.
+
+The implementation inventory and page-by-page verification criteria are maintained in `docs/content-tab-navigation-audit.md`.
+
+## Secondary content-page cover artwork (3:4)
+
+Every secondary page whose primary purpose is reading a textual work must end with one dedicated **3:4 cover frame**. The frame belongs after the complete work content and its navigation, at the true end of the page; it must not interrupt the article or appear between sections. It uses the same shared page structure and remains responsive in portrait, landscape, tablet, and desktop layouts.
+
+**Explicit exclusions:** `شاهنامه‌خوانی` keeps its existing episode-artwork experience and does not receive this additional cover frame. The Paragraph Machine is a functional workspace, not a textual-content page, and is also excluded. Home, realm landing pages, games, inventory, and utility panels are not in scope.
+
+### Canonical upload location
+
+Upload all page-cover images to:
+
+`content/page-templates/`
+
+Use the exact lowercase ASCII filenames below, with the `.jpg` extension. The path is relative to the repository root and must be referenced without hard-coded deployment-domain prefixes so GitHub Pages subpath deployment continues to work.
+
+| Textual page | Required cover filename |
+|---|---|
+| رساله فلسفی | `philosophical-treatise.jpg` |
+| فصل اول ظهور | `emergence-1.jpg` |
+| سرزمین مشاهده؛ ۲۵ بار رسیدن | `observation-25.jpg` |
+| آینه‌ی ممکن‌ها | `possible-mirror.jpg` |
+| فصل دوم ظهور | `emergence-2.jpg` |
+| سرزمین مشاهده؛ یک رود، یک جریان | `observation-river.jpg` |
+| پژواک لایه سوم | `echo-layer-3.jpg` |
+| انسان و ماشین‌هایش | `human-and-its-machines.jpg` |
+| جاعلان تقلید | `forgers-of-imitation.jpg` |
+| تباهیان | `tabahian.jpg` |
+| مانیفست آشوب‌زده | `disturbed-manifesto.jpg` |
+| صفر | `zero.jpg` |
+
+### Image and rendering contract
+
+- Each cover asset is a portrait image intended for a **3:4** frame. The frame must retain that aspect ratio at every viewport size; it must never stretch the image or cause horizontal overflow.
+- Keep the original uploaded image unchanged. Use a predictable, accessible image element with meaningful localized alternative text derived from the page's canonical title; do not duplicate article prose in the alt text.
+- The frame is a presentation element only. It must not alter the canonical Persian source, translation reservoirs, section order, page navigation, language selection, or shared Talk Back behavior.
+- If an image has not yet been uploaded, retain the reserved 3:4 frame as a neutral, non-interactive placeholder; do not show a broken-image icon or invent replacement artwork.
+- When a new textual-content child page is added, include the same end-of-page 3:4 cover frame, propose its unique lowercase ASCII kebab-case filename, and add that filename to this README table before requesting/uploading the image. Reuse the same `content/page-templates/` directory; do not create per-page image folders.
+- شاهنامه‌خوانی and the Paragraph Machine remain excluded unless the user explicitly changes this scope.

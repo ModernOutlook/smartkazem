@@ -32,6 +32,12 @@
     return translated?.[activeIndex] || null;
   }
 
+  function activePartForIndex(index) {
+    if (language() === 'fa') return source.parts[index];
+    const translated = catalog()?.chapters?.disturbedManifesto?.parts?.[language()];
+    return translated?.[index] || source.parts[index];
+  }
+
   function activeTitle() {
     if (language() === 'fa') return source.title;
     return catalog()?.chapters?.disturbedManifesto?.title?.[language()] ||
@@ -51,6 +57,9 @@
     const lang = language();
 
     reader.replaceChildren();
+    reader.setAttribute('role', 'tabpanel');
+    reader.tabIndex = 0;
+    reader.setAttribute('aria-labelledby', `manifesto-tab-${activeIndex}`);
 
     if (!part) {
       const fallback = createText(
@@ -63,8 +72,6 @@
       reader.appendChild(fallback);
       return;
     }
-
-    reader.setAttribute('aria-labelledby', 'manifesto-reader-heading');
 
     const header = document.createElement('header');
     header.className = 'reader-head';
@@ -136,18 +143,19 @@
 
     document.querySelectorAll('.part').forEach((button, index) => {
       const active = index === activeIndex;
+      const part = activePartForIndex(index) || source.parts[index];
       button.classList.toggle('active', active);
-      button.textContent = siteNumber(source.parts[index].number);
+      button.setAttribute('role', 'tab');
+      button.setAttribute('aria-selected', String(active));
+      button.tabIndex = active ? 0 : -1;
+      button.textContent = `${siteNumber(part.number)} · ${part.title}`;
 
       if (active) button.setAttribute('aria-current', 'step');
       else button.removeAttribute('aria-current');
 
       const number = siteNumber(source.parts[index].number);
 
-      button.setAttribute(
-        'aria-label',
-        label('goToPart', 'Go to part ') + number
-      );
+      button.setAttribute('aria-label', `${number} · ${activePartForIndex(index)?.title || ''}`);
     });
 
     renderReader();
@@ -159,15 +167,21 @@
     activeIndex = index;
     render();
 
-    if (moveFocus) reader.focus({ preventScroll: false });
+    if (moveFocus) list.children[index]?.focus({ preventScroll: true });
   }
 
+  list.setAttribute('role', 'tablist');
+  list.setAttribute('aria-orientation', 'horizontal');
   source.parts.forEach((part, index) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'part';
-    button.textContent = siteNumber(part.number);
+    button.id = `manifesto-tab-${index}`;
+    button.textContent = `${siteNumber(part.number)} · ${part.title}`;
+    button.setAttribute('role', 'tab');
     button.setAttribute('aria-controls', 'reader');
+    button.setAttribute('aria-selected', String(index === activeIndex));
+    button.tabIndex = index === activeIndex ? 0 : -1;
 
     button.addEventListener('click', () => select(index));
 
