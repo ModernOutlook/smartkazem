@@ -30,3 +30,6 @@ body[data-mode="zh"] .fa,body[data-mode="zh"] .ar,body[data-mode="zh"] .en{displ
 body[data-mode="zh"] .book-title,body[data-mode="zh"] .book-tab{font-family:Vazirmatn,Tahoma,sans-serif}
 
 .observation-tabs{display:flex;gap:8px;align-items:center;padding:8px 18px 0}.observation-tab{display:inline-flex;align-items:center;gap:.55rem;min-height:40px;padding:8px 14px;border:1px solid rgba(231,255,192,.28);border-radius:9px;background:rgba(4,37,30,.74);color:#efffe0;font:inherit;font-weight:700}.observation-tab .tab-number{opacity:.75;font-variant-numeric:tabular-nums}
+
+
+.observation-page,.observation-page .book-body{overflow-anchor:none}
