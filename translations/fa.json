@@ -310,7 +310,18 @@
       "fullyOwnedFree": "چون همهٔ نشان‌های این قلمرو را دارید، این بخش رایگان است.",
       "luckyCard": "کارت بخت",
       "bankNegativeFormula": "فرمول سود منفی است (سپرده کمتر از یک امتیاز)"
-    }
+    ,
+    "questionGenerating": "در حال تولید پاراگراف و ارزیابی پنج قلمرو...",
+    "questionServiceUnavailable": "مسیر بازشناسی ماشین پاراگراف در دسترس نیست.",
+    "questionGenerationFailed": "ماشین پاراگراف متنی معتبر تولید نکرد.",
+    "questionJudgmentFailed": "داوری مرجع پنج قلمرو کامل یا معتبر نیست.",
+    "recognitionParagraph": "پاراگراف برای بازشناسی",
+    "judgeFiveRealms": "قضاوت پنج قلمرو",
+    "judgeAllRealms": "برای هر پنج قلمرو یک قضاوت انتخاب کنید.",
+    "recognitionCorrect": "قضاوت شما در هر پنج قلمرو با داوری مرجع ماشین منطبق است.",
+    "recognitionIncorrect": "قضاوت شما با داوری مرجع ماشین در هر پنج قلمرو منطبق نیست.",
+    "retry": "تلاش دوباره"
+  }
   },
   "paragraphMachine": {
     "title": "ماشین پاراگراف",
