@@ -76,8 +76,8 @@ def align(source_lines, original_paragraphs, episode, lang):
             f'for {source_count} non-empty Persian source lines'
         )
 
-    source_lengths = [max(1, len(re.sub(r'\\s+', '', line))) for line in source_lines]
-    target_lengths = [max(1, len(re.sub(r'\\s+', '', unit))) for unit in target_units]
+    source_lengths = [max(1, len(re.sub(r'\s+', '', line))) for line in source_lines]
+    target_lengths = [max(1, len(re.sub(r'\s+', '', unit))) for unit in target_units]
     ratio = sum(target_lengths) / sum(source_lengths)
 
     infinity = 10**18
@@ -128,8 +128,8 @@ def align(source_lines, original_paragraphs, episode, lang):
 
     # Prove that alignment only changes boundaries: no translated characters
     # may be added, deleted, or reordered.
-    before = ''.join(re.sub(r'\\s+', '', str(value)) for value in original_paragraphs)
-    after = ''.join(re.sub(r'\\s+', '', value) for value in aligned)
+    before = ''.join(re.sub(r'\s+', '', str(value)) for value in original_paragraphs)
+    after = ''.join(re.sub(r'\s+', '', value) for value in aligned)
     if before != after:
         raise RuntimeError(f'Episode {episode} {lang}: translated text changed during alignment')
     return aligned, details
@@ -188,8 +188,8 @@ def main():
             f"AR={len(aligned['ar'])} ZH={len(aligned['zh'])}"
         )
 
-    TRANSLATIONS.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\\n', encoding='utf-8')
-    MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\\n', encoding='utf-8')
+    TRANSLATIONS.write_text(json.dumps(data, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    MANIFEST.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
 
 
 if __name__ == '__main__':
