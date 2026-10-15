@@ -331,3 +331,66 @@ html[dir="ltr"] .share-page .share-story-action {
 
 /* Shared child-page fragments participate in the app's single page stack. */
 #shared-page-host { display: contents; }
+
+
+/* Reserve a real header band for the one site-wide language control.
+   The control is viewport-fixed; every page header starts below its hit area
+   in portrait, landscape, tablet and desktop layouts. */
+:root {
+  --ui-language-clearance: calc(64px + var(--ui-safe-top));
+}
+.lang-switch {
+  top: calc(10px + var(--ui-safe-top));
+  left: 50%;
+  right: auto;
+  max-width: calc(100vw - 16px);
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+.lang-switch button {
+  flex: 0 0 auto;
+  min-height: 40px;
+  padding: 6px 9px;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+/* In-flow page headers: create space above their content, not by overlaying
+   the title, back button, or other header controls. */
+#shared-page-host .child-page .book-head,
+#shared-page-host .child-page .head {
+  padding-top: var(--ui-language-clearance);
+}
+#shared-page-host .child-page .shell > header.top {
+  padding-top: var(--ui-language-clearance);
+}
+#shared-page-host .child-page .treatise-shell,
+#shared-page-host .child-page .zero-shell {
+  padding-top: var(--ui-language-clearance);
+}
+#shared-page-host .child-page.inventory-page {
+  padding-top: var(--ui-language-clearance);
+}
+#shared-page-host .child-page.fr-page {
+  padding-top: var(--ui-language-clearance);
+}
+
+/* Absolute realm/story headers are placed beneath the language-control band
+   on every viewport, including desktop and landscape phones. */
+#shared-page-host .child-page:is(.observation25-page,.possible-mirror-page) > header,
+#shared-page-host .child-page .observation25-head,
+#shared-page-host .child-page .possible-mirror-head,
+.structure-page .structure-head,
+.continuity-page .continuity-head,
+.experience-page .experience-head,
+.reference-page .reference-head,
+.share-page .share-head {
+  top: var(--ui-language-clearance);
+}
+
+@media (orientation: landscape) and (max-width: 1023px) {
+  #shared-page-host .observation25-shell,
+  #shared-page-host .possible-mirror-shell {
+    top: calc(var(--ui-language-clearance) + 56px);
+  }
+}
