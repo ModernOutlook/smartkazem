@@ -433,7 +433,7 @@ window.EchoLayer3Content={
    return translated||null;
  }
  function focusReader(){
-   requestAnimationFrame(()=>reader.focus({preventScroll:true}));
+   requestAnimationFrame(()=>parts.children[activePart]?.focus({preventScroll:true}));
  }
  function render(){
    const lang=language(),d=layer(),source=C,book=chapterCatalog();
