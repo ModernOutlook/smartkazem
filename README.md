@@ -243,7 +243,7 @@ The original JPEGs remain in their existing PR paths rather than being re-encode
 
 ### Verification targets
 
-The responsive visual matrix is 1440 × 900, 390 × 844, and 844 × 390. Validate every child surface, direct URL and in-site entry, all four site languages, RTL/LTR, focus visibility, dialogs, return-to-parent navigation, no horizontal overflow, and successful requests for the five JPEGs. Browser/device verification must be reported separately from automated CI; a passing lint job alone is not visual or TalkBack evidence.
+The responsive visual matrix includes 320 × 740, 360 × 800, 390 × 844, 430 × 932, 640 × 360, 844 × 390, 768 × 1024, 900 × 1200, 1024 × 768, 1200 × 1600, 1365 × 900, 1440 × 900, and 1920 × 1080. Validate every child surface, direct URL and in-site entry, all four site languages, RTL/LTR, focus visibility, dialogs, return-to-parent navigation, no horizontal overflow, and successful requests for the five JPEGs. Browser/device verification must be reported separately from automated CI; a passing lint job alone is not visual or TalkBack evidence.
 
 ## 8. Paragraph Machine contract
 
@@ -307,7 +307,7 @@ Every layout change must consider:
 
 Preserve semantic buttons, type="button", keyboard interaction, appropriate aria-label/aria-pressed/aria-live, visible focus, and correct lang/dir.
 
-The landing-page language control is especially sensitive to narrow portrait widths, RTL/LTR, long labels, and header positioning. Child pages must not contain their own language selector.
+The landing-page language control is especially sensitive to narrow portrait widths, RTL/LTR, long labels, and header positioning. Child pages must not contain their own language selector. The single fixed selector owns a reserved top band of `64px + env(safe-area-inset-top)` across every orientation and breakpoint. All child-page, realm, and game headers must place their visible titles and actions below that band; do not rely on portrait-only offsets or allow the selector to cover header content. Keep the four language buttons on one visible row and within the viewport.
 
 ## 12. Security
 
@@ -362,7 +362,7 @@ These are boundaries, not reasons for opportunistic rewrites.
 ### After editing
 Verify as applicable: JS syntax, JSON validity, HTML structure, local assets, language switching, affected navigation, mobile/desktop, RTL/LTR, accessibility, and the quality/security gates. If a presentation change can be made without touching behavior, keep it in CSS.
 
-Verify the landing-page language selector in portrait/landscape and RTL/LTR, then confirm that all child pages inherit the selected language without rendering their own language controls.
+Verify the landing-page language selector in portrait/landscape and RTL/LTR, then confirm that all child pages inherit the selected language without rendering their own language controls. At every responsive viewport and in all four languages, assert that the selector remains fully visible and does not intersect any page-header title or action.
 
 For Paragraph Machine also verify evaluation/generation paths, S/T/E/R/C judgment, 144/34/900 limits, translation boundary, and batch cardinality.
 
