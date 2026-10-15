@@ -55,6 +55,17 @@ try {
     await page.locator('#fr-action-form button').last().click();
     await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
     if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) fail(`${viewport.name}: turn handoff did not name player two`);
+    if (await page.locator('#continuity-tadbir[data-tadbir-link]').count() !== 1) {
+      fail(`${viewport.name}: Continuity realm does not expose the Tadbir entry button`);
+    }
+    await page.evaluate(() => window.SharedPages.open('tadbir', 'continuity'));
+    await page.waitForSelector('#tadbir-title');
+    await page.waitForFunction(() => !document.querySelector('#tadbir-return-game')?.hidden);
+    await page.locator('#tadbir-return-game').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden && document.querySelector('#fr-play').hidden);
+    if ((await page.locator('#fr-pass-name').innerText()).indexOf('Browser Bob') < 0) {
+      fail(`${viewport.name}: returning from Tadbir exposed the next player's hand instead of preserving handoff`);
+    }
     await page.locator('#fr-reveal').click();
     await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Bob');
     if (await page.locator('#fr-hand .fr-card').count() !== 5) fail(`${viewport.name}: second player's hand was not rendered`);
