@@ -1666,20 +1666,34 @@ function labelSet(){
 function renderList(){
   const chapter=chapterCatalog();
   const lang=languageCode();
-  list.innerHTML='';
+  list.setAttribute('role','tablist');
+  list.setAttribute('aria-orientation','horizontal');
+  let buttons=[...list.querySelectorAll('button')];
+  if(buttons.length!==episodes.length){
+    list.replaceChildren();
+    episodes.forEach((ep,i)=>{
+      const b=document.createElement('button');
+      b.className='episode';
+      b.type='button';
+      b.id=`emergence-episode-tab-${i}`;
+      b.setAttribute('role','tab');
+      b.setAttribute('aria-controls','reader');
+      b.addEventListener('click',()=>select(i,false));
+      list.appendChild(b);
+    });
+    buttons=[...list.querySelectorAll('button')];
+  }
   episodes.forEach((ep,i)=>{
     const translated=chapter.episodes?.find(item=>item.number===ep.number);
     const title=translated?.title?.[lang] || ep.title;
-    const b=document.createElement('button');
-    b.className='episode'+(i===current?' active':'');
-    b.type='button';
-    b.setAttribute('aria-label',`${title} — ${siteNumber(i+1)} / ${siteNumber(episodes.length)}`);
-    b.setAttribute('aria-controls','reader');
-    if(i===current) b.setAttribute('aria-current','step');
+    const b=buttons[i];
+    const active=i===current;
+    b.textContent=`${siteNumber(ep.number)} · ${title}`;
+    b.setAttribute('aria-label',`${siteNumber(ep.number)} · ${title}`);
+    b.setAttribute('aria-selected',String(active));
+    b.tabIndex=active?0:-1;
+    if(active)b.setAttribute('aria-current','step');
     else b.removeAttribute('aria-current');
-    b.innerHTML=`<span class="n">${siteNumber(ep.number)}</span>`;
-    b.addEventListener('click',()=>select(i,true));
-    list.appendChild(b);
   });
 }
 function render(){
@@ -1703,7 +1717,7 @@ function render(){
   const body=paragraphs.length
     ? paragraphs.map(p=>`<p class="prose">${p}</p>`).join('')
     : `<div class="placeholder">${placeholder.replace(/\n/g,'<br>')}</div>`;
-  reader.setAttribute('aria-label',labels.reader);
+  reader.setAttribute('role','tabpanel');\n  reader.setAttribute('aria-label',labels.reader);\n  reader.setAttribute('aria-labelledby',`emergence-episode-tab-${current}`);
   reader.innerHTML=`<div class="reader-head"><div><div class="story-label">${chapterTitle}</div><h2 id="episode-reader-heading">${title}</h2><p>${storyDescription}</p></div></div><div class="block">${body}</div>`;
   reader.setAttribute('aria-labelledby','episode-reader-heading');
   document.querySelector('.title h1').textContent=chapterTitle;
