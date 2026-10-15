@@ -4,7 +4,6 @@
   const closeButton = document.getElementById('close');
   const tabs = [...document.querySelectorAll('#tabs .book-tab')];
   const body = document.getElementById('body');
-  const treatiseStarts = Object.freeze([0, 17, 48, 69, 103, 126, 146]);
   const observationTab = document.querySelector('#observation-tabs .observation-tab');
 
   function closePage() {
@@ -19,8 +18,10 @@
   function applySelection(index) {
     if (!tabs.length || !body) return;
     const pairs = [...body.querySelectorAll('.pair[data-block-index]')];
-    const start = treatiseStarts[index] ?? 0;
-    const end = treatiseStarts[index + 1] ?? Infinity;
+    const start = index === 0 ? 0 : Number(document.getElementById(tabs[index]?.dataset.target)?.dataset.blockIndex ?? 0);
+    const end = index + 1 < tabs.length
+      ? Number(document.getElementById(tabs[index + 1]?.dataset.target)?.dataset.blockIndex ?? Infinity)
+      : Infinity;
 
     tabs.forEach((tab, tabIndex) => {
       const active = tabIndex === index;
