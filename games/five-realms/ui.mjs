@@ -2,7 +2,7 @@ import { createEngine, REALM_IDS } from "./engine/index.mjs";
 
 let root = null;
 const $ = (selector, scope = document) => scope.querySelector(selector) || root?.querySelector(selector) || null;
-const $ = (selector, scope = document) => {
+const $$ = (selector, scope = document) => {
   const matches=[...scope.querySelectorAll(selector)];
   return matches.length || scope!==document ? matches : root ? [...root.querySelectorAll(selector)] : [];
 };
