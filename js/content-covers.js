@@ -31,7 +31,7 @@
     const figure = document.createElement('figure');
     figure.className = 'content-cover';
     figure.dataset.contentCover = filename;
-    figure.setAttribute('aria-label', title ? 'Cover image: ' + title : 'Content cover');
+    if (title) figure.setAttribute('aria-label', title);
 
     const image = document.createElement('img');
     image.src = new URL('content/page-templates/' + filename, document.baseURI).href;
