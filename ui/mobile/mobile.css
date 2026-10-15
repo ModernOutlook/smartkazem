@@ -304,11 +304,11 @@
 /* Secondary page headers: reserve the language-control area in mobile portrait. */
 @media (orientation: portrait) and (max-width: 1023px) {
   .book-head {
-    padding-top: calc(56px + var(--ui-safe-top));
+    padding-top: calc(64px + var(--ui-safe-top));
   }
 
   .observation25-head {
-    top: calc(56px + var(--ui-safe-top));
+    top: calc(64px + var(--ui-safe-top));
     left: calc(12px + var(--ui-safe-left));
     right: calc(12px + var(--ui-safe-right));
   }
