@@ -5,6 +5,7 @@
   const tabs = [...document.querySelectorAll('#tabs .book-tab')];
   const body = document.getElementById('body');
   const treatiseStarts = Object.freeze([0, 17, 48, 69, 103, 126, 146]);
+  const observationTab = document.querySelector('#observation-tabs .observation-tab');
 
   function closePage() {
     if (history.length > 1) history.back();
@@ -46,7 +47,19 @@
     if (moveFocus) tabs[index].focus({ preventScroll: true });
   }
 
+  function updateObservationTab() {
+    if (!observationTab) return;
+    const label = document.getElementById('observation-source-title')?.textContent?.trim() || 'سرزمین مشاهده';
+    observationTab.querySelector('.tab-number').textContent = number(1);
+    observationTab.querySelector('.tab-label').textContent = label;
+  }
+
   if (closeButton) closeButton.addEventListener('click', closePage);
+  if (observationTab) {
+    observationTab.addEventListener('click', () => updateObservationTab());
+    updateObservationTab();
+    document.addEventListener('site:languagechange', updateObservationTab);
+  }
 
   if (tabs.length) {
     const nav = document.getElementById('tabs');
