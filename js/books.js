@@ -206,6 +206,8 @@ function openBook(from = 'home', kind = BOOK_KINDS.FORGERS) {
   document.getElementById('book-close')?.focus({ preventScroll: true });
   buildBookTabs(0);
   selectChapter(0);
+  const bookShell = document.querySelector('#book-page .book-shell');
+  window.ContentCovers?.mountBook(document.getElementById('book-page'), activeBookKind, getBookTitle().title, bookShell);
 }
 
 function closeBook() {
