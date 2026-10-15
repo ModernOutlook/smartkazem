@@ -26,7 +26,7 @@
 
   function mount(root, filename, title, target) {
     if (!root || !filename) return null;
-    root.querySelectorAll(':scope > [data-content-cover]').forEach((node) => node.remove());
+    root.querySelectorAll('[data-content-cover]').forEach((node) => node.remove());
 
     const figure = document.createElement('figure');
     figure.className = 'content-cover';
