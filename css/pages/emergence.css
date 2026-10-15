@@ -16,3 +16,6 @@
 
 
 .episode-list{display:flex;flex-wrap:wrap;gap:8px}.episode{aspect-ratio:auto;min-height:42px;max-width:100%;padding:9px 13px;display:inline-flex;align-items:center;justify-content:center;white-space:normal;text-align:start;line-height:1.55}.episode[role=tab]{flex:0 1 auto}
+
+
+.emergence-page,.emergence-page .reader{overflow-anchor:none}
