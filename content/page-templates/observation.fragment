@@ -1,6 +1,6 @@
 <section class="page child-page observation-page">
 <header class="book-head"><div class="book-title" id="observation-book-title" data-i18n="pages.observation.title">📖 سرزمین مشاهده</div><button class="book-close" id="close" data-i18n-aria="pages.observation.close" aria-label="بستن">✕</button></header>
-<nav class="observation-tabs" id="observation-tabs" role="tablist" aria-label="فصل سرزمین مشاهده"><button class="observation-tab" type="button" role="tab" aria-selected="true" aria-controls="body"><span class="tab-number"></span><span class="tab-label" id="observation-tab-label">سرزمین مشاهده</span></button></nav>
+<nav class="observation-tabs" id="observation-tabs" role="tablist" aria-label="فصل سرزمین مشاهده" data-i18n-aria="labels.chapterList"><button class="observation-tab" type="button" role="tab" aria-selected="true" aria-controls="body"><span class="tab-number"></span><span class="tab-label" id="observation-tab-label">سرزمین مشاهده</span></button></nav>
 <article class="book-body" id="body" role="tabpanel" aria-labelledby="observation-tab-label">
 <div class="head">
 <h1 id="observation-source-title"></h1>
