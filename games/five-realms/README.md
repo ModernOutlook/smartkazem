@@ -25,7 +25,7 @@ node --test games/five-realms/tests/*.test.mjs
 - Start: two to five local players, five cards each, zero points.
 - **Approved badge pool (2026-10-15):** each realm has 72 badges: 12 worth 3, 24 worth 2, and 36 worth 1. Total value per realm is 120 (`10x`, with `x=12`).
 - **Author-approved realm identity and color mapping (2026-10-15):** blue = Structure of the Hall (`#164E63`), yellow = Continuity of the Universe (`#B89B45`), purple = Realm of Experience (`#7542A6`), red = Simulation (`#C94F55`, Paragraph Machine realm `R`), green = Share Economy (`#218653`). The mapping is stored in `data/realms.json`.
-- **Approved badge pricing decision (2026-10-15):** purple badge base price multiplier is `0.5`, so purple badges cost half their normal base price before the owned-value discount. The blue/Ace premium is approved in principle but remains unresolved: its amount and calculation method must be decided before final release. Until then, the blue multiplier remains `1` and no Ace premium is applied.
+- **Approved badge pricing decisions (2026-10-15):** purple badge base price multiplier is `0.5`, so purple badges cost half their normal base price before the owned-value discount. A player holding the blue Ace (`A-spades`) receives an additional 20% discount on the final blue badge price, after the existing base multiplier and owned-value discount are calculated. The discount is configured as `realms.blue.acePurchaseDiscount = 0.2` and the price is rounded to hundredths after applying it.
 - Badge price uses additive owned-value discount `price × (1 − ownedValue / (2T))`; this is currently applied per realm's configured total value.
 - Poker few-card scoring defaults to the approved `count` mode: 1→1, 2→2, 3→6, 4→16. A distinct structural scoring mode is not specified and is not selectable.
 - Each question is one live-generated paragraph. The five user judgments (`S/T/E/R/C`) use the Paragraph Machine statuses: consistent/matching, ambiguous, or contradictory. Exact correctness requires all five statuses to match the independently generated reference judgment.
@@ -43,7 +43,7 @@ node --test games/five-realms/tests/*.test.mjs
 - Added `content/page-templates/five-realms.fragment` and `css/pages/five-realms.css`.
 - Registered the page in `js/shared-pages.js` with the existing child-page runtime and a button in the `اقتصاد سهم` passage in `index.html`.
 - Added `games/five-realms/ui.mjs` for local hot-seat setup, hand display, action controls, badges, bank, scoreboard, and pass-device handoff.
-- Added centralized `pages.fiveRealms.*` strings to `translations/fa.json`, `en.json`, `ar.json`, and `zh.json`. Realm display labels and colors are read from `data/realms.json`; its mapping remains explicitly provisional.
+- Added centralized `pages.fiveRealms.*` strings to `translations/fa.json`, `en.json`, `ar.json`, and `zh.json`. Realm display labels and colors are read from `data/realms.json`; the mapping is author-confirmed.
 - Emits named game events through `site:game-sound` and requests sound through the existing `SiteAudio.play(realm)` API. The site audio engine itself was not modified.
 - The browser workflow starts the site over HTTP and exercises game startup, scoring, turn handoff, exchange, and the primary action panels at desktop and mobile viewports. Final readiness still depends on passing the current CI run and resolving the open author-owned content/configuration decisions.
 
