@@ -111,6 +111,14 @@ Every book has exactly one canonical Persian content source and one derived tran
 
 **Migration rule:** move content without summarizing, rewriting, reordering, or silently correcting it. Preserve exact source wording and paragraph structure. If two copies differ, do not choose one by guess; compare them and record the discrepancy for resolution before deleting either copy.
 
+## 3:4 content-cover contract
+
+The 12 supplied cover images live in `content/page-templates/`. The shared `js/content-covers.js` renderer places a responsive 3:4 frame as the final content element on each eligible textual child page. It uses a base-URI-resolved asset URL for GitHub Pages subpath deployments, preserves the image without stretching or cropping, and supplies the current page/book title as the image's accessible name.
+
+Coverage is explicit and limited to these 12 pages: رساله فلسفی, فصل اول ظهور, سرزمین مشاهده؛ ۲۵ بار رسیدن, آینه‌ی ممکن‌ها, فصل دوم ظهور, سرزمین مشاهده؛ یک رود، یک جریان, پژواک لایه سوم, مانیفست آشوب‌زده, صفر, انسان و ماشین‌هایش, جاعلان تقلید, and تباهیان. شاهنامه‌خوانی and ماشین پاراگراف are intentionally excluded. Realm landing pages, inventory, and utility surfaces are not content-book pages and do not receive covers.
+
+The browser smoke test verifies every eligible cover at desktop, portrait, and landscape viewports, including successful image loading, accessible alternative text, and the 3:4 frame ratio. New textual child pages must be added to the explicit shared/book cover registry and this test; excluded surfaces must remain excluded.
+
 ## 4. Repository map
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
