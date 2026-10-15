@@ -518,7 +518,7 @@ The page still owns its semantic HTML and interaction model; the accessibility e
 ## Emergence II translation alignment (2026-10-12)
 
 - Compared the canonical Persian source with the EN/AR/ZH reservoir. Episode 20’s opening translation paragraph had merged two Persian paragraphs; the boundary is now restored in all three languages. The manifest now points to `translations/emergence-2.json`.
-- **Completion remains blocked:** Persian episodes 23–30 use single-newline separators, but the current source parser splits only on blank lines. Each is therefore rendered as one Persian paragraph while the translation arrays contain 8–16 paragraphs. Do not claim paragraph-level parity until the source structure and target-language boundaries are reconciled.
+- **Paragraph rule:** every non-empty line in the canonical Persian episode string is one paragraph. EN/AR/ZH are aligned to the same ordered paragraph count by regrouping existing translated sentences only; translated wording and order are preserved. The renderer uses the same non-empty-line rule for Persian. The alignment manifest records every corresponding FA/EN/AR/ZH paragraph.
 
 ## Multi-book translation reservoirs (2026-10-09)
 
@@ -554,5 +554,5 @@ The UI Playwright workflow now checks rendered prose against the actual canonica
 
 The browser workflow runs Playwright against the PR branch served by a local HTTP server in GitHub Actions. This verifies the actual page runtime built from the proposed code, but is not a claim that the deployed production site has already been tested.
 
-The independent source-format audit for Emergence II episodes 23–30 remains open. Their Persian source strings contain single-newline breaks throughout, while the current parser groups each episode into one paragraph and the translations use 8–16 paragraph entries. These line breaks may be soft line breaks rather than paragraph boundaries; do not automatically split or rewrite the Persian text until that distinction is established.
+**Emergence II paragraph contract:** every non-empty line in each Persian source episode is a paragraph, including lines separated by a single newline. Blank lines are separators and are not paragraphs. Each EN/AR/ZH episode must expose the same number of paragraphs in the same order. The alignment utility splits existing translated text at sentence boundaries and monotonically regroups those unchanged sentence units to the Persian line count; it does not generate, summarize, rewrite, or reorder translation prose. Chinese sentence splitting recognizes 。！？ without requiring spaces. The browser audit checks exact rendered paragraph arrays in all four languages.
 
