@@ -78,12 +78,47 @@ try {
       }
     }
 
-    // Verify the remaining primary action panels are reachable without submitting them.
-    for (const action of ['buy', 'sell', 'deposit', 'withdraw', 'question']) {
+    // Verify the non-question primary action panels remain reachable.
+    for (const action of ['buy', 'sell', 'deposit', 'withdraw']) {
       await page.locator(`[data-action="${action}"]`).click();
       if (!(await page.locator('#fr-action-form').locator('button').count())) {
         fail(`${viewport.name}: ${action} action did not expose a confirm control`);
       }
+    }
+
+    // Isolate the recognition UI from network credentials while exercising the shared adapter contract.
+    await page.evaluate(() => {
+      const statusByDomain = {S:'ok',T:'warn',E:'bad',R:'ok',C:'warn'};
+      window.ParagraphWorkspaceAdapter = {
+        async generateParagraphs(count, mode, language) {
+          if (count !== 1 || mode !== 'mixed') throw new Error('Unexpected generation request');
+          return [{text:'این یک پاراگراف آزمایشی برای سنجش بازشناسی پنج قلمرو است.'}];
+        },
+        async evaluateText(text, language) {
+          return {text, judgment:Object.fromEntries(Object.entries(statusByDomain).map(([domain,status])=>[domain,{status,reason:'browser smoke'}]))};
+        }
+      };
+    });
+    const urlBeforeQuestion = page.url();
+    await page.locator('[data-action="question"]').click();
+    await page.waitForSelector('.fr-question-paragraph .fr-question-text');
+    if (page.url() !== urlBeforeQuestion) fail(`${viewport.name}: question action navigated away from the game`);
+    if (await page.locator('.fr-judgment-realm').count() !== 5) {
+      fail(`${viewport.name}: recognition question did not render five realm judgment boxes`);
+    }
+    for (const realm of ['blue','yellow','purple','red','green']) {
+      if (await page.locator(`.fr-judgment-realm[data-realm="${realm}"] input[type="radio"]`).count() !== 3) {
+        fail(`${viewport.name}: realm ${realm} did not expose the three recognition statuses`);
+      }
+    }
+    const matchingStatuses = {blue:'ok',yellow:'warn',purple:'bad',red:'ok',green:'warn'};
+    for (const [realm,status] of Object.entries(matchingStatuses)) {
+      await page.locator(`.fr-judgment-realm[data-realm="${realm}"] input[value="${status}"]`).check();
+    }
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    if (!(await page.locator('#fr-action-message').innerText()).includes('منطبق است')) {
+      fail(`${viewport.name}: exact five-realm recognition match was not reported as correct`);
     }
 
     const metrics = await page.evaluate(() => ({
