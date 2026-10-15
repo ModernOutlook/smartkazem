@@ -46,12 +46,24 @@ test("approved x=12 badge pool has 72 badges and total value 120 per realm",()=>
   assert.equal(engine.realmTotal(realm),120);
  }
 });
-test("badge discount, 95% resale and pool ownership",()=>{
+test("badge discount, blue Ace 20% final-price discount, 95% resale and pool ownership",()=>{
  const engine=createEngine(config,{seed:1}),state=engine.newGame(["A","B"]),p=state.players[0];
  p.points=10000;
  const bought=engine.buyBadge(state,p,"blue");assert.equal(bought.ok,true);
  assert.equal(bought.price,300);
  const sold=engine.sellBadge(state,p,bought.badge.id);assert.equal(sold.price,285);assert.equal(p.points,9985);assert.equal(state.badgePool.blue.length,72);
+
+ // Holding the blue Ace applies an additional 20% to the already ownership-adjusted price.
+ p.hand.push({id:"A-spades",rank:"A",suit:"spades",realm:"blue",joker:false,lucky:true});
+ const withAce=engine.buyBadge(state,p,"blue");
+ assert.equal(withAce.ok,true);
+ assert.equal(withAce.price,240); // 3 base × 0.8 Ace discount, rounded to hundredths.
+
+ // The Ace discount compounds with the existing owned-value discount, then rounds once.
+ p.badges.push({id:"blue-test-owned",realm:"blue",value:3,purchasePrice:0});
+ const ownedAndAce=engine.buyBadge(state,p,"blue");
+ assert.equal(ownedAndAce.ok,true);
+ assert.equal(ownedAndAce.price,234); // 3 × (1 - 6 / (2 × 120)) × 0.8 = 2.34 points, stored as hundredths.
 });
 test("joker exchange keeps the joker and grants a chosen card from the deck",()=>{
  const engine=createEngine(config,{seed:7}),state=engine.newGame(["A","B"]),p=state.players[0];

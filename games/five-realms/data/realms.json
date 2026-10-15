@@ -3,38 +3,38 @@
     {
       "id": "blue",
       "name": "ساختار تالار",
-      "color": "#2786e8",
+      "color": "#164E63",
       "suit": "♠",
       "i18nKey": "labels.structure"
     },
     {
       "id": "yellow",
       "name": "تداوم عالم",
-      "color": "#e8b82c",
+      "color": "#B89B45",
       "suit": "♦",
       "i18nKey": "labels.continuity"
     },
     {
       "id": "purple",
       "name": "قلمرو تجربه",
-      "color": "#a66be8",
+      "color": "#7542A6",
       "suit": "JOKER",
       "i18nKey": "labels.experience"
     },
     {
       "id": "red",
-      "name": "مرجع تقلید",
-      "color": "#e54b52",
+      "name": "شبیه‌سازی",
+      "color": "#C94F55",
       "suit": "♥",
-      "i18nKey": "labels.reference"
+      "i18nKey": "labels.simulation"
     },
     {
       "id": "green",
       "name": "اقتصاد سهم",
-      "color": "#38ad72",
+      "color": "#218653",
       "suit": "♣",
       "i18nKey": "labels.share"
     }
   ],
-  "note": "Realm-to-color mapping is provisional configuration, not an author-confirmed mapping."
+  "note": "Author-approved realm names and color mapping, confirmed 2026-10-15. The red realm is Simulation (R), aligned with Paragraph Machine."
 }

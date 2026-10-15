@@ -1,0 +1,31 @@
+<main class="page child-page tadbir-page" lang="fa" dir="rtl" aria-labelledby="tadbir-title">
+  <header class="tadbir-head">
+    <div><p class="tadbir-eyebrow">CONTINUITY OF THE UNIVERSE · T</p><h1 id="tadbir-title" data-i18n="pages.tadbir.title">تدبیر</h1><p data-i18n="pages.tadbir.subtitle">ماشین سپرده‌گذاری و برداشت بانک بازی ۵ قلمرو</p></div>
+    <button id="tadbir-close" class="tadbir-button" type="button" data-i18n="labels.back" data-i18n-aria="labels.back">بازگشت</button>
+  </header>
+  <section class="tadbir-shell">
+    <section class="tadbir-panel" aria-live="polite">
+      <h2 data-i18n="pages.tadbir.accountTitle">حساب بازیکن فعال</h2>
+      <p id="tadbir-status" class="tadbir-status" role="status">در حال بررسی وضعیت بازی...</p>
+      <dl id="tadbir-account" class="tadbir-account" hidden>
+        <div><dt data-i18n="pages.tadbir.player">بازیکن</dt><dd id="tadbir-player"></dd></div>
+        <div><dt data-i18n="pages.tadbir.points">امتیاز قابل‌مصرف</dt><dd id="tadbir-points"></dd></div>
+        <div><dt data-i18n="pages.tadbir.bank">موجودی بانک</dt><dd id="tadbir-bank"></dd></div>
+        <div><dt data-i18n="pages.tadbir.interestTurns">نوبت‌های سود</dt><dd id="tadbir-interest-turns"></dd></div>
+      </dl>
+      <p id="tadbir-limit" class="tadbir-note" hidden></p>
+      <form id="tadbir-deposit-form" class="tadbir-form" hidden>
+        <label for="tadbir-amount" data-i18n="pages.tadbir.depositAmount">مقدار سپرده</label>
+        <input id="tadbir-amount" name="amount" type="number" min="0" step="0.01" inputmode="decimal" required>
+        <button class="tadbir-primary" type="submit" data-i18n="pages.tadbir.deposit">سپرده‌گذاری</button>
+      </form>
+      <div class="tadbir-actions">
+        <button id="tadbir-withdraw" class="tadbir-primary" type="button" data-i18n="pages.tadbir.withdraw" hidden>برداشت</button>
+        <button id="tadbir-return-game" class="tadbir-button" type="button" data-i18n="pages.tadbir.returnToGame" hidden>بازگشت به بازی</button>
+        <button id="tadbir-start-game" class="tadbir-primary" type="button" data-i18n="pages.tadbir.startGame" hidden>ورود به بازی ۵ قلمرو</button>
+      </div>
+      <p id="tadbir-message" class="tadbir-message" aria-live="polite"></p>
+    </section>
+    <p class="tadbir-footnote" data-i18n="pages.tadbir.ruleNote">تدبیر به حساب همان بازیکن در بازی متصل است. عملیات بانکی کنش نوبت محسوب می‌شود و پس از آن دستگاه باید به بازیکن بعدی واگذار شود.</p>
+  </section>
+</main>

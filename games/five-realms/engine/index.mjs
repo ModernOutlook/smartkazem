@@ -143,7 +143,9 @@ export function createEngine(config,{seed=Date.now(),onEvent=()=>{}}={}){
     const pool=state.badgePool[realm];if(!pool)return {ok:false,reason:"unknown-realm"};
     const index=pool.findIndex(b=>!badgeId||b.id===badgeId);if(index<0)return {ok:false,reason:"unavailable"};
     const badge=pool[index],T=realmTotal(realm),value=ownedValue(player,realm);
-    const price=money(badge.value*(config.realms[realm].basePriceMultiplier??1)*(1-value/(config.badges.discountShareDivisor*T)));
+    const hasBlueAce=realm==="blue"&&player.hand.some(card=>card.id==="A-spades");
+    const aceDiscount=hasBlueAce?(config.realms.blue.acePurchaseDiscount??0):0;
+    const price=money(badge.value*(config.realms[realm].basePriceMultiplier??1)*(1-value/(config.badges.discountShareDivisor*T))*(1-aceDiscount));
     if(player.points<price)return {ok:false,reason:"insufficient-points",price};
     player.points-=price;pool.splice(index,1);player.badges.push({...badge,purchasePrice:price});
     events.emit("badge-bought",{playerId:player.id,realm,badgeId:badge.id,price});

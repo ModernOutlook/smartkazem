@@ -49,12 +49,25 @@ try {
     }
     if ((await page.locator('#fr-current').innerText()) !== 'Browser Alice') fail(`${viewport.name}: first player is not active after game start`);
 
-    // Score one non-joker card, then verify the private-hand handoff to player two.
-    await page.locator('#fr-hand .fr-card').filter({ hasNotText: 'JOKER' }).first().click();
+    // Score three non-joker cards to earn enough points for a badge purchase.
+    const initialScoringCards = page.locator('#fr-hand .fr-card').filter({ hasNotText: 'JOKER' });
+    if (await initialScoringCards.count() < 3) fail(`${viewport.name}: fewer than three scoreable cards were dealt`);
+    for (let i = 0; i < 3; i++) await initialScoringCards.nth(i).click();
     await page.locator('[data-action="score"]').click();
     await page.locator('#fr-action-form button').last().click();
     await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
     if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) fail(`${viewport.name}: turn handoff did not name player two`);
+    if (await page.locator('#continuity-tadbir[data-tadbir-link]').count() !== 1) {
+      fail(`${viewport.name}: Continuity realm does not expose the Tadbir entry button`);
+    }
+    await page.evaluate(() => window.SharedPages.open('tadbir', 'continuity'));
+    await page.waitForSelector('#tadbir-title');
+    await page.waitForFunction(() => !document.querySelector('#tadbir-return-game')?.hidden);
+    await page.locator('#tadbir-return-game').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden && document.querySelector('#fr-play').hidden);
+    if ((await page.locator('#fr-pass-name').innerText()).indexOf('Browser Bob') < 0) {
+      fail(`${viewport.name}: returning from Tadbir exposed the next player's hand instead of preserving handoff`);
+    }
     await page.locator('#fr-reveal').click();
     await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Bob');
     if (await page.locator('#fr-hand .fr-card').count() !== 5) fail(`${viewport.name}: second player's hand was not rendered`);
@@ -78,12 +91,120 @@ try {
       }
     }
 
-    // Verify the remaining primary action panels are reachable without submitting them.
-    for (const action of ['buy', 'sell', 'deposit', 'withdraw', 'question']) {
-      await page.locator(`[data-action="${action}"]`).click();
-      if (!(await page.locator('#fr-action-form').locator('button').count())) {
-        fail(`${viewport.name}: ${action} action did not expose a confirm control`);
+    // Bank controls must be absent from the game and Tadbir must connect to the active player's account.
+    if (await page.locator('[data-action="deposit"], [data-action="withdraw"]').count()) {
+      fail(`${viewport.name}: deposit/withdraw controls are still exposed in the game action panel`);
+    }
+    await page.evaluate(() => window.SharedPages.open('tadbir', 'continuity'));
+    await page.waitForSelector('#tadbir-title');
+    await page.waitForFunction(() => !document.querySelector('#tadbir-account')?.hidden);
+    if ((await page.locator('#tadbir-player').innerText()) !== 'Browser Alice') {
+      fail(`${viewport.name}: Tadbir is not connected to the active in-game player`);
+    }
+    if (!(await page.locator('#tadbir-deposit-form').isVisible())) {
+      fail(`${viewport.name}: Tadbir deposit form is unavailable for the active player`);
+    }
+    await page.locator('#tadbir-return-game').click();
+    await page.waitForFunction(() => document.querySelector('#fr-play') && !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Alice');
+
+    // Complete a real badge purchase and verify that the turn advances.
+    await page.locator('[data-action="buy"]').click();
+    const buyRealm = page.locator('#fr-action-form select').first();
+    await buyRealm.selectOption('purple');
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) {
+      fail(`${viewport.name}: successful badge purchase did not advance to player two`);
+    }
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Bob');
+
+    // Player two scores, handing the device back so player one can sell the badge.
+    const bobScoringCards = page.locator('#fr-hand .fr-card').filter({ hasNotText: 'JOKER' });
+    if (await bobScoringCards.count() < 1) fail(`${viewport.name}: player two has no scoreable card`);
+    await bobScoringCards.first().click();
+    await page.locator('[data-action="score"]').click();
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Alice');
+
+    // Complete a real badge sale and verify Alice's owned-badge count returns to zero.
+    await page.locator('[data-action="sell"]').click();
+    const sellBadge = page.locator('#fr-action-form select').first();
+    if (await sellBadge.locator('option').count() !== 1) {
+      fail(`${viewport.name}: the purchased badge was not available for sale`);
+    }
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) {
+      fail(`${viewport.name}: successful badge sale did not advance to player two`);
+    }
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Bob');
+    const aliceScoreRow = page.locator('#fr-scoreboard tbody tr').filter({ hasText: 'Browser Alice' });
+    if ((await aliceScoreRow.locator('td').nth(2).innerText()).trim() !== '0') {
+      fail(`${viewport.name}: sold badge still appears in Alice's owned-badge count`);
+    }
+    // Return to Alice so the recognition checks begin from the same known turn.
+    const bobFollowupCard = page.locator('#fr-hand .fr-card').filter({ hasNotText: 'JOKER' }).first();
+    await bobFollowupCard.click();
+    await page.locator('[data-action="score"]').click();
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Alice');
+
+    // Isolate the recognition UI from network credentials while exercising the shared adapter contract.
+    await page.evaluate(() => {
+      const statusByDomain = {S:'ok',T:'warn',E:'bad',R:'ok',C:'warn'};
+      window.ParagraphWorkspaceAdapter = {
+        async generateParagraphs(count, mode, language) {
+          if (count !== 1 || mode !== 'mixed') throw new Error('Unexpected generation request');
+          return [{text:'این یک پاراگراف آزمایشی برای سنجش بازشناسی پنج قلمرو است.'}];
+        },
+        async evaluateText(text, language) {
+          return {text, judgment:Object.fromEntries(Object.entries(statusByDomain).map(([domain,status])=>[domain,{status,reason:'browser smoke'}]))};
+        }
+      };
+    });
+    const urlBeforeQuestion = page.url();
+    await page.locator('[data-action="question"]').click();
+    await page.waitForSelector('.fr-question-paragraph .fr-question-text');
+    if (page.url() !== urlBeforeQuestion) fail(`${viewport.name}: question action navigated away from the game`);
+    if (await page.locator('.fr-judgment-realm').count() !== 5) {
+      fail(`${viewport.name}: recognition question did not render five realm judgment boxes`);
+    }
+    for (const realm of ['blue','yellow','purple','red','green']) {
+      if (await page.locator(`.fr-judgment-realm[data-realm="${realm}"] input[type="radio"]`).count() !== 3) {
+        fail(`${viewport.name}: realm ${realm} did not expose the three recognition statuses`);
       }
+    }
+    const matchingStatuses = {blue:'ok',yellow:'warn',purple:'bad',red:'ok',green:'warn'};
+    for (const [realm,status] of Object.entries(matchingStatuses)) {
+      await page.locator(`.fr-judgment-realm[data-realm="${realm}"] input[value="${status}"]`).check();
+    }
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    const recognitionMessage = await page.locator('#fr-action-message').innerText();
+    if (!/منطبق است|match.*reference|参考判断一致|تتطابق أحكامك/.test(recognitionMessage)) {
+      fail(`${viewport.name}: exact five-realm recognition match was not reported as correct: ${recognitionMessage}`);
+    }
+
+    // One mismatched realm must make the overall recognition result incorrect.
+    await page.locator('#fr-reveal').click();
+    await page.waitForFunction(() => !document.querySelector('#fr-play').hidden && document.querySelector('#fr-current')?.textContent === 'Browser Bob');
+    await page.locator('[data-action="question"]').click();
+    await page.waitForSelector('.fr-question-paragraph .fr-question-text');
+    const mismatchingStatuses = {blue:'bad',yellow:'warn',purple:'bad',red:'ok',green:'warn'};
+    for (const [realm,status] of Object.entries(mismatchingStatuses)) {
+      await page.locator(`.fr-judgment-realm[data-realm="${realm}"] input[value="${status}"]`).check();
+    }
+    await page.locator('#fr-action-form button').last().click();
+    await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
+    const incorrectMessage = await page.locator('#fr-action-message').innerText();
+    if (!/منطبق نیست|do not match|并不完全一致|لا تتطابق/.test(incorrectMessage)) {
+      fail(`${viewport.name}: a mismatched realm was not reported as an incorrect recognition: ${incorrectMessage}`);
     }
 
     const metrics = await page.evaluate(() => ({
