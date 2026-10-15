@@ -480,7 +480,12 @@ async function auditCanonicalRoute(page, route, language) {
     const activeRoot = document.querySelector('#shared-page-host .child-page.is-active') || document.body;
     activeRoot.querySelectorAll('[data-i18n]').forEach(element => {
       const expected = window.SiteI18n?.get?.(element.dataset.i18n, '');
-      if (expected !== '' && element.textContent !== String(expected)) issues.push('active-page data-i18n mismatch: ' + element.dataset.i18n);
+      const actualText = element.textContent.trim().normalize('NFC');
+      const expectedText = String(expected).trim().normalize('NFC');
+      if (expected !== '' && actualText !== expectedText) {
+        issues.push('active-page data-i18n mismatch: ' + element.dataset.i18n
+          + ' expected=' + JSON.stringify(expectedText) + ' actual=' + JSON.stringify(actualText));
+      }
     });
     return issues;
   }, { route, language });
