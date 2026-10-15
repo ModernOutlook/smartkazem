@@ -55,6 +55,9 @@ jobs:
       - name: Test realm-specific child backgrounds at required viewports
         run: node scripts/realm-child-background-smoke.mjs
 
+      - name: Test 3:4 content covers on every eligible page
+        run: node scripts/content-covers-browser-smoke.mjs
+
       - name: Upload child-page background screenshots
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
