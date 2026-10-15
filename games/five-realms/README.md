@@ -24,7 +24,7 @@ node --test games/five-realms/tests/*.test.mjs
 - Win condition: all badges claimed or the configured 30-round limit; most points wins, ties use owned badge value.
 - Start: two to five local players, five cards each, zero points.
 - **Approved badge pool (2026-10-15):** each realm has 72 badges: 12 worth 3, 24 worth 2, and 36 worth 1. Total value per realm is 120 (`10x`, with `x=12`).
-- Realm color/name mapping in `realms.json` is provisional and must be confirmed by the author.
+- **Author-approved realm identity and color mapping (2026-10-15):** blue = Structure of the Hall (`#164E63`), yellow = Continuity of the Universe (`#B89B45`), purple = Realm of Experience (`#7542A6`), red = Simulation (`#C94F55`, Paragraph Machine realm `R`), green = Share Economy (`#218653`). The mapping is stored in `data/realms.json`.
 - Purple badge base price multiplier is provisionally 0.5 to express “purple is cheapest”; blue/Ace premium is not applied.
 - Badge price uses additive owned-value discount `price × (1 − ownedValue / (2T))`; this is currently applied per realm's configured total value.
 - Poker few-card scoring defaults to the approved `count` mode: 1→1, 2→2, 3→6, 4→16. A distinct structural scoring mode is not specified and is not selectable.
@@ -60,7 +60,7 @@ node --test games/five-realms/tests/*.test.mjs
 ### Remaining release gates
 
 - Automated validation must be checked against the latest branch commit before any merge. The browser smoke suite now includes a dedicated Five Realms interaction run; mobile/RTL/accessibility and event-by-event audio behavior still require acceptance checks.
-- Realm color/name mapping remains provisional in `data/realms.json`; keep the mapping data-driven until the author confirms it.
+- Realm names and colors are author-confirmed and stored data-first in `data/realms.json`; red is Simulation (`R`), matching Paragraph Machine.
 - Five Realms no longer maintains a separate static question bank; the live Paragraph Machine recognition pipeline is the source of question paragraphs and reference judgments.
 - **Final bank scoring (user-approved 2026-10-15, option B):** bank principal and accrued interest do not count toward final score. Winners are ranked by spendable points only, then total owned badge value. A player must withdraw the balance before game end for it to contribute to spendable points.
 - Keep PR #167 in draft until automated tests and browser acceptance checks pass and the remaining configuration decisions are resolved.
