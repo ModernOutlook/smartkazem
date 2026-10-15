@@ -28,11 +28,6 @@
       tab.setAttribute('aria-selected', String(active));
       tab.tabIndex = active ? 0 : -1;
       tab.setAttribute('aria-controls', 'body');
-      const label = tab.querySelector('.tab-label');
-      if (label) {
-        if (!label.dataset.baseLabel) label.dataset.baseLabel = label.textContent.trim();
-        label.textContent = label.dataset.baseLabel;
-      }
       const numberNode = tab.querySelector('.tab-number');
       if (numberNode) numberNode.textContent = number(tabIndex + 1);
     });
