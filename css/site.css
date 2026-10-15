@@ -999,3 +999,6 @@ html[dir="rtl"] .home-page > .info {
   overflow:hidden!important;
   pointer-events:none!important;
 }
+
+
+.observation25-page,.observation25-body,.possible-mirror-page,.possible-mirror-body,.book-body{overflow-anchor:none}
