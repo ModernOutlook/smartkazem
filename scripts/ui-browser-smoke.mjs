@@ -55,6 +55,9 @@ const headerTargets = {
   disturbedManifesto: ['.title', '.actions'],
   zero: ['.zero-brand', '.zero-actions'],
   inventory: ['.inventory-heading', '.inventory-home'],
+  'five-realms': ['.fr-head > div', '.fr-close'],
+  tadbir: ['.tadbir-head > div', '.tadbir-head .tadbir-button'],
+  'quantum-maze': ['.qm-page-head > div', '.qm-close'],
   forgers: ['.book-title', '.book-close'],
   humanMachines: ['.book-title', '.book-close'],
   tabahian: ['.book-title', '.book-close'],
@@ -356,6 +359,9 @@ const sharedRoutes = [
   { route: 'disturbedManifesto', content: '#part-list', close: '#manifesto-close', measure: ['.disturbed-manifesto-page', '.top', '.reader'] },
   { route: 'zero', content: '#zero-story', close: '#zero-back', measure: ['.zero-page', '.zero-header', '.zero-article'] },
   { route: 'inventory', content: '#inventory-grid', close: 'a.inventory-home' },
+  { route: 'five-realms', content: '#five-realms-game', close: '#five-realms-close' },
+  { route: 'tadbir', content: '.tadbir-shell', close: '#tadbir-close' },
+  { route: 'quantum-maze', content: '#quantum-maze-game', close: '#quantum-maze-close' },
 ];
 
 async function auditCanonicalRoute(page, route, language) {
@@ -928,6 +934,11 @@ for (const book of sharedBooks) {
   for (const viewport of viewports) {
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
     await page.waitForTimeout(75);
+    for (const language of languages) {
+      await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
+      await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language, { timeout: 5000 });
+      await auditLanguageHeader(page, '#book-page.is-active', ['.book-head .book-title', '.book-head .book-close'], `shared book ${book.kind} @ ${viewport.name} ${language.code}`);
+    }
     const metrics = await page.evaluate(() => ({ innerWidth: innerWidth, documentWidth: document.documentElement.scrollWidth }));
     if (metrics.documentWidth > metrics.innerWidth + 2) fail(`shared book ${book.kind} @ ${viewport.name}: horizontal overflow ${metrics.documentWidth}>${metrics.innerWidth}`);
   }
