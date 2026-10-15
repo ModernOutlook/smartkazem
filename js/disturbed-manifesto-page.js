@@ -171,7 +171,8 @@
   }
 
   list.setAttribute('role', 'tablist');
-  list.setAttribute('aria-orientation', 'horizontal');\n  source.parts.forEach((part, index) => {
+  list.setAttribute('aria-orientation', 'horizontal');
+  source.parts.forEach((part, index) => {
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'part';
@@ -179,8 +180,6 @@
     button.textContent = `${siteNumber(part.number)} · ${part.title}`;
     button.setAttribute('role', 'tab');
     button.setAttribute('aria-controls', 'reader');
-    button.setAttribute('aria-selected', String(index === activeIndex));
-    button.tabIndex = index === activeIndex ? 0 : -1;
     button.setAttribute('aria-selected', String(index === activeIndex));
     button.tabIndex = index === activeIndex ? 0 : -1;
 
