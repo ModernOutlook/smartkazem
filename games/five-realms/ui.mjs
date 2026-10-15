@@ -331,6 +331,6 @@ if (root && !root.dataset.initialized) {
   $("#fr-reveal").addEventListener("click",()=>{awaitingReveal=false;refresh();});
   $$("#five-realms-game [data-action]").forEach(button=>button.addEventListener("click",()=>actionForm(button.dataset.action)));
   $("#fr-restart").addEventListener("click",()=>{state=null;selected.clear();$("#fr-game-over").hidden=true;$("#fr-setup").hidden=false;$("#fr-play").hidden=true;refreshNameInputs();});
-  document.addEventListener("site:languagechange",()=>{if(state)refresh();refreshNameInputs();});
+  document.addEventListener("site:languagechange",()=>{if(window.SharedPages?.getActive?.()!=="five-realms")return;if(state)restoreGamePage();refreshNameInputs();});
   refreshNameInputs();
 }
