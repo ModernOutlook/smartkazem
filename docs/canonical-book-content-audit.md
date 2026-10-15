@@ -127,7 +127,7 @@ The Persian-source-first milestone is complete at the source-boundary level for 
 - Compared the canonical Persian episode source with `translations/emergence-2.json`.
 - Found that episode 20’s first target-language paragraph had combined two distinct Persian paragraphs in EN, AR, and ZH.
 - Restored the source boundary in all three translations without removing or summarizing prose.
-- A follow-up source-structure check found that episodes 23–30 use single-newline paragraph separators while the Persian source parser splits only on blank lines. This collapses each of those Persian episodes into one rendered paragraph, unlike the multi-paragraph EN/AR/ZH arrays. Their paragraph alignment is therefore not certified; reconcile the Persian structure and translation boundaries before declaring this page complete.
+- The canonical paragraph convention is explicit: every non-empty line in a Persian episode string is one paragraph; blank lines are separators only. The same ordered paragraph count is required in EN/AR/ZH. The renderer and alignment utility now follow this rule for all 11 episodes (20–30).
 - Corrected `page-specs/emergence2.json` to name the dedicated reservoir `translations/emergence-2.json` rather than the generic `translations/{lang}.json` template.
 
 
@@ -160,3 +160,4 @@ These browser tests run the PR branch through Playwright using the workflow's lo
 
 Emergence II episodes 23–30 still need a deliberate source-to-translation paragraph-boundary review. The Persian source contains many single newlines (roughly 74–124 per episode), but the current source parser splits only on blank lines, so it produces one paragraph per episode; EN/AR/ZH each contain 8–16 paragraph entries. The single newlines could be line breaks within prose/dialogue rather than paragraph separators. Runtime rendering has been verified against each catalog, but this separate fidelity/segmentation question is not certified and must not be silently normalized.
 
+**Emergence II paragraph rule and verification:** every non-empty line in the canonical Persian source is one paragraph, including single-newline-separated lines; blank lines are ignored. The FA renderer splits on non-empty lines. The EN/AR/ZH alignment utility splits existing translated prose into ordered sentence units (including Chinese 。！？ boundaries) and regroups those units monotonically to produce exactly one translated paragraph per Persian source line. It verifies that the whitespace-insensitive character stream is unchanged, so no translated wording is generated, deleted, reordered, or rewritten. The manifest records the corresponding paragraph in all four languages for each of the 11 episodes. Browser checks verify exact rendered paragraph arrays in FA/EN/AR/ZH.
