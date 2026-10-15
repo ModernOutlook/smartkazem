@@ -56,6 +56,9 @@
     const lang = language();
 
     reader.replaceChildren();
+    reader.setAttribute('role', 'tabpanel');
+    reader.tabIndex = 0;
+    reader.setAttribute('aria-labelledby', `manifesto-tab-${activeIndex}`);
 
     if (!part) {
       const fallback = createText(
@@ -68,10 +71,6 @@
       reader.appendChild(fallback);
       return;
     }
-
-    reader.setAttribute('role', 'tabpanel');
-    reader.tabIndex = 0;
-    reader.setAttribute('aria-labelledby', `manifesto-tab-${activeIndex}`);
 
     const header = document.createElement('header');
     header.className = 'reader-head';
