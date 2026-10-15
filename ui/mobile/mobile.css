@@ -436,3 +436,25 @@
     overflow-wrap: anywhere;
   }
 }
+
+
+/* Landscape phones/tablets need the same reserved language-control row as
+   portrait devices; percentage-based header offsets are too small at short
+   viewport heights. */
+@media (max-width: 1023px) {
+  .observation25-head,
+  .possible-mirror-head,
+  .structure-head,
+  .continuity-head,
+  .experience-head,
+  .reference-head,
+  .share-head {
+    top: calc(64px + var(--ui-safe-top));
+  }
+}
+@media (orientation: landscape) and (max-width: 1023px) {
+  .observation25-shell,
+  .possible-mirror-shell {
+    top: calc(120px + var(--ui-safe-top));
+  }
+}
