@@ -1688,6 +1688,7 @@ function renderList(){
     const title=translated?.title?.[lang] || ep.title;
     const b=buttons[i];
     const active=i===current;
+    b.classList.toggle('active',active);
     b.textContent=`${siteNumber(ep.number)} · ${title}`;
     b.setAttribute('aria-label',`${siteNumber(ep.number)} · ${title}`);
     b.setAttribute('aria-selected',String(active));
