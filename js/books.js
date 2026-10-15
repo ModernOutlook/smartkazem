@@ -140,7 +140,7 @@ function renderBookHeader(chapterIndex, chapter) {
 
   const heading = createElement('h2');
   heading.appendChild(createElement('i'));
-  heading.appendChild(document.createTextNode(`${new Intl.NumberFormat(getCurrentLanguage()).format(chapter.number ?? chapterIndex + 1)} · ${chapter.title}`));
+  heading.appendChild(document.createTextNode(chapter.title));
   chapterElement.appendChild(heading);
 
   chapter.paragraphs.forEach((paragraph) => {
