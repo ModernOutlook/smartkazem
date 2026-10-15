@@ -51,7 +51,7 @@
     }
 
     if (moveFocus) {
-      tabList[index]?.focus();
+      tabList[index]?.focus({ preventScroll: true });
     }
   }
 
