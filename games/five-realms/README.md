@@ -36,7 +36,7 @@ node --test games/five-realms/tests/*.test.mjs
 - Implemented: the question action stays inside the game page and requests one paragraph through `ParagraphWorkspaceAdapter.generateParagraphs(1, 'mixed', language)`, then independently evaluates it through `ParagraphWorkspaceAdapter.evaluateText`. The UI renders five realm judgment boxes with the same three statuses as Paragraph Machine. Exact five-realm matching determines recognition correctness; existing card rewards, wrong-answer penalties, full-ownership forgiveness, and tied-most-held-realm forgiveness remain game mechanics.
 - Implemented: bank interest accrues at the start of the owner's turns for up to five turns; withdrawal stops future interest; sold badges return to the shared pool; game-over winners are selected by spendable points only, then total owned badge value. Bank principal and accrued interest do not count unless withdrawn before the game ends.
 - Question generation and reference evaluation use the existing Paragraph Machine LLM client and its default backend configuration. The game does not introduce a second LLM configuration path. Live questions require a working LLM connection; the game remains on the same page if generation or evaluation fails, and offers retry.
-- The game can be launched as a mechanics demo, but it must not be presented as a finished, author-approved game until the placeholder question bank and open rules/configuration decisions are resolved.
+- The game can be launched as a mechanics demo, but it must not be presented as a finished, author-approved game until the remaining open rules/configuration decisions are resolved.
 
 ## Site integration progress
 
@@ -63,4 +63,4 @@ node --test games/five-realms/tests/*.test.mjs
 - Realm color/name mapping remains provisional in `data/realms.json`; keep the mapping data-driven until the author confirms it.
 - Five Realms no longer maintains a separate static question bank; the live Paragraph Machine recognition pipeline is the source of question paragraphs and reference judgments.
 - **Final bank scoring (user-approved 2026-10-15, option B):** bank principal and accrued interest do not count toward final score. Winners are ranked by spendable points only, then total owned badge value. A player must withdraw the balance before game end for it to contribute to spendable points.
-- Keep PR #164 in draft until automated tests and browser acceptance checks pass and the remaining content/configuration decisions are resolved.
+- Keep PR #167 in draft until automated tests and browser acceptance checks pass and the remaining configuration decisions are resolved.
