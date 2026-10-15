@@ -6,7 +6,7 @@ const root = $("#five-realms-game");
 if (root && !root.dataset.initialized) {
   root.dataset.initialized = "true";
   const t = (key, fallback = "") => window.SiteI18n?.get("pages.fiveRealms." + key, fallback) || fallback;
-  let realmsData = [], questionsData = [], currentQuestion = null;
+  let realmsData = [], currentQuestion = null;
   let config, engine, state, selected = new Set(), pendingAction = null, awaitingReveal = false;
   const announce = (message) => { $("#fr-announcer").textContent = ""; requestAnimationFrame(() => { $("#fr-announcer").textContent = message; }); };
   const emitSound = (type, detail = {}) => {
@@ -25,17 +25,164 @@ if (root && !root.dataset.initialized) {
   const setMessage = (key, fallback) => { $("#fr-action-message").textContent = t(key, fallback); announce(t(key, fallback)); };
   const points = value => (value / config.game.roundingScale).toLocaleString(window.SiteI18n?.getLanguage?.() || "fa", {maximumFractionDigits:2});
   const moneyInput = raw => Math.round(Number(raw) * config.game.roundingScale);
+  const REALM_TO_DOMAIN = Object.freeze({blue:"S",yellow:"T",purple:"E",red:"R",green:"C"});
+  const DOMAIN_TO_REALM = Object.freeze({S:"blue",T:"yellow",E:"purple",R:"red",C:"green"});
+  const JUDGMENT_OPTIONS = Object.freeze({
+    fa:[["ok","مطابق"],["warn","مبهم"],["bad","متناقض"]],
+    en:[["ok","Consistent"],["warn","Ambiguous"],["bad","Contradictory"]],
+    zh:[["ok","一致"],["warn","模糊"],["bad","矛盾"]],
+    ar:[["ok","متوافق"],["warn","ملتبس"],["bad","متناقض"]]
+  });
+  async function populateRecognitionQuestion(form, player) {
+    const actionButtons = $("#five-realms-game [data-action]");
+    actionButtons.forEach(button => { button.disabled = true; });
+    const loading = document.createElement("p");
+    loading.className = "fr-question-loading";
+    loading.setAttribute("role", "status");
+    loading.textContent = t("questionGenerating", "در حال تولید پاراگراف و ارزیابی پنج قلمرو...");
+    form.append(loading);
+    try {
+      const workspace = window.ParagraphWorkspaceAdapter;
+      if (!workspace?.generateParagraphs || !workspace?.evaluateText) {
+        throw new Error(t("questionServiceUnavailable", "مسیر بازشناسی ماشین پاراگراف در دسترس نیست."));
+      }
+      const language = window.SiteI18n?.getLanguage?.() || "fa";
+      const generated = await workspace.generateParagraphs(1, "mixed", language);
+      const paragraph = generated?.[0];
+      if (typeof paragraph?.text !== "string" || !paragraph.text.trim()) {
+        throw new Error(t("questionGenerationFailed", "ماشین پاراگراف متنی معتبر تولید نکرد."));
+      }
+      const evaluated = await workspace.evaluateText(paragraph.text, language);
+      const judgment = evaluated?.judgment;
+      for (const domain of ["S","T","E","R","C"]) {
+        if (!["ok","warn","bad"].includes(judgment?.[domain]?.status)) {
+          throw new Error(t("questionJudgmentFailed", "داوری مرجع پنج قلمرو کامل یا معتبر نیست."));
+        }
+      }
+      if (!form.isConnected || pendingAction !== "question") return;
+      currentQuestion = {text:paragraph.text, judgment};
+      form.replaceChildren();
+
+      const paragraphFieldset = document.createElement("fieldset");
+      paragraphFieldset.className = "fr-question-paragraph";
+      const paragraphLegend = document.createElement("legend");
+      paragraphLegend.textContent = t("recognitionParagraph", "پاراگراف برای بازشناسی");
+      const paragraphText = document.createElement("p");
+      paragraphText.className = "fr-question-text";
+      paragraphText.textContent = paragraph.text;
+      paragraphFieldset.append(paragraphLegend, paragraphText);
+      form.append(paragraphFieldset);
+
+      const languageOptions = JUDGMENT_OPTIONS[language] || JUDGMENT_OPTIONS.fa;
+      const judgmentsFieldset = document.createElement("fieldset");
+      judgmentsFieldset.className = "fr-judgment-grid";
+      const judgmentsLegend = document.createElement("legend");
+      judgmentsLegend.textContent = t("judgeFiveRealms", "قضاوت پنج قلمرو");
+      judgmentsFieldset.append(judgmentsLegend);
+      for (const realm of REALM_IDS) {
+        const realmFieldset = document.createElement("fieldset");
+        realmFieldset.className = "fr-judgment-realm";
+        realmFieldset.dataset.realm = realm;
+        const realmLegend = document.createElement("legend");
+        realmLegend.textContent = realmLabel(realm);
+        realmFieldset.append(realmLegend);
+        for (const [status, labelText] of languageOptions) {
+          const label = document.createElement("label");
+          label.className = "fr-judgment-option fr-judgment-" + status;
+          const input = document.createElement("input");
+          input.type = "radio";
+          input.name = "fr-judgment-" + realm;
+          input.value = status;
+          input.required = true;
+          label.append(input, document.createTextNode(" " + labelText));
+          realmFieldset.append(label);
+        }
+        judgmentsFieldset.append(realmFieldset);
+      }
+      form.append(judgmentsFieldset);
+
+      const counts = Object.fromEntries(REALM_IDS.map(realm => [realm, player.hand.filter(card => card.realm === realm).length]));
+      const maxHeld = Math.max(...Object.values(counts));
+      const tiedRealms = REALM_IDS.filter(realm => counts[realm] === maxHeld);
+      let forgivenSelect = null;
+      if (tiedRealms.length > 1) {
+        const label = document.createElement("label");
+        label.className = "fr-forgiven-realm";
+        label.append(document.createTextNode(t("forgivenRealm", "قلمرو دارای بیشترین کارت که پاسخ نادرست آن بخشوده می‌شود")));
+        forgivenSelect = document.createElement("select");
+        forgivenSelect.setAttribute("aria-label", t("forgivenRealm", "قلمرو بخشوده‌شده"));
+        tiedRealms.forEach(realm => {
+          const option = document.createElement("option");
+          option.value = realm;
+          option.textContent = realmLabel(realm);
+          forgivenSelect.append(option);
+        });
+        label.append(forgivenSelect);
+        form.append(label);
+      }
+
+      const confirm = document.createElement("button");
+      confirm.type = "button";
+      confirm.className = "fr-primary";
+      confirm.textContent = t("confirm", "تأیید");
+      confirm.addEventListener("click", () => {
+        const parts = {};
+        let exactMatch = true;
+        for (const realm of REALM_IDS) {
+          const chosen = $('input[name="fr-judgment-' + realm + '"]:checked', form);
+          if (!chosen) {
+            setMessage("judgeAllRealms", "برای هر پنج قلمرو یک قضاوت انتخاب کنید.");
+            return;
+          }
+          const domain = REALM_TO_DOMAIN[realm];
+          const matchesReference = chosen.value === currentQuestion.judgment?.[domain]?.status;
+          if (!matchesReference) exactMatch = false;
+          parts[realm] = {correct:matchesReference};
+        }
+        const answers = {parts};
+        if (forgivenSelect) answers.forgivenRealm = forgivenSelect.value;
+        const result = engine.act(state, player.id, {type:"question", answers});
+        if (result.ok) {
+          advance(result);
+          setMessage(exactMatch ? "recognitionCorrect" : "recognitionIncorrect",
+            exactMatch ? "قضاوت شما در هر پنج قلمرو با داوری مرجع ماشین منطبق است." : "قضاوت شما با داوری مرجع ماشین در هر پنج قلمرو منطبق نیست.");
+        } else {
+          setMessage("actionFailed", "پاسخ هر پنج قلمرو را کامل کنید.");
+        }
+      });
+      form.append(confirm);
+    } catch (error) {
+      if (form.isConnected && pendingAction === "question") {
+        form.replaceChildren();
+        const message = document.createElement("p");
+        message.className = "fr-question-error";
+        message.setAttribute("role", "alert");
+        message.textContent = error?.message || String(error);
+        form.append(message);
+        const retry = document.createElement("button");
+        retry.type = "button";
+        retry.className = "fr-primary";
+        retry.textContent = t("retry", "تلاش دوباره");
+        retry.addEventListener("click", () => {
+          pendingAction = "question";
+          void populateRecognitionQuestion(form, player);
+        });
+        form.append(retry);
+      }
+    } finally {
+      actionButtons.forEach(button => {
+        button.disabled = !!state?.exchangeBonusAvailable && button.dataset.action !== "exchange";
+      });
+    }
+  }
   async function loadConfig() {
-    const [configResponse, realmsResponse, questionsResponse] = await Promise.all([
+    const [configResponse, realmsResponse] = await Promise.all([
       fetch("games/five-realms/data/config.json"),
-      fetch("games/five-realms/data/realms.json"),
-      fetch("games/five-realms/data/questions.json")
+      fetch("games/five-realms/data/realms.json")
     ]);
-    if (!configResponse.ok || !realmsResponse.ok || !questionsResponse.ok) throw new Error("Five Realms data could not be loaded");
+    if (!configResponse.ok || !realmsResponse.ok) throw new Error("Five Realms data could not be loaded");
     config = await configResponse.json();
     realmsData = (await realmsResponse.json()).realms;
-    questionsData = (await questionsResponse.json()).questions || [];
-    if (!questionsData.length) throw new Error("No question sets are configured");
   }
   function refreshNameInputs() {
     const count = Number($("#fr-player-count").value);
@@ -141,53 +288,7 @@ if (root && !root.dataset.initialized) {
     } else if(action==="withdraw"){
       submit(t("withdraw","Withdraw"),()=>{const result=engine.act(state,player.id,{type:"withdraw"});if(result.ok){advance(result);}else setMessage("emptyBank","No active deposit.");});
     } else if(action==="question"){
-      if(!questionsData.length){setMessage("actionFailed","No question sets are configured.");return;}
-      currentQuestion=questionsData[Math.floor(Math.random()*questionsData.length)];
-      const formset=document.createElement("fieldset");
-      const legend=document.createElement("legend");
-      legend.textContent=currentQuestion.placeholder?t("questionPlaceholder","Placeholder question set"):t("question","Question");
-      formset.append(legend);
-      REALM_IDS.forEach(realm=>{
-        const wrap=document.createElement("div");wrap.className="fr-choice-list";
-        const label=document.createElement("strong");label.textContent=realmLabel(realm);wrap.append(label);
-        const part=currentQuestion.parts?.[realm]||{prompt:"",options:[],answerIndex:-1};
-        const prompt=document.createElement("p");prompt.textContent=part.prompt||"";wrap.append(prompt);
-        if(engine.realmOwned(player,realm)){
-          const free=document.createElement("p");free.textContent=t("fullyOwnedFree","This realm's question part is free because you own all its badges.");wrap.append(free);
-        }else{
-          (part.options||[]).forEach((optionText,i)=>{
-            const label=document.createElement("label"),input=document.createElement("input");
-            input.type="radio";input.name="fr-q-"+realm;input.value=String(i);
-            label.append(input,document.createTextNode(" "+optionText));wrap.append(label);
-          });
-        }
-        formset.append(wrap);
-      });
-      form.append(formset);
-      const counts=Object.fromEntries(REALM_IDS.map(realm=>[realm,player.hand.filter(card=>card.realm===realm).length]));
-      const maxHeld=Math.max(...Object.values(counts));
-      const tiedRealms=REALM_IDS.filter(realm=>counts[realm]===maxHeld);
-      let forgivenSelect=null;
-      if(tiedRealms.length>1){
-        const label=document.createElement("label");label.append(document.createTextNode(t("forgivenRealm","Choose which tied realm's wrong answer is forgiven")));
-        forgivenSelect=document.createElement("select");
-        tiedRealms.forEach(realm=>{const option=document.createElement("option");option.value=realm;option.textContent=realmLabel(realm);forgivenSelect.append(option);});
-        label.append(forgivenSelect);form.append(label);
-      }
-      submit(t("confirm","Confirm"),()=>{
-        const parts={};
-        for(const realm of REALM_IDS){
-          if(engine.realmOwned(player,realm))continue;
-          const chosen=$('input[name="fr-q-'+realm+'"]:checked',form);
-          if(!chosen){setMessage("actionFailed","Choose one answer for every realm that is not fully owned.");return;}
-          parts[realm]={correct:Number(chosen.value)===Number(currentQuestion.parts?.[realm]?.answerIndex)};
-        }
-        const answers={parts};if(forgivenSelect)answers.forgivenRealm=forgivenSelect.value;
-        const result=engine.act(state,player.id,{type:"question",answers});
-        if(result.ok)advance(result);else setMessage("actionFailed","Complete the answers before confirming.");
-      });
-
-    }
+      void populateRecognitionQuestion(form, player);
   }
   $("#fr-player-count").addEventListener("change",refreshNameInputs);
   $("#fr-start").addEventListener("click",async()=>{try{if(!config)await loadConfig();engine=createEngine(config,{seed:Date.now(),onEvent:event=>emitSound(event.type,event.detail)});const names=$$("[data-player-name]").map((input,i)=>input.value.trim()||t("player","Player")+" "+(i+1));state=engine.newGame(names);awaitingReveal=false;refresh();}catch(error){$("#fr-action-message").textContent=error.message;}});
