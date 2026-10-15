@@ -610,3 +610,17 @@ The browser workflow runs Playwright against the PR branch served by a local HTT
 
 **Emergence II paragraph contract:** every non-empty line in each Persian source episode is a paragraph, including lines separated by a single newline. Blank lines are separators and are not paragraphs. Each EN/AR/ZH episode must expose the same number of paragraphs in the same order. The alignment utility splits existing translated text at sentence boundaries and monotonically regroups those unchanged sentence units to the Persian line count; it does not generate, summarize, rewrite, or reorder translation prose. Chinese sentence splitting recognizes 。！？ without requiring spaces. The browser audit checks exact rendered paragraph arrays in all four languages.
 
+
+
+## Content-section navigation contract
+
+Every text-bearing secondary page uses a consistent, localized section-navigation pattern, except **شاهنامه‌خوانی**, whose episode-list and artwork navigation are a deliberate separate experience. The Paragraph Machine is a tool/workspace, not a content page, and is outside this rule.
+
+- Each tab or section heading displays both the localized section number and its canonical name (for example, `۳ · عنوان بخش`). Numbers use the active language's number formatter.
+- Selecting a tab changes only the content visible in its reading panel. It must not call `scrollIntoView`, reset a reader's `scrollTop`, move focus to the reading panel, or otherwise move the document viewport. Keyboard navigation keeps focus on the selected tab with `focus({ preventScroll: true })`.
+- Multi-section books use their existing canonical chapter/part/episode/section data. Do not invent headings, reorder content, or split/merge source paragraphs to create navigation.
+- Works whose canonical source is one continuous, undivided text retain one numbered tab for the complete work; this applies to **سرزمین مشاهده؛ یک رود، یک جریان** and **صفر**. Their prose remains intact and is not artificially divided.
+- The shared book reader (`جاعلان تقلید`, `انسان و ماشین‌هایش`, and `تباهیان`), **رساله فلسفی**, **فصل اول ظهور**, **فصل دوم ظهور**, **سرزمین مشاهده؛ ۲۵ بار رسیدن**, **آینه‌ی ممکن‌ها**, **پژواک لایه سوم**, and **مانیفست آشوب‌زده** all follow the same no-scroll selection behavior.
+- Tabs must retain semantic tablist/tab/tabpanel relationships, visible focus, RTL/LTR behavior, mobile wrapping/overflow, and the selected section when the language changes.
+
+The implementation inventory and page-by-page verification criteria are maintained in `docs/content-tab-navigation-audit.md`.
