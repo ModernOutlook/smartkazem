@@ -7,7 +7,7 @@ if (root && !root.dataset.initialized) {
   root.dataset.initialized = "true";
   const t = (key, fallback = "") => window.SiteI18n?.get("pages.fiveRealms." + key, fallback) || fallback;
   let realmsData = [], currentQuestion = null;
-  let config, engine, state, selected = new Set(), pendingAction = null, awaitingReveal = false;
+  let config, engine, state, selected = new Set(), pendingAction = null, awaitingReveal = false, pendingBankResult = null, pendingBankPlayerId = null;
   const announce = (message) => { $("#fr-announcer").textContent = ""; requestAnimationFrame(() => { $("#fr-announcer").textContent = message; }); };
   const emitSound = (type, detail = {}) => {
     document.dispatchEvent(new CustomEvent("site:game-sound", {detail:{game:"five-realms",type,...detail}}));
@@ -281,15 +281,44 @@ if (root && !root.dataset.initialized) {
     } else if(action==="sell"){
       const badge=select(player.badges.map(b=>({value:b.id,label:realmLabel(b.realm)+" · "+b.value}),),t("sellBadge","Badge to sell"));
       submit(t("sellBadge","Sell badge"),()=>{const result=engine.act(state,player.id,{type:"sell-badge",badgeId:badge.value});if(result.ok){advance(result);}else setMessage("actionFailed","Action failed.");});
-    } else if(action==="deposit"){
-      const amount=document.createElement("input");amount.type="number";amount.min="0";amount.step="0.01";amount.inputMode="decimal";field(t("depositAmount","Deposit amount"),amount);
-      submit(t("deposit","Deposit"),()=>{const result=engine.act(state,player.id,{type:"deposit",amount:moneyInput(amount.value)});if(result.ok){advance(result);}else setMessage("actionFailed","Deposit is above the allowed limit.");});
-    } else if(action==="withdraw"){
-      submit(t("withdraw","Withdraw"),()=>{const result=engine.act(state,player.id,{type:"withdraw"});if(result.ok){advance(result);}else setMessage("emptyBank","No active deposit.");});
     } else if(action==="question"){
       void populateRecognitionQuestion(form, player);
     }
   }
+  function bankMachineStatus() {
+    if (!state || !engine || !config) return {available:false,reason:"no-game"};
+    if (pendingBankResult) {
+      const player = state.players.find(item => item.id === pendingBankPlayerId);
+      return {available:false,reason:"pending-handoff",playerName:player?.name||"",points:player?player.points/config.game.roundingScale:0,bankPrincipal:player?.bank?player.bank.principal/config.game.roundingScale:0,bankActive:!!player?.bank,bankTurns:player?.bank?.turns||0,negativeFormula:!!player?.bank?.negativeFormula};
+    }
+    const player = current();
+    if (state.over) return {available:false,reason:"game-over",playerName:player?.name||""};
+    if (awaitingReveal) return {available:false,reason:"handoff",playerName:player?.name||""};
+    const scale=config.game.roundingScale;
+    const fractionalPoints=(player.points%scale)/scale;
+    return {available:true,reason:"",playerName:player.name,points:player.points/scale,bankPrincipal:player.bank?player.bank.principal/scale:0,bankActive:!!player.bank,bankTurns:player.bank?.turns||0,negativeFormula:!!player.bank?.negativeFormula,maxDeposit:Math.round(config.bank.maxDepositFactor*fractionalPoints*scale)/scale};
+  }
+  function performBankAction(type, amount) {
+    const status=bankMachineStatus();
+    if (!status.available) return {ok:false,reason:status.reason};
+    const player=current();
+    const result=engine.act(state,player.id,type==="deposit"?{type,amount:moneyInput(amount)}:{type});
+    if(result.ok){pendingBankResult=result;pendingBankPlayerId=player.id;awaitingReveal=true;}
+    return result;
+  }
+  async function returnFromBankMachine() {
+    const opened=await window.SharedPages?.open?.("five-realms","share");
+    if(!opened)return false;
+    if(pendingBankResult){const result=pendingBankResult;pendingBankResult=null;pendingBankPlayerId=null;advance(result);}
+    else refresh();
+    return true;
+  }
+  window.FiveRealmsBankMachine=Object.freeze({
+    getStatus:bankMachineStatus,
+    deposit:amount=>performBankAction("deposit",amount),
+    withdraw:()=>performBankAction("withdraw"),
+    returnToGame:returnFromBankMachine
+  });
   $("#fr-player-count").addEventListener("change",refreshNameInputs);
   $("#fr-start").addEventListener("click",async()=>{try{if(!config)await loadConfig();engine=createEngine(config,{seed:Date.now(),onEvent:event=>emitSound(event.type,event.detail)});const names=$$("[data-player-name]").map((input,i)=>input.value.trim()||t("player","Player")+" "+(i+1));state=engine.newGame(names);awaitingReveal=false;refresh();}catch(error){$("#fr-action-message").textContent=error.message;}});
   $("#fr-reveal").addEventListener("click",()=>{awaitingReveal=false;refresh();});
