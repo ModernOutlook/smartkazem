@@ -297,7 +297,18 @@
       "fullyOwnedFree": "This realm's question part is free because you own all its badges.",
       "luckyCard": "Lucky card",
       "bankNegativeFormula": "negative-interest formula applies (deposit below one point)"
-    }
+    ,
+    "questionGenerating": "Generating a paragraph and evaluating all five realms...",
+    "questionServiceUnavailable": "The Paragraph Machine recognition pathway is unavailable.",
+    "questionGenerationFailed": "The Paragraph Machine did not generate a valid paragraph.",
+    "questionJudgmentFailed": "The five-realm reference judgment is incomplete or invalid.",
+    "recognitionParagraph": "Paragraph to recognize",
+    "judgeFiveRealms": "Judge the five realms",
+    "judgeAllRealms": "Choose one judgment for each of the five realms.",
+    "recognitionCorrect": "Your judgments match the machine's reference across all five realms.",
+    "recognitionIncorrect": "Your judgments do not match the machine's reference across all five realms.",
+    "retry": "Retry"
+  }
   },
   "paragraphMachine": {
     "title": "Paragraph Machine",
