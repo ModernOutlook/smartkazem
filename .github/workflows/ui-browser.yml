@@ -49,6 +49,7 @@ jobs:
         run: node scripts/ui-browser-smoke.mjs
 
       - name: Test Five Realms gameplay interactions at desktop and mobile viewports
+        if: always()
         run: node scripts/five-realms-browser-smoke.mjs
 
       - name: Test realm-specific child backgrounds at required viewports
