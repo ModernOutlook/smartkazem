@@ -274,11 +274,12 @@ Hard limits:
 - MAX_WORD_LENGTH = 34
 - MAX_CHARS = 900
 
-Judgment contract:
-- domains: S / T / E / R / C
-- status: ok | warn | bad
-- reason: non-empty string
-- ok = منطبق; warn = مبهم; bad = متناقض
+Judgment contract (per paragraph):
+- `judgment`: S / T / E / R / C, each with `status: ok | warn | bad` and a non-empty `reason`; these describe alignment with explicit principles only.
+- `normative`: a separate S / T / E / R / C axis, each with `direction: nobler | harmful | mixed | indeterminate`, a non-empty `rationale`, and textual `evidence`.
+- The normative axis is qualitative and contextual. It must not be converted into a number, percentage, total, average, or single overall ranking.
+- `ok` = منطبق; `warn` = مبهم; `bad` = متناقض. These labels are not moral scores.
+- The UI presents the normative direction separately and shows its rationale/evidence; it never treats the three-state conceptual status as a moral judgment.
 
 Entry modes:
 - **هم‌سنگی:** original user text → criteria translated to the same language → independent judgment → UI. The user's paragraph is never translated as a preprocessing step.
