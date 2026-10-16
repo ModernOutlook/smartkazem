@@ -22,6 +22,7 @@ const elements={
  primaryOutput:document.getElementById('paragraph-primary-output'),
  action:document.getElementById('paragraph-recognize'),
  output:document.getElementById('paragraph-output'),
+ normative:document.getElementById('paragraph-normative-output'),
  error:document.getElementById('paragraph-error'),
  source:document.getElementById('paragraph-source'),
  settings:document.getElementById('paragraph-settings'),
@@ -62,6 +63,28 @@ function getSourceLabel(m){
  return labels[lang][m===ENTRY_MODES.REFERENCE?'reference':'experience'];
 }
 function clearRealmState(){elements.choices.forEach(c=>{c.classList.remove('judgment-ok','judgment-warn','judgment-bad','realm-output');delete c.dataset.judgment;c.removeAttribute('aria-pressed')})}
+const NORMATIVE_DIRECTION_KEYS=Object.freeze({nobler:'normativeNobler',harmful:'normativeHarmful',mixed:'normativeMixed',indeterminate:'normativeIndeterminate'});
+function renderNormativeResults(results){
+ const lang=getLanguage(),labels=REALM_LABELS[lang]||REALM_LABELS.fa;
+ const heading=document.createElement('h3');heading.textContent=translate('paragraphMachine.normativeTitle','محور هنجاری مستقل');
+ const note=document.createElement('p');note.className='pm-normative-note';note.textContent=translate('paragraphMachine.normativeDescription','این داوری کیفی است؛ امتیاز، درصد اطمینان یا رتبه‌بندی کلی تولید نمی‌شود.');
+ const list=document.createElement('div');list.className='pm-normative-list';let count=0;
+ (Array.isArray(results)?results:[]).forEach(result=>{
+  const normative=result?.normative;if(!normative)return;
+  DOMAIN_ORDER.forEach(domain=>{
+   const item=normative[domain];if(!item||!NORMATIVE_DIRECTION_KEYS[item.direction])return;
+   count+=1;
+   const card=document.createElement('article');card.className='pm-normative-card pm-normative-'+item.direction;
+   const title=document.createElement('h4');title.textContent=(labels[domain]||domain)+' — '+translate('paragraphMachine.'+NORMATIVE_DIRECTION_KEYS[item.direction],item.direction);
+   const rationale=document.createElement('p');rationale.className='pm-normative-rationale';rationale.textContent=item.rationale;
+   const evidence=document.createElement('p');evidence.className='pm-normative-evidence';
+   const evidenceLabel=document.createElement('strong');evidenceLabel.textContent=translate('paragraphMachine.normativeEvidence','شاهد متنی: ');
+   evidence.append(evidenceLabel,document.createTextNode(item.evidence));card.append(title,rationale,evidence);list.append(card);
+  });
+ });
+ if(!count){const unavailable=document.createElement('p');unavailable.className='pm-normative-note';unavailable.textContent=translate('paragraphMachine.normativeUnavailable','محور هنجاری در این پاسخ موجود نیست؛ داوری ناقص است.');list.append(unavailable)}
+ elements.normative.replaceChildren(heading,note,list);elements.normative.hidden=false;
+}
 function generateRandomTargetJudgments(){
  clearRealmState();
  DOMAIN_ORDER.forEach(d=>{userJudgments[d]=getStatusOptions()[Math.floor(Math.random()*getStatusOptions().length)][0]});
@@ -75,9 +98,10 @@ async function generateRecognitionParagraph(){
   elements.error.textContent='';elements.primaryOutput.innerHTML='<div class="pm-loading">'+translate('paragraphMachine.processing','در حال پردازش...')+'</div>';
   currentResults=await generateExperience();
   renderPrimaryParagraphs(currentResults);
+  renderNormativeResults(currentResults);
   elements.source.textContent=translate('paragraphMachine.judgmentReady','پاراگراف آماده قضاوت پنج‌قلمرویی است.');
   updateActionState();
- }catch(e){currentResults=[];elements.primaryOutput.replaceChildren();elements.error.textContent=e.message||String(e);updateActionState()}
+ }catch(e){currentResults=[];elements.primaryOutput.replaceChildren();elements.normative.replaceChildren();elements.normative.hidden=true;elements.error.textContent=e.message||String(e);updateActionState()}
 }
 function setRealmOutputState(p){const j=p?.judgment||{};elements.choices.forEach(c=>{const s=j[c.dataset.domain]?.status||'';c.classList.remove('judgment-ok','judgment-warn','judgment-bad');c.classList.toggle('realm-output',!!s);c.dataset.judgment=s;if(s)c.classList.add('judgment-'+s);c.setAttribute('aria-pressed',String(!!s))})}
 function openParagraphPage(kind){
@@ -86,7 +110,7 @@ function openParagraphPage(kind){
  elements.primaryPanel.classList.toggle('is-input-mode',ref);elements.primaryPanel.classList.toggle('is-output-mode',!ref);
  elements.input.hidden=!ref;elements.primaryOutput.hidden=ref;
  elements.action.textContent=getActionLabel(kind);elements.action.classList.toggle('pm-action-reference',ref);elements.action.classList.toggle('pm-action-recognition',!ref);
- elements.source.textContent=getSourceLabel(kind);elements.input.value='';elements.primaryOutput.replaceChildren();elements.output.replaceChildren();elements.error.textContent='';
+ elements.source.textContent=getSourceLabel(kind);elements.input.value='';elements.primaryOutput.replaceChildren();elements.output.replaceChildren();elements.normative.replaceChildren();elements.normative.hidden=true;elements.error.textContent='';
  elements.input.classList.remove('pm-user-correct','pm-user-incorrect');
  currentResults=[];DOMAIN_ORDER.forEach(d=>delete userJudgments[d]);clearRealmState();closeJudgmentPopover();
  elements.choices.forEach(c=>{c.classList.toggle('is-judgment-input',!ref);c.classList.toggle('is-result-output',ref)});
@@ -145,6 +169,7 @@ async function run(){
    if(!equivalenceReady())return;
    const result=await evaluateReference();
    currentResults=result;
+   renderNormativeResults(result);
    const correct=DOMAIN_ORDER.every(d=>result[0].judgment?.[d]?.status===userJudgments[d]);
    elements.input.classList.add(correct?'pm-user-correct':'pm-user-incorrect');
    elements.source.textContent=translate(correct?'paragraphMachine.equivalenceCorrect':'paragraphMachine.equivalenceIncorrect',correct?'نوشتار شما با مجموعه داوری نمایش‌داده‌شده هم‌سنگ است.':'نوشتار شما با مجموعه داوری نمایش‌داده‌شده هم‌سنگ نیست.');
