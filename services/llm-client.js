@@ -122,19 +122,19 @@ function getSettings(){
 function saveSettings(settings){
   const baseUrl=normalizeBaseUrl(settings.baseUrl||DEFAULTS.baseUrl);
   const model=String(settings.model||DEFAULTS.model).trim();
-  const apiKey=String(settings.apiKey||'').trim();
+  // Browser-supplied API keys are intentionally ignored; credentials stay in the Worker.
   const proxyUrl=normalizeOptionalProxyUrl(settings.proxyUrl||'');
 
   try{
     localStorage.setItem('pgm_baseUrl',baseUrl);
     localStorage.setItem('pgm_model',model);
     localStorage.setItem(PROXY_URL_KEY,proxyUrl);
-    runtimeApiKey=apiKey;
+    runtimeApiKey='';
   }catch(_){}
 
   rememberValue(HISTORY_KEYS.baseUrl,baseUrl);
   rememberValue(HISTORY_KEYS.model,model);
-  runtimeApiKey=apiKey;
+  runtimeApiKey='';
 }
 
 async function request(url,init){
