@@ -11,7 +11,7 @@ export function createGame({width=720,height=480,seed=1,columns=18,rows=8}={}){
  const random=()=>{randomState=(1664525*randomState+1013904223)>>>0;return randomState/4294967296;};
  const cellW=width/columns,cellH=Math.min(28,Math.max(14,cellW*.78)),triangles=[];
  for(let row=0;row<rows;row++)for(let col=0;col<columns;col++){
-  const x0=col*cellW,x1=(col+1)*cellW,y0=18+row*cellH,y1=y0+cellH;
+  const x0=col*cellW,x1=(col+1)*cellW,y0=row*cellH,y1=y0+cellH;
   const points=[{x:x0,y:y0},{x:x1,y:y0},{x:x1,y:y1},{x:x0,y:y1}];
   const polygons=(row+col)%2?[[points[0],points[1],points[3]],[points[1],points[2],points[3]]]:[[points[0],points[1],points[2]],[points[0],points[2],points[3]]];
   for(const vertices of polygons){
