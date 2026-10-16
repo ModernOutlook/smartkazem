@@ -60,7 +60,7 @@ test("adds the free router as fallback and overrides client fallback lists", asy
   });
   assert.equal(response.status, 200);
   assert.deepEqual(captured.body.models, ["google/example:free", "openrouter/free"]);
-  assert.equal(captured.body.model, "google/example:free");
+  assert.equal("model" in captured.body, false);
   assert.equal(captured.url, "https://openrouter.ai/api/v1/chat/completions");
 });
 
@@ -72,6 +72,7 @@ test("allows the free router without introducing any paid fallback", async () =>
   });
   assert.equal(response.status, 200);
   assert.deepEqual(captured.body.models, ["openrouter/free"]);
+  assert.equal("model" in captured.body, false);
 });
 
 test("rejects invalid JSON with a controlled client error", async () => {
