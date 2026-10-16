@@ -43,15 +43,15 @@ try {
     });
 
     for (const language of languages) {
-      await page.evaluate(() => window.ParagraphPage.close());
+      await page.evaluate(() => window.SitePages.closeParagraph());
       await page.locator('[data-site-lang="' + language.code + '"]').first().click();
       await page.waitForFunction(({ code, dir }) =>
         document.documentElement.lang === code &&
         document.documentElement.dir === dir,
       language);
       for (const entry of ['experience', 'reference']) {
-        await page.evaluate(kind => window.ParagraphPage.open(kind), entry);
-        await page.waitForFunction(() => document.querySelector('#paragraph-page')?.classList.contains('open'));
+        await page.evaluate(kind => window.SitePages.openParagraph(kind), entry);
+        await page.waitForFunction(() => {\n          const page = document.querySelector('#paragraph-page');\n          return page?.classList.contains('open') && page.classList.contains('is-active') && getComputedStyle(page).display !== 'none' && page.getBoundingClientRect().width > 0;\n        });
         await page.waitForTimeout(80);
         const metrics = await page.evaluate(() => {
           const rect = selector => {
