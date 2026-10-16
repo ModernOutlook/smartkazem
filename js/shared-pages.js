@@ -54,7 +54,18 @@ document.addEventListener('click',event=>{
  const entry=event.target instanceof Element?event.target.closest('[data-tadbir-link]'):null;
  if(!entry)return;
  event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
- open('tadbir','continuity').catch(error=>console.error('[SharedPages]',error));
+ if(activeKey==='five-realms'){
+  open('five-realms-cards',origin).catch(error=>console.error('[SharedPages]',error));
+  return;
+ }
+ open('tadbir',activeKey==='five-realms-cards'?origin:'continuity').catch(error=>console.error('[SharedPages]',error));
+},true);
+
+document.addEventListener('click',event=>{
+ const entry=event.target instanceof Element?event.target.closest('[data-quantum-maze-link]'):null;
+ if(!entry)return;
+ event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
+ open('quantum-maze',origin).catch(error=>console.error('[SharedPages]',error));
 },true);
 
 document.addEventListener('click',event=>{
