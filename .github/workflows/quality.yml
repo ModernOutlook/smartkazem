@@ -33,6 +33,9 @@ jobs:
       - name: Test Five Realms gameplay engine
         run: node --test games/five-realms/tests/*.test.mjs
 
+      - name: Test Talash gameplay engine
+        run: node --test games/talash/tests/*.test.mjs
+
       - name: Test Paragraph Machine contracts
         run: node tests/paragraph-machine.test.js
 

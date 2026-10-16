@@ -3,6 +3,12 @@ name: UI browser smoke tests
 on:
   pull_request:
   workflow_dispatch:
+    inputs:
+      approve_browser_download:
+        description: "Explicitly approve downloading Playwright and Chromium if the reusable bundle cannot be accessed"
+        required: true
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -13,25 +19,116 @@ concurrency:
 
 jobs:
   browser-smoke:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 2
+
+      - name: Detect image-only asset upload commit
+        id: change-scope
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" != "pull_request" ]; then
+            echo "image_only=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          files="$(git diff-tree --no-commit-id --name-only -r HEAD^ HEAD)"
+          if [ -n "$files" ] && ! printf '%s\n' "$files" | grep -Ev '^content/bk[1-5]\.(jpe?g)$' >/dev/null; then
+            echo "image_only=true" >> "$GITHUB_OUTPUT"
+            echo "Only content/bk1.jpg/jpeg through content/bk5.jpg/jpeg changed in this commit; browser/language tests will be skipped."
+          else
+            echo "image_only=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Setup Node
+        if: steps.change-scope.outputs.image_only != 'true'
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
 
-      - name: Install Playwright
+      - name: Restore cached Playwright and Chromium
+        id: browser-cache
+        if: steps.change-scope.outputs.image_only != 'true'
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: smartkazem-browser-${{ runner.os }}-node22-playwright1.55.0-chromium-v2
+
+      - name: Import prebuilt Playwright and Chromium bundle from private GPT repository
+        id: browser-bundle
+        if: steps.change-scope.outputs.image_only != 'true' && steps.browser-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GPT_CACHE_READ_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "imported=false" >> "$GITHUB_OUTPUT"
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "GPT_CACHE_READ_TOKEN is not configured; reusable bundle import is unavailable."
+            exit 0
+          fi
+
+          TAG="playwright-1.55.0-chromium-linux-x64"
+          ARCHIVE="playwright-1.55.0-chromium-linux-x64.tar.gz"
+          CHECKSUM="$ARCHIVE.sha256"
+          DEST="$RUNNER_TEMP/playwright-release"
+          mkdir -p "$DEST"
+
+          gh release download "$TAG" --repo ModernOutlook/GPT \
+            --pattern "$ARCHIVE" --pattern "$CHECKSUM" --dir "$DEST"
+
+          cd "$DEST"
+          sha256sum --check "$CHECKSUM"
+          tar -xzf "$ARCHIVE" -C "$DEST"
+
+          mkdir -p "$GITHUB_WORKSPACE/node_modules" "$HOME/.cache/ms-playwright"
+          cp -a "$DEST/playwright-cache/npm/node_modules/." "$GITHUB_WORKSPACE/node_modules/"
+          cp -a "$DEST/playwright-cache/ms-playwright/." "$HOME/.cache/ms-playwright/"
+
+          node -e "const {chromium}=require('./node_modules/playwright'); if (!require('node:fs').existsSync(chromium.executablePath())) process.exit(1)"
+          echo "imported=true" >> "$GITHUB_OUTPUT"
+          echo "Imported the reusable bundle and verified the Chromium executable."
+
+      - name: Install Playwright and Chromium (explicit approval fallback)
+        id: browser-install
+        if: steps.change-scope.outputs.image_only != 'true' && steps.browser-cache.outputs.cache-hit != 'true' && steps.browser-bundle.outputs.imported != 'true' && github.event_name == 'workflow_dispatch' && inputs.approve_browser_download == true
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install chromium
 
+      - name: Save reusable Playwright and Chromium cache
+        if: (steps.browser-bundle.outputs.imported == 'true' || steps.browser-install.outcome == 'success') && steps.browser-cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: smartkazem-browser-${{ runner.os }}-node22-playwright1.55.0-chromium-v2
+
+      - name: Check whether browser dependencies are already available
+        id: browser-ready
+        if: steps.change-scope.outputs.image_only != 'true'
+        run: |
+          if [ -f node_modules/playwright/package.json ] && node -e "const fs=require('node:fs'); const {chromium}=require('playwright'); process.exit(fs.existsSync(chromium.executablePath()) ? 0 : 1)"; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Explain skipped browser tests
+        if: steps.browser-ready.outputs.ready == 'false'
+        run: echo "Browser tests skipped: Playwright/Chromium is not cached and the reusable private bundle was not imported. Add GPT_CACHE_READ_TOKEN (Contents: read on ModernOutlook/GPT), or manually run this workflow with approve_browser_download=true to approve a direct download."
+
       - name: Start static site
+        if: steps.browser-ready.outputs.ready == 'true'
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/smartkazem-http.log 2>&1 &
           echo $! > /tmp/smartkazem-http.pid
@@ -43,44 +140,51 @@ jobs:
           exit 1
 
       - name: Audit four-language HTML translation contracts
+        if: steps.browser-ready.outputs.ready == 'true'
         run: node scripts/i18n-contract-check.mjs
 
       - name: Test language transitions and responsive overflow
+        if: steps.browser-ready.outputs.ready == 'true'
         run: node scripts/ui-browser-smoke.mjs
 
       - name: Test Paragraph Machine layout across viewport, entry-route and language matrix
+        if: steps.browser-ready.outputs.ready == 'true'
         run: node scripts/paragraph-layout-browser-smoke.mjs
 
       - name: Upload Paragraph Machine full-matrix screenshots
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true' && hashFiles('artifacts/paragraph-machine/**') != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: paragraph-machine-full-matrix-screenshots
           path: artifacts/paragraph-machine/
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14
 
       - name: Test Five Realms gameplay interactions at desktop and mobile viewports
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: node scripts/five-realms-browser-smoke.mjs
 
+      - name: Test Talash hub, Tadbir handoff, and responsive gameplay
+        if: always() && steps.browser-ready.outputs.ready == 'true'
+        run: node scripts/talash-browser-smoke.mjs
+
       - name: Test realm-specific child backgrounds at required viewports
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: node scripts/realm-child-background-smoke.mjs
 
       - name: Test 3:4 content covers on every eligible page
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: node scripts/content-covers-browser-smoke.mjs
 
       - name: Upload child-page background screenshots
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true' && hashFiles('artifacts/realm-child-backgrounds/**') != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: realm-child-background-screenshots
           path: artifacts/realm-child-backgrounds/
-          if-no-files-found: warn
+          if-no-files-found: error
 
       - name: Stop static site
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: |
           if [ -f /tmp/smartkazem-http.pid ]; then kill "$(cat /tmp/smartkazem-http.pid)" || true; fi

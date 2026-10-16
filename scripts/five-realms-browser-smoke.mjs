@@ -19,7 +19,7 @@ try {
     page.on('pageerror', error => pageErrors.push(error.message));
     page.on('requestfailed', request => failedRequests.push(request.url() + ': ' + (request.failure()?.errorText || 'request failed')));
 
-    const response = await page.goto(`${baseURL}/index.html?page=five-realms`, { waitUntil: 'domcontentloaded' });
+    const response = await page.goto(`${baseURL}/index.html?page=five-realms-cards`, { waitUntil: 'domcontentloaded' });
     if (!response?.ok()) {
       fail(`${viewport.name}: game route HTTP ${response?.status() ?? 'no response'}`);
       await page.close();
@@ -57,7 +57,7 @@ try {
     await page.locator('#fr-action-form button').last().click();
     await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
     if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) fail(`${viewport.name}: turn handoff did not name player two`);
-    if (await page.locator('#continuity-tadbir[data-tadbir-link]').count() !== 1) {
+    if (await page.locator('#five-realms-tadbir[data-tadbir-link]').count() !== 1) {
       fail(`${viewport.name}: Continuity realm does not expose the Tadbir entry button`);
     }
     await page.evaluate(() => window.SharedPages.open('tadbir', 'continuity'));

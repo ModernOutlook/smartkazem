@@ -1,6 +1,6 @@
 # بازی ۵ قلمرو — Five Realms
 
-Five Realms is a local hot-seat card-game demo for 2–5 players, integrated into the SmartKazem shared-page runtime. The rules engine and browser smoke coverage are included. The question flow now generates a paragraph and its reference judgment through the existing Paragraph Machine recognition pipeline and default backend settings. Remaining author-owned game configuration decisions are documented below.
+The Five Realms entry is now a five-game directory in the SmartKazem shared-page runtime. The existing local hot-seat card game for 2–5 players remains preserved at the separate `five-realms-cards` route so its rules engine and Tadbir bank handoff remain available. Its question flow generates a paragraph and reference judgment through the existing Paragraph Machine recognition pipeline and default backend settings. Remaining author-owned card-game configuration decisions are documented below.
 
 ## Layout
 
@@ -35,15 +35,15 @@ node --test games/five-realms/tests/*.test.mjs
 - Implemented: exchange from an unowned realm into an owned realm grants one additional exchange before the turn ends; when both the returned-card realm and drawn-card realm are owned, the returned card stays in hand and two cards are drawn.
 - Implemented: the question action stays inside the game page and requests one paragraph through `ParagraphWorkspaceAdapter.generateParagraphs(1, 'mixed', language)`, then independently evaluates it through `ParagraphWorkspaceAdapter.evaluateText`. The UI renders five realm judgment boxes with the same three statuses as Paragraph Machine. Exact five-realm matching determines recognition correctness; existing card rewards, wrong-answer penalties, full-ownership forgiveness, and tied-most-held-realm forgiveness remain game mechanics.
 - Implemented: bank interest accrues at the start of the owner's turns for up to five turns; withdrawal stops future interest; sold badges return to the shared pool; game-over winners are selected by spendable points only, then total owned badge value. Bank principal and accrued interest do not count unless withdrawn before the game ends.
-- Tadbir bank machine: deposit and withdrawal are removed from the Five Realms action panel and are available through the separate «تدبیر» page, launched by a button in the Continuity of the Universe realm. Its adapter operates on the active player's existing in-game bank, preserves the game state while routes change, and treats a successful bank operation as the current turn's action before returning to the game for the next-player handoff.
+- Tadbir bank machine: deposit and withdrawal are removed from the card game's action panel and are available through the separate «تدبیر» page, launched from the five-game directory. The card game and bank state remain on the separate `five-realms-cards` route so returning from Tadbir preserves the active game and handoff state. Its adapter operates on the active player's existing in-game bank, preserves the game state while routes change, and treats a successful bank operation as the current turn's action before returning to the game for the next-player handoff.
 - Question generation and reference evaluation use the existing Paragraph Machine LLM client and its default backend configuration. The game does not introduce a second LLM configuration path. Live questions require a working LLM connection; the game remains on the same page if generation or evaluation fails, and offers retry.
 - The game can be launched as a mechanics demo, but it must not be presented as a finished, author-approved game until the remaining open rules/configuration decisions are resolved.
 
 ## Site integration progress
 
-- Added `content/page-templates/five-realms.fragment` and `css/pages/five-realms.css`.
-- Registered the page in `js/shared-pages.js` with the existing child-page runtime and a button in the `اقتصاد سهم` passage in `index.html`.
-- Added `games/five-realms/ui.mjs` for local hot-seat setup, hand display, action controls, badges, bank, scoreboard, and pass-device handoff.
+- `content/page-templates/five-realms.fragment` is the five-game directory; `games/five-realms/hub.mjs` opens Talash and the existing Tadbir page.
+- The original card game is preserved in `content/page-templates/five-realms-cards.fragment` and remains implemented by `games/five-realms/ui.mjs` on the `five-realms-cards` route.
+- `js/shared-pages.js` registers the directory, the preserved card game, Tadbir, and Talash with the shared-page runtime.
 - Added centralized `pages.fiveRealms.*` strings to `translations/fa.json`, `en.json`, `ar.json`, and `zh.json`. Realm display labels and colors are read from `data/realms.json`; the mapping is author-confirmed.
 - Emits named game events through `site:game-sound` and requests sound through the existing `SiteAudio.play(realm)` API. The site audio engine itself was not modified.
 - The browser workflow starts the site over HTTP and exercises game startup, scoring, turn handoff, exchange, badge action panels, and Tadbir's active-player bank connection at desktop and mobile viewports. Final readiness still depends on passing the current CI run and resolving the open author-owned content/configuration decisions.

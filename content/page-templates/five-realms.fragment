@@ -1,38 +1,13 @@
-<main class="page child-page fr-page" lang="fa" dir="rtl" aria-labelledby="fr-title">
-  <header class="fr-head">
-    <div><p class="fr-eyebrow">ECONOMY OF SHARE · C</p><h1 id="fr-title" data-i18n="pages.fiveRealms.title">بازی ۵ قلمرو</h1><p data-i18n="pages.fiveRealms.subtitle">بازی کارتی محلی برای ۲ تا ۵ بازیکن</p></div>
-    <button id="five-realms-close" class="fr-close" type="button" data-i18n="labels.back" data-i18n-aria="labels.back">بازگشت</button>
-  </header>
-  <section class="fr-shell" id="five-realms-game" aria-describedby="fr-note">
-    <p class="fr-note" id="fr-note" data-i18n="pages.fiveRealms.hotSeat">بازی محلی است. هنگام واگذاری دستگاه، دست بازیکن بعدی پنهان می‌شود.</p>
-    <section class="fr-panel" id="fr-setup">
-      <h2 data-i18n="pages.fiveRealms.setup">آماده‌سازی بازی</h2>
-      <label for="fr-player-count" data-i18n="pages.fiveRealms.playerCount">تعداد بازیکنان</label>
-      <select id="fr-player-count"><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option></select>
-      <div id="fr-player-names" class="fr-name-grid"></div>
-      <button type="button" id="fr-start" class="fr-primary" data-i18n="pages.fiveRealms.start">شروع بازی</button>
-    </section>
-    <section id="fr-pass" class="fr-panel" hidden aria-live="polite">
-      <h2 data-i18n="pages.fiveRealms.passDevice">دستگاه را واگذار کنید</h2><p id="fr-pass-name"></p>
-      <button type="button" id="fr-reveal" class="fr-primary" data-i18n="pages.fiveRealms.reveal">نمایش دست</button>
-    </section>
-    <section id="fr-play" hidden>
-      <div class="fr-status" aria-live="polite"><div><span data-i18n="pages.fiveRealms.round">دور</span> <b id="fr-round">1</b></div><div><span data-i18n="pages.fiveRealms.currentPlayer">بازیکن</span> <b id="fr-current"></b></div><div><span data-i18n="pages.fiveRealms.points">امتیاز</span> <b id="fr-points">0</b></div><div><span data-i18n="pages.fiveRealms.bank">بانک</span> <b id="fr-bank">0</b></div></div>
-      <section class="fr-panel"><h2 data-i18n="pages.fiveRealms.hand">دست شما</h2><div id="fr-hand" class="fr-cards" role="group" aria-label="Cards"></div><p id="fr-action-message" class="fr-message" aria-live="polite"></p></section>
-      <section class="fr-panel"><h2 data-i18n="pages.fiveRealms.action">یک کنش انتخاب کنید</h2>
-        <div class="fr-actions">
-          <button type="button" data-action="question" data-i18n="pages.fiveRealms.question">پرسش</button>
-          <button type="button" data-action="exchange" data-i18n="pages.fiveRealms.exchange">مبادله</button>
-          <button type="button" data-action="score" data-i18n="pages.fiveRealms.scoreHand">امتیازگیری از دست</button>
-          <button type="button" data-action="buy" data-i18n="pages.fiveRealms.buyBadge">خرید نشان</button>
-          <button type="button" data-action="sell" data-i18n="pages.fiveRealms.sellBadge">فروش نشان</button>
-        </div>
-        <div id="fr-action-form" class="fr-action-form"></div>
-      </section>
-      <section class="fr-panel"><h2 data-i18n="pages.fiveRealms.badges">نشان‌های بازیکن</h2><div id="fr-badges"></div></section>
-      <section class="fr-panel"><h2 data-i18n="pages.fiveRealms.players">وضعیت بازیکنان</h2><div id="fr-scoreboard"></div></section>
-    </section>
-    <section id="fr-game-over" class="fr-panel" hidden aria-live="polite"><h2 data-i18n="pages.fiveRealms.gameOver">پایان بازی</h2><div id="fr-winner"></div><button type="button" id="fr-restart" data-i18n="pages.fiveRealms.restart">بازی تازه</button></section>
-    <div id="fr-announcer" class="fr-sr-only" aria-live="assertive" aria-atomic="true"></div>
-  </section>
+<main class="page child-page fr-page fr-hub-page" lang="fa" dir="rtl" aria-labelledby="fr-title">
+ <header class="fr-head">
+  <div><p class="fr-eyebrow">FIVE REALMS · GAMES</p><h1 id="fr-title" data-i18n="pages.fiveRealms.title">بازی ۵ قلمرو</h1><p data-i18n="pages.gameHub.subtitle">پنج بازی، پنج قلمرو</p></div>
+  <button id="five-realms-close" class="fr-close" type="button" data-i18n="labels.back" data-i18n-aria="labels.back">بازگشت</button>
+ </header>
+ <section class="fr-hub-grid" aria-label="Five Realms games">
+  <button class="fr-game-tile fr-game-talash" type="button" data-talash-link><span class="fr-game-number">۱</span><strong data-i18n="pages.gameHub.talash">تلاش</strong><span data-i18n="pages.gameHub.structure">ساختار تالار</span></button>
+  <button class="fr-game-tile" type="button" disabled aria-disabled="true"><span class="fr-game-number">۲</span><strong data-i18n="pages.gameHub.gold">طلا</strong><span data-i18n="pages.gameHub.continuity">تداوم عالم</span><small data-i18n="pages.gameHub.comingSoon">در دست ساخت</small></button>
+  <button class="fr-game-tile" type="button" disabled aria-disabled="true"><span class="fr-game-number">۳</span><strong data-i18n="pages.gameHub.experience">تجربه</strong><span data-i18n="pages.gameHub.experienceRealm">قلمرو تجربه</span><small data-i18n="pages.gameHub.comingSoon">در دست ساخت</small></button>
+  <button class="fr-game-tile" type="button" disabled aria-disabled="true"><span class="fr-game-number">۴</span><strong data-i18n="pages.gameHub.simulation">شبیه‌سازی</strong><span data-i18n="pages.gameHub.reference">مرجع تقلید</span><small data-i18n="pages.gameHub.comingSoon">در دست ساخت</small></button>
+  <button class="fr-game-tile fr-game-tadbir" type="button" data-tadbir-link><span class="fr-game-number">۵</span><strong data-i18n="pages.gameHub.tadbir">تدبیر</strong><span data-i18n="pages.gameHub.share">اقتصاد سهم</span></button>
+ </section>
 </main>
