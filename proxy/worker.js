@@ -71,6 +71,10 @@ export default {
   }
 };
 
+function isFreeModel(model) {
+  return model === "openrouter/free" || (typeof model === "string" && model.endsWith(":free"));
+}
+
 async function forward(request, env, path, origin) {
   const headers = new Headers({
     "Authorization": "Bearer " + env.OPENROUTER_API_KEY,
@@ -83,7 +87,29 @@ async function forward(request, env, path, origin) {
   if (accept) headers.set("Accept", accept);
 
   const init = { method: request.method, headers, redirect: "manual" };
-  if (request.method !== "GET" && request.method !== "HEAD") init.body = request.body;
+  if (request.method === "POST" && path === "/chat/completions") {
+    let payload;
+    try {
+      payload = await request.json();
+    } catch (_) {
+      return json({ error: "Request body must be valid JSON.", code: "INVALID_JSON" }, 400, origin);
+    }
+
+    const model = payload && payload.model;
+    if (!isFreeModel(model)) {
+      return json({
+        error: "Only explicitly free models are permitted.",
+        code: "FREE_MODELS_ONLY"
+      }, 400, origin);
+    }
+
+    // Ignore client-supplied fallback lists. Every possible model is free.
+    payload.models = model === "openrouter/free"
+      ? ["openrouter/free"]
+      : [model, "openrouter/free"];
+    init.body = JSON.stringify(payload);
+    init.headers.set("Content-Type", "application/json");
+  }
 
   let upstream;
   try {
