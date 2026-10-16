@@ -1,4 +1,5 @@
 import { chromium } from 'playwright';
+import { mkdir } from 'node:fs/promises';
 
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const browser = await chromium.launch({ headless: true });
@@ -23,6 +24,8 @@ const languages = [
   { code: 'ar', dir: 'rtl' },
   { code: 'zh', dir: 'ltr' },
 ];
+const screenshotDir = 'artifacts/paragraph-machine';
+await mkdir(screenshotDir, { recursive: true });
 let failures = 0;
 function check(ok, message) {
   if (!ok) { failures += 1; console.error('FAIL ' + message); }
@@ -152,6 +155,12 @@ try {
           check(metrics.smartbot && metrics.smartbot.width > 0 && metrics.choices && metrics.choices.width > 0, tag + ': SmartBot or realm controls collapsed');
         }
         console.log('OK ' + tag + ': workspace=' + Math.round(metrics.workspace?.width || 0) + 'px, realms=' + metrics.realms.map(r => Math.round(r.width)).join('/') + ', workspaceScroll=' + metrics.workspaceScrolls);
+        const safe = value => value.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        await page.screenshot({
+          path: screenshotDir + '/' + safe(viewport.name) + '__' + language.code + '__' + entry + '.png',
+          fullPage: false,
+          animations: 'disabled'
+        });
       }
     }
     // Exercise real in-session reflow across orientation changes and the
