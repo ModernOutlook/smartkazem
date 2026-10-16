@@ -43,6 +43,7 @@ try {
     });
 
     for (const language of languages) {
+      await page.evaluate(() => window.ParagraphPage.close());
       await page.locator('[data-site-lang="' + language.code + '"]').first().click();
       await page.waitForFunction(({ code, dir }) =>
         document.documentElement.lang === code &&
