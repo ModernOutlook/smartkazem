@@ -61,7 +61,15 @@ try {
           })),
         evaluateText: async text => ({
           text,
-          judgment: {}
+          judgment: Object.fromEntries(['S', 'T', 'E', 'R', 'C'].map(domain => [domain, {
+            status: 'warn',
+            reason: 'Layout fixture; no conceptual claim is tested.'
+          }])),
+          normative: Object.fromEntries(['S', 'T', 'E', 'R', 'C'].map(domain => [domain, {
+            direction: 'indeterminate',
+            rationale: 'This fixture deliberately supplies insufficient evidence.',
+            evidence: 'Insufficient textual evidence.'
+          }]))
         })
       };
     });
@@ -127,6 +135,9 @@ try {
             primaryPanel: rect('#paragraph-primary-panel'),
             primaryOutput: { ...rect('#paragraph-primary-output'), hidden: document.querySelector('#paragraph-primary-output')?.hidden, childCount: document.querySelector('#paragraph-primary-output')?.children.length },
             primaryPanelClass: document.querySelector('#paragraph-primary-panel')?.className,
+            normative: rect('#paragraph-normative-output'),
+            normativeCards: document.querySelectorAll('#paragraph-normative-output .pm-normative-card').length,
+            normativeHeading: document.querySelector('#paragraph-normative-output h3')?.textContent || '',
             entry: document.querySelector('#paragraph-page')?.dataset.entry,
             settings: rect('#paragraph-settings'),
             output: rect('#paragraph-output'),
@@ -141,6 +152,11 @@ try {
         check(metrics.bodyWidth <= viewport.width + 2, tag + ': body horizontal overflow ' + metrics.bodyWidth + '>' + viewport.width);
         check(metrics.workspace && metrics.workspace.width > 0 && metrics.workspace.left >= -2 && metrics.workspace.right <= viewport.width + 2, tag + ': workspace outside viewport');
         check(metrics.realms.length === 5, tag + ': expected five realm controls, got ' + metrics.realms.length);
+        if (entry === 'experience') {
+          check(metrics.normative && metrics.normative.width > 0 && metrics.normative.height > 0, tag + ': independent normative panel is not visible');
+          check(metrics.normativeCards === 5, tag + ': expected five separate normative judgments, got ' + metrics.normativeCards);
+          check(Boolean(metrics.normativeHeading), tag + ': normative panel heading is missing');
+        }
         check(metrics.realms.every(r => r.width > 0 && r.height > 0 && r.left >= -2 && r.right <= viewport.width + 2), tag + ': one or more realm controls are outside viewport');
         check(metrics.choices && metrics.choices.width > 0 && metrics.choices.left >= -2 && metrics.choices.right <= viewport.width + 2, tag + ': realm-choice track outside viewport');
         if (metrics.stage && metrics.choices) {
