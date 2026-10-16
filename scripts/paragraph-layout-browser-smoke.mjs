@@ -3,11 +3,19 @@ import { chromium } from 'playwright';
 const baseURL = process.env.BASE_URL || 'http://127.0.0.1:4173';
 const browser = await chromium.launch({ headless: true });
 const viewports = [
+  { name: 'minimum mobile portrait', width: 320, height: 568, mobile: true },
+  { name: 'compact mobile portrait', width: 360, height: 640, mobile: true },
   { name: 'mobile portrait', width: 390, height: 844, mobile: true },
-  { name: 'narrow mobile landscape', width: 640, height: 360, mobile: true },
+  { name: 'narrow mobile landscape', width: 568, height: 320, mobile: true },
+  { name: 'standard mobile landscape', width: 640, height: 360, mobile: true },
   { name: 'wide mobile landscape', width: 844, height: 390, mobile: true },
+  { name: 'tablet portrait', width: 768, height: 1024, mobile: true },
+  { name: 'desktop breakpoint landscape', width: 1024, height: 768, mobile: false },
   { name: 'desktop portrait', width: 1024, height: 1366, mobile: false },
+  { name: 'compact desktop landscape', width: 1280, height: 720, mobile: false },
+  { name: 'standard desktop landscape', width: 1366, height: 768, mobile: false },
   { name: 'desktop landscape', width: 1440, height: 900, mobile: false },
+  { name: 'wide desktop landscape', width: 1920, height: 1080, mobile: false },
 ];
 const languages = [
   { code: 'fa', dir: 'rtl' },
@@ -145,6 +153,44 @@ try {
         }
         console.log('OK ' + tag + ': workspace=' + Math.round(metrics.workspace?.width || 0) + 'px, realms=' + metrics.realms.map(r => Math.round(r.width)).join('/') + ', workspaceScroll=' + metrics.workspaceScrolls);
       }
+    }
+    // Exercise real in-session reflow across orientation changes and the
+    // 1024px mobile/desktop breakpoint, not only fresh-page viewport loads.
+    const languageAtEnd = languages[languages.length - 1].code;
+    for (const size of [
+      { name: 'resize to minimum portrait', width: 320, height: 568 },
+      { name: 'resize to narrow landscape', width: 568, height: 320 },
+      { name: 'resize below desktop breakpoint', width: 1023, height: 768 },
+      { name: 'resize across desktop breakpoint', width: 1024, height: 768 },
+      { name: 'resize to wide desktop', width: 1920, height: 1080 },
+      { name: 'resize back to mobile portrait', width: 360, height: 640 },
+    ]) {
+      await page.setViewportSize({ width: size.width, height: size.height });
+      await page.waitForTimeout(50);
+      const resized = await page.evaluate(() => {
+        const workspace = document.querySelector('.paragraph-workspace');
+        const choices = document.querySelector('.pm-realm-choices');
+        const wr = workspace?.getBoundingClientRect();
+        const cr = choices?.getBoundingClientRect();
+        return {
+          width: innerWidth,
+          documentWidth: document.documentElement.scrollWidth,
+          bodyWidth: document.body.scrollWidth,
+          workspace: wr ? { left: wr.left, right: wr.right, width: wr.width } : null,
+          choices: cr ? { left: cr.left, right: cr.right, width: cr.width, scrollWidth: choices.scrollWidth, clientWidth: choices.clientWidth } : null,
+          realmCount: document.querySelectorAll('.pm-realm-choice').length,
+        };
+      });
+      const tag = size.name + ' / ' + languageAtEnd;
+      check(resized.documentWidth <= size.width + 2, tag + ': document horizontal overflow ' + resized.documentWidth + '>' + size.width);
+      check(resized.bodyWidth <= size.width + 2, tag + ': body horizontal overflow ' + resized.bodyWidth + '>' + size.width);
+      check(resized.workspace && resized.workspace.width > 0 && resized.workspace.left >= -2 && resized.workspace.right <= size.width + 2, tag + ': workspace outside viewport');
+      check(resized.realmCount === 5, tag + ': expected five realm controls, got ' + resized.realmCount);
+      check(resized.choices && resized.choices.left >= -2 && resized.choices.right <= size.width + 2, tag + ': realm-choice track outside viewport');
+      if (size.width <= 1023 && size.height < size.width) {
+        check(resized.choices && resized.choices.scrollWidth <= resized.choices.clientWidth + 2, tag + ': realm-choice track overflows after resize');
+      }
+      console.log('OK ' + tag + ': workspace=' + Math.round(resized.workspace?.width || 0) + 'px');
     }
     check(pageErrors.length === 0, viewport.name + ': browser exceptions: ' + pageErrors.slice(0, 2).join(' | '));
     await page.close();
