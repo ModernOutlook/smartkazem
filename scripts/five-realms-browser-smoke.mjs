@@ -19,7 +19,7 @@ try {
     page.on('pageerror', error => pageErrors.push(error.message));
     page.on('requestfailed', request => failedRequests.push(request.url() + ': ' + (request.failure()?.errorText || 'request failed')));
 
-    const response = await page.goto(`${baseURL}/index.html?page=five-realms`, { waitUntil: 'domcontentloaded' });
+    const response = await page.goto(`${baseURL}/index.html?page=five-realms-cards`, { waitUntil: 'domcontentloaded' });
     if (!response?.ok()) {
       fail(`${viewport.name}: game route HTTP ${response?.status() ?? 'no response'}`);
       await page.close();
