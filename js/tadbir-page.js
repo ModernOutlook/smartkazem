@@ -64,7 +64,7 @@
     const ok=await window.FiveRealmsBankMachine?.returnToGame?.();
     if(!ok){setMessage(t('returnFailed','بازگشت به بازی انجام نشد.'),true);return;}
   });
-  startButton.addEventListener('click',()=>window.SharedPages?.open?.('five-realms','share').catch(error=>setMessage(error.message,true)));
+  startButton.addEventListener('click',()=>window.SharedPages?.open?.('five-realms-cards','share').catch(error=>setMessage(error.message,true)));
   document.addEventListener('site:languagechange',()=>{if(window.SharedPages?.getActive?.()==='tadbir')render();});
   document.addEventListener('shared-page:opened',event=>{if(event.detail?.key==='tadbir')render();});
   render();
