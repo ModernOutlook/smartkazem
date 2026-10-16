@@ -58,6 +58,14 @@ Every surface that displays playing cards must use the same mapped image assets 
 
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
+### Exact access contract for the Paragraph Machine
+
+The machine has exactly two user-facing frontend entry paths:
+- `قلمرو تجربه → بازشناسی → ماشین پاراگراف` (`experience-detect` → `PageNavigation.openParagraph('experience')`).
+- `مرجع تقلید → هم‌سنگی → ماشین پاراگراف` (`reference-match` → `PageNavigation.openParagraph('reference')`).
+
+The only additional programmatic/in-game access is the `پرسش` action on `?page=five-realms-cards`, reached from `اقتصاد سهم → کانون فعلیت → تدبیر`. That action calls the shared `ParagraphWorkspaceAdapter` to generate a paragraph and independently evaluate it; it does not open or expose the Paragraph Machine frontend. Do not add any other UI entry point or programmatic consumer without an explicit requirement. The game hub’s `تجربه` action opens `?page=quantum-maze`; its `تدبیر` action opens `?page=five-realms-cards`. The separate `تدبیر` action on the `تداوم عالم` realm opens `?page=tadbir`.
+
 ## Canonical Persian content sources — current status
 
 **The Persian-source-first pass is consolidated for all 13 content pages.** Each book or story page has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
