@@ -64,6 +64,10 @@ jobs:
         if: always()
         run: node scripts/five-realms-browser-smoke.mjs
 
+      - name: Test Talash hub, Tadbir handoff, and responsive gameplay
+        if: always()
+        run: node scripts/talash-browser-smoke.mjs
+
       - name: Test realm-specific child backgrounds at required viewports
         if: always()
         run: node scripts/realm-child-background-smoke.mjs
