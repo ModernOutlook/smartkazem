@@ -388,6 +388,14 @@
     "proxy": "Proxy",
     "connect": "Connect",
     "connectionSettings": "Connection settings",
-    "localStorageNote": "Default mode uses a secure server-side proxy; the API key is not shown or stored in the browser."
+    "localStorageNote": "Default mode uses a secure server-side proxy; the API key is not shown or stored in the browser.",
+    "normativeTitle": "Independent normative axis",
+    "normativeDescription": "This is a contextual qualitative judgment. No score, confidence percentage, or overall ranking is produced.",
+    "normativeEvidence": "Textual evidence: ",
+    "normativeUnavailable": "The normative axis is missing from this response; the evaluation is incomplete.",
+    "normativeNobler": "Comparatively better direction",
+    "normativeHarmful": "More harmful direction",
+    "normativeMixed": "Mixed or conflicting",
+    "normativeIndeterminate": "Indeterminate; insufficient evidence"
   }
 }
