@@ -51,7 +51,10 @@ try {
       language);
       for (const entry of ['experience', 'reference']) {
         await page.evaluate(kind => window.SitePages.openParagraph(kind), entry);
-        await page.waitForFunction(() => {\n          const page = document.querySelector('#paragraph-page');\n          return page?.classList.contains('open') && page.classList.contains('is-active') && getComputedStyle(page).display !== 'none' && page.getBoundingClientRect().width > 0;\n        });
+        await page.waitForFunction(() => {
+          const page = document.querySelector('#paragraph-page');
+          return page?.classList.contains('open') && page.classList.contains('is-active') && getComputedStyle(page).display !== 'none' && page.getBoundingClientRect().width > 0;
+        });
         await page.waitForTimeout(80);
         const metrics = await page.evaluate(() => {
           const rect = selector => {
