@@ -93,7 +93,7 @@ jobs:
           cp -a "$DEST/playwright-cache/npm/node_modules/." "$GITHUB_WORKSPACE/node_modules/"
           cp -a "$DEST/playwright-cache/ms-playwright/." "$HOME/.cache/ms-playwright/"
 
-          node -e "const {chromium}=require('./node_modules/playwright'); if (!require('node:fs').existsSync(chromium.executablePath())) process.exit(1)"
+          node -e "const fs=require('node:fs'); const packagePath='$GITHUB_WORKSPACE/node_modules/playwright'; const pkg=require(packagePath+'/package.json'); const {chromium}=require(packagePath); if(pkg.version!=='1.55.0' || !fs.existsSync(chromium.executablePath())) process.exit(1)"
           echo "imported=true" >> "$GITHUB_OUTPUT"
           echo "Imported the reusable bundle and verified the Chromium executable."
 
