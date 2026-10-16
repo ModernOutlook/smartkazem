@@ -62,6 +62,8 @@ The canonical operational specification is [`docs/paragraph-machine-philosophica
 
 The five realms must be evaluated independently. The existing `ok / warn / bad` values describe explicit conceptual alignment only; they are not a moral ranking. The model is instructed to ground any judgment about the nobler direction separately in evidence, relational proportionality, capacity, avoidable harm, agency, correction, epistemic limits, distribution, and feedback effects. Do not claim the current UI exposes a separate moral score unless its output contract and presentation are explicitly extended and tested.
 
+The locally retained research synthesis and source metadata are in [`docs/paragraph-machine-research-map.md`](docs/paragraph-machine-research-map.md). These sources supplement rather than replace Modern Outlook's own philosophical framework; normal execution must not download them.
+
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ## Canonical Persian content sources — current status
