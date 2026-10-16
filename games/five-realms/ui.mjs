@@ -321,9 +321,9 @@ if (root && !root.dataset.initialized) {
     refresh();
   }
   async function returnFromBankMachine() {
-    return !!(await window.SharedPages?.open?.("five-realms","share"));
+    return !!(await window.SharedPages?.open?.("five-realms-cards","share"));
   }
-  document.addEventListener("shared-page:opened",event=>{if(event.detail?.key==="five-realms")restoreGamePage();});
+  document.addEventListener("shared-page:opened",event=>{if(event.detail?.key==="five-realms-cards")restoreGamePage();});
   window.FiveRealmsBankMachine=Object.freeze({
     getStatus:bankMachineStatus,
     deposit:amount=>performBankAction("deposit",amount),
