@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
     inputs:
       approve_browser_download:
-        description: "Explicitly approve downloading Playwright and Chromium if no cached copy exists"
+        description: "Explicitly approve downloading Playwright and Chromium if the reusable bundle cannot be accessed"
         required: true
         type: boolean
         default: false
@@ -19,8 +19,8 @@ concurrency:
 
 jobs:
   browser-smoke:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -39,9 +39,9 @@ jobs:
             exit 0
           fi
           files="$(git diff-tree --no-commit-id --name-only -r HEAD^ HEAD)"
-          if [ -n "$files" ] && ! printf '%s\n' "$files" | grep -Ev '^content/bk[1-5]\.jpg
+          if [ -n "$files" ] && ! printf '%s\n' "$files" | grep -Ev '^content/bk[1-5]\.(jpe?g)$' >/dev/null; then
             echo "image_only=true" >> "$GITHUB_OUTPUT"
-            echo "Only content/bk1.jpg through content/bk5.jpg changed in this commit; browser/language tests will be skipped."
+            echo "Only content/bk1.jpg/jpeg through content/bk5.jpg/jpeg changed in this commit; browser/language tests will be skipped."
           else
             echo "image_only=false" >> "$GITHUB_OUTPUT"
           fi
@@ -60,23 +60,58 @@ jobs:
           path: |
             node_modules
             ~/.cache/ms-playwright
-          key: smartkazem-browser-${{ runner.os }}-node22-playwright1.55.0-chromium-v1
+          key: smartkazem-browser-${{ runner.os }}-node22-playwright1.55.0-chromium-v2
 
-      - name: Install Playwright and Chromium (explicit approval required)
+      - name: Import prebuilt Playwright and Chromium bundle from private GPT repository
+        id: browser-bundle
+        if: steps.change-scope.outputs.image_only != 'true' && steps.browser-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GPT_CACHE_READ_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "imported=false" >> "$GITHUB_OUTPUT"
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "GPT_CACHE_READ_TOKEN is not configured; reusable bundle import is unavailable."
+            exit 0
+          fi
+
+          TAG="playwright-1.55.0-chromium-linux-x64"
+          ARCHIVE="playwright-1.55.0-chromium-linux-x64.tar.gz"
+          CHECKSUM="$ARCHIVE.sha256"
+          DEST="$RUNNER_TEMP/playwright-release"
+          mkdir -p "$DEST"
+
+          gh release download "$TAG" --repo ModernOutlook/GPT \
+            --pattern "$ARCHIVE" --pattern "$CHECKSUM" --dir "$DEST"
+
+          cd "$DEST"
+          sha256sum --check "$CHECKSUM"
+          tar -xzf "$ARCHIVE" -C "$DEST"
+
+          mkdir -p "$GITHUB_WORKSPACE/node_modules" "$HOME/.cache/ms-playwright"
+          cp -a "$DEST/playwright-cache/npm/node_modules/." "$GITHUB_WORKSPACE/node_modules/"
+          cp -a "$DEST/playwright-cache/ms-playwright/." "$HOME/.cache/ms-playwright/"
+
+          node -e "const {chromium}=require('./node_modules/playwright'); if (!require('node:fs').existsSync(chromium.executablePath())) process.exit(1)"
+          echo "imported=true" >> "$GITHUB_OUTPUT"
+          echo "Imported the reusable bundle and verified the Chromium executable."
+
+      - name: Install Playwright and Chromium (explicit approval fallback)
         id: browser-install
-        if: steps.change-scope.outputs.image_only != 'true' && steps.browser-cache.outputs.cache-hit != 'true' && github.event_name == 'workflow_dispatch' && inputs.approve_browser_download == true
+        if: steps.change-scope.outputs.image_only != 'true' && steps.browser-cache.outputs.cache-hit != 'true' && steps.browser-bundle.outputs.imported != 'true' && github.event_name == 'workflow_dispatch' && inputs.approve_browser_download == true
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install chromium
 
-      - name: Save approved Playwright and Chromium cache
-        if: steps.browser-install.outcome == 'success' && steps.browser-cache.outputs.cache-hit != 'true'
+      - name: Save reusable Playwright and Chromium cache
+        if: (steps.browser-bundle.outputs.imported == 'true' || steps.browser-install.outcome == 'success') && steps.browser-cache.outputs.cache-hit != 'true'
         uses: actions/cache/save@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
         with:
           path: |
             node_modules
             ~/.cache/ms-playwright
-          key: smartkazem-browser-${{ runner.os }}-node22-playwright1.55.0-chromium-v1
+          key: smartkazem-browser-${{ runner.os }}-node22-playwright1.55.0-chromium-v2
 
       - name: Check whether browser dependencies are already available
         id: browser-ready
@@ -90,7 +125,7 @@ jobs:
 
       - name: Explain skipped browser tests
         if: steps.browser-ready.outputs.ready == 'false'
-        run: echo "Browser tests skipped: Playwright/Chromium is not cached. No download was started. To authorize a one-time download, manually run this workflow with approve_browser_download=true."
+        run: echo "Browser tests skipped: Playwright/Chromium is not cached and the reusable private bundle was not imported. Add GPT_CACHE_READ_TOKEN (Contents: read on ModernOutlook/GPT), or manually run this workflow with approve_browser_download=true to approve a direct download."
 
       - name: Start static site
         if: steps.browser-ready.outputs.ready == 'true'
