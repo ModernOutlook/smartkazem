@@ -113,7 +113,7 @@
       } catch (error) {
         lastError = error;
         const message = String(error && error.message || '');
-        const repairable = /ساختار داوری|ساختار پاسخ داوری|داوری قلمرو|دلیل داوری|پاسخ مدل خالی|JSON معتبر برنگرداند/.test(message);
+        const repairable = /ساختار داوری|ساختار پاسخ داوری|محور هنجاری|جهت هنجاری|دلیل محور هنجاری|شاهد محور هنجاری|داوری قلمرو|دلیل داوری|پاسخ مدل خالی|JSON معتبر برنگرداند/.test(message);
         if (!repairable) throw error;
       }
     }
