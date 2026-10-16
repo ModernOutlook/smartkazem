@@ -48,7 +48,6 @@
   }
 
   /* Book reader */
-  }
 
   .orbit {
     position: relative;
@@ -87,7 +86,7 @@
   /* Paragraph Machine: use the real workspace children. */
   .paragraph-workspace {
     display: grid;
-    grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     grid-template-rows: auto auto auto 1fr;
     column-gap: var(--ui-space-5);
     row-gap: var(--ui-space-3);
@@ -102,14 +101,33 @@
   }
 
   .pm-input-panel,
-  .pm-output {
+  .pm-output,
+  .paragraph-connection {
     grid-column: 2;
+    min-width: 0;
   }
 
-  .pm-controls,
-  .pm-settings,
+  .pm-recognition-stage,
   .pm-error {
     grid-column: 1;
+    min-width: 0;
+  }
+
+  /* The five realm cards must fit inside the stage rather than spill over
+     the adjacent connection panel at desktop and desktop-portrait widths. */
+  .paragraph-workspace .pm-recognition-stage {
+    grid-template-columns: 96px minmax(0, 1fr);
+  }
+
+  .paragraph-workspace .pm-realm-choices {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .paragraph-workspace .pm-realm-choice {
+    width: 100%;
+    min-width: 0;
   }
 
   .pm-output {
