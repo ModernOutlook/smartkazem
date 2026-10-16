@@ -56,7 +56,8 @@ async function main() {
   const systemPrompt = core.buildSystemPrompt(criteria, 'English');
   assert.match(systemPrompt, /Modal words/);
   assert.match(systemPrompt, /normative direction/);
-  assert.match(systemPrompt, /no score, confidence percentage/);
+  assert.match(systemPrompt, /confidence percentage/);
+  assert.match(systemPrompt, /Do not total, average, rank/);
   assert.match(systemPrompt, /"normative"/);
   assert.match(systemPrompt, /density, rate of directional change/);
   assert.match(systemPrompt, /concrete phrase or relation/);
