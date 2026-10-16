@@ -41,14 +41,18 @@ try {
     // populates its output panel without any model/network calls. Production
     // adapter and request/response contracts remain untouched.
     await page.evaluate(() => {
-      window.ParagraphWorkspaceAdapter.generateParagraphs = async count =>
-        Array.from({ length: count }, (_, index) => ({
-          text: 'Layout smoke test paragraph ' + (index + 1) + '.'
-        }));
-      window.ParagraphWorkspaceAdapter.evaluateText = async text => ({
-        text,
-        judgment: {}
-      });
+      // The production adapter is frozen, so replace the global reference
+      // rather than assigning methods on the frozen object.
+      window.ParagraphWorkspaceAdapter = {
+        generateParagraphs: async count =>
+          Array.from({ length: count }, (_, index) => ({
+            text: 'Layout smoke test paragraph ' + (index + 1) + '.'
+          })),
+        evaluateText: async text => ({
+          text,
+          judgment: {}
+        })
+      };
     });
 
     for (const language of languages) {
