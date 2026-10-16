@@ -71,7 +71,7 @@ export function stepGame(game,dt,inputX=game.paddle.x){
   ball.y=paddle.y-paddle.height/2-ball.radius;const offset=clamp((ball.x-paddle.x)/(paddle.width/2),-1,1),magnitude=Math.hypot(ball.vx,ball.vy),angle=offset*.95;ball.vx=Math.sin(angle)*magnitude;ball.vy=-Math.cos(angle)*magnitude;
  }
  if(ball.y-ball.radius>height){game.lives--;if(game.lives<=0){game.over=true;game.running=false;}else{ball.x=width/2;ball.y=height-50;ball.vx=width*.34;ball.vy=-height*.58;}}
- const hit=game.triangles.find(t=>t.active&&hitTriangle(ball,t));if(hit){disintegrateCluster(game,hit.id);ball.vy=Math.abs(ball.vy);ball.y=Math.max(ball.y,hit.y+ball.radius+1);}
+ const hit=game.triangles.find(t=>t.active&&hitTriangle(ball,t));if(hit){disintegrateCluster(game,hit.id);ball.vy=-ball.vy;ball.y=ball.vy>0?Math.max(ball.y,hit.y+ball.radius+1):Math.min(ball.y,hit.y-ball.radius-1);}
  for(const c of game.coins)if(c.active){c.x+=c.vx*step;c.y+=c.vy*step;if(c.y+c.radius>=paddle.y-paddle.height/2&&c.y-c.radius<=paddle.y+paddle.height/2&&c.x>=paddle.x-paddle.width/2-c.radius&&c.x<=paddle.x+paddle.width/2+c.radius){c.active=false;game.score++;}else if(c.y-c.radius>height)c.active=false;}
  game.coins=game.coins.filter(c=>c.active);if(!game.triangles.some(t=>t.active)){game.over=true;game.running=false;}return game;
 }
