@@ -138,11 +138,28 @@
     }
     return judgment;
   }
+  const NORMATIVE_DIRECTIONS = Object.freeze(['nobler', 'harmful', 'mixed', 'indeterminate']);
+  function validateNormative(normative) {
+    if (!normative || typeof normative !== 'object' || Array.isArray(normative)) throw new Error('ساختار محور هنجاری نامعتبر است.');
+    const keys = Object.keys(normative);
+    if (keys.length !== DOMAIN_ORDER.length || keys.some(key => !DOMAIN_ORDER.includes(key))) throw new Error('محور هنجاری باید دقیقاً پنج قلمرو داشته باشد.');
+    for (const domain of DOMAIN_ORDER) {
+      const item = normative[domain];
+      if (!item || !NORMATIVE_DIRECTIONS.includes(item.direction)) throw new Error('جهت هنجاری قلمرو ' + domain + ' نامعتبر است.');
+      if (typeof item.rationale !== 'string' || !item.rationale.trim()) throw new Error('دلیل محور هنجاری قلمرو ' + domain + ' نامعتبر است.');
+      if (typeof item.evidence !== 'string' || !item.evidence.trim()) throw new Error('شاهد محور هنجاری قلمرو ' + domain + ' نامعتبر است.');
+      if (Object.keys(item).length !== 3 || Object.keys(item).some(key => !['direction', 'rationale', 'evidence'].includes(key))) throw new Error('ساختار محور هنجاری قلمرو ' + domain + ' نامعتبر است.');
+    }
+    return normative;
+  }
   function validateEvaluation(parsed) {
-    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || Object.keys(parsed).length !== 1 || !Object.prototype.hasOwnProperty.call(parsed, 'judgment')) {
+    if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || Object.keys(parsed).length !== 2 ||
+        !Object.prototype.hasOwnProperty.call(parsed, 'judgment') || !Object.prototype.hasOwnProperty.call(parsed, 'normative')) {
       throw new Error('ساختار پاسخ داوری نامعتبر است.');
     }
-    return validateJudgment(parsed.judgment);
+    validateJudgment(parsed.judgment);
+    validateNormative(parsed.normative);
+    return parsed;
   }
   function validateGeneratedResult(parsed, expectedCount) {
     if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || Object.keys(parsed).length !== 1 || !Array.isArray(parsed.paragraphs)) throw new Error('ساختار پاسخ تولید نامعتبر است.');
@@ -172,13 +189,14 @@
       'You are the independent judgment engine for Paragraph Machine. Evaluate only the supplied paragraph against the explicit criteria below. Do not use general world knowledge or external philosophical assumptions as judging standards.',
       'Paragraph language: ' + language + '. The criteria below have been translated into that same language. Interpret the paragraph in its original language; never translate or rewrite the paragraph as a preprocessing step.',
       'Canonical criteria are the Persian source principles translated faithfully. Their IDs are stable. Evaluate each realm independently, including shared M1-M10 wherever semantically relevant. The five realms are distinct analytical lenses, not five copies of one mechanism.',
-      'Keep two questions separate: (A) conceptual status against the explicit principles and (B) the nobler direction supported by this paragraph. ok/warn/bad are not moral labels. Do not infer goodness from eloquence, popularity, declared intention, immediate pleasure, or one party’s benefit alone.',
-      'For the nobler direction, compare evidence-supported alternatives by relational proportionality, actualization of relevant capacities, avoidable harm, agency and corrigibility, epistemic transparency, dynamic resilience, participation and distribution, and delayed/feedback effects. These are contextual criteria, not a mechanical score. If trade-offs or evidence are unresolved, state the direction as mixed or indeterminate instead of inventing certainty.',
-      'For every realm reason, cite a specific principle ID and concrete phrase or relation from the paragraph. Distinguish what the paragraph states from your inference. Separate conceptual, topological, causal, temporal, observational, cross-realm, normative, logical, and expression errors. Silence is neither confirmation nor violation. Correlation and temporal order do not prove causation; a path is not a feedback loop unless an effect returns to influence its originating process.',
+      'Keep two axes strictly separate: (A) conceptual status against explicit principles and (B) normative direction. ok/warn/bad are not moral labels and must never be interpreted as a moral score.',
+      'For the normative axis, assess each realm independently using contextual evidence: relational proportionality, actualization of relevant capacities, avoidable harm, agency and corrigibility, epistemic transparency, dynamic resilience, participation and distribution, and delayed/feedback effects. Do not total, average, rank, or convert these considerations into a number or confidence percentage. Do not infer goodness from eloquence, popularity, declared intention, immediate pleasure, or one party’s benefit alone.',
+      'Normative direction must be exactly one of: nobler (the paragraph supports a comparatively better direction on the evidence available), harmful (the paragraph supports or normalizes avoidable harm or a materially worse direction), mixed (relevant goods, harms, or trade-offs conflict), indeterminate (the text lacks enough evidence or a meaningful comparison). Use indeterminate rather than guess; use mixed when a real conflict is evidenced, not merely because the text is short. This is a reasoned qualitative judgment, not a measurement.',
+      'For every realm reason, cite a specific principle ID and concrete phrase or relation from the paragraph. For every normative entry, provide a non-empty rationale and an evidence field containing a short exact phrase from the paragraph or, for indeterminate judgments, a clear statement of what textual evidence is missing. Distinguish what the paragraph states from your inference. Separate conceptual, topological, causal, temporal, observational, cross-realm, normative, logical, and expression errors. Silence is neither confirmation nor violation. Correlation and temporal order do not prove causation; a path is not a feedback loop unless an effect returns to influence its originating process.',
       'Do not collapse density, rate of directional change, reasoning-control threshold, observation delay, perceptual clarity, and integration cost into one variable. Any reinforcing-feedback claim must be evidenced or explicitly treated as a hypothesis, never presumed to be a universal law.',
       'Status protocol for each realm: ok means at least one principle is explicitly confirmed and no principle in that realm is violated; bad means at least one specific principle is explicitly and definitely violated; warn means no explicit confirmation and no definite violation. A definite violation overrides confirmations of other principles in the same realm. Silence, partial reference, overlap, or deferral is warn. Uncertainty is warn.',
       'Modal words such as “perhaps” or “possibly” do not automatically cause warn: evaluate the proposition content independently of the modal word. Words equivalent to “only” or “same” are signals, not decisions by themselves. A contradiction must identify a specific principle and a definite conflict.',
-      'Return exactly one JSON object: {"judgment":{"S":{"status":"ok|warn|bad","reason":"..."},"T":{"status":"ok|warn|bad","reason":"..."},"E":{"status":"ok|warn|bad","reason":"..."},"R":{"status":"ok|warn|bad","reason":"..."},"C":{"status":"ok|warn|bad","reason":"..."}}}. Reasons must cite principle IDs, concrete textual evidence, and (where the paragraph supports it) explicitly distinguish the nobler direction from conceptual status. If the nobler direction cannot be established, say so. Write reasons in the paragraph language. Do not add keys or prose.',
+      'Return exactly one JSON object with exactly two top-level keys: {"judgment":{"S":{"status":"ok|warn|bad","reason":"..."},"T":{"status":"ok|warn|bad","reason":"..."},"E":{"status":"ok|warn|bad","reason":"..."},"R":{"status":"ok|warn|bad","reason":"..."},"C":{"status":"ok|warn|bad","reason":"..."}},"normative":{"S":{"direction":"nobler|harmful|mixed|indeterminate","rationale":"...","evidence":"..."},"T":{"direction":"nobler|harmful|mixed|indeterminate","rationale":"...","evidence":"..."},"E":{"direction":"nobler|harmful|mixed|indeterminate","rationale":"...","evidence":"..."},"R":{"direction":"nobler|harmful|mixed|indeterminate","rationale":"...","evidence":"..."},"C":{"direction":"nobler|harmful|mixed|indeterminate","rationale":"...","evidence":"..."}}}. Reasons and normative text must be in the paragraph language. Do not add scores, percentages, a single overall direction, extra keys, or prose outside JSON.',
       'Canonical criteria, with language-local renderings:',
       criteria
     ].join('\n\n');
@@ -203,6 +221,6 @@
     MAX_WORDS, MAX_WORD_LENGTH, MAX_CHARS, DOMAIN_ORDER, DOMAIN_NAMES, STATUS_LABELS,
     COMMON_CRITERIA, REALM_CRITERIA, ALL_CRITERIA, CRITERIA_TRANSLATION_ITEMS, MODE_INSTRUCTIONS,
     normalizeText, countWords, countChars, findLongWords, processText, validateJudgment,
-    validateEvaluation, validateGeneratedResult, buildSystemPrompt, buildGenerationPrompt, buildEvaluationPrompt
+    validateEvaluation, validateNormative, NORMATIVE_DIRECTIONS, validateGeneratedResult, buildSystemPrompt, buildGenerationPrompt, buildEvaluationPrompt
   });
 })();
