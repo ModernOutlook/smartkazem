@@ -6,7 +6,7 @@
  <section class="fr-hub-grid" aria-label="Five Realms games">
   <button class="fr-game-tile fr-game-talash" type="button" data-talash-link><span class="fr-game-number">۱</span><strong data-i18n="pages.gameHub.talash">تلاش</strong><span data-i18n="pages.gameHub.structure">ساختار تالار</span></button>
   <button class="fr-game-tile" type="button" disabled aria-disabled="true"><span class="fr-game-number">۲</span><strong data-i18n="pages.gameHub.gold">طلا</strong><span data-i18n="pages.gameHub.continuity">تداوم عالم</span><small data-i18n="pages.gameHub.comingSoon">در دست ساخت</small></button>
-  <button class="fr-game-tile" type="button" disabled aria-disabled="true"><span class="fr-game-number">۳</span><strong data-i18n="pages.gameHub.experience">تجربه</strong><span data-i18n="pages.gameHub.experienceRealm">قلمرو تجربه</span><small data-i18n="pages.gameHub.comingSoon">در دست ساخت</small></button>
+  <button class="fr-game-tile fr-game-experience" type="button" data-quantum-maze-link><span class="fr-game-number">۳</span><strong data-i18n="pages.gameHub.experience">تجربه</strong><span data-i18n="pages.gameHub.experienceRealm">قلمرو تجربه</span></button>
   <button class="fr-game-tile" type="button" disabled aria-disabled="true"><span class="fr-game-number">۴</span><strong data-i18n="pages.gameHub.simulation">شبیه‌سازی</strong><span data-i18n="pages.gameHub.reference">مرجع تقلید</span><small data-i18n="pages.gameHub.comingSoon">در دست ساخت</small></button>
   <button class="fr-game-tile fr-game-tadbir" type="button" data-tadbir-link><span class="fr-game-number">۵</span><strong data-i18n="pages.gameHub.tadbir">تدبیر</strong><span data-i18n="pages.gameHub.share">اقتصاد سهم</span></button>
  </section>
