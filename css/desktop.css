@@ -136,6 +136,26 @@
     white-space: nowrap;
   }
 
+  .paragraph-workspace .pm-realm-choice span {
+    font-size: 0.55rem;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+  }
+
+  /* Fit the connection illustration and fields in the landscape row. */
+  .paragraph-workspace .paragraph-connection .pc-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(150px, 160px) minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .paragraph-workspace .paragraph-connection .pc-center {
+    width: 160px;
+  }
+
   /* The connection controls can exceed the available desktop row height.
      Keep every field reachable instead of clipping the proxy and mode controls. */
   .paragraph-workspace .paragraph-connection {
