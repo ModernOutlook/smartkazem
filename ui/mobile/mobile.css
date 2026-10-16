@@ -480,3 +480,22 @@
     width: 100%;
   }
 }
+
+
+/* Keep the two long Paragraph Machine context messages from colliding on
+   narrow screens in either orientation or any of the four writing systems. */
+@media (max-width: 700px) {
+  .paragraph-page .paragraph-context {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .paragraph-page .paragraph-context strong,
+  .paragraph-page .paragraph-context span {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
