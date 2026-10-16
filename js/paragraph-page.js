@@ -131,7 +131,7 @@ async function generateExperience(){
  const lang=getLanguage();
  const generated=await window.ParagraphWorkspaceAdapter.generateParagraphs(1,'mixed',lang);
  const evaluated=await Promise.all(generated.map(p=>window.ParagraphWorkspaceAdapter.evaluateText(p.text,lang)));
- return generated.map((p,i)=>({...p,judgment:evaluated[i].judgment,displayedText:p.text}));
+ return generated.map((p,i)=>({...p,judgment:evaluated[i].judgment,normative:evaluated[i].normative,displayedText:p.text}));
 }
 function closeJudgmentPopover({restoreFocus=false}={}){
  elements.choices.forEach(choice=>choice.setAttribute('aria-expanded','false'));
