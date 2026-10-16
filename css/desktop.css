@@ -148,22 +148,21 @@
 
   /* Fit the connection illustration and fields in the landscape row. */
   .paragraph-workspace .paragraph-connection .pc-layout {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px 12px;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
 
   .paragraph-workspace .paragraph-connection .pc-center {
-    grid-column: 1 / -1;
     order: -1;
-    width: 140px;
+    width: 110px;
   }
 
-  .paragraph-workspace .paragraph-connection .pc-feed:first-child {
-    grid-column: 1;
+  .paragraph-workspace .paragraph-connection .pc-input {
+    height: 40px;
   }
 
-  .paragraph-workspace .paragraph-connection .pc-feed:last-child {
-    grid-column: 2;
+  .paragraph-workspace .paragraph-connection .pc-footer {
+    margin-top: 8px;
   }
 
   /* The connection controls can exceed the available desktop row height.
