@@ -87,7 +87,7 @@
   .paragraph-workspace {
     display: grid;
     grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
-    grid-template-rows: auto auto auto 1fr;
+    grid-template-rows: auto auto auto max-content minmax(0, 1fr);
     column-gap: var(--ui-space-5);
     row-gap: var(--ui-space-3);
     height: calc(100dvh - 32px);
@@ -163,13 +163,6 @@
 
   .paragraph-workspace .paragraph-connection .pc-footer {
     margin-top: 8px;
-  }
-
-  /* The connection controls can exceed the available desktop row height.
-     Keep every field reachable instead of clipping the proxy and mode controls. */
-  .paragraph-workspace .paragraph-connection {
-    overflow-x: hidden;
-    overflow-y: auto;
   }
 
   .pm-output {
