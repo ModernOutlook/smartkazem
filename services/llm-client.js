@@ -188,9 +188,20 @@ async function complete(messages,options={}){
     {method:'POST',headers:{'Content-Type':'application/json',...(proxy||!s.apiKey?{}:{'Authorization':'Bearer '+s.apiKey})},body:JSON.stringify(payload)}
   );
   let data;
-  try{data=await res.json()}catch(_){throw new Error('پاسخ سرویس مدل JSON معتبر نیست.')}
+  const responseText = await res.text();
+  try{
+    // Some upstream gateways prepend a UTF-8 BOM, which makes JSON.parse fail.
+    data = JSON.parse(responseText.replace(/^\\uFEFF/, '').trim());
+  }catch(_){
+    const contentType = res.headers.get('content-type') || 'نامشخص';
+    throw new Error('پاسخ سرویس مدل JSON معتبر نیست (HTTP '+res.status+'؛ نوع محتوا: '+contentType+'). سرویس ممکن است پاسخ متنی یا خطای درگاه برگردانده باشد.');
+  }
+  if(data?.error){
+    const message = data.error?.message || data.error;
+    throw new Error(typeof message === 'string' ? message : 'سرویس مدل درخواست را نپذیرفت.');
+  }
   const content=data?.choices?.[0]?.message?.content;
-  if(!content)throw new Error('پاسخ مدل خالی است.');
+  if(!content)throw new Error('پاسخ مدل خالی است یا ساختار مورد انتظار را ندارد.');
   try{
     return JSON.parse(String(content).replace(/^\`\`\`json\s*/,'').replace(/\`\`\`$/,'').trim());
   }catch(_){throw new Error('مدل پاسخ JSON معتبر برنگرداند.')}
