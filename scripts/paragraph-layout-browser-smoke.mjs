@@ -104,6 +104,9 @@ try {
           const workspace = document.querySelector('.paragraph-workspace');
           const stage = document.querySelector('.pm-recognition-stage');
           const choices = document.querySelector('.pm-realm-choices');
+          const contextStrong = document.querySelector('.paragraph-context strong');
+          const contextSpan = document.querySelector('.paragraph-context span');
+          const connection = document.querySelector('.paragraph-connection');
           const realms = [...document.querySelectorAll('.pm-realm-choice')].map(el => {
             const r = el.getBoundingClientRect();
             return { left: r.left, right: r.right, width: r.width, height: r.height };
@@ -117,6 +120,9 @@ try {
             stage: rect('.pm-recognition-stage'),
             smartbot: rect('.pm-smartbot'),
             choices: rect('.pm-realm-choices'),
+            contextStrong: contextStrong ? (() => { const r = contextStrong.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width }; })() : null,
+            contextSpan: contextSpan ? (() => { const r = contextSpan.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width }; })() : null,
+            connection: connection ? (() => { const r = connection.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, width: r.width, height: r.height }; })() : null,
             input: rect('#paragraph-input'),
             primaryPanel: rect('#paragraph-primary-panel'),
             primaryOutput: { ...rect('#paragraph-primary-output'), hidden: document.querySelector('#paragraph-primary-output')?.hidden, childCount: document.querySelector('#paragraph-primary-output')?.children.length },
@@ -137,6 +143,25 @@ try {
         check(metrics.realms.length === 5, tag + ': expected five realm controls, got ' + metrics.realms.length);
         check(metrics.realms.every(r => r.width > 0 && r.height > 0 && r.left >= -2 && r.right <= viewport.width + 2), tag + ': one or more realm controls are outside viewport');
         check(metrics.choices && metrics.choices.width > 0 && metrics.choices.left >= -2 && metrics.choices.right <= viewport.width + 2, tag + ': realm-choice track outside viewport');
+        if (metrics.stage && metrics.choices) {
+          check(metrics.choices.left >= metrics.stage.left - 2 && metrics.choices.right <= metrics.stage.right + 2, tag + ': realm-choice track spills outside its stage');
+        }
+        if (viewport.width >= 1024 && metrics.choices && metrics.connection) {
+          const overlapsConnection = metrics.realms.some(r =>
+            r.left < metrics.connection.right - 2 &&
+            r.right > metrics.connection.left + 2 &&
+            r.top < metrics.connection.bottom - 2 &&
+            r.bottom > metrics.connection.top + 2
+          );
+          check(!overlapsConnection, tag + ': realm controls overlap the connection panel');
+        }
+        if (viewport.width <= 700 && metrics.contextStrong && metrics.contextSpan) {
+          check(metrics.contextStrong.right <= metrics.contextSpan.left + 2 ||
+            metrics.contextSpan.top >= metrics.contextStrong.bottom - 2,
+          tag + ': context messages overlap instead of wrapping');
+          check(metrics.contextStrong.width <= viewport.width && metrics.contextSpan.width <= viewport.width,
+            tag + ': context message exceeds viewport width');
+        }
         if (viewport.width <= 1023 && viewport.height < viewport.width) {
           check(metrics.realms.every(r => r.width >= 20), tag + ': realm controls too narrow in landscape');
           check(metrics.choices && metrics.choices.scrollWidth <= metrics.choices.clientWidth + 2, tag + ': realm-choice track overflows its own width');
