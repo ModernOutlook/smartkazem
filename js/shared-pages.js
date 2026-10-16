@@ -47,7 +47,7 @@ document.addEventListener('click',event=>{
  const entry=event.target instanceof Element?event.target.closest('[data-five-realms-link]'):null;
  if(!entry)return;
  event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();
- open('five-realms','share').catch(error=>console.error('[SharedPages]',error));
+ open('five-realms',document.getElementById('continuity-page')?.classList.contains('is-active')?'continuity':'share').catch(error=>console.error('[SharedPages]',error));
 },true);
 
 document.addEventListener('click',event=>{
