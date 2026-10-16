@@ -32,9 +32,12 @@ try{
   await page.waitForSelector('#talash-canvas');
   const geometry=await page.evaluate(()=>{
    const c=document.querySelector('#talash-canvas'),r=c.getBoundingClientRect();
-   return {canvasWidth:r.width,canvasHeight:r.height,left:r.left,right:r.right,viewport:innerWidth,docWidth:document.documentElement.scrollWidth};
+   return {canvasWidth:r.width,canvasHeight:r.height,ratio:r.width/Math.max(1,r.height),left:r.left,right:r.right,viewport:innerWidth,docWidth:document.documentElement.scrollWidth};
   });
-  if(geometry.canvasWidth<200||geometry.canvasHeight<250)fail(`${viewport.name}: Talash canvas is too small: ${JSON.stringify(geometry)}`);
+  if(geometry.canvasWidth<200||geometry.canvasHeight<200)fail(`${viewport.name}: Talash canvas is too small: ${JSON.stringify(geometry)}`);
+  if(Math.abs(geometry.ratio-1)>0.01)fail(`${viewport.name}: Talash playfield is not square (1:1): ${JSON.stringify(geometry)}`);
+  const backgrounds=await page.evaluate(async()=>{const m=await import("/games/shared/backgrounds.mjs");const images=await Promise.all(m.GAME_BACKGROUNDS.map(asset=>new Promise(resolve=>{const image=new Image();image.onload=()=>resolve({id:asset.id,ok:true,width:image.naturalWidth,height:image.naturalHeight});image.onerror=()=>resolve({id:asset.id,ok:false,width:0,height:0});image.src=asset.dataUri;})));return {count:m.GAME_BACKGROUNDS.length,images};});
+  if(backgrounds.count!==5||backgrounds.images.some(image=>!image.ok||image.width!==image.height))fail(`${viewport.name}: five Base64 backgrounds must load and be square: ${JSON.stringify(backgrounds)}`);
   if(geometry.left<0||geometry.right>geometry.viewport+1)fail(`${viewport.name}: Talash canvas clips horizontally: ${JSON.stringify(geometry)}`);
   if(geometry.docWidth>geometry.viewport+1)fail(`${viewport.name}: Talash causes horizontal page overflow: ${JSON.stringify(geometry)}`);
   await page.locator('#talash-start').click();

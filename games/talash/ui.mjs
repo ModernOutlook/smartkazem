@@ -1,11 +1,12 @@
-import {createGame,stepGame,resizeGame,REALMS,coinLogoPoints} from "./engine.mjs";
+import {createGame,stepGame,resizeGame,coinLogoPoints} from "./engine.mjs";
+import { GAME_BACKGROUNDS } from "../shared/backgrounds.mjs";
 const root=document.querySelector(".talash-page");
 if(root&&!root.dataset.initialized){
  root.dataset.initialized="true";
  const $=id=>root.querySelector("#"+id),canvas=$("talash-canvas"),ctx=canvas.getContext("2d"),overlay=$("talash-overlay"),status=$("talash-status");
  let game=null,lastTime=0,raf=0,desiredX=0,keys=new Set(),paused=false,backgrounds=[];
  const tr=(key,fallback)=>window.SiteI18n?.get("pages.talash."+key,fallback)||fallback;
- const images=[new Image()];images[0].src=new URL(REALMS[0].background,document.baseURI).href;images[0].onload=()=>{if(game)draw();};
+ const images=GAME_BACKGROUNDS.map(asset=>{const image=new Image();image.src=asset.dataUri;image.onload=()=>{if(game)draw();};return image;});
  backgrounds=images;
  function resize(){
   const rect=canvas.getBoundingClientRect(),w=Math.max(240,Math.floor(rect.width)),h=Math.max(280,Math.floor(rect.height));
