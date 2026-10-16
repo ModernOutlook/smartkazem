@@ -57,7 +57,7 @@ try {
     await page.locator('#fr-action-form button').last().click();
     await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
     if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) fail(`${viewport.name}: turn handoff did not name player two`);
-    if (await page.locator('#continuity-tadbir[data-tadbir-link]').count() !== 1) {
+    if (await page.locator('#five-realms-tadbir[data-tadbir-link]').count() !== 1) {
       fail(`${viewport.name}: Continuity realm does not expose the Tadbir entry button`);
     }
     await page.evaluate(() => window.SharedPages.open('tadbir', 'continuity'));
