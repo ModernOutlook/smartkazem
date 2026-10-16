@@ -3,7 +3,7 @@
 
 const DEFAULTS = Object.freeze({
   baseUrl: 'https://openrouter.ai/api/v1',
-  model: 'google/gemma-4-26b-a4b-it:free'
+  model: 'openrouter/free'
 });
 
 const PRESET_CONNECTIONS = Object.freeze([
@@ -37,7 +37,7 @@ const MAX_HISTORY = 12;
 const REQUEST_TIMEOUT_MS = 30000;
 const MAX_ATTEMPTS = 3;
 const RETRY_DELAY_MS = 700;
-const RETRYABLE_STATUSES = new Set([408,425,429,500,502,503,504]);
+const RETRYABLE_STATUSES = new Set([408,425,500,502,503,504]);
 
 function normalizeOptionalProxyUrl(value) {
   const raw=String(value||'').trim();
@@ -168,12 +168,11 @@ async function complete(messages,options={}){
   const proxy = getConnectionMode()==='proxy';
   if(!proxy && !s.apiKey)throw new Error('کلید اتصال به مدل تنظیم نشده است.');
   const model=String(s.model||DEFAULTS.model).trim();
+  if(model!=='openrouter/free'&&!model.endsWith(':free'))throw new Error('برای حفظ استفادهٔ کاملاً رایگان، فقط مدل‌های دارای پسوند :free یا مسیریاب openrouter/free مجازند.');
   const endpoint = proxy ? normalizeOptionalProxyUrl(s.proxyUrl||'') : normalizeBaseUrl(s.baseUrl);
   if(proxy && !endpoint)throw new Error('نشانی پروکسی تنظیم نشده است.');
   const payload={model,messages,temperature:options.temperature??0.7,response_format:{type:'json_object'}};
-  if(/^https:\/\/(?:www\.)?openrouter\.ai(?:\/|$)/i.test(normalizeBaseUrl(s.baseUrl))&&model!=='openrouter/free'){
-    payload.models=[model,'openrouter/free'];
-  }
+  payload.models=model==='openrouter/free'?['openrouter/free']:[model,'openrouter/free'];
   const res=await request(
     endpoint+'/chat/completions',
     {method:'POST',headers:{'Content-Type':'application/json',...(proxy||!s.apiKey?{}:{'Authorization':'Bearer '+s.apiKey})},body:JSON.stringify(payload)}
@@ -203,13 +202,10 @@ async function checkConnection(settings={}){
     return {ok:false,variant:'network_failed'};
   }
 }
-function setConnectionMode(mode){connectionMode=mode==='proxy'?'proxy':'direct';try{localStorage.setItem(CONNECTION_MODE_KEY,connectionMode)}catch(_){} }
+function setConnectionMode(_mode){connectionMode='proxy';try{localStorage.setItem(CONNECTION_MODE_KEY,'proxy')}catch(_){} }
 function getConnectionMode(){
-  try{
-    const stored=localStorage.getItem(CONNECTION_MODE_KEY);
-    if(stored==='proxy'||stored==='direct')return stored;
-  }catch(_){}
-  return connectionMode;
+  try{localStorage.setItem(CONNECTION_MODE_KEY,'proxy')}catch(_){}
+  return 'proxy';
 }
 window.ParagraphLLM=Object.freeze({
   DEFAULTS,
