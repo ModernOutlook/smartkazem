@@ -148,8 +148,18 @@ async function request(url,init){
       if(response.ok)return response;
       if(!RETRYABLE_STATUSES.has(response.status)||attempt===MAX_ATTEMPTS-1){
         let detail='';
-        try{detail=(await response.text()).slice(0,240)}catch(_){}
-        throw new Error('خطای سرویس مدل ('+response.status+'): '+(detail||'پاسخ نامشخص'));
+        try{
+          const body=await response.clone().json();
+          const code=body?.code||body?.error?.code;
+          if(code==='FREE_MODELS_ONLY')detail='فقط مدل‌های رایگان مجازند. مدل دارای پسوند :free یا openrouter/free را انتخاب کنید.';
+          else if(response.status===429)detail='سهمیهٔ رایگان یا محدودیت درخواست فعلاً فعال است. کمی بعد دوباره تلاش کنید؛ هیچ اعتباری نخرید.';
+          else if(response.status===402)detail='سرویس درخواست را به دلیل محدودیت اعتبار رد کرد. برای حفظ سیاست رایگان، اعتباری خریداری نکنید.';
+          else if(response.status>=500)detail='سرویس مدل رایگان موقتاً در دسترس نیست. کمی بعد دوباره تلاش کنید.';
+          else detail=String(body?.error?.message||body?.error||'');
+        }catch(_){
+          try{detail=(await response.text()).slice(0,240)}catch(__){}
+        }
+        throw new Error(detail||('خطای سرویس مدل ('+response.status+').'));
       }
     }catch(error){
       if(error?.name==='AbortError'){
