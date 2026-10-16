@@ -5,7 +5,7 @@ if(root&&!root.dataset.initialized){
  const $=id=>root.querySelector("#"+id),canvas=$("talash-canvas"),ctx=canvas.getContext("2d"),overlay=$("talash-overlay"),status=$("talash-status");
  let game=null,lastTime=0,raf=0,desiredX=0,keys=new Set(),paused=false,backgrounds=[];
  const tr=(key,fallback)=>window.SiteI18n?.get("pages.talash."+key,fallback)||fallback;
- const images=REALMS.map(item=>{const img=new Image();img.src=new URL(item.background,document.baseURI).href;img.onload=()=>{if(game)draw();};return img;});
+ const images=[new Image()];images[0].src=new URL(REALMS[0].background,document.baseURI).href;images[0].onload=()=>{if(game)draw();};
  backgrounds=images;
  function resize(){
   const rect=canvas.getBoundingClientRect(),w=Math.max(240,Math.floor(rect.width)),h=Math.max(280,Math.floor(rect.height));
@@ -22,7 +22,7 @@ if(root&&!root.dataset.initialized){
  function draw(){
   if(!game)return;const w=game.width,h=game.height;ctx.clearRect(0,0,w,h);ctx.fillStyle="#000";ctx.fillRect(0,0,w,h);
   // Supplied realm artwork remains deliberately faint and never replaces the black base.
-  for(let i=0;i<backgrounds.length;i++){const img=backgrounds[i];if(img.complete&&img.naturalWidth){ctx.save();ctx.globalAlpha=.055;ctx.drawImage(img,0,0,w,h);ctx.restore();}}
+  for(let i=0;i<backgrounds.length;i++){const img=backgrounds[i];if(img.complete&&img.naturalWidth){ctx.save();ctx.globalAlpha=.12;ctx.drawImage(img,0,0,w,h);ctx.restore();}}
   for(const t of game.triangles){if(!t.active)continue;ctx.beginPath();ctx.moveTo(t.vertices[0].x,t.vertices[0].y);for(let i=1;i<t.vertices.length;i++)ctx.lineTo(t.vertices[i].x,t.vertices[i].y);ctx.closePath();ctx.fillStyle=t.color;ctx.globalAlpha=.86;ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle="#ffffff35";ctx.lineWidth=.8;ctx.stroke();}
   for(const coin of game.coins)drawCoin(coin);
   const p=game.paddle;ctx.save();ctx.translate(p.x,p.y);ctx.fillStyle="#55bfff";ctx.shadowColor="#238fd1";ctx.shadowBlur=12;roundRect(-p.width/2,-p.height/2,p.width,p.height,5);ctx.fill();ctx.shadowBlur=0;ctx.fillStyle="#bfeaff";ctx.fillRect(-p.width*.35,-p.height*.12,p.width*.7,p.height*.16);ctx.fillStyle="#a5b1be";for(const x of [-p.width*.32,p.width*.32]){ctx.beginPath();ctx.arc(x,p.height*.7,3.5,0,Math.PI*2);ctx.fill();}ctx.restore();
