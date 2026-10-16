@@ -20,7 +20,7 @@ async function main() {
   assert.equal(core.DOMAIN_NAMES.C, 'سهام');
   assert.deepEqual(
     Array.from(core.DOMAIN_ORDER, domain => core.ALL_CRITERIA[domain].length),
-    [9, 9, 11, 10, 10]
+    [19, 19, 21, 20, 20]
   );
 
   assert.equal(core.validateGeneratedResult({ paragraphs: [{ text: 'A short paragraph.' }] }, 1).paragraphs[0].text, 'A short paragraph.');
@@ -44,6 +44,10 @@ async function main() {
   }, {});
   const systemPrompt = core.buildSystemPrompt(criteria, 'English');
   assert.match(systemPrompt, /Modal words/);
+  assert.match(systemPrompt, /nobler direction/);
+  assert.match(systemPrompt, /density, rate of directional change/);
+  assert.match(systemPrompt, /concrete phrase or relation/);
+  assert.match(systemPrompt, /M1-M10/);
   assert.match(systemPrompt, /definite violation overrides confirmations/);
   assert.doesNotMatch(systemPrompt, /R-ADJ-2/);
   assert.match(systemPrompt, /Structure/);
