@@ -6,7 +6,7 @@ if(root&&!root.dataset.initialized){
  const $=id=>root.querySelector("#"+id),canvas=$("talash-canvas"),ctx=canvas.getContext("2d"),overlay=$("talash-overlay"),status=$("talash-status");
  let game=null,lastTime=0,raf=0,desiredX=0,keys=new Set(),paused=false,backgrounds=[];
  const tr=(key,fallback)=>window.SiteI18n?.get("pages.talash."+key,fallback)||fallback;
- const images=GAME_BACKGROUNDS.map(asset=>{const image=new Image();image.src=asset.dataUri;image.onload=()=>{if(game)draw();};return image;});
+ const images=[new Image()];images[0].src=GAME_BACKGROUNDS[0].dataUri;images[0].onload=()=>{if(game)draw();};
  backgrounds=images;
  function resize(){
   const rect=canvas.getBoundingClientRect(),w=Math.max(240,Math.floor(rect.width)),h=Math.max(280,Math.floor(rect.height));
