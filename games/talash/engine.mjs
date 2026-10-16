@@ -11,7 +11,7 @@ export function createGame({width=720,height=480,seed=1,columns=18,rows=8}={}){
  const random=()=>{randomState=(1664525*randomState+1013904223)>>>0;return randomState/4294967296;};
  const cellW=width/columns,cellH=Math.min(25,cellW*.78),triangles=[];
  for(let row=0;row<rows;row++)for(let col=0;col<columns;col++){
-  const realm=REALMS[Math.floor(random()*REALMS.length)],x=(col+.5)*cellW+(row%2?cellW*.5:0),y=18+row*cellH,orientation=(row+col)%2? -1:1,half=cellW*.49,h=cellH*.86;
+  const realm=REALMS[Math.floor(random()*REALMS.length)],x=(col+.5)*cellW,y=18+row*cellH,orientation=(row+col)%2? -1:1,half=cellW*.49,h=cellH*.86;
   const vertices=orientation===1?[{x:x-half,y:y+h/2},{x:x+half,y:y+h/2},{x,y:y-h/2}]:[{x:x-half,y:y-h/2},{x:x+half,y:y-h/2},{x,y:y+h/2}];
   triangles.push({id:row*columns+col,row,col,x,y,realm:realm.id,color:realm.color,vertices,active:true});
  }
@@ -32,9 +32,20 @@ export function disintegrateCluster(game,triangleId){
  const coins=cluster.map((t,i)=>({id:game.lastHitCluster*10000+t.id,x:t.x,y:t.y,vx:(i%3-1)*18,vy:24+(i%4)*5,radius:8,active:true}));
  cluster.forEach(t=>t.active=false);game.lastHitCluster++;game.coins.push(...coins);return{removed:cluster.map(t=>t.id),coins};
 }
+function pointInTriangle(p,a,b,c){
+ const sign=(p1,p2,p3)=>(p1.x-p3.x)*(p2.y-p3.y)-(p2.x-p3.x)*(p1.y-p3.y);
+ const d1=sign(p,a,b),d2=sign(p,b,c),d3=sign(p,c,a);
+ return !((d1<0||d2<0||d3<0)&&(d1>0||d2>0||d3>0));
+}
+function pointSegmentDistanceSquared(p,a,b){
+ const dx=b.x-a.x,dy=b.y-a.y,length=dx*dx+dy*dy;
+ const t=length?clamp(((p.x-a.x)*dx+(p.y-a.y)*dy)/length,0,1):0;
+ return (p.x-(a.x+t*dx))**2+(p.y-(a.y+t*dy))**2;
+}
 function hitTriangle(ball,t){
- const minX=Math.min(...t.vertices.map(p=>p.x)),maxX=Math.max(...t.vertices.map(p=>p.x)),minY=Math.min(...t.vertices.map(p=>p.y)),maxY=Math.max(...t.vertices.map(p=>p.y));
- return ball.x+ball.radius>=minX&&ball.x-ball.radius<=maxX&&ball.y+ball.radius>=minY&&ball.y-ball.radius<=maxY;
+ const [a,b,c]=t.vertices,center={x:ball.x,y:ball.y},r2=ball.radius*ball.radius;
+ if(pointInTriangle(center,a,b,c))return true;
+ return pointSegmentDistanceSquared(center,a,b)<=r2||pointSegmentDistanceSquared(center,b,c)<=r2||pointSegmentDistanceSquared(center,c,a)<=r2;
 }
 export function stepGame(game,dt,inputX=game.paddle.x){
  if(!game.running||game.over||dt<=0)return game;
