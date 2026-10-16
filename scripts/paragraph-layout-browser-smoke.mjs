@@ -100,7 +100,9 @@ try {
             smartbot: rect('.pm-smartbot'),
             choices: rect('.pm-realm-choices'),
             input: rect('#paragraph-input'),
-            primaryOutput: rect('#paragraph-primary-output'),
+            primaryOutput: { ...rect('#paragraph-primary-output'), hidden: document.querySelector('#paragraph-primary-output')?.hidden },
+            primaryPanelClass: document.querySelector('#paragraph-primary-panel')?.className,
+            entry: document.querySelector('#paragraph-page')?.dataset.entry,
             settings: rect('#paragraph-settings'),
             output: rect('#paragraph-output'),
             realms,
@@ -127,7 +129,7 @@ try {
         if (entry === 'reference') {
           check(metrics.input && metrics.input.display !== 'none' && metrics.input.width > 0, tag + ': equivalency input is not visible');
         } else {
-          check(metrics.primaryOutput && metrics.primaryOutput.display !== 'none' && metrics.primaryOutput.width > 0, tag + ': recognition output panel is not visible');
+          check(metrics.primaryOutput && metrics.primaryOutput.display !== 'none' && metrics.primaryOutput.width > 0, tag + ': recognition output panel is not visible (display=' + metrics.primaryOutput?.display + ', width=' + metrics.primaryOutput?.width + ', hidden=' + metrics.primaryOutput?.hidden + ', parentClass=' + metrics.primaryPanelClass + ', entry=' + metrics.entry + ')');
         }
         if (viewport.width >= 640 && viewport.width <= 1023 && viewport.height < viewport.width) {
           check(metrics.smartbot && metrics.smartbot.width > 0 && metrics.choices && metrics.choices.width > 0, tag + ': SmartBot or realm controls collapsed');
