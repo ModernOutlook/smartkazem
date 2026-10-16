@@ -36,10 +36,19 @@ try {
     }
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
-    // Keep this a presentation-only test: block any model/network call without
-    // changing the production adapter or request/response contract.
+    // Keep this a presentation-only test: stub the workspace adapter with
+    // deterministic, schema-independent data so opening the recognition route
+    // populates its output panel without any model/network calls. Production
+    // adapter and request/response contracts remain untouched.
     await page.evaluate(() => {
-      window.ParagraphLLM.complete = async () => { throw new Error('Layout smoke test: model calls disabled'); };
+      window.ParagraphWorkspaceAdapter.generateParagraphs = async count =>
+        Array.from({ length: count }, (_, index) => ({
+          text: 'Layout smoke test paragraph ' + (index + 1) + '.'
+        }));
+      window.ParagraphWorkspaceAdapter.evaluateText = async text => ({
+        text,
+        judgment: {}
+      });
     });
 
     for (const language of languages) {
