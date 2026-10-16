@@ -68,7 +68,14 @@ try {
           const page = document.querySelector('#paragraph-page');
           return page?.classList.contains('open') && page.classList.contains('is-active') && getComputedStyle(page).display !== 'none' && page.getBoundingClientRect().width > 0;
         });
-        await page.waitForTimeout(80);
+        // Recognition generation is asynchronous; wait for its deterministic fixture to render.
+        if (entry === 'experience') {
+          await page.waitForFunction(() => {
+            const output = document.querySelector('#paragraph-primary-output');
+            return Boolean(output && (output.querySelector('.pm-primary-card') || document.querySelector('#paragraph-error')?.textContent));
+          }, null, { timeout: 3000 }).catch(() => {});
+        }
+        await page.waitForTimeout(40);
         const metrics = await page.evaluate(() => {
           const rect = selector => {
             const el = document.querySelector(selector);
@@ -100,7 +107,8 @@ try {
             smartbot: rect('.pm-smartbot'),
             choices: rect('.pm-realm-choices'),
             input: rect('#paragraph-input'),
-            primaryOutput: { ...rect('#paragraph-primary-output'), hidden: document.querySelector('#paragraph-primary-output')?.hidden },
+            primaryPanel: rect('#paragraph-primary-panel'),
+            primaryOutput: { ...rect('#paragraph-primary-output'), hidden: document.querySelector('#paragraph-primary-output')?.hidden, childCount: document.querySelector('#paragraph-primary-output')?.children.length },
             primaryPanelClass: document.querySelector('#paragraph-primary-panel')?.className,
             entry: document.querySelector('#paragraph-page')?.dataset.entry,
             settings: rect('#paragraph-settings'),
@@ -129,7 +137,8 @@ try {
         if (entry === 'reference') {
           check(metrics.input && metrics.input.display !== 'none' && metrics.input.width > 0, tag + ': equivalency input is not visible');
         } else {
-          check(metrics.primaryOutput && metrics.primaryOutput.display !== 'none' && metrics.primaryOutput.width > 0, tag + ': recognition output panel is not visible (display=' + metrics.primaryOutput?.display + ', width=' + metrics.primaryOutput?.width + ', hidden=' + metrics.primaryOutput?.hidden + ', parentClass=' + metrics.primaryPanelClass + ', entry=' + metrics.entry + ')');
+          check(metrics.primaryPanel && metrics.primaryPanel.display !== 'none' && metrics.primaryPanel.width > 0, tag + ': recognition panel container is not visible (display=' + metrics.primaryPanel?.display + ', width=' + metrics.primaryPanel?.width + ', class=' + metrics.primaryPanelClass + ', entry=' + metrics.entry + ')');
+          check(metrics.primaryOutput && metrics.primaryOutput.display !== 'none' && metrics.primaryOutput.hidden !== true && metrics.primaryOutput.childCount > 0, tag + ': recognition output has not rendered (display=' + metrics.primaryOutput?.display + ', width=' + metrics.primaryOutput?.width + ', hidden=' + metrics.primaryOutput?.hidden + ', children=' + metrics.primaryOutput?.childCount + ', parentClass=' + metrics.primaryPanelClass + ', entry=' + metrics.entry + ')');
         }
         if (viewport.width >= 640 && viewport.width <= 1023 && viewport.height < viewport.width) {
           check(metrics.smartbot && metrics.smartbot.width > 0 && metrics.choices && metrics.choices.width > 0, tag + ': SmartBot or realm controls collapsed');
