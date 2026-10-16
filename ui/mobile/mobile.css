@@ -458,3 +458,25 @@
     top: calc(120px + var(--ui-safe-top));
   }
 }
+
+
+/* Paragraph Machine: prevent the five realm controls from forcing horizontal
+   overflow on narrow landscape phones. Keep the compact side-by-side stage,
+   but allow each realm track to shrink to the available workspace width. */
+@media (orientation: landscape) and (max-width: 1023px) {
+  .paragraph-page .paragraph-workspace,
+  .paragraph-page .pm-recognition-stage,
+  .paragraph-page .pm-realm-choices {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .paragraph-page .pm-realm-choices {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .paragraph-page .pm-realm-choice {
+    min-width: 0;
+    width: 100%;
+  }
+}
