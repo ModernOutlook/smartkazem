@@ -104,12 +104,12 @@
         if (attempt > 0) {
           messages.push({
             role: 'user',
-            content: 'The previous response failed schema validation: ' + String(lastError && lastError.message || 'invalid output') + '. Return a corrected JSON judgment object only. Re-evaluate the original paragraph; do not change the paragraph.'
+            content: 'The previous response failed schema validation: ' + String(lastError && lastError.message || 'invalid output') + '. Return the complete corrected JSON object with both judgment and normative axes, without scores or percentages. Re-evaluate the original paragraph; do not change the paragraph.'
           });
         }
         const result = await window.ParagraphLLM.complete(messages, { temperature: 0.1 });
-        const judgment = core.validateEvaluation(result);
-        return { text: original, judgment };
+        const evaluation = core.validateEvaluation(result);
+        return { text: original, judgment: evaluation.judgment, normative: evaluation.normative };
       } catch (error) {
         lastError = error;
         const message = String(error && error.message || '');
