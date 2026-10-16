@@ -48,7 +48,6 @@
   }
 
   /* Book reader */
-  }
 
   .orbit {
     position: relative;
@@ -87,8 +86,8 @@
   /* Paragraph Machine: use the real workspace children. */
   .paragraph-workspace {
     display: grid;
-    grid-template-columns: minmax(300px, 360px) minmax(0, 1fr);
-    grid-template-rows: auto auto auto 1fr;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    grid-template-rows: auto auto auto max-content minmax(0, 1fr);
     column-gap: var(--ui-space-5);
     row-gap: var(--ui-space-3);
     height: calc(100dvh - 32px);
@@ -102,14 +101,68 @@
   }
 
   .pm-input-panel,
-  .pm-output {
+  .pm-output,
+  .paragraph-connection {
     grid-column: 2;
+    min-width: 0;
   }
 
-  .pm-controls,
-  .pm-settings,
+  .pm-recognition-stage,
   .pm-error {
     grid-column: 1;
+    min-width: 0;
+  }
+
+  /* The five realm cards must fit inside the stage rather than spill over
+     the adjacent connection panel at desktop and desktop-portrait widths. */
+  .paragraph-workspace .pm-recognition-stage {
+    grid-template-columns: 116px minmax(0, 1fr);
+  }
+
+  .paragraph-workspace .pm-realm-choices {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .paragraph-workspace .pm-realm-choice {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .paragraph-workspace .pm-smartbot button {
+    padding-inline: 4px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .paragraph-workspace .pm-realm-choice span {
+    font-size: 0.55rem;
+    line-height: 1.2;
+    text-align: center;
+    white-space: normal;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    text-overflow: clip;
+  }
+
+  /* Fit the connection illustration and fields in the landscape row. */
+  .paragraph-workspace .paragraph-connection .pc-layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .paragraph-workspace .paragraph-connection .pc-center {
+    order: -1;
+    width: 110px;
+  }
+
+  .paragraph-workspace .paragraph-connection .pc-input {
+    height: 40px;
+  }
+
+  .paragraph-workspace .paragraph-connection .pc-footer {
+    margin-top: 8px;
   }
 
   .pm-output {
@@ -120,4 +173,40 @@
   .pm-card {
     min-width: 0;
   }
+}
+
+
+/* Shared shell geometry retained for existing mobile book and home pages.
+   Only the Paragraph Machine workspace grid above is desktop-specific. */
+.orbit {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+}
+
+.menu-svg {
+  width: min(78vh, 900px);
+  height: min(78vh, 900px);
+}
+
+.book-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+}
+
+.book-head {
+  grid-column: 1 / -1;
+}
+
+.book-tabs {
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.book-body {
+  max-width: 900px;
+  margin: auto;
 }

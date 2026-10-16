@@ -458,3 +458,147 @@
     top: calc(120px + var(--ui-safe-top));
   }
 }
+
+
+/* Paragraph Machine: prevent the five realm controls from forcing horizontal
+   overflow on narrow landscape phones. Keep the compact side-by-side stage,
+   but allow each realm track to shrink to the available workspace width. */
+@media (orientation: landscape) and (max-width: 1023px) {
+  .paragraph-page .paragraph-workspace,
+  .paragraph-page .pm-recognition-stage,
+  .paragraph-page .pm-realm-choices {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .paragraph-page .pm-realm-choices {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .paragraph-page .pm-realm-choice {
+    min-width: 0;
+    width: 100%;
+  }
+}
+
+
+/* Keep the two long Paragraph Machine context messages from colliding on
+   narrow screens in either orientation or any of the four writing systems. */
+@media (max-width: 700px) {
+  .paragraph-page .paragraph-context {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
+    min-width: 0;
+  }
+
+  .paragraph-page .paragraph-context strong,
+  .paragraph-page .paragraph-context span {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
+
+
+/* In mobile landscape, place the active input/output beside the five-realm
+   stage so the selector is visible without scrolling past a full-height panel. */
+@media (orientation: landscape) and (max-width: 1023px) {
+  .paragraph-page .paragraph-workspace {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 12px;
+    row-gap: 8px;
+    padding-top: 8px;
+  }
+
+  .paragraph-page .paragraph-head,
+  .paragraph-page .paragraph-context {
+    grid-column: 1 / -1;
+    margin-bottom: 0;
+  }
+
+  .paragraph-page .paragraph-context {
+    gap: 6px;
+  }
+
+  .paragraph-page .pm-input-panel {
+    grid-column: 1;
+    min-width: 0;
+    margin-bottom: 0;
+    padding: 10px;
+  }
+
+  .paragraph-page .pm-input-panel textarea {
+    min-height: 100px;
+  }
+
+  .paragraph-page .pm-recognition-stage {
+    grid-column: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    gap: 8px;
+    min-width: 0;
+    min-height: 0;
+    margin-bottom: 0;
+    padding: 8px;
+  }
+
+  .paragraph-page .pm-smartbot {
+    flex-direction: row;
+    justify-content: center;
+    gap: 6px;
+    min-height: 44px;
+  }
+
+  .paragraph-page .pm-smartbot img {
+    width: 42px;
+    height: 42px;
+  }
+
+  .paragraph-page .pm-smartbot button {
+    width: min(100px, 54%);
+    min-height: 38px;
+    padding: 5px 3px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .paragraph-page .pm-realm-choices {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 3px;
+    min-width: 0;
+  }
+
+  .paragraph-page .pm-realm-choice {
+    width: 100%;
+    min-width: 0;
+    min-height: 70px;
+    padding: 3px 2px;
+  }
+
+  .paragraph-page .pm-realm-choice img {
+    height: 38px;
+    border-radius: 5px;
+  }
+
+  .paragraph-page .pm-realm-choice span {
+    margin-top: 3px;
+    font-size: 0.42rem;
+    line-height: 1.1;
+    text-align: center;
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  .paragraph-page .paragraph-connection,
+  .paragraph-page .pm-error,
+  .paragraph-page .pm-output {
+    grid-column: 1 / -1;
+  }
+
+  .paragraph-page .paragraph-connection {
+    margin-top: 0;
+  }
+}

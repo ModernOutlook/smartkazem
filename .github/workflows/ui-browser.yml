@@ -48,6 +48,18 @@ jobs:
       - name: Test language transitions and responsive overflow
         run: node scripts/ui-browser-smoke.mjs
 
+      - name: Test Paragraph Machine layout across viewport, entry-route and language matrix
+        run: node scripts/paragraph-layout-browser-smoke.mjs
+
+      - name: Upload Paragraph Machine full-matrix screenshots
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: paragraph-machine-full-matrix-screenshots
+          path: artifacts/paragraph-machine/
+          if-no-files-found: warn
+          retention-days: 14
+
       - name: Test Five Realms gameplay interactions at desktop and mobile viewports
         if: always()
         run: node scripts/five-realms-browser-smoke.mjs
