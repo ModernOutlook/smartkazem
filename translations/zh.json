@@ -387,6 +387,14 @@
     "proxy": "Proxy",
     "connect": "连接",
     "connectionSettings": "连接设置",
-    "localStorageNote": "默认模式使用安全的服务器端代理；API 密钥不会在浏览器中显示或存储。"
+    "localStorageNote": "默认模式使用安全的服务器端代理；API 密钥不会在浏览器中显示或存储。",
+    "normativeTitle": "独立规范性维度",
+    "normativeDescription": "这是依赖语境的定性判断；不生成分数、置信百分比或总体排名。",
+    "normativeEvidence": "文本证据：",
+    "normativeUnavailable": "此响应缺少规范性维度；评估不完整。",
+    "normativeNobler": "相对更好的方向",
+    "normativeHarmful": "危害更大的方向",
+    "normativeMixed": "混合或相互冲突",
+    "normativeIndeterminate": "无法确定；证据不足"
   }
 }
