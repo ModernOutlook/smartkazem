@@ -86,7 +86,7 @@
   /* Paragraph Machine: use the real workspace children. */
   .paragraph-workspace {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
     grid-template-rows: auto auto auto 1fr;
     column-gap: var(--ui-space-5);
     row-gap: var(--ui-space-3);
@@ -116,7 +116,7 @@
   /* The five realm cards must fit inside the stage rather than spill over
      the adjacent connection panel at desktop and desktop-portrait widths. */
   .paragraph-workspace .pm-recognition-stage {
-    grid-template-columns: 96px minmax(0, 1fr);
+    grid-template-columns: 116px minmax(0, 1fr);
   }
 
   .paragraph-workspace .pm-realm-choices {
@@ -128,6 +128,19 @@
   .paragraph-workspace .pm-realm-choice {
     width: 100%;
     min-width: 0;
+  }
+
+  .paragraph-workspace .pm-smartbot button {
+    padding-inline: 4px;
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  /* The connection controls can exceed the available desktop row height.
+     Keep every field reachable instead of clipping the proxy and mode controls. */
+  .paragraph-workspace .paragraph-connection {
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 
   .pm-output {
