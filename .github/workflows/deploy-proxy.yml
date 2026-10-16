@@ -21,14 +21,54 @@ jobs:
         with:
           node-version: 22
 
-      - name: Deploy Worker with secret
+      - name: Validate deployment secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
+        run: |
+          set -euo pipefail
+          for name in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID OPENROUTER_API_KEY; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::Missing GitHub Actions secret: $name"
+              exit 1
+            fi
+          done
+          echo "All required deployment secrets are present."
+
+      - name: Deploy Worker and verify runtime bindings
         working-directory: proxy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
         run: |
+          set -euo pipefail
           umask 077
-          printf '{"OPENROUTER_API_KEY":"%s"}' "$OPENROUTER_API_KEY" > /tmp/paragraph-machine-secrets.json
-          npx --yes wrangler deploy --secrets-file /tmp/paragraph-machine-secrets.json
-          rm -f /tmp/paragraph-machine-secrets.json
+          secrets_file="$(mktemp)"
+          trap 'rm -f "$secrets_file"' EXIT
+          node -e 'require("fs").writeFileSync(process.argv[1], JSON.stringify({OPENROUTER_API_KEY: process.env.OPENROUTER_API_KEY}), {mode: 0o600})' "$secrets_file"
+          npx --yes wrangler deploy --secrets-file "$secrets_file"
+
+          health="$(curl --fail --silent --show-error https://modern-outlook-paragraph-proxy.game-kazem9877.workers.dev/health)"
+          printf '%s' "$health" | node -e '
+            let raw = "";
+            process.stdin.setEncoding("utf8");
+            process.stdin.on("data", chunk => raw += chunk);
+            process.stdin.on("end", () => {
+              let result;
+              try { result = JSON.parse(raw); } catch (_) {
+                console.error("Worker health endpoint returned invalid JSON.");
+                process.exit(1);
+              }
+              if (result.configured !== true) {
+                console.error("Worker deployed, but OPENROUTER_API_KEY is not available at runtime.");
+                process.exit(1);
+              }
+              if (result.rateLimiterConfigured !== true) {
+                console.error("Worker deployed, but PM_RATE_LIMITER is not available at runtime.");
+                process.exit(1);
+              }
+              console.log("Worker health check passed: required runtime bindings are available.");
+            });
+          '
