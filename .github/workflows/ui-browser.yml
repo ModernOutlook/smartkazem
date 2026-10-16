@@ -113,19 +113,21 @@ jobs:
             ~/.cache/ms-playwright
           key: smartkazem-browser-${{ runner.os }}-node22-playwright1.55.0-chromium-v2
 
-      - name: Check whether browser dependencies are already available
+      - name: Check whether the exact browser toolchain is available
         id: browser-ready
         if: steps.change-scope.outputs.image_only != 'true'
         run: |
-          if [ -f node_modules/playwright/package.json ] && node -e "const fs=require('node:fs'); const {chromium}=require('playwright'); process.exit(fs.existsSync(chromium.executablePath()) ? 0 : 1)"; then
+          if [ -f node_modules/playwright/package.json ] && node -e "const fs=require('node:fs'); const p=require('./node_modules/playwright/package.json'); const {chromium}=require('playwright'); process.exit(p.version === '1.55.0' && fs.existsSync(chromium.executablePath()) ? 0 : 1)"; then
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Explain skipped browser tests
-        if: steps.browser-ready.outputs.ready == 'false'
-        run: echo "Browser tests skipped: Playwright/Chromium is not cached and the reusable private bundle was not imported. Add GPT_CACHE_READ_TOKEN (Contents: read on ModernOutlook/GPT), or manually run this workflow with approve_browser_download=true to approve a direct download."
+      - name: Require the browser toolchain before running browser tests
+        if: steps.change-scope.outputs.image_only != 'true' && steps.browser-ready.outputs.ready != 'true'
+        run: |
+          echo "::error::Playwright 1.55.0 and its cached Chromium executable are unavailable. Configure GPT_CACHE_READ_TOKEN with Contents: read access to ModernOutlook/GPT, or manually dispatch this workflow with approve_browser_download=true to explicitly approve upstream installation."
+          exit 1
 
       - name: Start static site
         if: steps.browser-ready.outputs.ready == 'true'
