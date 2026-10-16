@@ -181,3 +181,39 @@
     min-width: 0;
   }
 }
+
+
+/* Shared shell geometry retained for existing mobile book and home pages.
+   Only the Paragraph Machine workspace grid above is desktop-specific. */
+.orbit {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: 100%;
+}
+
+.menu-svg {
+  width: min(78vh, 900px);
+  height: min(78vh, 900px);
+}
+
+.book-shell {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  grid-template-rows: auto 1fr;
+}
+
+.book-head {
+  grid-column: 1 / -1;
+}
+
+.book-tabs {
+  flex-direction: column;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.book-body {
+  max-width: 900px;
+  margin: auto;
+}
