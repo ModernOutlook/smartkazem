@@ -107,6 +107,8 @@ async function forward(request, env, path, origin) {
     payload.models = model === "openrouter/free"
       ? ["openrouter/free"]
       : [model, "openrouter/free"];
+    // Use the documented ordered models array as the sole routing source.
+    delete payload.model;
     init.body = JSON.stringify(payload);
     init.headers.set("Content-Type", "application/json");
   }
