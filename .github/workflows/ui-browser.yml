@@ -39,69 +39,7 @@ jobs:
             exit 0
           fi
           files="$(git diff-tree --no-commit-id --name-only -r HEAD^ HEAD)"
-          if [ -n "$files" ] && ! printf '%s\\n' "$files" | grep -Ev '^content/bk[1-5]\\.jpg
-      - name: Start static site
-        if: steps.browser-ready.outputs.ready == 'true'
-        run: |
-          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/smartkazem-http.log 2>&1 &
-          echo $! > /tmp/smartkazem-http.pid
-          for attempt in $(seq 1 30); do
-            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null; then exit 0; fi
-            sleep 1
-          done
-          cat /tmp/smartkazem-http.log
-          exit 1
-
-      - name: Audit four-language HTML translation contracts
-        if: steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/i18n-contract-check.mjs
-
-      - name: Test language transitions and responsive overflow
-        if: steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/ui-browser-smoke.mjs
-
-      - name: Test Paragraph Machine layout across viewport, entry-route and language matrix
-        if: steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/paragraph-layout-browser-smoke.mjs
-
-      - name: Upload Paragraph Machine full-matrix screenshots
-        if: always() && steps.browser-ready.outputs.ready == 'true' && hashFiles('artifacts/paragraph-machine/**') != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: paragraph-machine-full-matrix-screenshots
-          path: artifacts/paragraph-machine/
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Test Five Realms gameplay interactions at desktop and mobile viewports
-        if: always()
-        run: node scripts/five-realms-browser-smoke.mjs
-
-      - name: Test Talash hub, Tadbir handoff, and responsive gameplay
-        if: always()
-        run: node scripts/talash-browser-smoke.mjs
-
-      - name: Test realm-specific child backgrounds at required viewports
-        if: always()
-        run: node scripts/realm-child-background-smoke.mjs
-
-      - name: Test 3:4 content covers on every eligible page
-        if: always()
-        run: node scripts/content-covers-browser-smoke.mjs
-
-      - name: Upload child-page background screenshots
-        if: always() && steps.browser-ready.outputs.ready == 'true' && hashFiles('artifacts/realm-child-backgrounds/**') != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: realm-child-background-screenshots
-          path: artifacts/realm-child-backgrounds/
-          if-no-files-found: warn
-
-      - name: Stop static site
-        if: always() && steps.browser-ready.outputs.ready == 'true'
-        run: |
-          if [ -f /tmp/smartkazem-http.pid ]; then kill "$(cat /tmp/smartkazem-http.pid)" || true; fi
- | grep -q .; then
+          if [ -n "$files" ] && ! printf '%s\\n' "$files" | grep -Ev '^content/bk[1-5]\\.jpg$' | grep -q .; then
             echo "image_only=true" >> "$GITHUB_OUTPUT"
             echo "Only content/bk1.jpg through content/bk5.jpg changed in this commit; browser/language tests will be skipped."
           else
@@ -148,10 +86,14 @@ jobs:
             echo "ready=true" >> "$GITHUB_OUTPUT"
           else
             echo "ready=false" >> "$GITHUB_OUTPUT"
-            echo "Browser checks skipped: Playwright/Chromium is not cached. No download was started. To authorize a one-time download, manually run this workflow with approve_browser_download=true."
           fi
 
+      - name: Explain skipped browser tests
+        if: steps.browser-ready.outputs.ready == 'false'
+        run: echo "Browser tests skipped: Playwright/Chromium is not cached. No download was started. To authorize a one-time download, manually run this workflow with approve_browser_download=true."
+
       - name: Start static site
+        if: steps.browser-ready.outputs.ready == 'true'
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/smartkazem-http.log 2>&1 &
           echo $! > /tmp/smartkazem-http.pid
@@ -163,48 +105,51 @@ jobs:
           exit 1
 
       - name: Audit four-language HTML translation contracts
+        if: steps.browser-ready.outputs.ready == 'true'
         run: node scripts/i18n-contract-check.mjs
 
       - name: Test language transitions and responsive overflow
+        if: steps.browser-ready.outputs.ready == 'true'
         run: node scripts/ui-browser-smoke.mjs
 
       - name: Test Paragraph Machine layout across viewport, entry-route and language matrix
+        if: steps.browser-ready.outputs.ready == 'true'
         run: node scripts/paragraph-layout-browser-smoke.mjs
 
       - name: Upload Paragraph Machine full-matrix screenshots
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true' && hashFiles('artifacts/paragraph-machine/**') != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: paragraph-machine-full-matrix-screenshots
           path: artifacts/paragraph-machine/
-          if-no-files-found: warn
+          if-no-files-found: error
           retention-days: 14
 
       - name: Test Five Realms gameplay interactions at desktop and mobile viewports
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: node scripts/five-realms-browser-smoke.mjs
 
       - name: Test Talash hub, Tadbir handoff, and responsive gameplay
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: node scripts/talash-browser-smoke.mjs
 
       - name: Test realm-specific child backgrounds at required viewports
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: node scripts/realm-child-background-smoke.mjs
 
       - name: Test 3:4 content covers on every eligible page
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: node scripts/content-covers-browser-smoke.mjs
 
       - name: Upload child-page background screenshots
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true' && hashFiles('artifacts/realm-child-backgrounds/**') != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: realm-child-background-screenshots
           path: artifacts/realm-child-backgrounds/
-          if-no-files-found: warn
+          if-no-files-found: error
 
       - name: Stop static site
-        if: always()
+        if: always() && steps.browser-ready.outputs.ready == 'true'
         run: |
           if [ -f /tmp/smartkazem-http.pid ]; then kill "$(cat /tmp/smartkazem-http.pid)" || true; fi
