@@ -11,20 +11,33 @@ export function createGame({width=720,height=480,seed=1,columns=18,rows=8}={}){
  const random=()=>{randomState=(1664525*randomState+1013904223)>>>0;return randomState/4294967296;};
  const cellW=width/columns,cellH=Math.min(25,cellW*.78),triangles=[];
  for(let row=0;row<rows;row++)for(let col=0;col<columns;col++){
-  const realm=REALMS[Math.floor(random()*REALMS.length)],x=(col+.5)*cellW,y=18+row*cellH,orientation=(row+col)%2? -1:1,half=cellW*.49,h=cellH*.86;
-  const vertices=orientation===1?[{x:x-half,y:y+h/2},{x:x+half,y:y+h/2},{x,y:y-h/2}]:[{x:x-half,y:y-h/2},{x:x+half,y:y-h/2},{x,y:y+h/2}];
-  triangles.push({id:row*columns+col,row,col,x,y,realm:realm.id,color:realm.color,vertices,active:true});
+  const x0=col*cellW,x1=(col+1)*cellW,y0=18+row*cellH,y1=y0+cellH;
+  const points=[{x:x0,y:y0},{x:x1,y:y0},{x:x1,y:y1},{x:x0,y:y1}];
+  const polygons=(row+col)%2?[[points[0],points[1],points[3]],[points[1],points[2],points[3]]]:[[points[0],points[1],points[2]],[points[0],points[2],points[3]]];
+  for(const vertices of polygons){
+   const realm=REALMS[Math.floor(random()*REALMS.length)];
+   triangles.push({id:triangles.length,row,col,x:vertices.reduce((s,p)=>s+p.x,0)/3,y:vertices.reduce((s,p)=>s+p.y,0)/3,realm:realm.id,color:realm.color,vertices,active:true});
+  }
  }
  const game={width,height,triangles,coins:[],score:0,lives:3,running:false,over:false,paddle:{x:width/2,y:height-24,width:Math.max(76,width*.14),height:12,speed:0},ball:{x:width/2,y:height-50,vx:width*.34,vy:-height*.58,radius:Math.max(6,Math.min(9,width*.012))},wallHits:0,lastHitCluster:0,random,initialTriangleCount:triangles.length};
  const speed=Math.hypot(game.ball.vx,game.ball.vy);game.ball.vx=speed*.48;game.ball.vy=-Math.sqrt(speed*speed-game.ball.vx*game.ball.vx);return game;
 }
-function neighbors(game,a){
- return game.triangles.filter(b=>b.active&&b.id!==a.id&&((a.row===b.row&&Math.abs(a.col-b.col)===1)||(Math.abs(a.row-b.row)===1&&Math.abs(a.col-b.col)<=1)));
+function edgeKey(a,b){
+ const p=[a,b].sort((u,v)=>u.x-v.x||u.y-v.y);
+ return p.map(v=>v.x.toFixed(4)+","+v.y.toFixed(4)).join("|");
+}
+function adjacencyFor(game){
+ const byEdge=new Map(),adjacency=new Map(game.triangles.filter(t=>t.active).map(t=>[t.id,[]]));
+ for(const triangle of game.triangles){if(!triangle.active)continue;for(let i=0;i<3;i++){
+  const key=edgeKey(triangle.vertices[i],triangle.vertices[(i+1)%3]);
+  const list=byEdge.get(key)||[];for(const other of list){adjacency.get(triangle.id)?.push(other.id);adjacency.get(other.id)?.push(triangle.id);}list.push(triangle);byEdge.set(key,list);
+ }}
+ return adjacency;
 }
 export function connectedCluster(game,triangleId){
  const target=game.triangles.find(t=>t.id===triangleId&&t.active);if(!target)return[];
- const seen=new Set([target.id]),queue=[target.id];
- for(let i=0;i<queue.length;i++){const current=game.triangles.find(t=>t.id===queue[i]);for(const n of neighbors(game,current))if(n.realm===target.realm&&!seen.has(n.id)){seen.add(n.id);queue.push(n.id);}}
+ const adjacency=adjacencyFor(game),seen=new Set([target.id]),queue=[target.id];
+ for(let i=0;i<queue.length;i++)for(const id of adjacency.get(queue[i])||[]){const item=game.triangles.find(t=>t.id===id);if(item?.active&&item.realm===target.realm&&!seen.has(id)){seen.add(id);queue.push(id);}}
  return queue.map(id=>game.triangles.find(t=>t.id===id));
 }
 export function disintegrateCluster(game,triangleId){
