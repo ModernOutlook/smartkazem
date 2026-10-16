@@ -27,6 +27,9 @@ jobs:
         run: |
           find . -type f \( -name '*.js' -o -name '*.mjs' \) -not -path './.git/*' -print0 | xargs -0 -n1 node --check
 
+      - name: Test free-only Paragraph Machine proxy routing
+        run: node --test proxy/worker.test.mjs
+
       - name: Test Five Realms gameplay engine
         run: node --test games/five-realms/tests/*.test.mjs
 
