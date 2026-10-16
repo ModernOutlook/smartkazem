@@ -185,7 +185,7 @@ async function complete(messages,options={}){
   payload.models=model==='openrouter/free'?['openrouter/free']:[model,'openrouter/free'];
   const res=await request(
     endpoint+'/chat/completions',
-    {method:'POST',headers:{'Content-Type':'application/json',...(proxy||!s.apiKey?{}:{'Authorization':'Bearer '+s.apiKey})},body:JSON.stringify(payload)}
+    {method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json',...(proxy||!s.apiKey?{}:{'Authorization':'Bearer '+s.apiKey})},body:JSON.stringify(payload)}
   );
   let data;
   const responseText = await res.text();
