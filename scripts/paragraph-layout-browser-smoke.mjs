@@ -29,6 +29,11 @@ try {
     const response = await page.goto(baseURL + '/index.html', { waitUntil: 'domcontentloaded' });
     check(Boolean(response && response.ok()), viewport.name + ': site failed to load');
     await page.waitForFunction(() => Boolean(window.ParagraphPage && window.ParagraphLLM && window.SiteI18n), null, { timeout: 8000 });
+    const splash = page.locator('#splash');
+    if (await splash.count() && await splash.isVisible()) {
+      await splash.click().catch(() => {});
+      await page.waitForTimeout(120);
+    }
     await page.setViewportSize({ width: viewport.width, height: viewport.height });
 
     // Keep this a presentation-only test: block any model/network call without
