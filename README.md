@@ -64,7 +64,6 @@ The five realms must be evaluated independently. The existing `ok / warn / bad` 
 
 The locally retained research synthesis and source metadata are in [`docs/paragraph-machine-research-map.md`](docs/paragraph-machine-research-map.md). These sources supplement rather than replace Modern Outlook's own philosophical framework; normal execution must not download them.
 
-
 `بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۳ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ### Exact access contract for the Paragraph Machine
@@ -229,7 +228,7 @@ Order S/T/E/R/C is an invariant. Child-page order is likewise the order explicit
 
 ## Shared realm backgrounds for child surfaces
 
-The five original JPEGs are the source of truth. The shared renderer in `js/shared-pages.js` owns the realm-to-image mapping and applies the background to the rendered page root. Paths are resolved against `document.baseURI`, so direct child-page URLs and GitHub Pages deployments under `/smartkazem/` stay subpath-compatible. The image is rendered with `contain`, centered at the top, no-repeat, and a separate dark gradient layer; this keeps the entire source composition recognizable on desktop, portrait, and landscape screens instead of cropping defining elements. The background scrolls with the page and has no pointer/touch layer. The two long-form reader bodies whose existing opaque fills concealed the image use 86%-opaque light reading panels, keeping dark text legible while allowing the imitation-reference motif to remain visible. Foreground cards and controls retain their existing stacking and behavior.
+The five original JPEGs are the source of truth. The shared renderer in `js/shared-pages.js` owns the realm-to-image mapping and applies the background to the rendered page root. Paths are resolved against `document.baseURI`, so direct child-page URLs and GitHub Pages deployments under `/smartkazem/` stay subpath-compatible. The image is rendered with `contain`, centered at the top, no-repeat, and a separate dark gradient layer; this keeps the entire source composition recognizable on desktop, portrait, and landscape screens instead of cropping defining elements. The background scrolls with the page and has no pointer/touch layer. The two long-form reader bodies whose existing opaque fills concealed the image use 86%-opaque light reading panels, keeping dark text legible while allowing the simulation-realm motif to remain visible. Foreground cards and controls retain their existing stacking and behavior.
 
 ### Child-page coverage matrix
 
@@ -244,13 +243,13 @@ The five original JPEGs are the source of truth. The shared renderer in `js/shar
 | سرزمین مشاهده؛ ۲۵ بار رسیدن | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
 | آینه‌ی ممکن‌ها | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
 | فصل دوم ظهور | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
-| سرزمین مشاهده؛ یک رود، یک جریان | مرجع تقلید | `adapters/مرجع تقلید.jpg` | Shared route manifest → page root |
-| پژواک لایه سوم | مرجع تقلید | `adapters/مرجع تقلید.jpg` | Shared route manifest → page root |
+| سرزمین مشاهده؛ یک رود، یک جریان | شبیه‌سازی | `adapters/مرجع تقلید.jpg` | Shared route manifest → page root |
+| پژواک لایه سوم | شبیه‌سازی | `adapters/مرجع تقلید.jpg` | Shared route manifest → page root |
 | انسان و ماشین‌هایش | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
 | جاعلان تقلید | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
 | تباهیان | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
 
-The Paragraph Machine is a shared workspace, not a separate child document. It is reachable from both قلمرو تجربه and مرجع تقلید; its presentation therefore follows the actual entry mode: experience background for بازشناسی and imitation-reference background for هم‌سنگی. The card inventory is opened from the home/logo surface rather than a primary realm and is intentionally excluded. The home page and five realm landing surfaces are also excluded.
+The Paragraph Machine is a shared workspace, not a separate child document. It is reachable from both قلمرو تجربه and شبیه‌سازی; its presentation therefore follows the actual entry mode: experience background for بازشناسی and simulation-realm background for هم‌سنگی. The card inventory is opened from the home/logo surface rather than a primary realm and is intentionally excluded. The home page and five realm landing surfaces are also excluded.
 
 ### Original JPEG integrity
 
@@ -300,7 +299,7 @@ Translation bridge public operations: toPersian(), fromPersian(), fromPersianBat
 
 llm-client.js is the model-service boundary. UI must not call the model API directly; adapters must not duplicate retry logic.
 
-The `paragraph-page` workspace in `index.html` is the single shared **machine surface** for Paragraph Machine; it is not a book or a second machine. It is reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **مرجع تقلید → هم‌سنگی → ماشین پاراگراف** paths. There is no separate standalone Paragraph Machine HTML page in the current route structure.
+The `paragraph-page` workspace in `index.html` is the single shared **machine surface** for Paragraph Machine; it is not a book or a second machine. It is reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **شبیه‌سازی → هم‌سنگی → ماشین پاراگراف** paths. There is no separate standalone Paragraph Machine HTML page in the current route structure.
 
 ## 9. Content and reading ownership
 
@@ -452,7 +451,7 @@ The five realms form one visual composition from the outer black perimeter towar
 1. **S — ساختار تالار:** deep petroleum blue
 2. **T — تداوم عالم:** matte golden yellow
 3. **E — قلمرو تجربه:** cosmic purple
-4. **R — مرجع تقلید:** dark coral red
+4. **R — شبیه‌سازی:** dark coral red
 5. **C — اقتصاد سهم:** emerald green
 
 The palette order is invariant and is part of the site's visual identity. A page opened from a realm should inherit that realm's dominant color family, while it may develop its own visual language from the parent realm's background motifs. Child surfaces are therefore **related, not identical**.
