@@ -4,6 +4,16 @@ const baseURL=process.env.SMARTKAZEM_BASE_URL||'http://127.0.0.1:4173';
 const browser=await chromium.launch({headless:true});
 const failures=[];
 const fail=message=>{failures.push(message);console.error('FAIL '+message);};
+const waitForSplashToDismiss=async page=>page.locator('#splash').waitFor({state:'detached',timeout:20000});
+// Realm <g> elements span the full SVG viewBox because they contain full-size
+// foreignObjects. A default Playwright click targets the group's bbox center,
+// which is covered by #core. Click a point on each realm's visible ring instead.
+const clickRealmRing=async(page,selector,yRatio)=>{
+  const realm=page.locator(selector);
+  const box=await realm.boundingBox();
+  if(!box) throw new Error(`Realm is not laid out: ${selector}`);
+  await realm.click({position:{x:box.width*0.5,y:box.height*yRatio}});
+};
 try{
  for(const viewport of [
   {name:'desktop',width:1365,height:900},
@@ -16,6 +26,7 @@ try{
   page.on('pageerror',error=>pageErrors.push(error.message));
   const response=await page.goto(`${baseURL}/index.html?page=five-realms`,{waitUntil:'domcontentloaded'});
   if(!response?.ok()){fail(`${viewport.name}: game hub route HTTP ${response?.status()??'no response'}`);await page.close();continue;}
+  await waitForSplashToDismiss(page);
   await page.waitForSelector('.fr-hub-grid .fr-game-tile');
   if(await page.locator('.fr-hub-grid .fr-game-tile').count()!==5)fail(`${viewport.name}: hub does not show exactly five game tiles`);
   if(await page.locator('[data-talash-link]').isDisabled())fail(`${viewport.name}: Talash button is disabled`);
@@ -36,6 +47,7 @@ try{
 
   // The Experience tile now opens the Quantum Maze directly.
   await page.goto(`${baseURL}/index.html?page=five-realms`,{waitUntil:'domcontentloaded'});
+  await waitForSplashToDismiss(page);
   await page.locator('[data-quantum-maze-link]').click();
   await page.waitForFunction(()=>window.SharedPages?.getActive()==='quantum-maze');
   await page.waitForSelector('#quantum-maze-game');
@@ -44,7 +56,8 @@ try{
   // The Continuity realm no longer exposes Five Realms; its Tadbir button
   // is a direct, independent entry to the Tadbir page.
   await page.goto(`${baseURL}/index.html`,{waitUntil:'domcontentloaded'});
-  await page.locator('#realm-continuity').click();
+  await waitForSplashToDismiss(page);
+  await clickRealmRing(page,'#realm-continuity',0.15);
   await page.waitForFunction(()=>document.querySelector('#continuity-page')?.classList.contains('is-active'));
   if(await page.locator('#continuity-five-realms').count()!==0)fail(`${viewport.name}: removed Five Realms button is still present in Continuity`);
   if(await page.locator('#continuity-tadbir[data-tadbir-link]').count()!==1)fail(`${viewport.name}: Continuity does not expose exactly one Tadbir entry`);
@@ -56,7 +69,7 @@ try{
 
   // The renamed Economy of Share action opens the game directory.
   await page.locator('#continuity-close').click();
-  await page.locator('#realm-share').click();
+  await clickRealmRing(page,'#realm-share',0.375);
   await page.waitForFunction(()=>document.querySelector('#share-page')?.classList.contains('is-active'));
   if(await page.locator('#share-actuality-center').count()!==1)fail(`${viewport.name}: Economy of Share does not expose the renamed Actuality Center action`);
   await page.locator('#share-actuality-center').click();
@@ -66,6 +79,7 @@ try{
 
   const talashResponse=await page.goto(`${baseURL}/index.html?page=talash`,{waitUntil:'domcontentloaded'});
   if(!talashResponse?.ok()){fail(`${viewport.name}: Talash route HTTP ${talashResponse?.status()??'no response'}`);await page.close();continue;}
+  await waitForSplashToDismiss(page);
   await page.waitForSelector('#talash-canvas');
   const geometry=await page.evaluate(()=>{
    const c=document.querySelector('#talash-canvas'),r=c.getBoundingClientRect();
