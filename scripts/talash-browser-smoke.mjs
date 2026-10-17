@@ -5,6 +5,15 @@ const browser=await chromium.launch({headless:true});
 const failures=[];
 const fail=message=>{failures.push(message);console.error('FAIL '+message);};
 const waitForSplashToDismiss=async page=>page.locator('#splash').waitFor({state:'detached',timeout:20000});
+// Realm <g> elements span the full SVG viewBox because they contain full-size
+// foreignObjects. A default Playwright click targets the group's bbox center,
+// which is covered by #core. Click a point on each realm's visible ring instead.
+const clickRealmRing=async(page,selector,yRatio)=>{
+  const realm=page.locator(selector);
+  const box=await realm.boundingBox();
+  if(!box) throw new Error(`Realm is not laid out: ${selector}`);
+  await realm.click({position:{x:box.width*0.5,y:box.height*yRatio}});
+};
 try{
  for(const viewport of [
   {name:'desktop',width:1365,height:900},
@@ -48,7 +57,7 @@ try{
   // is a direct, independent entry to the Tadbir page.
   await page.goto(`${baseURL}/index.html`,{waitUntil:'domcontentloaded'});
   await waitForSplashToDismiss(page);
-  await page.locator('#realm-continuity').click();
+  await clickRealmRing(page,'#realm-continuity',0.15);
   await page.waitForFunction(()=>document.querySelector('#continuity-page')?.classList.contains('is-active'));
   if(await page.locator('#continuity-five-realms').count()!==0)fail(`${viewport.name}: removed Five Realms button is still present in Continuity`);
   if(await page.locator('#continuity-tadbir[data-tadbir-link]').count()!==1)fail(`${viewport.name}: Continuity does not expose exactly one Tadbir entry`);
@@ -60,7 +69,7 @@ try{
 
   // The renamed Economy of Share action opens the game directory.
   await page.locator('#continuity-close').click();
-  await page.locator('#realm-share').click();
+  await clickRealmRing(page,'#realm-share',0.375);
   await page.waitForFunction(()=>document.querySelector('#share-page')?.classList.contains('is-active'));
   if(await page.locator('#share-actuality-center').count()!==1)fail(`${viewport.name}: Economy of Share does not expose the renamed Actuality Center action`);
   await page.locator('#share-actuality-center').click();
