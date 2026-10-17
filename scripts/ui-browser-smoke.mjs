@@ -544,7 +544,11 @@ async function auditCanonicalRoute(page, route, language) {
 
     if (route === 'zero') {
       const source = window.ZeroPersianSource;
-      const book = catalog.bookContent?.zero || catalog.chapters?.zero || catalog.pages?.zero || {};
+      const translationResponse = await fetch('translations/zero.json', { cache: 'no-store' });
+      const zeroTranslation = translationResponse.ok ? await translationResponse.json() : {};
+      const book = zeroTranslation.title && zeroTranslation.paragraphs
+        ? zeroTranslation
+        : (catalog.bookContent?.zero || catalog.chapters?.zero || catalog.pages?.zero || {});
       const expectedTitle = lang === 'fa' ? source?.title : (book.title?.[lang] || '');
       const expectedParagraphs = lang === 'fa' ? source?.paragraphs : (book.paragraphs?.[lang] || []);
       const actualTitle = document.querySelector('#zero-title')?.textContent?.trim() || '';
