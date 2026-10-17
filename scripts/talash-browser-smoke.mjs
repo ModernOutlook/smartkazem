@@ -4,6 +4,7 @@ const baseURL=process.env.SMARTKAZEM_BASE_URL||'http://127.0.0.1:4173';
 const browser=await chromium.launch({headless:true});
 const failures=[];
 const fail=message=>{failures.push(message);console.error('FAIL '+message);};
+const waitForSplashToDismiss=async page=>page.locator('#splash').waitFor({state:'detached',timeout:20000});
 try{
  for(const viewport of [
   {name:'desktop',width:1365,height:900},
@@ -16,6 +17,7 @@ try{
   page.on('pageerror',error=>pageErrors.push(error.message));
   const response=await page.goto(`${baseURL}/index.html?page=five-realms`,{waitUntil:'domcontentloaded'});
   if(!response?.ok()){fail(`${viewport.name}: game hub route HTTP ${response?.status()??'no response'}`);await page.close();continue;}
+  await waitForSplashToDismiss(page);
   await page.waitForSelector('.fr-hub-grid .fr-game-tile');
   if(await page.locator('.fr-hub-grid .fr-game-tile').count()!==5)fail(`${viewport.name}: hub does not show exactly five game tiles`);
   if(await page.locator('[data-talash-link]').isDisabled())fail(`${viewport.name}: Talash button is disabled`);
@@ -36,6 +38,7 @@ try{
 
   // The Experience tile now opens the Quantum Maze directly.
   await page.goto(`${baseURL}/index.html?page=five-realms`,{waitUntil:'domcontentloaded'});
+  await waitForSplashToDismiss(page);
   await page.locator('[data-quantum-maze-link]').click();
   await page.waitForFunction(()=>window.SharedPages?.getActive()==='quantum-maze');
   await page.waitForSelector('#quantum-maze-game');
@@ -44,6 +47,7 @@ try{
   // The Continuity realm no longer exposes Five Realms; its Tadbir button
   // is a direct, independent entry to the Tadbir page.
   await page.goto(`${baseURL}/index.html`,{waitUntil:'domcontentloaded'});
+  await waitForSplashToDismiss(page);
   await page.locator('#realm-continuity').click();
   await page.waitForFunction(()=>document.querySelector('#continuity-page')?.classList.contains('is-active'));
   if(await page.locator('#continuity-five-realms').count()!==0)fail(`${viewport.name}: removed Five Realms button is still present in Continuity`);
@@ -66,6 +70,7 @@ try{
 
   const talashResponse=await page.goto(`${baseURL}/index.html?page=talash`,{waitUntil:'domcontentloaded'});
   if(!talashResponse?.ok()){fail(`${viewport.name}: Talash route HTTP ${talashResponse?.status()??'no response'}`);await page.close();continue;}
+  await waitForSplashToDismiss(page);
   await page.waitForSelector('#talash-canvas');
   const geometry=await page.evaluate(()=>{
    const c=document.querySelector('#talash-canvas'),r=c.getBoundingClientRect();
