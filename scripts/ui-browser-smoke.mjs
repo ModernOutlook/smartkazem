@@ -375,7 +375,9 @@ const sharedRoutes = [
   { route: 'disturbedManifesto', content: '#part-list', close: '#manifesto-close', measure: ['.disturbed-manifesto-page', '.top', '.reader'] },
   { route: 'zero', content: '#zero-story', close: '#zero-back', measure: ['.zero-page', '.zero-header', '.zero-article'] },
   { route: 'inventory', content: '#inventory-grid', close: 'a.inventory-home' },
-  { route: 'five-realms', content: '#five-realms-game', close: '#five-realms-close' },
+  // The hub route is tested by talash-browser-smoke; this shared-page audit
+  // must target the card-game page, which owns #five-realms-game.
+  { route: 'five-realms-cards', content: '#five-realms-game', close: '#five-realms-cards-close' },
   { route: 'tadbir', content: '.tadbir-shell', close: '#tadbir-close' },
   { route: 'quantum-maze', content: '#quantum-maze-game', close: '#quantum-maze-close' },
 ];
@@ -716,6 +718,9 @@ for (const route of sharedRoutes) {
   }
 
   for (const language of languages) {
+    // If initial route mounting failed, retain that primary failure and avoid
+    // cascading TypeErrors from geometry helpers that were never initialized.
+    if (typeof measureRouteGeometry !== 'function' || !routeGeometryBaseline) break;
     try {
       await page.locator(`[data-site-lang="${language.code}"]`).first().click({ timeout: 5000 });
       await page.waitForFunction(({ code, dir, key }) =>
