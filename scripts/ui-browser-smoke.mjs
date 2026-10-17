@@ -454,10 +454,12 @@ async function auditCanonicalRoute(page, route, language) {
 
     if (route === 'disturbedManifesto') {
       const source = window.DisturbedManifestoSource;
-      const translated = catalog.chapters?.disturbedManifesto?.parts?.[lang];
+      const translationResponse = await fetch('translations/disturbed-manifesto.json', { cache: 'no-store' });
+      const manifestoTranslation = translationResponse.ok ? await translationResponse.json() : {};
+      const translated = manifestoTranslation.parts?.[lang] || catalog.chapters?.disturbedManifesto?.parts?.[lang];
       const expectedParts = lang === 'fa' ? source?.parts : translated;
       const expectedTitle = lang === 'fa' ? source?.title :
-        (catalog.chapters?.disturbedManifesto?.title?.[lang] || catalog.pages?.disturbedManifesto?.title || source?.title);
+        (manifestoTranslation.title?.[lang] || catalog.chapters?.disturbedManifesto?.title?.[lang] || catalog.pages?.disturbedManifesto?.title || source?.title);
       if (!expectedTitle || document.querySelector('#page-title')?.textContent?.trim() !== expectedTitle) issues.push('manifesto page title differs from canonical content');
       const buttons = [...document.querySelectorAll('#part-list .part')];
       if (!expectedParts?.length || buttons.length !== expectedParts.length) issues.push('manifesto part list does not match canonical part count');
