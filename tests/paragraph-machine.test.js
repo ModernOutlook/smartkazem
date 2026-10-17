@@ -20,7 +20,7 @@ async function main() {
   assert.equal(core.DOMAIN_NAMES.C, 'سهام');
   assert.deepEqual(
     Array.from(core.DOMAIN_ORDER, domain => core.ALL_CRITERIA[domain].length),
-    [9, 9, 11, 10, 10]
+    [19, 19, 21, 20, 20]
   );
 
   assert.equal(core.validateGeneratedResult({ paragraphs: [{ text: 'A short paragraph.' }] }, 1).paragraphs[0].text, 'A short paragraph.');
@@ -30,11 +30,22 @@ async function main() {
   assert.throws(() => core.validateGeneratedResult({ paragraphs: [{ text: 'x'.repeat(35) }] }, 1), /محدودیت‌های سخت/);
 
   const validJudgment = {};
-  for (const domain of core.DOMAIN_ORDER) validJudgment[domain] = { status: 'warn', reason: 'No explicit confirmation or violation.' };
-  assert.equal(core.validateEvaluation({ judgment: validJudgment }), validJudgment);
-  assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, C: { status: 'unknown', reason: 'bad' } } }), /قلمرو C/);
-  assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, R: { status: 'ok', reason: ' ' } } }), /دلیل داوری/);
-  assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, X: { status: 'warn', reason: 'extra' } } }), /دقیقاً پنج قلمرو/);
+  const validNormative = {};
+  for (const domain of core.DOMAIN_ORDER) {
+    validJudgment[domain] = { status: 'warn', reason: 'No explicit confirmation or violation.' };
+    validNormative[domain] = { direction: 'indeterminate', rationale: 'The paragraph supplies no adequate comparison.', evidence: 'Insufficient textual evidence.' };
+  }
+  const validEvaluation = { judgment: validJudgment, normative: validNormative };
+  assert.equal(core.validateEvaluation(validEvaluation), validEvaluation);
+  assert.equal(core.validateNormative(validNormative), validNormative);
+  assert.deepEqual(Array.from(core.NORMATIVE_DIRECTIONS), ['nobler', 'harmful', 'mixed', 'indeterminate']);
+  assert.throws(() => core.validateEvaluation({ judgment: validJudgment }), /ساختار پاسخ داوری/);
+  assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, C: { status: 'unknown', reason: 'bad' } }, normative: validNormative }), /قلمرو C/);
+  assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, R: { status: 'ok', reason: ' ' } }, normative: validNormative }), /دلیل داوری/);
+  assert.throws(() => core.validateEvaluation({ judgment: { ...validJudgment, X: { status: 'warn', reason: 'extra' } }, normative: validNormative }), /دقیقاً پنج قلمرو/);
+  assert.throws(() => core.validateEvaluation({ judgment: validJudgment, normative: { ...validNormative, E: { direction: 'certainly-good', rationale: 'x', evidence: 'y' } } }), /جهت هنجاری قلمرو E/);
+  assert.throws(() => core.validateEvaluation({ judgment: validJudgment, normative: { ...validNormative, S: { direction: 'nobler', rationale: 'x', evidence: 'y', score: 99 } } }), /ساختار محور هنجاری قلمرو S/);
+  assert.throws(() => core.validateEvaluation({ judgment: validJudgment, normative: validNormative, score: 100 }), /ساختار پاسخ داوری/);
   assert.throws(() => core.validateGeneratedResult({ paragraphs: [{ text: 'Text', judgment: validJudgment }] }, 1), /تولیدی نامعتبر/);
   assert.throws(() => core.validateEvaluation({ judgment: validJudgment, extra: true }), /ساختار پاسخ داوری/);
 
@@ -44,6 +55,13 @@ async function main() {
   }, {});
   const systemPrompt = core.buildSystemPrompt(criteria, 'English');
   assert.match(systemPrompt, /Modal words/);
+  assert.match(systemPrompt, /normative direction/);
+  assert.match(systemPrompt, /confidence percentage/);
+  assert.match(systemPrompt, /Do not total, average, rank/);
+  assert.match(systemPrompt, /"normative"/);
+  assert.match(systemPrompt, /density, rate of directional change/);
+  assert.match(systemPrompt, /concrete phrase or relation/);
+  assert.match(systemPrompt, /M1-M10/);
   assert.match(systemPrompt, /definite violation overrides confirmations/);
   assert.doesNotMatch(systemPrompt, /R-ADJ-2/);
   assert.match(systemPrompt, /Structure/);
@@ -83,7 +101,7 @@ async function main() {
           invalidJudgmentsRemaining = Math.max(0, invalidJudgmentsRemaining - 1);
           return {};
         }
-        return { judgment: validJudgment };
+        return { judgment: validJudgment, normative: validNormative };
       }
       generationCalls += 1;
       generationPrompt = messages[messages.length - 1].content;

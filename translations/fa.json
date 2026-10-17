@@ -434,6 +434,14 @@
     "proxy": "Proxy",
     "connect": "اتصال",
     "connectionSettings": "تنظیمات اتصال",
-    "localStorageNote": "حالت پیش‌فرض از پروکسی امن سمت سرور استفاده می‌کند؛ کلید API در مرورگر نمایش یا ذخیره نمی‌شود."
+    "localStorageNote": "حالت پیش‌فرض از پروکسی امن سمت سرور استفاده می‌کند؛ کلید API در مرورگر نمایش یا ذخیره نمی‌شود.",
+    "normativeTitle": "محور هنجاری مستقل",
+    "normativeDescription": "داوری کیفی و زمینه‌مند است؛ امتیاز، درصد اطمینان یا رتبه‌بندی کلی تولید نمی‌شود.",
+    "normativeEvidence": "شاهد متنی: ",
+    "normativeUnavailable": "محور هنجاری در این پاسخ موجود نیست؛ داوری ناقص است.",
+    "normativeNobler": "جهت نیک‌تر",
+    "normativeHarmful": "جهت زیان‌بارتر",
+    "normativeMixed": "آمیخته یا متعارض",
+    "normativeIndeterminate": "نامعین؛ شواهد ناکافی"
   }
 }

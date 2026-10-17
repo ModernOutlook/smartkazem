@@ -420,6 +420,14 @@
     "proxy": "Proxy",
     "connect": "اتصال",
     "connectionSettings": "إعدادات الاتصال",
-    "localStorageNote": "يستخدم الوضع الافتراضي وكيلاً آمناً على الخادم؛ لا يتم عرض مفتاح API أو تخزينه في المتصفح."
+    "localStorageNote": "يستخدم الوضع الافتراضي وكيلاً آمناً على الخادم؛ لا يتم عرض مفتاح API أو تخزينه في المتصفح.",
+    "normativeTitle": "المحور المعياري المستقل",
+    "normativeDescription": "هذا حكم نوعي سياقي؛ لا تُنتَج درجات أو نسب ثقة أو مرتبة إجمالية.",
+    "normativeEvidence": "الدليل النصي: ",
+    "normativeUnavailable": "المحور المعياري غير موجود في هذه الاستجابة؛ التقييم غير مكتمل.",
+    "normativeNobler": "اتجاه أفضل نسبيًا",
+    "normativeHarmful": "اتجاه أشد ضررًا",
+    "normativeMixed": "مختلط أو متعارض",
+    "normativeIndeterminate": "غير محدد؛ الأدلة غير كافية"
   }
 }
