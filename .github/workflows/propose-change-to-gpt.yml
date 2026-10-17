@@ -1,0 +1,109 @@
+name: Propose a controlled change from smartkazem to GPT
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_path:
+        description: Existing UTF-8 text file path in this repository
+        required: true
+        type: string
+      destination_path:
+        description: File path to create or replace in ModernOutlook/GPT
+        required: true
+        type: string
+      change_title:
+        description: Pull request title
+        required: true
+        type: string
+      change_summary:
+        description: Why this file is being proposed
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gpt-proposal-${{ inputs.destination_path }}
+  cancel-in-progress: false
+
+jobs:
+  propose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Check out this repository default branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          persist-credentials: false
+
+      - name: Validate request and prepare content
+        id: source
+        shell: bash
+        env:
+          SOURCE_PATH: ${{ inputs.source_path }}
+          DESTINATION_PATH: ${{ inputs.destination_path }}
+        run: |
+          set -euo pipefail
+          [[ "$SOURCE_PATH" =~ ^[A-Za-z0-9._/-]+$ && "$SOURCE_PATH" != *".."* && "$SOURCE_PATH" != /* ]] || { echo "::error::Unsafe source path."; exit 1; }
+          [[ "$DESTINATION_PATH" =~ ^[A-Za-z0-9._/-]+$ && "$DESTINATION_PATH" != *".."* && "$DESTINATION_PATH" != /* ]] || { echo "::error::Unsafe destination path."; exit 1; }
+          git ls-files --error-unmatch -- "$SOURCE_PATH" >/dev/null
+          test -f "$SOURCE_PATH"
+          test -s "$SOURCE_PATH"
+          if [[ -L "$SOURCE_PATH" ]]; then
+            echo "::error::Symbolic links are not accepted as source files."
+            exit 1
+          fi
+          if ! grep -Iq . "$SOURCE_PATH"; then
+            echo "::error::Only text files are supported; binary files are not allowed."
+            exit 1
+          fi
+          if ! iconv -f UTF-8 -t UTF-8 "$SOURCE_PATH" >/dev/null 2>&1; then
+            echo "::error::Source file is not valid UTF-8."
+            exit 1
+          fi
+          if [[ "$(wc -c < "$SOURCE_PATH")" -gt 900000 ]]; then
+            echo "::error::File exceeds the conservative 900 KB bridge limit."
+            exit 1
+          fi
+          printf 'source_path=%s\n' "$SOURCE_PATH" >> "$GITHUB_OUTPUT"
+          printf 'destination_path=%s\n' "$DESTINATION_PATH" >> "$GITHUB_OUTPUT"
+
+      - name: Create GPT branch, write the requested file, and open a pull request
+        env:
+          GH_TOKEN: ${{ secrets.GPT_REPO_SYNC_TOKEN }}
+          TARGET_REPOSITORY: ModernOutlook/GPT
+          SOURCE_REPOSITORY: ModernOutlook/smartkazem
+          SOURCE_PATH: ${{ steps.source.outputs.source_path }}
+          DESTINATION_PATH: ${{ steps.source.outputs.destination_path }}
+          CHANGE_TITLE: ${{ inputs.change_title }}
+          CHANGE_SUMMARY: ${{ inputs.change_summary }}
+          RUN_ID: ${{ github.run_id }}
+          RUN_ATTEMPT: ${{ github.run_attempt }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [[ -z "${GH_TOKEN:-}" ]]; then
+            echo "::error::Missing GPT_REPO_SYNC_TOKEN."
+            exit 1
+          fi
+          branch="bridge/smartkazem-${RUN_ID}-${RUN_ATTEMPT}"
+          base="$(gh api "repos/$TARGET_REPOSITORY" --jq .default_branch)"
+          base_sha="$(gh api "repos/$TARGET_REPOSITORY/git/ref/heads/$base" --jq .object.sha)"
+          gh api --method POST "repos/$TARGET_REPOSITORY/git/refs" \
+            -f "ref=refs/heads/$branch" -f "sha=$base_sha" >/dev/null
+
+          encoded="$(base64 -w 0 "$SOURCE_PATH")"
+          existing_sha=""
+          if existing="$(gh api "repos/$TARGET_REPOSITORY/contents/$DESTINATION_PATH?ref=$base" 2>/dev/null)"; then
+            existing_sha="$(jq -r '.sha' <<<"$existing")"
+          fi
+          payload="$(jq -n --arg message "Propose: $CHANGE_TITLE" --arg content "$encoded" --arg branch "$branch" --arg sha "$existing_sha" '
+            {message:$message, content:$content, branch:$branch} + (if $sha == "" then {} else {sha:$sha} end)
+          ')"
+          gh api --method PUT "repos/$TARGET_REPOSITORY/contents/$DESTINATION_PATH" --input - <<<"$payload" >/dev/null
+
+          body="$(printf '%s\n\nSource: %s:%s\n\n%s\n\nThis is a proposal only. Review the diff and required checks before merging. No default branch was modified directly.' "$CHANGE_SUMMARY" "$SOURCE_REPOSITORY" "$SOURCE_PATH" "Created by repository bridge run $RUN_ID.")"
+          gh api --method POST "repos/$TARGET_REPOSITORY/pulls" \
+            -f "title=$CHANGE_TITLE" -f "head=$branch" -f "base=$base" -f "body=$body" \
+            --jq '"Opened pull request: " + .html_url'
