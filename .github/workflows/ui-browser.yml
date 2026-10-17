@@ -52,6 +52,10 @@ jobs:
         with:
           node-version: 22
 
+      - name: Validate browser cache contract
+        if: steps.change-scope.outputs.image_only != 'true'
+        run: node tests/browser-cache-contract.test.cjs
+
       - name: Restore cached Playwright and Chromium
         id: browser-cache
         if: steps.change-scope.outputs.image_only != 'true'
@@ -60,7 +64,7 @@ jobs:
           path: |
             node_modules
             ~/.cache/ms-playwright
-          key: smartkazem-browser-${{ runner.os }}-node22-playwright1.55.0-chromium-v2
+          key: smartkazem-browser-${{ runner.os }}-${{ runner.arch }}-node22-playwright1.55.0-chromium-v2
 
       - name: Import prebuilt Playwright and Chromium bundle from private GPT repository
         id: browser-bundle
