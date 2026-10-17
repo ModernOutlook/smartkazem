@@ -52,7 +52,7 @@ Every surface that displays playing cards must use the same mapped image assets 
 - When adding or changing a card-rendering surface, inspect all callers of `PlayingCardsCatalog`, then verify that each displayed image resolves and loads in desktop, mobile portrait, and mobile landscape layouts.
 \n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
 - **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
-- **مرجع تقلید → هم‌سنگی → ماشین پاراگراف**
+- **شبیه‌سازی → هم‌سنگی → ماشین پاراگراف**
 
 `بازشناسی` and `هم‌سنگی` are two modes of the same shared Paragraph Machine workspace. No legacy Paragraph Machine surface is maintained.
 
@@ -222,7 +222,7 @@ Rules:
 | S | ساختار تالار |
 | T | تداوم عالم |
 | E | قلمرو تجربه |
-| R | مرجع تقلید |
+| R | شبیه‌سازی |
 | C | اقتصاد سهم |
 
 Order S/T/E/R/C is an invariant. Child-page order is likewise the order explicitly defined by the site's realm navigation. Check navigation, translations, Paragraph Machine, and documentation before changing it. **Never introduce a chronological/legacy-vs-new ordering rule based on code history or file age.**
