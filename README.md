@@ -65,7 +65,7 @@ The five realms must be evaluated independently. The existing `ok / warn / bad` 
 The locally retained research synthesis and source metadata are in [`docs/paragraph-machine-research-map.md`](docs/paragraph-machine-research-map.md). These sources supplement rather than replace Modern Outlook's own philosophical framework; normal execution must not download them.
 
 
-`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۲ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
+`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۳ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
 
 ### Exact access contract for the Paragraph Machine
 
