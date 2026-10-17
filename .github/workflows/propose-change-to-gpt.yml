@@ -50,8 +50,16 @@ jobs:
           git ls-files --error-unmatch -- "$SOURCE_PATH" >/dev/null
           test -f "$SOURCE_PATH"
           test -s "$SOURCE_PATH"
+          if [[ -L "$SOURCE_PATH" ]]; then
+            echo "::error::Symbolic links are not accepted as source files."
+            exit 1
+          fi
           if ! grep -Iq . "$SOURCE_PATH"; then
-            echo "::error::Only UTF-8/text files are supported; binary files are not allowed."
+            echo "::error::Only text files are supported; binary files are not allowed."
+            exit 1
+          fi
+          if ! iconv -f UTF-8 -t UTF-8 "$SOURCE_PATH" >/dev/null 2>&1; then
+            echo "::error::Source file is not valid UTF-8."
             exit 1
           fi
           if [[ "$(wc -c < "$SOURCE_PATH")" -gt 900000 ]]; then
