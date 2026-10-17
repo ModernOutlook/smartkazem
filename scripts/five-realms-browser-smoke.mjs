@@ -58,9 +58,9 @@ try {
     await page.waitForFunction(() => !document.querySelector('#fr-pass').hidden);
     if (!(await page.locator('#fr-pass-name').innerText()).includes('Browser Bob')) fail(`${viewport.name}: turn handoff did not name player two`);
     if (await page.locator('#five-realms-tadbir[data-tadbir-link]').count() !== 1) {
-      fail(`${viewport.name}: Continuity realm does not expose the Tadbir entry button`);
+      fail(`${viewport.name}: active card-game page does not expose its Tadbir handoff control`);
     }
-    await page.evaluate(() => window.SharedPages.open('tadbir', 'continuity'));
+    await page.locator('#five-realms-tadbir').click();
     await page.waitForSelector('#tadbir-title');
     await page.waitForFunction(() => !document.querySelector('#tadbir-return-game')?.hidden);
     await page.locator('#tadbir-return-game').click();
@@ -95,7 +95,7 @@ try {
     if (await page.locator('[data-action="deposit"], [data-action="withdraw"]').count()) {
       fail(`${viewport.name}: deposit/withdraw controls are still exposed in the game action panel`);
     }
-    await page.evaluate(() => window.SharedPages.open('tadbir', 'continuity'));
+    await page.locator('#five-realms-tadbir').click();
     await page.waitForSelector('#tadbir-title');
     await page.waitForFunction(() => !document.querySelector('#tadbir-account')?.hidden);
     if ((await page.locator('#tadbir-player').innerText()) !== 'Browser Alice') {

@@ -17,15 +17,52 @@ try{
   const response=await page.goto(`${baseURL}/index.html?page=five-realms`,{waitUntil:'domcontentloaded'});
   if(!response?.ok()){fail(`${viewport.name}: game hub route HTTP ${response?.status()??'no response'}`);await page.close();continue;}
   await page.waitForSelector('.fr-hub-grid .fr-game-tile');
-  if(await page.locator('.fr-hub-grid .fr-game-tile').count()!==5)fail(`${viewport.name}: hub does not show exactly five game buttons`);
+  if(await page.locator('.fr-hub-grid .fr-game-tile').count()!==5)fail(`${viewport.name}: hub does not show exactly five game tiles`);
   if(await page.locator('[data-talash-link]').isDisabled())fail(`${viewport.name}: Talash button is disabled`);
-  if(await page.locator('.fr-game-tile:disabled').count()!==3)fail(`${viewport.name}: unfinished games should remain disabled until implemented`);
-  await page.locator('[data-tadbir-link]').click();
-  await page.waitForSelector('#tadbir-title');
-  if(!(await page.locator('#tadbir-start-game').isVisible()))fail(`${viewport.name}: Tadbir no longer exposes its existing start-game path when no card game is active`);
-  await page.locator('#tadbir-start-game').click();
+  if(await page.locator('.fr-game-tile:disabled').count()!==2)fail(`${viewport.name}: only the unfinished Gold and Simulation games should remain disabled`);
+
+  // The hub's Tadbir tile first opens the card-game page; its own Tadbir
+  // control then opens the Tadbir page, whose start action returns to the game.
+  await page.locator('.fr-game-tadbir[data-tadbir-link]').click();
+  await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms-cards');
   await page.waitForSelector('#five-realms-game #fr-start');
-  if(pageErrors.length)fail(`${viewport.name}: hub/Tadbir/card-game page errors: ${pageErrors.join('; ')}`);
+  await page.locator('#five-realms-tadbir').click();
+  await page.waitForFunction(()=>window.SharedPages?.getActive()==='tadbir');
+  await page.waitForSelector('#tadbir-title');
+  if(!(await page.locator('#tadbir-start-game').isVisible()))fail(`${viewport.name}: Tadbir no longer exposes its start-game path when no card game is active`);
+  await page.locator('#tadbir-start-game').click();
+  await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms-cards');
+  await page.waitForSelector('#five-realms-game #fr-start');
+
+  // The Experience tile now opens the Quantum Maze directly.
+  await page.goto(`${baseURL}/index.html?page=five-realms`,{waitUntil:'domcontentloaded'});
+  await page.locator('[data-quantum-maze-link]').click();
+  await page.waitForFunction(()=>window.SharedPages?.getActive()==='quantum-maze');
+  await page.waitForSelector('#quantum-maze-game');
+  if(!(await page.locator('#quantum-maze-title').isVisible()))fail(`${viewport.name}: Experience tile did not open the Quantum Maze page`);
+
+  // The Continuity realm no longer exposes Five Realms; its Tadbir button
+  // is a direct, independent entry to the Tadbir page.
+  await page.goto(`${baseURL}/index.html`,{waitUntil:'domcontentloaded'});
+  await page.locator('#realm-continuity').click();
+  await page.waitForFunction(()=>document.querySelector('#continuity-page')?.classList.contains('is-active'));
+  if(await page.locator('#continuity-five-realms').count()!==0)fail(`${viewport.name}: removed Five Realms button is still present in Continuity`);
+  if(await page.locator('#continuity-tadbir[data-tadbir-link]').count()!==1)fail(`${viewport.name}: Continuity does not expose exactly one Tadbir entry`);
+  await page.locator('#continuity-tadbir').click();
+  await page.waitForFunction(()=>window.SharedPages?.getActive()==='tadbir');
+  await page.waitForSelector('#tadbir-title');
+  await page.locator('#tadbir-close').click();
+  await page.waitForFunction(()=>!window.SharedPages?.getActive() && document.querySelector('#continuity-page')?.classList.contains('is-active'));
+
+  // The renamed Economy of Share action opens the game directory.
+  await page.locator('#continuity-close').click();
+  await page.locator('#realm-share').click();
+  await page.waitForFunction(()=>document.querySelector('#share-page')?.classList.contains('is-active'));
+  if(await page.locator('#share-actuality-center').count()!==1)fail(`${viewport.name}: Economy of Share does not expose the renamed Actuality Center action`);
+  await page.locator('#share-actuality-center').click();
+  await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms');
+
+  if(pageErrors.length)fail(`${viewport.name}: hub/Tadbir/realm navigation page errors: ${pageErrors.join('; ')}`);
 
   const talashResponse=await page.goto(`${baseURL}/index.html?page=talash`,{waitUntil:'domcontentloaded'});
   if(!talashResponse?.ok()){fail(`${viewport.name}: Talash route HTTP ${talashResponse?.status()??'no response'}`);await page.close();continue;}

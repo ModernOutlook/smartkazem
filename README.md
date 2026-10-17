@@ -624,6 +624,15 @@ The UI Playwright workflow now checks rendered prose against the actual canonica
 
 The browser workflow runs Playwright against the PR branch served by a local HTTP server in GitHub Actions. This verifies the actual page runtime built from the proposed code, but is not a claim that the deployed production site has already been tested.
 
+### Reusable Playwright / Chromium toolchain
+
+The UI browser workflow uses the pinned Playwright **1.55.0** + Chromium bundle published as a private Release in `ModernOutlook/GPT` (`playwright-1.55.0-chromium-linux-x64`). On a cache miss, it downloads the archive using the `GPT_CACHE_READ_TOKEN` repository secret, verifies the accompanying SHA-256 file before extraction, and saves the extracted Node package and browser files in the SmartKazem Actions cache. The cache key is pinned to the runner OS, Node 22, Playwright 1.55.0, and the browser bundle revision; no credentials are stored in the cache.
+
+Configure `GPT_CACHE_READ_TOKEN` in **SmartKazem → Settings → Secrets and variables → Actions**. It must be a narrowly scoped token with **Contents: read** access to the private `ModernOutlook/GPT` repository. Do not put the token in source files, workflow outputs, or logs. If the private bundle cannot be accessed and the browser toolchain is not already cached, the workflow fails before test execution instead of reporting a misleading green run with browser tests skipped. A manual `workflow_dispatch` may use `approve_browser_download=true` only when an explicit one-off upstream download is intended.
+
+The existing browser, language, Paragraph Machine full-matrix, Five Realms, realm-child-background, and content-cover tests remain enabled; this cache integration does not weaken their assertions or remove their screenshot artifacts.
+
+
 **Emergence II paragraph contract:** every non-empty line in each Persian source episode is a paragraph, including lines separated by a single newline. Blank lines are separators and are not paragraphs. Each EN/AR/ZH episode must expose the same number of paragraphs in the same order. The alignment utility splits existing translated text at sentence boundaries and monotonically regroups those unchanged sentence units to the Persian line count; it does not generate, summarize, rewrite, or reorder translation prose. Chinese sentence splitting recognizes 。！？ without requiring spaces. The browser audit checks exact rendered paragraph arrays in all four languages.
 
 
