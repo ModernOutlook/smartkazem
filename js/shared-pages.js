@@ -114,6 +114,8 @@ async function collectSectionResources(){
  };
  add('index.html');
  add('local-cognition-package-manifest.json');
+ add('js/content-covers.js');
+ for(const language of ['fa','en','zh','ar'])add('translations/'+language+'.json');
  document.querySelectorAll('link[rel="stylesheet"],link[rel="preload"],script[src],img[src],source[src],audio[src],video[src],video[poster],iframe[src]').forEach(node=>{
   for(const attr of ['href','src','poster'])if(node.hasAttribute(attr))add(node.getAttribute(attr));
   if(node.hasAttribute('srcset'))for(const candidate of node.getAttribute('srcset').split(','))add(candidate.trim().split(/\s+/)[0]);
@@ -125,7 +127,7 @@ async function collectSectionResources(){
  for(const entry of Object.values(manifest)){
   for(const path of [entry.file,entry.catalog,...(entry.styles||[]),...(entry.scripts||[])])if(path)add(path);
  }
- Object.values(REALM_ASSETS).forEach(add);
+ Object.values(REALM_ASSETS).forEach(value=>add(value));
  const scanned=new Set();
  while(queue.length){
   const path=queue.shift();if(scanned.has(path))continue;scanned.add(path);
@@ -134,6 +136,9 @@ async function collectSectionResources(){
   if(!/(?:javascript|json|css|html|text|xml|svg)/i.test(type)&&!sourcePattern.test(path))continue;
   let body;try{body=await response.text();}catch(_){continue;}
   const base=new URL(path,document.baseURI);
+  if(/(?:^|\/)content-covers\.js(?:\?|$)/i.test(path)){
+   for(const match of body.matchAll(/\[['"]([^'"]+\.(?:avif|gif|jpe?g|png|webp))['"]\s*,/gi))add('content/page-templates/'+match[1],document.baseURI);
+  }
   if(/\.css(?:\?|$)/i.test(path)||/text\/css/i.test(type)){
    for(const match of body.matchAll(/url\(\s*['"]?([^)'"]+)['"]?\s*\)/gi))add(match[1],base);
    for(const match of body.matchAll(/@import\s+(?:url\()?['"]([^'"]+)['"]/gi))add(match[1],base);
