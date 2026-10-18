@@ -91,10 +91,22 @@
 
       return await new Promise((resolve) => {
         const channel = new MessageChannel();
-        const timeout = window.setTimeout(() => resolve(null), 30000);
+        const timeout = window.setTimeout(() => {
+          channel.port1.close();
+          resolve(null);
+        }, 30 * 60 * 1000);
         channel.port1.onmessage = (event) => {
-          window.clearTimeout(timeout);
-          resolve(event.data || null);
+          const message = event.data || {};
+          if (message.type === 'LOCAL_COGNITION_CACHE_PROGRESS') {
+            document.dispatchEvent(new CustomEvent('local-cognition-cache-progress', { detail: message }));
+            return;
+          }
+          if (message.type === 'LOCAL_COGNITION_CACHE_RESULT') {
+            window.clearTimeout(timeout);
+            channel.port1.close();
+            document.dispatchEvent(new CustomEvent('local-cognition-cache-result', { detail: message }));
+            resolve(message);
+          }
         };
         worker.postMessage({ type: 'CACHE_LOCAL_COGNITION' }, [channel.port2]);
       });
@@ -157,8 +169,8 @@
         }
         unlocked = true;
         removeDialog();
-        void warmOfflineCache();
         logoViewer.querySelector('.local-cognition-trigger')?.click();
+        void warmOfflineCache();
       } catch (_) {
         error.textContent = c.invalid;
       }
