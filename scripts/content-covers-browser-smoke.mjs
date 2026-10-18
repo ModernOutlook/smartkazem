@@ -12,6 +12,12 @@ const shared = [
   ['disturbedManifesto', 'disturbed-manifesto.jpg'],
   ['zero', 'zero.jpg']
 ];
+const sharedTargets = Object.freeze({
+  observation: '.book-body',
+  observation25: '.observation25-body',
+  possibleMirror: '.possible-mirror-body',
+  layer3: '.reader'
+});
 const books = [
   ['humanMachines', 'human-and-its-machines.jpg'],
   ['forgers', 'forgers-of-imitation.jpg'],
@@ -51,8 +57,12 @@ try {
         return image?.complete && image.naturalWidth > 0;
       });
       await check(page, filename, viewport.width + 'x' + viewport.height + '/' + route);
-      const last = await page.locator('[data-content-cover]').evaluate((node) => node.parentElement.lastElementChild === node);
-      if (!last) failures.push(route + ': cover is not the final child of its page root');
+      const targetSelector = sharedTargets[route] || null;
+      const last = await page.locator('[data-content-cover]').evaluate((node, selector) => {
+        const target = selector ? node.closest('.child-page')?.querySelector(selector) : node.parentElement;
+        return Boolean(target && node.parentElement === target && target.lastElementChild === node);
+      }, targetSelector);
+      if (!last) failures.push(route + ': cover is not the final child of its scrollable content region');
       await page.close();
     }
 
@@ -69,6 +79,11 @@ try {
         return image?.complete && image.naturalWidth > 0;
       });
       await check(page, filename, viewport.width + 'x' + viewport.height + '/book-' + kind);
+      const lastInReader = await page.locator('#book-body [data-content-cover]').evaluate((node) =>
+        node.parentElement === document.querySelector('#book-body') &&
+        node.parentElement.lastElementChild === node
+      );
+      if (!lastInReader) failures.push('book-' + kind + ': cover is not the final child of the scrollable book body');
       await page.close();
     }
   }
