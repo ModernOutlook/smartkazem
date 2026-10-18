@@ -181,6 +181,7 @@
   }
 
   function open() {
+    logoViewer.classList.add('open');
     const panel = ensurePanel();
     renderPanel();
     panel.classList.add('is-open');
@@ -201,6 +202,7 @@
 
   function init() {
     logoViewer.dataset.localCognitionReady = 'true';
+    window.LocalCognitionPanel = Object.freeze({ open, close });
     loadStyles();
     document.addEventListener('local-cognition-cache-progress', (event) => updateDownloadPanel(event.detail));
     document.addEventListener('local-cognition-cache-result', (event) => updateDownloadPanel({
