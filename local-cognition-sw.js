@@ -28,6 +28,7 @@
     const cache = await caches.open(manifest.cacheName);
     const declaredSizes = manifest.resourceSizes || {};
     const resources = [...new Set(manifest.packages.flatMap((pkg) => pkg.resources || []))];
+    report(port, { status: 'preparing', totalBytes: 0, downloadedBytes: 0, remainingBytes: 0, completedResources: 0, totalResources: resources.length, unknownSizeResources: resources.length });
     const entries = await Promise.all(resources.map(async (resource) => {
       const url = new URL(resource, self.location).toString();
       const request = new Request(url, { mode: 'cors' });
@@ -100,6 +101,7 @@
     if (event.data?.type !== 'CACHE_LOCAL_COGNITION') return;
     const port = event.ports?.[0] || null;
     const task = cachePackages(port);
+    event.waitUntil(task);
     if (port) task.then((result) => port.postMessage({ type: 'LOCAL_COGNITION_CACHE_RESULT', ...result }))
       .catch((error) => port.postMessage({ type: 'LOCAL_COGNITION_CACHE_RESULT', error: String(error?.message || error) }));
   });
