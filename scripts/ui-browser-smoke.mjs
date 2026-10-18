@@ -983,6 +983,10 @@ for (const book of sharedBooks) {
         }
       });
       tabs[longestIndex]?.click();
+      // Chapter selection and earlier language/content audits may leave the
+      // reader at its previous scroll position. Start from the top so this
+      // check measures actual movement rather than a stale end position.
+      body.scrollTop = 0;
       const before = body.scrollTop;
       const maxScroll = body.scrollHeight - body.clientHeight;
       body.scrollTop = maxScroll;
