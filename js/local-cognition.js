@@ -7,40 +7,40 @@
   const copy = {
     fa: {
       button: 'شناخت محلی', title: 'شناخت محلی', downloadTitle: 'پایش دریافت بسته‌ها', total: 'حجم کل دریافت', remaining: 'حجم باقی‌مانده', downloaded: 'دریافت‌شده', preparing: 'آماده‌سازی دریافت', downloading: 'در حال دریافت', complete: 'دریافت کامل شد', partial: 'دریافت با خطاهای جزئی پایان یافت', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
-      back: 'بازگشت به لوگو', repos: 'دو مخزن هسته‌ای', knowledge: 'کتابخانه دانش ثبت‌شده', neural: 'مدل عصبی محلی', providers: 'تغذیه‌کنندگان تولید متن',
-      gptMeta: 'ModernOutlook / GPT · خصوصی · dependency & model asset cache', kMeta: 'ModernOutlook / K-ZEM-MOQADDAM · خصوصی · local retrieval & runtime',
+      back: 'بازگشت به لوگو', repos: 'فضاهای کاری یکپارچه', knowledge: 'کتابخانه دانش ثبت‌شده', neural: 'مدل عصبی محلی', providers: 'تغذیه‌کنندگان تولید متن',
+      gptMeta: 'فضای تولید متن · دارایی‌های نسخه‌بندی‌شده و مسیر‌دهی مدل', kMeta: 'فضای دانش · بازیابی معنایی چندزبانه و محیط اجرای محلی',
       gptText: 'مخزن دارایی‌های نسخه‌بندی‌شده، مدل‌های تأییدشده و روتر دوگانهٔ تولید متن.', kText: 'لایهٔ اجرایی شناخت محلی، بازیابی معنایی چندزبانه و قراردادهای نگهداری دانش.',
-      open: 'باز کردن مخزن', router: 'مشخصات روتر', map: 'نقشه دانش', seed: '۷۶ واحد دانشیِ curated', fallback: 'fallback قطعی مفهومی/واژگانی',
+      open: 'باز کردن فضای کاری', router: 'مشخصات روتر', map: 'نقشه دانش', seed: '۷۶ واحد دانشیِ curated', fallback: 'fallback قطعی مفهومی/واژگانی',
       model: 'Xenova / multilingual-e5-small', modelMeta: 'بازیابی معنایی محلی · opt-in · همان‌مبدأ · حدود ۱۴۰٫۵ MB برای دریافت نخست',
       google: 'Google Gemini', groq: 'Groq', slot1: 'Slot 1', slot2: 'Slot 2', routeNote: 'ترتیب عملیاتی: Google Gemini → Groq. کلیدها فقط در سمت مخزن/CI نگهداری می‌شوند و هرگز وارد مرورگر نمی‌شوند.',
       architecture: 'بازیابی عصبی از تولید متن جداست؛ شباهت معنایی به‌تنهایی حکم حقیقت یا قضاوت نیست.'
     },
     en: {
       button: 'local cognition', title: 'local cognition', downloadTitle: 'PACKAGE TRANSFER MONITOR', total: 'TOTAL TRANSFER', remaining: 'REMAINING', downloaded: 'TRANSFERRED', preparing: 'PREPARING TRANSFER', downloading: 'DOWNLOADING', complete: 'ALL PACKAGES CACHED', partial: 'COMPLETED WITH ERRORS', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
-      back: 'Back to logo', repos: 'Core repositories', knowledge: 'Registered knowledge library', neural: 'Local neural model', providers: 'Text-generation providers',
-      gptMeta: 'ModernOutlook / GPT · private · dependency & model asset cache', kMeta: 'ModernOutlook / K-ZEM-MOQADDAM · private · local retrieval & runtime',
+      back: 'Back to logo', repos: 'Integrated workspaces', knowledge: 'Registered knowledge library', neural: 'Local neural model', providers: 'Text-generation providers',
+      gptMeta: 'Versioned assets and model-routing workspace', kMeta: 'Knowledge workspace · multilingual retrieval and local runtime',
       gptText: 'Version-pinned dependencies, verified model assets, and the two-slot text-generation router.', kText: 'Local cognition runtime, multilingual semantic retrieval, and the knowledge-maintenance boundary.',
-      open: 'Open repository', router: 'Router specification', map: 'Knowledge map', seed: '76 curated knowledge units', fallback: 'deterministic conceptual/lexical fallback',
+      open: 'Open workspace', router: 'Router specification', map: 'Knowledge map', seed: '76 curated knowledge units', fallback: 'deterministic conceptual/lexical fallback',
       model: 'Xenova / multilingual-e5-small', modelMeta: 'local semantic retrieval · opt-in · same-origin · about 140.5 MB on first download',
       google: 'Google Gemini', groq: 'Groq', slot1: 'Slot 1', slot2: 'Slot 2', routeNote: 'Operational order: Google Gemini → Groq. Keys stay in repository/CI configuration and never enter browser code.',
       architecture: 'Neural retrieval is separate from text generation; semantic similarity alone is not truth or judgment.'
     },
     zh: {
       button: '本地认知', title: '本地认知', downloadTitle: '下载包监控', total: '总下载量', remaining: '剩余下载量', downloaded: '已下载', preparing: '正在准备下载', downloading: '正在下载', complete: '所有软件包已缓存', partial: '下载完成，但存在错误', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
-      back: '返回标志', repos: '核心仓库', knowledge: '已登记知识库', neural: '本地神经模型', providers: '文本生成提供方',
-      gptMeta: 'ModernOutlook / GPT · 私有 · 依赖与模型资产缓存', kMeta: 'ModernOutlook / K-ZEM-MOQADDAM · 私有 · 本地检索与运行时',
+      back: '返回标志', repos: '集成工作空间', knowledge: '已登记知识库', neural: '本地神经模型', providers: '文本生成提供方',
+      gptMeta: '版本化依赖、模型资产与路由工作空间', kMeta: '知识工作空间 · 多语言检索与本地运行时',
       gptText: '保存固定版本依赖、经过验证的模型资产，以及双槽文本生成路由器。', kText: '本地认知运行时、多语言语义检索与知识维护边界。',
-      open: '打开仓库', router: '路由器规范', map: '知识地图', seed: '76 个精选知识单元', fallback: '确定性的概念/词法回退',
+      open: '打开工作空间', router: '路由器规范', map: '知识地图', seed: '76 个精选知识单元', fallback: '确定性的概念/词法回退',
       model: 'Xenova / multilingual-e5-small', modelMeta: '本地语义检索 · 用户选择启用 · 同源 · 首次下载约 140.5 MB',
       google: 'Google Gemini', groq: 'Groq', slot1: '槽位 1', slot2: '槽位 2', routeNote: '运行顺序：Google Gemini → Groq。密钥仅保存在仓库/CI 配置中，不进入浏览器代码。',
       architecture: '神经检索与文本生成相互独立；语义相似度本身不是事实或判断。'
     },
     ar: {
       button: 'الإدراك المحلي', title: 'الإدراك المحلي', downloadTitle: 'مراقبة تنزيل الحزم', total: 'إجمالي حجم التنزيل', remaining: 'الحجم المتبقي', downloaded: 'تم تنزيله', preparing: 'جارٍ تجهيز التنزيل', downloading: 'جارٍ التنزيل', complete: 'اكتمل تخزين جميع الحزم', partial: 'اكتمل مع وجود أخطاء', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
-      back: 'العودة إلى الشعار', repos: 'المستودعان الأساسيان', knowledge: 'مكتبة المعرفة المسجّلة', neural: 'النموذج العصبي المحلي', providers: 'مزودا توليد النص',
-      gptMeta: 'ModernOutlook / GPT · خاص · مخزن الاعتماديات وأصول النماذج', kMeta: 'ModernOutlook / K-ZEM-MOQADDAM · خاص · الاسترجاع المحلي ووقت التشغيل',
+      back: 'العودة إلى الشعار', repos: 'مساحات العمل المتكاملة', knowledge: 'مكتبة المعرفة المسجّلة', neural: 'النموذج العصبي المحلي', providers: 'مزودا توليد النص',
+      gptMeta: 'مساحة الأصول ذات الإصدارات وتوجيه النماذج', kMeta: 'مساحة المعرفة · الاسترجاع متعدد اللغات وبيئة التشغيل المحلية',
       gptText: 'اعتماديات مثبتة الإصدار، أصول نماذج موثقة، وموجّه توليد نصي بموضعين.', kText: 'طبقة الإدراك المحلي، الاسترجاع الدلالي متعدد اللغات، وحدود صيانة المعرفة.',
-      open: 'فتح المستودع', router: 'مواصفات الموجّه', map: 'خريطة المعرفة', seed: '٧٦ وحدة معرفة منتقاة', fallback: 'بديل مفاهيمي/معجمي حتمي',
+      open: 'فتح مساحة العمل', router: 'مواصفات الموجّه', map: 'خريطة المعرفة', seed: '٧٦ وحدة معرفة منتقاة', fallback: 'بديل مفاهيمي/معجمي حتمي',
       model: 'Xenova / multilingual-e5-small', modelMeta: 'استرجاع دلالي محلي · اختياري · من نفس المصدر · نحو 140.5 MB عند التنزيل الأول',
       google: 'Google Gemini', groq: 'Groq', slot1: 'الموضع 1', slot2: 'الموضع 2', routeNote: 'الترتيب التشغيلي: Google Gemini ← Groq. تبقى المفاتيح في إعدادات المستودع/CI ولا تدخل كود المتصفح.',
       architecture: 'الاسترجاع العصبي منفصل عن توليد النص؛ التشابه الدلالي وحده ليس حقيقة ولا حكماً.'
@@ -89,7 +89,7 @@
       detail.currentResource ? detail.currentResource.split('/').pop() : c.preparing;
     monitor.dataset.state = detail.status || 'downloading';
   }
-  const link = (href, label) => `<a class="local-cognition-action" href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
+  
 
   function ensurePanel() {
     if (document.getElementById('local-cognition-panel')) return document.getElementById('local-cognition-panel');
@@ -138,8 +138,8 @@
               <p>${c.gptText}</p>
               <div class="meta">${c.gptMeta}</div>
               <div class="local-cognition-actions">
-                ${link('https://github.com/ModernOutlook/GPT', c.open)}
-                ${link('https://github.com/ModernOutlook/GPT/blob/main/LLM-ROUTER-SETUP.md', c.router)}
+                <button class="local-cognition-action" type="button" data-local-view="router">${c.open}</button>
+                <button class="local-cognition-action" type="button" data-local-view="router">${c.router}</button>
               </div>
             </article>
             <article class="local-cognition-card">
@@ -147,8 +147,8 @@
               <div class="meta">${c.kMeta}</div>
               <p>${c.kText}</p>
               <div class="local-cognition-actions">
-                ${link('https://github.com/ModernOutlook/K-ZEM-MOQADDAM', c.open)}
-                ${link('https://github.com/ModernOutlook/K-ZEM-MOQADDAM/blob/main/docs/paragraph-machine-research-map.md', c.map)}
+                <button class="local-cognition-action" type="button" data-local-view="knowledge">${c.open}</button>
+                <button class="local-cognition-action" type="button" data-local-view="knowledge">${c.map}</button>
               </div>
             </article>
             <article class="local-cognition-card wide">
@@ -174,9 +174,20 @@
               <div class="local-cognition-note">${c.routeNote}</div>
             </article>
           </div>
+          <section class="local-cognition-card wide local-cognition-inline-view" data-local-detail="router" hidden>
+            <h3>${c.router}</h3><p>${c.routeNote}</p><p>${c.architecture}</p>
+          </section>
+          <section class="local-cognition-card wide local-cognition-inline-view" data-local-detail="knowledge" hidden>
+            <h3>${c.map}</h3><p>${c.seed} · ${c.fallback}</p><p>${c.architecture}</p>
+          </section>
         </div>
       </div>`;
     panel.querySelector('.local-cognition-back').addEventListener('click', close);
+    panel.querySelectorAll('[data-local-view]').forEach((button) => button.addEventListener('click', () => {
+      const target = button.dataset.localView;
+      panel.querySelectorAll('[data-local-detail]').forEach((view) => { view.hidden = view.dataset.localDetail !== target; });
+      panel.querySelector('[data-local-detail="' + target + '"]')?.scrollIntoView({ block: 'nearest', behavior: 'auto' });
+    }));
     if (cacheState.latest) updateDownloadPanel(cacheState.latest);
   }
 
