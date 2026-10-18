@@ -43,7 +43,7 @@
     return { cacheName: manifest.cacheName, ...results };
   }
 
-  self.addEventListener('install', (event) => {
+  self.addEventListener('install', () => {
     self.skipWaiting();
   });
 
@@ -65,6 +65,10 @@
 
   self.addEventListener('fetch', (event) => {
     if (event.request.method !== 'GET') return;
+    if (event.request.url === MANIFEST_URL) {
+      event.respondWith(fetch(event.request));
+      return;
+    }
 
     event.respondWith((async () => {
       const manifest = await loadManifest().catch(() => null);
