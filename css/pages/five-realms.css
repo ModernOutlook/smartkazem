@@ -46,3 +46,8 @@
 .fr-hub-page .fr-game-number{color:#c4d8e8}
 .fr-hub-page .fr-game-talash{box-shadow:inset 0 0 28px rgba(28,151,211,.16)}
 .fr-hub-page .fr-game-tadbir{box-shadow:inset 0 0 28px rgba(60,194,127,.15)}
+/* Match each remaining hub tile outline to its corresponding realm palette. */
+.fr-hub-page .fr-game-structure{border-color:#8f75df!important;box-shadow:inset 0 0 28px rgba(143,117,223,.16)}
+.fr-hub-page .fr-game-gold{border-color:#d5ad52!important;box-shadow:inset 0 0 28px rgba(213,173,82,.16)}
+.fr-hub-page .fr-game-experience{border-color:#55b9a0!important;box-shadow:inset 0 0 28px rgba(85,185,160,.16)}
+
