@@ -74,7 +74,8 @@
     monitor.hidden = false;
     const c = t(), total = Number(detail.totalBytes) || 0, downloaded = Number(detail.downloadedBytes) || 0;
     const remaining = Number.isFinite(detail.remainingBytes) ? detail.remainingBytes : Math.max(0, total - downloaded);
-    const percent = total > 0 ? Math.min(100, Math.round(downloaded / total * 100)) : 0;
+    const rawPercent = total > 0 ? Math.round(downloaded / total * 100) : 0;
+    const percent = detail.status === 'complete' ? 100 : detail.unknownSizeResources > 0 && Number(detail.completedResources) < Number(detail.totalResources) ? Math.min(99, rawPercent) : Math.min(100, rawPercent);
     monitor.querySelector('[data-cache-total]').textContent = detail.unknownSizeResources
       ? `${formatBytes(total)} + ${detail.unknownSizeResources} unknown` : formatBytes(total);
     monitor.querySelector('[data-cache-remaining]').textContent = formatBytes(remaining);
