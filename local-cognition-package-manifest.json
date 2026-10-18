@@ -1,6 +1,15 @@
 {
   "schema": "local-cognition-cache/v1",
   "cacheName": "smartkazem-local-cognition-v1",
+  "resourceSizes": {
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/config.json": 658,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/tokenizer.json": 17082730,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/tokenizer_config.json": 471,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/special_tokens_map.json": 167,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/onnx/model_quantized.onnx": 118308185,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/sentencepiece.bpe.model": 5069051,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/quant_config.json": 674
+  },
   "packages": [
     {
       "id": "local-cognition-ui",
@@ -25,11 +34,13 @@
       "id": "multilingual-e5-small",
       "required": false,
       "resources": [
-        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/config.json",
-        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/tokenizer.json",
-        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/tokenizer_config.json",
-        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/special_tokens_map.json",
-        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/onnx/model_quantized.onnx"
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/config.json",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/tokenizer.json",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/tokenizer_config.json",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/special_tokens_map.json",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/onnx/model_quantized.onnx",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/sentencepiece.bpe.model",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/quant_config.json"
       ]
     }
   ]

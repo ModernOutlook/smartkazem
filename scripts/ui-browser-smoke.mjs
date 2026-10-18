@@ -968,6 +968,43 @@ for (const book of sharedBooks) {
       await page.waitForFunction(({ code, dir }) => document.documentElement.lang === code && document.documentElement.dir === dir, language, { timeout: 5000 });
       await auditLanguageHeader(page, '#book-page.is-active', ['.book-head .book-title', '.book-head .book-close'], `shared book ${book.kind} @ ${viewport.name} ${language.code}`);
     }
+    const readerScrollAudit = await page.evaluate(() => {
+      const body = document.querySelector('#book-body');
+      if (!body) return { missing: true };
+      const tabs = [...document.querySelectorAll('#book-tabs .book-tab')];
+      let longestIndex = 0;
+      let longestLength = -1;
+      tabs.forEach((tab, index) => {
+        tab.click();
+        const length = body.textContent?.length || 0;
+        if (length > longestLength) {
+          longestLength = length;
+          longestIndex = index;
+        }
+      });
+      tabs[longestIndex]?.click();
+      // Chapter selection and earlier language/content audits may leave the
+      // reader at its previous scroll position. Start from the top so this
+      // check measures actual movement rather than a stale end position.
+      body.scrollTop = 0;
+      const before = body.scrollTop;
+      const maxScroll = body.scrollHeight - body.clientHeight;
+      body.scrollTop = maxScroll;
+      return {
+        missing: false,
+        overflowY: getComputedStyle(body).overflowY,
+        clientHeight: body.clientHeight,
+        scrollHeight: body.scrollHeight,
+        maxScroll,
+        reachedEnd: maxScroll <= 2 || body.scrollTop >= maxScroll - 2,
+        moved: maxScroll <= 2 || body.scrollTop > before
+      };
+    });
+    if (readerScrollAudit.missing || !['auto', 'scroll'].includes(readerScrollAudit.overflowY) ||
+        readerScrollAudit.clientHeight < 100 || readerScrollAudit.maxScroll > 2 &&
+        (!readerScrollAudit.reachedEnd || !readerScrollAudit.moved)) {
+      fail(`shared book ${book.kind} @ ${viewport.name}: reader does not scroll correctly; ${JSON.stringify(readerScrollAudit)}`);
+    }
     const metrics = await page.evaluate(() => ({ innerWidth: innerWidth, documentWidth: document.documentElement.scrollWidth }));
     if (metrics.documentWidth > metrics.innerWidth + 2) fail(`shared book ${book.kind} @ ${viewport.name}: horizontal overflow ${metrics.documentWidth}>${metrics.innerWidth}`);
   }

@@ -210,3 +210,91 @@
   max-width: 900px;
   margin: auto;
 }
+
+/* Share Economy book reader: keep the reading pane as the sole vertical
+   scroller. The previous global grid rules also affected phones and the
+   auto margins on the desktop reader could let its grid item shrink to its
+   contents instead of filling the bounded reader track. */
+#book-page {
+  height: 100%;
+  min-height: 0;
+}
+
+#book-page .book-shell {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+@media (max-width: 1023px) {
+  #book-page .book-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  #book-page .book-tabs {
+    flex: 0 0 auto;
+    min-height: 0;
+    max-height: 34dvh;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #book-page .book-body {
+    flex: 1 1 0;
+    width: 100%;
+    max-width: none;
+    min-height: 0;
+    height: auto;
+    margin: 0;
+    align-self: stretch;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+}
+
+@media (min-width: 1024px) {
+  #book-page .book-shell {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  #book-page .book-head {
+    grid-column: 1 / -1;
+    min-width: 0;
+  }
+
+  #book-page .book-tabs {
+    grid-column: 1;
+    grid-row: 2;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #book-page .book-body {
+    grid-column: 2;
+    grid-row: 2;
+    width: min(100%, 900px);
+    max-width: 900px;
+    height: 100%;
+    min-height: 0;
+    margin-block: 0;
+    margin-inline: auto;
+    align-self: stretch;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+  }
+}
