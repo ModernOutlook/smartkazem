@@ -1,0 +1,34 @@
+{
+  "schema": "local-cognition-cache/v1",
+  "cacheName": "smartkazem-local-cognition-v1",
+  "packages": [
+    {
+      "id": "local-cognition-ui",
+      "required": true,
+      "resources": [
+        "index.html",
+        "css/logo-viewer.css",
+        "css/local-cognition.css",
+        "js/local-cognition.js",
+        "js/local-cognition-lock.js",
+        "js/splash.js",
+        "translations/logo-viewer/fa.json",
+        "translations/logo-viewer/en.json",
+        "translations/logo-viewer/zh.json",
+        "translations/logo-viewer/ar.json",
+        "startsmart.jpg"
+      ]
+    },
+    {
+      "id": "multilingual-e5-small",
+      "required": false,
+      "resources": [
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/config.json",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/tokenizer.json",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/tokenizer_config.json",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/special_tokens_map.json",
+        "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/onnx/model_quantized.onnx"
+      ]
+    }
+  ]
+}
