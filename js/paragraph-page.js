@@ -105,6 +105,7 @@ async function generateRecognitionParagraph(){
 }
 function setRealmOutputState(p){const j=p?.judgment||{};elements.choices.forEach(c=>{const s=j[c.dataset.domain]?.status||'';c.classList.remove('judgment-ok','judgment-warn','judgment-bad');c.classList.toggle('realm-output',!!s);c.dataset.judgment=s;if(s)c.classList.add('judgment-'+s);c.setAttribute('aria-pressed',String(!!s))})}
 function openParagraphPage(kind){
+ document.dispatchEvent(new CustomEvent('paragraph-machine:turn', { detail: { phase: 'open', mode: kind } }));
  entryMode=kind;elements.page.classList.add('open');elements.page.dataset.entry=kind;
  const ref=kind===ENTRY_MODES.REFERENCE;
  elements.primaryPanel.classList.toggle('is-input-mode',ref);elements.primaryPanel.classList.toggle('is-output-mode',!ref);
@@ -159,6 +160,7 @@ function openJudgmentPopover(button){
  elements.popover.querySelector('[data-status]')?.focus({preventScroll:true});
 }
 async function run(){
+ document.dispatchEvent(new CustomEvent('paragraph-machine:turn', { detail: { phase: 'run', mode: entryMode } }));
  elements.error.textContent='';
  if(entryMode===ENTRY_MODES.REFERENCE)elements.input.classList.remove('pm-user-correct','pm-user-incorrect');
  try{
