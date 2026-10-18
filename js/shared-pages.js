@@ -136,6 +136,10 @@ async function collectSectionResources(){
   if(!/(?:javascript|json|css|html|text|xml|svg)/i.test(type)&&!sourcePattern.test(path))continue;
   let body;try{body=await response.text();}catch(_){continue;}
   const base=new URL(path,document.baseURI);
+  if(/(?:^|\/)content\/shahnameh-series\.js(?:\?|$)/i.test(path)){
+   const episodeCount=Number(body.match(/totalEpisodes\s*:\s*(\d+)/)?.[1]||0);
+   for(let episode=1;episode<=episodeCount;episode++)add('content/'+String(episode).padStart(2,'0')+'.jpg',document.baseURI);
+  }
   if(/(?:^|\/)content-covers\.js(?:\?|$)/i.test(path)){
    for(const match of body.matchAll(/\[['"]([^'"]+\.(?:avif|gif|jpe?g|png|webp))['"]\s*,/gi))add('content/page-templates/'+match[1],document.baseURI);
   }
