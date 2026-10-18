@@ -30,7 +30,27 @@ try{
   await page.waitForSelector('.fr-hub-grid .fr-game-tile');
   if(await page.locator('.fr-hub-grid .fr-game-tile').count()!==5)fail(`${viewport.name}: hub does not show exactly five game tiles`);
   if(await page.locator('[data-talash-link]').isDisabled())fail(`${viewport.name}: Talash button is disabled`);
-  if(await page.locator('.fr-game-tile:disabled').count()!==2)fail(`${viewport.name}: only the unfinished Gold and Simulation games should remain disabled`);
+  if(await page.locator('.fr-game-tile:disabled').count()!==0)fail(`${viewport.name}: one or more of the five game tiles are disabled`);
+
+  // Gold and Simulation must open their own pages with assigned backgrounds,
+  // then return to the same Five Realms hub.
+  for (const game of [
+    {selector:'[data-gold-link]', key:'gold', title:'طلا', background:'content/bk2.jpeg', close:'#gold-close', page:'.fr-gold-page'},
+    {selector:'[data-simulation-link]', key:'simulation', title:'شبیه‌سازی', background:'content/bk4.jpeg', close:'#simulation-close', page:'.fr-simulation-page'},
+  ]) {
+    await page.locator(game.selector).click();
+    await page.waitForFunction(key => window.SharedPages?.getActive()===key, game.key);
+    const gamePage = page.locator(game.page);
+    await gamePage.waitFor({state:'visible'});
+    const title = (await gamePage.locator('h1').innerText()).trim();
+    if(title!==game.title)fail(`${viewport.name}: ${game.key} page title mismatch: ${title}`);
+    const bg=await gamePage.evaluate(el=>({image:getComputedStyle(el).backgroundImage,repeat:getComputedStyle(el).backgroundRepeat,size:getComputedStyle(el).backgroundSize,overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
+    if(!decodeURIComponent(bg.image).includes(game.background))fail(`${viewport.name}: ${game.key} background mismatch: ${JSON.stringify(bg)}`);
+    if(bg.repeat.split(',').some(value=>value.trim()!=='no-repeat')||bg.size.split(',').at(-1).trim()!=='cover')fail(`${viewport.name}: ${game.key} background scaling/repeat mismatch: ${JSON.stringify(bg)}`);
+    if(bg.overflow>1)fail(`${viewport.name}: ${game.key} page has horizontal overflow: ${JSON.stringify(bg)}`);
+    await page.locator(game.close).click();
+    await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms');
+  }
 
   // The hub's Tadbir tile first opens the card-game page; its own Tadbir
   // control then opens the Tadbir page, whose start action returns to the game.
