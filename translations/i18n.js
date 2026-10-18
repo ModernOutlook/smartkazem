@@ -8,6 +8,7 @@
   const LEGACY_STORAGE_KEY = 'modern-outlook.lang.v1';
 
   const catalogs = Object.create(null);
+  const pageReservoirs = Object.create(null);
   let currentLanguage = DEFAULT_LANGUAGE;
   let languageRequestSerial = 0;
   let observer = null;
@@ -95,10 +96,25 @@
     }
   }
 
+  function attachPageReservoir(data, pageKey, chapter) {
+    if (!data || !pageKey || !chapter) return;
+    data.chapters = data.chapters || {};
+    data.chapters[pageKey] = chapter;
+    data.bookContent = data.bookContent || {};
+    data.bookContent[pageKey] = chapter;
+  }
+
+  function attachKnownPageReservoirs(data) {
+    Object.entries(pageReservoirs).forEach(([pageKey, chapter]) => {
+      attachPageReservoir(data, pageKey, chapter);
+    });
+  }
+
   async function load(language) {
     const normalizedLanguage = normalizeLanguage(language);
 
     if (catalogs[normalizedLanguage]) {
+      attachKnownPageReservoirs(catalogs[normalizedLanguage]);
       return catalogs[normalizedLanguage];
     }
 
@@ -112,6 +128,10 @@
     }
 
     const data = await response.json();
+    // A page can be opened while the initial language catalog is still loading.
+    // Reattach every already-declared page reservoir before caching this result,
+    // so completion order cannot leave the active page with Persian fallbacks.
+    attachKnownPageReservoirs(data);
 
     // Long-form pages may declare their own translation reservoir at the HTML
     // boundary. This keeps SiteI18n generic: adding a future page does not
@@ -121,15 +141,16 @@
     const chapterPath = declaredCatalog;
 
     if (pageKey && chapterPath) {
-      const chapterResponse = await fetch(chapterPath, { cache: 'no-store' });
-      if (!chapterResponse.ok) {
-        throw new Error('Chapter translation catalog unavailable: ' + pageKey);
+      let chapter = pageReservoirs[pageKey];
+      if (!chapter) {
+        const chapterResponse = await fetch(chapterPath, { cache: 'no-store' });
+        if (!chapterResponse.ok) {
+          throw new Error('Chapter translation catalog unavailable: ' + pageKey);
+        }
+        chapter = await chapterResponse.json();
+        pageReservoirs[pageKey] = chapter;
       }
-      const chapter = await chapterResponse.json();
-      data.chapters = data.chapters || {};
-      data.chapters[pageKey] = chapter;
-      data.bookContent = data.bookContent || {};
-      data.bookContent[pageKey] = chapter;
+      attachPageReservoir(data, pageKey, chapter);
     }
 
     // Home overlays can declare several dedicated book reservoirs without
@@ -207,12 +228,8 @@
       const response = await fetch(catalogPath, {cache:'no-store'});
       if (!response.ok) throw new Error('Page catalog unavailable: ' + pageKey);
       const chapter = await response.json();
-      Object.values(catalogs).forEach(data => {
-        data.chapters = data.chapters || {};
-        data.bookContent = data.bookContent || {};
-        data.chapters[pageKey] = chapter;
-        data.bookContent[pageKey] = chapter;
-      });
+      pageReservoirs[pageKey] = chapter;
+      Object.values(catalogs).forEach(data => attachPageReservoir(data, pageKey, chapter));
     }
     return setLanguage(currentLanguage || getLanguage());
   }
