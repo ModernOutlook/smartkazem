@@ -135,6 +135,17 @@ Coverage is explicit and limited to these 12 pages: رساله فلسفی, فص�
 
 The browser smoke test verifies every eligible cover at desktop, portrait, and landscape viewports, including successful image loading, accessible alternative text, and the 3:4 frame ratio. New textual child pages must be added to the explicit shared/book cover registry and this test; excluded surfaces must remain excluded.
 
+## Browser resource caching and shared-page performance
+
+SmartKazem remains a static GitHub Pages application with one shared HTML shell. The service worker in `local-cognition-sw.js` uses Cache Storage as a cache-first layer for same-origin GET requests: after a section's template, scripts, styles, catalogs, or images have been fetched once, later requests can be served from the browser's persistent cache instead of downloading them again. The shared-page renderer also retains loaded page roots and scripts in memory for repeat navigation within the same session.
+
+- Shared page templates and translation catalogs use the browser's normal HTTP cache behavior; do not set `cache: 'no-store'` for reusable static site resources.
+- Keep resource URLs relative/base-aware so caching works when the site is deployed beneath `/smartkazem/`.
+- The service worker may not control the very first navigation until installation/activation completes. Normal browser caching remains the fallback; offline availability is not guaranteed until a resource has successfully been cached.
+- Cache Storage is subject to browser quota and eviction. Do not assume it is permanent storage, and do not cache user secrets or API credentials.
+- Large optional model packages remain opt-in; do not eagerly download the neural model merely because the site shell loads.
+- When changing cached resource behavior, preserve the existing local-cognition package workflow and its progress reporting. Browser/device performance audits remain manual opt-in under the test policy below.
+
 ## 4. Repository map
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
