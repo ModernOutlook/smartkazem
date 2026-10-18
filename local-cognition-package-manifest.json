@@ -18,6 +18,7 @@
         "index.html",
         "local-cognition-package-manifest.json",
         "local-cognition-sw.js",
+        "js/local-cognition-cache-ui.js",
         "css/logo-viewer.css",
         "css/local-cognition.css",
         "js/local-cognition.js",
@@ -28,6 +29,27 @@
         "translations/logo-viewer/zh.json",
         "translations/logo-viewer/ar.json",
         "startsmart.jpg"
+      ]
+    },
+    {
+      "id": "paragraph-machine",
+      "required": true,
+      "resources": [
+        "js/paragraph-page.js",
+        "adapters/paragraph-workspace.js",
+        "engine/paragraph-engine.js",
+        "services/llm-client.js",
+        "services/translation-bridge.js"
+      ]
+    },
+    {
+      "id": "five-realms-cards",
+      "required": true,
+      "resources": [
+        "games/five-realms/ui.mjs",
+        "games/five-realms/engine/index.mjs",
+        "games/five-realms/data/config.json",
+        "games/five-realms/data/realms.json"
       ]
     },
     {
