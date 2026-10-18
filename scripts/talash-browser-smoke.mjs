@@ -62,11 +62,21 @@ try{
   if(mazeBackground.repeat.split(',').some(value=>value.trim()!=='no-repeat'))fail(`${viewport.name}: Quantum Maze background must not repeat: ${JSON.stringify(mazeBackground)}`);
   if(mazeBackground.overflow>1)fail(`${viewport.name}: Quantum Maze causes horizontal overflow: ${JSON.stringify(mazeBackground)}`);
 
-  // A direct route is no longer a valid entry point for the maze.
-  await page.goto(`${baseURL}/index.html?page=quantum-maze`,{waitUntil:'domcontentloaded'});
-  await waitForSplashToDismiss(page);
-  if(await page.locator('#quantum-maze-game').count()!==0||await page.locator('#home-page.is-active').count()!==1)fail(`${viewport.name}: Quantum Maze can still be opened outside the Actuality Center path`);
+  // A direct route is no longer a valid entry point for the maze. Use a fresh
+  // page so a prior shared-page history state cannot affect this assertion.
+  const directPage=await browser.newPage({viewport,reducedMotion:'reduce'});
+  directPage.setDefaultTimeout(7000);
+  const directErrors=[];
+  directPage.on('pageerror',error=>directErrors.push(error.message));
+  await directPage.goto(`${baseURL}/index.html?page=quantum-maze`,{waitUntil:'domcontentloaded'});
+  await waitForSplashToDismiss(directPage);
+  if(await directPage.locator('#quantum-maze-game').count()!==0||await directPage.locator('#home-page.is-active').count()!==1)fail(`${viewport.name}: Quantum Maze can still be opened outside the Actuality Center path`);
+  if(directErrors.length)fail(`${viewport.name}: direct Quantum Maze route produced browser errors: ${directErrors.join('; ')}`);
+  await directPage.close();
 
+  // Return to a fresh home shell before checking the independent Continuity route.
+  await page.goto(`${baseURL}/index.html`,{waitUntil:'domcontentloaded'});
+  await waitForSplashToDismiss(page);
   // The Continuity realm no longer exposes Five Realms; its Tadbir button
   // is a direct, independent entry to the Tadbir page.
   await clickRealmRing(page,'#realm-continuity',0.15);
