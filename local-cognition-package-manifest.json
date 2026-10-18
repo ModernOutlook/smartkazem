@@ -1,6 +1,13 @@
 {
   "schema": "local-cognition-cache/v1",
   "cacheName": "smartkazem-local-cognition-v1",
+  "resourceSizes": {
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/config.json": 658,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/tokenizer.json": 17082730,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/tokenizer_config.json": 471,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/special_tokens_map.json": 167,
+    "https://huggingface.co/Xenova/multilingual-e5-small/resolve/main/onnx/model_quantized.onnx": 118308185
+  },
   "packages": [
     {
       "id": "local-cognition-ui",
