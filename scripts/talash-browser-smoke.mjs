@@ -60,6 +60,10 @@ try{
   await page.locator('#five-realms-tadbir').click();
   await page.waitForFunction(()=>window.SharedPages?.getActive()==='tadbir');
   await page.waitForSelector('#tadbir-title');
+  const tadbirBackground=await page.locator('.tadbir-page').evaluate(el=>({image:getComputedStyle(el).backgroundImage,repeat:getComputedStyle(el).backgroundRepeat,size:getComputedStyle(el).backgroundSize,overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
+  if(!decodeURIComponent(tadbirBackground.image).includes('content/bk5.jpeg'))fail(`${viewport.name}: Tadbir background should be bk5.jpeg: ${JSON.stringify(tadbirBackground)}`);
+  if(tadbirBackground.repeat!=='no-repeat'||tadbirBackground.size!=='cover')fail(`${viewport.name}: Tadbir background scaling/repeat mismatch: ${JSON.stringify(tadbirBackground)}`);
+  if(tadbirBackground.overflow>1)fail(`${viewport.name}: Tadbir page has horizontal overflow: ${JSON.stringify(tadbirBackground)}`);
   if(!(await page.locator('#tadbir-start-game').isVisible()))fail(`${viewport.name}: Tadbir no longer exposes its start-game path when no card game is active`);
   await page.locator('#tadbir-start-game').click();
   await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms-cards');
@@ -115,6 +119,10 @@ try{
   if(!talashResponse?.ok()){fail(`${viewport.name}: Talash route HTTP ${talashResponse?.status()??'no response'}`);await page.close();continue;}
   await waitForSplashToDismiss(page);
   await page.waitForSelector('#talash-canvas');
+  const talashBackground=await page.locator('.talash-page').evaluate(el=>({image:getComputedStyle(el).backgroundImage,repeat:getComputedStyle(el).backgroundRepeat,size:getComputedStyle(el).backgroundSize,overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
+  if(!decodeURIComponent(talashBackground.image).includes('content/bk1.jpeg'))fail(`${viewport.name}: Talash background should be bk1.jpeg: ${JSON.stringify(talashBackground)}`);
+  if(talashBackground.repeat!=='no-repeat'||talashBackground.size!=='cover')fail(`${viewport.name}: Talash background scaling/repeat mismatch: ${JSON.stringify(talashBackground)}`);
+  if(talashBackground.overflow>1)fail(`${viewport.name}: Talash page has horizontal overflow: ${JSON.stringify(talashBackground)}`);
   const brickBreakerTitle = (await page.locator('.talash-head h1').innerText()).trim();
   if (!['آجرشکن', 'Brick Breaker', '打砖块', 'كاسر الطوب'].includes(brickBreakerTitle)) {
     fail(`${viewport.name}: game title was not localized as Brick Breaker: ${brickBreakerTitle}`);
