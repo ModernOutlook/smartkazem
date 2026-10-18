@@ -7,6 +7,8 @@
       "required": true,
       "resources": [
         "index.html",
+        "local-cognition-package-manifest.json",
+        "local-cognition-sw.js",
         "css/logo-viewer.css",
         "css/local-cognition.css",
         "js/local-cognition.js",
