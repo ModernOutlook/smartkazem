@@ -103,6 +103,7 @@ async function collectSectionResources(){
  const resources=new Set(),queue=[],queued=new Set();
  const sourcePattern=/\.(?:css|fragment|html|js|mjs|json|xml|svg)(?:\?[^#]*)?(?:#.*)?$/i;
  const assetPattern=/(?:\.?\.?\/|\/)?[A-Za-z0-9_./%?=&-]+\.(?:avif|bmp|bpe|css|gif|html|jpe?g|js|json|m4a|mjs|mp3|mp4|ogg|onnx|otf|png|svg|ttf|txt|wasm|wav|webm|webmanifest|webp|woff2?|xml|bin|model|aac|flac)(?:\?[^\s"'()<>]*)?/gi;
+ const quotedAssetPattern=/['"]([^'"]+\.(?:avif|bmp|bpe|css|gif|html|jpe?g|js|json|m4a|mjs|mp3|mp4|ogg|onnx|otf|png|svg|ttf|txt|wasm|wav|webm|webmanifest|webp|woff2?|xml|bin|model|aac|flac)(?:\?[^'"]*)?)['"]/gi;
  const add=(value,base=document.baseURI)=>{
   if(typeof value!=='string'||!value.trim()||/^(?:data:|blob:|javascript:|mailto:|tel:|#)/i.test(value))return;
   try{
@@ -137,6 +138,7 @@ async function collectSectionResources(){
    for(const match of body.matchAll(/@import\s+(?:url\()?['"]([^'"]+)['"]/gi))add(match[1],base);
   }
   for(const match of body.matchAll(assetPattern))add(match[0],base);
+  for(const match of body.matchAll(quotedAssetPattern))add(match[1],base);
   for(const match of body.matchAll(/(?:\bimport\s*(?:\([^)]*?\)|[^;]*?\bfrom\s*)|\b(?:fetch|importScripts)\s*\(|\bnew\s+(?:Worker|SharedWorker)\s*\()\s*['"]([^'"]+)['"]/g))add(match[1],base);
   for(const match of body.matchAll(/new\s+URL\(\s*['"]([^'"]+)['"]\s*,\s*import\.meta\.url\s*\)/g))add(match[1],base);
   if(/\.fragment(?:\?|$)|text\/html/i.test(path+' '+type)){
