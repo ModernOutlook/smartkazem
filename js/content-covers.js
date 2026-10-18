@@ -13,6 +13,13 @@
     zero: ['zero.jpg', 'صفر']
   });
 
+  const SHARED_COVER_TARGETS = Object.freeze({
+    observation: '.book-body',
+    observation25: '.observation25-body',
+    possibleMirror: '.possible-mirror-body',
+    layer3: '.reader'
+  });
+
   const BOOK_COVERS = Object.freeze({
     humanMachines: ['human-and-its-machines.jpg', 'انسان و ماشین‌هایش'],
     forgers: ['forgers-of-imitation.jpg', 'جاعلان تقلید'],
@@ -50,7 +57,7 @@
   function mountShared(root, route) {
     const cover = SHARED_COVERS[route];
     if (!cover) return null;
-    return mount(root, cover[0], activeTitle(root, cover[1]));
+    const target = root.querySelector(SHARED_COVER_TARGETS[route] || '') || root;\n    return mount(root, cover[0], activeTitle(root, cover[1]), target);
   }
 
   function mountBook(root, kind, title, target) {
