@@ -1,0 +1,82 @@
+name: Targeted section resource inventory audit
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  section-resource-audit:
+    if: github.event.pull_request.head.ref == 'perf/shared-section-browser-cache'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+
+      - name: Restore pinned Playwright and Chromium cache
+        id: browser-cache
+        uses: actions/cache/restore@5a3ec84eff668545956fd18022155c47e93e2684 # v4.2.3
+        with:
+          path: |
+            node_modules
+            ~/.cache/ms-playwright
+          key: smartkazem-browser-${{ runner.os }}-${{ runner.arch }}-node22-playwright1.55.0-chromium-v2
+
+      - name: Import verified browser bundle from private GPT repository
+        id: browser-bundle
+        if: steps.browser-cache.outputs.cache-hit != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GPT_CACHE_READ_TOKEN }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${GH_TOKEN:-}" ]; then
+            echo "::error::Pinned Playwright/Chromium cache is unavailable and GPT_CACHE_READ_TOKEN is not configured; refusing to download a new browser toolchain."
+            exit 1
+          fi
+          TAG="playwright-1.55.0-chromium-linux-x64"
+          ARCHIVE="playwright-1.55.0-chromium-linux-x64.tar.gz"
+          DEST="$RUNNER_TEMP/playwright-release"
+          mkdir -p "$DEST"
+          gh release download "$TAG" --repo ModernOutlook/GPT --pattern "$ARCHIVE" --pattern "$ARCHIVE.sha256" --dir "$DEST"
+          cd "$DEST"
+          sha256sum --check "$ARCHIVE.sha256"
+          tar -xzf "$ARCHIVE" -C "$DEST"
+          mkdir -p "$GITHUB_WORKSPACE/node_modules" "$HOME/.cache/ms-playwright"
+          cp -a "$DEST/playwright-cache/npm/node_modules/." "$GITHUB_WORKSPACE/node_modules/"
+          cp -a "$DEST/playwright-cache/ms-playwright/." "$HOME/.cache/ms-playwright/"
+          node -e "const fs=require('node:fs'); const p=require('./node_modules/playwright/package.json'); const {chromium}=require('playwright'); if(p.version!=='1.55.0'||!fs.existsSync(chromium.executablePath())) process.exit(1)"
+
+      - name: Verify exact browser toolchain
+        run: |
+          node -e "const fs=require('node:fs'); const p=require('./node_modules/playwright/package.json'); const {chromium}=require('playwright'); if(p.version!=='1.55.0'||!fs.existsSync(chromium.executablePath())) process.exit(1)"
+
+      - name: Start static site
+        run: |
+          python3 -m http.server 4173 --bind 127.0.0.1 > /tmp/smartkazem-http.log 2>&1 &
+          echo $! > /tmp/smartkazem-http.pid
+          for attempt in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:4173/index.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/smartkazem-http.log
+          exit 1
+
+      - name: Reconcile runtime section requests against cache inventory
+        run: node scripts/section-resource-network-audit.mjs
+
+      - name: Stop static site
+        if: always()
+        run: |
+          if [ -f /tmp/smartkazem-http.pid ]; then kill "$(cat /tmp/smartkazem-http.pid)" || true; fi
