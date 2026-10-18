@@ -21,6 +21,14 @@
     document.body.appendChild(script);
   }
 
+  function loadLocalCognitionLockScript() {
+    if (!logoViewer || document.querySelector('script[data-local-cognition-lock]')) return;
+    const script = document.createElement('script');
+    script.src = 'js/local-cognition-lock.js';
+    script.dataset.localCognitionLock = 'true';
+    document.body.appendChild(script);
+  }
+
   async function loadLogoViewerLanguage(language) {
     const normalized = ['fa', 'en', 'zh', 'ar'].includes(language) ? language : 'fa';
     try {
@@ -75,6 +83,7 @@
   function initSplash() {
     initLogoViewerLocalization();
     loadLocalCognitionScript();
+    loadLocalCognitionLockScript();
   }
 
   const waitForDom = () => {
