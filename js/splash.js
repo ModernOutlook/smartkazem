@@ -13,6 +13,27 @@
     document.head.appendChild(link);
   }
 
+  function loadLocalCognitionScript() {
+    if (!logoViewer || document.querySelector('script[data-local-cognition]')) return;
+    const script = document.createElement('script');
+    script.src = 'js/local-cognition.js';
+    script.dataset.localCognition = 'true';
+    document.body.appendChild(script);
+  }
+
+  function loadLocalCognitionLockScript() {
+    if (!logoViewer || document.querySelector('script[data-local-cognition-lock]')) return;
+    const script = document.createElement('script');
+    script.src = 'js/local-cognition-lock.js';
+    script.dataset.localCognitionLock = 'true';
+    document.body.appendChild(script);
+  }
+
+  function registerLocalCognitionServiceWorker() {
+    if (!('serviceWorker' in navigator)) return;
+    navigator.serviceWorker.register('local-cognition-sw.js', { scope: './' }).catch(() => {});
+  }
+
   async function loadLogoViewerLanguage(language) {
     const normalized = ['fa', 'en', 'zh', 'ar'].includes(language) ? language : 'fa';
     try {
@@ -65,7 +86,10 @@
   }
 
   function initSplash() {
+    registerLocalCognitionServiceWorker();
     initLogoViewerLocalization();
+    loadLocalCognitionScript();
+    loadLocalCognitionLockScript();
   }
 
   const waitForDom = () => {
