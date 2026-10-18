@@ -9,6 +9,8 @@
   const PASSWORD_SHA256 = 'cdc99cbc4a4041a4ec523b0c7b36e4c5565d3cda68a3843bdfecc32d21c5a94c';
   let unlocked = false;
   let activeDialog = null;
+  let cacheCheckPromise = null;
+  let cacheWarmPromise = null;
 
   const copy = {
     fa: {
@@ -115,6 +117,42 @@
     }
   }
 
+  async function checkBrowserCache() {
+    if (cacheCheckPromise) return cacheCheckPromise;
+    cacheCheckPromise = (async () => {
+      if (!('serviceWorker' in navigator)) return { ready: false, unavailable: true };
+      const registration = await navigator.serviceWorker.ready;
+      const worker = registration.active || navigator.serviceWorker.controller;
+      if (!worker) return { ready: false, unavailable: true };
+      return new Promise((resolve) => {
+        const channel = new MessageChannel();
+        const timeout = window.setTimeout(() => {
+          channel.port1.close();
+          resolve({ ready: false, unavailable: true });
+        }, 15000);
+        channel.port1.onmessage = (event) => {
+          window.clearTimeout(timeout);
+          channel.port1.close();
+          resolve(event.data || { ready: false, unavailable: true });
+        };
+        worker.postMessage({ type: 'CHECK_LOCAL_COGNITION_CACHE' }, [channel.port2]);
+      });
+    })().finally(() => { cacheCheckPromise = null; });
+    return cacheCheckPromise;
+  }
+
+  async function ensureParagraphPackages() {
+    const check = await checkBrowserCache();
+    if (check.ready) return check;
+    if (check.unavailable) return check;
+    window.LocalCognitionPanel?.open();
+    if (!cacheWarmPromise) {
+      cacheWarmPromise = warmOfflineCache().finally(() => { cacheWarmPromise = null; });
+    }
+    const result = await cacheWarmPromise;
+    return result || check;
+  }
+
   function removeDialog() {
     activeDialog?.remove();
     activeDialog = null;
@@ -188,6 +226,10 @@
     event.stopImmediatePropagation();
     showDialog();
   }, true);
+
+  document.addEventListener('paragraph-machine:turn', () => {
+    void ensureParagraphPackages();
+  });
 
   document.addEventListener('site:languagechange', () => {
     if (!activeDialog) return;
