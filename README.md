@@ -669,6 +669,14 @@ The browser, language, Paragraph Machine full-matrix, Five Realms, realm-child-b
 
 
 
+
+
+### Proactive section asset caching
+
+On startup, `js/shared-pages.js` discovers the shared shell's local resources plus each registered section's template, translation catalog, stylesheets, scripts, realm backgrounds, and asset references found in those resources. It sends the discovered same-origin URLs to `local-cognition-sw.js`, which downloads successful GET responses into the versioned Cache Storage bucket in the background. This warms the browser cache before the user opens every section; the shared renderer still retains visited page roots and scripts in memory. A `site-resource-cache-complete` event reports the result for diagnostics.
+
+This is best-effort rather than an absolute offline guarantee: browser storage quotas/eviction apply, a first visit requires a network connection, and cross-origin resources are deliberately not copied into the site's cache. Assets assembled at runtime from opaque values or fetched by unlisted dynamic endpoints cannot be inferred reliably from static source scanning; register such resources explicitly when adding them. The service worker must be installed and active, and every resource must have been fetched successfully, before it can be served offline. The cache version is bumped when the cache contract changes.
+
 ## Content-section navigation contract
 
 Every text-bearing secondary page uses a consistent, localized section-navigation pattern, except **شاهنامه‌خوانی**, whose episode-list and artwork navigation are a deliberate separate experience. The Paragraph Machine is a tool/workspace, not a content page, and is outside this rule.
