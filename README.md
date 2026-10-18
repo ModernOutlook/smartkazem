@@ -342,6 +342,16 @@ A browser-side API key is not a server-side secret. Never commit keys, tokens, p
 
 ## 13. Quality, security, and deployment
 
+### Explicit approval policy for tests and merges (mandatory)
+
+- **Only the Site quality gate (`quality.yml`) and Security gate (`security.yml`) may run automatically** on pushes to `main` and pull requests.
+- **Every other test suite is opt-in.** Browser/UI smoke tests, responsive and screenshot matrices, Paragraph Machine layout tests, and any other test workflow must not start automatically on a push, pull request, merge, or unrelated workflow. Run them only after the user explicitly requests that specific test or suite. Their GitHub Actions trigger must be manual (`workflow_dispatch`) unless the user explicitly authorizes a different trigger.
+- Do not interpret opening a PR, asking for a code change, or asking to prepare a merge as permission to run optional tests. If optional testing would be useful, ask first and wait.
+- **Merging is also opt-in and requires explicit user approval for that merge.** Passing checks, a green PR, or a previous merge approval is not permission to merge a later PR. Never enable auto-merge or merge on the user's behalf before that approval.
+- The quality and security gates are the only routine automatic tests; deployment workflows are operational workflows, not permission to start additional test suites. A manually requested deployment or other action still requires the user's explicit request.
+- When preparing a PR, report which automatic quality/security gates ran and keep optional tests unstarted unless requested. Do not claim an optional test passed if it was not run.
+
+
 `quality.yml` enforces the maintenance contract: JavaScript syntax, JSON validity, duplicate HTML IDs, missing local HTML assets, inline-script/event-handler restrictions, externalized presentation CSS, document language, and the landing-only language-selector contract.
 
 `security.yml` checks every HTML page for the browser-security metadata contract, insecure `http://` URLs, `javascript:` URLs, and likely committed credentials. The legacy Paragraph Machine is not exempt.
@@ -385,7 +395,7 @@ These are boundaries, not reasons for opportunistic rewrites.
 - Avoid speculative abstraction.
 
 ### After editing
-Verify as applicable: JS syntax, JSON validity, HTML structure, local assets, language switching, affected navigation, mobile/desktop, RTL/LTR, accessibility, and the quality/security gates. If a presentation change can be made without touching behavior, keep it in CSS.
+Run optional verification (JS/JSON/HTML checks beyond the automatic quality gate, browser tests, language switching, navigation, mobile/desktop, RTL/LTR, or accessibility checks) only when the user explicitly requests it. The quality and security gates are the sole automatically triggered test suites. If a presentation change can be made without touching behavior, keep it in CSS.
 
 Verify the landing-page language selector in portrait/landscape and RTL/LTR, then confirm that all child pages inherit the selected language without rendering their own language controls. At every responsive viewport and in all four languages, assert that the selector remains fully visible and does not intersect any page-header title or action.
 
@@ -639,7 +649,7 @@ The UI browser workflow uses the pinned Playwright **1.55.0** + Chromium bundle 
 
 Configure `GPT_CACHE_READ_TOKEN` in **SmartKazem → Settings → Secrets and variables → Actions**. It must be a narrowly scoped token with **Contents: read** access to the private `ModernOutlook/GPT` repository. Do not put the token in source files, workflow outputs, or logs. If the private bundle cannot be accessed and the browser toolchain is not already cached, the workflow fails before test execution instead of reporting a misleading green run with browser tests skipped. A manual `workflow_dispatch` may use `approve_browser_download=true` only when an explicit one-off upstream download is intended.
 
-The existing browser, language, Paragraph Machine full-matrix, Five Realms, realm-child-background, and content-cover tests remain enabled; this cache integration does not weaken their assertions or remove their screenshot artifacts.
+The browser, language, Paragraph Machine full-matrix, Five Realms, realm-child-background, and content-cover test suites remain available but are **manual opt-in only**. They must not run automatically; invoke them only after the user explicitly requests the relevant suite. This cache integration does not weaken their assertions or remove their screenshot artifacts.
 
 
 **Emergence II paragraph contract:** every non-empty line in each Persian source episode is a paragraph, including lines separated by a single newline. Blank lines are separators and are not paragraphs. Each EN/AR/ZH episode must expose the same number of paragraphs in the same order. The alignment utility splits existing translated text at sentence boundaries and monotonically regroups those unchanged sentence units to the Persian line count; it does not generate, summarize, rewrite, or reorder translation prose. Chinese sentence splitting recognizes 。！？ without requiring spaces. The browser audit checks exact rendered paragraph arrays in all four languages.
