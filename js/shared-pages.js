@@ -100,11 +100,19 @@ host.addEventListener('click',event=>{const button=event.target instanceof Eleme
 window.addEventListener('popstate',event=>{pendingHistoryClose=false;const route=new URLSearchParams(location.search).get('page');if(route&&manifest[route])open(route,event.state?.origin||origin,{push:false}).catch(console.error);else if(activeKey)showOrigin();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&activeKey)close();});
 async function collectSectionResources(){
- const resources=new Set();
- const add=value=>{if(typeof value!=='string'||!value.trim()||value.startsWith('data:')||value.startsWith('blob:')||value.startsWith('#'))return;try{const url=new URL(value,document.baseURI);if(url.origin===location.origin)resources.add(url.href);}catch(_){}};
- const assetPattern=/(?:\.?\.?\/|\/)?[A-Za-z0-9_./%?=&-]+\.(?:avif|bmp|css|gif|html|jpe?g|js|json|m4a|mp3|ogg|otf|png|svg|ttf|webp|woff2?|wav)(?:\?[^\s"'()<>]*)?/gi;
+ const resources=new Set(),queue=[],queued=new Set();
+ const sourcePattern=/\.(?:css|fragment|html|js|mjs|json|xml|svg)(?:\?[^#]*)?(?:#.*)?$/i;
+ const assetPattern=/(?:\.?\.?\/|\/)?[A-Za-z0-9_./%?=&-]+\.(?:avif|bmp|bpe|css|gif|html|jpe?g|js|json|m4a|mjs|mp3|mp4|ogg|onnx|otf|png|svg|ttf|txt|wasm|wav|webm|webmanifest|webp|woff2?|xml|bin|model|aac|flac)(?:\?[^\s"'()<>]*)?/gi;
+ const add=(value,base=document.baseURI)=>{
+  if(typeof value!=='string'||!value.trim()||/^(?:data:|blob:|javascript:|mailto:|tel:|#)/i.test(value))return;
+  try{
+   const url=new URL(value,base);if(url.origin!==location.origin||!/^https?:$/.test(url.protocol))return;
+   resources.add(url.href);
+   if(sourcePattern.test(url.pathname+url.search)&&!queued.has(url.href)){queued.add(url.href);queue.push(url.href);}
+  }catch(_){}
+ };
  add('index.html');
- document.querySelectorAll('link[rel="stylesheet"],link[rel="preload"],script[src],img[src],source[src],audio[src],video[poster]').forEach(node=>{
+ document.querySelectorAll('link[rel="stylesheet"],link[rel="preload"],script[src],img[src],source[src],audio[src],video[src],video[poster],iframe[src]').forEach(node=>{
   for(const attr of ['href','src','poster'])if(node.hasAttribute(attr))add(node.getAttribute(attr));
   if(node.hasAttribute('srcset'))for(const candidate of node.getAttribute('srcset').split(','))add(candidate.trim().split(/\s+/)[0]);
  });
@@ -112,33 +120,35 @@ async function collectSectionResources(){
   const css=node.textContent+' '+(node.getAttribute('style')||'');
   for(const match of css.matchAll(/url\(\s*['"]?([^)'" ]+)['"]?\s*\)/gi))add(match[1]);
  });
- const sourceFiles=new Set(['index.html']);
-
  for(const entry of Object.values(manifest)){
-  for(const path of [entry.file,entry.catalog,...(entry.styles||[]),...(entry.scripts||[])])if(path){add(path);if(/\.(?:css|fragment|html|js|mjs|json)(?:\?|$)/i.test(path))sourceFiles.add(path);}
+  for(const path of [entry.file,entry.catalog,...(entry.styles||[]),...(entry.scripts||[])])if(path)add(path);
  }
  Object.values(REALM_ASSETS).forEach(add);
- const queue=[...sourceFiles];const scanned=new Set();
+ const scanned=new Set();
  while(queue.length){
   const path=queue.shift();if(scanned.has(path))continue;scanned.add(path);
   let response;try{response=await fetch(path);}catch(_){continue;}if(!response.ok)continue;
   const type=response.headers.get('content-type')||'';
-  if(!/(?:javascript|json|css|html|text|xml)/i.test(type)&&!/\.(?:css|fragment|html|js|mjs|json)(?:\?|$)/i.test(path))continue;
+  if(!/(?:javascript|json|css|html|text|xml|svg)/i.test(type)&&!sourcePattern.test(path))continue;
   let body;try{body=await response.text();}catch(_){continue;}
+  const base=new URL(path,document.baseURI);
   if(/\.css(?:\?|$)/i.test(path)||/text\/css/i.test(type)){
-   for(const match of body.matchAll(/url\(\s*['"]?([^)'"]+)['"]?\s*\)/gi))add(new URL(match[1],new URL(path,document.baseURI)).href);
-   for(const match of body.matchAll(/@import\s+(?:url\()?['"]([^'"]+)['"]/gi)){const url=new URL(match[1],new URL(path,document.baseURI));add(url.href);queue.push(url.href);}
+   for(const match of body.matchAll(/url\(\s*['"]?([^)'"]+)['"]?\s*\)/gi))add(match[1],base);
+   for(const match of body.matchAll(/@import\s+(?:url\()?['"]([^'"]+)['"]/gi))add(match[1],base);
   }
-  for(const match of body.matchAll(assetPattern)){const value=match[0];add(new URL(value,new URL(path,document.baseURI)).href);}
+  for(const match of body.matchAll(assetPattern))add(match[0],base);
+  for(const match of body.matchAll(/(?:\bimport\s*(?:\([^)]*?\)|[^;]*?\bfrom\s*)|\b(?:fetch|importScripts)\s*\(|\bnew\s+(?:Worker|SharedWorker)\s*\()\s*['"]([^'"]+)['"]/g))add(match[1],base);
+  for(const match of body.matchAll(/new\s+URL\(\s*['"]([^'"]+)['"]\s*,\s*import\.meta\.url\s*\)/g))add(match[1],base);
   if(/\.fragment(?:\?|$)|text\/html/i.test(path+' '+type)){
    const attrs=/(?:src|href|poster|data-src)\s*=\s*['"]([^'"]+)['"]/gi;
-   for(const match of body.matchAll(attrs))add(new URL(match[1],new URL(path,document.baseURI)).href);
-   for(const match of body.matchAll(/srcset\s*=\s*['"]([^'"]+)['"]/gi))for(const candidate of match[1].split(','))add(new URL(candidate.trim().split(/\s+/)[0],new URL(path,document.baseURI)).href);
+   for(const match of body.matchAll(attrs))add(match[1],base);
+   for(const match of body.matchAll(/srcset\s*=\s*['"]([^'"]+)['"]/gi))for(const candidate of match[1].split(','))add(candidate.trim().split(/\s+/)[0],base);
   }
  }
- return [...resources].map(url=>new URL(url).pathname+new URL(url).search);
+ return [...resources].map(value=>{const url=new URL(value);return url.pathname+url.search;});
 }
 function requestSiteResourceCache(){
+ if(new URLSearchParams(location.search).has('skipSiteResourceWarmup'))return;
  if(!('serviceWorker'in navigator))return;
  const run=async()=>{
   const worker=navigator.serviceWorker.controller||(await navigator.serviceWorker.ready).active;
@@ -151,7 +161,7 @@ function requestSiteResourceCache(){
  if('requestIdleCallback'in window)window.requestIdleCallback(()=>run().catch(error=>console.warn('[SharedPages] Site cache warm-up incomplete',error)),{timeout:4000});
  else window.setTimeout(()=>run().catch(error=>console.warn('[SharedPages] Site cache warm-up incomplete',error)),1200);
 }
-window.SharedPages=Object.freeze({open,close,getActive:()=>activeKey});
+window.SharedPages=Object.freeze({open,close,getActive:()=>activeKey,getSectionKeys:()=>Object.keys(manifest),collectSectionResources});
 requestSiteResourceCache();
 const initial=new URLSearchParams(location.search).get('page');if(initial&&manifest[initial])open(initial,'home',{push:false}).catch(error=>console.error('[SharedPages]',error));
 })();
