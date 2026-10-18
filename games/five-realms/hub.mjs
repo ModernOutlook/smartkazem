@@ -8,7 +8,7 @@ import { GAME_BACKGROUNDS } from "../shared/backgrounds.mjs";
  root.querySelectorAll(".fr-game-tile").forEach((tile,index)=>{
   const asset=GAME_BACKGROUNDS[index];
   if(!asset)return;
-  tile.style.backgroundImage=`linear-gradient(rgba(3,7,11,.72),rgba(3,7,11,.86)),url("${asset.dataUri}")`;
+  tile.style.backgroundImage=`linear-gradient(rgba(3,7,11,.34),rgba(3,7,11,.48)),url("${asset.dataUri}")`;
   tile.style.backgroundSize="cover";
   tile.style.backgroundPosition="center";
   tile.style.backgroundRepeat="no-repeat";
