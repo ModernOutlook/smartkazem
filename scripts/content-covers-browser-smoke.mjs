@@ -58,11 +58,23 @@ try {
       });
       await check(page, filename, viewport.width + 'x' + viewport.height + '/' + route);
       const targetSelector = sharedTargets[route] || null;
-      const last = await page.locator('[data-content-cover]').evaluate((node, selector) => {
+      const endPosition = await page.locator('[data-content-cover]').evaluate((node, selector) => {
         const target = selector ? node.closest('.child-page')?.querySelector(selector) : node.parentElement;
-        return Boolean(target && node.parentElement === target && target.lastElementChild === node);
+        if (!target || node.parentElement !== target || target.lastElementChild !== node) return { finalChild: false };
+        target.scrollTop = target.scrollHeight;
+        const targetRect = target.getBoundingClientRect();
+        const coverRect = node.getBoundingClientRect();
+        const clientTop = targetRect.top + target.clientTop;
+        const clientBottom = clientTop + target.clientHeight;
+        return {
+          finalChild: true,
+          reachesEnd: Math.abs(target.scrollHeight - target.scrollTop - target.clientHeight) <= 2,
+          visibleAtEnd: coverRect.bottom <= clientBottom + 2 && coverRect.bottom > clientTop
+        };
       }, targetSelector);
-      if (!last) failures.push(route + ': cover is not the final child of its scrollable content region');
+      if (!endPosition.finalChild || !endPosition.reachesEnd || !endPosition.visibleAtEnd) {
+        failures.push(route + ': cover is not reachable at the end of the scrollable page; ' + JSON.stringify(endPosition));
+      }
       await page.close();
     }
 
@@ -79,11 +91,23 @@ try {
         return image?.complete && image.naturalWidth > 0;
       });
       await check(page, filename, viewport.width + 'x' + viewport.height + '/book-' + kind);
-      const lastInReader = await page.locator('#book-body [data-content-cover]').evaluate((node) =>
-        node.parentElement === document.querySelector('#book-body') &&
-        node.parentElement.lastElementChild === node
-      );
-      if (!lastInReader) failures.push('book-' + kind + ': cover is not the final child of the scrollable book body');
+      const bookEndPosition = await page.locator('#book-body [data-content-cover]').evaluate((node) => {
+        const target = document.querySelector('#book-body');
+        if (node.parentElement !== target || target.lastElementChild !== node) return { finalChild: false };
+        target.scrollTop = target.scrollHeight;
+        const targetRect = target.getBoundingClientRect();
+        const coverRect = node.getBoundingClientRect();
+        const clientTop = targetRect.top + target.clientTop;
+        const clientBottom = clientTop + target.clientHeight;
+        return {
+          finalChild: true,
+          reachesEnd: Math.abs(target.scrollHeight - target.scrollTop - target.clientHeight) <= 2,
+          visibleAtEnd: coverRect.bottom <= clientBottom + 2 && coverRect.bottom > clientTop
+        };
+      });
+      if (!bookEndPosition.finalChild || !bookEndPosition.reachesEnd || !bookEndPosition.visibleAtEnd) {
+        failures.push('book-' + kind + ': cover is not reachable at the end of the book reader; ' + JSON.stringify(bookEndPosition));
+      }
       await page.close();
     }
   }
