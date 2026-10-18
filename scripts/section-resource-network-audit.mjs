@@ -10,7 +10,7 @@ const normalize = (raw) => {
   return url.origin === new URL(baseURL).origin ? url.pathname + url.search : null;
 };
 const actualBySection = new Map();
-let activeSection = 'initial';
+let activeSection = 'home';
 page.on('request', (request) => {
   const resource = normalize(request.url());
   if (!resource || request.isNavigationRequest()) return;
@@ -21,9 +21,11 @@ page.on('request', (request) => {
 try {
   await page.goto(baseURL + '/index.html?skipSiteResourceWarmup=1', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => Boolean(window.SharedPages?.collectSectionResources && window.SiteI18n));
+  const homeRequests = new Set(actualBySection.get('home') || []);
   const inventory = new Set(await page.evaluate(() => window.SharedPages.collectSectionResources()));
-  // Ignore the inventory scanner's own fetches; capture only actual section opens below.
+  // Ignore the inventory scanner's own fetches, but retain the real shared-shell requests.
   actualBySection.clear();
+  actualBySection.set('home', homeRequests);
   const sections = await page.evaluate(() => window.SharedPages.getSectionKeys());
   for (const section of sections) {
     activeSection = section;
