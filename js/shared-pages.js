@@ -103,7 +103,17 @@ async function collectSectionResources(){
  const resources=new Set();
  const add=value=>{if(typeof value!=='string'||!value.trim()||value.startsWith('data:')||value.startsWith('blob:')||value.startsWith('#'))return;try{const url=new URL(value,document.baseURI);if(url.origin===location.origin)resources.add(url.href);}catch(_){}};
  const assetPattern=/(?:\.?\.?\/|\/)?[A-Za-z0-9_./%?=&-]+\.(?:avif|bmp|css|gif|html|jpe?g|js|json|m4a|mp3|ogg|otf|png|svg|ttf|webp|woff2?|wav)(?:\?[^\s"'()<>]*)?/gi;
- const sourceFiles=new Set();
+ add('index.html');
+ document.querySelectorAll('link[rel="stylesheet"],link[rel="preload"],script[src],img[src],source[src],audio[src],video[poster]').forEach(node=>{
+  for(const attr of ['href','src','poster'])if(node.hasAttribute(attr))add(node.getAttribute(attr));
+  if(node.hasAttribute('srcset'))for(const candidate of node.getAttribute('srcset').split(','))add(candidate.trim().split(/\\s+/)[0]);
+ });
+ document.querySelectorAll('style,[style]').forEach(node=>{
+  const css=node.textContent+' '+(node.getAttribute('style')||'');
+  for(const match of css.matchAll(/url\\(\\s*['"]?([^)'" ]+)['"]?\\s*\\)/gi))add(match[1]);
+ });
+ const sourceFiles=new Set(['index.html']);
+
  for(const entry of Object.values(manifest)){
   for(const path of [entry.file,entry.catalog,...(entry.styles||[]),...(entry.scripts||[])])if(path){add(path);if(/\.(?:css|fragment|html|js|mjs|json)(?:\?|$)/i.test(path))sourceFiles.add(path);}
  }
