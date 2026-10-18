@@ -1,0 +1,37 @@
+name: Temporary maze source cleanup
+
+on:
+  push:
+    branches:
+      - fix/maze-route-and-background
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Remove the legacy Structure of the Hall maze button from index.html
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('index.html')
+          text = path.read_text(encoding='utf-8')
+          needle = '<button class="realm-action structure-action" id="structure-quantum-maze" type="button" data-i18n="pages.quantumMaze.title">هزارتو</button>'
+          if needle not in text:
+              raise SystemExit('Legacy Structure of the Hall maze button was not found')
+          path.write_text(text.replace(needle, ''), encoding='utf-8')
+          PY
+      - name: Remove this temporary workflow
+        run: rm .github/workflows/temporary-maze-cleanup.yml
+      - name: Commit source cleanup
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html .github/workflows/temporary-maze-cleanup.yml
+          git commit -m "Remove legacy maze button from Structure of the Hall source"
+          git push
