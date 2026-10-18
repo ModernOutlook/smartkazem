@@ -223,6 +223,7 @@ logoViewer.addEventListener('click', (event) => {
   if (event.target === logoViewer) closeLogoViewer();
 });
 
+// Quantum Maze is intentionally not owned by Structure of the Hall anymore.
 document.getElementById('structure-quantum-maze')?.remove();
 
 realms.forEach((realm) => {
