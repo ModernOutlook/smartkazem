@@ -25,3 +25,77 @@
 .fr-gold-page{background-color:#241506!important;background-image:linear-gradient(rgba(25,13,2,.48),rgba(28,15,2,.68)),url("../../content/bk2.jpeg")!important;background-position:center top!important;background-size:cover!important;background-repeat:no-repeat!important;background-attachment:scroll!important}
 .fr-simulation-page{background-color:#07131d!important;background-image:linear-gradient(rgba(3,12,23,.48),rgba(3,12,23,.68)),url("../../content/bk4.jpeg")!important;background-position:center top!important;background-size:cover!important;background-repeat:no-repeat!important;background-attachment:scroll!important}
 .fr-placeholder-page .fr-head p{max-width:60ch}
+
+
+/* Five Realms hub: realm-inspired cosmic artwork, preserved across screen shapes. */
+.fr-hub-page{
+ background-color:#030608!important;
+ background-image:linear-gradient(rgba(2,8,16,.42),rgba(2,8,16,.54)),url("../../content/page-templates/five-realms-hub.svg")!important;
+ background-position:center top!important;
+ background-size:cover,contain!important;
+ background-repeat:no-repeat!important;
+ background-attachment:scroll!important;
+}
+.fr-hub-page .fr-game-tile{
+ background:linear-gradient(145deg,rgba(7,20,32,.48),rgba(3,8,15,.34))!important;
+ border-color:rgba(147,204,229,.52)!important;
+ -webkit-backdrop-filter:blur(2px);
+ backdrop-filter:blur(2px);
+}
+.fr-hub-page .fr-game-tile>span:not(.fr-game-number){color:#d2e3ed}
+.fr-hub-page .fr-game-number{color:#c4d8e8}
+.fr-hub-page .fr-game-talash{box-shadow:inset 0 0 28px rgba(28,151,211,.16)}
+.fr-hub-page .fr-game-tadbir{box-shadow:inset 0 0 28px rgba(60,194,127,.15)}
+/* Match each remaining hub tile outline to its corresponding realm palette. */
+.fr-hub-page .fr-game-structure{border-color:#8f75df!important;box-shadow:inset 0 0 28px rgba(143,117,223,.16)}
+.fr-hub-page .fr-game-gold{border-color:#d5ad52!important;box-shadow:inset 0 0 28px rgba(213,173,82,.16)}
+.fr-hub-page .fr-game-experience{border-color:#55b9a0!important;box-shadow:inset 0 0 28px rgba(85,185,160,.16)}
+
+/* Illustrated faces: each tile carries the atmosphere and emblem of its destination realm. */
+.fr-hub-page .fr-game-tile{
+ isolation:isolate;
+ border-width:2px!important;
+ border-radius:16px!important;
+ box-shadow:inset 0 0 0 1px rgba(255,255,255,.09),inset 0 -34px 42px rgba(0,0,0,.24),0 8px 22px rgba(0,0,0,.24);
+ transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;
+}
+.fr-hub-page .fr-game-tile::before{
+ content:"";
+ position:absolute;
+ z-index:-1;
+ width:68%;
+ aspect-ratio:1;
+ top:8%;
+ left:16%;
+ border-radius:50%;
+ opacity:.95;
+ background:radial-gradient(circle at 50% 50%,var(--fr-face-core) 0 2%,transparent 3% 18%,var(--fr-face-glow) 19% 21%,transparent 22% 35%,var(--fr-face-glow) 36% 37%,transparent 38% 49%,var(--fr-face-glow) 50% 51%,transparent 52%),radial-gradient(circle at 40% 35%,var(--fr-face-light),transparent 58%);
+ box-shadow:0 0 28px var(--fr-face-shadow);
+}
+.fr-hub-page .fr-game-tile::after{
+ content:"";
+ position:absolute;
+ z-index:-1;
+ inset:9px;
+ border:1px solid var(--fr-face-frame);
+ border-radius:11px;
+ background:linear-gradient(135deg,transparent 0 45%,var(--fr-face-wash) 100%);
+ clip-path:polygon(0 0,22% 0,22% 2%,2% 2%,2% 22%,0 22%,0 0,78% 0,100% 0,100% 22%,98% 22%,98% 2%,78% 2%,78% 0,100% 78%,100% 100%,78% 100%,78% 98%,98% 98%,98% 78%,100% 78%,22% 100%,0 100%,0 78%,2% 78%,2% 98%,22% 98%);
+}
+.fr-hub-page .fr-game-tile strong,.fr-hub-page .fr-game-tile>span{position:relative;z-index:1;text-shadow:0 2px 9px rgba(0,0,0,.95)}
+.fr-hub-page .fr-game-tile strong{margin-top:26%;font-size:clamp(1.25rem,3.3vw,1.85rem);letter-spacing:.02em}
+.fr-hub-page .fr-game-tile>span:not(.fr-game-number){padding:4px 9px;border:1px solid var(--fr-face-frame);border-radius:999px;background:rgba(1,7,13,.68);font-size:clamp(.72rem,1.8vw,.92rem)}
+.fr-hub-page .fr-game-number{z-index:2;padding:3px 7px;border:1px solid var(--fr-face-frame);border-radius:6px;background:rgba(1,7,13,.7)}
+.fr-hub-page .fr-game-talash{--fr-face-core:#d9f4ff;--fr-face-glow:#38a9ed;--fr-face-light:rgba(45,160,238,.48);--fr-face-shadow:rgba(32,151,227,.35);--fr-face-frame:rgba(112,208,255,.68);--fr-face-wash:rgba(22,117,175,.19);border-color:#48b9f2!important}
+.fr-hub-page .fr-game-talash::before{border-radius:50%;background:radial-gradient(ellipse at 50% 50%,#e5f9ff 0 2%,transparent 3% 18%,#55c9ff 19% 20%,transparent 21% 34%,#55c9ff 35% 36%,transparent 37% 49%,#55c9ff 50% 51%,transparent 52%),conic-gradient(from 25deg,transparent 0 8%,rgba(85,201,255,.6) 9% 10%,transparent 11% 24%,rgba(85,201,255,.45) 25% 26%,transparent 27% 60%,rgba(85,201,255,.5) 61% 62%,transparent 63%)}
+.fr-hub-page .fr-game-gold{--fr-face-core:#fff3c3;--fr-face-glow:#e7b548;--fr-face-light:rgba(245,185,67,.52);--fr-face-shadow:rgba(224,163,45,.34);--fr-face-frame:rgba(255,220,132,.7);--fr-face-wash:rgba(193,129,28,.2);border-color:#e6bd59!important}
+.fr-hub-page .fr-game-gold::before{border-radius:42% 58% 48% 52%;transform:rotate(45deg);background:radial-gradient(circle,#fff3c3 0 3%,#e7b548 4% 8%,transparent 9% 24%),repeating-conic-gradient(from 0deg,rgba(255,219,127,.7) 0 2deg,transparent 2deg 22deg),radial-gradient(circle,transparent 0 47%,rgba(244,192,79,.8) 48% 50%,transparent 51%)}
+.fr-hub-page .fr-game-experience{--fr-face-core:#f4dfff;--fr-face-glow:#ad6cf0;--fr-face-light:rgba(158,88,231,.52);--fr-face-shadow:rgba(147,83,220,.4);--fr-face-frame:rgba(213,169,255,.72);--fr-face-wash:rgba(112,48,172,.22);border-color:#a879e7!important}
+.fr-hub-page .fr-game-experience::before{background:radial-gradient(ellipse at 50% 52%,#f4dfff 0 2%,transparent 3% 13%,#bf83ff 14% 16%,transparent 17% 28%),repeating-radial-gradient(ellipse at 50% 52%,transparent 0 10px,rgba(198,139,255,.65) 11px 12px,transparent 13px 20px);transform:rotate(-18deg)}
+.fr-hub-page .fr-game-simulation{--fr-face-core:#ffe1e5;--fr-face-glow:#e45b72;--fr-face-light:rgba(221,65,93,.5);--fr-face-shadow:rgba(219,55,86,.36);--fr-face-frame:rgba(255,150,164,.7);--fr-face-wash:rgba(166,31,54,.22);border-color:#e05c72!important}
+.fr-hub-page .fr-game-simulation::before{border-radius:50% 50% 38% 38%;background:radial-gradient(ellipse at 50% 42%,#ffe1e5 0 3%,transparent 4% 18%,rgba(255,106,128,.9) 19% 20%,transparent 21% 33%),conic-gradient(from 0deg,transparent 0 12%,rgba(255,100,123,.8) 13% 15%,transparent 16% 32%,rgba(255,100,123,.6) 33% 35%,transparent 36% 58%,rgba(255,100,123,.8) 59% 61%,transparent 62%)}
+.fr-hub-page .fr-game-tadbir{--fr-face-core:#d6ffe6;--fr-face-glow:#4acb8b;--fr-face-light:rgba(45,189,117,.48);--fr-face-shadow:rgba(41,186,112,.36);--fr-face-frame:rgba(126,239,177,.72);--fr-face-wash:rgba(17,120,70,.22);border-color:#55d795!important}
+.fr-hub-page .fr-game-tadbir::before{background:radial-gradient(circle at 50% 45%,#d6ffe6 0 3%,transparent 4% 18%),linear-gradient(60deg,transparent 47%,rgba(100,230,155,.8) 48% 49%,transparent 50%),linear-gradient(-60deg,transparent 47%,rgba(100,230,155,.8) 48% 49%,transparent 50%),radial-gradient(ellipse at 50% 80%,transparent 0 42%,rgba(100,230,155,.75) 43% 44%,transparent 45%);clip-path:polygon(50% 0,90% 25%,82% 72%,50% 100%,18% 72%,10% 25%)}
+.fr-hub-page .fr-game-tile:hover{transform:translateY(-3px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.14),inset 0 -34px 42px rgba(0,0,0,.2),0 12px 28px var(--fr-face-shadow)}
+.fr-hub-page .fr-game-tile:focus-visible{outline-color:var(--fr-face-core);outline-offset:4px}
+@media(prefers-reduced-motion:reduce){.fr-hub-page .fr-game-tile{transition:none}}

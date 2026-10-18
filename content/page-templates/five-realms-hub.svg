@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" role="img" aria-label="Five Realms cosmic landscape">
+<defs>
+ <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#020813"/><stop offset=".48" stop-color="#08243a"/><stop offset="1" stop-color="#071018"/></linearGradient>
+ <radialGradient id="nebula"><stop stop-color="#247b9a" stop-opacity=".72"/><stop offset=".55" stop-color="#342e70" stop-opacity=".28"/><stop offset="1" stop-color="#06101c" stop-opacity="0"/></radialGradient>
+ <radialGradient id="sun"><stop stop-color="#fff8d8"/><stop offset=".14" stop-color="#f4d28a"/><stop offset=".4" stop-color="#76d9f2" stop-opacity=".72"/><stop offset="1" stop-color="#1b4e87" stop-opacity="0"/></radialGradient>
+ <linearGradient id="water" x2="0" y2="1"><stop stop-color="#50c4e4" stop-opacity=".85"/><stop offset="1" stop-color="#122e49" stop-opacity=".08"/></linearGradient>
+ <linearGradient id="gold" x2="1" y2="1"><stop stop-color="#ffe6a0"/><stop offset=".5" stop-color="#cda65c"/><stop offset="1" stop-color="#4f83b5"/></linearGradient>
+ <linearGradient id="island" x2="0" y2="1"><stop stop-color="#294d59"/><stop offset="1" stop-color="#08111b"/></linearGradient>
+ <filter id="glow"><feGaussianBlur stdDeviation="9"/></filter>
+ <pattern id="stars" width="117" height="91" patternUnits="userSpaceOnUse"><circle cx="12" cy="19" r="1.2" fill="#d8f3ff" opacity=".85"/><circle cx="67" cy="42" r=".8" fill="#fff0c3" opacity=".75"/><circle cx="98" cy="8" r=".7" fill="#b4dfff"/><circle cx="40" cy="78" r=".6" fill="#fff"/></pattern>
+</defs>
+<rect width="1600" height="900" fill="url(#sky)"/><rect width="1600" height="900" fill="url(#nebula)"/><rect width="1600" height="900" fill="url(#stars)"/>
+<ellipse cx="800" cy="275" rx="470" ry="260" fill="url(#sun)" opacity=".78"/>
+<circle cx="800" cy="274" r="132" fill="#0b2c48" stroke="#70c8e8" stroke-opacity=".62" stroke-width="2"/>
+<circle cx="800" cy="274" r="113" fill="none" stroke="#e6d49d" stroke-opacity=".25"/>
+<g fill="none" stroke="url(#gold)" stroke-width="3" opacity=".78"><ellipse cx="800" cy="274" rx="360" ry="82" transform="rotate(-10 800 274)"/><ellipse cx="800" cy="274" rx="430" ry="120" transform="rotate(7 800 274)"/><ellipse cx="800" cy="274" rx="280" ry="54" transform="rotate(16 800 274)"/></g>
+<g fill="#e6d49d"><circle cx="470" cy="218" r="5"/><circle cx="1120" cy="304" r="6"/><circle cx="1020" cy="190" r="3"/></g>
+<!-- left hall and luminous arches -->
+<g stroke="#d8b66d" stroke-width="5" fill="none" opacity=".82"><path d="M0 40 Q170 -20 320 45 L320 430"/><path d="M34 95 Q166 30 280 92 L280 390"/><path d="M72 145 Q165 96 244 145 L244 365"/></g>
+<g fill="#162c37" stroke="#c9a45e" stroke-opacity=".7" stroke-width="2"><path d="M0 420 L0 210 Q90 130 155 210 L155 420Z"/><path d="M170 410 L170 260 Q220 210 270 260 L270 410Z"/></g>
+<!-- floating islands -->
+<g><path d="M110 462 L230 390 L360 435 L420 485 L356 526 L175 520Z" fill="url(#island)" stroke="#5cc5db" stroke-opacity=".6"/><path d="M170 517 L200 690 L225 690 L246 520" fill="url(#water)" opacity=".75"/><path d="M280 518 L300 645 L316 645 L325 510" fill="url(#water)" opacity=".55"/>
+<path d="M540 444 L650 374 L760 405 L808 449 L745 481 L590 480Z" fill="url(#island)" stroke="#64c6dc" stroke-opacity=".7"/><path d="M622 480 L630 610 L645 610 L658 480" fill="url(#water)"/>
+<path d="M860 445 L980 378 L1090 410 L1150 451 L1080 485 L910 481Z" fill="url(#island)" stroke="#64c6dc" stroke-opacity=".7"/><path d="M1000 482 L1010 630 L1028 630 L1042 480" fill="url(#water)"/>
+<path d="M1230 458 L1360 386 L1500 430 L1570 476 L1490 519 L1280 514Z" fill="url(#island)" stroke="#64c6dc" stroke-opacity=".6"/><path d="M1335 514 L1355 680 L1372 680 L1386 514" fill="url(#water)"/></g>
+<!-- towers -->
+<g fill="#102332" stroke="#b6d9e4" stroke-opacity=".5" stroke-width="2"><path d="M590 405 L615 335 L640 405Z"/><rect x="604" y="405" width="22" height="35"/><path d="M945 408 L970 326 L995 408Z"/><rect x="959" y="408" width="22" height="38"/><path d="M1290 425 L1314 355 L1338 425Z"/><rect x="1303" y="425" width="22" height="30"/></g>
+<!-- radiant tree -->
+<g stroke="#e5c77e" stroke-linecap="round" fill="none"><path d="M1370 418 Q1390 355 1368 310 M1378 370 Q1330 343 1328 306 M1373 348 Q1420 320 1432 282 M1368 325 Q1358 283 1378 260" stroke-width="8"/><path d="M1328 306 L1307 284 M1432 282 L1458 265 M1378 260 L1392 237" stroke-width="4"/></g>
+<g fill="#eacb78" opacity=".75" filter="url(#glow)"><circle cx="1368" cy="300" r="34"/><circle cx="1417" cy="286" r="30"/><circle cx="1335" cy="310" r="27"/></g>
+<g fill="#f3d58b"><circle cx="1368" cy="300" r="3"/><circle cx="1417" cy="286" r="3"/><circle cx="1335" cy="310" r="2.5"/><circle cx="1390" cy="251" r="2.5"/></g>
+<!-- reflective foreground and concentric rings -->
+<path d="M0 650 Q300 610 520 674 T1050 660 T1600 642 L1600 900 L0 900Z" fill="#030a12" opacity=".85"/>
+<g fill="none" stroke="url(#gold)" opacity=".68"><ellipse cx="800" cy="760" rx="730" ry="104" stroke-width="3"/><ellipse cx="800" cy="760" rx="610" ry="77" stroke-width="2"/><ellipse cx="800" cy="760" rx="470" ry="53" stroke-width="1.5"/><ellipse cx="800" cy="760" rx="310" ry="31" stroke-width="1"/></g>
+<g fill="none" stroke="#48b5d6" stroke-opacity=".22"><path d="M0 705 Q400 670 800 720 T1600 700"/><path d="M0 815 Q400 780 800 830 T1600 810"/></g>
+<circle cx="800" cy="747" r="5" fill="#fff1c5"/><circle cx="800" cy="747" r="20" fill="#f0c975" opacity=".22" filter="url(#glow)"/>
+</svg>
