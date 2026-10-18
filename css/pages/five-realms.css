@@ -25,3 +25,24 @@
 .fr-gold-page{background-color:#241506!important;background-image:linear-gradient(rgba(25,13,2,.48),rgba(28,15,2,.68)),url("../../content/bk2.jpeg")!important;background-position:center top!important;background-size:cover!important;background-repeat:no-repeat!important;background-attachment:scroll!important}
 .fr-simulation-page{background-color:#07131d!important;background-image:linear-gradient(rgba(3,12,23,.48),rgba(3,12,23,.68)),url("../../content/bk4.jpeg")!important;background-position:center top!important;background-size:cover!important;background-repeat:no-repeat!important;background-attachment:scroll!important}
 .fr-placeholder-page .fr-head p{max-width:60ch}
+
+
+/* Five Realms hub: realm-inspired cosmic artwork, preserved across screen shapes. */
+.fr-hub-page{
+ background-color:#030608!important;
+ background-image:linear-gradient(rgba(2,8,16,.42),rgba(2,8,16,.54)),url("../../content/page-templates/five-realms-hub.svg")!important;
+ background-position:center top!important;
+ background-size:cover,contain!important;
+ background-repeat:no-repeat!important;
+ background-attachment:scroll!important;
+}
+.fr-hub-page .fr-game-tile{
+ background:linear-gradient(145deg,rgba(7,20,32,.48),rgba(3,8,15,.34))!important;
+ border-color:rgba(147,204,229,.52)!important;
+ -webkit-backdrop-filter:blur(2px);
+ backdrop-filter:blur(2px);
+}
+.fr-hub-page .fr-game-tile>span:not(.fr-game-number){color:#d2e3ed}
+.fr-hub-page .fr-game-number{color:#c4d8e8}
+.fr-hub-page .fr-game-talash{box-shadow:inset 0 0 28px rgba(28,151,211,.16)}
+.fr-hub-page .fr-game-tadbir{box-shadow:inset 0 0 28px rgba(60,194,127,.15)}
