@@ -123,6 +123,34 @@
         .catch((error) => port.postMessage({ type: 'LOCAL_COGNITION_CACHE_CHECK_RESULT', error: String(error?.message || error) }));
       return;
     }
+    if (event.data?.type === 'CACHE_SITE_RESOURCES') {
+      const task = (async () => {
+        const manifest = await loadManifest();
+        const cache = await caches.open(manifest.cacheName);
+        const resources = [...new Set(Array.isArray(event.data.resources) ? event.data.resources : [])];
+        const cached = [], skipped = [], failed = [];
+        for (const resource of resources) {
+          let url;
+          try { url = new URL(resource, self.location); } catch (_) { skipped.push(resource); continue; }
+          if (url.origin !== self.location.origin || !/^https?:$/.test(url.protocol)) { skipped.push(resource); continue; }
+          const request = new Request(url.href, { method: 'GET' });
+          if (await cache.match(request).catch(() => null)) { cached.push(resource); continue; }
+          try {
+            const response = await fetch(request, { cache: 'no-store' });
+            if (!response.ok || response.type === 'opaque') throw new Error(`HTTP ${response.status}`);
+            await cache.put(request, response.clone());
+            cached.push(resource);
+          } catch (error) { failed.push({ resource, error: String(error?.message || error) }); }
+        }
+        const result = { type: 'SITE_RESOURCES_CACHE_RESULT', totalResources: resources.length, cached, skipped, failed, complete: failed.length === 0 && skipped.length === 0 };
+        if (port) port.postMessage(result);
+        report(port, { status: result.complete ? 'complete' : 'partial', packageId: 'site-sections', totalResources: resources.length, completedResources: cached.length, failedResources: failed.length, skippedResources: skipped.length });
+        return result;
+      })();
+      event.waitUntil(task);
+      task.catch((error) => { if (port) port.postMessage({ type: 'SITE_RESOURCES_CACHE_RESULT', error: String(error?.message || error), complete: false }); });
+      return;
+    }
     if (event.data?.type !== 'CACHE_LOCAL_COGNITION') return;
     const task = cachePackages(port, event.data?.packages || null);
     event.waitUntil(task);
