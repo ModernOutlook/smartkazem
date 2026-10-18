@@ -99,6 +99,49 @@ document.addEventListener('click',event=>{
 host.addEventListener('click',event=>{const button=event.target instanceof Element?event.target.closest('button'):null;if(!button||!activeKey||button.id!==manifest[activeKey].close)return;event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();close();},true);
 window.addEventListener('popstate',event=>{pendingHistoryClose=false;const route=new URLSearchParams(location.search).get('page');if(route&&manifest[route])open(route,event.state?.origin||origin,{push:false}).catch(console.error);else if(activeKey)showOrigin();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&activeKey)close();});
+async function collectSectionResources(){
+ const resources=new Set();
+ const add=value=>{if(typeof value!=='string'||!value.trim()||value.startsWith('data:')||value.startsWith('blob:')||value.startsWith('#'))return;try{const url=new URL(value,document.baseURI);if(url.origin===location.origin)resources.add(url.href);}catch(_){}};
+ const assetPattern=/(?:\.?\.?\/|\/)?[A-Za-z0-9_./%?=&-]+\.(?:avif|bmp|css|gif|html|jpe?g|js|json|m4a|mp3|ogg|otf|png|svg|ttf|webp|woff2?|wav)(?:\?[^\s"'()<>]*)?/gi;
+ const sourceFiles=new Set();
+ for(const entry of Object.values(manifest)){
+  for(const path of [entry.file,entry.catalog,...(entry.styles||[]),...(entry.scripts||[])])if(path){add(path);if(/\.(?:css|fragment|html|js|mjs|json)(?:\?|$)/i.test(path))sourceFiles.add(path);}
+ }
+ Object.values(REALM_ASSETS).forEach(add);
+ const queue=[...sourceFiles];const scanned=new Set();
+ while(queue.length){
+  const path=queue.shift();if(scanned.has(path))continue;scanned.add(path);
+  let response;try{response=await fetch(path);}catch(_){continue;}if(!response.ok)continue;
+  const type=response.headers.get('content-type')||'';
+  if(!/(?:javascript|json|css|html|text|xml)/i.test(type)&&!/\.(?:css|fragment|html|js|mjs|json)(?:\?|$)/i.test(path))continue;
+  let body;try{body=await response.text();}catch(_){continue;}
+  if(/\.css(?:\?|$)/i.test(path)||/text\/css/i.test(type)){
+   for(const match of body.matchAll(/url\(\s*['"]?([^)'"]+)['"]?\s*\)/gi))add(new URL(match[1],new URL(path,document.baseURI)).href);
+   for(const match of body.matchAll(/@import\s+(?:url\()?['"]([^'"]+)['"]/gi)){const url=new URL(match[1],new URL(path,document.baseURI));add(url.href);queue.push(url.href);}
+  }
+  for(const match of body.matchAll(assetPattern)){const value=match[0];add(new URL(value,new URL(path,document.baseURI)).href);}
+  if(/\.fragment(?:\?|$)|text\/html/i.test(path+' '+type)){
+   const attrs=/(?:src|href|poster|data-src)\s*=\s*['"]([^'"]+)['"]/gi;
+   for(const match of body.matchAll(attrs))add(new URL(match[1],new URL(path,document.baseURI)).href);
+   for(const match of body.matchAll(/srcset\s*=\s*['"]([^'"]+)['"]/gi))for(const candidate of match[1].split(','))add(new URL(candidate.trim().split(/\s+/)[0],new URL(path,document.baseURI)).href);
+  }
+ }
+ return [...resources].map(url=>new URL(url).pathname+new URL(url).search);
+}
+function requestSiteResourceCache(){
+ if(!('serviceWorker'in navigator))return;
+ const run=async()=>{
+  const worker=navigator.serviceWorker.controller||(await navigator.serviceWorker.ready).active;
+  if(!worker)return;
+  const resources=await collectSectionResources();
+  const channel=new MessageChannel();
+  channel.port1.onmessage=event=>{if(event.data?.type==='SITE_RESOURCES_CACHE_RESULT')window.dispatchEvent(new CustomEvent('site-resource-cache-complete',{detail:event.data}));};
+  worker.postMessage({type:'CACHE_SITE_RESOURCES',resources},[channel.port2]);
+ };
+ if('requestIdleCallback'in window)window.requestIdleCallback(()=>run().catch(error=>console.warn('[SharedPages] Site cache warm-up incomplete',error)),{timeout:4000});
+ else window.setTimeout(()=>run().catch(error=>console.warn('[SharedPages] Site cache warm-up incomplete',error)),1200);
+}
 window.SharedPages=Object.freeze({open,close,getActive:()=>activeKey});
+requestSiteResourceCache();
 const initial=new URLSearchParams(location.search).get('page');if(initial&&manifest[initial])open(initial,'home',{push:false}).catch(error=>console.error('[SharedPages]',error));
 })();
