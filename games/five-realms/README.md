@@ -1,4 +1,4 @@
-# بازی ۵ قلمرو — Five Realms
+# Poker Hands — بازی کارتی اقتصاد سهم
 
 The Five Realms entry is now a five-game directory in the SmartKazem shared-page runtime. The existing local hot-seat card game for 2–5 players remains preserved at the separate `five-realms-cards` route so its rules engine and Tadbir bank handoff remain available. Its question flow generates a paragraph and reference judgment through the existing Paragraph Machine recognition pipeline and default backend settings. Remaining author-owned card-game configuration decisions are documented below.
 

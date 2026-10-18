@@ -1,0 +1,6 @@
+<main class="page child-page fr-page fr-placeholder-page fr-simulation-page" lang="fa" dir="rtl" aria-labelledby="simulation-title">
+ <header class="fr-head">
+  <div><p class="fr-eyebrow">IMITATION REFERENCE · S</p><h1 id="simulation-title" data-i18n="pages.gameHub.simulation">شبیه‌سازی</h1><p data-i18n="pages.gameHub.reference">مرجع تقلید</p></div>
+  <button id="simulation-close" class="fr-close" type="button" data-i18n="labels.back" data-i18n-aria="labels.back">بازگشت</button>
+ </header>
+</main>

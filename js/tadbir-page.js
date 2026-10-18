@@ -8,13 +8,13 @@
   function render(){
     const bank=window.FiveRealmsBankMachine;
     if(!bank){
-      statusNode.textContent=t('noGame','ابتدا بازی ۵ قلمرو را آغاز کنید تا حساب بانکی بازیکن در دسترس باشد.');
+      statusNode.textContent=t('noGame','ابتدا بازی Poker Hands را آغاز کنید تا حساب بانکی بازیکن در دسترس باشد.');
       account.hidden=true;depositForm.hidden=true;withdrawButton.hidden=true;limitNode.hidden=true;returnButton.hidden=true;startButton.hidden=false;return;
     }
     const s=bank.getStatus();
     account.hidden=true;depositForm.hidden=true;withdrawButton.hidden=true;limitNode.hidden=true;returnButton.hidden=true;startButton.hidden=true;
     if(s.reason==='no-game'){
-      statusNode.textContent=t('noGame','ابتدا بازی ۵ قلمرو را آغاز کنید تا حساب بانکی بازیکن در دسترس باشد.');
+      statusNode.textContent=t('noGame','ابتدا بازی Poker Hands را آغاز کنید تا حساب بانکی بازیکن در دسترس باشد.');
       startButton.hidden=false;return;
     }
     if(s.reason==='pending-handoff'){

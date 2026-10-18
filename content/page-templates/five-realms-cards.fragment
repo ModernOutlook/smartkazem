@@ -1,6 +1,6 @@
 <main class="page child-page fr-page" lang="fa" dir="rtl" aria-labelledby="fr-title">
   <header class="fr-head">
-    <div><p class="fr-eyebrow">ECONOMY OF SHARE · C</p><h1 id="fr-title" data-i18n="pages.fiveRealms.title">بازی ۵ قلمرو</h1><p data-i18n="pages.fiveRealms.subtitle">بازی کارتی محلی برای ۲ تا ۵ بازیکن</p></div>
+    <div><p class="fr-eyebrow">POKER HANDS · C</p><h1 id="fr-title" data-i18n="pages.pokerHands.title">Poker Hands</h1><p data-i18n="pages.fiveRealms.subtitle">بازی کارتی محلی برای ۲ تا ۵ بازیکن</p></div>
     <div class="fr-head-actions"><button id="five-realms-tadbir" class="fr-close" type="button" data-tadbir-link data-i18n="pages.tadbir.title">تدبیر</button><button id="five-realms-cards-close" class="fr-close" type="button" data-i18n="labels.back" data-i18n-aria="labels.back">بازگشت</button></div>
   </header>
   <section class="fr-shell" id="five-realms-game" aria-describedby="fr-note">

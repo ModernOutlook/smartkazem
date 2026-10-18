@@ -27,6 +27,25 @@ try {
     }
 
     await page.waitForSelector('#five-realms-game #fr-start', { state: 'visible' });
+    if ((await page.locator('#fr-title').innerText()).trim() !== 'Poker Hands') {
+      fail(`${viewport.name}: card-game page title is not Poker Hands`);
+    }
+    const pokerBackground = await page.locator('.fr-page:not(.fr-hub-page)').evaluate(el => ({
+      image: getComputedStyle(el).backgroundImage,
+      repeat: getComputedStyle(el).backgroundRepeat,
+      size: getComputedStyle(el).backgroundSize,
+      overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
+    }));
+    if (!decodeURIComponent(pokerBackground.image).includes('content/bk5.jpeg')) {
+      fail(`${viewport.name}: Poker Hands does not use content/bk5.jpeg: ${JSON.stringify(pokerBackground)}`);
+    }
+    if (pokerBackground.repeat.split(',').some(value => value.trim() !== 'no-repeat') ||
+        pokerBackground.size.split(',').at(-1).trim() !== 'cover') {
+      fail(`${viewport.name}: Poker Hands background scaling/repeat is incorrect: ${JSON.stringify(pokerBackground)}`);
+    }
+    if (pokerBackground.overflow > 1) {
+      fail(`${viewport.name}: Poker Hands causes horizontal overflow: ${JSON.stringify(pokerBackground)}`);
+    }
     await page.locator('#fr-player-count').selectOption('2');
     await page.locator('[data-player-name="0"]').fill('Browser Alice');
     await page.locator('[data-player-name="1"]').fill('Browser Bob');

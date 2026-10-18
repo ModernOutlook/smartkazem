@@ -30,7 +30,27 @@ try{
   await page.waitForSelector('.fr-hub-grid .fr-game-tile');
   if(await page.locator('.fr-hub-grid .fr-game-tile').count()!==5)fail(`${viewport.name}: hub does not show exactly five game tiles`);
   if(await page.locator('[data-talash-link]').isDisabled())fail(`${viewport.name}: Talash button is disabled`);
-  if(await page.locator('.fr-game-tile:disabled').count()!==2)fail(`${viewport.name}: only the unfinished Gold and Simulation games should remain disabled`);
+  if(await page.locator('.fr-game-tile:disabled').count()!==0)fail(`${viewport.name}: one or more of the five game tiles are disabled`);
+
+  // Gold and Simulation must open their own pages with assigned backgrounds,
+  // then return to the same Five Realms hub.
+  for (const game of [
+    {selector:'[data-gold-link]', key:'gold', title:'طلا', background:'content/bk2.jpeg', close:'#gold-close', page:'.fr-gold-page'},
+    {selector:'[data-simulation-link]', key:'simulation', title:'شبیه‌سازی', background:'content/bk4.jpeg', close:'#simulation-close', page:'.fr-simulation-page'},
+  ]) {
+    await page.locator(game.selector).click();
+    await page.waitForFunction(key => window.SharedPages?.getActive()===key, game.key);
+    const gamePage = page.locator(game.page);
+    await gamePage.waitFor({state:'visible'});
+    const title = (await gamePage.locator('h1').innerText()).trim();
+    if(title!==game.title)fail(`${viewport.name}: ${game.key} page title mismatch: ${title}`);
+    const bg=await gamePage.evaluate(el=>({image:getComputedStyle(el).backgroundImage,repeat:getComputedStyle(el).backgroundRepeat,size:getComputedStyle(el).backgroundSize,overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
+    if(!decodeURIComponent(bg.image).includes(game.background))fail(`${viewport.name}: ${game.key} background mismatch: ${JSON.stringify(bg)}`);
+    if(bg.repeat.split(',').some(value=>value.trim()!=='no-repeat')||bg.size.split(',').at(-1).trim()!=='cover')fail(`${viewport.name}: ${game.key} background scaling/repeat mismatch: ${JSON.stringify(bg)}`);
+    if(bg.overflow>1)fail(`${viewport.name}: ${game.key} page has horizontal overflow: ${JSON.stringify(bg)}`);
+    await page.locator(game.close).click();
+    await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms');
+  }
 
   // The hub's Tadbir tile first opens the card-game page; its own Tadbir
   // control then opens the Tadbir page, whose start action returns to the game.
@@ -45,18 +65,40 @@ try{
   await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms-cards');
   await page.waitForSelector('#five-realms-game #fr-start');
 
-  // The Experience tile now opens the Quantum Maze directly.
-  await page.goto(`${baseURL}/index.html?page=five-realms`,{waitUntil:'domcontentloaded'});
+  // Quantum Maze is reachable only through Economy of Share → Actuality Center → game hub.
+  await page.goto(`${baseURL}/index.html`,{waitUntil:'domcontentloaded'});
   await waitForSplashToDismiss(page);
+  await clickRealmRing(page,'#realm-share',0.375);
+  await page.waitForFunction(()=>document.querySelector('#share-page')?.classList.contains('is-active'));
+  if(await page.locator('#share-actuality-center').count()!==1)fail(`${viewport.name}: Economy of Share does not expose the renamed Actuality Center action`);
+  await page.locator('#share-actuality-center').click();
+  await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms');
   await page.locator('[data-quantum-maze-link]').click();
   await page.waitForFunction(()=>window.SharedPages?.getActive()==='quantum-maze');
   await page.waitForSelector('#quantum-maze-game');
-  if(!(await page.locator('#quantum-maze-title').isVisible()))fail(`${viewport.name}: Experience tile did not open the Quantum Maze page`);
+  if(!(await page.locator('#quantum-maze-title').isVisible()))fail(`${viewport.name}: Actuality Center path did not open the Quantum Maze page`);
+  const mazeBackground=await page.locator('.qm-page').evaluate(el=>({image:getComputedStyle(el).backgroundImage,repeat:getComputedStyle(el).backgroundRepeat,size:getComputedStyle(el).backgroundSize,overflow:document.documentElement.scrollWidth-document.documentElement.clientWidth}));
+  if(!decodeURIComponent(mazeBackground.image).includes('content/bk3.jpg'))fail(`${viewport.name}: Quantum Maze does not use content/bk3.jpg as its page background: ${JSON.stringify(mazeBackground)}`);
+  if(mazeBackground.repeat.split(',').some(value=>value.trim()!=='no-repeat'))fail(`${viewport.name}: Quantum Maze background must not repeat: ${JSON.stringify(mazeBackground)}`);
+  if(mazeBackground.overflow>1)fail(`${viewport.name}: Quantum Maze causes horizontal overflow: ${JSON.stringify(mazeBackground)}`);
 
-  // The Continuity realm no longer exposes Five Realms; its Tadbir button
-  // is a direct, independent entry to the Tadbir page.
+  // A direct route is no longer a valid entry point for the maze. Use a fresh
+  // page so a prior shared-page history state cannot affect this assertion.
+  const directPage=await browser.newPage({viewport,reducedMotion:'reduce'});
+  directPage.setDefaultTimeout(7000);
+  const directErrors=[];
+  directPage.on('pageerror',error=>directErrors.push(error.message));
+  await directPage.goto(`${baseURL}/index.html?page=quantum-maze`,{waitUntil:'domcontentloaded'});
+  await waitForSplashToDismiss(directPage);
+  if(await directPage.locator('#quantum-maze-game').count()!==0||await directPage.locator('#home-page.is-active').count()!==1)fail(`${viewport.name}: Quantum Maze can still be opened outside the Actuality Center path`);
+  if(directErrors.length)fail(`${viewport.name}: direct Quantum Maze route produced browser errors: ${directErrors.join('; ')}`);
+  await directPage.close();
+
+  // Return to a fresh home shell before checking the independent Continuity route.
   await page.goto(`${baseURL}/index.html`,{waitUntil:'domcontentloaded'});
   await waitForSplashToDismiss(page);
+  // The Continuity realm no longer exposes Five Realms; its Tadbir button
+  // is a direct, independent entry to the Tadbir page.
   await clickRealmRing(page,'#realm-continuity',0.15);
   await page.waitForFunction(()=>document.querySelector('#continuity-page')?.classList.contains('is-active'));
   if(await page.locator('#continuity-five-realms').count()!==0)fail(`${viewport.name}: removed Five Realms button is still present in Continuity`);
@@ -67,20 +109,16 @@ try{
   await page.locator('#tadbir-close').click();
   await page.waitForFunction(()=>!window.SharedPages?.getActive() && document.querySelector('#continuity-page')?.classList.contains('is-active'));
 
-  // The renamed Economy of Share action opens the game directory.
-  await page.locator('#continuity-close').click();
-  await clickRealmRing(page,'#realm-share',0.375);
-  await page.waitForFunction(()=>document.querySelector('#share-page')?.classList.contains('is-active'));
-  if(await page.locator('#share-actuality-center').count()!==1)fail(`${viewport.name}: Economy of Share does not expose the renamed Actuality Center action`);
-  await page.locator('#share-actuality-center').click();
-  await page.waitForFunction(()=>window.SharedPages?.getActive()==='five-realms');
-
   if(pageErrors.length)fail(`${viewport.name}: hub/Tadbir/realm navigation page errors: ${pageErrors.join('; ')}`);
 
   const talashResponse=await page.goto(`${baseURL}/index.html?page=talash`,{waitUntil:'domcontentloaded'});
   if(!talashResponse?.ok()){fail(`${viewport.name}: Talash route HTTP ${talashResponse?.status()??'no response'}`);await page.close();continue;}
   await waitForSplashToDismiss(page);
   await page.waitForSelector('#talash-canvas');
+  const brickBreakerTitle = (await page.locator('.talash-head h1').innerText()).trim();
+  if (!['آجرشکن', 'Brick Breaker', '打砖块', 'كاسر الطوب'].includes(brickBreakerTitle)) {
+    fail(`${viewport.name}: game title was not localized as Brick Breaker: ${brickBreakerTitle}`);
+  }
   const geometry=await page.evaluate(()=>{
    const c=document.querySelector('#talash-canvas'),r=c.getBoundingClientRect();
    return {canvasWidth:r.width,canvasHeight:r.height,ratio:r.width/Math.max(1,r.height),left:r.left,right:r.right,viewport:innerWidth,docWidth:document.documentElement.scrollWidth};
@@ -105,4 +143,4 @@ try{
  }
 }finally{await browser.close();}
 if(failures.length){console.error(`Talash browser smoke failed with ${failures.length} issue(s).`);process.exit(1);}
-console.log('Talash hub, Tadbir handoff, and responsive gameplay smoke passed.');
+console.log('Talash hub, Tadbir handoff, Actuality Center → Quantum Maze, and responsive gameplay smoke passed.');

@@ -20,7 +20,6 @@ const routes = [
   { route: 'observation', realm: 'reference', asset: 'مرجع تقلید.jpg' },
   { route: 'layer3', realm: 'reference', asset: 'مرجع تقلید.jpg' },
   { route: 'zero', realm: 'structure', asset: 'ساختار تالار.jpg' },
-  { route: 'quantum-maze', realm: 'structure', asset: 'ساختار تالار.jpg' },
 ];
 const books = ['humanMachines', 'forgers', 'tabahian'];
 const paragraphModes = [
