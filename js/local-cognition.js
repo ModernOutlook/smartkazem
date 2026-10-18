@@ -6,7 +6,7 @@
 
   const copy = {
     fa: {
-      button: 'شناخت محلی', title: 'شناخت محلی', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
+      button: 'شناخت محلی', title: 'شناخت محلی', downloadTitle: 'پایش دریافت بسته‌ها', total: 'حجم کل دریافت', remaining: 'حجم باقی‌مانده', downloaded: 'دریافت‌شده', preparing: 'آماده‌سازی دریافت', downloading: 'در حال دریافت', complete: 'دریافت کامل شد', partial: 'دریافت با خطاهای جزئی پایان یافت', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
       back: 'بازگشت به لوگو', repos: 'دو مخزن هسته‌ای', knowledge: 'کتابخانه دانش ثبت‌شده', neural: 'مدل عصبی محلی', providers: 'تغذیه‌کنندگان تولید متن',
       gptMeta: 'ModernOutlook / GPT · خصوصی · dependency & model asset cache', kMeta: 'ModernOutlook / K-ZEM-MOQADDAM · خصوصی · local retrieval & runtime',
       gptText: 'مخزن دارایی‌های نسخه‌بندی‌شده، مدل‌های تأییدشده و روتر دوگانهٔ تولید متن.', kText: 'لایهٔ اجرایی شناخت محلی، بازیابی معنایی چندزبانه و قراردادهای نگهداری دانش.',
@@ -16,7 +16,7 @@
       architecture: 'بازیابی عصبی از تولید متن جداست؛ شباهت معنایی به‌تنهایی حکم حقیقت یا قضاوت نیست.'
     },
     en: {
-      button: 'local cognition', title: 'local cognition', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
+      button: 'local cognition', title: 'local cognition', downloadTitle: 'PACKAGE TRANSFER MONITOR', total: 'TOTAL TRANSFER', remaining: 'REMAINING', downloaded: 'TRANSFERRED', preparing: 'PREPARING TRANSFER', downloading: 'DOWNLOADING', complete: 'ALL PACKAGES CACHED', partial: 'COMPLETED WITH ERRORS', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
       back: 'Back to logo', repos: 'Core repositories', knowledge: 'Registered knowledge library', neural: 'Local neural model', providers: 'Text-generation providers',
       gptMeta: 'ModernOutlook / GPT · private · dependency & model asset cache', kMeta: 'ModernOutlook / K-ZEM-MOQADDAM · private · local retrieval & runtime',
       gptText: 'Version-pinned dependencies, verified model assets, and the two-slot text-generation router.', kText: 'Local cognition runtime, multilingual semantic retrieval, and the knowledge-maintenance boundary.',
@@ -26,7 +26,7 @@
       architecture: 'Neural retrieval is separate from text generation; semantic similarity alone is not truth or judgment.'
     },
     zh: {
-      button: '本地认知', title: '本地认知', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
+      button: '本地认知', title: '本地认知', downloadTitle: '下载包监控', total: '总下载量', remaining: '剩余下载量', downloaded: '已下载', preparing: '正在准备下载', downloading: '正在下载', complete: '所有软件包已缓存', partial: '下载完成，但存在错误', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
       back: '返回标志', repos: '核心仓库', knowledge: '已登记知识库', neural: '本地神经模型', providers: '文本生成提供方',
       gptMeta: 'ModernOutlook / GPT · 私有 · 依赖与模型资产缓存', kMeta: 'ModernOutlook / K-ZEM-MOQADDAM · 私有 · 本地检索与运行时',
       gptText: '保存固定版本依赖、经过验证的模型资产，以及双槽文本生成路由器。', kText: '本地认知运行时、多语言语义检索与知识维护边界。',
@@ -36,7 +36,7 @@
       architecture: '神经检索与文本生成相互独立；语义相似度本身不是事实或判断。'
     },
     ar: {
-      button: 'الإدراك المحلي', title: 'الإدراك المحلي', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
+      button: 'الإدراك المحلي', title: 'الإدراك المحلي', downloadTitle: 'مراقبة تنزيل الحزم', total: 'إجمالي حجم التنزيل', remaining: 'الحجم المتبقي', downloaded: 'تم تنزيله', preparing: 'جارٍ تجهيز التنزيل', downloading: 'جارٍ التنزيل', complete: 'اكتمل تخزين جميع الحزم', partial: 'اكتمل مع وجود أخطاء', subtitle: 'The Military Multilingual Cabinet of Reading in view of Modern Outlook',
       back: 'العودة إلى الشعار', repos: 'المستودعان الأساسيان', knowledge: 'مكتبة المعرفة المسجّلة', neural: 'النموذج العصبي المحلي', providers: 'مزودا توليد النص',
       gptMeta: 'ModernOutlook / GPT · خاص · مخزن الاعتماديات وأصول النماذج', kMeta: 'ModernOutlook / K-ZEM-MOQADDAM · خاص · الاسترجاع المحلي ووقت التشغيل',
       gptText: 'اعتماديات مثبتة الإصدار، أصول نماذج موثقة، وموجّه توليد نصي بموضعين.', kText: 'طبقة الإدراك المحلي، الاسترجاع الدلالي متعدد اللغات، وحدود صيانة المعرفة.',
@@ -49,6 +49,45 @@
 
   const getLang = () => window.SiteI18n?.getLanguage?.() || document.documentElement.lang || 'fa';
   const t = () => copy[getLang()] || copy.fa;
+  const cacheState = { latest: null };
+  const formatBytes = (value) => {
+    if (!Number.isFinite(value) || value < 0) return '—';
+    if (value < 1024) return `${value} B`;
+    const units = ['KB', 'MB', 'GB', 'TB'];
+    let amount = value / 1024, index = 0;
+    while (amount >= 1024 && index < units.length - 1) { amount /= 1024; index += 1; }
+    return `${amount.toFixed(amount >= 100 ? 0 : 1)} ${units[index]}`;
+  };
+  function loadStyles() {
+    if (document.querySelector('link[data-local-cognition-style]')) return;
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'css/local-cognition.css';
+    link.dataset.localCognitionStyle = 'true';
+    document.head.appendChild(link);
+  }
+  function updateDownloadPanel(detail) {
+    if (!detail) return;
+    cacheState.latest = detail;
+    const monitor = document.querySelector('#local-cognition-panel .local-cognition-download');
+    if (!monitor) return;
+    monitor.hidden = false;
+    const c = t(), total = Number(detail.totalBytes) || 0, downloaded = Number(detail.downloadedBytes) || 0;
+    const remaining = Number.isFinite(detail.remainingBytes) ? detail.remainingBytes : Math.max(0, total - downloaded);
+    const percent = total > 0 ? Math.min(100, Math.round(downloaded / total * 100)) : 0;
+    monitor.querySelector('[data-cache-total]').textContent = detail.unknownSizeResources
+      ? `${formatBytes(total)} + ${detail.unknownSizeResources} unknown` : formatBytes(total);
+    monitor.querySelector('[data-cache-remaining]').textContent = formatBytes(remaining);
+    monitor.querySelector('[data-cache-downloaded]').textContent = formatBytes(downloaded);
+    monitor.querySelector('[data-cache-percent]').textContent = `${percent}%`;
+    monitor.querySelector('.local-cognition-progress-fill').style.width = `${percent}%`;
+    monitor.querySelector('.local-cognition-progress-track').setAttribute('aria-valuenow', String(percent));
+    monitor.querySelector('[data-cache-status]').textContent = detail.status === 'complete' ? c.complete :
+      detail.status === 'partial' ? c.partial : detail.status === 'preparing' ? c.preparing : c.downloading;
+    monitor.querySelector('[data-cache-file]').textContent =
+      detail.currentResource ? detail.currentResource.split('/').pop() : c.preparing;
+    monitor.dataset.state = detail.status || 'downloading';
+  }
   const link = (href, label) => `<a class="local-cognition-action" href="${href}" target="_blank" rel="noopener noreferrer">${label}</a>`;
 
   function ensurePanel() {
@@ -78,6 +117,19 @@
           <button class="local-cognition-back" type="button" aria-label="${c.back}" title="${c.back}">×</button>
         </header>
         <div class="local-cognition-body">
+          <section class="local-cognition-download" aria-live="polite" hidden>
+            <div class="local-cognition-download-head">
+              <div><span class="local-cognition-download-kicker">CACHE / TELEMETRY</span><h3>${c.downloadTitle}</h3></div>
+              <strong data-cache-percent>0%</strong>
+            </div>
+            <div class="local-cognition-progress-track" role="progressbar" aria-label="${c.downloadTitle}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span class="local-cognition-progress-fill"></span></div>
+            <div class="local-cognition-download-stats">
+              <div><span>${c.total}</span><strong data-cache-total>—</strong></div>
+              <div><span>${c.remaining}</span><strong data-cache-remaining>—</strong></div>
+              <div><span>${c.downloaded}</span><strong data-cache-downloaded>—</strong></div>
+            </div>
+            <div class="local-cognition-download-foot"><span data-cache-status>${c.preparing}</span><span data-cache-file>—</span></div>
+          </section>
           <div class="local-cognition-grid">
             <article class="local-cognition-card">
               <h3>${c.repos}</h3>
@@ -124,6 +176,7 @@
         </div>
       </div>`;
     panel.querySelector('.local-cognition-back').addEventListener('click', close);
+    if (cacheState.latest) updateDownloadPanel(cacheState.latest);
   }
 
   function open() {
@@ -147,6 +200,14 @@
 
   function init() {
     logoViewer.dataset.localCognitionReady = 'true';
+    loadStyles();
+    document.addEventListener('local-cognition-cache-progress', (event) => updateDownloadPanel(event.detail));
+    document.addEventListener('local-cognition-cache-result', (event) => updateDownloadPanel({
+      ...event.detail, status: event.detail.error || event.detail.failed?.length ? 'partial' : 'complete'
+    }));
+    navigator.serviceWorker?.addEventListener('message', (event) => {
+      if (event.data?.type === 'LOCAL_COGNITION_CACHE_PROGRESS') updateDownloadPanel(event.data);
+    });
     const logoArt = logoViewer.querySelector('.logo-art');
     const inventory = logoViewer.querySelector('.inventory-link');
     if (!logoArt || !inventory) return;
