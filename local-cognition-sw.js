@@ -49,7 +49,10 @@
     for (const item of entries) {
       if (item.cached) continue;
       try {
-        const response = await fetch(item.request, { cache: 'no-store' });
+        const response = await fetch(item.request, { cache: 'no-store' }).catch(async (error) => {
+          if (new URL(item.request.url).origin === self.location.origin) throw error;
+          return fetch(new Request(item.request.url, { mode: 'no-cors' }), { cache: 'no-store' });
+        });
         if (!response.ok && response.type !== 'opaque') throw new Error(`HTTP ${response.status}`);
         if (item.size === null) {
           const discovered = Number(response.headers.get('content-length'));
