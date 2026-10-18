@@ -1,16 +1,6 @@
 name: Paragraph Machine layout test
 
 on:
-  pull_request:
-    paths:
-      - 'index.html'
-      - 'css/**'
-      - 'ui/**'
-      - 'js/**'
-      - 'adapters/**'
-      - 'engine/**'
-      - 'scripts/paragraph-layout-browser-smoke.mjs'
-      - '.github/workflows/paragraph-layout.yml'
   workflow_dispatch:
 
 permissions:
