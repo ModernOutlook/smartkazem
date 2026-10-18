@@ -80,6 +80,29 @@
     return bufferToHex(await crypto.subtle.digest('SHA-256', data));
   }
 
+  async function warmOfflineCache() {
+    try {
+      if (navigator.storage?.persist) await navigator.storage.persist().catch(() => false);
+      if (!('serviceWorker' in navigator)) return null;
+
+      const registration = await navigator.serviceWorker.ready;
+      const worker = registration.active || navigator.serviceWorker.controller;
+      if (!worker) return null;
+
+      return await new Promise((resolve) => {
+        const channel = new MessageChannel();
+        const timeout = window.setTimeout(() => resolve(null), 30000);
+        channel.port1.onmessage = (event) => {
+          window.clearTimeout(timeout);
+          resolve(event.data || null);
+        };
+        worker.postMessage({ type: 'CACHE_LOCAL_COGNITION' }, [channel.port2]);
+      });
+    } catch (_) {
+      return null;
+    }
+  }
+
   function removeDialog() {
     activeDialog?.remove();
     activeDialog = null;
@@ -134,6 +157,7 @@
         }
         unlocked = true;
         removeDialog();
+        void warmOfflineCache();
         logoViewer.querySelector('.local-cognition-trigger')?.click();
       } catch (_) {
         error.textContent = c.invalid;
