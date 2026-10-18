@@ -23,11 +23,14 @@
       return response.ok && Number.isFinite(size) && size >= 0 ? size : null;
     } catch (_) { return null; }
   }
-  async function cachePackages(port) {
+  async function cachePackages(port, packageIds = null) {
     const manifest = await loadManifest();
     const cache = await caches.open(manifest.cacheName);
+    const selected = Array.isArray(packageIds) && packageIds.length
+      ? manifest.packages.filter((pkg) => packageIds.includes(pkg.id))
+      : manifest.packages;
     const declaredSizes = manifest.resourceSizes || {};
-    const resources = [...new Set(manifest.packages.flatMap((pkg) => pkg.resources || []))];
+    const resources = [...new Set(selected.flatMap((pkg) => pkg.resources || []))];
     report(port, { status: 'preparing', totalBytes: 0, downloadedBytes: 0, remainingBytes: 0, completedResources: 0, totalResources: resources.length, unknownSizeResources: resources.length });
     const entries = await Promise.all(resources.map(async (resource) => {
       const url = new URL(resource, self.location).toString();
@@ -46,7 +49,6 @@
       completedResources, totalResources: entries.length, unknownSizeResources
     });
     report(port, snapshot('downloading'));
-
     for (const item of entries) {
       if (item.cached) continue;
       try {
@@ -108,15 +110,8 @@
       return { id: pkg.id, required: pkg.required, totalResources: pkg.resources.length, missingResources: missing };
     }));
     const missingResources = [...new Set(checked.flatMap((pkg) => pkg.missingResources))];
-    return {
-      cacheName: manifest.cacheName,
-      ready: missingResources.length === 0,
-      packages: checked,
-      missingResources,
-      missingCount: missingResources.length
-    };
+    return { cacheName: manifest.cacheName, ready: missingResources.length === 0, packages: checked, missingResources, missingCount: missingResources.length };
   }
-
   self.addEventListener('install', () => self.skipWaiting());
   self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));
   self.addEventListener('message', (event) => {
@@ -129,7 +124,7 @@
       return;
     }
     if (event.data?.type !== 'CACHE_LOCAL_COGNITION') return;
-    const task = cachePackages(port);
+    const task = cachePackages(port, event.data?.packages || null);
     event.waitUntil(task);
     if (port) task.then((result) => port.postMessage({ type: 'LOCAL_COGNITION_CACHE_RESULT', ...result }))
       .catch((error) => port.postMessage({ type: 'LOCAL_COGNITION_CACHE_RESULT', error: String(error?.message || error) }));
@@ -144,8 +139,7 @@
       if (cached) return cached;
       try {
         const response = await fetch(event.request);
-        if (cache && response.ok && event.request.url.startsWith(self.location.origin))
-          cache.put(event.request, response.clone()).catch(() => {});
+        if (cache && response.ok && event.request.url.startsWith(self.location.origin)) cache.put(event.request, response.clone()).catch(() => {});
         return response;
       } catch (error) {
         if (cache && event.request.mode === 'navigate') {
