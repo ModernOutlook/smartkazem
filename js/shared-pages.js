@@ -113,6 +113,7 @@ async function collectSectionResources(){
   }catch(_){}
  };
  add('index.html');
+ add('local-cognition-package-manifest.json');
  document.querySelectorAll('link[rel="stylesheet"],link[rel="preload"],script[src],img[src],source[src],audio[src],video[src],video[poster],iframe[src]').forEach(node=>{
   for(const attr of ['href','src','poster'])if(node.hasAttribute(attr))add(node.getAttribute(attr));
   if(node.hasAttribute('srcset'))for(const candidate of node.getAttribute('srcset').split(','))add(candidate.trim().split(/\s+/)[0]);
