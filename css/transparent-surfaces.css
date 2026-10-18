@@ -1,0 +1,82 @@
+/*
+ * Site-wide translucent presentation layer.
+ * Presentation only: preserve layout, interaction, language and accessibility contracts.
+ */
+:root {
+  --glass: rgba(4, 10, 18, .18);
+  --sk-surface: rgba(255, 255, 255, .055);
+  --sk-surface-strong: rgba(255, 255, 255, .10);
+  --sk-border: rgba(225, 241, 255, .28);
+}
+
+/* Let each page's artwork remain visible beneath shared interface surfaces. */
+.app {
+  background-color: transparent;
+  background-image: none;
+}
+.app::before {
+  background:
+    radial-gradient(circle at 50% 44%, rgba(5, 50, 82, .16) 0%, rgba(2, 20, 34, .08) 28%, transparent 52%),
+    radial-gradient(circle at 50% 50%, transparent 50%, rgba(0, 0, 0, .16) 79%);
+}
+.app::after {
+  background:
+    radial-gradient(circle at 50% 42%, transparent 35%, rgba(0, 0, 0, .035) 61%, rgba(0, 0, 0, .14) 100%),
+    linear-gradient(180deg, rgba(0, 0, 0, .035), transparent 22%, transparent 78%, rgba(0, 0, 0, .08));
+}
+
+/* Shared controls */
+:where(
+  button, input, textarea, select, .btn, .icon-btn, .realm-action,
+  .book-tab, .book-close, .book-lang-switch, .lang-switch,
+  .global-lang, .observation25-close, .possible-mirror-close,
+  .paragraph-head button, .pm-controls button, .pm-settings-body button
+) {
+  background-color: rgba(8, 17, 28, .16);
+  border-color: rgba(225, 241, 255, .30);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+:where(
+  button, .btn, .icon-btn, .realm-action, .book-tab,
+  .book-close, .observation25-close, .possible-mirror-close
+):hover {
+  background-color: rgba(90, 170, 220, .18);
+}
+
+/* Cards, readers, dialogs and machine/game workspaces */
+:where(
+  .info, .realm-info, .panel, .card, .pm-card, .pm-input-panel,
+  .pm-output, .pm-settings, .pm-error, .paragraph-context,
+  .paragraph-connection, .book-shell, .book-tabs, .book-body,
+  .book-head, .child-page .shell, .child-page .reader,
+  .child-page .visual, .child-page .controls, .child-page .side,
+  .observation25-shell, .possible-mirror-shell, .game-panel,
+  .game-card, .inventory-card, .local-cognition-cache-progress
+) {
+  background-color: rgba(4, 12, 20, .12);
+  border-color: rgba(225, 241, 255, .22);
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+}
+
+/* Keep dense reading areas lightly tinted for contrast, not opaque. */
+:where(.book-body, .pm-output, .pm-input-panel, .child-page .reader) {
+  background-color: rgba(2, 8, 14, .16);
+}
+
+/* Preserve focus visibility over detailed artwork. */
+:where(button, input, textarea, select, a, [tabindex]):focus-visible {
+  outline-color: #ffe59a;
+  outline-offset: 3px;
+}
+
+/* Honor an explicit reduced-transparency preference without forcing opaque UI
+   on everyone else. */
+@media (prefers-reduced-transparency: reduce) {
+  :where(.lang-switch, .global-lang, .realm-action, .btn, .book-tab) {
+    background-color: rgba(8, 13, 19, .88);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
