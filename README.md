@@ -344,6 +344,8 @@ A browser-side API key is not a server-side secret. Never commit keys, tokens, p
 
 ### Explicit approval policy for tests and merges (mandatory)
 
+**Scope:** This rule applies to every ModernOutlook-owned/maintained repository, all website surfaces, and all associated workflows—not only SmartKazem.
+
 - **Only the Site quality gate (`quality.yml`) and Security gate (`security.yml`) may run automatically** on pushes to `main` and pull requests.
 - **Every other test suite is opt-in.** Browser/UI smoke tests, responsive and screenshot matrices, Paragraph Machine layout tests, and any other test workflow must not start automatically on a push, pull request, merge, or unrelated workflow. Run them only after the user explicitly requests that specific test or suite. Their GitHub Actions trigger must be manual (`workflow_dispatch`) unless the user explicitly authorizes a different trigger.
 - Do not interpret opening a PR, asking for a code change, or asking to prepare a merge as permission to run optional tests. If optional testing would be useful, ask first and wait.
