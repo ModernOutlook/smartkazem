@@ -57,7 +57,9 @@
   function mountShared(root, route) {
     const cover = SHARED_COVERS[route];
     if (!cover) return null;
-    const target = root.querySelector(SHARED_COVER_TARGETS[route] || '') || root;\n    return mount(root, cover[0], activeTitle(root, cover[1]), target);
+    const targetSelector = SHARED_COVER_TARGETS[route];
+    const target = (targetSelector ? root.querySelector(targetSelector) : null) || root;
+    return mount(root, cover[0], activeTitle(root, cover[1]), target);
   }
 
   function mountBook(root, kind, title, target) {
