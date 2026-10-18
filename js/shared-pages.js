@@ -106,11 +106,11 @@ async function collectSectionResources(){
  add('index.html');
  document.querySelectorAll('link[rel="stylesheet"],link[rel="preload"],script[src],img[src],source[src],audio[src],video[poster]').forEach(node=>{
   for(const attr of ['href','src','poster'])if(node.hasAttribute(attr))add(node.getAttribute(attr));
-  if(node.hasAttribute('srcset'))for(const candidate of node.getAttribute('srcset').split(','))add(candidate.trim().split(/\\s+/)[0]);
+  if(node.hasAttribute('srcset'))for(const candidate of node.getAttribute('srcset').split(','))add(candidate.trim().split(/\s+/)[0]);
  });
  document.querySelectorAll('style,[style]').forEach(node=>{
   const css=node.textContent+' '+(node.getAttribute('style')||'');
-  for(const match of css.matchAll(/url\\(\\s*['"]?([^)'" ]+)['"]?\\s*\\)/gi))add(match[1]);
+  for(const match of css.matchAll(/url\(\s*['"]?([^)'" ]+)['"]?\s*\)/gi))add(match[1]);
  });
  const sourceFiles=new Set(['index.html']);
 
