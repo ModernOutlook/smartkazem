@@ -1,4 +1,4 @@
-# تلاش — Talash
+# آجرشکن — Brick Breaker
 
 A dependency-free browser game for SmartKazem using an ES module, Canvas, and a local simulation loop.
 

@@ -95,6 +95,10 @@ try{
   if(!talashResponse?.ok()){fail(`${viewport.name}: Talash route HTTP ${talashResponse?.status()??'no response'}`);await page.close();continue;}
   await waitForSplashToDismiss(page);
   await page.waitForSelector('#talash-canvas');
+  const brickBreakerTitle = (await page.locator('.talash-head h1').innerText()).trim();
+  if (!['آجرشکن', 'Brick Breaker', '打砖块', 'كاسر الطوب'].includes(brickBreakerTitle)) {
+    fail(`${viewport.name}: game title was not localized as Brick Breaker: ${brickBreakerTitle}`);
+  }
   const geometry=await page.evaluate(()=>{
    const c=document.querySelector('#talash-canvas'),r=c.getBoundingClientRect();
    return {canvasWidth:r.width,canvasHeight:r.height,ratio:r.width/Math.max(1,r.height),left:r.left,right:r.right,viewport:innerWidth,docWidth:document.documentElement.scrollWidth};

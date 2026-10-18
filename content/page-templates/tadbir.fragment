@@ -1,6 +1,6 @@
 <main class="page child-page tadbir-page" lang="fa" dir="rtl" aria-labelledby="tadbir-title">
   <header class="tadbir-head">
-    <div><p class="tadbir-eyebrow">CONTINUITY OF THE UNIVERSE · T</p><h1 id="tadbir-title" data-i18n="pages.tadbir.title">تدبیر</h1><p data-i18n="pages.tadbir.subtitle">ماشین سپرده‌گذاری و برداشت بانک بازی ۵ قلمرو</p></div>
+    <div><p class="tadbir-eyebrow">CONTINUITY OF THE UNIVERSE · T</p><h1 id="tadbir-title" data-i18n="pages.tadbir.title">تدبیر</h1><p data-i18n="pages.tadbir.subtitle">ماشین سپرده‌گذاری و برداشت بانک بازی Poker Hands</p></div>
     <button id="tadbir-close" class="tadbir-button" type="button" data-i18n="labels.back" data-i18n-aria="labels.back">بازگشت</button>
   </header>
   <section class="tadbir-shell">
@@ -22,7 +22,7 @@
       <div class="tadbir-actions">
         <button id="tadbir-withdraw" class="tadbir-primary" type="button" data-i18n="pages.tadbir.withdraw" hidden>برداشت</button>
         <button id="tadbir-return-game" class="tadbir-button" type="button" data-i18n="pages.tadbir.returnToGame" hidden>بازگشت به بازی</button>
-        <button id="tadbir-start-game" class="tadbir-primary" type="button" data-i18n="pages.tadbir.startGame" hidden>ورود به بازی ۵ قلمرو</button>
+        <button id="tadbir-start-game" class="tadbir-primary" type="button" data-i18n="pages.tadbir.startGame" hidden>ورود به بازی Poker Hands</button>
       </div>
       <p id="tadbir-message" class="tadbir-message" aria-live="polite"></p>
     </section>
