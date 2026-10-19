@@ -30,7 +30,11 @@ const elements={
  base:document.getElementById('paragraph-base-url'),
  model:document.getElementById('paragraph-model'),
  choices:[...document.querySelectorAll('.pm-realm-choice')],
- popover:document.getElementById('pm-judgment-popover')
+ popover:document.getElementById('pm-judgment-popover'),
+ smartbotDetailsButton:document.getElementById('paragraph-smartbot-details'),
+ detailsPanel:document.getElementById('pm-judgment-details'),
+ detailsContent:document.getElementById('pm-judgment-details-content'),
+ detailsClose:document.getElementById('pm-judgment-details-close')
 };
 let entryMode=ENTRY_MODES.EXPERIENCE,currentResults=[];
 let judgmentReturnFocus=null;
@@ -134,6 +138,51 @@ async function generateExperience(){
  const evaluated=await Promise.all(generated.map(p=>window.ParagraphWorkspaceAdapter.evaluateText(p.text,lang)));
  return generated.map((p,i)=>({...p,judgment:evaluated[i].judgment,normative:evaluated[i].normative,displayedText:p.text}));
 }
+const DETAILS_TEXT=Object.freeze({
+ fa:{title:'نتیجه و دلیل داوری',close:'بستن',pending:'هنوز نتیجه‌ای برای نمایش وجود ندارد. ابتدا بازشناسی را کامل کنید.',empty:'نتیجهٔ داوری در دسترس نیست.',concept:'داوری مفهومی',reason:'دلیل داوری',normative:'جهت هنجاری',rationale:'دلیل جهت هنجاری',evidence:'شاهد متنی',status:{ok:'مطابق',warn:'مبهم',bad:'متناقض'},direction:{nobler:'جهت نیک‌تر',harmful:'جهت زیان‌بار',mixed:'ترکیبی',indeterminate:'نامعین'}},
+ en:{title:'Judgment result and reasons',close:'Close',pending:'There is no result to show yet. Complete recognition first.',empty:'Judgment result is unavailable.',concept:'Conceptual judgment',reason:'Reason for judgment',normative:'Normative direction',rationale:'Normative rationale',evidence:'Textual evidence',status:{ok:'Consistent',warn:'Ambiguous',bad:'Contradictory'},direction:{nobler:'Nobler direction',harmful:'Harmful direction',mixed:'Mixed',indeterminate:'Indeterminate'}},
+ zh:{title:'判断结果与理由',close:'关闭',pending:'目前没有可显示的结果。请先完成识别。',empty:'判断结果不可用。',concept:'概念判断',reason:'判断理由',normative:'规范方向',rationale:'规范理由',evidence:'文本证据',status:{ok:'一致',warn:'模糊',bad:'矛盾'},direction:{nobler:'更优方向',harmful:'有害方向',mixed:'混合',indeterminate:'不确定'}},
+ ar:{title:'نتيجة الحكم وأسبابه',close:'إغلاق',pending:'لا توجد نتيجة للعرض بعد. أكمل التعرّف أولاً.',empty:'نتيجة الحكم غير متاحة.',concept:'الحكم المفاهيمي',reason:'سبب الحكم',normative:'الاتجاه المعياري',rationale:'التعليل المعياري',evidence:'الدليل النصي',status:{ok:'متوافق',warn:'ملتبس',bad:'متناقض'},direction:{nobler:'الاتجاه الأفضل',harmful:'الاتجاه الضار',mixed:'مختلط',indeterminate:'غير محدد'}}
+});
+function appendDetailText(parent,tag,className,text){
+ const node=document.createElement(tag);if(className)node.className=className;node.textContent=String(text??'');parent.append(node);return node;
+}
+function openJudgmentDetails(){
+ const lang=getLanguage(),labels=DETAILS_TEXT[lang]||DETAILS_TEXT.fa;
+ const panel=elements.detailsPanel,button=elements.smartbotDetailsButton;
+ panel.querySelector('#pm-judgment-details-title').textContent=labels.title;
+ elements.detailsClose.setAttribute('aria-label',labels.close);
+ const content=elements.detailsContent;content.replaceChildren();
+ if(!currentResults.length){
+  appendDetailText(content,'p','pm-details-empty',labels.pending);
+ }else{
+  currentResults.forEach((result,index)=>{
+   const article=appendDetailText(content,'article','pm-details-result','');
+   appendDetailText(article,'h4','pm-details-paragraph-title',currentResults.length>1?String(index+1):labels.concept);
+   const judgment=result?.judgment||{};
+   DOMAIN_ORDER.forEach(domain=>{
+    const item=judgment[domain];if(!item)return;
+    const card=appendDetailText(article,'section','pm-details-domain pm-details-'+(item.status||'unknown'),'');
+    const realm=REALM_LABELS[lang]?.[domain]||REALM_LABELS.fa[domain];
+    appendDetailText(card,'h5','pm-details-domain-title',realm+' — '+(labels.status[item.status]||item.status||labels.empty));
+    appendDetailText(card,'p','pm-details-reason-label',labels.reason);
+    appendDetailText(card,'p','pm-details-reason',item.reason||labels.empty);
+    const normative=result?.normative?.[domain];
+    if(normative){
+     appendDetailText(card,'p','pm-details-normative-title',labels.normative+': '+(labels.direction[normative.direction]||normative.direction||labels.empty));
+     appendDetailText(card,'p','pm-details-rationale',normative.rationale||labels.empty);
+     appendDetailText(card,'p','pm-details-evidence-label',labels.evidence);
+     appendDetailText(card,'blockquote','pm-details-evidence',normative.evidence||labels.empty);
+    }
+   });
+  });
+ }
+ panel.hidden=false;button.setAttribute('aria-expanded','true');elements.detailsClose.focus({preventScroll:true});
+}
+function closeJudgmentDetails({restoreFocus=false}={}){
+ elements.detailsPanel.hidden=true;elements.smartbotDetailsButton.setAttribute('aria-expanded','false');
+ if(restoreFocus)elements.smartbotDetailsButton.focus({preventScroll:true});
+}
 function closeJudgmentPopover({restoreFocus=false}={}){
  elements.choices.forEach(choice=>choice.setAttribute('aria-expanded','false'));
  elements.popover.hidden=true;elements.popover.replaceChildren();
@@ -181,6 +230,10 @@ async function run(){
  finally{updateActionState()}
 }
 elements.action.addEventListener('click',run);
+elements.smartbotDetailsButton.addEventListener('click',openJudgmentDetails);
+elements.detailsClose.addEventListener('click',()=>closeJudgmentDetails({restoreFocus:true}));
+elements.detailsPanel.addEventListener('click',event=>{if(event.target===elements.detailsPanel)closeJudgmentDetails({restoreFocus:true})});
+document.addEventListener('keydown',event=>{if(!elements.detailsPanel.hidden&&event.key==='Escape'){event.preventDefault();closeJudgmentDetails({restoreFocus:true})}});
 elements.choices.forEach(c=>c.addEventListener('click',e=>{e.stopPropagation();if(entryMode===ENTRY_MODES.EXPERIENCE)openJudgmentPopover(c)}));
 elements.input.addEventListener('input',()=>{if(entryMode===ENTRY_MODES.REFERENCE){elements.input.classList.remove('pm-user-correct','pm-user-incorrect');updateActionState()}});
 document.addEventListener('click',e=>{if(elements.popover.hidden)return;if(!elements.popover.contains(e.target)&&!e.target.closest('.pm-realm-choice'))closeJudgmentPopover({restoreFocus:true})});

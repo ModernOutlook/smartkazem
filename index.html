@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="ui/mobile/mobile.css">
 <link rel="stylesheet" href="css/desktop.css">
 <link rel="stylesheet" href="css/paragraph-connection.css">
+<link rel="stylesheet" href="css/paragraph-judgment-details.css">
 <link rel="stylesheet" href="css/home-realm-info.css">
 <link rel="stylesheet" href="css/transparent-surfaces.css">
 <script src="ui/bootstrap.js" defer></script>
@@ -214,9 +215,18 @@
 
       <section class="pm-recognition-stage" aria-label="قضاوت قلمروها" data-i18n-aria="paragraphMachine.realms">
         <div class="pm-smartbot">
-          <img src="engine/smartbot.png" alt="SmartBot" loading="lazy" decoding="async">
+          <button id="paragraph-smartbot-details" class="pm-smartbot-image-button" type="button" aria-haspopup="dialog" aria-controls="pm-judgment-details" aria-expanded="false" aria-label="نمایش نتیجه و دلیل داوری">
+            <img src="engine/smartbot.png" alt="SmartBot" loading="lazy" decoding="async">
+          </button>
           <button id="paragraph-recognize" type="button" data-i18n="paragraphMachine.recognize">بازشناسی</button>
         </div>
+        <section id="pm-judgment-details" class="pm-judgment-details" role="dialog" aria-modal="false" aria-labelledby="pm-judgment-details-title" hidden>
+          <header class="pm-judgment-details-head">
+            <h3 id="pm-judgment-details-title">نتیجه و دلیل داوری</h3>
+            <button id="pm-judgment-details-close" type="button" aria-label="بستن">×</button>
+          </header>
+          <div id="pm-judgment-details-content" aria-live="polite"></div>
+        </section>
 
         <div class="pm-realm-choices" role="group" aria-label="پنج قلمرو" data-i18n-aria="paragraphMachine.realms">
           <button class="pm-realm-choice realm-structure" type="button" data-domain="S" aria-label="ساختار تالار" data-i18n-aria="paragraphMachine.realmS" aria-haspopup="dialog" aria-expanded="false">
