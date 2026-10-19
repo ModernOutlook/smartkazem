@@ -15,6 +15,7 @@ This is a staged maintenance plan, not authorization for a rewrite. The README i
 - Removed the `window.__referenceOpenTimer` compatibility global; the reference-open debounce timer is now private to `js/app.js`.
 - Removed the unused `window.__structureOpenTimer` clear operation from `js/pages.js`; repository search found no corresponding writer.
 - Expanded compressed one-line helpers in `js/pages.js` into the repository's multi-line style.
+- Expanded the compressed `routeKey` helper in `js/shared-pages.js` into readable multi-line form; its route normalization and alias fallback logic are unchanged.
 - Per the requested low-processing approach, no broad test suite or browser suite was run. These changes are narrow; runtime verification remains outstanding.
 
 ## Staged work
