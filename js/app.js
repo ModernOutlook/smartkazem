@@ -17,6 +17,7 @@
   });
 
   let lastSelectionAt = 0;
+  let referenceOpenTimer = null;
   const SECONDARY_RETURN_KEY = 'smartkazem.secondaryReturn';
 
   const realms = [...document.querySelectorAll('.realm')];
@@ -46,8 +47,8 @@
   }
 
   if (id === 'reference') {
-    window.clearTimeout(window.__referenceOpenTimer);
-    window.__referenceOpenTimer = window.setTimeout(PageNavigation.openReference, 220);
+    window.clearTimeout(referenceOpenTimer);
+    referenceOpenTimer = window.setTimeout(PageNavigation.openReference, 220);
   }
 }
 
