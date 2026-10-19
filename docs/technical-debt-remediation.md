@@ -28,6 +28,7 @@ This is a staged maintenance plan, not authorization for a rewrite. The README i
 - Added targeted translation-boundary regression coverage for empty Persian translations, mismatched batch counts, empty batch items, upstream failures, and the Persian pass-through path; wired it into the existing quality workflow. No fallback behavior was changed before adding these tests.
 - The new translation-boundary test has not yet been executed in this environment; the targeted CI step will report its result.
 - CSS stage 5: repaired one malformed mobile media-query rule in `css/site.css` by separating `.structure-column` and `.icon-btn` declarations. This restores the intended independent selectors without moving rules or changing the cascade elsewhere. Visual verification across mobile/desktop and RTL/LTR is still outstanding.
+- Browser-smoke stage 6: audited the existing manual Playwright workflow and its concise UI script. The script already checks HTML entry points, three viewport sizes, runtime exceptions, and switching across `fa`, `en`, `zh`, and `ar`; it now also reports same-origin non-HTML asset responses with HTTP errors. The workflow remains manually dispatched because its pinned browser bundle/download path is intentionally gated. This change has not been executed in a browser in this environment.
 
 ## Staged work
 
