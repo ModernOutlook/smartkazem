@@ -32,7 +32,14 @@ if(!host||!app)return;
 const roots=new Map(),loadedScripts=new Set(),styleLinks=new Map();
 let activeKey=null,activeContainer=null,origin='home',pendingHistoryClose=false;
 const aliases={'philosophical-treatise':'treatise','observation-25':'observation25','possible-mirror':'possibleMirror','emergence-2':'emergence2','echo-layer3':'layer3','disturbed-manifesto':'disturbedManifesto'};
-function routeKey(route){const name=String(route||'').split('/').pop().replace(/\.html(?:\?.*)?$/,'');return manifest[name]?name:aliases[name]||null;}
+function routeKey(route) {
+  const name = String(route || '')
+    .split('/')
+    .pop()
+    .replace(/\.html(?:\?.*)?$/, '');
+
+  return manifest[name] ? name : aliases[name] || null;
+}
 function setMeta(name,value){let n=document.querySelector('meta[name="'+name+'"]');if(!n){n=document.createElement('meta');n.name=name;document.head.appendChild(n);}if(value)n.content=value;else n.remove();}
 function syncStyles(key){for(const [name,links] of styleLinks)links.forEach(link=>link.disabled=name!==key);}
 async function ensureStyles(key){if(styleLinks.has(key))return;const links=[];for(const href of manifest[key].styles||[]){const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.dataset.sharedPageStyle=key;link.disabled=false;document.head.appendChild(link);links.push(link);}styleLinks.set(key,links);await Promise.all(links.map(link=>link.sheet?Promise.resolve():new Promise(resolve=>{link.addEventListener('load',resolve,{once:true});link.addEventListener('error',resolve,{once:true});})));}
