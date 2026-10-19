@@ -1,0 +1,5 @@
+# Static assets and generated/vendor content are not formatter targets.
+css/site.css
+node_modules/
+.git/
+artifacts/
