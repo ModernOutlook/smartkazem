@@ -3,6 +3,8 @@ SmartKazem — README Logic & Algorithms (Condensed, No Omission)
 
 ---
 
+Technical debt remediation is tracked in [docs/technical-debt-remediation.md](docs/technical-debt-remediation.md). This is a staged maintenance plan; it does not authorize a broad rewrite or bypass the invariants below.
+
 1. Base Rules
 
 Minimal responsible change; inspect owning HTML/controller/content-service/CSS/i18n first; no unrelated refactor; no new framework/router/state manager/build system/dependency without proven need; separation of content / business rules / services / adapters / controllers / presentation; shared-code change ⇒ audit all callers; preserve 4 languages, RTL/LTR, accessibility, responsiveness, and public contracts.
