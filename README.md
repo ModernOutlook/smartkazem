@@ -56,6 +56,20 @@ Every surface that displays playing cards must use the same mapped image assets 
 
 `بازشناسی` and `هم‌سنگی` are two modes of the same shared Paragraph Machine workspace. No legacy Paragraph Machine surface is maintained.
 
+### Gold jewel charge mechanism — change authority
+
+The Gold page (`?page=gold`) contains a progressive golden-jewel charge mechanism associated with successful Paragraph Machine model connections and the complete paragraph-generation-and-judgment cycle.
+
+**Single source of authority for changing the mechanism's determining rules:** `docs/paragraph-machine-philosophical-judgment.md`.
+
+- Change the charge mechanism's determining logic only when the user changes the canonical judgment guide and that change directly affects the defined paragraph-generation/judgment process or its duration.
+- Do not change the mechanism's rules merely because network quality, model/provider, connection settings, response latency, page design, UI behavior, or unrelated site code changes.
+- Runtime observations such as the measured duration of a completed generation-and-judgment cycle may be recorded as measurements; they do not authorize a new rule or an independent redesign of the mechanism.
+- Keep the mechanism's established capacity (0–3600), visual-stage contract (72 stages), and charge behavior unchanged unless a change to the judgment guide directly requires a corresponding change.
+- If a guide change is ambiguous about whether or how it affects charging, do not infer a new rule. Explain the ambiguity and ask the user before changing the mechanism.
+- Keep the judgment guide and this README aligned when the user authorizes a guide-driven change. Do not silently modify the guide to justify a mechanism change.
+- This policy documents authority; it does not itself authorize merging a pull request. Merge only after the user explicitly approves it.
+
 ### Philosophical judgment contract
 
 The canonical operational specification is [`docs/paragraph-machine-philosophical-judgment.md`](docs/paragraph-machine-philosophical-judgment.md). The Persian criteria embedded in `engine/paragraph-engine.js` are the runtime source of truth; the document defines the expanded reasoning protocol and acceptance checklist. Keep them synchronized and update `tests/paragraph-machine.test.js` whenever criterion IDs or counts change.
