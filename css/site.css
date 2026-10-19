@@ -1009,3 +1009,83 @@ html[dir="rtl"] .home-page > .info {
 
 
 .observation25-page,.observation25-body,.possible-mirror-page,.possible-mirror-body,.book-body{overflow-anchor:none}
+
+
+/* Share Economy: present its book destinations as a compact, scrollable tab strip.
+   Keep the game/directory entry in the same strip without letting the actions
+   consume the lower half of the realm page or overflow on narrow screens. */
+.share-page .share-actions {
+  position: absolute;
+  z-index: 12;
+  left: max(12px, env(safe-area-inset-left, 0px));
+  right: max(12px, env(safe-area-inset-right, 0px));
+  bottom: max(5%, env(safe-area-inset-bottom, 0px));
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-start;
+  gap: 6px;
+  width: auto;
+  max-width: none;
+  padding: 7px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  border: 1px solid rgba(113, 255, 196, .24);
+  border-radius: 14px;
+  background: rgba(1, 20, 15, .72);
+  backdrop-filter: blur(10px);
+}
+.share-page .share-actions .share-story-action {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: max-content;
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid rgba(113, 255, 196, .34);
+  border-radius: 10px;
+  background: rgba(5, 80, 54, .48);
+  color: #effff7;
+  box-shadow: none;
+  white-space: nowrap;
+  font-size: clamp(.72rem, 2.2vw, .9rem);
+  line-height: 1.35;
+}
+.share-page .share-actions .share-story-action:hover,
+.share-page .share-actions .share-story-action:focus-visible {
+  border-color: rgba(150, 255, 208, .82);
+  background: rgba(11, 112, 75, .72);
+}
+.share-page .share-actions .share-story-action:focus-visible {
+  outline: 2px solid #d9ffed;
+  outline-offset: 2px;
+}
+.share-page .share-actions::-webkit-scrollbar { height: 4px; }
+.share-page .share-actions::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background: rgba(146, 255, 205, .48);
+}
+@media (min-width: 700px) {
+  .share-page .share-actions {
+    left: 50%;
+    right: auto;
+    width: min(92%, 850px);
+    transform: translateX(-50%);
+    justify-content: center;
+  }
+}
+@media (max-width: 520px) {
+  .share-page .share-actions {
+    left: max(8px, env(safe-area-inset-left, 0px));
+    right: max(8px, env(safe-area-inset-right, 0px));
+    bottom: max(3%, env(safe-area-inset-bottom, 0px));
+    gap: 5px;
+    padding: 6px;
+  }
+  .share-page .share-actions .share-story-action {
+    min-height: 44px;
+    padding: 8px 11px;
+    font-size: .72rem;
+  }
+}
