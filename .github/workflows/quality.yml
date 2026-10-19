@@ -39,6 +39,9 @@ jobs:
       - name: Test Paragraph Machine contracts
         run: node tests/paragraph-machine.test.js
 
+      - name: Test Paragraph Machine translation failure boundaries
+        run: node tests/paragraph-translation-boundary.test.js
+
       - name: Validate JSON catalogs
         run: |
           python3 - <<'PY'
