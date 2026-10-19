@@ -5,6 +5,12 @@ SmartKazem — README Logic & Algorithms (Condensed, No Omission)
 
 Technical debt remediation is tracked in [docs/technical-debt-remediation.md](docs/technical-debt-remediation.md). This is a staged maintenance plan; it does not authorize a broad rewrite or bypass the invariants below.
 
+Documentation ownership
+
+- `README.md` is the primary contributor guide and canonical index of current project invariants.
+- `docs/technical-debt-remediation.md` tracks the staged maintenance plan, scope limits, and verification status.
+- `Structure.txt` is retained as supplementary architecture and content-source documentation while it contains details not yet fully reconciled with this guide. It is not a competing authority when wording differs; verify current code and the contracts in this README. Do not delete it or bulk-copy it into the README without a separate line-by-line reconciliation.
+
 1. Base Rules
 
 Minimal responsible change; inspect owning HTML/controller/content-service/CSS/i18n first; no unrelated refactor; no new framework/router/state manager/build system/dependency without proven need; separation of content / business rules / services / adapters / controllers / presentation; shared-code change ⇒ audit all callers; preserve 4 languages, RTL/LTR, accessibility, responsiveness, and public contracts.
@@ -115,7 +121,7 @@ Before: exact level; owning files; callers before changing shared module; affect
 
 During: smallest patch; reuse existing API/helper; business rule outside UI, service outside content module; data-driven rendering; textContent/replaceChildren/explicit DOM API over unsafe injected HTML; preserve escaping/safety for user/model text; no speculative abstraction.
 
-After: optional verification (JS/JSON/HTML check beyond gate, browser test, language change, navigation, mobile/desktop, RTL/LTR, a11y) only on explicit user request; quality/security is the only automated suite; presentation-only change in CSS.
+After: run the smallest relevant checks for the changed boundary when available; record checks not run and leave browser/visual verification explicitly outstanding when unavailable. Avoid broad suites unless requested or needed to resolve a concrete risk. Use browser checks for affected navigation, language, viewport, RTL/LTR, and accessibility behavior where the existing CI path supports them. Keep presentation-only changes in CSS.
 
 Verify selector landing in portrait/landscape and RTL/LTR; confirm child pages inherit language without their own control. In every viewport and 4 languages: selector fully visible, no intersection with header. Paragraph Machine: evaluation/generation path, S/T/E/R/C judgment, 144/34/900 limits, translation boundary, batch cardinality.
 
