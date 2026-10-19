@@ -10,6 +10,13 @@ This is a staged maintenance plan, not authorization for a rewrite. The README i
 - Do not remove a compatibility global until every consumer has been migrated and the supported load order is verified.
 - Avoid broad CSS rewrites and formatting-only churn mixed with behavioral changes.
 
+## Current progress
+
+- Removed the `window.__referenceOpenTimer` compatibility global; the reference-open debounce timer is now private to `js/app.js`.
+- Removed the unused `window.__structureOpenTimer` clear operation from `js/pages.js`; repository search found no corresponding writer.
+- Expanded compressed one-line helpers in `js/pages.js` into the repository's multi-line style.
+- Per the requested low-processing approach, no broad test suite or browser suite was run. These changes are narrow; runtime verification remains outstanding.
+
 ## Staged work
 
 ### 1. Establish a baseline
