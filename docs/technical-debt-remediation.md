@@ -18,6 +18,14 @@ This is a staged maintenance plan, not authorization for a rewrite. The README i
 - Expanded the compressed `routeKey` helper in `js/shared-pages.js` into readable multi-line form; its route normalization and alias fallback logic are unchanged.
 - Per the requested low-processing approach, no broad test suite or browser suite was run. These changes are narrow; runtime verification remains outstanding.
 
+## Tooling baseline
+
+- Confirmed there is no repository-root package manifest, lockfile, or existing Prettier/ESLint config on this branch.
+- Added a minimal Prettier config and ignore file, plus a pinned Prettier 3.6.2 GitHub Actions report for changed `.js`/`.mjs` files. The workflow is explicitly non-blocking while legacy formatting debt is measured.
+- Kept the existing `quality.yml` syntax check and custom contract checks intact. No dependency was added to the deployed site and no mandatory build step was introduced.
+- ESLint is deferred for now: first review the Prettier baseline and existing custom quality checks, then decide whether a separate linter provides enough additional value to justify its rules/configuration.
+- The formatter workflow has been added but has not yet been run in GitHub Actions; its first report will establish the actual baseline.
+
 ## Staged work
 
 ### 1. Establish a baseline
