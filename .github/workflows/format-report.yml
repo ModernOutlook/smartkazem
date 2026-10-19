@@ -1,0 +1,47 @@
+name: JavaScript format report
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prettier-report:
+    # Baseline only: existing formatting debt must not block unrelated fixes.
+    continue-on-error: true
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+
+      - name: Check changed JavaScript files (report only)
+        shell: bash
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          set -uo pipefail
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            git fetch --no-tags origin "$BASE_REF"
+            mapfile -t files < <(git diff --name-only --diff-filter=ACMR "origin/$BASE_REF...HEAD" -- '*.js' '*.mjs')
+          else
+            mapfile -t files < <(git ls-files '*.js' '*.mjs')
+          fi
+
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No JavaScript files to check."
+            exit 0
+          fi
+
+          npx --yes prettier@3.6.2 --check --ignore-path .prettierignore "${files[@]}"
