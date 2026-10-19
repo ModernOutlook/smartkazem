@@ -25,6 +25,8 @@ This is a staged maintenance plan, not authorization for a rewrite. The README i
 - Kept the existing `quality.yml` syntax check and custom contract checks intact. No dependency was added to the deployed site and no mandatory build step was introduced.
 - ESLint is deferred for now: first review the Prettier baseline and existing custom quality checks, then decide whether a separate linter provides enough additional value to justify its rules/configuration.
 - The formatter workflow has been added but has not yet been run in GitHub Actions; its first report will establish the actual baseline.
+- Added targeted translation-boundary regression coverage for empty Persian translations, mismatched batch counts, empty batch items, upstream failures, and the Persian pass-through path; wired it into the existing quality workflow. No fallback behavior was changed before adding these tests.
+- The new translation-boundary test has not yet been executed in this environment; the targeted CI step will report its result.
 
 ## Staged work
 
