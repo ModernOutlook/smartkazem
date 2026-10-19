@@ -95,7 +95,6 @@
   }
 
   function openStructure() {
-    window.clearTimeout(window.__structureOpenTimer);
     showPage('structure');
     homeController.clearInfo();
   }
