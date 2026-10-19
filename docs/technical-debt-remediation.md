@@ -80,6 +80,13 @@ This is a staged maintenance plan, not authorization for a rewrite. The README i
 - Retain `Structure.txt` while it contains unique architecture and content-source contracts; remove duplication in a separate documentation-only change after comparing the complete documents.
 - Never delete or paraphrase authoritative Persian-content ownership, translation, accessibility, or service-boundary rules merely to shorten documentation.
 
+## Documentation consolidation (stage 7)
+
+- Added a documentation-ownership map to the README: README is the primary contributor guide, this file tracks remediation progress, and `Structure.txt` remains supplementary until its unique details have been reconciled.
+- Kept `Structure.txt`; it contains distinct content-source ownership and detailed Paragraph Machine explanations that are not safe to discard as duplicate text.
+- Updated the README verification guidance to favor targeted checks for changed boundaries and explicit reporting of checks not run, instead of implying that automated verification is only available on explicit request.
+- This was a documentation-only change. No test suite or browser workflow was run for it. The seven-stage cleanup is complete as a staged PR, not as fully runtime-verified or merged work.
+
 ## Definition of done
 
 - Existing quality checks pass, or pre-existing failures are explicitly recorded and separated from regressions.
