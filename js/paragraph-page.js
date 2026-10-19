@@ -94,14 +94,24 @@ function recognitionReady(){return entryMode===ENTRY_MODES.EXPERIENCE&&currentRe
 function equivalenceReady(){const raw=elements.input.value.trim();if(!raw)return false;return window.ParagraphMachineCore.countWords(raw)<=144&&window.ParagraphMachineCore.countChars(raw)<=900&&window.ParagraphMachineCore.findLongWords(raw).length===0}
 function updateActionState(){const ready=entryMode===ENTRY_MODES.EXPERIENCE?recognitionReady():equivalenceReady();elements.action.disabled=!ready;elements.action.classList.toggle('is-enabled',ready)}
 async function generateRecognitionParagraph(){
+ let paragraphGenerated=false;
  try{
   elements.error.textContent='';elements.primaryOutput.innerHTML='<div class="pm-loading">'+translate('paragraphMachine.processing','در حال پردازش...')+'</div>';
-  currentResults=await generateExperience();
+  currentResults=await generateExperience(paragraphs=>{
+   paragraphGenerated=true;
+   renderPrimaryParagraphs(paragraphs.map(p=>({...p,displayedText:p.text})));
+   elements.source.textContent=translate('paragraphMachine.processing','در حال پردازش...');
+  });
   renderPrimaryParagraphs(currentResults);
   renderNormativeResults(currentResults);
   elements.source.textContent=translate('paragraphMachine.judgmentReady','پاراگراف آماده قضاوت پنج‌قلمرویی است.');
   updateActionState();
- }catch(e){currentResults=[];elements.primaryOutput.replaceChildren();elements.normative.replaceChildren();elements.normative.hidden=true;elements.error.textContent=e.message||String(e);updateActionState()}
+ }catch(e){
+  currentResults=[];
+  if(!paragraphGenerated)elements.primaryOutput.replaceChildren();
+  elements.normative.replaceChildren();elements.normative.hidden=true;
+  elements.error.textContent=e.message||String(e);updateActionState()
+ }
 }
 function setRealmOutputState(p){const j=p?.judgment||{};elements.choices.forEach(c=>{const s=j[c.dataset.domain]?.status||'';c.classList.remove('judgment-ok','judgment-warn','judgment-bad');c.classList.toggle('realm-output',!!s);c.dataset.judgment=s;if(s)c.classList.add('judgment-'+s);c.setAttribute('aria-pressed',String(!!s))})}
 function openParagraphPage(kind){
@@ -128,9 +138,12 @@ async function evaluateReference(){
  if(!raw.trim())throw new Error(translate('paragraphMachine.empty','متنی وارد نشده است.'));
  return [await window.ParagraphWorkspaceAdapter.evaluateText(raw,getLanguage())];
 }
-async function generateExperience(){
+async function generateExperience(onGenerated){
  const lang=getLanguage();
  const generated=await window.ParagraphWorkspaceAdapter.generateParagraphs(1,'mixed',lang);
+ // Render the generated text immediately; independent evaluation continues before
+ // the realm controls become actionable, preserving the existing judgment contract.
+ if(typeof onGenerated==='function')onGenerated(generated);
  const evaluated=await Promise.all(generated.map(p=>window.ParagraphWorkspaceAdapter.evaluateText(p.text,lang)));
  return generated.map((p,i)=>({...p,judgment:evaluated[i].judgment,normative:evaluated[i].normative,displayedText:p.text}));
 }
