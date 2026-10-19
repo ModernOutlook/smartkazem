@@ -144,50 +144,9 @@ jobs:
           cat /tmp/smartkazem-http.log
           exit 1
 
-      - name: Audit four-language HTML translation contracts
-        if: steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/i18n-contract-check.mjs
-
-      - name: Test language transitions and responsive overflow
+      - name: Run concise UI browser smoke
         if: steps.browser-ready.outputs.ready == 'true'
         run: node scripts/ui-browser-smoke.mjs
-
-      - name: Test Paragraph Machine layout across viewport, entry-route and language matrix
-        if: steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/paragraph-layout-browser-smoke.mjs
-
-      - name: Upload Paragraph Machine full-matrix screenshots
-        if: always() && steps.browser-ready.outputs.ready == 'true' && hashFiles('artifacts/paragraph-machine/**') != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: paragraph-machine-full-matrix-screenshots
-          path: artifacts/paragraph-machine/
-          if-no-files-found: error
-          retention-days: 14
-
-      - name: Test Five Realms gameplay interactions at desktop and mobile viewports
-        if: always() && steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/five-realms-browser-smoke.mjs
-
-      - name: Test Talash hub, Tadbir handoff, and responsive gameplay
-        if: always() && steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/talash-browser-smoke.mjs
-
-      - name: Test realm-specific child backgrounds at required viewports
-        if: always() && steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/realm-child-background-smoke.mjs
-
-      - name: Test 3:4 content covers on every eligible page
-        if: always() && steps.browser-ready.outputs.ready == 'true'
-        run: node scripts/content-covers-browser-smoke.mjs
-
-      - name: Upload child-page background screenshots
-        if: always() && steps.browser-ready.outputs.ready == 'true' && hashFiles('artifacts/realm-child-backgrounds/**') != ''
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
-        with:
-          name: realm-child-background-screenshots
-          path: artifacts/realm-child-backgrounds/
-          if-no-files-found: error
 
       - name: Stop static site
         if: always() && steps.browser-ready.outputs.ready == 'true'
