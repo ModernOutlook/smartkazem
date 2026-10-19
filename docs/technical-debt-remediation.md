@@ -1,0 +1,98 @@
+# Technical debt remediation plan
+
+This is a staged maintenance plan, not authorization for a rewrite. The README is the canonical contributor guide; this document tracks the debt-remediation sequence and acceptance criteria.
+
+## Constraints
+
+- Preserve the static GitHub Pages deployment and avoid a mandatory build step.
+- Keep Persian as the authoritative source for Persian content; preserve the `fa`, `en`, `zh`, and `ar` language paths and RTL/LTR behavior.
+- Preserve the S/T/E/R/C order, public runtime contracts, card-catalog image mapping, and Paragraph Machine limits and service boundaries.
+- Do not remove a compatibility global until every consumer has been migrated and the supported load order is verified.
+- Avoid broad CSS rewrites and formatting-only churn mixed with behavioral changes.
+
+## Current progress
+
+- Removed the `window.__referenceOpenTimer` compatibility global; the reference-open debounce timer is now private to `js/app.js`.
+- Removed the unused `window.__structureOpenTimer` clear operation from `js/pages.js`; repository search found no corresponding writer.
+- Expanded compressed one-line helpers in `js/pages.js` into the repository's multi-line style.
+- Expanded the compressed `routeKey` helper in `js/shared-pages.js` into readable multi-line form; its route normalization and alias fallback logic are unchanged.
+- Per the requested low-processing approach, no broad test suite or browser suite was run. These changes are narrow; runtime verification remains outstanding.
+
+## Tooling baseline
+
+- Confirmed there is no repository-root package manifest, lockfile, or existing Prettier/ESLint config on this branch.
+- Added a minimal Prettier config and ignore file, plus a pinned Prettier 3.6.2 GitHub Actions report for changed `.js`/`.mjs` files. The workflow is explicitly non-blocking while legacy formatting debt is measured.
+- Kept the existing `quality.yml` syntax check and custom contract checks intact. No dependency was added to the deployed site and no mandatory build step was introduced.
+- ESLint is deferred for now: first review the Prettier baseline and existing custom quality checks, then decide whether a separate linter provides enough additional value to justify its rules/configuration.
+- The first pinned Prettier 3.6.2 report completed in GitHub Actions. It flagged `js/app.js`, `js/pages.js`, `js/shared-pages.js`, `scripts/ui-browser-smoke.mjs`, and `tests/paragraph-translation-boundary.test.js`; the job is intentionally non-blocking (`continue-on-error`) so this establishes a baseline rather than silently introducing broad formatting churn. Keep formatting these files as separate, reviewable work unless a targeted edit needs it.
+- Added targeted translation-boundary regression coverage for empty Persian translations, mismatched batch counts, empty batch items, upstream failures, and the Persian pass-through path; wired it into the existing quality workflow. No fallback behavior was changed before adding these tests.
+- Executed the targeted translation-boundary test with Node 22 in an isolated scratch copy of the test and its translation bridge: it passed. The committed branch's GitHub Actions Site quality gate also passed, including the new translation-boundary step.
+- CSS stage 5: repaired one malformed mobile media-query rule in `css/site.css` by separating `.structure-column` and `.icon-btn` declarations. This restores the intended independent selectors without moving rules or changing the cascade elsewhere. Visual verification across mobile/desktop and RTL/LTR is still outstanding.
+- Browser-smoke stage 6: audited the existing manual Playwright workflow and its concise UI script. The script already checks HTML entry points, three viewport sizes, runtime exceptions, and switching across `fa`, `en`, `zh`, and `ar`; it now also reports same-origin non-HTML asset responses with HTTP errors. The workflow remains manually dispatched because its pinned browser bundle/download path is intentionally gated. The exact smoke script has not run: this environment has system Chromium but does not have the required Playwright 1.55.0 package/browser bundle, and the available GitHub connection exposes no workflow-dispatch action. No browser pass is claimed; the manual workflow still needs to be run with the cached bundle available or with explicit approval for its documented installation fallback.
+
+## Staged work
+
+### 1. Establish a baseline
+
+- Run the existing quality workflow and record failures before changing code.
+- Inventory global exports and consumers, including dynamically loaded fragments and standalone pages.
+- Inventory current CSS ownership and existing browser smoke coverage.
+- Identify fallback strings adjacent to state transitions, validation, network requests, and business rules.
+
+### 2. Add consistent tooling without forcing a build
+
+- Select and pin a formatter and linter compatible with the repository's browser-native JavaScript and existing module styles.
+- Introduce configuration and CI checks in warning/report-only mode first where legacy violations are numerous.
+- Format files in small, reviewable batches; do not combine formatting with behavior changes.
+- Add type checking only for a bounded module boundary if it proves useful; do not introduce a repository-wide type migration as a prerequisite.
+
+### 3. Reduce compatibility globals safely
+
+- Document each global's owner, consumers, load-order requirements, and removal criteria.
+- Prefer explicit module APIs for new or changed code where the current deployment architecture supports them.
+- Migrate one consumer group at a time and add regression coverage before removing an export.
+- Keep intentional browser integration points documented; do not mechanically replace every `window.*` access.
+
+### 4. Refine fallback behavior
+
+- Keep user-facing fallback copy at presentation boundaries.
+- Do not convert missing required dependencies, invalid model responses, failed translations, or failed requests into apparently successful default states.
+- Preserve accessible error/status messages and existing language selection.
+- Add tests for the failure path before changing each fallback.
+
+### 5. Split CSS and clean legacy markup incrementally
+
+- Move a rule only after identifying its owning page/component and checking cascade and specificity dependencies.
+- Preserve responsive breakpoints, focus visibility, reduced-motion behavior, and RTL/LTR layouts.
+- Prefer small component/page slices over a wholesale rewrite of `css/site.css`.
+- Remove legacy markup/styles only after confirming no runtime fragment, selector, or standalone page depends on them.
+
+### 6. Expand browser smoke tests
+
+- Reuse the existing Playwright smoke-test conventions and pin/install browser tooling only where the repository's CI can support it.
+- Cover critical navigation, language switching, browser-console errors, failed local assets, card artwork, and key desktop/mobile viewports.
+- Add targeted tests for RTL and LTR and for each changed interaction.
+- Keep browser tests deterministic and avoid relying on live model/API credentials in CI.
+
+### 7. Consolidate documentation
+
+- Keep README as the primary contributor guide and index of invariants.
+- Retain `Structure.txt` while it contains unique architecture and content-source contracts; remove duplication in a separate documentation-only change after comparing the complete documents.
+- Never delete or paraphrase authoritative Persian-content ownership, translation, accessibility, or service-boundary rules merely to shorten documentation.
+
+## Documentation consolidation (stage 7)
+
+- Added a documentation-ownership map to the README: README is the primary contributor guide, this file tracks remediation progress, and `Structure.txt` remains supplementary until its unique details have been reconciled.
+- Kept `Structure.txt`; it contains distinct content-source ownership and detailed Paragraph Machine explanations that are not safe to discard as duplicate text.
+- Updated the README verification guidance to favor targeted checks for changed boundaries and explicit reporting of checks not run, instead of implying that automated verification is only available on explicit request.
+- This was a documentation-only change. No test suite or browser workflow was run for it. The seven-stage cleanup is complete as a staged PR, not as fully runtime-verified or merged work.
+
+## Definition of done
+
+- Existing quality checks pass, or pre-existing failures are explicitly recorded and separated from regressions.
+- Each behavior change has relevant regression coverage.
+- No unexpected changes to language behavior, navigation, content, accessibility, or deployment.
+- Browser smoke tests cover the affected interaction at desktop and mobile sizes where applicable.
+- Every removed compatibility API has no remaining consumers.
+- CSS moves and documentation consolidation are independently reviewable.
+- The final report distinguishes executed checks from checks that could not be run.

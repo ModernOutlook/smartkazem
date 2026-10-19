@@ -28,7 +28,15 @@ try {
     const page = await browser.newPage({ viewport: { width: 1365, height: 900 }, reducedMotion: 'reduce' });
     page.setDefaultTimeout(5000);
     const pageErrors = [];
+    const localAssetFailures = [];
+    const siteOrigin = new URL(baseURL).origin;
     page.on('pageerror', (error) => pageErrors.push(error.message));
+    page.on('response', (response) => {
+      const url = new URL(response.url());
+      if (url.origin === siteOrigin && response.status() >= 400 && !url.pathname.endsWith('.html')) {
+        localAssetFailures.push(url.pathname + ' (HTTP ' + response.status() + ')');
+      }
+    });
 
     try {
       const response = await page.goto(new URL(encodeURIComponent(file), baseURL.endsWith('/') ? baseURL : baseURL + '/').href, {
@@ -55,6 +63,9 @@ try {
       }
 
       if (pageErrors.length) fail(file + ': runtime exception: ' + pageErrors[0]);
+      if (localAssetFailures.length) {
+        fail(file + ': local asset response failure: ' + [...new Set(localAssetFailures)].join(', '));
+      }
     } catch (error) {
       fail(file + ': ' + String(error).split('\n')[0]);
     } finally {

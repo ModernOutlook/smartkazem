@@ -230,7 +230,7 @@ linear-gradient(135deg,transparent 0 28%,rgba(30,95,154,.25) 29% 31%,transparent
 .structure-light{position:absolute;right:0;bottom:18%;width:44%;height:55%;background:radial-gradient(ellipse at 95% 52%,rgba(168,230,255,.95),rgba(70,164,255,.3) 30%,transparent 67%);filter:blur(3px)}
 .structure-spire{position:absolute;right:29%;top:15%;width:17%;height:31%;background:linear-gradient(180deg,rgba(9,34,62,.15),rgba(5,22,42,.95));clip-path:polygon(50% 0,59% 27%,72% 52%,88% 100%,12% 100%,28% 52%,41% 27%);filter:drop-shadow(0 0 12px rgba(70,171,255,.45))}
 .structure-head{position:absolute;z-index:5;top:5%;left:5%;right:5%;display:flex;justify-content:space-between;align-items:center;direction:rtl}.structure-title strong{display:block;font-size:clamp(1rem,3.5vw,1.4rem);text-shadow:0 2px 12px #000}.structure-title span{display:block;font-size:.62rem;opacity:.58;direction:ltr}.structure-close{width:36px;height:36px;border-radius:50%;border:1px solid rgba(190,225,255,.35);background:rgba(0,12,25,.42);color:#fff;cursor:pointer}
-@media(max-width:520px){.structure-column{width:10%.icon-btn{top:12px;right:12px;width:36px;height:36px}}.structure-banner{top:35%;width:14%}.structure-banner.b2{top:41%;width:10%}.structure-spire{right:26%;width:22%}}
+@media(max-width:520px){.structure-column{width:10%}.icon-btn{top:12px;right:12px;width:36px;height:36px}.structure-banner{top:35%;width:14%}.structure-banner.b2{top:41%;width:10%}.structure-spire{right:26%;width:22%}}
 
 /* ===== Continuity of the Universe page ===== */
 .continuity-page{display:none;overflow:hidden;background:

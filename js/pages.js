@@ -19,10 +19,29 @@
   let paragraphOrigin = 'experience';
   let lastFocusElement = null;
 
-  const PAGE_CLOSE_BUTTONS = Object.freeze({ share: 'share-close', experience: 'experience-close', continuity: 'continuity-close', structure: 'structure-close', reference: 'reference-close', paragraph: 'paragraph-close' });
-  function rememberFocus() { const active = document.activeElement; lastFocusElement = active instanceof HTMLElement && active !== document.body ? active : null; }
-  function focusPage(pageKey) { document.getElementById(PAGE_CLOSE_BUTTONS[pageKey])?.focus({ preventScroll: true }); }
-  function restoreFocus() { const target = lastFocusElement; lastFocusElement = null; if (target?.isConnected) target.focus({ preventScroll: true }); }
+  const PAGE_CLOSE_BUTTONS = Object.freeze({
+    share: 'share-close',
+    experience: 'experience-close',
+    continuity: 'continuity-close',
+    structure: 'structure-close',
+    reference: 'reference-close',
+    paragraph: 'paragraph-close'
+  });
+
+  function rememberFocus() {
+    const active = document.activeElement;
+    lastFocusElement = active instanceof HTMLElement && active !== document.body ? active : null;
+  }
+
+  function focusPage(pageKey) {
+    document.getElementById(PAGE_CLOSE_BUTTONS[pageKey])?.focus({ preventScroll: true });
+  }
+
+  function restoreFocus() {
+    const target = lastFocusElement;
+    lastFocusElement = null;
+    if (target?.isConnected) target.focus({ preventScroll: true });
+  }
   let homeController = {
     setInfo: () => {},
     clearInfo: () => {}
@@ -95,7 +114,6 @@
   }
 
   function openStructure() {
-    window.clearTimeout(window.__structureOpenTimer);
     showPage('structure');
     homeController.clearInfo();
   }
