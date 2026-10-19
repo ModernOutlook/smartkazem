@@ -1118,6 +1118,7 @@ html[dir="rtl"] .home-page > .info {
   .continuity-page .continuity-actions > button { border-color: rgba(255,232,170,.48); }
   .experience-page .experience-actions > button { border-color: rgba(239,190,255,.48); }
   .reference-page .reference-actions > button { border-color: rgba(255,178,166,.48); }
+  .reference-page .reference-actions #reference-match { width: auto; grid-column: auto; justify-self: auto; }
   .share-page .share-actions > button { border-color: rgba(113,255,196,.48); }
 
   .structure-page .structure-actions::-webkit-scrollbar,
