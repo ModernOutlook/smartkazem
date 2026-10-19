@@ -135,6 +135,17 @@ Coverage is explicit and limited to these 12 pages: رساله فلسفی, فص�
 
 The browser smoke test verifies every eligible cover at desktop, portrait, and landscape viewports, including successful image loading, accessible alternative text, and the 3:4 frame ratio. New textual child pages must be added to the explicit shared/book cover registry and this test; excluded surfaces must remain excluded.
 
+## Browser resource caching and shared-page performance
+
+SmartKazem remains a static GitHub Pages application with one shared HTML shell. The service worker in `local-cognition-sw.js` uses Cache Storage as a cache-first layer for same-origin GET requests: after a section's template, scripts, styles, catalogs, or images have been fetched once, later requests can be served from the browser's persistent cache instead of downloading them again. The shared-page renderer also retains loaded page roots and scripts in memory for repeat navigation within the same session.
+
+- Shared page templates and translation catalogs use the browser's normal HTTP cache behavior; do not set `cache: 'no-store'` for reusable static site resources.
+- Keep resource URLs relative/base-aware so caching works when the site is deployed beneath `/smartkazem/`.
+- The service worker may not control the very first navigation until installation/activation completes. Normal browser caching remains the fallback; offline availability is not guaranteed until a resource has successfully been cached.
+- Cache Storage is subject to browser quota and eviction. Do not assume it is permanent storage, and do not cache user secrets or API credentials.
+- Large optional model packages remain opt-in; do not eagerly download the neural model merely because the site shell loads.
+- When changing cached resource behavior, preserve the existing local-cognition package workflow and its progress reporting. Browser/device performance audits remain manual opt-in under the test policy below.
+
 ## 4. Repository map
 
 The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
@@ -348,6 +359,7 @@ A browser-side API key is not a server-side secret. Never commit keys, tokens, p
 
 - **Only the Site quality gate (`quality.yml`) and Security gate (`security.yml`) may run automatically** on pushes to `main` and pull requests.
 - **Every other test suite is opt-in.** Browser/UI smoke tests, responsive and screenshot matrices, Paragraph Machine layout tests, and any other test workflow must not start automatically on a push, pull request, merge, or unrelated workflow. Run them only after the user explicitly requests that specific test or suite. Their GitHub Actions trigger must be manual (`workflow_dispatch`) unless the user explicitly authorizes a different trigger.
+- **Section resource inventory is a mandatory maintenance contract.** Any change to a section, template, script/module, stylesheet, image, font, media file, or other runtime-loaded asset must account for its actual same-origin network requests and ensure every observed request is represented in the proactive cache inventory. Update `scripts/section-resource-network-audit.mjs` if its coverage assumptions or section entry points change. Do not silently skip an unclassified request or claim runtime reconciliation without executing the targeted audit. The audit itself remains opt-in and must not be run automatically without the user's explicit request for that test.
 - Do not interpret opening a PR, asking for a code change, or asking to prepare a merge as permission to run optional tests. If optional testing would be useful, ask first and wait.
 - **Merging is also opt-in and requires explicit user approval for that merge.** Passing checks, a green PR, or a previous merge approval is not permission to merge a later PR. Never enable auto-merge or merge on the user's behalf before that approval.
 - The quality and security gates are the only routine automatic tests; deployment workflows are operational workflows, not permission to start additional test suites. A manually requested deployment or other action still requires the user's explicit request.
@@ -657,6 +669,16 @@ The browser, language, Paragraph Machine full-matrix, Five Realms, realm-child-b
 **Emergence II paragraph contract:** every non-empty line in each Persian source episode is a paragraph, including lines separated by a single newline. Blank lines are separators and are not paragraphs. Each EN/AR/ZH episode must expose the same number of paragraphs in the same order. The alignment utility splits existing translated text at sentence boundaries and monotonically regroups those unchanged sentence units to the Persian line count; it does not generate, summarize, rewrite, or reorder translation prose. Chinese sentence splitting recognizes 。！？ without requiring spaces. The browser audit checks exact rendered paragraph arrays in all four languages.
 
 
+
+
+
+### Proactive section asset caching
+
+On startup, `js/shared-pages.js` discovers the shared shell's local resources plus each registered section's template, translation catalog, stylesheets, scripts, realm backgrounds, and recursively referenced local assets. The scanner follows CSS imports and URLs, HTML asset attributes and source sets, JavaScript module imports, statically identifiable fetch/worker URLs, and nested source files (including `.mjs` modules). It sends discovered same-origin URLs to `local-cognition-sw.js`, which downloads successful GET responses into the versioned Cache Storage bucket in the background. This warms the browser cache before the user opens every section; the shared renderer still retains visited page roots and scripts in memory. A `site-resource-cache-complete` event reports the result for diagnostics.
+
+**Mandatory rule for every future section or asset change:** reconcile the discovered inventory against the actual same-origin network requests made while opening every registered section. If a request is absent from the inventory, fix the scanner or add an explicit resource declaration before calling the change complete. When adding, removing, or relocating a section, update its resource declarations and repeat the reconciliation; do not rely only on a filename search or a single page's startup requests. The dedicated browser audit is `scripts/section-resource-network-audit.mjs`; with the static site served at port 4173 and the repository's pinned Playwright/Chromium available, run `node scripts/section-resource-network-audit.mjs`. It deliberately disables proactive warm-up during observation so the scanner's own discovery requests cannot masquerade as real section requests. It visits every key registered in the shared-page manifest, observes same-origin requests made by each section, and fails with the missing section/resource pairs. Add new runtime-loaded resource patterns or section entry points to this audit when the architecture changes.
+
+This is best-effort rather than an absolute offline guarantee: browser storage quotas/eviction apply, a first visit requires a network connection, and cross-origin resources are deliberately not copied into the site's cache. Assets assembled from opaque runtime values, conditional user actions, or dynamically generated endpoints cannot always be inferred from static source scanning; if the runtime audit observes them, make them explicit or teach the scanner how to discover them. The service worker must be installed and active, and every resource must have been fetched successfully, before it can be served offline. The cache version is bumped when the cache contract changes.
 
 ## Content-section navigation contract
 

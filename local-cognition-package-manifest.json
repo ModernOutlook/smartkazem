@@ -1,6 +1,6 @@
 {
   "schema": "local-cognition-cache/v1",
-  "cacheName": "smartkazem-local-cognition-v1",
+  "cacheName": "smartkazem-site-cache-v2",
   "resourceSizes": {
     "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/config.json": 658,
     "https://huggingface.co/Xenova/multilingual-e5-small/resolve/47e7f554d04b0779fbadcc680936cb21826ba3ec/tokenizer.json": 17082730,

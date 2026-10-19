@@ -37,7 +37,7 @@ function setMeta(name,value){let n=document.querySelector('meta[name="'+name+'"]
 function syncStyles(key){for(const [name,links] of styleLinks)links.forEach(link=>link.disabled=name!==key);}
 async function ensureStyles(key){if(styleLinks.has(key))return;const links=[];for(const href of manifest[key].styles||[]){const link=document.createElement('link');link.rel='stylesheet';link.href=href;link.dataset.sharedPageStyle=key;link.disabled=false;document.head.appendChild(link);links.push(link);}styleLinks.set(key,links);await Promise.all(links.map(link=>link.sheet?Promise.resolve():new Promise(resolve=>{link.addEventListener('load',resolve,{once:true});link.addEventListener('error',resolve,{once:true});})));}
 function hideAppPages(){app.querySelectorAll(':scope > .page').forEach(p=>p.classList.remove('is-active'));}
-async function loadRoot(key){if(roots.has(key))return roots.get(key);const response=await fetch(manifest[key].file,{cache:'no-store'});if(!response.ok)throw new Error('Unable to load page template '+key);const markup=await response.text();const container=document.createElement('div');container.dataset.sharedRoute=key;container.style.position='absolute';container.style.inset='0';container.style.width='auto';container.style.height='auto';container.style.overflow='hidden';container.innerHTML=markup;container.querySelectorAll('.global-lang,.lang-switch').forEach(n=>n.remove());roots.set(key,container);return container;}
+async function loadRoot(key){if(roots.has(key))return roots.get(key);const response=await fetch(manifest[key].file);if(!response.ok)throw new Error('Unable to load page template '+key);const markup=await response.text();const container=document.createElement('div');container.dataset.sharedRoute=key;container.style.position='absolute';container.style.inset='0';container.style.width='auto';container.style.height='auto';container.style.overflow='hidden';container.innerHTML=markup;container.querySelectorAll('.global-lang,.lang-switch').forEach(n=>n.remove());roots.set(key,container);return container;}
 async function loadScripts(key){for(const src of manifest[key].scripts||[]){const scriptKey=key+':'+src;if(loadedScripts.has(scriptKey))continue;await new Promise((resolve,reject)=>{const script=document.createElement('script');if(src.endsWith('.mjs'))script.type='module';script.src=src;script.onload=()=>{loadedScripts.add(scriptKey);resolve();};script.onerror=()=>reject(new Error('Failed page script '+src));document.body.appendChild(script);});}}
 function showOrigin(){if(activeContainer)activeContainer.remove();activeContainer=null;activeKey=null;syncStyles('');setMeta('i18n-page','home');setMeta('i18n-catalog','');setMeta('i18n-blocks','');const methods={share:'openShare',experience:'openExperience',continuity:'openContinuity',structure:'openStructure',reference:'openReference',home:'returnHome'};window.SitePages?.[methods[origin]||'returnHome']?.();window.SiteI18n?.setPage?.('home','','').catch(()=>{});history.replaceState({},'',location.pathname+location.hash);}
 async function open(route,from='home',options={}){const key=routeKey(route);if(!key)return false;if(key==='quantum-maze'&&!(from==='share'&&activeKey==='five-realms'))return false;if(activeContainer)activeContainer.remove();activeContainer=null;activeKey=key;origin=from||origin||'home';hideAppPages();await ensureStyles(key);syncStyles(key);const container=await loadRoot(key);host.appendChild(container);activeContainer=container;const pageRoot=container.querySelector('.child-page,.page');if(pageRoot){pageRoot.classList.add('page','is-active');pageRoot.style.position='absolute';pageRoot.style.inset='0';pageRoot.style.width='auto';pageRoot.style.maxWidth='100%';pageRoot.style.height='auto';pageRoot.style.minHeight='0';pageRoot.style.overflowY='auto';applyRealmBackground(pageRoot,manifest[key].realm,key);}setMeta('i18n-page',manifest[key].page);setMeta('i18n-catalog',manifest[key].catalog);setMeta('i18n-blocks',manifest[key].blocks||'');await window.SiteI18n?.setPage?.(manifest[key].page,manifest[key].catalog,manifest[key].blocks||'');await loadScripts(key);if(pageRoot)window.ContentCovers?.mountShared(pageRoot,key);document.dispatchEvent(new CustomEvent('shared-page:opened',{detail:{key,origin}}));if(options.push!==false)history.pushState({sharedPage:key,origin},'',location.pathname+'?page='+encodeURIComponent(key));return true;}
@@ -99,6 +99,81 @@ document.addEventListener('click',event=>{
 host.addEventListener('click',event=>{const button=event.target instanceof Element?event.target.closest('button'):null;if(!button||!activeKey||button.id!==manifest[activeKey].close)return;event.preventDefault();event.stopPropagation();event.stopImmediatePropagation();close();},true);
 window.addEventListener('popstate',event=>{pendingHistoryClose=false;const route=new URLSearchParams(location.search).get('page');if(route&&manifest[route])open(route,event.state?.origin||origin,{push:false}).catch(console.error);else if(activeKey)showOrigin();});
 document.addEventListener('keydown',event=>{if(event.key==='Escape'&&activeKey)close();});
-window.SharedPages=Object.freeze({open,close,getActive:()=>activeKey});
+async function collectSectionResources(){
+ const resources=new Set(),queue=[],queued=new Set();
+ const sourcePattern=/\.(?:css|fragment|html|js|mjs|json|xml|svg)(?:\?[^#]*)?(?:#.*)?$/i;
+ const assetPattern=/(?:\.?\.?\/|\/)?[A-Za-z0-9_./%?=&-]+\.(?:avif|bmp|bpe|css|gif|html|jpe?g|js|json|m4a|mjs|mp3|mp4|ogg|onnx|otf|png|svg|ttf|txt|wasm|wav|webm|webmanifest|webp|woff2?|xml|bin|model|aac|flac)(?:\?[^\s"'()<>]*)?/gi;
+ const quotedAssetPattern=/['"]([^'"]+\.(?:avif|bmp|bpe|css|gif|html|jpe?g|js|json|m4a|mjs|mp3|mp4|ogg|onnx|otf|png|svg|ttf|txt|wasm|wav|webm|webmanifest|webp|woff2?|xml|bin|model|aac|flac)(?:\?[^'"]*)?)['"]/gi;
+ const add=(value,base=document.baseURI)=>{
+  if(typeof value!=='string'||!value.trim()||/^(?:data:|blob:|javascript:|mailto:|tel:|#)/i.test(value))return;
+  try{
+   const url=new URL(value,base);if(url.origin!==location.origin||!/^https?:$/.test(url.protocol))return;
+   resources.add(url.href);
+   if(sourcePattern.test(url.pathname+url.search)&&!queued.has(url.href)){queued.add(url.href);queue.push(url.href);}
+  }catch(_){}
+ };
+ add('index.html');
+ add('local-cognition-package-manifest.json');
+ add('js/content-covers.js');
+ for(const language of ['fa','en','zh','ar'])add('translations/'+language+'.json');
+ document.querySelectorAll('link[rel="stylesheet"],link[rel="preload"],script[src],img[src],source[src],audio[src],video[src],video[poster],iframe[src]').forEach(node=>{
+  for(const attr of ['href','src','poster'])if(node.hasAttribute(attr))add(node.getAttribute(attr));
+  if(node.hasAttribute('srcset'))for(const candidate of node.getAttribute('srcset').split(','))add(candidate.trim().split(/\s+/)[0]);
+ });
+ document.querySelectorAll('style,[style]').forEach(node=>{
+  const css=node.textContent+' '+(node.getAttribute('style')||'');
+  for(const match of css.matchAll(/url\(\s*['"]?([^)'" ]+)['"]?\s*\)/gi))add(match[1]);
+ });
+ for(const entry of Object.values(manifest)){
+  for(const path of [entry.file,entry.catalog,...(entry.styles||[]),...(entry.scripts||[])])if(path)add(path);
+ }
+ Object.values(REALM_ASSETS).forEach(value=>add(value));
+ const scanned=new Set();
+ while(queue.length){
+  const path=queue.shift();if(scanned.has(path))continue;scanned.add(path);
+  let response;try{response=await fetch(path);}catch(_){continue;}if(!response.ok)continue;
+  const type=response.headers.get('content-type')||'';
+  if(!/(?:javascript|json|css|html|text|xml|svg)/i.test(type)&&!sourcePattern.test(path))continue;
+  let body;try{body=await response.text();}catch(_){continue;}
+  const base=new URL(path,document.baseURI);
+  if(/(?:^|\/)content\/shahnameh-series\.js(?:\?|$)/i.test(path)){
+   const episodeCount=Number(body.match(/totalEpisodes\s*:\s*(\d+)/)?.[1]||0);
+   for(let episode=1;episode<=episodeCount;episode++)add('content/'+String(episode).padStart(2,'0')+'.jpg',document.baseURI);
+  }
+  if(/(?:^|\/)content-covers\.js(?:\?|$)/i.test(path)){
+   for(const match of body.matchAll(/\[['"]([^'"]+\.(?:avif|gif|jpe?g|png|webp))['"]\s*,/gi))add('content/page-templates/'+match[1],document.baseURI);
+  }
+  if(/\.css(?:\?|$)/i.test(path)||/text\/css/i.test(type)){
+   for(const match of body.matchAll(/url\(\s*['"]?([^)'"]+)['"]?\s*\)/gi))add(match[1],base);
+   for(const match of body.matchAll(/@import\s+(?:url\()?['"]([^'"]+)['"]/gi))add(match[1],base);
+  }
+  for(const match of body.matchAll(assetPattern))add(match[0],base);
+  for(const match of body.matchAll(quotedAssetPattern))add(match[1],base);
+  for(const match of body.matchAll(/(?:\bimport\s*(?:\([^)]*?\)|[^;]*?\bfrom\s*)|\b(?:fetch|importScripts)\s*\(|\bnew\s+(?:Worker|SharedWorker)\s*\()\s*['"]([^'"]+)['"]/g))add(match[1],base);
+  for(const match of body.matchAll(/new\s+URL\(\s*['"]([^'"]+)['"]\s*,\s*import\.meta\.url\s*\)/g))add(match[1],base);
+  if(/\.fragment(?:\?|$)|text\/html/i.test(path+' '+type)){
+   const attrs=/(?:src|href|poster|data-src)\s*=\s*['"]([^'"]+)['"]/gi;
+   for(const match of body.matchAll(attrs))add(match[1],base);
+   for(const match of body.matchAll(/srcset\s*=\s*['"]([^'"]+)['"]/gi))for(const candidate of match[1].split(','))add(candidate.trim().split(/\s+/)[0],base);
+  }
+ }
+ return [...resources].map(value=>{const url=new URL(value);return url.pathname+url.search;});
+}
+function requestSiteResourceCache(){
+ if(new URLSearchParams(location.search).has('skipSiteResourceWarmup'))return;
+ if(!('serviceWorker'in navigator))return;
+ const run=async()=>{
+  const worker=navigator.serviceWorker.controller||(await navigator.serviceWorker.ready).active;
+  if(!worker)return;
+  const resources=await collectSectionResources();
+  const channel=new MessageChannel();
+  channel.port1.onmessage=event=>{if(event.data?.type==='SITE_RESOURCES_CACHE_RESULT')window.dispatchEvent(new CustomEvent('site-resource-cache-complete',{detail:event.data}));};
+  worker.postMessage({type:'CACHE_SITE_RESOURCES',resources},[channel.port2]);
+ };
+ if('requestIdleCallback'in window)window.requestIdleCallback(()=>run().catch(error=>console.warn('[SharedPages] Site cache warm-up incomplete',error)),{timeout:4000});
+ else window.setTimeout(()=>run().catch(error=>console.warn('[SharedPages] Site cache warm-up incomplete',error)),1200);
+}
+window.SharedPages=Object.freeze({open,close,getActive:()=>activeKey,getSectionKeys:()=>Object.keys(manifest),collectSectionResources});
+requestSiteResourceCache();
 const initial=new URLSearchParams(location.search).get('page');if(initial&&manifest[initial])open(initial,'home',{push:false}).catch(error=>console.error('[SharedPages]',error));
 })();

@@ -164,7 +164,7 @@
       }).filter((entry) => entry && entry[0] && entry[1]);
       data.bookContent = data.bookContent || {};
       await Promise.all(entries.map(async ([bookKey, path]) => {
-        const bookResponse = await fetch(path, { cache: 'no-store' });
+        const bookResponse = await fetch(path);
         if (!bookResponse.ok) {
           throw new Error('Book translation reservoir unavailable: ' + bookKey);
         }
