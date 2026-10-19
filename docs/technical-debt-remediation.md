@@ -27,6 +27,7 @@ This is a staged maintenance plan, not authorization for a rewrite. The README i
 - The formatter workflow has been added but has not yet been run in GitHub Actions; its first report will establish the actual baseline.
 - Added targeted translation-boundary regression coverage for empty Persian translations, mismatched batch counts, empty batch items, upstream failures, and the Persian pass-through path; wired it into the existing quality workflow. No fallback behavior was changed before adding these tests.
 - The new translation-boundary test has not yet been executed in this environment; the targeted CI step will report its result.
+- CSS stage 5: repaired one malformed mobile media-query rule in `css/site.css` by separating `.structure-column` and `.icon-btn` declarations. This restores the intended independent selectors without moving rules or changing the cascade elsewhere. Visual verification across mobile/desktop and RTL/LTR is still outstanding.
 
 ## Staged work
 
