@@ -69,10 +69,12 @@ try {
   const pageErrors = [];
   page.on('pageerror', (error) => pageErrors.push(error.message));
   try {
-    const response = await page.goto(baseURL.endsWith('/') ? baseURL : baseURL + '/', { waitUntil: 'domcontentloaded' });
+    const response = await page.goto(new URL('index.html', baseURL.endsWith('/') ? baseURL : baseURL + '/').href, { waitUntil: 'domcontentloaded' });
     if (!response?.ok()) fail('index.html: landing page did not load');
 
     await page.waitForFunction(() => Boolean(window.SiteI18n), null, { timeout: 7000 });
+    const splash = page.locator('#splash');
+    if (await splash.count() && await splash.isVisible()) await splash.click().catch(() => {});
     for (const language of languages) {
       const button = page.locator('[data-site-lang="' + language.code + '"]').first();
       if (await button.count() !== 1) {
