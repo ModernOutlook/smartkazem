@@ -1,710 +1,140 @@
-# SmartKazem — AI Maintenance Guide
+SmartKazem — REA
+SmartKazem — README Logic & Algorithms (Condensed, No Omission)
 
-> Repository: ModernOutlook/smartkazem  
-> Deployment: GitHub Pages · browser-native HTML/CSS/JS · no required build system  
-> Languages: fa / en / zh / ar
+---
 
-This is the compact engineering contract for future human/AI maintenance. **Inspect the actual repository before changing it; this README is a guide, not a substitute for code inspection.**
+1. Base Rules
 
-## 1. Non-negotiable principles
+Minimal responsible change; inspect owning HTML/controller/content-service/CSS/i18n first; no unrelated refactor; no new framework/router/state manager/build system/dependency without proven need; separation of content / business rules / services / adapters / controllers / presentation; shared-code change ⇒ audit all callers; preserve 4 languages, RTL/LTR, accessibility, responsiveness, and public contracts.
 
-1. Preserve existing behavior and architecture; make the smallest responsible change.
-2. Inspect the owning HTML, controller, content/service boundary, CSS, and i18n before editing.
-3. Do not refactor unrelated code during a feature or bug fix.
-4. Do not introduce a framework, router, state manager, build system, or dependency without a demonstrated need.
-5. Keep content, business rules, services, adapters, controllers, and presentation separate.
-6. Shared-code changes require checking all callers.
-7. Preserve four languages, RTL/LTR, accessibility, responsive behavior, and existing public contracts unless redesign is explicitly requested.
+---
 
-## 2. User-facing content model
+2. Content Model
 
-Home → 5 primary realms → secondary surfaces.
+Home → 5 primary realms → secondary levels. Fixed order: S → T → E → R → C.
 
-Primary realms, in invariant order:
+Exactly 13 secondary pages (12 books + short story "Zero"): philosophical treatise, Shahnameh reading, Emergence Ch. 1, Land of Observation; 25 Times of Arrival, Mirror of Possibles, Emergence Ch. 2, Land of Observation; One River One Flow, Third-Layer Echo, Humans and Their Machines, Imitators of Imitation, The Corruptors, Manifesto of the Chaotic (book) + Zero (story).
 
-S → T → E → R → C
+Inventory renders from content/page-templates/inventory.fragment in shared runtime; no standalone document.
 
-Secondary pages (current child-page inventory): **exactly 13 pages, including books and the short story «صفر»**
-1. **رساله فلسفی** — book
-2. **شاهنامه‌خوانی** — book
-3. **فصل اول ظهور** — book
-4. **سرزمین مشاهده؛ ۲۵ بار رسیدن** — book
-5. **آینه‌ی ممکن‌ها** — book
-6. **فصل دوم ظهور** — book
-7. **سرزمین مشاهده؛ یک رود، یک جریان** — book
-8. **پژواک لایه سوم** — book
-9. **انسان و ماشین‌هایش** — book
-10. **جاعلان تقلید** — book
-11. **تباهیان** — book
-12. **مانیفست آشوب‌زده** — book
-13. **صفر** — short story
+Card Algorithm (Mandatory)
 
-The playing-card inventory is also rendered inside the shared runtime from `content/page-templates/inventory.fragment`; no separate inventory document is used.
+Any level showing cards ⇒ window.PlayingCardsCatalog from content/playing-cards.js + PlayingCardsCatalog.imagePath(card); identify via catalog ID/rank/suit, never construct paths or separate text cards. Reference: Card Inventory and "Your Hand" in Five Realms. Prohibited: image duplication, parallel mapping, text-card substitution. Preserve: semantic/a11y labels, selection/status indicators, joker identity, responsive ratios. Adding a card level ⇒ audit all callers + verify image load in desktop/portrait/landscape.
 
-### Shared playing-card image mapping (mandatory)
+Paragraph Machine
 
-Every surface that displays playing cards must use the same mapped image assets as the **Card Inventory** and the **Five Realms game hand**. Reuse `window.PlayingCardsCatalog` from `content/playing-cards.js` and resolve artwork through `PlayingCardsCatalog.imagePath(card)`; identify cards through the catalog's existing IDs, ranks, and suits rather than constructing image paths or drawing a separate text-only card representation.
+Shared workspace inside index.html, not a separate page. Two entry paths: Experience Realm → Recognition → Paragraph Machine, and Simulation → Co-aging → Paragraph Machine. Recognition and Co-aging are two modes of the same workspace.
 
-- The Card Inventory and the Five Realms **دست شما** hand are the reference implementations for mapped card artwork.
-- Any other page, panel, game state, preview, or card listing that renders a playing card must use the same catalog mapping and image files.
-- Do not duplicate card images, create parallel rank/suit-to-file mappings, or substitute independently styled text cards where the mapped artwork is expected.
-- Preserve semantic/accessibility labels, selection and state indicators, joker identity, and responsive image proportions around the shared artwork.
-- When adding or changing a card-rendering surface, inspect all callers of `PlayingCardsCatalog`, then verify that each displayed image resolves and loads in desktop, mobile portrait, and mobile landscape layouts.
-\n\nThe Paragraph Machine is a **shared workspace inside `index.html`**, not a standalone page. It is reachable through both Paragraph Machine entry paths:
-- **قلمرو تجربه → بازشناسی → ماشین پاراگراف**
-- **شبیه‌سازی → هم‌سنگی → ماشین پاراگراف**
+Gold Gem Charge Algorithm (Gold page)
 
-`بازشناسی` and `هم‌سنگی` are two modes of the same shared Paragraph Machine workspace. No legacy Paragraph Machine surface is maintained.
+Single source of rule change: docs/paragraph-machine-philosophical-judgment.md.
 
-### Philosophical judgment contract
+Change determining logic only when user changes the judgment guide and it directly affects the generation-and-judgment process/duration.
 
-The canonical operational specification is [`docs/paragraph-machine-philosophical-judgment.md`](docs/paragraph-machine-philosophical-judgment.md). The Persian criteria embedded in `engine/paragraph-engine.js` are the runtime source of truth; the document defines the expanded reasoning protocol and acceptance checklist. Keep them synchronized and update `tests/paragraph-machine.test.js` whenever criterion IDs or counts change.
+Prohibited: rule change due to network, model/provider, settings, latency, design, UI, unrelated code.
 
-The five realms must be evaluated independently. The existing `ok / warn / bad` values describe explicit conceptual alignment only; they are not a moral ranking. The model is instructed to ground any judgment about the nobler direction separately in evidence, relational proportionality, capacity, avoidable harm, agency, correction, epistemic limits, distribution, and feedback effects. Do not claim the current UI exposes a separate moral score unless its output contract and presentation are explicitly extended and tested.
+Runtime observations (cycle duration) are measurement only; not authorization for rule/redesign.
 
-The locally retained research synthesis and source metadata are in [`docs/paragraph-machine-research-map.md`](docs/paragraph-machine-research-map.md). These sources supplement rather than replace Modern Outlook's own philosophical framework; normal execution must not download them.
+Preserve capacity (0–3600), 72-stage contract, charge behavior, unless guide change directly requires it.
 
-`بازشناسی` و `هم‌سنگی` صفحهٔ فرعی نیستند؛ هر دو مسیر ورود به ماشین پاراگراف‌اند. بنابراین خارج از صفحهٔ اصلی و ۵ قلمرو، دقیقاً همین ۱۳ صفحهٔ فرعی وجود دارد و همهٔ آن‌ها کتاب‌اند. An HTML file, box, panel, overlay, card, or popup is not automatically a page/category.
+Guide ambiguity ⇒ do not infer; explain and ask user. Guide-README alignment mandatory; silent guide change for justification prohibited. This policy documents authority only; merge only with explicit user approval.
 
-### Exact access contract for the Paragraph Machine
+Philosophical Judgment Contract
 
-The machine has exactly two user-facing frontend entry paths:
-- `قلمرو تجربه → بازشناسی → ماشین پاراگراف` (`experience-detect` → `PageNavigation.openParagraph('experience')`).
-- `مرجع تقلید → هم‌سنگی → ماشین پاراگراف` (`reference-match` → `PageNavigation.openParagraph('reference')`).
+Spec: docs/paragraph-machine-philosophical-judgment.md; Persian criteria inside engine/paragraph-engine.js = runtime source of truth; keep tests/paragraph-machine.test.js synchronized when changing criteria ID/count.
 
-The only additional programmatic/in-game access is the `پرسش` action on `?page=five-realms-cards`, reached from `اقتصاد سهم → کانون فعلیت → تدبیر`. That action calls the shared `ParagraphWorkspaceAdapter` to generate a paragraph and independently evaluate it; it does not open or expose the Paragraph Machine frontend. Do not add any other UI entry point or programmatic consumer without an explicit requirement. The game hub’s `تجربه` action opens `?page=quantum-maze`; its `تدبیر` action opens `?page=five-realms-cards`. The separate `تدبیر` action on the `تداوم عالم` realm opens `?page=tadbir`.
+5 realms evaluated independently; ok/warn/bad = conceptual alignment only, not moral ranking. Judgment model constructs "nobler direction" separately on evidence, relational fit, capacity, avoidable harm, agency, correction, epistemic limits, distribution, feedback effects. Separate moral score claim in UI prohibited unless output contract and presentation are explicitly extended and tested.
 
-## Canonical Persian content sources — current status
+Research: docs/paragraph-machine-research-map.md (supplementary, no download at runtime).
 
-**The Persian-source-first pass is consolidated for all 13 content pages.** Each book or story page has one canonical Persian source under `content/`; long-form Persian prose has been removed from HTML or duplicate Persian catalog fields where those were competing content stores. The translation-source pass has now started. The target-language prose for five books has been centralized; the other book reservoirs still require their alignment and completeness checks.
+Precise Access Contract
 
-| Content page | Canonical Persian source |
-|---|---|
-| رساله فلسفی نگرش نوین | `content/philosophical-treatise.js` |
-| شاهنامه‌خوانی | `content/shahnameh-series.js` |
-| فصل اول ظهور | `content/emergence.js` |
-| سرزمین مشاهده؛ ۲۵ بار رسیدن | `content/observation-25.js` |
-| آینه‌ی ممکن‌ها | `content/possible-mirror.js` |
-| فصل دوم ظهور | `content/emergence-2.js` |
-| سرزمین مشاهده؛ یک رود، یک جریان | `content/observation.js` |
-| پژواک لایه سوم | `content/echo-layer3.js` |
-| انسان و ماشین‌هایش | `content/human-machines.js` |
-| جاعلان تقلید | `content/forgers.js` |
-| تباهیان | `content/tabahian.js` |
-| مانیفست آشوب‌زده | `content/disturbed-manifesto.js` |
-| صفر | `content/zero.js` |
+Exactly two frontend paths: experience-detect → PageNavigation.openParagraph('experience') and reference-match → PageNavigation.openParagraph('reference'). Only additional programmatic/in-game access: "Question" action in ?page=five-realms-cards (from share economy → current focus → deliberation) calling ParagraphWorkspaceAdapter to generate and independently evaluate a paragraph — without opening/exposing frontend. No new entry point/consumer without explicit need. Game hub: "Experience" → ?page=quantum-maze; "Deliberation" → ?page=five-realms-cards; "Deliberation" (world-continuity realm) → ?page=tadbir.
 
-### Changes completed in the Persian pass
+---
 
-- Extracted the Persian article body from `philosophical-treatise.html` into 158 ordered source blocks, preserving heading, paragraph, and table markup. The HTML now has empty Persian render targets.
-- Extracted the Persian title, subtitle, and 12 paragraphs of `سرزمین مشاهده` into `content/observation.js`; its HTML no longer embeds those Persian paragraphs.
-- Moved the 25 sections of `سرزمین مشاهده؛ ۲۵ بار رسیدن` and the 31 sections of `آینه‌ی ممکن‌ها` out of `translations/fa.json` into dedicated Persian sources. Their page controllers select these sources in Persian mode.
-- Moved the first Shahnameh episode's 2,678-character original-verse passage from `translations/fa.json` into `content/shahnameh-series.js`.
-- Removed duplicated Persian chapter prose from the shared catalog for `جاعلان تقلید` and `انسان و ماشین‌هایش`, and removed duplicate Persian fields from the observation and book translation reservoirs where canonical sources already own them.
-- Updated the shared reader and page renderers to use the canonical Persian source; Talk Back continues to read the localized rendered DOM rather than a separate text store.
-
-### Remaining before translations
-
-- The English, Chinese, and Arabic prose for **رساله فلسفی نگرش نوین** is now in `translations/treatise.json` as 158 aligned blocks per language; **سرزمین مشاهده** uses `translations/observation.json` with 12 paragraphs per language; **سرزمین مشاهده؛ ۲۵ بار رسیدن** and **آینه‌ی ممکن‌ها** use `translations/observation-25.json` and `translations/possible-mirror.json` with 25 and 31 sections per language; **پژواک لایه سوم** uses `translations/echo-layer3.json` with 17 parts per language. These pages load book prose from their dedicated reservoirs rather than duplicated global-catalog entries. The `zero` story is declared in `content/zero.js` with aligned EN/ZH/AR prose in `translations/zero.json`. Its runtime is the shared `index.html` shell plus `content/page-templates/zero.fragment` and `js/zero-page.js`, and `page-specs/zero.json` declares the canonical relationship. The remaining book reservoirs must be checked and reconciled against their canonical Persian sources.
-- `translations/tabahian.json` now contains all three chapters in EN/ZH/AR, aligned to the canonical Persian source: 38, 59, and 96 paragraphs respectively. The third chapter was translated in full, not summarized; automated paragraph-count checks matched all three target languages to the 96-paragraph Persian source.
-- Automated JavaScript, JSON, HTML, and security checks are being run on the branch. Manual visual checks and real-device TalkBack verification have not been claimed.
-
-The source inventory and per-book evidence are maintained in `docs/canonical-book-content-audit.md`. Do not merge or describe the entire site as fully migrated until the remaining translation reservoirs, four-language rendering, and accessibility checks are complete.
-
-## Canonical book-content boundary (mandatory)
-
-Every book has exactly one canonical Persian content source and one derived translation reservoir. At runtime, the selected language chooses the data source:
-
-- `fa`: render the canonical Persian content from its declared source in `content/`.
-- `en`, `ar`, or `zh`: render the matching language from the book's declared file in `translations/`.
-- The page HTML is a presentation shell only: structure, stable IDs, semantic controls, and script/style references. It must not contain book prose, chapter/episode text, translated copies, or static content placeholders that duplicate a source.
-- Page controllers render the selected source into the shell. They may contain rendering/navigation logic, but no book prose, chapter titles, subtitles, morals, or language-specific fallback copies.
-- Translation catalogs may contain the translations and UI labels for their declared purpose; they must not be used as a second Persian source for long-form book content.
-- Never duplicate a book's prose between HTML, controller JavaScript, a global UI catalog, and a content dataset. When the same text appears in multiple places, remove the non-authoritative copy after wiring and verifying the canonical path.
-- Book cards, home listings, search indexes, accessible reading, and page views must all derive titles and text from the same declared catalog; no parallel hard-coded book metadata.
-- Each book must declare these paths in `page-specs/<book>.json`: Persian source, translation reservoir, presentation shell, renderer/controller, and language selection contract.
-- A book is not compliant merely because its current display looks correct. Verify every language, chapter/episode count and order, paragraph boundaries, navigation, Talk Back, RTL/LTR, and responsive behavior after migration.
-
-**Migration rule:** move content without summarizing, rewriting, reordering, or silently correcting it. Preserve exact source wording and paragraph structure. If two copies differ, do not choose one by guess; compare them and record the discrepancy for resolution before deleting either copy.
-
-## 3:4 content-cover contract
-
-The 12 supplied cover images live in `content/page-templates/`. The shared `js/content-covers.js` renderer places a responsive 3:4 frame as the final content element on each eligible textual child page. It uses a base-URI-resolved asset URL for GitHub Pages subpath deployments, preserves the image without stretching or cropping, and supplies the current page/book title as the image's accessible name.
-
-Coverage is explicit and limited to these 12 pages: رساله فلسفی, فصل اول ظهور, سرزمین مشاهده؛ ۲۵ بار رسیدن, آینه‌ی ممکن‌ها, فصل دوم ظهور, سرزمین مشاهده؛ یک رود، یک جریان, پژواک لایه سوم, مانیفست آشوب‌زده, صفر, انسان و ماشین‌هایش, جاعلان تقلید, and تباهیان. شاهنامه‌خوانی and ماشین پاراگراف are intentionally excluded. Realm landing pages, inventory, and utility surfaces are not content-book pages and do not receive covers.
-
-The browser smoke test verifies every eligible cover at desktop, portrait, and landscape viewports, including successful image loading, accessible alternative text, and the 3:4 frame ratio. New textual child pages must be added to the explicit shared/book cover registry and this test; excluded surfaces must remain excluded.
-
-## 4. Repository map
-
-The repository is organized by ownership: HTML defines structure, CSS defines presentation, JS/controllers coordinate pages, and content/services/adapters/engine keep business and integration logic out of presentation.
-
-The current user-facing surfaces are Home, the five realms, 12 book pages, and the Paragraph Machine machine surface. **Navigation order is defined only by the site's route hierarchy and canonical DOM order; it is never inferred from file age, commit history, creation time, or which implementation was written first.** `بازشناسی` and `هم‌سنگی` are entry paths/modes, not additional pages.
-
-
-
+```
 /
-├── index.html · home + dynamic book pages + shared Paragraph Machine workspace
-├── index.html · single shared shell for home, realms, all child pages, inventory, and Paragraph Machine
-├── js/shared-pages.js · fragment loader, route state, and shared page lifecycle
-├── content/page-templates/*.fragment · all child-page and inventory presentation fragments
-├── shared paragraph workspace in index.html · shared Paragraph Machine workspace (machine)
+├── index.html · shared shell: home + books + realms + child pages + inventory + Paragraph Machine
+├── js/shared-pages.js · fragment loader, route state, page lifecycle
+├── content/page-templates/*.fragment · presentation fragments
 ├── css/ · site, desktop, splash
 ├── ui/ · bootstrap, mobile, shared layout
-├── js/ · page/application controllers
+├── js/ · page/app controllers
 ├── engine/ · domain core
 ├── services/ · model/translation boundaries
-├── adapters/ · UI/service orchestration
-├── content/ · authoritative content datasets
-├── translations/ · language catalogs + i18n runtime
+├── adapters/ · orchestration
+├── content/ · authoritative datasets
+├── translations/ · catalogs + i18n runtime
 └── .github/workflows/ · quality/deployment
+```
 
+Layer Ownership
 
-### Presentation enforcement
+HTML: structure, stable IDs, semantic controls, a11y labels, script loading; no inline handler/script.
 
-The architecture is enforced, not only documented:
-- user-facing HTML pages must not contain inline `<style>` blocks or inline event handlers;
-- the language selector (`fa/en/zh/ar`) exists only on the landing page (`index.html`); all shared child pages use the persisted language selected there and must not render duplicate language controls;
-- every user-facing HTML document must declare its language;
-- page presentation belongs in external CSS layers (`css/`, `ui/mobile/`, or page-specific CSS under `css/pages/`);
-- dynamic UI should prefer `textContent`, `replaceChildren()`, and explicit DOM APIs over avoidable dynamic HTML injection;
-- security checks cover every HTML page, including legacy surfaces.
+CSS: presentation only — css/site.css shared/base; css/desktop.css; ui/mobile/mobile.css; ui/shared/layout-spec.css; css/splash.css.
 
-The GitHub Actions quality/security gates are part of the maintenance contract. A change that violates these contracts is incomplete even if the page appears visually correct.
+JS: js/app.js home; js/pages.js navigation boundary; js/books.js book nav/render; content/*.js datasets; services/* external boundary; adapters/* orchestration; engine/* DOM-independent rules.
 
-### Desktop/mobile ownership
+i18n Algorithm
 
-Desktop and mobile are presentation layers, not separate application architectures. They must reuse the same content, translation, engine, service, adapter, and business logic.
+fa RTL, en LTR, zh LTR, ar RTL. Runtime: translations/i18n.js → window.SiteI18n.
 
-## 5. Layer ownership
+Responsibilities: validate/persist language, load catalog, data-i18n, lang/dir, active-language state, site:languagechange.
 
-**HTML:** structure, stable IDs, semantic controls, accessibility labels, script loading. Avoid inline event handlers/scripts.
+Rules: no per-page translation engine; no Persian copy in catalog for fa; Persian primary from source, EN/AR/ZH from translation catalog; language-sensitive modules may subscribe.
 
-**CSS:** presentation only.
-- css/site.css → shared/base
-- css/desktop.css → desktop
-- ui/mobile/mobile.css → mobile
-- ui/shared/layout-spec.css → shared layout contract
-- css/splash.css → splash
+Realms Algorithm
 
-**JS:**
-- js/app.js → home controller
-- js/pages.js → page navigation boundary
-- js/books.js → shared book navigation/rendering
-- content/*.js → content datasets
-- services/* → external/service boundaries
-- adapters/* → orchestration
-- engine/* → DOM-independent business rules
+S Hall Structure · T World Continuity · E Experience Realm · R Simulation · C Share Economy. S/T/E/R/C order invariant; child-page order same as explicit realm navigation; before change: audit navigation, translations, Paragraph Machine, docs. Never build temporal/legacy-vs-new ordering rule based on code/file dates.
 
-## 6. Internationalization contract
+Original JPEG Integrity
 
-Supported languages:
-- fa → RTL
-- en → LTR
-- zh → LTR
-- ar → RTL
+PR #163 JPEGs byte-for-byte untouched. Dimensions/bytes from stream; SHA-256 from decoded bytes.
 
-Runtime boundary: translations/i18n.js → window.SiteI18n.
+Paragraph Machine Algorithm
 
-Responsibilities: language validation/persistence, catalog loading, data-i18n, lang/dir, active-language state, and site:languagechange.
+Architecture: UI → js/paragraph-page.js → adapters/paragraph-workspace.js → engine/paragraph-engine.js. Adapter also uses services/llm-client.js and services/translation-bridge.js. Engine DOM-independent.
 
-Rules:
-- No per-page translation engines.
-- Do not duplicate Persian into translation catalogs merely for fa.
-- Primary Persian content comes from the Persian source; EN/AR/ZH come from translated catalogs.
-- Language-sensitive modules may subscribe to site:languagechange.
+Hard limits: MAX_WORDS=144, MAX_WORD_LENGTH=34, MAX_CHARS=900.
 
-## 7. Five realms
+Judgment (per paragraph): judgment S/T/E/R/C each with status: ok|warn|bad + non-empty reason (alignment with explicit principles only); separate normative axis S/T/E/R/C with direction: nobler|harmful|mixed|indeterminate, non-empty rationale, textual evidence. Normative axis qualitative/contextual; never converted to number/percentage/total/average/unified ranking. ok=aligned, warn=ambiguous, bad=contradictory; not moral ranks. UI shows normative direction separately with rationale/evidence; never treat three-state status as moral judgment.
 
-| Code | Realm |
-|---|---|
-| S | ساختار تالار |
-| T | تداوم عالم |
-| E | قلمرو تجربه |
-| R | شبیه‌سازی |
-| C | اقتصاد سهم |
+Entry modes: Co-aging: user original text → criteria translated to same language → independent judgment → UI (user paragraph never translated as preprocessing). Recognition: generation in selected language → independent judgment with same-language criteria → compare with user's 5 selections. Paths separate; evaluation must not become generation.
 
-Order S/T/E/R/C is an invariant. Child-page order is likewise the order explicitly defined by the site's realm navigation. Check navigation, translations, Paragraph Machine, and documentation before changing it. **Never introduce a chronological/legacy-vs-new ordering rule based on code history or file age.**
+Translation bridge: toPersian(), fromPersian(), fromPersianBatch(); batch cardinality: input count = output count. llm-client.js = model-service boundary; UI must not call API directly; adapters must not duplicate retry.
 
-## Shared realm backgrounds for child surfaces
+paragraph-page in index.html is the only shared machine surface — not a book, not a second machine. No separate HTML.
 
-The five original JPEGs are the source of truth. The shared renderer in `js/shared-pages.js` owns the realm-to-image mapping and applies the background to the rendered page root. Paths are resolved against `document.baseURI`, so direct child-page URLs and GitHub Pages deployments under `/smartkazem/` stay subpath-compatible. The image is rendered with `contain`, centered at the top, no-repeat, and a separate dark gradient layer; this keeps the entire source composition recognizable on desktop, portrait, and landscape screens instead of cropping defining elements. The background scrolls with the page and has no pointer/touch layer. The two long-form reader bodies whose existing opaque fills concealed the image use 86%-opaque light reading panels, keeping dark text legible while allowing the simulation-realm motif to remain visible. Foreground cards and controls retain their existing stacking and behavior.
+AI Change Algorithm
 
-### Child-page coverage matrix
+Before: exact level; owning files; callers before changing shared module; affected contract/invariant; actual current code.
 
-| Child page / surface | Owning realm | Original image | Application mechanism |
-|---|---|---|---|
-| رساله فلسفی | ساختار تالار | `adapters/ساختار تالار.jpg` | Shared route manifest → page root |
-| صفر | ساختار تالار | `adapters/ساختار تالار.jpg` | Shared route manifest → page root |
-| هزارتوی کوانتومی | ساختار تالار | `adapters/ساختار تالار.jpg` | Shared route manifest → page root |
-| شاهنامه‌خوانی | تداوم عالم | `adapters/تداوم عالم.jpg` | Shared route manifest → page root |
-| فصل اول ظهور | تداوم عالم | `adapters/تداوم عالم.jpg` | Shared route manifest → page root |
-| مانیفست آشوب‌زده | تداوم عالم | `adapters/تداوم عالم.jpg` | Shared route manifest → page root |
-| سرزمین مشاهده؛ ۲۵ بار رسیدن | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
-| آینه‌ی ممکن‌ها | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
-| فصل دوم ظهور | قلمرو تجربه | `adapters/قلمرو تجربه.jpg` | Shared route manifest → page root |
-| سرزمین مشاهده؛ یک رود، یک جریان | شبیه‌سازی | `adapters/مرجع تقلید.jpg` | Shared route manifest → page root |
-| پژواک لایه سوم | شبیه‌سازی | `adapters/مرجع تقلید.jpg` | Shared route manifest → page root |
-| انسان و ماشین‌هایش | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
-| جاعلان تقلید | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
-| تباهیان | اقتصاد سهم | `adapters/اقتصاد سهم.jpg` | Shared book workspace → origin realm |
+During: smallest patch; reuse existing API/helper; business rule outside UI, service outside content module; data-driven rendering; textContent/replaceChildren/explicit DOM API over unsafe injected HTML; preserve escaping/safety for user/model text; no speculative abstraction.
 
-The Paragraph Machine is a shared workspace, not a separate child document. It is reachable from both قلمرو تجربه and شبیه‌سازی; its presentation therefore follows the actual entry mode: experience background for بازشناسی and simulation-realm background for هم‌سنگی. The card inventory is opened from the home/logo surface rather than a primary realm and is intentionally excluded. The home page and five realm landing surfaces are also excluded.
+After: optional verification (JS/JSON/HTML check beyond gate, browser test, language change, navigation, mobile/desktop, RTL/LTR, a11y) only on explicit user request; quality/security is the only automated suite; presentation-only change in CSS.
 
-### Original JPEG integrity
+Verify selector landing in portrait/landscape and RTL/LTR; confirm child pages inherit language without their own control. In every viewport and 4 languages: selector fully visible, no intersection with header. Paragraph Machine: evaluation/generation path, S/T/E/R/C judgment, 144/34/900 limits, translation boundary, batch cardinality.
 
-The source JPEGs were supplied in PR #163 and are kept byte-for-byte unchanged. Dimensions and byte sizes were read from the original JPEG streams; SHA-256 values below were computed from the decoded source bytes.
+Decision Rules
 
-| Source path | Dimensions | Bytes | SHA-256 |
-|---|---:|---:|---|
-| `adapters/ساختار تالار.jpg` | 1024 × 1023 | 319,822 | `123e2a5a53275846f5b4ed58cbac90a2653fd31a50a7918ec53ebfddadbce70c` |
-| `adapters/تداوم عالم.jpg` | 1024 × 1024 | 244,108 | `4a9e451ee6745694eb3ba26653e6f660b4625f675d08f40191e068b5239462b5` |
-| `adapters/قلمرو تجربه.jpg` | 1050 × 1050 | 161,964 | `9146fb600b66b52f658b9c0c5273b36cba5abbec0c85799c523b51f466490e5f` |
-| `adapters/مرجع تقلید.jpg` | 1425 × 1425 | 513,125 | `97249cf98ab4d5cb7d649d9abf8eb16d7c6a71c5d59d0173522cfc0e76cf8562` |
-| `adapters/اقتصاد سهم.jpg` | 1126 × 1126 | 243,856 | `9437fd46315ff9a32bb0a317eddba9bcce460598fdd140979f7730029046c4df` |
+Fix this page → page code first. Fix all → audit shared before repeating fix. Fix language → translations/i18n.js then listener/layout. Fix mobile → ui/mobile/mobile.css + page CSS. Fix desktop → css/desktop.css + shared layout. Update translations → Persian canonical source first, then only requested target catalog. Clean code → staged refactor preserving behavior at each step.
 
-The original JPEGs remain in their existing PR paths rather than being re-encoded or renamed. No page-specific background declarations or new dependencies are required.
+Invariants
 
-### Verification targets
+1. Static GitHub Pages architecture. 2. No mandatory build. 3. Four languages fa/en/zh/ar. 4. Persian primary content authoritative. 5. S/T/E/R/C order. 6. Paragraph Machine: Persian criteria source immutable; judgment in primary/selected language. 7. Limits 144/34/900. 8. Shared core/service boundary. 9. Shared i18n boundary. 10. Mobile+desktop. 11. Keyboard a11y. 12. Per-page language switching present. 13. Ownership Persian-source → translation-source. 14. Talk Back from same selected-language content.
 
-The responsive visual matrix includes 320 × 740, 360 × 800, 390 × 844, 430 × 932, 640 × 360, 844 × 390, 768 × 1024, 900 × 1200, 1024 × 768, 1200 × 1600, 1365 × 900, 1440 × 900, and 1920 × 1080. Validate every child surface, direct URL and in-site entry, all four site languages, RTL/LTR, focus visibility, dialogs, return-to-parent navigation, no horizontal overflow, and successful requests for the five JPEGs. Browser/device verification must be reported separately from automated CI; a passing lint job alone is not visual or TalkBack evidence.
+Commit Vocabulary
 
-## 8. Paragraph Machine contract
+Unified Visual Family System
 
-Architecture:
+5 realms = one composition from outer black perimeter to white center: S dark petroleum blue; T matte golden yellow; E cosmic purple; R dark coral red; C emerald green. Order invariant and part of visual identity. A page inherits dominant color family from its realm and builds its visual language from parent realm motifs — related, not identical.
 
-UI → js/paragraph-page.js → adapters/paragraph-workspace.js → engine/paragraph-engine.js
+Rules: shared grammar (restrained header, glass-like controls, soft depth, subtle border, controlled glow, strong negative space, shared motion language); preserve parent color/atmosphere; reuse + interpret motifs, not scene copy; hierarchy: atmosphere → title/nav → content surface → actions; Reference with architectural/concentric vocabulary from coral-red (not reduced to legacy); Paragraph Machine deliberately exceptional (functional workspace, stronger language allowed); Shahnameh flagship level — image-centric composition is not baseline for all; visual refinement must not change navigation/state/content/i18n/a11y semantics/service boundary/business rule.
 
-The adapter also uses services/llm-client.js and services/translation-bridge.js. The engine is DOM-independent.
+Maintenance: inspect owning page + parent realm; prefer presentation-only CSS when structure/behavior suffices; new motif belongs to realm family, not unrelated sixth language.
 
-Hard limits:
-- MAX_WORDS = 144
-- MAX_WORD_LENGTH = 34
-- MAX_CHARS = 900
+a11y for blind users = shared runtime service, not per-page content implementation.
 
-Judgment contract (per paragraph):
-- `judgment`: S / T / E / R / C, each with `status: ok | warn | bad` and a non-empty `reason`; these describe alignment with explicit principles only.
-- `normative`: a separate S / T / E / R / C axis, each with `direction: nobler | harmful | mixed | indeterminate`, a non-empty `rationale`, and textual `evidence`.
-- The normative axis is qualitative and contextual. It must not be converted into a number, percentage, total, average, or single overall ranking.
-- `ok` = منطبق; `warn` = مبهم; `bad` = متناقض. These labels are not moral scores.
-- The UI presents the normative direction separately and shows its rationale/evidence; it never treats the three-state conceptual status as a moral judgment.
-
-Entry modes:
-- **هم‌سنگی:** original user text → criteria translated to the same language → independent judgment → UI. The user's paragraph is never translated as a preprocessing step.
-- **بازشناسی:** generate in the selected site language → independently judge the generated paragraph using criteria in that language → compare with the user's five selections.
-
-These are distinct paths: evaluation must not accidentally become generation.
-
-Translation bridge public operations: toPersian(), fromPersian(), fromPersianBatch(). Batch cardinality must remain input count = output count.
-
-llm-client.js is the model-service boundary. UI must not call the model API directly; adapters must not duplicate retry logic.
-
-The `paragraph-page` workspace in `index.html` is the single shared **machine surface** for Paragraph Machine; it is not a book or a second machine. It is reached through both **قلمرو تجربه → بازشناسی → ماشین پاراگراف** and **شبیه‌سازی → هم‌سنگی → ماشین پاراگراف** paths. There is no separate standalone Paragraph Machine HTML page in the current route structure.
-
-## 9. Content and reading ownership
-
-Authoritative content belongs in content/*.js or the defined Persian/translation source repositories, not in controllers, CSS, or generic utilities.
-
-Shahnameh ownership:
-
-index.html → js/shared-pages.js → content/page-templates/shahnameh.fragment → js/shahnameh-series-page.js → content/shahnameh-series.js → translations/i18n.js
-
-Fix Shahnameh-specific defects in its own surface first; change global i18n only when the defect is demonstrably global.
-
-## 10. Globals and dependencies
-
-Current compatibility globals include:
-
-window.SiteI18n, window.SitePages, window.BookNavigation, window.ParagraphMachineCore, window.ParagraphLLM, window.ParagraphTranslation, window.ParagraphWorkspaceAdapter, window.ParagraphPage
-
-Do not add arbitrary globals. Extend an existing public API when appropriate, keep interfaces small, and avoid leaking internal state.
-
-Script order has intentional dependencies. Do not reorder casually. ES-module migration is a dedicated refactor.
-
-## 11. Responsive and accessibility contract
-
-Every layout change must consider:
-- mobile portrait
-- mobile landscape
-- desktop
-- RTL and LTR
-- short and long translated labels
-
-Preserve semantic buttons, type="button", keyboard interaction, appropriate aria-label/aria-pressed/aria-live, visible focus, and correct lang/dir.
-
-The landing-page language control is especially sensitive to narrow portrait widths, RTL/LTR, long labels, and header positioning. Child pages must not contain their own language selector. The single fixed selector owns a reserved top band of `64px + env(safe-area-inset-top)` across every orientation and breakpoint. All child-page, realm, and game headers must place their visible titles and actions below that band; do not rely on portrait-only offsets or allow the selector to cover header content. Keep the four language buttons on one visible row and within the viewport.
-
-## 12. Security
-
-Preserve existing CSP and browser security constraints, including HTTPS-only model endpoints and restricted embedding/navigation behavior.
-
-A browser-side API key is not a server-side secret. Never commit keys, tokens, passwords, or provider secrets.
-
-## 13. Quality, security, and deployment
-
-### Explicit approval policy for tests and merges (mandatory)
-
-**Scope:** This rule applies to every ModernOutlook-owned/maintained repository, all website surfaces, and all associated workflows—not only SmartKazem.
-
-- **Only the Site quality gate (`quality.yml`) and Security gate (`security.yml`) may run automatically** on pushes to `main` and pull requests.
-- **Every other test suite is opt-in.** Browser/UI smoke tests, responsive and screenshot matrices, Paragraph Machine layout tests, and any other test workflow must not start automatically on a push, pull request, merge, or unrelated workflow. Run them only after the user explicitly requests that specific test or suite. Their GitHub Actions trigger must be manual (`workflow_dispatch`) unless the user explicitly authorizes a different trigger.
-- Do not interpret opening a PR, asking for a code change, or asking to prepare a merge as permission to run optional tests. If optional testing would be useful, ask first and wait.
-- **Merging is also opt-in and requires explicit user approval for that merge.** Passing checks, a green PR, or a previous merge approval is not permission to merge a later PR. Never enable auto-merge or merge on the user's behalf before that approval.
-- The quality and security gates are the only routine automatic tests; deployment workflows are operational workflows, not permission to start additional test suites. A manually requested deployment or other action still requires the user's explicit request.
-- When preparing a PR, report which automatic quality/security gates ran and keep optional tests unstarted unless requested. Do not claim an optional test passed if it was not run.
-
-
-`quality.yml` enforces the maintenance contract: JavaScript syntax, JSON validity, duplicate HTML IDs, missing local HTML assets, inline-script/event-handler restrictions, externalized presentation CSS, document language, and the landing-only language-selector contract.
-
-`security.yml` checks every HTML page for the browser-security metadata contract, insecure `http://` URLs, `javascript:` URLs, and likely committed credentials. The legacy Paragraph Machine is not exempt.
-
-Browser security is intentionally implemented within static GitHub Pages constraints. Do not assume arbitrary server response headers are available. Keep CSP, referrer, and Permissions-Policy metadata synchronized with the actual page requirements.
-
-`css/visual-security.css` is presentation-only: it may improve visual focus, contrast, illumination, and control affordances, but must not acquire navigation, state, content, i18n, engine, service, or adapter logic.
-
-`deploy.yml` is the current deployment workflow. Do not introduce or document a second deployment workflow without first inspecting the actual workflow tree.
-
-## 14. Known technical debt
-
-- some window.* compatibility globals
-- large css/site.css
-- inconsistent legacy JS formatting
-- some fallback/content prose near logic
-- some legacy compatibility globals
-- no complete formatter/linter/type system
-- no full browser smoke-test suite
-- some legacy HTML/CSS may still require staged cleanup as the repository evolves
-- Structure.txt overlaps README
-
-These are boundaries, not reasons for opportunistic rewrites.
-
-## 15. AI change protocol
-
-### Before editing
-1. Identify the exact user-facing surface.
-2. Find its owning files.
-3. Search callers before changing shared modules.
-4. Identify affected contracts/invariants.
-5. Inspect actual current code.
-
-### During editing
-- Prefer the smallest patch.
-- Reuse existing APIs/helpers.
-- Keep business rules out of UI and services out of content modules.
-- Prefer data-driven rendering.
-- Prefer textContent/replaceChildren/explicit DOM APIs over unsafe dynamic HTML.
-- Preserve existing escaping/safety boundaries for user/model text.
-- Avoid speculative abstraction.
-
-### After editing
-Run optional verification (JS/JSON/HTML checks beyond the automatic quality gate, browser tests, language switching, navigation, mobile/desktop, RTL/LTR, or accessibility checks) only when the user explicitly requests it. The quality and security gates are the sole automatically triggered test suites. If a presentation change can be made without touching behavior, keep it in CSS.
-
-Verify the landing-page language selector in portrait/landscape and RTL/LTR, then confirm that all child pages inherit the selected language without rendering their own language controls. At every responsive viewport and in all four languages, assert that the selector remains fully visible and does not intersect any page-header title or action.
-
-For Paragraph Machine also verify evaluation/generation paths, S/T/E/R/C judgment, 144/34/900 limits, translation boundary, and batch cardinality.
-
-## 16. Decision rules
-
-- **Fix this page:** modify page-specific code first.
-- **Fix all pages:** inspect shared code before duplicating a fix.
-- **Fix language switching:** start at translations/i18n.js, then inspect the affected page listener/layout.
-- **Fix mobile:** start at ui/mobile/mobile.css and affected-page CSS.
-- **Fix desktop:** start at css/desktop.css and shared layout contracts.
-- **Update translations:** obtain the canonical Persian source first; update only requested target catalogs.
-- **Clean the code:** use staged refactoring; preserve behavior after each stage.
-
-## 17. Invariants not to change casually
-
-1. Static GitHub Pages architecture.
-2. No mandatory build step.
-3. Four languages: fa/en/zh/ar.
-4. Persian as authoritative primary content.
-5. Realm order: S/T/E/R/C.
-6. Paragraph Machine keeps Persian as the immutable canonical source of criteria; paragraphs are judged in their original/selected language.
-7. Paragraph limits: 144 / 34 / 900.
-8. Shared Paragraph Machine core/service boundaries.
-9. Shared i18n boundary.
-10. Mobile + desktop support.
-11. Keyboard accessibility.
-12. Existing page-specific language switching.
-13. Persian-source → translation-source content ownership.
-14. Talk Back consumes the same language-selected content.
-
-## 18. Commit/change vocabulary
-
-Prefer: fix: / feat: / refactor: / style: / docs: / test: / chore:
-
-## Final rule
-
-> **Inspect first. Identify the smallest responsible layer. Change only what is necessary. Preserve contracts. Validate the affected surface.**
-
-## 19. Repeatable AI page-completion system
-
-Long-form content pages use a machine-detectable **page-completion package** so future ChatGPT maintenance can recognize the workflow instead of inventing a new one.
-
-Reference protocol: `docs/ai-page-completion.md`  
-Machine-readable manifest: `page-specs/<page>.json`
-
-The standard flow is:
-
-`Persian source → translation reservoir (EN/AR/ZH) → shared i18n/runtime → accessibility derived from content + interaction model → verification`
-
-For a new page, ChatGPT should inspect the repository first and request only missing inputs: page identity, canonical Persian source, translation target/path, runtime page/path, and any page-specific accessibility requirements. It should then reconcile source and translations, complete translations from Persian, derive the accessibility layer, run the quality gate, and perform real browser/screen-reader testing when that capability is available.
-
-The **Persian source remains authoritative**. Translation cardinality and ordering must match it. Accessibility is not a separate content source; it is a contract derived from the actual translated content and controls. The reference implementation is `emergence`.
-
-This protocol does not replace page-specific inspection. It makes the expected relationship explicit and repeatable.
-
-
-## 20. Unified visual-family system
-
-The five realms form one visual composition from the outer black perimeter toward the white center:
-
-1. **S — ساختار تالار:** deep petroleum blue
-2. **T — تداوم عالم:** matte golden yellow
-3. **E — قلمرو تجربه:** cosmic purple
-4. **R — شبیه‌سازی:** dark coral red
-5. **C — اقتصاد سهم:** emerald green
-
-The palette order is invariant and is part of the site's visual identity. A page opened from a realm should inherit that realm's dominant color family, while it may develop its own visual language from the parent realm's background motifs. Child surfaces are therefore **related, not identical**.
-
-### Visual design rules
-- Shared page grammar: restrained header, glass-like control surfaces, soft depth, fine borders, controlled glow, strong negative space, and a common motion language.
-- Realm identity: preserve the parent realm's dominant color and atmospheric character.
-- Child identity: reuse one or more motifs from the parent realm's background, then reinterpret them rather than copying the parent scene literally.
-- Visual hierarchy: atmosphere → title/navigation → content surface → actions.
-- The Reference realm uses an architectural/concentric vocabulary derived from its coral-red identity; it should not be visually reduced to the simpler legacy treatment.
-- Paragraph Machine remains a deliberately exceptional machine surface. Its stronger visual language is allowed because it is a functional workspace, not a normal child page.
-- Shahnameh remains a flagship visual surface; its image-rich composition is not a baseline that every page must imitate.
-- Visual refinement must not alter navigation, state, content, i18n, accessibility semantics, service boundaries, or business rules.
-
-### Maintenance rule
-When improving a visual surface, inspect both the owning page and its parent realm. Prefer a presentation-only CSS change when structure and behavior already satisfy the contract. New visual motifs should belong to the realm family rather than becoming an unrelated sixth design language.
-
-
-## §21 Accessibility data-flow contract — future-proof by default
-
-The blind-user accessibility system is a **shared runtime service**, not a per-page content implementation.
-
-### Core invariant
-
-Future content updates must follow this one-way data flow:
-
-`Persian source → translation reservoir → SiteI18n → rendered localized DOM → shared Talk Back/accessibility runtime`
-
-Accessibility never owns a second copy of page prose. It reads the **currently rendered, language-selected content** from the page at runtime.
-
-Therefore:
-
-> **Updating authoritative Persian content and its EN/AR/ZH translations automatically updates the Talk Back content, without editing the accessibility engine.**
-
-### What future pages MUST NOT do
-
-- Do not create a page-specific Talk Back engine.
-- Do not create an accessibility translation catalog.
-- Do not duplicate Persian/English/Arabic/Chinese prose for screen readers.
-- Do not hard-code page titles, paragraphs, episode text, or navigation prose inside `audio-engine.js`.
-- Do not add a page-specific accessibility script merely because a new book/section was added.
-- Do not connect Talk Back directly to the Persian repository or a target translation repository from page code. The runtime path is always through the shared i18n/rendered-DOM boundary.
-- Do not require a future content editor to update accessibility text separately.
-
-### What the shared runtime guarantees
-
-`audio-engine.js` is responsible for behavior, not content. When accessibility is active it:
-
-1. discovers semantic/navigable elements from the current DOM;
-2. derives accessible names from native semantics, ARIA labels, i18n labels, and visible text;
-3. reads the currently rendered article/book content;
-4. uses `document.documentElement.lang` / `SiteI18n` to select the active speech language;
-5. reacts to `site:languagechange`;
-6. observes DOM/content mutations and resynchronizes its navigation model;
-7. announces dynamically replaced content through the shared live region;
-8. supports keyboard, touch, focus, previous/next, item selection, and long-form reading without knowing the page's prose.
-
-The runtime therefore remains stable while the content and translation repositories evolve.
-
-### Content contract for automatic accessibility
-
-Every future user-facing content surface must expose its content through the existing shared runtime:
-
-- Persian content is authoritative.
-- EN/AR/ZH are structurally aligned translations.
-- `translations/i18n.js` selects and renders the active language.
-- Book/article content is present in the DOM or is rendered into the DOM from the same source/translation model.
-- Interactive controls use native HTML semantics and existing i18n labels where labels are language-sensitive.
-- Dynamic content must be inserted through the page's existing rendering boundary so the shared MutationObserver can discover it.
-- No hidden duplicate accessibility-only content is permitted.
-
-### Automatic update rule
-
-For a new or changed content item:
-
-`update Persian → update EN/AR/ZH → render → Talk Back sees the new DOM`
-
-No accessibility-engine change is expected.
-
-A change to `audio-engine.js` is justified only when the **interaction model itself** changes, such as introducing a genuinely new accessibility gesture, control type, or reading behavior. A normal new page, chapter, episode, paragraph, title, translation, or button label is a **content/data change**, not an accessibility-engine change.
-
-### Page manifests and accessibility
-
-`page-specs/<page>.json` may declare page-specific accessibility requirements when the interaction model genuinely needs them. Such declarations describe **requirements and verification**, not a second implementation.
-
-If a page uses only standard book/article navigation, it should inherit the shared accessibility contract rather than adding custom accessibility code.
-
-### Definition of automatic accessibility completeness
-
-A page is accessibility-complete when:
-
-- its Persian source is complete;
-- EN/AR/ZH translations are complete and structurally aligned;
-- the shared i18n runtime can render every language;
-- the resulting DOM uses semantic controls and landmarks;
-- `audio-engine.js` is loaded by the shared page shell/runtime;
-- Talk Back can discover the rendered content and controls without page-specific accessibility prose;
-- quality/security gates pass.
-
-This means **content synchronization and accessibility synchronization are the same runtime operation**: accessibility consumes the current rendered content rather than maintaining an independent copy.
-
-
-### §21.2 Bootstrap and coverage safeguards
-
-The automatic bootstrap is defensive as well as convenient:
-
-- `translations/i18n.js` first reuses an already loaded `window.SmartKazemAudio` instance.
-- If the page already declares `audio-engine.js`, the i18n runtime reuses that script instead of injecting a second copy.
-- Otherwise the shared engine is injected once and initialized idempotently.
-- This means script-order differences between legacy and newer pages must not create duplicate accessibility engines.
-- The accessibility contract applies to every user-facing HTML surface that follows the shared i18n contract, including books, the home/realm surface, inventory, and the legacy Paragraph Machine surface.
-- Page-specific manifests may describe verification requirements, but they do not create separate accessibility implementations.
-
-When validating a future page, check the shared runtime rather than adding page-specific accessibility code:
-
-1. Fresh/local state → accessibility is off.
-2. Triple primary-pointer click/tap anywhere → toggles accessibility.
-3. A second triple click/tap → toggles it back off.
-4. While off → accessibility gestures do nothing.
-5. While on → the current localized DOM is what is announced/read.
-6. Changing language → accessibility follows the new rendered language.
-7. Dynamic content replacement → the shared navigation model resynchronizes.
-8. No duplicate `audio-engine.js` instance is created.
-
-### §21.1 Automatic runtime bootstrap
-
-`translations/i18n.js` is the shared language boundary and also bootstraps `audio-engine.js` when the accessibility runtime is not already present. This is intentional: a future page that follows the normal site i18n contract inherits Talk Back automatically instead of needing a page-specific accessibility script tag.
-
-The resulting runtime chain is:
-
-`Persian source → translation reservoir → SiteI18n → localized DOM → auto-bootstrapped shared Talk Back`
-
-The page still owns its semantic HTML and interaction model; the accessibility engine owns only the generic behavior. Existing explicit `audio-engine.js` inclusions remain safe because the engine is idempotent.
-
-
-## Declared book translation reservoirs (2026-10-09)
-
-- **فصل اول ظهور** and **فصل دوم ظهور** now declare `translations/emergence.json` and `translations/emergence-2.json` directly in their HTML. Their renderers prefer the shared `bookContent` boundary, with the legacy `chapters` view retained only as a compatibility fallback.
-- Removed page-name-to-file hardcoding from `translations/i18n.js`; long-form pages now load a dedicated book catalog only when the page declares `i18n-catalog`. This prevents each new book page from requiring an edit to the shared loader.
-- Translation completeness remains a separate requirement from source centralization. The audit still flags **تباهیان** because its canonical Persian source has three chapters but the translation reservoir contains only two.
-
-
-## Emergence II translation alignment (2026-10-12)
-
-- Compared the canonical Persian source with the EN/AR/ZH reservoir. Episode 20’s opening translation paragraph had merged two Persian paragraphs; the boundary is now restored in all three languages. The manifest now points to `translations/emergence-2.json`.
-- **Paragraph rule:** every non-empty line in the canonical Persian episode string is one paragraph. EN/AR/ZH are aligned to the same ordered paragraph count by regrouping existing translated sentences only; translated wording and order are preserved. The renderer uses the same non-empty-line rule for Persian. The compact alignment manifest records each Persian source-line index and its ordered EN/AR/ZH sentence ranges.
-
-## Multi-book translation reservoirs (2026-10-09)
-
-The home page can declare more than one long-form translation source using `meta[name="i18n-catalogs"]`, with semicolon-separated `bookKey=path` entries. `translations/i18n.js` loads each declared JSON reservoir into `SiteI18n.getCatalog().bookContent`; book renderers localize the language-keyed titles, subtitles, chapter labels, and paragraph arrays. This keeps long-form prose out of the global language catalogs and avoids adding a per-book fetch branch to the shared loader.
-
-Currently, **جاعلان تقلید** uses `translations/forgers.json` (10 chapters) and **انسان و ماشین‌هایش** uses `translations/human-machines.json` (7 chapters). Their Persian render paths remain backed by `content/forgers.js` and `content/human-machines.js` respectively. Do not claim a translation is complete based only on the presence of a reservoir; compare chapter counts, paragraph alignment, and full-text fidelity against the canonical Persian source.
-
-
-The Shahnameh reader uses `translations/shahnameh.json` for localized episode titles, section labels, and target-language prose. Its page declares this file with `i18n-catalog`; the reader consumes it from `SiteI18n.getCatalog().bookContent.shahnameh`. Original Persian verse remains sourced from `content/shahnameh-series.js`, not copied into each language catalog. The extraction preserves existing translations but does not replace a full 81-episode visual and content review.
-
-
-All three Share Economy books now use the same generic home-page manifest: `forgers=translations/forgers.json;humanMachines=translations/human-machines.json;tabahian=translations/tabahian.json`. The shared loader has no Tabahian-specific fetch branch. `translations/tabahian.json` now contains all three chapters in EN/ZH/AR, with paragraph counts aligned to the canonical Persian source (38, 59, and 96).
-
-
-## Reader design reference
-
-The short-story reader `content/page-templates/zero.fragment` establishes the child-page reading surface: a compact shared-language header, clear return action, a centered deep-blue article card, visible keyboard focus, responsive spacing, and reduced-motion support. Long-form readers such as `philosophical-treatise.html` should reuse this visual family while retaining their own navigation and content structure. Long-form text must continue to render from the canonical Persian source and the declared translation reservoir; do not duplicate prose in HTML or introduce a page-specific language/accessibility system.
-
-
-### Emergence II runtime language-rendering fix (2026-10-12)
-
-The `emergence2` shared-page controller must unwrap the language-keyed reservoir fields before rendering: `episode.title[language]` and `episode.paragraphs[language]`. Passing the objects directly produced `[object Object]` and the missing-episode fallback. The browser smoke test now verifies real localized prose for EN, AR, and ZH, not merely a non-empty reader container. The paragraph audit now enforces one non-empty source line per paragraph in all four languages, with the translated character stream preserved.
-
-
-### Canonical-content browser verification (2026-10-12)
-
-The UI Playwright workflow now checks rendered prose against the actual canonical data loaded by each page, rather than treating a non-empty reader as proof of success.
-
-- **Emergence II:** all 11 episodes (20–30) are checked in FA/EN/AR/ZH. For each language, the rendered episode title and every rendered paragraph must exactly match the Persian source object or the selected language's translation reservoir. The test also checks the chapter title, document `lang`/`dir`, absence of placeholders and raw object output, and preservation of the active episode while switching languages.
-- **Other shared content pages:** canonical text checks cover all treatise blocks, all 81 Shahnameh episodes, Emergence I episodes, Observation, Observation 25, Possible Mirror, Layer 3, Disturbed Manifesto, Zero, and every chapter of Forgers, Human and its Machines, and Tabahian. The tests compare the visible DOM text with the page's Persian source or language-specific catalog data.
-- **Site-wide checks:** every HTML page is exercised through the four language controls; shared-page routes also verify language bindings, and the workflow retains its responsive viewport and horizontal-overflow sweep.
-- **Direction correction:** the shared book reader now uses RTL for Persian/Arabic and LTR for English/Chinese. Previously, Chinese was incorrectly forced to RTL.
-
-The browser workflow runs Playwright against the PR branch served by a local HTTP server in GitHub Actions. This verifies the actual page runtime built from the proposed code, but is not a claim that the deployed production site has already been tested.
-
-### Reusable Playwright / Chromium toolchain
-
-The UI browser workflow uses the pinned Playwright **1.55.0** + Chromium bundle published as a private Release in `ModernOutlook/GPT` (`playwright-1.55.0-chromium-linux-x64`). On a cache miss, it downloads the archive using the `GPT_CACHE_READ_TOKEN` repository secret, verifies the accompanying SHA-256 file before extraction, and saves the extracted Node package and browser files in the SmartKazem Actions cache. The cache key is pinned to the runner OS, Node 22, Playwright 1.55.0, and the browser bundle revision; no credentials are stored in the cache.
-
-Configure `GPT_CACHE_READ_TOKEN` in **SmartKazem → Settings → Secrets and variables → Actions**. It must be a narrowly scoped token with **Contents: read** access to the private `ModernOutlook/GPT` repository. Do not put the token in source files, workflow outputs, or logs. If the private bundle cannot be accessed and the browser toolchain is not already cached, the workflow fails before test execution instead of reporting a misleading green run with browser tests skipped. A manual `workflow_dispatch` may use `approve_browser_download=true` only when an explicit one-off upstream download is intended.
-
-The browser, language, Paragraph Machine full-matrix, Five Realms, realm-child-background, and content-cover test suites remain available but are **manual opt-in only**. They must not run automatically; invoke them only after the user explicitly requests the relevant suite. This cache integration does not weaken their assertions or remove their screenshot artifacts.
-
-
-**Emergence II paragraph contract:** every non-empty line in each Persian source episode is a paragraph, including lines separated by a single newline. Blank lines are separators and are not paragraphs. Each EN/AR/ZH episode must expose the same number of paragraphs in the same order. The alignment utility splits existing translated text at sentence boundaries and monotonically regroups those unchanged sentence units to the Persian line count; it does not generate, summarize, rewrite, or reorder translation prose. Chinese sentence splitting recognizes 。！？ without requiring spaces. The browser audit checks exact rendered paragraph arrays in all four languages.
-
-
-
-## Content-section navigation contract
-
-Every text-bearing secondary page uses a consistent, localized section-navigation pattern, except **شاهنامه‌خوانی**, whose episode-list and artwork navigation are a deliberate separate experience. The Paragraph Machine is a tool/workspace, not a content page, and is outside this rule.
-
-- Each tab or section heading displays both the localized section number and its canonical name (for example, `۳ · عنوان بخش`). Numbers use the active language's number formatter.
-- Selecting a tab changes only the content visible in its reading panel. It must not call `scrollIntoView`, reset a reader's `scrollTop`, move focus to the reading panel, or otherwise move the document viewport. Keyboard navigation keeps focus on the selected tab with `focus({ preventScroll: true })`.
-- Multi-section books use their existing canonical chapter/part/episode/section data. Do not invent headings, reorder content, or split/merge source paragraphs to create navigation.
-- Works whose canonical source is one continuous, undivided text retain one numbered tab for the complete work; this applies to **سرزمین مشاهده؛ یک رود، یک جریان** and **صفر**. Their prose remains intact and is not artificially divided.
-- The shared book reader (`جاعلان تقلید`, `انسان و ماشین‌هایش`, and `تباهیان`), **رساله فلسفی**, **فصل اول ظهور**, **فصل دوم ظهور**, **سرزمین مشاهده؛ ۲۵ بار رسیدن**, **آینه‌ی ممکن‌ها**, **پژواک لایه سوم**, and **مانیفست آشوب‌زده** all follow the same no-scroll selection behavior.
-- Tabs must retain semantic tablist/tab/tabpanel relationships, visible focus, RTL/LTR behavior, mobile wrapping/overflow, and the selected section when the language changes.
-
-The implementation inventory and page-by-page verification criteria are maintained in `docs/content-tab-navigation-audit.md`.
-
-## Secondary content-page cover artwork (3:4)
-
-Every secondary page whose primary purpose is reading a textual work must end with one dedicated **3:4 cover frame**. The frame belongs after the complete work content and its navigation, at the true end of the page; it must not interrupt the article or appear between sections. It uses the same shared page structure and remains responsive in portrait, landscape, tablet, and desktop layouts.
-
-**Explicit exclusions:** `شاهنامه‌خوانی` keeps its existing episode-artwork experience and does not receive this additional cover frame. The Paragraph Machine is a functional workspace, not a textual-content page, and is also excluded. Home, realm landing pages, games, inventory, and utility panels are not in scope.
-
-### Canonical upload location
-
-Upload all page-cover images to:
-
-`content/page-templates/`
-
-Use the exact lowercase ASCII filenames below, with the `.jpg` extension. The path is relative to the repository root and must be referenced without hard-coded deployment-domain prefixes so GitHub Pages subpath deployment continues to work.
-
-| Textual page | Required cover filename |
-|---|---|
-| رساله فلسفی | `philosophical-treatise.jpg` |
-| فصل اول ظهور | `emergence-1.jpg` |
-| سرزمین مشاهده؛ ۲۵ بار رسیدن | `observation-25.jpg` |
-| آینه‌ی ممکن‌ها | `possible-mirror.jpg` |
-| فصل دوم ظهور | `emergence-2.jpg` |
-| سرزمین مشاهده؛ یک رود، یک جریان | `observation-river.jpg` |
-| پژواک لایه سوم | `echo-layer-3.jpg` |
-| انسان و ماشین‌هایش | `human-and-its-machines.jpg` |
-| جاعلان تقلید | `forgers-of-imitation.jpg` |
-| تباهیان | `tabahian.jpg` |
-| مانیفست آشوب‌زده | `disturbed-manifesto.jpg` |
-| صفر | `zero.jpg` |
-
-### Image and rendering contract
-
-- Each cover asset is a portrait image intended for a **3:4** frame. The frame must retain that aspect ratio at every viewport size; it must never stretch the image or cause horizontal overflow.
-- Keep the original uploaded image unchanged. Use a predictable, accessible image element with meaningful localized alternative text derived from the page's canonical title; do not duplicate article prose in the alt text.
-- The frame is a presentation element only. It must not alter the canonical Persian source, translation reservoirs, section order, page navigation, language selection, or shared Talk Back behavior.
-- If an image has not yet been uploaded, retain the reserved 3:4 frame as a neutral, non-interactive placeholder; do not show a broken-image icon or invent replacement artwork.
-- When a new textual-content child page is added, include the same end-of-page 3:4 cover frame, propose its unique lowercase ASCII kebab-case filename, and add that filename to this README table before requesting/uploading the image. Reuse the same `content/page-templates/` directory; do not create per-page image folders.
-- شاهنامه‌خوانی and the Paragraph Machine remain excluded unless the user explicitly changes this scope.
+Core invariant: Persian source → translation reservoir → SiteI18n → rendered lo[g]
