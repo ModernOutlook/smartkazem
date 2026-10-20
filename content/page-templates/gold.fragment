@@ -41,13 +41,5 @@
    <div class="gold-progress-track" role="progressbar" aria-label="میزان شارژ جواهر" aria-valuemin="0" aria-valuemax="3600" aria-valuenow="0" data-gold-progress><span data-gold-progress-fill></span></div>
    <p class="gold-stage-caption" data-gold-stage-label>مرحلهٔ ۰ از ۷۲ · آغاز تکامل</p>
   </div>
-  <div class="gold-charge-panel">
-   <h3>توالی تکامل</h3>
-   <p>با افزایش شارژ، برش‌های هندسی منظم‌تر، اندازهٔ جزئیات متنوع‌تر، شفافیت و درخشش جواهر به‌تدریج افزایش می‌یابد. پایان توالی برابر با شارژ کامل است؛ شارژ صفر دقیقاً به مرحلهٔ آغاز برمی‌گردد.</p>
-   <label for="gold-charge-input">تنظیم شارژ (۰ تا ۳۶۰۰)</label>
-   <input id="gold-charge-input" type="number" min="0" max="3600" step="1" value="0" inputmode="numeric">
-   <div class="gold-controls"><button type="button" data-gold-set="0">خالی</button><button type="button" data-gold-set="1800">نیمه</button><button type="button" data-gold-set="3600">کامل</button></div>
-   <p class="gold-sync-status" data-gold-sync-status aria-live="polite">مکانیزم شارژ آماده است.</p>
-  </div>
  </section>
 </main>
