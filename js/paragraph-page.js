@@ -133,9 +133,17 @@ async function evaluateReference(){
  return [await window.ParagraphWorkspaceAdapter.evaluateText(raw,getLanguage())];
 }
 async function generateExperience(){
+ const cycleStarted=performance.now();
  const lang=getLanguage();
+ const generationStarted=performance.now();
  const generated=await window.ParagraphWorkspaceAdapter.generateParagraphs(1,'mixed',lang);
+ const generationMs=Math.max(0,Math.round(performance.now()-generationStarted));
+ const judgmentStarted=performance.now();
  const evaluated=await Promise.all(generated.map(p=>window.ParagraphWorkspaceAdapter.evaluateText(p.text,lang)));
+ const judgmentMs=Math.max(0,Math.round(performance.now()-judgmentStarted));
+ const totalMs=Math.max(1,Math.round(performance.now()-cycleStarted));
+ const connection=navigator.connection||navigator.mozConnection||navigator.webkitConnection;
+ window.GoldChargeMechanism?.recordParagraphCycle?.(totalMs,{generationMs,judgmentMs,totalMs,language:lang,paragraphCount:generated.length,effectiveType:connection?.effectiveType||'unknown',rttMs:Number.isFinite(connection?.rtt)?connection.rtt:null,downlinkMbps:Number.isFinite(connection?.downlink)?connection.downlink:null,online:navigator.onLine!==false,timingBasis:'measured successful generation plus independent judgment; includes criterion translation/semantic audit when cache is cold and any retries'});
  return generated.map((p,i)=>({...p,judgment:evaluated[i].judgment,normative:evaluated[i].normative,displayedText:p.text}));
 }
 const DETAILS_TEXT=Object.freeze({
