@@ -11,7 +11,10 @@ if (root && !root.dataset.initialized) {
   root.dataset.initialized = "true";
   const t = (key, fallback = "") => window.SiteI18n?.get("pages.fiveRealms." + key, fallback) || fallback;
   let realmsData = [], currentQuestion = null;
-  let config, engine, state, selected = new Set(), pendingAction = null, awaitingReveal = false, pendingBankResult = null, pendingBankPlayerId = null;
+  const PROGRESS_KEY="smartkazem.five-realms-cards.progress.v1";
+  let config, engine, state, selected = new Set(), pendingAction = null, awaitingReveal = false, pendingBankResult = null, pendingBankPlayerId = null, engineSeed = null;
+  function saveProgress(){try{if(!state){localStorage.removeItem(PROGRESS_KEY);return;}localStorage.setItem(PROGRESS_KEY,JSON.stringify({version:1,state,awaitingReveal,pendingBankResult,pendingBankPlayerId,engineSeed}));}catch(_){}}
+  async function restoreProgress(){try{const saved=JSON.parse(localStorage.getItem(PROGRESS_KEY)||"null");if(saved?.version!==1||!saved.state?.players?.length)return false;if(!config)await loadConfig();engineSeed=Number(saved.engineSeed)||Date.now();engine=createEngine(config,{seed:engineSeed,onEvent:event=>emitSound(event.type,event.detail)});state=saved.state;awaitingReveal=!!saved.awaitingReveal;pendingBankResult=saved.pendingBankResult||null;pendingBankPlayerId=saved.pendingBankPlayerId??null;selected.clear();restoreGamePage();return true;}catch(_){return false;}}
   const announce = (message) => { const target=$("#fr-announcer",root); if(!target)return; target.textContent = ""; requestAnimationFrame(() => { target.textContent = message; }); };
   const emitSound = (type, detail = {}) => {
     document.dispatchEvent(new CustomEvent("site:game-sound", {detail:{game:"five-realms",type,...detail}}));
@@ -247,6 +250,7 @@ if (root && !root.dataset.initialized) {
       $("#fr-winner").textContent = winners.length ? t("winner","Winner: ") + winners.map(p=>p.name).join(" / ") : "";
       $("#fr-play").hidden = true;
     }
+    saveProgress();
   }
   function escapeHtml(value) { return String(value).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c])); }
   function advance(result) {
@@ -258,6 +262,7 @@ if (root && !root.dataset.initialized) {
       $("#fr-pass-name").textContent = t("passTo","Pass the device to") + " " + current().name;
       $("#fr-pass").hidden = false; $("#fr-play").hidden = true; awaitingReveal = true;
     }
+    saveProgress();
   }
   function actionForm(action) {
     pendingAction = action; const form = $("#fr-action-form"); form.replaceChildren();
@@ -307,7 +312,7 @@ if (root && !root.dataset.initialized) {
     if (!status.available) return {ok:false,reason:status.reason};
     const player=current();
     const result=engine.act(state,player.id,type==="deposit"?{type,amount:moneyInput(amount)}:{type});
-    if(result.ok){pendingBankResult=result;pendingBankPlayerId=player.id;awaitingReveal=true;}
+    if(result.ok){pendingBankResult=result;pendingBankPlayerId=player.id;awaitingReveal=true;saveProgress();}
     return result;
   }
   function restoreGamePage() {
@@ -331,10 +336,11 @@ if (root && !root.dataset.initialized) {
     returnToGame:returnFromBankMachine
   });
   $("#fr-player-count").addEventListener("change",refreshNameInputs);
-  $("#fr-start").addEventListener("click",async()=>{try{if(!config)await loadConfig();engine=createEngine(config,{seed:Date.now(),onEvent:event=>emitSound(event.type,event.detail)});const names=$$("[data-player-name]").map((input,i)=>input.value.trim()||t("player","Player")+" "+(i+1));state=engine.newGame(names);awaitingReveal=false;refresh();}catch(error){$("#fr-action-message").textContent=error.message;}});
+  $("#fr-start").addEventListener("click",async()=>{try{if(!config)await loadConfig();engineSeed=Date.now();engine=createEngine(config,{seed:engineSeed,onEvent:event=>emitSound(event.type,event.detail)});const names=$$("[data-player-name]").map((input,i)=>input.value.trim()||t("player","Player")+" "+(i+1));state=engine.newGame(names);awaitingReveal=false;refresh();}catch(error){$("#fr-action-message").textContent=error.message;}});
   $("#fr-reveal").addEventListener("click",()=>{awaitingReveal=false;refresh();});
   $$("#five-realms-game [data-action]").forEach(button=>button.addEventListener("click",()=>actionForm(button.dataset.action)));
-  $("#fr-restart").addEventListener("click",()=>{state=null;selected.clear();$("#fr-game-over").hidden=true;$("#fr-setup").hidden=false;$("#fr-play").hidden=true;refreshNameInputs();});
+  $("#fr-restart").addEventListener("click",()=>{state=null;pendingBankResult=null;pendingBankPlayerId=null;awaitingReveal=false;selected.clear();saveProgress();$("#fr-game-over").hidden=true;$("#fr-setup").hidden=false;$("#fr-play").hidden=true;refreshNameInputs();});
   document.addEventListener("site:languagechange",()=>{if(window.SharedPages?.getActive?.()!=="five-realms")return;if(state)restoreGamePage();refreshNameInputs();});
   refreshNameInputs();
+  void restoreProgress();
 }
