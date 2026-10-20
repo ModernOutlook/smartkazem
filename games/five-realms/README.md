@@ -43,6 +43,7 @@ node --test games/five-realms/tests/*.test.mjs
 
 - `content/page-templates/five-realms.fragment` is the five-game directory; `games/five-realms/hub.mjs` opens Talash and the existing Tadbir page.
 - The original card game is preserved in `content/page-templates/five-realms-cards.fragment` and remains implemented by `games/five-realms/ui.mjs` on the `five-realms-cards` route.
+- The active card-game state, player hands, scores, badges, deck/discard piles, round, turn handoff, and Tadbir bank handoff are stored in localStorage and restored after reload. This is device/browser-profile local, not account-synced; clearing site data removes the save.
 - `js/shared-pages.js` registers the directory, the preserved card game, Tadbir, and Talash with the shared-page runtime.
 - Added centralized `pages.fiveRealms.*` strings to `translations/fa.json`, `en.json`, `ar.json`, and `zh.json`. Realm display labels and colors are read from `data/realms.json`; the mapping is author-confirmed.
 - Emits named game events through `site:game-sound` and requests sound through the existing `SiteAudio.play(realm)` API. The site audio engine itself was not modified.
