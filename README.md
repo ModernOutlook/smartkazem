@@ -45,6 +45,8 @@ Runtime observations (cycle duration) are measurement only; not authorization fo
 
 Preserve capacity (0–3600), 72-stage contract, charge behavior, unless guide change directly requires it.
 
+The Gold page displays only the jewel and its live charge/progression readout. The temporary “توالی تکامل” preview panel and all manual charge controls/editors are removed from the Gold page and Paragraph Machine; do not reintroduce them without an explicit request. The charge mechanism remains driven by the Paragraph Machine generation-and-judgment cycle.
+
 Guide ambiguity ⇒ do not infer; explain and ask user. Guide-README alignment mandatory; silent guide change for justification prohibited. This policy documents authority only; merge only with explicit user approval.
 
 Philosophical Judgment Contract
