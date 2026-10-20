@@ -1,10 +1,15 @@
 import {createGame,stepGame,resizeGame,coinLogoPoints} from "./engine.mjs";
 import { GAME_BACKGROUNDS } from "../shared/backgrounds.mjs";
+import { installWallet } from "./wallet.mjs";
 const root=document.querySelector(".talash-page");
 if(root&&!root.dataset.initialized){
  root.dataset.initialized="true";
  const $=id=>root.querySelector("#"+id),canvas=$("talash-canvas"),ctx=canvas.getContext("2d"),overlay=$("talash-overlay"),status=$("talash-status");
- let game=null,lastTime=0,raf=0,desiredX=0,keys=new Set(),paused=false,backgrounds=[];
+ const PROGRESS_KEY="smartkazem.brick-breaker.progress.v1";
+ let game=null,lastTime=0,raf=0,desiredX=0,keys=new Set(),paused=false,backgrounds=[],creditedScore=0;
+ function saveProgress(){if(!game)return;try{const snapshot={version:1,game:{...game,random:undefined},paused:!!paused};delete snapshot.game.random;localStorage.setItem(PROGRESS_KEY,JSON.stringify(snapshot));}catch(_){}}
+ function restoreProgress(width,height){try{const saved=JSON.parse(localStorage.getItem(PROGRESS_KEY)||"null"),g=saved?.game;if(saved?.version!==1||!g||!Array.isArray(g.triangles)||!g.ball||!g.paddle||!Array.isArray(g.coins))return false;game={...g,random:Math.random,running:false};resizeGame(game,width,height);paused=!game.over;creditedScore=game.score;desiredX=game.paddle.x;if(game.over){overlay.hidden=false;$("talash-overlay-title").textContent=tr("gameOver","بازی تمام شد");$("talash-overlay-text").textContent=tr("finalScore","امتیاز نهایی: ")+game.score;$("talash-start").disabled=false;$("talash-pause").disabled=true;status.textContent=tr("gameOver","بازی تمام شد");}else{overlay.hidden=false;$("talash-overlay-title").textContent=tr("paused","بازی ذخیره‌شده");$("talash-overlay-text").textContent=tr("resumeHint","برای ادامه، دکمهٔ ادامه را بزنید.");$("talash-start").disabled=false;$("talash-pause").disabled=false;$("talash-pause").textContent=tr("resume","ادامه");status.textContent=tr("paused","پیشرفت بازی بازیابی شد؛ برای ادامه، دکمهٔ ادامه را بزنید.");}return true;}catch(_){return false;}}
+ const wallet=installWallet();
  const tr=(key,fallback)=>window.SiteI18n?.get("pages.talash."+key,fallback)||fallback;
  const images=[new Image()];images[0].src=GAME_BACKGROUNDS[0].dataUri;images[0].onload=()=>{if(game)draw();};
  backgrounds=images;
@@ -12,7 +17,7 @@ if(root&&!root.dataset.initialized){
   const rect=canvas.getBoundingClientRect(),w=Math.max(240,Math.floor(rect.width)),h=Math.max(280,Math.floor(rect.height));
   const dpr=Math.min(window.devicePixelRatio||1,2);
   const old=game;canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
-  if(old)resizeGame(old,w,h);else game=createGame({width:w,height:h,seed:Date.now()&0xffffffff});
+  if(old)resizeGame(old,w,h);else if(!restoreProgress(w,h))game=createGame({width:w,height:h,seed:Date.now()&0xffffffff});
   desiredX=game.paddle.x;draw();
  }
  function drawCoin(c){
@@ -31,11 +36,11 @@ if(root&&!root.dataset.initialized){
   $("talash-score").textContent=String(game.score);$("talash-lives").textContent=String(game.lives);$("talash-speed").textContent=(Math.hypot(b.vx,b.vy)/Math.max(1,Math.hypot(game.width*.34,game.height*.58))).toFixed(1)+"×";
  }
  function roundRect(x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w,y+h,r);ctx.arcTo(x+w,y+h,x,y+h,r);ctx.arcTo(x,y+h,x,y,r);ctx.arcTo(x,y,x+w,y,r);ctx.closePath();}
- function tick(time){raf=0;if(!game)return;const dt=lastTime?Math.min(.04,(time-lastTime)/1000):0;lastTime=time;if(game.running&&!paused){const direction=(keys.has("ArrowLeft")||keys.has("a")||keys.has("A")?-1:0)+(keys.has("ArrowRight")||keys.has("d")||keys.has("D")?1:0);if(direction)desiredX=game.paddle.x+direction*game.width*.8*dt;stepGame(game,dt,desiredX);}draw();if(game.over){overlay.hidden=false;$("talash-overlay-title").textContent=tr("gameOver","بازی تمام شد");$("talash-overlay-text").textContent=tr("finalScore","امتیاز نهایی: ")+game.score;$("talash-start").disabled=false;$("talash-pause").disabled=true;status.textContent=tr("gameOver","بازی تمام شد");}else raf=requestAnimationFrame(tick);}
+ function tick(time){raf=0;if(!game)return;const dt=lastTime?Math.min(.04,(time-lastTime)/1000):0;lastTime=time;if(game.running&&!paused){const direction=(keys.has("ArrowLeft")||keys.has("a")||keys.has("A")?-1:0)+(keys.has("ArrowRight")||keys.has("d")||keys.has("D")?1:0);if(direction)desiredX=game.paddle.x+direction*game.width*.8*dt;stepGame(game,dt,desiredX);if(game.score>creditedScore)wallet.creditCaughtCoins(game.score-creditedScore);creditedScore=game.score;}draw();if(game.over){overlay.hidden=false;$("talash-overlay-title").textContent=tr("gameOver","بازی تمام شد");$("talash-overlay-text").textContent=tr("finalScore","امتیاز نهایی: ")+game.score;$("talash-start").disabled=false;$("talash-pause").disabled=true;status.textContent=tr("gameOver","بازی تمام شد");}else raf=requestAnimationFrame(tick);}
  function ensureLoop(){if(!raf){lastTime=0;raf=requestAnimationFrame(tick);}}
- function start(){if(game.over||!game.triangles.some(t=>t.active))game=createGame({width:game.width,height:game.height,seed:Date.now()&0xffffffff});game.running=true;paused=false;overlay.hidden=true;$("talash-start").disabled=true;$("talash-pause").disabled=false;status.textContent=tr("playing","بازی در جریان است.");canvas.focus({preventScroll:true});ensureLoop();}
- function togglePause(){if(!game||game.over)return;paused=!paused;game.running=!paused;$("talash-pause").textContent=paused?tr("resume","ادامه"):tr("pause","مکث");$("talash-start").disabled=!paused;if(paused){overlay.hidden=false;$("talash-overlay-title").textContent=tr("paused","بازی متوقف شد");$("talash-overlay-text").textContent=tr("resumeHint","برای ادامه، دکمهٔ ادامه را بزنید.");status.textContent=tr("paused","بازی متوقف شد.");}else{overlay.hidden=true;status.textContent=tr("playing","بازی در جریان است.");ensureLoop();}}
- function restart(){if(raf)cancelAnimationFrame(raf);raf=0;paused=false;game=createGame({width:Math.max(240,canvas.clientWidth),height:Math.max(280,canvas.clientHeight),seed:Date.now()&0xffffffff});desiredX=game.paddle.x;game.running=false;overlay.hidden=false;$("talash-overlay-title").textContent=tr("ready","آماده‌ای؟");$("talash-overlay-text").textContent=tr("instructions","با لمس یا حرکت اشاره‌گر راکت آبی را افقی حرکت بده.");$("talash-start").disabled=false;$("talash-pause").disabled=true;$("talash-pause").textContent=tr("pause","مکث");status.textContent=tr("instructions","با لمس یا حرکت اشاره‌گر راکت آبی را افقی حرکت بده.");draw();}
+ function start(){if(game.over||!game.triangles.some(t=>t.active)){game=createGame({width:game.width,height:game.height,seed:Date.now()&0xffffffff});creditedScore=0;}game.running=true;paused=false;overlay.hidden=true;$("talash-start").disabled=true;$("talash-pause").disabled=false;status.textContent=tr("playing","بازی در جریان است.");canvas.focus({preventScroll:true});saveProgress();ensureLoop();}
+ function togglePause(){if(!game||game.over)return;paused=!paused;game.running=!paused;$("talash-pause").textContent=paused?tr("resume","ادامه"):tr("pause","مکث");$("talash-start").disabled=!paused;if(paused){overlay.hidden=false;$("talash-overlay-title").textContent=tr("paused","بازی متوقف شد");$("talash-overlay-text").textContent=tr("resumeHint","برای ادامه، دکمهٔ ادامه را بزنید.");status.textContent=tr("paused","بازی متوقف شد.");}else{overlay.hidden=true;status.textContent=tr("playing","بازی در جریان است.");saveProgress();ensureLoop();}saveProgress();}
+ function restart(){if(raf)cancelAnimationFrame(raf);raf=0;paused=false;game=createGame({width:Math.max(240,canvas.clientWidth),height:Math.max(280,canvas.clientHeight),seed:Date.now()&0xffffffff});creditedScore=0;desiredX=game.paddle.x;game.running=false;overlay.hidden=false;$("talash-overlay-title").textContent=tr("ready","آماده‌ای؟");$("talash-overlay-text").textContent=tr("instructions","با لمس یا حرکت اشاره‌گر راکت آبی را افقی حرکت بده.");$("talash-start").disabled=false;$("talash-pause").disabled=true;$("talash-pause").textContent=tr("pause","مکث");status.textContent=tr("instructions","با لمس یا حرکت اشاره‌گر راکت آبی را افقی حرکت بده.");draw();saveProgress();}
  function setPointer(event){const r=canvas.getBoundingClientRect();desiredX=(event.clientX-r.left)/r.width*game.width;}
  canvas.addEventListener("pointermove",event=>{if(event.pointerType==="mouse"||event.buttons)setPointer(event);});
  canvas.addEventListener("pointerdown",event=>{setPointer(event);canvas.focus({preventScroll:true});});
@@ -45,5 +50,5 @@ if(root&&!root.dataset.initialized){
  window.addEventListener("blur",()=>{keys.clear();if(game?.running)togglePause();});
  const observer=new ResizeObserver(()=>resize());observer.observe(canvas);resize();ensureLoop();
  document.addEventListener("shared-page:opened",event=>{if(event.detail?.key!=="talash"&&game?.running)togglePause();});
- window.addEventListener("pagehide",()=>{observer.disconnect();if(raf)cancelAnimationFrame(raf);});
+ const progressTimer=setInterval(saveProgress,1000);document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden")saveProgress();});window.addEventListener("pagehide",()=>{saveProgress();clearInterval(progressTimer);observer.disconnect();if(raf)cancelAnimationFrame(raf);});
 }

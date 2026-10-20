@@ -8,6 +8,7 @@ A dependency-free browser game for SmartKazem using an ES module, Canvas, and a 
 - Five-colored triangles form the upper mesh. Hitting one triangle atomically removes only its same-color connected component; other colors remain unchanged.
 - Each removed triangle spawns a coin carrying the five-realm site emblem. Score increases only when the paddle catches a coin.
 - Three missed balls, pause/resume, restart, accessible status announcements, and reduced-motion-friendly controls are included.
+- Game state is saved locally and restored after navigation, page/browser closure, or device restart; restored active games start paused so the player can resume deliberately. Clearing this site's browser data removes the local save.
 - Backgrounds `content/bk1.jpg` through `content/bk5.jpg` are reserved in realm order. Until supplied, the game uses a pure black background.
 
 ## Test
