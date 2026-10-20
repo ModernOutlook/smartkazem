@@ -17,7 +17,7 @@ if(root&&!root.dataset.initialized){
   const rect=canvas.getBoundingClientRect(),w=Math.max(240,Math.floor(rect.width)),h=Math.max(280,Math.floor(rect.height));
   const dpr=Math.min(window.devicePixelRatio||1,2);
   const old=game;canvas.width=Math.floor(w*dpr);canvas.height=Math.floor(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);
-  if(old)resizeGame(old,w,h);else game=createGame({width:w,height:h,seed:Date.now()&0xffffffff});
+  if(old)resizeGame(old,w,h);else if(!restoreProgress(w,h))game=createGame({width:w,height:h,seed:Date.now()&0xffffffff});
   desiredX=game.paddle.x;draw();
  }
  function drawCoin(c){
