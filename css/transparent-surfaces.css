@@ -1,82 +1,24 @@
-/*
- * Site-wide translucent presentation layer.
- * Presentation only: preserve layout, interaction, language and accessibility contracts.
- */
+/* Site-wide translucent presentation layer. */
 :root {
   --glass: rgba(4, 10, 18, .18);
   --sk-surface: rgba(255, 255, 255, .055);
   --sk-surface-strong: rgba(255, 255, 255, .10);
   --sk-border: rgba(225, 241, 255, .28);
 }
+.app { background-color: transparent; background-image: none; }
+.app::before { background: radial-gradient(circle at 50% 44%, rgba(5, 50, 82, .16) 0%, rgba(2, 20, 34, .08) 28%, transparent 52%), radial-gradient(circle at 50% 50%, transparent 50%, rgba(0, 0, 0, .16) 79%); }
+.app::after { background: radial-gradient(circle at 50% 42%, transparent 35%, rgba(0, 0, 0, .035) 61%, rgba(0, 0, 0, .14) 100%), linear-gradient(180deg, rgba(0, 0, 0, .035), transparent 22%, transparent 78%, rgba(0, 0, 0, .08)); }
+:where(button, input, textarea, select, .btn, .icon-btn, .realm-action, .book-tab, .book-close, .book-lang-switch, .lang-switch, .global-lang, .observation25-close, .possible-mirror-close, .paragraph-head button, .pm-controls button, .pm-settings-body button) { background-color: rgba(8, 17, 28, .16); border-color: rgba(225, 241, 255, .30); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+:where(button, .btn, .icon-btn, .realm-action, .book-tab, .book-close, .observation25-close, .possible-mirror-close):hover { background-color: rgba(90, 170, 220, .18); }
+:where(.info, .realm-info, .panel, .card, .pm-card, .pm-input-panel, .pm-output, .pm-settings, .pm-error, .paragraph-context, .paragraph-connection, .book-shell, .book-tabs, .book-body, .book-head, .child-page .shell, .child-page .reader, .child-page .visual, .child-page .controls, .child-page .side, .observation25-shell, .possible-mirror-shell, .game-panel, .game-card, .inventory-card, .local-cognition-cache-progress) { background-color: rgba(4, 12, 20, .12); border-color: rgba(225, 241, 255, .22); -webkit-backdrop-filter: blur(2px); backdrop-filter: blur(2px); }
+:where(.book-body, .pm-output, .pm-input-panel, .child-page .reader) { background-color: rgba(2, 8, 14, .16); }
+:where(button, input, textarea, select, a, [tabindex]):focus-visible { outline-color: #ffe59a; outline-offset: 3px; }
+@media (prefers-reduced-transparency: reduce) { :where(.lang-switch, .global-lang, .realm-action, .btn, .book-tab) { background-color: rgba(8, 13, 19, .88); -webkit-backdrop-filter: none; backdrop-filter: none; } }
 
-/* Let each page's artwork remain visible beneath shared interface surfaces. */
-.app {
-  background-color: transparent;
-  background-image: none;
-}
-.app::before {
-  background:
-    radial-gradient(circle at 50% 44%, rgba(5, 50, 82, .16) 0%, rgba(2, 20, 34, .08) 28%, transparent 52%),
-    radial-gradient(circle at 50% 50%, transparent 50%, rgba(0, 0, 0, .16) 79%);
-}
-.app::after {
-  background:
-    radial-gradient(circle at 50% 42%, transparent 35%, rgba(0, 0, 0, .035) 61%, rgba(0, 0, 0, .14) 100%),
-    linear-gradient(180deg, rgba(0, 0, 0, .035), transparent 22%, transparent 78%, rgba(0, 0, 0, .08));
-}
-
-/* Shared controls */
-:where(
-  button, input, textarea, select, .btn, .icon-btn, .realm-action,
-  .book-tab, .book-close, .book-lang-switch, .lang-switch,
-  .global-lang, .observation25-close, .possible-mirror-close,
-  .paragraph-head button, .pm-controls button, .pm-settings-body button
-) {
-  background-color: rgba(8, 17, 28, .16);
-  border-color: rgba(225, 241, 255, .30);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-}
-:where(
-  button, .btn, .icon-btn, .realm-action, .book-tab,
-  .book-close, .observation25-close, .possible-mirror-close
-):hover {
-  background-color: rgba(90, 170, 220, .18);
-}
-
-/* Cards, readers, dialogs and machine/game workspaces */
-:where(
-  .info, .realm-info, .panel, .card, .pm-card, .pm-input-panel,
-  .pm-output, .pm-settings, .pm-error, .paragraph-context,
-  .paragraph-connection, .book-shell, .book-tabs, .book-body,
-  .book-head, .child-page .shell, .child-page .reader,
-  .child-page .visual, .child-page .controls, .child-page .side,
-  .observation25-shell, .possible-mirror-shell, .game-panel,
-  .game-card, .inventory-card, .local-cognition-cache-progress
-) {
-  background-color: rgba(4, 12, 20, .12);
-  border-color: rgba(225, 241, 255, .22);
-  -webkit-backdrop-filter: blur(2px);
-  backdrop-filter: blur(2px);
-}
-
-/* Keep dense reading areas lightly tinted for contrast, not opaque. */
-:where(.book-body, .pm-output, .pm-input-panel, .child-page .reader) {
-  background-color: rgba(2, 8, 14, .16);
-}
-
-/* Preserve focus visibility over detailed artwork. */
-:where(button, input, textarea, select, a, [tabindex]):focus-visible {
-  outline-color: #ffe59a;
-  outline-offset: 3px;
-}
-
-/* Honor an explicit reduced-transparency preference without forcing opaque UI
-   on everyone else. */
-@media (prefers-reduced-transparency: reduce) {
-  :where(.lang-switch, .global-lang, .realm-action, .btn, .book-tab) {
-    background-color: rgba(8, 13, 19, .88);
-    -webkit-backdrop-filter: none;
-    backdrop-filter: none;
-  }
-}
+/* CSS reconstruction of the five realm page artworks. */
+[data-realm-background] { position: relative; isolation: isolate; background-repeat: no-repeat !important; background-attachment: scroll !important; background-position: center top !important; background-size: cover !important; }
+[data-realm-background="structure"] { background-color: #020a14 !important; background-image: radial-gradient(ellipse at 50% 12%, rgba(90,180,255,.24), transparent 28%), radial-gradient(ellipse at 18% 72%, rgba(18,94,154,.34), transparent 38%), radial-gradient(ellipse at 84% 62%, rgba(23,75,130,.28), transparent 36%), linear-gradient(180deg, #020914 0%, #062444 46%, #07172a 100%), repeating-linear-gradient(90deg, transparent 0 11%, rgba(110,190,255,.055) 11.1% 11.35%, transparent 11.45% 22%), repeating-linear-gradient(0deg, transparent 0 15%, rgba(120,195,255,.04) 15.1% 15.35%, transparent 15.45% 30%); }
+[data-realm-background="continuity"] { background-color: #24170b !important; background-image: radial-gradient(circle at 27% 14%, rgba(255,229,154,.74) 0 2%, rgba(255,196,77,.30) 9%, transparent 27%), radial-gradient(ellipse at 75% 78%, rgba(194,112,29,.38), transparent 42%), linear-gradient(180deg, rgba(255,209,108,.08), transparent 35%), linear-gradient(178deg, #1e1209 0%, #6c4318 42%, #b97927 67%, #3c2411 100%), repeating-linear-gradient(171deg, transparent 0 18%, rgba(255,220,139,.055) 18.2% 18.6%, transparent 18.8% 31%); }
+[data-realm-background="experience"] { background-color: #090014 !important; background-image: radial-gradient(circle at 50% 24%, rgba(213,143,255,.36) 0 1px, transparent 2px), radial-gradient(circle at 18% 18%, rgba(255,220,255,.72) 0 1px, transparent 2px), radial-gradient(circle at 82% 34%, rgba(239,193,255,.58) 0 1px, transparent 2px), radial-gradient(ellipse at 42% 38%, rgba(153,62,234,.58), transparent 30%), radial-gradient(ellipse at 78% 78%, rgba(92,28,180,.48), transparent 38%), linear-gradient(180deg, #080012 0%, #23054b 43%, #541b8e 72%, #17062b 100%), repeating-linear-gradient(158deg, transparent 0 14%, rgba(231,176,255,.045) 14.2% 14.7%, transparent 14.9% 27%); }
+[data-realm-background="reference"] { background-color: #160000 !important; background-image: radial-gradient(circle at 50% 45%, rgba(255,126,74,.78) 0 3%, rgba(215,31,19,.42) 11%, transparent 27%), radial-gradient(circle at 50% 45%, transparent 0 17%, rgba(255,88,52,.20) 17.2% 18%, transparent 18.3% 31%, rgba(255,74,42,.16) 31.2% 32%, transparent 32.3% 47%, rgba(255,157,79,.11) 47.2% 48%, transparent 48.3%), radial-gradient(ellipse at 17% 80%, rgba(170,12,9,.48), transparent 36%), radial-gradient(ellipse at 88% 18%, rgba(255,40,25,.34), transparent 34%), linear-gradient(180deg, #180000 0%, #4c0504 45%, #9f1710 72%, #250000 100%); }
+[data-realm-background="share"] { background-color: #031a15 !important; background-image: radial-gradient(circle at 72% 13%, rgba(207,255,218,.62) 0 1.5%, rgba(127,235,174,.24) 8%, transparent 25%), radial-gradient(ellipse at 20% 80%, rgba(32,165,120,.38), transparent 42%), radial-gradient(ellipse at 78% 66%, rgba(69,205,151,.28), transparent 38%), linear-gradient(154deg, transparent 0 38%, rgba(159,246,196,.18) 38.5% 41%, transparent 41.5% 54%, rgba(81,210,151,.12) 54.5% 57%, transparent 57.5%), linear-gradient(180deg, #03221c 0%, #087052 42%, #23986e 68%, #082d24 100%); }
