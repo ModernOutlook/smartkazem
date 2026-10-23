@@ -59,7 +59,7 @@
     // The visible DOM is already language-selected by the page/runtime.
     // Read the article once from its rendered text tree; including the root
     // and every descendant would duplicate the entire article for speech.
-    return String(root.innerText||root.textContent||'').replace(/\\s+/g,' ').trim();
+    return String(root.innerText||root.textContent||'').replace(/\s+/g,' ').trim();
   }
   function readArticle(article){
     if(!state.accessibility||!article)return false;
