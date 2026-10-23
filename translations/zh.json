@@ -89,6 +89,8 @@
     "homePage": "返回主页",
     "cards": "卡片",
     "cardInventory": "卡片清单",
+    "cardOwned": "已激活",
+    "cardLocked": "未激活",
     "jokers": "小丑牌",
     "spades": "黑桃",
     "hearts": "红桃",
