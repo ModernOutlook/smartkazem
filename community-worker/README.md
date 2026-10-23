@@ -15,7 +15,7 @@ This is an isolated Cloudflare Worker service. It does not add a framework, buil
 
 The deployment workflow provisions a D1 database named `smartkazem-community` and an R2 bucket named `smartkazem-community-media` when they do not already exist. It injects the discovered D1 ID into the checked-out Wrangler config at runtime; no resource ID is committed.
 
-The workflow provisions the D1 database and R2 bucket, then transfers the mail and Turnstile credentials into Worker secrets without writing their values to repository files.
+The workflow provisions the D1 database and R2 bucket, then transfers the mail and Turnstile credentials into Worker secrets without writing their values to repository files. The deployed Worker URL is read from Wrangler's deployment output for the health check.
 
 - `RESEND_API_KEY`
 - `MAIL_FROM` (verified sender address)
