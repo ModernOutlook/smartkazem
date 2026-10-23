@@ -7,6 +7,7 @@ assert.match(engine, /function speechChunks\(text,limit=850\)/);
 assert.match(engine, /Array\.from\(String\(text/);
 assert.match(engine, /remaining\.lastIndexOf\(' ',limit-1\)/);
 assert.match(engine, /const NAV_SELECTOR=.*p,li,blockquote,figcaption,td,th,dt,dd,pre/s);
+assert.match(engine, /const candidates=\[\.\.\.\(root\.matches\?\.\(NAV_SELECTOR\)\?\[root\]:\[\]\),\.\.\.root\.querySelectorAll\(NAV_SELECTOR\)\]/);
 assert.match(engine, /function activateNavigation\(\)[\s\S]*?const text=visibleLocalizedText\(el\);[\s\S]*?if\(text\)speak\(text/);
 assert.match(engine, /event\.key\.toLowerCase\(\)==='p'/);
 assert.match(engine, /event\.key\.toLowerCase\(\)==='r'/);
