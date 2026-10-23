@@ -7,7 +7,7 @@
   const ACCESSIBILITY_KEY = 'smartkazem.audio.accessibility.v1';
   const TRIPLE_WINDOW = 620;
   const LONG_PRESS_MS = 720;
-  const DEFAULT_STATE = Object.freeze({ enabled:true, muted:false, volume:0.36, realm:'structure', accessibility:false, speechEnabled:true, voiceVersion:1 });
+  const DEFAULT_STATE = Object.freeze({ enabled:true, muted:false, volume:0.36, realm:'structure', accessibility:false, nativeScreenReader:false, speechEnabled:true, voiceVersion:1 });
 
   let state={...DEFAULT_STATE}, ctx=null, master=null, initialized=false, voices=[], lastSpoken='', clickTimes=[], longPressTimer=0, longPressPointer=null, longPressTriggered=false, suppressNextClick=false;
 
@@ -27,9 +27,9 @@
     state.volume=Math.min(1,Math.max(.02,Number.isFinite(savedVolume)?savedVolume:DEFAULT_STATE.volume));
     if(savedVolume===0.18)state.volume=DEFAULT_STATE.volume;
     state.realm=REALM_CUES[state.realm]?state.realm:DEFAULT_STATE.realm;
-    try{const access=JSON.parse(localStorage.getItem(ACCESSIBILITY_KEY)||'null');if(access&&typeof access==='object'){state.accessibility=access.enabled===true;state.speechEnabled=access.speechEnabled!==false;state.voiceVersion=Number(access.voiceVersion)||1;}}catch(_){}
+    try{const access=JSON.parse(localStorage.getItem(ACCESSIBILITY_KEY)||'null');if(access&&typeof access==='object'){state.accessibility=access.enabled===true;state.nativeScreenReader=access.nativeScreenReader===true;state.speechEnabled=access.speechEnabled!==false;state.voiceVersion=Number(access.voiceVersion)||1;}}catch(_){}
   }
-  function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));localStorage.setItem(ACCESSIBILITY_KEY,JSON.stringify({enabled:state.accessibility,speechEnabled:state.speechEnabled,voiceVersion:state.voiceVersion}));}catch(_){}}
+  function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));localStorage.setItem(ACCESSIBILITY_KEY,JSON.stringify({enabled:state.accessibility,nativeScreenReader:state.nativeScreenReader,speechEnabled:state.speechEnabled,voiceVersion:state.voiceVersion}));}catch(_){}}
   function ensureGraph(){
     if(ctx&&master)return true;
     const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return false;
@@ -87,7 +87,7 @@
     return chunks;
   }
   function readArticle(article){
-    if(!state.accessibility||!state.speechEnabled||!article||!('speechSynthesis'in window))return false;
+    if(!state.accessibility||state.nativeScreenReader||!state.speechEnabled||!article||!('speechSynthesis'in window))return false;
     const text=visibleLocalizedText(article);
     if(!text)return false;
     const title=article.querySelector('h1,h2,h3,h4,h5,h6,[role="heading"]');
@@ -132,7 +132,7 @@
   function chooseVoice(lang){if(!voices.length)return null;const exact=voices.find(v=>v.lang?.toLowerCase()===lang.toLowerCase());if(exact)return exact;const prefix=lang.split('-')[0].toLowerCase();return voices.find(v=>v.lang?.toLowerCase().startsWith(prefix))||null;}
   function refreshVoices(){if('speechSynthesis'in window)voices=window.speechSynthesis.getVoices()||[];}
   function speak(text,options={}){
-    if(!state.accessibility||!state.speechEnabled||!('speechSynthesis'in window))return false;
+    if(!state.accessibility||state.nativeScreenReader||!state.speechEnabled||!('speechSynthesis'in window))return false;
     const value=String(text||'').replace(/\s+/g,' ').trim();if(!value)return false;
     try{const synth=window.speechSynthesis;synth.cancel();const utterance=new SpeechSynthesisUtterance(value),lang=options.lang||currentLanguage();utterance.lang=lang;utterance.rate=Number(options.rate)||.92;utterance.pitch=Number(options.pitch)||1;utterance.volume=state.volume;const voice=chooseVoice(lang);if(voice)utterance.voice=voice;lastSpoken=value;synth.speak(utterance);return true;}catch(_){return false;}
   }
@@ -203,7 +203,7 @@
     return true;
   }
   function announceNavigation(el){
-    if(!el)return;
+    if(!el||state.nativeScreenReader)return;
     const description=semanticDescription(el);
     if(!description)return;
     const text=description;
@@ -213,7 +213,7 @@
     speak(text,{rate:1.08});
   }
   function announcePage(){
-    if(!state.accessibility)return;
+    if(!state.accessibility||state.nativeScreenReader)return;
     syncNavigation();
     const title=document.title.replace(/\s*[—|·-]\s*Modern Outlook.*$/i,'').trim();
     const main=document.querySelector('main');
@@ -235,7 +235,7 @@
     if(text)speak(text,{rate:1.02});
   }
   function handleAccessibilityKeyboard(event){
-    if(!state.accessibility)return;
+    if(!state.accessibility||state.nativeScreenReader)return;
     const typingTarget=event.target?.matches?.('input,textarea,select,[contenteditable="true"]');
     if(!typingTarget&&event.key.toLowerCase()==='p'){
       event.preventDefault();
@@ -262,11 +262,11 @@
   }
   let touchStartX=0,touchStartY=0,touchPointer=null;
   function handleAccessibilityTouchStart(event){
-    if(!state.accessibility||event.pointerType!=='touch')return;
+    if(!state.accessibility||state.nativeScreenReader||event.pointerType!=='touch')return;
     touchPointer=event.pointerId;touchStartX=event.clientX;touchStartY=event.clientY;
   }
   function handleAccessibilityTouchEnd(event){
-    if(!state.accessibility||event.pointerType!=='touch'||touchPointer!==event.pointerId)return;
+    if(!state.accessibility||state.nativeScreenReader||event.pointerType!=='touch'||touchPointer!==event.pointerId)return;
     touchPointer=null;
     const dx=event.clientX-touchStartX,dy=event.clientY-touchStartY;
     if(Math.abs(dx)<42||Math.abs(dx)<Math.abs(dy)*1.25)return;
@@ -279,9 +279,12 @@
     if(article)article.setAttribute('data-a11y-read','true');
     syncNavigation();
     document.documentElement.dataset.accessibilityNavigation='on';
+    if(navRegion)navRegion.setAttribute('aria-live',state.nativeScreenReader?'off':'assertive');
+    if(!state.nativeScreenReader){
     const first=navItems.findIndex(el=>el.matches('main h1,h1,h2,[role="heading"]'))>=0?navItems.findIndex(el=>el.matches('main h1,h1,h2,[role="heading"]')):0;
     focusNavigation(first,false);
     window.setTimeout(announcePage,40);
+    }
   }
   function disableAccessibilityNavigation(){
     document.documentElement.dataset.accessibilityNavigation='off';
@@ -292,7 +295,7 @@
   }
 
   function toggleAccessibility(){
-    state.accessibility=!state.accessibility;saveState();
+    state.accessibility=!state.accessibility;state.nativeScreenReader=false;saveState();
     if(state.accessibility){const enabled=i18nGet('labels.accessibility.enabled','Accessibility mode enabled.');const repeat=i18nGet('labels.accessibility.repeat','Double-click to repeat the last announcement.');const hold=i18nGet('labels.accessibility.hold','Long-press to pause, resume, or repeat speech.');speak([enabled,repeat,hold].join(' '));}
     else if('speechSynthesis'in window)window.speechSynthesis.cancel();
     // One switch controls speech navigation and visual presentation together.
@@ -302,7 +305,28 @@
     document.dispatchEvent(new CustomEvent('audio:accessibilitychange',{detail:{enabled:state.accessibility}}));
     return state.accessibility;
   }
+  function toggleNativeScreenReaderMode(){
+    if(!state.accessibility){state.accessibility=true;state.nativeScreenReader=true;}
+    else if(state.nativeScreenReader){state.accessibility=false;state.nativeScreenReader=false;}
+    else state.nativeScreenReader=true;
+    saveState();
+    if(state.nativeScreenReader&&'speechSynthesis'in window)window.speechSynthesis.cancel();
+    document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
+    if(state.accessibility)enableAccessibilityNavigation();else disableAccessibilityNavigation();
+    if(state.accessibility&&!state.nativeScreenReader)speak(i18nGet('labels.accessibility.enabled','Accessibility mode enabled.'));
+    document.dispatchEvent(new CustomEvent('audio:accessibilitychange',{detail:{enabled:state.accessibility,nativeScreenReader:state.nativeScreenReader}}));
+    return state.accessibility;
+  }
+  function ensureNativeScreenReaderControl(){
+    if(!document.body||document.getElementById('smartkazem-native-screenreader-control'))return;
+    const button=document.createElement('button');button.type='button';button.id='smartkazem-native-screenreader-control';
+    button.className='sr-only audio-accessibility-screenreader-control';button.dataset.noTripleClick='true';
+    const label=i18nGet('labels.accessibility.useDeviceScreenReader','Use device screen reader without overlapping site speech');
+    button.setAttribute('aria-label',label);button.textContent=label;button.addEventListener('click',toggleNativeScreenReaderMode);
+    (document.querySelector('main')||document.body).appendChild(button);
+  }
   function handleTripleClick(event){
+    if(state.nativeScreenReader)return false;
     // Accessibility gestures must never consume ordinary controls, especially
     // the shared language selector. Count only repeated clicks on the same
     // non-interactive target so quick taps on different controls stay usable.
@@ -339,16 +363,16 @@
     return false;
   }
   function handlePointerDown(event){
-    if(event.button!==undefined&&event.button!==0)return;resume();setRealm(realmFromElement(event.target));if(!state.accessibility)return;
+    if(event.button!==undefined&&event.button!==0)return;resume();setRealm(realmFromElement(event.target));if(!state.accessibility||state.nativeScreenReader)return;
     longPressPointer=event.pointerId??'mouse';window.clearTimeout(longPressTimer);
     longPressTimer=window.setTimeout(()=>{if(longPressPointer!==(event.pointerId??'mouse'))return;longPressTriggered=true;suppressNextClick=true;if(!('speechSynthesis'in window))return;if(window.speechSynthesis.speaking&&!window.speechSynthesis.paused)window.speechSynthesis.pause();else if(window.speechSynthesis.paused)window.speechSynthesis.resume();else if(lastSpoken)speak(lastSpoken);},LONG_PRESS_MS);
   }
   function handlePointerUp(event){if(longPressPointer===(event.pointerId??'mouse')){window.clearTimeout(longPressTimer);longPressPointer=null;}}
-  function handleClick(event){if(handleTripleClick(event))return;if(suppressNextClick){suppressNextClick=false;event.preventDefault();event.stopImmediatePropagation();return;}const realm=realmFromElement(event.target);setRealm(realm);resume().then(()=>play(realm)).catch(()=>{});if(state.accessibility)speakTarget(event.target);}
+  function handleClick(event){if(handleTripleClick(event))return;if(suppressNextClick){suppressNextClick=false;event.preventDefault();event.stopImmediatePropagation();return;}const realm=realmFromElement(event.target);setRealm(realm);resume().then(()=>play(realm)).catch(()=>{});if(state.accessibility&&!state.nativeScreenReader)speakTarget(event.target);}
   function handleDoubleClick(event){
     // A double-click is only a repeat gesture while accessibility is active.
     // It must never toggle the mode and must not compete with triple-click.
-    if(state.accessibility&&lastSpoken&&Number(event.detail)===2)speak(lastSpoken);
+    if(state.accessibility&&!state.nativeScreenReader&&lastSpoken&&Number(event.detail)===2)speak(lastSpoken);
   }
   let contentObserver=null;
   let contentObserverTimer=0;
@@ -368,6 +392,7 @@
     if(!state.accessibility)return;
     if('speechSynthesis'in window)window.speechSynthesis.cancel();
     syncNavigation();
+    if(state.nativeScreenReader){if(navRegion)navRegion.setAttribute('aria-live','off');return;}
     const focused=document.activeElement;
     const index=navItems.indexOf(focused);if(index>=0)navIndex=index;
     window.setTimeout(()=>{if(focused&&navItems.includes(focused))announceNavigation(focused);else announcePage();},80);
@@ -387,6 +412,7 @@
     // gesture on touch devices, while preserving normal panning/scrolling.
     document.documentElement.style.touchAction='manipulation';
     document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
+    ensureNativeScreenReaderControl();
     document.addEventListener('pointerdown',handlePointerDown,{capture:true,passive:true});
     document.addEventListener('pointerup',handlePointerUp,{capture:true,passive:true});
     document.addEventListener('pointercancel',handlePointerUp,{capture:true,passive:true});
@@ -396,7 +422,7 @@
     document.addEventListener('pointerdown',handleAccessibilityTouchStart,{capture:true,passive:true});
     document.addEventListener('pointerup',handleAccessibilityTouchEnd,{capture:true,passive:false});
     document.addEventListener('focusin',event=>{if(state.accessibility&&event.target?.matches?.(NAV_SELECTOR)){syncNavigation();const index=navItems.indexOf(event.target);if(index>=0)navIndex=index;announceNavigation(event.target);}}, {capture:true});
-    document.addEventListener('site:languagechange',handleLanguageChange);
+    document.addEventListener('site:languagechange',()=>{const control=document.getElementById('smartkazem-native-screenreader-control');if(control){const label=i18nGet('labels.accessibility.useDeviceScreenReader','Use device screen reader without overlapping site speech');control.setAttribute('aria-label',label);control.textContent=label;}handleLanguageChange();});
     observeAccessibleContent();
     window.addEventListener('pageshow',()=>{resume();if(state.accessibility)window.setTimeout(announcePage,80);});
     document.addEventListener('visibilitychange',()=>{if(!document.hidden&&state.enabled&&!state.muted)resume();});

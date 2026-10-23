@@ -13,6 +13,10 @@ assert.match(engine, /function activateNavigation\(\)[\s\S]*?const text=visibleL
 assert.match(engine, /event\.key\.toLowerCase\(\)==='p'/);
 assert.match(engine, /event\.key\.toLowerCase\(\)==='r'/);
 assert.match(engine, /function handleLanguageChange\(\)[\s\S]*?speechSynthesis\.cancel\(\)[\s\S]*?announcePage\(\)/);
+assert.match(engine, /function toggleNativeScreenReaderMode\(\)/);
+assert.match(engine, /function ensureNativeScreenReaderControl\(\)/);
+assert.match(engine, /state\.nativeScreenReader\|\|!state\.speechEnabled/);
+assert.match(engine, /navRegion\.setAttribute\('aria-live',state\.nativeScreenReader\?'off':'assertive'\)/);
 assert.match(engine, /if\(!state\.accessibility\|\|!state\.speechEnabled\|\|!article/);
 assert.match(engine, /event\.ctrlKey&&event\.altKey&&event\.shiftKey&&event\.key\.toLowerCase\(\)==='a'/);
 
