@@ -29,28 +29,6 @@ async function rateLimit(db, bucket, subject, max, seconds) {
   await db.prepare("UPDATE rate_limits SET count=count+1 WHERE bucket=? AND subject=?").bind(bucket, subject).run();
   return true;
 }
-async function captcha(request, env, token) {
-  if (env.TURNSTILE_ENABLED !== "true") return true;
-  if (!token || !env.TURNSTILE_SECRET_KEY) return false;
-  const data = new FormData();
-  data.set("secret", env.TURNSTILE_SECRET_KEY);
-  data.set("response", token);
-  const ip = request.headers.get("CF-Connecting-IP");
-  if (ip) data.set("remoteip", ip);
-  try {
-    const response = await fetch("https://challenges.cloudflare.com/turnstile/v0/siteverify", { method: "POST", body: data });
-    return response.ok && (await response.json()).success === true;
-  } catch { return false; }
-}
-async function sendMail(env, to, subject, html) {
-  if (!env.RESEND_API_KEY || !env.MAIL_FROM) throw new Error("Mail service is not configured");
-  const response = await fetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { authorization: `Bearer ${env.RESEND_API_KEY}`, "content-type": "application/json" },
-    body: JSON.stringify({ from: env.MAIL_FROM, to: [to], subject, html })
-  });
-  if (!response.ok) throw new Error("Mail delivery failed");
-}
 function bearerToken(request) {
   const header = request.headers.get("Authorization") || "";
   const match = header.match(/^Bearer ([A-Za-z0-9_-]{32,128})$/);
