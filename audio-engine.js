@@ -218,6 +218,17 @@
   }
   function handleAccessibilityKeyboard(event){
     if(!state.accessibility)return;
+    const typingTarget=event.target?.matches?.('input,textarea,select,[contenteditable="true"]');
+    if(!typingTarget&&event.key.toLowerCase()==='p'){
+      event.preventDefault();
+      if(!('speechSynthesis'in window))return;
+      const synth=window.speechSynthesis;
+      if(synth.paused)synth.resume();else if(synth.speaking)synth.pause();else if(lastSpoken)speak(lastSpoken);
+      return;
+    }
+    if(!typingTarget&&event.key.toLowerCase()==='r'){
+      event.preventDefault();if(lastSpoken)speak(lastSpoken);return;
+    }
     const keys=['ArrowDown','ArrowUp','ArrowLeft','ArrowRight','Home','End','Enter',' ','Escape'];
     if(!keys.includes(event.key))return;
     syncNavigation();
