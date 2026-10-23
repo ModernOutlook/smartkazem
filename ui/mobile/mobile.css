@@ -184,6 +184,15 @@
     scrollbar-width: thin;
   }
 
+  /* Economy Share books use the same horizontal, touch-scrollable chapter strip
+     as the mobile reader design; scope this to that entry route only. */
+  #book-page.share-book-reader .book-tabs {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    touch-action: pan-x;
+  }
+
   .book-tab {
     min-height: var(--ui-touch-target);
     padding: 10px 12px;
