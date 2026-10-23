@@ -58,7 +58,7 @@
       "page": "Page",
       "navigable": "navigable items",
       "sections": "sections",
-      "navigationHelp": "Use arrow keys to move. Press Enter to activate.",
+      "navigationHelp": "Use arrow keys to navigate; press Enter to read or activate, P to pause/resume speech, and R to repeat.",
       "article": "Article",
       "readingArticle": "Reading article"
     },
