@@ -1,3 +1,5 @@
+import { verifyGoogleCredential } from "./google-auth.js";
+
 const encoder = new TextEncoder();
 const json = (value, status = 200, headers = {}) => new Response(JSON.stringify(value), {
   status, headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store", ...headers }
@@ -11,19 +13,6 @@ const randomToken = () => {
 };
 async function digest(value) {
   return bytesToHex(await crypto.subtle.digest("SHA-256", encoder.encode(value)));
-}
-async function passwordHash(password, salt) {
-  const material = await crypto.subtle.importKey("raw", encoder.encode(password), "PBKDF2", false, ["deriveBits"]);
-  const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", hash: "SHA-256", salt: encoder.encode(salt), iterations: 600000 }, material, 256);
-  return bytesToHex(bits);
-}
-function cookie(token, maxAge) {
-  return `sk_session=${token}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=${maxAge}`;
-}
-function getCookie(request, name) {
-  const value = request.headers.get("Cookie") || "";
-  const match = value.match(new RegExp(`(?:^|;\\s*)${name}=([^;]+)`));
-  return match ? match[1] : "";
 }
 function validOrigin(request, env) {
   const origin = request.headers.get("Origin");
@@ -62,8 +51,13 @@ async function sendMail(env, to, subject, html) {
   });
   if (!response.ok) throw new Error("Mail delivery failed");
 }
+function bearerToken(request) {
+  const header = request.headers.get("Authorization") || "";
+  const match = header.match(/^Bearer ([A-Za-z0-9_-]{32,128})$/);
+  return match ? match[1] : "";
+}
 async function currentUser(request, env) {
-  const token = getCookie(request, "sk_session");
+  const token = bearerToken(request);
   if (!token) return null;
   const tokenHash = await digest(token);
   return env.DB.prepare("SELECT u.id,u.email,u.display_name,u.email_verified_at FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires_at>? AND u.disabled_at IS NULL")
@@ -92,65 +86,41 @@ async function route(request, env) {
   const method = request.method;
   if (method === "GET" && path === "/health") return json({ ok: true, service: "smartkazem-community", version: 1 });
   if (method !== "GET" && method !== "HEAD" && !validOrigin(request, env)) return json({ error: "origin_not_allowed" }, 403);
-  if (method === "POST" && path === "/auth/register") {
+  if (method === "POST" && ["/auth/register","/auth/verify","/auth/login"].includes(path)) {
+    return json({ error: "google_oauth_only" }, 410);
+  }
+  if (method === "POST" && path === "/auth/google") {
     const data = await body(request);
-    const email = text(data.email, 254).toLowerCase();
-    const displayName = text(data.displayName, 48);
-    const password = typeof data.password === "string" ? data.password : "";
     const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-    if (!(await rateLimit(env.DB, "register", ip, 5, 3600))) return json({ error: "rate_limited" }, 429);
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || displayName.length < 2 || password.length < 12 || password.length > 128)
-      return json({ error: "invalid_registration" }, 400);
-    if (!(await captcha(request, env, data.turnstileToken))) return json({ error: "captcha_failed" }, 400);
-    const exists = await env.DB.prepare("SELECT id FROM users WHERE email=?").bind(email).first();
-    if (exists) return json({ ok: true, message: "If the address is eligible, verification instructions will be sent." }, 202);
-    const userId = id(), salt = randomToken(), token = randomToken(), created = now();
-    const hash = await passwordHash(password, salt);
-    await env.DB.batch([
-      env.DB.prepare("INSERT INTO users(id,email,display_name,password_hash,password_salt,created_at) VALUES(?,?,?,?,?,?)").bind(userId,email,displayName,hash,salt,created),
-      env.DB.prepare("INSERT INTO email_verifications(id,user_id,token_hash,expires_at,created_at) VALUES(?,?,?,?,?)").bind(id(),userId,await digest(token),new Date(Date.now()+86400000).toISOString(),created)
-    ]);
-    const verifyUrl = new URL("/?community-verify=" + encodeURIComponent(token), env.SITE_ORIGIN).toString();
-    await sendMail(env,email,"Verify your SmartKazem account",`<p>Confirm your email to activate your account.</p><p><a href="${verifyUrl}">Verify email</a></p>`);
-    return json({ ok: true, message: "verification_sent" }, 202);
-  }
-  if (method === "POST" && path === "/auth/verify") {
-    const data = await body(request), token = text(data.token, 200);
-    if (!token) return json({ error: "invalid_token" }, 400);
-    const row = await env.DB.prepare("SELECT id,user_id FROM email_verifications WHERE token_hash=? AND consumed_at IS NULL AND expires_at>?").bind(await digest(token),now()).first();
-    if (!row) return json({ error: "invalid_or_expired_token" }, 400);
-    await env.DB.batch([
-      env.DB.prepare("UPDATE users SET email_verified_at=? WHERE id=?").bind(now(),row.user_id),
-      env.DB.prepare("UPDATE email_verifications SET consumed_at=? WHERE id=?").bind(now(),row.id)
-    ]);
-    return json({ ok: true });
-  }
-  if (method === "POST" && path === "/auth/login") {
-    const data = await body(request), email = text(data.email,254).toLowerCase(), password = typeof data.password === "string" ? data.password : "";
-    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
-    if (!(await rateLimit(env.DB,"login",ip,12,900))) return json({ error: "rate_limited" },429);
-    if (!(await captcha(request,env,data.turnstileToken))) return json({ error: "captcha_failed" },400);
-    const user = await env.DB.prepare("SELECT id,password_hash,password_salt,email_verified_at,disabled_at FROM users WHERE email=?").bind(email).first();
-    const candidate = user ? await passwordHash(password,user.password_salt) : await passwordHash(password || "invalid-password", "constant-work-salt");
-    if (!user || user.disabled_at || candidate !== user.password_hash) return json({ error: "invalid_credentials" },401);
-    if (!user.email_verified_at) return json({ error: "email_verification_required" },403);
-    const token = randomToken(), created = now(), expires = new Date(Date.now()+604800000).toISOString();
-    await env.DB.prepare("INSERT INTO sessions(id,user_id,token_hash,expires_at,created_at) VALUES(?,?,?,?,?)").bind(id(),user.id,await digest(token),expires,created).run();
-    return json({ ok: true },200,{ "set-cookie": cookie(token,604800) });
+    if (!(await rateLimit(env.DB, "google_auth", ip, 30, 3600))) return json({ error: "rate_limited" }, 429);
+    let identity;
+    try { identity = await verifyGoogleCredential(data.credential, env.GOOGLE_CLIENT_ID); }
+    catch { return json({ error: "invalid_google_credential" }, 401); }
+    let user = await env.DB.prepare("SELECT id,email,display_name,email_verified_at FROM users WHERE google_sub=?").bind(identity.sub).first();
+    if (!user) {
+      const existing = await env.DB.prepare("SELECT id,google_sub FROM users WHERE email=? COLLATE NOCASE").bind(identity.email).first();
+      if (existing) return json({ error: "account_link_required" }, 409);
+      const userId = id(), stamp = now();
+      const unusableHash = await digest(randomToken());
+      const unusableSalt = randomToken();
+      await env.DB.prepare("INSERT INTO users(id,email,display_name,password_hash,password_salt,email_verified_at,created_at,google_sub) VALUES(?,?,?,?,?,?,?,?)")
+        .bind(userId, identity.email, text(identity.name, 48) || identity.email.split("@")[0], unusableHash, unusableSalt, stamp, stamp, identity.sub).run();
+      user = { id: userId, email: identity.email, display_name: text(identity.name, 48) || identity.email.split("@")[0], email_verified_at: stamp };
+    }
+    const token = randomToken(), created = now(), expires = new Date(Date.now() + 604800000).toISOString();
+    await env.DB.prepare("INSERT INTO sessions(id,user_id,token_hash,expires_at,created_at) VALUES(?,?,?,?,?)")
+      .bind(id(), user.id, await digest(token), expires, created).run();
+    return json({ ok: true, token, expiresAt: expires, user });
   }
   if (method === "POST" && path === "/auth/logout") {
-    const token=getCookie(request,"sk_session");
+    const token = bearerToken(request);
     if (token) await env.DB.prepare("DELETE FROM sessions WHERE token_hash=?").bind(await digest(token)).run();
-    return json({ok:true},200,{"set-cookie":cookie("",0)});
+    return json({ ok: true });
   }
   if (method === "GET" && path === "/auth/me") {
-    const user=await currentUser(request,env);
-    return user ? json({user}) : json({user:null});
+    const user = await currentUser(request, env);
+    return user ? json({ user }) : json({ user: null });
   }
-
-  const auth = await requireUser(request,env);
-  if (auth.error) return auth.error;
-  const user = auth.user;
 
   if (method === "GET" && path === "/posts") {
     const rows = await env.DB.prepare(`SELECT p.id,p.body,p.visibility,p.created_at,u.id AS author_id,u.display_name,
@@ -226,15 +196,31 @@ async function route(request, env) {
 export default {
   async fetch(request, env) {
     try {
-      if (request.method==="OPTIONS") return new Response(null,{status:204,headers:{"allow":"GET,POST,PUT,DELETE,OPTIONS"}});
-      const response=await route(request,env);
-      response.headers.set("x-content-type-options","nosniff");
-      response.headers.set("referrer-policy","no-referrer");
-      response.headers.set("cache-control","no-store");
+      const origin = request.headers.get("Origin");
+      if (request.method === "OPTIONS") {
+        if (!validOrigin(request, env)) return json({ error: "origin_not_allowed" }, 403);
+        const requestedHeaders = (request.headers.get("Access-Control-Request-Headers") || "").toLowerCase().split(",").map((v) => v.trim()).filter(Boolean);
+        if (requestedHeaders.some((header) => !["authorization", "content-type"].includes(header))) return json({ error: "headers_not_allowed" }, 403);
+        return new Response(null, { status: 204, headers: {
+          "access-control-allow-origin": env.SITE_ORIGIN,
+          "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "access-control-allow-headers": "Authorization, Content-Type",
+          "access-control-max-age": "600",
+          "vary": "Origin"
+        }});
+      }
+      const response = await route(request, env);
+      response.headers.set("x-content-type-options", "nosniff");
+      response.headers.set("referrer-policy", "no-referrer");
+      response.headers.set("cache-control", "no-store");
+      if (origin === env.SITE_ORIGIN) {
+        response.headers.set("access-control-allow-origin", env.SITE_ORIGIN);
+        response.headers.set("vary", "Origin");
+      }
       return response;
     } catch (error) {
       console.error("community_api_error", error?.message || "unknown");
-      return json({error:"internal_error"},500);
+      return json({ error: "internal_error" }, 500);
     }
   }
 };
