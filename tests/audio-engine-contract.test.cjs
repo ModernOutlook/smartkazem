@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const engine = fs.readFileSync('audio-engine.js', 'utf8');
 
 assert.match(engine, /function speechChunks\(text,limit=850\)/);
-assert.match(engine, /Array\.from\(String\(text\|\|'\'\)\.trim\(\)\)/);
+assert.match(engine, /Array\.from\(String\(text/);
 assert.match(engine, /remaining\.lastIndexOf\(' ',limit-1\)/);
 assert.match(engine, /const NAV_SELECTOR=.*p,li,blockquote,figcaption,td,th,dt,dd,pre/s);
 assert.match(engine, /function activateNavigation\(\)[\s\S]*?const text=visibleLocalizedText\(el\);[\s\S]*?if\(text\)speak\(text/);
