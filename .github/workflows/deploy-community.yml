@@ -1,0 +1,65 @@
+name: Deploy SmartKazem Community API
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: smartkazem-community-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
+
+      - name: Validate deployment secrets
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          test -n "$CLOUDFLARE_API_TOKEN" || { echo "::error::Missing CLOUDFLARE_API_TOKEN"; exit 1; }
+          test -n "$CLOUDFLARE_ACCOUNT_ID" || { echo "::error::Missing CLOUDFLARE_ACCOUNT_ID"; exit 1; }
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+
+      - name: Deploy Worker and apply D1 migrations
+        working-directory: community-worker
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          npx --yes wrangler@4.45.0 d1 migrations apply smartkazem-community --remote
+          npx --yes wrangler@4.45.0 deploy
+
+      - name: Verify deployed API
+        env:
+          COMMUNITY_API_URL: ${{ vars.COMMUNITY_API_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "$COMMUNITY_API_URL" ]; then
+            echo "::error::Set the repository variable COMMUNITY_API_URL to the deployed Worker URL."
+            exit 1
+          fi
+          curl --fail --silent --show-error "$COMMUNITY_API_URL/health" | node -e '
+            let raw = "";
+            process.stdin.setEncoding("utf8");
+            process.stdin.on("data", chunk => raw += chunk);
+            process.stdin.on("end", () => {
+              const result = JSON.parse(raw);
+              if (result.ok !== true || result.service !== "smartkazem-community") process.exit(1);
+              console.log("Community API health check passed.");
+            });
+          '
