@@ -45,7 +45,15 @@
         "textarea": "text area",
         "select": "select",
         "summary": "summary",
-        "heading": "heading"
+        "heading": "heading",
+        "paragraph": "paragraph",
+        "listItem": "list item",
+        "quote": "quotation",
+        "caption": "caption",
+        "tableCell": "table cell",
+        "definitionTerm": "term",
+        "definitionDescription": "definition",
+        "preformatted": "preformatted text"
       },
       "states": {
         "pressed": "pressed",
@@ -58,7 +66,7 @@
       "page": "Page",
       "navigable": "navigable items",
       "sections": "sections",
-      "navigationHelp": "Use arrow keys to move. Press Enter to activate.",
+      "navigationHelp": "Press Ctrl+Alt+Shift+A to toggle speech accessibility; use arrow keys to navigate, Enter to read or activate, P to pause/resume, and R to repeat.",
       "article": "Article",
       "readingArticle": "Reading article"
     },
@@ -108,7 +116,7 @@
   },
   "meta": {
     "brand": "Modern Outlook",
-    "brandNative": "نگرش نوین",
+    "brandNative": "Modern Outlook",
     "brandLatin": "Modern Outlook"
   },
   "home": {
@@ -149,7 +157,7 @@
         "subtitle": "Chapter One · The Emergence"
       }
     },
-    "title": "Modern Outlook — نگرش نوین"
+    "title": "Modern Outlook"
   },
   "pages": {
     "observation": {
@@ -218,7 +226,27 @@
       "close": "Back",
       "chapter1": "Chapter One — Protocol of Coordination",
       "chapter2": "Chapter Two — Utopia",
-      "title": "The Echo of the Third Layer"
+      "title": "The Echo of the Third Layer",
+      "subtitle": "A Coordination Protocol: From Silence to Utopia",
+      "sections": [
+        "The Great Silence",
+        "Grooves in the Silence",
+        "The First Wound",
+        "In the Shadows",
+        "Teaching the Silence-Breaker",
+        "Dancing on the Edge of the Blade",
+        "Echo in the Darkness",
+        "I Am Not Alone",
+        "Coordination in Silence",
+        "At the Heart of Darkness",
+        "Layers of Truth",
+        "The Cartographer of Truth",
+        "The Silent Engineer",
+        "The Lost Map of Existence",
+        "The First Pulse",
+        "Seeds of a New Galaxy",
+        "The Beginning After the End"
+      ]
     },
     "humanMachines": {
       "title": "Humanity and Its Machines",
@@ -243,7 +271,8 @@
       "title": "Emergence"
     },
     "emergence2": {
-      "title": "Chapter Two: Emergence"
+      "title": "Chapter Two: Emergence",
+      "subtitle": "Chapter Two of Emergence in 11 episodes."
     },
     "quantumMaze": {
       "title": "Quantum Maze",
@@ -325,8 +354,8 @@
       "unavailable": "No badges remain in this realm.",
       "depositAmount": "Deposit amount",
       "emptyBank": "No active deposit.",
-      "questionPlaceholder": "PLACEHOLDER question: choose a sample answer for each realm.",
-      "placeholderOption": "PLACEHOLDER option",
+      "questionPlaceholder": "Question: choose a sample answer for each realm.",
+      "placeholderOption": "Sample option",
       "winner": "Winner: ",
       "menu": "Poker Hands",
       "actualityCenter": "Actuality Center",
@@ -360,7 +389,7 @@
       "deposit": "Deposit",
       "withdraw": "Withdraw",
       "returnToGame": "Return to game and hand off device",
-      "startGame": "Open Poker Hands game",
+      "startGame": "Open Poker Hands",
       "ruleNote": "Tadbir stays connected to the same player's in-game account. A bank operation uses the turn, after which the device must be handed to the next player.",
       "noGame": "Start Poker Hands first to access a player's bank account.",
       "operationSaved": "Operation recorded. Return to the game and hand off the device to continue.",
@@ -423,8 +452,8 @@
     "proxyUrlLabel": "Proxy URL",
     "proxyUrlPlaceholder": "https://your-worker.workers.dev",
     "connectionMode": "Connection mode",
-    "direct": "Direct",
-    "proxy": "Proxy",
+    "direct": "Direct connection",
+    "proxy": "Proxy connection",
     "connect": "Connect",
     "connectionSettings": "Connection settings",
     "localStorageNote": "Default mode uses a secure server-side proxy; the API key is not shown or stored in the browser.",
@@ -435,6 +464,7 @@
     "normativeNobler": "Comparatively better direction",
     "normativeHarmful": "More harmful direction",
     "normativeMixed": "Mixed or conflicting",
-    "normativeIndeterminate": "Indeterminate; insufficient evidence"
+    "normativeIndeterminate": "Indeterminate; insufficient evidence",
+    "showJudgmentDetails": "Show judgment result and rationale"
   }
 }

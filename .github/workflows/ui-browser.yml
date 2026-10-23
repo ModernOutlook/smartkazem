@@ -1,6 +1,7 @@
 name: UI browser smoke tests
 
 on:
+  pull_request:
   workflow_dispatch:
     inputs:
       approve_browser_download:
@@ -102,7 +103,7 @@ jobs:
 
       - name: Install Playwright and Chromium (explicit approval fallback)
         id: browser-install
-        if: steps.change-scope.outputs.image_only != 'true' && steps.browser-cache.outputs.cache-hit != 'true' && steps.browser-bundle.outputs.imported != 'true' && github.event_name == 'workflow_dispatch' && inputs.approve_browser_download == true
+        if: steps.change-scope.outputs.image_only != 'true' && steps.browser-cache.outputs.cache-hit != 'true' && steps.browser-bundle.outputs.imported != 'true' && ((github.event_name == 'workflow_dispatch' && inputs.approve_browser_download == true) || github.event_name == 'pull_request')
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install chromium

@@ -49,14 +49,43 @@ for (const file of htmlFiles) {
   }
 }
 
-const parityMissing = [];
-for (const key of keys.fa) {
-  if (!key.startsWith('labels.')) continue;
-  for (const language of ['en', 'ar', 'zh']) {
-    if (!keys[language].has(key)) parityMissing.push(language + '.json missing catalog key ' + key);
+// Every catalog must expose the same translation-key surface so the runtime
+// never silently falls back to Persian when a user selects another language.
+const allKeys = new Set(languages.flatMap((language) => [...keys[language]]));
+for (const key of allKeys) {
+  for (const language of languages) {
+    if (!keys[language].has(key)) {
+      errors.push(language + '.json missing catalog key ' + key);
+    }
   }
 }
-errors.push(...parityMissing);
+
+function validateCatalogLanguage(language, value, prefix = '') {
+  if (typeof value === 'string') {
+    // Flag script leakage across the four supported languages. Proper names
+    // and technical Latin acronyms remain allowed in non-Latin catalogs.
+    if (['en', 'zh'].includes(language) && /[\u0600-\u06FF]/u.test(value)) {
+      errors.push(language + '.json contains Arabic/Persian script at ' + prefix + ': ' + value);
+    }
+    if (language === 'ar' && /[پچژگکی]/u.test(value)) {
+      errors.push(language + '.json contains Persian-specific letters at ' + prefix + ': ' + value);
+    }
+    if (language !== 'zh' && /[\u4E00-\u9FFF]/u.test(value)) {
+      errors.push(language + '.json contains Chinese characters at ' + prefix + ': ' + value);
+    }
+    if (!value.trim()) errors.push(language + '.json has an empty translation at ' + prefix);
+    return;
+  }
+  if (value && typeof value === 'object') {
+    for (const [key, child] of Object.entries(value)) {
+      validateCatalogLanguage(language, child, prefix ? prefix + '.' + key : key);
+    }
+  }
+}
+
+for (const language of languages) {
+  validateCatalogLanguage(language, catalogs[language]);
+}
 
 console.log('Root HTML files scanned: ' + htmlFiles.length);
 console.log('Translation attributes scanned: ' + attributeCount);

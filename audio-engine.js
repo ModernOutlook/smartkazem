@@ -59,32 +59,50 @@
     // The visible DOM is already language-selected by the page/runtime.
     // Read the article once from its rendered text tree; including the root
     // and every descendant would duplicate the entire article for speech.
-    return String(root.innerText||root.textContent||'').replace(/\\s+/g,' ').trim();
+    return String(root.innerText||root.textContent||'').replace(/\s+/g,' ').trim();
+  }
+  function speechChunks(text,limit=850){
+    const remaining=Array.from(String(text||'').trim());
+    const chunks=[];
+    while(remaining.length>limit){
+      let cut=limit;
+      const floor=Math.floor(limit*.55);
+      const punctuation='。！？.!?؛،;,:';
+      let boundary=-1;
+      for(let i=limit-1;i>=floor;i--){
+        if(punctuation.includes(remaining[i])){boundary=i+1;break;}
+      }
+      if(boundary>0)cut=boundary;
+      else{
+        const space=remaining.lastIndexOf(' ',limit-1);
+        if(space>=floor)cut=space;
+      }
+      const chunk=remaining.slice(0,cut).join('').trim();
+      if(chunk)chunks.push(chunk);
+      remaining.splice(0,cut);
+      while(remaining.length&&/\s/u.test(remaining[0]))remaining.shift();
+    }
+    const tail=remaining.join('').trim();
+    if(tail)chunks.push(tail);
+    return chunks;
   }
   function readArticle(article){
-    if(!state.accessibility||!article)return false;
+    if(!state.accessibility||!state.speechEnabled||!article||!('speechSynthesis'in window))return false;
     const text=visibleLocalizedText(article);
     if(!text)return false;
-    const title=article.querySelector('h1,h2,h3,[role="heading"]');
+    const title=article.querySelector('h1,h2,h3,h4,h5,h6,[role="heading"]');
     const titleText=title?accessibleName(title):'';
     const label=i18nGet('labels.accessibility.readingArticle','Reading article');
     const content=titleText&&text.startsWith(titleText)?text:[titleText,text].filter(Boolean).join('، ');
     const full=label+'، '+content;
-    const chunks=[];
-    for(let i=0;i<full.length;i+=900)chunks.push(full.slice(i,i+900));
-    if(!('speechSynthesis'in window))return false;
     try{
       const synth=window.speechSynthesis;
       synth.cancel();
-      chunks.forEach((chunk,index)=>{
+      const lang=currentLanguage();
+      speechChunks(full).forEach(chunk=>{
         const utterance=new SpeechSynthesisUtterance(chunk);
-        const lang=currentLanguage();
-        utterance.lang=lang;
-        utterance.rate=.92;
-        utterance.pitch=1;
-        utterance.volume=state.volume;
-        const voice=chooseVoice(lang);
-        if(voice)utterance.voice=voice;
+        utterance.lang=lang;utterance.rate=.92;utterance.pitch=1;utterance.volume=state.volume;
+        const voice=chooseVoice(lang);if(voice)utterance.voice=voice;
         synth.speak(utterance);
       });
       lastSpoken=full;
@@ -122,7 +140,7 @@
 
 
   // Accessible navigation layer: semantic focus + fast speech + touch/keyboard movement.
-  const NAV_SELECTOR='article,[data-a11y-read],h1,h2,h3,h4,a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),summary,[tabindex]:not([tabindex="-1"]),[role="button"],[role="link"],[role="checkbox"],[role="radio"],[role="switch"],[role="tab"],[role="menuitem"],[role="heading"]';
+  const NAV_SELECTOR='article,[data-a11y-read],h1,h2,h3,h4,h5,h6,p,li,blockquote,figcaption,td,th,dt,dd,pre,a[href],button:not([disabled]),input:not([disabled]),textarea:not([disabled]),select:not([disabled]),summary,[tabindex]:not([tabindex="-1"]),[role="button"],[role="link"],[role="checkbox"],[role="radio"],[role="switch"],[role="tab"],[role="menuitem"],[role="heading"]';
   let navIndex=-1, navItems=[], navRegion=null;
 
   function ensureAccessibilityRegion(){
@@ -139,9 +157,10 @@
   }
   function navigationItems(){
     const root=document.querySelector('main')||document.body;
-    return [...root.querySelectorAll(NAV_SELECTOR)].filter(el=>{
-      if(el.matches('article,[data-a11y-read],h1,h2,h3,h4,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
-      if(el.hidden||el.getAttribute('aria-hidden')==='true')return false;
+    const candidates=[...(root.matches?.(NAV_SELECTOR)?[root]:[]),...root.querySelectorAll(NAV_SELECTOR)];
+    return candidates.filter(el=>{
+      if(el.matches('article,[data-a11y-read],h1,h2,h3,h4,h5,h6,p,li,blockquote,figcaption,td,th,dt,dd,pre,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
+      if(el.hidden||el.closest('[hidden],[aria-hidden="true"],[inert]')||el.getAttribute('aria-hidden')==='true')return false;
       const rect=el.getBoundingClientRect();
       return rect.width>0&&rect.height>0;
     });
@@ -150,7 +169,9 @@
     const roleKey=el.getAttribute('role')||el.tagName;
     const rolePath={
       BUTTON:'button',A:'link',INPUT:'input',TEXTAREA:'textarea',SELECT:'select',
-      SUMMARY:'summary',heading:'heading',H1:'heading',H2:'heading',H3:'heading',H4:'heading'
+      SUMMARY:'summary',heading:'heading',H1:'heading',H2:'heading',H3:'heading',H4:'heading',H5:'heading',H6:'heading',
+      P:'paragraph',LI:'listItem',BLOCKQUOTE:'quote',FIGCAPTION:'caption',TD:'tableCell',TH:'tableCell',
+      DT:'definitionTerm',DD:'definitionDescription',PRE:'preformatted'
     }[roleKey]||roleKey.toLowerCase();
     const role=i18nGet('labels.accessibility.roles.'+rolePath,rolePath);
     const name=el.matches?.('article') ? i18nGet('labels.accessibility.article','Article') : accessibleName(el);
@@ -209,10 +230,23 @@
     const el=navItems[navIndex];
     if(!el)return;
     if(el.matches?.('article,[data-a11y-read]')){readArticle(el);return;}
-    el.click();
+    if(el.matches?.('a[href],button,input,textarea,select,summary,[role="button"],[role="link"],[role="checkbox"],[role="radio"],[role="switch"],[role="tab"],[role="menuitem"]')){el.click();return;}
+    const text=visibleLocalizedText(el);
+    if(text)speak(text,{rate:1.02});
   }
   function handleAccessibilityKeyboard(event){
     if(!state.accessibility)return;
+    const typingTarget=event.target?.matches?.('input,textarea,select,[contenteditable="true"]');
+    if(!typingTarget&&event.key.toLowerCase()==='p'){
+      event.preventDefault();
+      if(!('speechSynthesis'in window))return;
+      const synth=window.speechSynthesis;
+      if(synth.paused)synth.resume();else if(synth.speaking)synth.pause();else if(lastSpoken)speak(lastSpoken);
+      return;
+    }
+    if(!typingTarget&&event.key.toLowerCase()==='r'){
+      event.preventDefault();if(lastSpoken)speak(lastSpoken);return;
+    }
     const keys=['ArrowDown','ArrowUp','ArrowLeft','ArrowRight','Home','End','Enter',' ','Escape'];
     if(!keys.includes(event.key))return;
     syncNavigation();
@@ -327,8 +361,23 @@
     });
     contentObserver.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:['hidden','aria-hidden','data-i18n','class']});
   }
-  function handleLanguageChange(){if(!state.accessibility)return;syncNavigation();const focused=document.activeElement;const index=navItems.indexOf(focused);if(index>=0)navIndex=index;window.setTimeout(()=>{if(focused&&navItems.includes(focused))announceNavigation(focused);},40);}
-  function handleKeyboard(event){handleAccessibilityKeyboard(event);if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
+  function handleLanguageChange(){
+    refreshVoices();
+    if(!state.accessibility)return;
+    if('speechSynthesis'in window)window.speechSynthesis.cancel();
+    syncNavigation();
+    const focused=document.activeElement;
+    const index=navItems.indexOf(focused);if(index>=0)navIndex=index;
+    window.setTimeout(()=>{if(focused&&navItems.includes(focused))announceNavigation(focused);else announcePage();},80);
+  }
+  function handleKeyboard(event){
+    if(event.ctrlKey&&event.altKey&&event.shiftKey&&event.key.toLowerCase()==='a'){
+      event.preventDefault();toggleAccessibility();return;
+    }
+    handleAccessibilityKeyboard(event);
+    if(!state.accessibility||event.key!=='Escape')return;
+    if('speechSynthesis'in window)window.speechSynthesis.cancel();
+  }
   function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
   function init(){
     if(initialized)return getState();initialized=true;loadState();ensureGraph();initSpeech();

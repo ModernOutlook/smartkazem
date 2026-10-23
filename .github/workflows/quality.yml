@@ -42,6 +42,12 @@ jobs:
       - name: Test Paragraph Machine translation failure boundaries
         run: node tests/paragraph-translation-boundary.test.js
 
+      - name: Test audio accessibility contracts
+        run: node --test tests/audio-engine-contract.test.cjs
+
+      - name: Validate translation catalog parity and localization
+        run: node scripts/i18n-contract-check.mjs
+
       - name: Validate JSON catalogs
         run: |
           python3 - <<'PY'

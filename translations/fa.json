@@ -46,7 +46,15 @@
         "textarea": "متن",
         "select": "انتخاب",
         "summary": "بازکننده",
-        "heading": "عنوان"
+        "heading": "عنوان",
+        "paragraph": "بند",
+        "listItem": "مورد فهرست",
+        "quote": "نقل‌قول",
+        "caption": "شرح تصویر",
+        "tableCell": "خانهٔ جدول",
+        "definitionTerm": "اصطلاح",
+        "definitionDescription": "توضیح اصطلاح",
+        "preformatted": "متن قالب‌بندی‌شده"
       },
       "states": {
         "pressed": "فعال",
@@ -59,7 +67,7 @@
       "page": "صفحه",
       "navigable": "گزینه قابل پیمایش",
       "sections": "بخش",
-      "navigationHelp": "برای حرکت از کلیدهای جهت‌دار استفاده کنید. برای اجرا Enter را بزنید.",
+      "navigationHelp": "برای فعال یا غیرفعال کردن حالت صوتی Ctrl+Alt+Shift+A را بزنید؛ با کلیدهای جهت‌دار پیمایش کنید، برای خواندن یا اجرا Enter، برای توقف یا ادامه گفتار P و برای تکرار R را بزنید.",
       "article": "مقاله",
       "readingArticle": "خواندن مقاله"
     },
@@ -103,11 +111,13 @@
     "missingEpisodeText": "متن این قسمت در مخزن مربوطه موجود نیست.",
     "missingTranslation": "ترجمهٔ این بخش در دسترس نیست.",
     "inventoryDescription": "۵۵ تصویر، با هویت مستقل و ترتیب ثابت.",
-    "fiveRealms": "پنج قلمرو"
+    "fiveRealms": "پنج قلمرو",
+    "episodeReader": "متن قسمت"
   },
   "meta": {
     "brand": "نگرش نوین",
-    "brandLatin": "Modern Outlook"
+    "brandLatin": "Modern Outlook",
+    "brandNative": "نگرش نوین"
   },
   "home": {
     "brand": "نگرش نوین",
@@ -144,7 +154,7 @@
       "observation": "سرزمین مشاهده؛ یک رود، یک جریان",
       "emergence": {
         "title": "فصل اول ظهور",
-        "subtitle": "Chapter One · The Emergence"
+        "subtitle": "فصل نخست · ظهور"
       }
     },
     "title": "نگرش نوین — Modern Outlook"
@@ -174,7 +184,8 @@
     },
     "forgers": {
       "title": "جاعلان تقلید",
-      "subtitle": "در ده فصل"
+      "subtitle": "در ده فصل",
+      "moral": "کسی که مهارتی را به نمایش می‌گذارد، فقط تا جایی پیش می‌رود که تماشاگر دارد؛ اما کسی که مهارتی را تمرین می‌کند، تا جایی پیش می‌رود که خودش بتواند. جنگلی که همه در آن تماشاگر باشند، سرانجام چیزی جز خودِ تماشا برای دیدن باقی نمی‌گذارد."
     },
     "humanMachines": {
       "title": "انسان و ماشین‌هایش",
@@ -205,11 +216,15 @@
       "visualLabel": "۸۱ داستان، ۸۱ دوره",
       "visualAlbum": "۸۱ داستان، ۸۱ دوره",
       "findTitle": "پیدا کردن قسمت",
-      "searchPlaceholder": "عنوان یا شماره قسمت…"
+      "searchPlaceholder": "عنوان یا شماره قسمت…",
+      "subtitle": "از نخستین قانون تا افق ناشناخته",
+      "heroTitle": "از نخستین پادشاه تا پایان داستان",
+      "heroText": "قسمت‌های کامل شاهنامه را همچون سفری ادبی و پیوسته بخوانید. هر قسمت روایت، ابیات برگزیده و اطلاعات نسخه را در بر دارد."
     },
     "observation25": {
       "close": "بازگشت",
-      "title": "سرزمین مشاهده؛ ۲۵ بار رسیدن"
+      "title": "سرزمین مشاهده؛ ۲۵ بار رسیدن",
+      "subtitle": "جلد دوم رسالهٔ فلسفی نگرش نوین"
     },
     "layer3": {
       "title": "پژواک لایه سوم",
@@ -239,7 +254,8 @@
     },
     "possibleMirror": {
       "close": "بازگشت",
-      "title": "آینه‌ی ممکن‌ها"
+      "title": "آینه‌ی ممکن‌ها",
+      "subtitle": "رمانی دربارهٔ اراده، امکان و بازتاب"
     },
     "disturbedManifesto": {
       "title": "مانیفست آشوب‌زده",
@@ -253,7 +269,7 @@
     },
     "emergence2": {
       "title": "فصل دوم ظهور",
-      "subtitle": "فصل دوم ظهور در ۱۱ قسمت."
+      "subtitle": "فصل دوم ظهور در یازده قسمت."
     },
     "inventory": {
       "title": "فهرست کارت‌ها — SmartKazem"
@@ -264,7 +280,7 @@
       "close": "بازگشت"
     },
     "pokerHands": {
-      "title": "Poker Hands"
+      "title": "دست‌های پوکر"
     },
     "gameHub": {
       "subtitle": "پنج بازی، پنج قلمرو",
@@ -338,10 +354,10 @@
       "unavailable": "نشانی در این قلمرو باقی نمانده است.",
       "depositAmount": "مقدار سپرده",
       "emptyBank": "سپرده فعالی وجود ندارد.",
-      "questionPlaceholder": "PLACEHOLDER پرسش: برای هر قلمرو یک پاسخ آزمایشی انتخاب کنید.",
-      "placeholderOption": "گزینه PLACEHOLDER",
+      "questionPlaceholder": "پرسش: برای هر قلمرو یک پاسخ آزمایشی انتخاب کنید.",
+      "placeholderOption": "گزینهٔ آزمایشی",
       "winner": "برنده: ",
-      "menu": "Poker Hands",
+      "menu": "دست‌های پوکر",
       "actualityCenter": "کانون فعلیت",
       "jokerNoPoker": "جوکر وارد دست پوکر نمی‌شود؛ برای آن کنش مبادله را انتخاب کنید.",
       "forgivenRealm": "اگر چند قلمرو در بیشترین تعداد کارت مساوی‌اند، انتخاب کنید پاسخ نادرست کدام قلمرو بخشوده شود.",
@@ -363,7 +379,7 @@
     },
     "tadbir": {
       "title": "تدبیر",
-      "subtitle": "ماشین سپرده‌گذاری و برداشت بانک بازی Poker Hands",
+      "subtitle": "ماشین واریز و برداشت بانک بازی دست‌های پوکر",
       "accountTitle": "حساب بازیکن فعال",
       "player": "بازیکن",
       "points": "امتیاز قابل‌مصرف",
@@ -373,9 +389,9 @@
       "deposit": "سپرده‌گذاری",
       "withdraw": "برداشت",
       "returnToGame": "بازگشت به بازی و واگذاری دستگاه",
-      "startGame": "ورود به بازی Poker Hands",
+      "startGame": "ورود به بازی دست‌های پوکر",
       "ruleNote": "تدبیر به حساب همان بازیکن در بازی متصل است. عملیات بانکی کنش نوبت محسوب می‌شود و پس از آن دستگاه باید به بازیکن بعدی واگذار شود.",
-      "noGame": "ابتدا بازی Poker Hands را آغاز کنید تا حساب بانکی بازیکن در دسترس باشد.",
+      "noGame": "برای دسترسی به حساب بانکی بازیکن، ابتدا بازی دست‌های پوکر را آغاز کنید.",
       "operationSaved": "عملیات ثبت شد. برای ادامه، به بازی بازگردید و دستگاه را واگذار کنید.",
       "handoff": "نوبت بازیکن بعدی هنوز در صفحه بازی آشکار نشده است. برای ادامه به بازی برگردید.",
       "gameOver": "بازی پایان یافته است. موجودی بانک در امتیاز نهایی حساب نمی‌شود مگر پیش از پایان بازی برداشت شود.",
@@ -431,13 +447,13 @@
     "realmC": "اقتصاد سهم",
     "apiKeyLabel": "کلید API",
     "showApiKey": "نمایش کلید API",
-    "baseUrlLabel": "Base URL",
-    "modelLabel": "Model ID",
-    "proxyUrlLabel": "Proxy URL",
+    "baseUrlLabel": "نشانی پایه",
+    "modelLabel": "شناسهٔ مدل",
+    "proxyUrlLabel": "نشانی پروکسی",
     "proxyUrlPlaceholder": "https://your-worker.workers.dev",
     "connectionMode": "حالت اتصال",
-    "direct": "Direct",
-    "proxy": "Proxy",
+    "direct": "مستقیم",
+    "proxy": "واسط",
     "connect": "اتصال",
     "connectionSettings": "تنظیمات اتصال",
     "localStorageNote": "حالت پیش‌فرض از پروکسی امن سمت سرور استفاده می‌کند؛ کلید API در مرورگر نمایش یا ذخیره نمی‌شود.",
@@ -448,6 +464,7 @@
     "normativeNobler": "جهت نیک‌تر",
     "normativeHarmful": "جهت زیان‌بارتر",
     "normativeMixed": "آمیخته یا متعارض",
-    "normativeIndeterminate": "نامعین؛ شواهد ناکافی"
+    "normativeIndeterminate": "نامعین؛ شواهد ناکافی",
+    "showJudgmentDetails": "نمایش نتیجه و دلیل داوری"
   }
 }
