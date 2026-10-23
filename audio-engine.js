@@ -370,7 +370,14 @@
     const index=navItems.indexOf(focused);if(index>=0)navIndex=index;
     window.setTimeout(()=>{if(focused&&navItems.includes(focused))announceNavigation(focused);else announcePage();},80);
   }
-  function handleKeyboard(event){handleAccessibilityKeyboard(event);if(!state.accessibility||event.key!=='Escape')return;if('speechSynthesis'in window)window.speechSynthesis.cancel();}
+  function handleKeyboard(event){
+    if(event.ctrlKey&&event.altKey&&event.shiftKey&&event.key.toLowerCase()==='a'){
+      event.preventDefault();toggleAccessibility();return;
+    }
+    handleAccessibilityKeyboard(event);
+    if(!state.accessibility||event.key!=='Escape')return;
+    if('speechSynthesis'in window)window.speechSynthesis.cancel();
+  }
   function initSpeech(){if(!('speechSynthesis'in window))return;refreshVoices();window.speechSynthesis.addEventListener?.('voiceschanged',refreshVoices);}
   function init(){
     if(initialized)return getState();initialized=true;loadState();ensureGraph();initSpeech();
