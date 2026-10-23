@@ -1,6 +1,7 @@
 name: UI browser smoke tests
 
 on:
+  pull_request:
   workflow_dispatch:
     inputs:
       approve_browser_download:
