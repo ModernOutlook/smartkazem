@@ -66,7 +66,7 @@
       "page": "页面",
       "navigable": "个可导航项目",
       "sections": "个部分",
-      "navigationHelp": "使用方向键导航；按 Enter 朗读或激活，按 P 暂停/继续语音，按 R 重复朗读。",
+      "navigationHelp": "按 Ctrl+Alt+Shift+A 开启或关闭语音辅助；使用方向键导航，按 Enter 朗读或激活，按 P 暂停/继续，按 R 重复。",
       "article": "文章",
       "readingArticle": "正在朗读文章"
     },
