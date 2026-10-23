@@ -1,0 +1,21 @@
+<main class="page child-page doctor-page" lang="fa" dir="rtl" aria-labelledby="doctor-title">
+  <header class="doctor-head">
+    <div><p class="doctor-eyebrow">SHARE ECONOMY · CARE</p><h1 id="doctor-title" data-i18n="pages.doctor.title">دکتر</h1><p data-i18n="pages.doctor.subtitle">همراهی هوشمند برای مراقبت و تندرستی</p></div>
+    <button id="doctor-close" class="doctor-close" type="button" data-i18n="labels.back" data-i18n-aria="labels.back">بازگشت</button>
+  </header>
+  <section class="doctor-scene" aria-label="فضای تصویری دکتر و دستیار رباتیک">
+    <div class="doctor-clinic-window"></div><div class="doctor-shelf"></div><div class="doctor-plant"></div>
+    <div class="doctor-mark" aria-hidden="true"><span class="doctor-cross"></span><span class="doctor-heart">♡</span></div>
+    <div class="doctor-portrait" aria-hidden="true">
+      <div class="doctor-hair"></div><div class="doctor-face"><span class="doctor-eye eye-left"></span><span class="doctor-eye eye-right"></span><span class="doctor-nose"></span><span class="doctor-smile"></span><span class="doctor-stubble"></span></div>
+      <div class="doctor-neck"></div><div class="doctor-shirt"></div><div class="doctor-coat coat-left"></div><div class="doctor-coat coat-right"></div><div class="doctor-stethoscope"></div>
+    </div>
+    <div class="doctor-robot" aria-hidden="true">
+      <div class="robot-antenna"></div><div class="robot-head"><div class="robot-face"><span class="robot-eye"></span><span class="robot-eye"></span><span class="robot-smile"></span></div></div>
+      <div class="robot-neck"></div><div class="robot-body"><div class="robot-tablet"><span class="robot-heart">♡</span><span class="robot-pulse">⌁</span><span class="robot-lines"></span></div></div>
+      <div class="robot-arm arm-left"></div><div class="robot-arm arm-right"></div>
+    </div>
+    <div class="doctor-scene-glow"></div>
+  </section>
+  <p class="doctor-caption" data-i18n="pages.doctor.caption">دانش پزشکی، همدلی انسانی و ابزارهای هوشمند در فضایی روشن و آرام.</p>
+</main>
