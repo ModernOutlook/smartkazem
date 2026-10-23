@@ -15,4 +15,4 @@ bucket_name = "smartkazem-community-media"
 
 [vars]
 SITE_ORIGIN = "https://modernoutlook.github.io"
-TURNSTILE_ENABLED = "true"
+GOOGLE_CLIENT_ID = "REPLACE_WITH_GOOGLE_CLIENT_ID"
