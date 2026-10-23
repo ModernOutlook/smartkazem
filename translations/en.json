@@ -405,7 +405,6 @@
       "returnFailed": "Could not return to the game."
     },
     "doctor": {
-      "hub": "Doctor",
       "title": "Doctor",
       "subtitle": "An intelligent companion for care and well-being",
       "caption": "Medical knowledge, human empathy, and intelligent tools in a bright, calming space."
