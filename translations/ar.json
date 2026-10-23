@@ -89,6 +89,8 @@
     "homePage": "العودة إلى الصفحة الرئيسية",
     "cards": "البطاقات",
     "cardInventory": "فهرس البطاقات",
+    "cardOwned": "نشطة",
+    "cardLocked": "غير نشطة",
     "jokers": "الجوكر",
     "spades": "البستوني",
     "hearts": "القلوب",
