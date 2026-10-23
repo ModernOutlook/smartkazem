@@ -36,6 +36,7 @@
     "accessibility": {
       "enabled": "无障碍模式已启用。",
       "disabled": "无障碍模式已关闭。",
+      "useDeviceScreenReader": "使用设备屏幕阅读器（避免网站语音重叠）",
       "repeat": "双击可重复最后一条语音提示。",
       "hold": "长按可暂停、继续或重复语音。",
       "roles": {
