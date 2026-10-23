@@ -35,7 +35,7 @@ for (const sample of [
   assert.equal(chunks.join('').replace(/\s+/gu, ''), sample.trim().replace(/\s+/gu, ''), 'chunking must preserve all non-whitespace text');
 }
 
-assert.deepEqual(speechChunks('  Short text.  ', 120), ['Short text.']);
-assert.deepEqual(speechChunks('', 120), []);
+assert.deepEqual(Array.from(speechChunks('  Short text.  ', 120)), ['Short text.']);
+assert.deepEqual(Array.from(speechChunks('', 120)), []);
 
 console.log('Audio accessibility contract and speech chunking tests passed.');
