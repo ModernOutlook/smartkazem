@@ -152,3 +152,12 @@ Maintenance: inspect owning page + parent realm; prefer presentation-only CSS wh
 a11y for blind users = shared runtime service, not per-page content implementation.
 
 Core invariant: Persian source → translation reservoir → SiteI18n → rendered lo[g]
+
+
+## Audio-first accessibility mode
+
+- The shared audio engine owns blind-user mode; do not implement per-page toggles.
+- Default mode is off for new users. The existing global triple-click gesture toggles it on/off; interactive controls and language selectors remain excluded from gesture detection.
+- Speech navigation and visual presentation are one state: `html[data-audio-accessibility="on"]` enables audio-first presentation, and turning the mode off restores ordinary visuals.
+- Visual styling is suppressed without removing semantic content, focusable controls, or the live announcement region from the accessibility tree. Keep semantic HTML, accessible names/states, keyboard/touch navigation, and selected-language speech aligned with the shared runtime.
+- This mode complements platform screen readers; it does not replace semantic accessibility or introduce page-specific content copies.
