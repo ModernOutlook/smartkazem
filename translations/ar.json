@@ -456,6 +456,7 @@
     "normativeNobler": "اتجاه أفضل نسبيًا",
     "normativeHarmful": "اتجاه أشد ضررًا",
     "normativeMixed": "مختلط أو متعارض",
-    "normativeIndeterminate": "غير محدد؛ الأدلة غير كافية"
+    "normativeIndeterminate": "غير محدد؛ الأدلة غير كافية",
+    "showJudgmentDetails": "عرض نتيجة الحكم وأسبابه"
   }
 }
