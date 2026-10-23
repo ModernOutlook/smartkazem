@@ -45,7 +45,15 @@
         "textarea": "نص",
         "select": "اختيار",
         "summary": "مُلخّص",
-        "heading": "عنوان"
+        "heading": "عنوان",
+        "paragraph": "فقرة",
+        "listItem": "عنصر قائمة",
+        "quote": "اقتباس",
+        "caption": "تعليق توضيحي",
+        "tableCell": "خلية جدول",
+        "definitionTerm": "مصطلح",
+        "definitionDescription": "شرح المصطلح",
+        "preformatted": "نص منسق"
       },
       "states": {
         "pressed": "مفعّل",
