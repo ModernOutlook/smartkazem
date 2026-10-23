@@ -36,6 +36,7 @@
     "accessibility": {
       "enabled": "Accessibility mode enabled.",
       "disabled": "Accessibility mode disabled.",
+      "useDeviceScreenReader": "Use device screen reader (avoid overlapping site speech)",
       "repeat": "Double-click to repeat the last announcement.",
       "hold": "Long-press to pause, resume, or repeat speech.",
       "roles": {
