@@ -38,8 +38,8 @@ For OAuth consent-screen status **Testing**, add the Google accounts that will t
 The manually dispatched workflow provisions D1 (`smartkazem-community`) and R2 (`smartkazem-community-media`), applies migrations, deploys the Worker, and checks `/health`.
 
 Required GitHub repository secrets:
-- `CLOUDFLARE_API_TOKEN` — scoped to Workers Scripts:Edit, D1:Edit, R2 Storage:Edit, and account read access needed by Wrangler.
-- `CLOUDFLARE_ACCOUNT_ID`
+- `CLOUDFLARE_socialAPI_TOKEN` — scoped to Workers Scripts:Edit, D1:Edit, R2 Storage:Edit, and account read access needed by Wrangler.
+- `CLOUDFLARE_socialACCOUNT_ID`
 
 Required GitHub repository variables:
 - `COMMUNITY_SITE_ORIGIN`
