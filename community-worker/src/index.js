@@ -74,7 +74,8 @@ async function route(request, env) {
     let identity;
     try { identity = await verifyGoogleCredential(data.credential, env.GOOGLE_CLIENT_ID); }
     catch { return json({ error: "invalid_google_credential" }, 401); }
-    let user = await env.DB.prepare("SELECT id,email,display_name,email_verified_at FROM users WHERE google_sub=?").bind(identity.sub).first();
+    let user = await env.DB.prepare("SELECT id,email,display_name,email_verified_at,disabled_at FROM users WHERE google_sub=?").bind(identity.sub).first();
+    if (user?.disabled_at) return json({ error: "account_disabled" }, 403);
     if (!user) {
       const existing = await env.DB.prepare("SELECT id,google_sub FROM users WHERE email=? COLLATE NOCASE").bind(identity.email).first();
       if (existing) return json({ error: "account_link_required" }, 409);
@@ -177,6 +178,8 @@ export default {
       const origin = request.headers.get("Origin");
       if (request.method === "OPTIONS") {
         if (!validOrigin(request, env)) return json({ error: "origin_not_allowed" }, 403);
+        const requestedMethod = (request.headers.get("Access-Control-Request-Method") || "").toUpperCase();
+        if (!["GET", "POST", "PUT", "DELETE"].includes(requestedMethod)) return json({ error: "method_not_allowed" }, 403);
         const requestedHeaders = (request.headers.get("Access-Control-Request-Headers") || "").toLowerCase().split(",").map((v) => v.trim()).filter(Boolean);
         if (requestedHeaders.some((header) => !["authorization", "content-type"].includes(header))) return json({ error: "headers_not_allowed" }, 403);
         return new Response(null, { status: 204, headers: {
