@@ -63,7 +63,7 @@ function validateAccessibilityLanguage(language, value, prefix = 'labels.accessi
   if (typeof value === 'string') {
     // Arabic-script text is expected only in Persian/Arabic accessibility labels.
     // Persian-specific letters are not valid in the Arabic catalog.
-    if (['en', 'zh'].includes(language) && /[\\u0600-\\u06FF]/u.test(value)) {
+    if (['en', 'zh'].includes(language) && /[\u0600-\u06FF]/u.test(value)) {
       errors.push(language + '.json contains Arabic/Persian text at ' + prefix + ': ' + value);
     }
     if (language === 'ar' && /[پچژگکی]/u.test(value)) {
