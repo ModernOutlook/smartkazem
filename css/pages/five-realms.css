@@ -114,3 +114,62 @@
 
 @media(max-width:700px){.gold-jewel-layout{grid-template-columns:minmax(0,1fr)}.gold-gem{width:min(78vw,300px)}}
 @media(prefers-reduced-motion:reduce){.gold-gem,.gold-liquid,.gold-outline,.gold-outline-inner,.gold-shine,.gold-inner-facets,.gold-sparks,.gold-progress-track span{transition:none!important}}
+
+
+/* Actuality Center: CSS-only twilight forest inspired by the supplied reference.
+   The artwork scales with the page and never depends on a fixed image ratio. */
+.fr-hub-page{
+ isolation:isolate;
+ background-color:#071013!important;
+ background-image:
+  radial-gradient(ellipse at 51% 48%,rgba(157,180,177,.22) 0,rgba(93,119,120,.12) 18%,transparent 43%),
+  radial-gradient(ellipse at 50% 68%,rgba(123,145,137,.15),transparent 36%),
+  linear-gradient(180deg,#152b35 0%,#0c2027 24%,#102127 43%,#111d1d 65%,#080e0f 100%)!important;
+ background-size:100% 100%!important;
+ background-position:center!important;
+ background-repeat:no-repeat!important;
+}
+.fr-hub-page::before{
+ content:"";
+ position:absolute;
+ z-index:-1;
+ inset:0;
+ pointer-events:none;
+ background:
+  radial-gradient(ellipse at 50% 48%,rgba(201,214,204,.18),transparent 27%),
+  radial-gradient(ellipse at 50% 58%,rgba(137,158,149,.13),transparent 42%),
+  repeating-linear-gradient(88deg,transparent 0 5.5%,rgba(1,7,9,.12) 5.7% 6%,transparent 6.2% 11%),
+  radial-gradient(ellipse at 50% 0%,transparent 18%,rgba(1,6,9,.6) 83%);
+ opacity:.95;
+}
+.fr-hub-page::after{
+ content:"";
+ position:absolute;
+ z-index:-1;
+ inset:0;
+ pointer-events:none;
+ background:
+  linear-gradient(112deg,transparent 0 12%,rgba(2,9,12,.94) 12.4% 14%,transparent 14.5% 100%),
+  linear-gradient(72deg,transparent 0 79%,rgba(2,8,11,.9) 79.5% 82%,transparent 82.5% 100%),
+  linear-gradient(104deg,transparent 0 23%,rgba(3,10,13,.72) 23.3% 24%,transparent 24.5% 100%),
+  linear-gradient(82deg,transparent 0 64%,rgba(3,9,12,.78) 64.4% 65.2%,transparent 65.6% 100%),
+  linear-gradient(96deg,transparent 0 39%,rgba(3,10,12,.64) 39.4% 40%,transparent 40.4% 100%),
+  radial-gradient(ellipse at 50% 100%,rgba(2,6,7,.9),transparent 55%);
+ opacity:.88;
+}
+.fr-hub-page .fr-head,
+.fr-hub-page .fr-hub-grid{
+ position:relative;
+ z-index:1;
+}
+.fr-hub-page .fr-head{
+ text-shadow:0 2px 12px rgba(0,0,0,.9);
+}
+.fr-hub-page .fr-game-tile{
+ background:linear-gradient(180deg,rgba(6,17,20,.42),rgba(3,9,11,.64))!important;
+ -webkit-backdrop-filter:blur(1px);
+ backdrop-filter:blur(1px);
+}
+@media(prefers-reduced-transparency:reduce){
+ .fr-hub-page .fr-game-tile{-webkit-backdrop-filter:none;backdrop-filter:none}
+}
