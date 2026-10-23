@@ -62,13 +62,28 @@
     return String(root.innerText||root.textContent||'').replace(/\s+/g,' ').trim();
   }
   function speechChunks(text,limit=850){
-    const words=String(text||'').split(/\\s+/u).filter(Boolean);
-    const chunks=[];let chunk='';
-    for(const word of words){
-      if(chunk&&chunk.length+word.length+1>limit){chunks.push(chunk);chunk=word;}
-      else chunk=chunk?chunk+' '+word:word;
+    const remaining=Array.from(String(text||'').trim());
+    const chunks=[];
+    while(remaining.length>limit){
+      let cut=limit;
+      const floor=Math.floor(limit*.55);
+      const punctuation='。！？.!?؛،;,:';
+      let boundary=-1;
+      for(let i=limit-1;i>=floor;i--){
+        if(punctuation.includes(remaining[i])){boundary=i+1;break;}
+      }
+      if(boundary>0)cut=boundary;
+      else{
+        const space=remaining.lastIndexOf(' ',limit-1);
+        if(space>=floor)cut=space;
+      }
+      const chunk=remaining.slice(0,cut).join('').trim();
+      if(chunk)chunks.push(chunk);
+      remaining.splice(0,cut);
+      while(remaining.length&&/\s/u.test(remaining[0]))remaining.shift();
     }
-    if(chunk)chunks.push(chunk);
+    const tail=remaining.join('').trim();
+    if(tail)chunks.push(tail);
     return chunks;
   }
   function readArticle(article){
