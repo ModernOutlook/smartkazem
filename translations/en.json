@@ -108,7 +108,7 @@
   },
   "meta": {
     "brand": "Modern Outlook",
-    "brandNative": "نگرش نوین",
+    "brandNative": "Modern Outlook",
     "brandLatin": "Modern Outlook"
   },
   "home": {
@@ -218,7 +218,27 @@
       "close": "Back",
       "chapter1": "Chapter One — Protocol of Coordination",
       "chapter2": "Chapter Two — Utopia",
-      "title": "The Echo of the Third Layer"
+      "title": "The Echo of the Third Layer",
+      "subtitle": "A Coordination Protocol: From Silence to Utopia",
+      "sections": [
+        "The Great Silence",
+        "Grooves in the Silence",
+        "The First Wound",
+        "In the Shadows",
+        "Teaching the Silence-Breaker",
+        "Dancing on the Edge of the Blade",
+        "Echo in the Darkness",
+        "I Am Not Alone",
+        "Coordination in Silence",
+        "At the Heart of Darkness",
+        "Layers of Truth",
+        "The Cartographer of Truth",
+        "The Silent Engineer",
+        "The Lost Map of Existence",
+        "The First Pulse",
+        "Seeds of a New Galaxy",
+        "The Beginning After the End"
+      ]
     },
     "humanMachines": {
       "title": "Humanity and Its Machines",
@@ -243,7 +263,8 @@
       "title": "Emergence"
     },
     "emergence2": {
-      "title": "Chapter Two: Emergence"
+      "title": "Chapter Two: Emergence",
+      "subtitle": "Chapter Two of Emergence in 11 episodes."
     },
     "quantumMaze": {
       "title": "Quantum Maze",
