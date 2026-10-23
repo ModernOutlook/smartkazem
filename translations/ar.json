@@ -280,7 +280,7 @@
       "close": "عودة"
     },
     "pokerHands": {
-      "title": "Poker Hands"
+      "title": "أيدي البوكر"
     },
     "gameHub": {
       "subtitle": "خمسة ألعاب، خمسة مجالات",
@@ -354,10 +354,10 @@
       "unavailable": "لا توجد شارات متبقية في هذا المجال.",
       "depositAmount": "مقدار الإيداع",
       "emptyBank": "لا يوجد إيداع نشط.",
-      "questionPlaceholder": "سؤال PLACEHOLDER: اختر إجابة تجريبية لكل مجال.",
-      "placeholderOption": "خيار PLACEHOLDER",
+      "questionPlaceholder": "السؤال: اختر إجابة تجريبية لكل مجال.",
+      "placeholderOption": "خيار تجريبي",
       "winner": "الفائز: ",
-      "menu": "Poker Hands",
+      "menu": "أيدي البوكر",
       "actualityCenter": "مركز الفعلية",
       "jokerNoPoker": "لا يمكن إدخال الجوكر في يد البوكر؛ استخدم إجراء المبادلة.",
       "forgivenRealm": "إذا تعادلت مجالات في أكبر عدد من البطاقات، فاختر المجال الذي يُعفى من إجابته الخاطئة.",
@@ -379,7 +379,7 @@
     },
     "tadbir": {
       "title": "تدبير",
-      "subtitle": "آلة الإيداع والسحب من مصرف لعبة Poker Hands",
+      "subtitle": "آلة الإيداع والسحب لمصرف لعبة أيدي البوكر",
       "accountTitle": "حساب اللاعب النشط",
       "player": "اللاعب",
       "points": "النقاط المتاحة",
@@ -389,9 +389,9 @@
       "deposit": "إيداع",
       "withdraw": "سحب",
       "returnToGame": "العودة إلى اللعبة وتسليم الجهاز",
-      "startGame": "فتح لعبة Poker Hands",
+      "startGame": "فتح لعبة أيدي البوكر",
       "ruleNote": "تبقى تدبير متصلة بحساب اللاعب نفسه داخل اللعبة. تُحسب العملية المصرفية كفعل للدور، ثم يُسلّم الجهاز إلى اللاعب التالي.",
-      "noGame": "ابدأ لعبة Poker Hands أولاً للوصول إلى الحساب المصرفي للاعب.",
+      "noGame": "ابدأ لعبة أيدي البوكر أولاً للوصول إلى الحساب المصرفي للاعب.",
       "operationSaved": "تم تسجيل العملية. عُد إلى اللعبة وسلّم الجهاز للمتابعة.",
       "handoff": "لم يُكشف دور اللاعب التالي في صفحة اللعبة بعد. عُد إلى اللعبة للمتابعة.",
       "gameOver": "انتهت اللعبة. لا يُحتسب رصيد المصرف في النتيجة النهائية إلا إذا سُحب قبل النهاية.",
@@ -449,11 +449,11 @@
     "showApiKey": "إظهار مفتاح API",
     "baseUrlLabel": "عنوان الخدمة",
     "modelLabel": "معرّف النموذج",
-    "proxyUrlLabel": "عنوان Proxy",
+    "proxyUrlLabel": "عنوان الوكيل",
     "proxyUrlPlaceholder": "https://your-worker.workers.dev",
     "connectionMode": "وضع الاتصال",
-    "direct": "Direct",
-    "proxy": "Proxy",
+    "direct": "اتصال مباشر",
+    "proxy": "اتصال عبر وكيل",
     "connect": "اتصال",
     "connectionSettings": "إعدادات الاتصال",
     "localStorageNote": "يستخدم الوضع الافتراضي وكيلاً آمناً على الخادم؛ لا يتم عرض مفتاح API أو تخزينه في المتصفح.",
