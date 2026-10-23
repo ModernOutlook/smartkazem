@@ -456,6 +456,7 @@
     "normativeNobler": "相对更好的方向",
     "normativeHarmful": "危害更大的方向",
     "normativeMixed": "混合或相互冲突",
-    "normativeIndeterminate": "无法确定；证据不足"
+    "normativeIndeterminate": "无法确定；证据不足",
+    "showJudgmentDetails": "显示判断结果及理由"
   }
 }
