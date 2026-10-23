@@ -50,7 +50,7 @@
     return lang === 'zh' ? suit + rank : rank + ' ' + suit;
   }
 
-  function render() {
+  function render(changedCardId = null) {
     grid.replaceChildren();
     groups.forEach((group) => {
       const section = document.createElement('section');
@@ -73,7 +73,11 @@
 
       group.cards.forEach((card) => {
         const item = document.createElement('article');
-        item.className = 'card-item';
+        const owned = window.CardCollection?.isOwned?.(card.id) === true && card.suit !== 'back';
+        item.className = 'card-item ' + (owned ? 'is-owned' : 'is-locked');
+        if (Number(changedCardId) === card.id) item.classList.add('is-revealing');
+        item.dataset.cardId = String(card.id);
+        item.dataset.cardState = owned ? 'owned' : 'locked';
         item.setAttribute('role', 'listitem');
         item.setAttribute('aria-label', label(card));
 
@@ -92,6 +96,15 @@
         number.textContent = formatNumber(card.id).padStart(2, formatNumber(0));
 
         imageWrap.append(image, number);
+        if (card.suit !== 'back') {
+          const motion = document.createElement('img');
+          motion.className = 'card-back-motion';
+          motion.src = catalog.imagePath(55);
+          motion.alt = '';
+          motion.setAttribute('aria-hidden', 'true');
+          motion.draggable = false;
+          imageWrap.append(motion);
+        }
 
         const name = document.createElement('span');
         name.className = 'card-name';
@@ -102,6 +115,7 @@
         id.textContent = formatNumber(card.id).padStart(2, formatNumber(0));
 
         item.append(imageWrap, name, id);
+        item.setAttribute('aria-label', label(card) + (card.suit === 'back' ? '' : owned ? ' — ' + translate('cardOwned','فعال') : ' — ' + translate('cardLocked','غیرفعال')));
         list.append(item);
       });
 
@@ -112,4 +126,8 @@
 
   render();
   document.addEventListener('site:languagechange', () => { if (!grid?.isConnected) return; render(); });
+  document.addEventListener('site:card-collection-change', event => {
+    if (!grid?.isConnected) return;
+    render(event.detail?.cardId ?? null);
+  });
 })();
