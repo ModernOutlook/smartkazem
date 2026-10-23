@@ -36,7 +36,7 @@ const elements={
  detailsContent:document.getElementById('pm-judgment-details-content'),
  detailsClose:document.getElementById('pm-judgment-details-close')
 };
-let entryMode=ENTRY_MODES.EXPERIENCE,currentResults=[];
+let entryMode=ENTRY_MODES.EXPERIENCE,currentResults=[],outcomeApplied=false;
 let judgmentReturnFocus=null;
 const userJudgments=Object.create(null);
 function getLanguage(){const lang=window.SiteI18n?.getLanguage?.()||'fa';return REALM_LABELS[lang]?lang:'fa'}
@@ -94,6 +94,18 @@ function generateRandomTargetJudgments(){
  DOMAIN_ORDER.forEach(d=>{userJudgments[d]=getStatusOptions()[Math.floor(Math.random()*getStatusOptions().length)][0]});
  elements.choices.forEach(c=>{const d=c.dataset.domain;c.dataset.target=userJudgments[d];c.classList.add('judgment-'+userJudgments[d],'realm-output');c.setAttribute('aria-pressed','true')});
 }
+function applyCardOutcome(correct,mode){
+ if(outcomeApplied)return null;
+ outcomeApplied=true;
+ const result=window.CardCollection?.applyOutcome?.(correct);
+ if(result?.changed){
+  const message=correct?'کارت جدیدی به مخزن شما اضافه شد.':'یک کارت از مخزن شما کم شد.';
+  elements.source.textContent=(elements.source.textContent+' '+message).trim();
+ }else if(result?.reason==='deck-empty'){
+  elements.source.textContent=(elements.source.textContent+' دستهٔ کارت‌های قابل دریافت تمام شده است.').trim();
+ }
+ return result||null;
+}
 function recognitionReady(){return entryMode===ENTRY_MODES.EXPERIENCE&&currentResults.length===1&&DOMAIN_ORDER.every(d=>Boolean(userJudgments[d]))}
 function equivalenceReady(){const raw=elements.input.value.trim();if(!raw)return false;return window.ParagraphMachineCore.countWords(raw)<=144&&window.ParagraphMachineCore.countChars(raw)<=900&&window.ParagraphMachineCore.findLongWords(raw).length===0}
 function updateActionState(){const ready=entryMode===ENTRY_MODES.EXPERIENCE?recognitionReady():equivalenceReady();elements.action.disabled=!ready;elements.action.classList.toggle('is-enabled',ready)}
@@ -110,7 +122,7 @@ async function generateRecognitionParagraph(){
 function setRealmOutputState(p){const j=p?.judgment||{};elements.choices.forEach(c=>{const s=j[c.dataset.domain]?.status||'';c.classList.remove('judgment-ok','judgment-warn','judgment-bad');c.classList.toggle('realm-output',!!s);c.dataset.judgment=s;if(s)c.classList.add('judgment-'+s);c.setAttribute('aria-pressed',String(!!s))})}
 function openParagraphPage(kind){
  document.dispatchEvent(new CustomEvent('paragraph-machine:turn', { detail: { phase: 'open', mode: kind } }));
- entryMode=kind;elements.page.classList.add('open');elements.page.dataset.entry=kind;
+ entryMode=kind;outcomeApplied=false;elements.page.classList.add('open');elements.page.dataset.entry=kind;
  const ref=kind===ENTRY_MODES.REFERENCE;
  elements.primaryPanel.classList.toggle('is-input-mode',ref);elements.primaryPanel.classList.toggle('is-output-mode',!ref);
  elements.input.hidden=!ref;elements.primaryOutput.hidden=ref;
@@ -217,13 +229,14 @@ function openJudgmentPopover(button){
  elements.popover.querySelector('[data-status]')?.focus({preventScroll:true});
 }
 async function run(){
+ if(outcomeApplied)return;
  document.dispatchEvent(new CustomEvent('paragraph-machine:turn', { detail: { phase: 'run', mode: entryMode } }));
  elements.error.textContent='';
  if(entryMode===ENTRY_MODES.REFERENCE)elements.input.classList.remove('pm-user-correct','pm-user-incorrect');
  try{
   if(entryMode===ENTRY_MODES.EXPERIENCE){
    if(!recognitionReady())return;
-   evaluateRecognitionJudgments();saveSettingsAfterSuccess();
+   evaluateRecognitionJudgments();applyCardOutcome(currentResults.every(p=>p.userEvaluation==='correct'),'experience');saveSettingsAfterSuccess();
   }else{
    if(!equivalenceReady())return;
    const result=await evaluateReference();
@@ -232,6 +245,7 @@ async function run(){
    const correct=DOMAIN_ORDER.every(d=>result[0].judgment?.[d]?.status===userJudgments[d]);
    elements.input.classList.add(correct?'pm-user-correct':'pm-user-incorrect');
    elements.source.textContent=translate(correct?'paragraphMachine.equivalenceCorrect':'paragraphMachine.equivalenceIncorrect',correct?'نوشتار شما با مجموعه داوری نمایش‌داده‌شده هم‌سنگ است.':'نوشتار شما با مجموعه داوری نمایش‌داده‌شده هم‌سنگ نیست.');
+   applyCardOutcome(correct,'reference');
    saveSettingsAfterSuccess();
   }
  }catch(e){elements.error.textContent=e.message||String(e)}
@@ -243,7 +257,7 @@ elements.detailsClose.addEventListener('click',()=>closeJudgmentDetails({restore
 elements.detailsPanel.addEventListener('click',event=>{if(event.target===elements.detailsPanel)closeJudgmentDetails({restoreFocus:true})});
 document.addEventListener('keydown',event=>{if(!elements.detailsPanel.hidden&&event.key==='Escape'){event.preventDefault();closeJudgmentDetails({restoreFocus:true})}});
 elements.choices.forEach(c=>c.addEventListener('click',e=>{e.stopPropagation();if(entryMode===ENTRY_MODES.EXPERIENCE)openJudgmentPopover(c)}));
-elements.input.addEventListener('input',()=>{if(entryMode===ENTRY_MODES.REFERENCE){elements.input.classList.remove('pm-user-correct','pm-user-incorrect');updateActionState()}});
+elements.input.addEventListener('input',()=>{if(entryMode===ENTRY_MODES.REFERENCE){outcomeApplied=false;elements.input.classList.remove('pm-user-correct','pm-user-incorrect');updateActionState()}});
 document.addEventListener('click',e=>{if(elements.popover.hidden)return;if(!elements.popover.contains(e.target)&&!e.target.closest('.pm-realm-choice'))closeJudgmentPopover({restoreFocus:true})});
 document.addEventListener('keydown',e=>{
  if(elements.popover.hidden)return;
