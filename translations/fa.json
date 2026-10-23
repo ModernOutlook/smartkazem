@@ -456,6 +456,7 @@
     "normativeNobler": "جهت نیک‌تر",
     "normativeHarmful": "جهت زیان‌بارتر",
     "normativeMixed": "آمیخته یا متعارض",
-    "normativeIndeterminate": "نامعین؛ شواهد ناکافی"
+    "normativeIndeterminate": "نامعین؛ شواهد ناکافی",
+    "showJudgmentDetails": "نمایش نتیجه و دلیل داوری"
   }
 }
