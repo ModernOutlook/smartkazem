@@ -57,6 +57,13 @@ html{scroll-behavior:smooth}
 .card-item:hover,.card-item:focus-within{transform:translateY(-3px);border-color:rgba(223,255,240,.35);background:rgba(255,255,255,.055)}
 .card-image-wrap{position:relative;aspect-ratio:2/3;overflow:hidden;border-radius:9px;background:#0b0d0d}
 .card-image{width:100%;height:100%;display:block;object-fit:cover}
+.card-item.is-locked{opacity:.46;filter:saturate(.35)}
+.card-item.is-locked .card-image{filter:grayscale(.68) brightness(.72)}
+.card-item.is-owned{border-color:rgba(223,255,240,.48);background:rgba(35,150,104,.12);box-shadow:0 0 16px rgba(75,255,174,.09)}
+.card-back-motion{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;pointer-events:none;opacity:0;backface-visibility:hidden}
+.card-item.is-revealing .card-back-motion{animation:card-back-reveal .72s cubic-bezier(.2,.8,.2,1) both}
+@keyframes card-back-reveal{0%{opacity:1;transform:perspective(700px) rotateY(0)}65%{opacity:1;transform:perspective(700px) rotateY(95deg)}100%{opacity:0;transform:perspective(700px) rotateY(180deg)}}
+@media(prefers-reduced-motion:reduce){.card-item.is-revealing .card-back-motion{animation:none;opacity:0}}
 .card-number{position:absolute;top:5px;inset-inline-start:5px;min-width:22px;height:22px;padding:0 5px;display:grid;place-items:center;border-radius:999px;background:rgba(0,0,0,.62);color:#fff;font-size:.57rem;line-height:1;backdrop-filter:blur(5px)}
 .card-name{display:block;margin:7px 2px 1px;color:var(--inventory-text);font-size:.62rem;line-height:1.35;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .card-id{display:block;color:var(--inventory-muted);font-size:.52rem;text-align:center;direction:ltr}
