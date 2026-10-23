@@ -46,7 +46,15 @@
         "textarea": "متن",
         "select": "انتخاب",
         "summary": "بازکننده",
-        "heading": "عنوان"
+        "heading": "عنوان",
+        "paragraph": "بند",
+        "listItem": "مورد فهرست",
+        "quote": "نقل‌قول",
+        "caption": "شرح تصویر",
+        "tableCell": "خانهٔ جدول",
+        "definitionTerm": "اصطلاح",
+        "definitionDescription": "توضیح اصطلاح",
+        "preformatted": "متن قالب‌بندی‌شده"
       },
       "states": {
         "pressed": "فعال",
