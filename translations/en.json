@@ -456,6 +456,7 @@
     "normativeNobler": "Comparatively better direction",
     "normativeHarmful": "More harmful direction",
     "normativeMixed": "Mixed or conflicting",
-    "normativeIndeterminate": "Indeterminate; insufficient evidence"
+    "normativeIndeterminate": "Indeterminate; insufficient evidence",
+    "showJudgmentDetails": "Show judgment result and rationale"
   }
 }
