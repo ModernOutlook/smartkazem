@@ -169,7 +169,9 @@
     const roleKey=el.getAttribute('role')||el.tagName;
     const rolePath={
       BUTTON:'button',A:'link',INPUT:'input',TEXTAREA:'textarea',SELECT:'select',
-      SUMMARY:'summary',heading:'heading',H1:'heading',H2:'heading',H3:'heading',H4:'heading',H5:'heading',H6:'heading'
+      SUMMARY:'summary',heading:'heading',H1:'heading',H2:'heading',H3:'heading',H4:'heading',H5:'heading',H6:'heading',
+      P:'paragraph',LI:'listItem',BLOCKQUOTE:'quote',FIGCAPTION:'caption',TD:'tableCell',TH:'tableCell',
+      DT:'definitionTerm',DD:'definitionDescription',PRE:'preformatted'
     }[roleKey]||roleKey.toLowerCase();
     const role=i18nGet('labels.accessibility.roles.'+rolePath,rolePath);
     const name=el.matches?.('article') ? i18nGet('labels.accessibility.article','Article') : accessibleName(el);
