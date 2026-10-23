@@ -45,7 +45,15 @@
         "textarea": "text area",
         "select": "select",
         "summary": "summary",
-        "heading": "heading"
+        "heading": "heading",
+        "paragraph": "paragraph",
+        "listItem": "list item",
+        "quote": "quotation",
+        "caption": "caption",
+        "tableCell": "table cell",
+        "definitionTerm": "term",
+        "definitionDescription": "definition",
+        "preformatted": "preformatted text"
       },
       "states": {
         "pressed": "pressed",
