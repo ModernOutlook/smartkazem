@@ -13,20 +13,23 @@ This is an isolated Cloudflare Worker service. It does not add a framework, buil
 
 ## Required Cloudflare resources and secrets
 
-Create a D1 database named `smartkazem-community` and an R2 bucket named `smartkazem-community-media`. Replace the D1 database ID in `wrangler.toml` with the ID from the Cloudflare dashboard.
+The deployment workflow provisions a D1 database named `smartkazem-community` and an R2 bucket named `smartkazem-community-media` when they do not already exist. It injects the discovered D1 ID into the checked-out Wrangler config at runtime; no resource ID is committed.
 
-Set these Worker secrets (not repository files):
+The workflow provisions the D1 database and R2 bucket, then transfers the mail and Turnstile credentials into Worker secrets without writing their values to repository files.
 
 - `RESEND_API_KEY`
 - `MAIL_FROM` (verified sender address)
 - `TURNSTILE_SECRET_KEY`
 
-Set `TURNSTILE_ENABLED=true` and configure the matching public Turnstile site key in the frontend. The site origin in `SITE_ORIGIN` must match the deployed Pages origin exactly.
+Set the matching public Turnstile site key in the frontend before enabling registration. The current UI integration and public-site-key wiring are still outstanding. The site origin in `SITE_ORIGIN` must match the deployed Pages origin exactly.
 
 GitHub Actions repository secrets required for deployment:
 
 - `CLOUDFLARE_API_TOKEN` — scoped to Workers Scripts:Edit, D1:Edit, R2 Storage:Edit, and account read access needed by Wrangler.
 - `CLOUDFLARE_ACCOUNT_ID`
+- `RESEND_API_KEY`
+- `MAIL_FROM` (a verified sender)
+- `TURNSTILE_SECRET_KEY`
 
 Never put credentials in source, commit messages, workflow logs, or client-side JavaScript.
 
