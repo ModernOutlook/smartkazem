@@ -225,7 +225,7 @@ function openJudgmentPopover(button){
  elements.popover.className='pm-judgment-popover pm-domain-'+d;
  elements.popover.innerHTML='<strong>'+escapeHtml(name)+'</strong><div class="pm-judgment-options">'+getStatusOptions().map(([v,l])=>'<button type="button" data-status="'+v+'" class="pm-choice-'+v+'">'+l+'</button>').join('')+'</div>';
  elements.popover.hidden=false;
- elements.popover.querySelectorAll('[data-status]').forEach(o=>o.addEventListener('click',()=>{userJudgments[d]=o.dataset.status;button.dataset.judgment=o.dataset.status;button.classList.remove('judgment-ok','judgment-warn','judgment-bad');button.classList.add('judgment-'+o.dataset.status);closeJudgmentPopover({restoreFocus:true});updateActionState()}));
+ elements.popover.querySelectorAll('[data-status]').forEach(o=>o.addEventListener('click',()=>{outcomeApplied=false;userJudgments[d]=o.dataset.status;button.dataset.judgment=o.dataset.status;button.classList.remove('judgment-ok','judgment-warn','judgment-bad');button.classList.add('judgment-'+o.dataset.status);closeJudgmentPopover({restoreFocus:true});updateActionState()}));
  elements.popover.querySelector('[data-status]')?.focus({preventScroll:true});
 }
 async function run(){
