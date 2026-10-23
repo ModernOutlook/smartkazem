@@ -45,7 +45,15 @@
         "textarea": "文本框",
         "select": "选择",
         "summary": "摘要",
-        "heading": "标题"
+        "heading": "标题",
+        "paragraph": "段落",
+        "listItem": "列表项",
+        "quote": "引文",
+        "caption": "图片说明",
+        "tableCell": "表格单元格",
+        "definitionTerm": "术语",
+        "definitionDescription": "术语解释",
+        "preformatted": "预格式文本"
       },
       "states": {
         "pressed": "已按下",
