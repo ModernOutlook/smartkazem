@@ -18,9 +18,9 @@
     "close": "关闭",
     "comingSoon": "稍后推出",
     "language": "网站语言",
+    "skipToContent": "跳转到主要内容",
     "audio": "声音",
     "audioControls": "声音控制",
-    "skipToContent": "跳转到主要内容",
     "enable": "启用声音",
     "continueSilent": "静音继续",
     "toggle": "打开或关闭声音",
@@ -33,6 +33,7 @@
     "volumeLabel": "音量",
     "resumeFailed": "无法自动启用声音。",
     "shahnameh": "《列王纪》诵读",
+    "emergence": "第一章 · 涌现",
     "accessibility": {
       "enabled": "无障碍模式已启用。",
       "disabled": "无障碍模式已关闭。",
@@ -70,11 +71,6 @@
       "article": "文章",
       "readingArticle": "正在朗读文章"
     },
-    "episodeNavigation": "章节导航",
-    "previousEpisode": "上一集",
-    "nextEpisode": "下一集",
-    "episodeReader": "章节文本",
-    "emergence": "第一章 · 涌现",
     "manifestoParts": "宣言部分",
     "partNavigation": "选择部分",
     "partText": "正文",
@@ -87,6 +83,9 @@
     "book": "书籍",
     "bookChapters": "书籍章节",
     "sectionList": "章节列表",
+    "episodeNavigation": "章节导航",
+    "previousEpisode": "上一集",
+    "nextEpisode": "下一集",
     "emergence1ImageAlt": "《显现》第一章图片",
     "emergence2ImageAlt": "《显现》第二章图片",
     "chapterList": "章节目录",
@@ -112,7 +111,8 @@
     "missingEpisodeText": "此集文本在对应内容库中不可用。",
     "missingTranslation": "此部分暂无译文。",
     "inventoryDescription": "55 张图片，各有独立标识并按固定顺序排列。",
-    "fiveRealms": "五个领域"
+    "fiveRealms": "五个领域",
+    "episodeReader": "章节文本"
   },
   "meta": {
     "brand": "现代视野",
@@ -187,15 +187,12 @@
       "subtitle": "十章",
       "moral": "展示技艺的人只能走到有观众的地方；磨炼技艺的人能走到自己能够抵达的地方。而一座人人都是观众的森林，最终除了观看本身，便再没有什么可看。"
     },
+    "humanMachines": {
+      "title": "人类与他们的机器",
+      "subtitle": "七个部分"
+    },
     "shahnameh": {
       "placeholder": "本部分的文本尚未添加。",
-      "subtitle": "从第一条法则到未知的地平线",
-      "heroTitle": "从第一位君王到故事终章",
-      "heroText": "完整阅读《列王纪》的各个篇章，沿着一条连续的文学旅程展开。每一篇都包含叙事、诗句与版本信息。",
-      "findTitle": "查找篇章",
-      "searchPlaceholder": "篇章标题或编号…",
-      "visualLabel": "81个故事，81个时代",
-      "visualAlbum": "81个故事，81个时代",
       "eyebrow": "Modern Outlook",
       "ui": {
         "eyebrow": "Modern Outlook · 列王纪",
@@ -215,19 +212,26 @@
         "empty": "没有符合条件的章节。",
         "imageMissing": "未找到本章节图片。",
         "part": "第"
-      }
+      },
+      "visualLabel": "81个故事，81个时代",
+      "visualAlbum": "81个故事，81个时代",
+      "findTitle": "查找篇章",
+      "searchPlaceholder": "篇章标题或编号…",
+      "subtitle": "从第一条法则到未知的地平线",
+      "heroTitle": "从第一位君王到故事终章",
+      "heroText": "完整阅读《列王纪》的各个篇章，沿着一条连续的文学旅程展开。每一篇都包含叙事、诗句与版本信息。"
     },
     "observation25": {
+      "close": "返回",
       "title": "观察之地；二十五次抵达",
-      "subtitle": "《现代视野哲学论述》第二卷",
-      "close": "返回"
+      "subtitle": "《现代视野哲学论述》第二卷"
     },
     "layer3": {
+      "title": "第三层回声",
+      "subtitle": "协调协议：从寂静到理想城",
       "close": "返回",
       "chapter1": "第一章——协调协议",
       "chapter2": "第二章——理想城",
-      "title": "第三层回声",
-      "subtitle": "协调协议：从寂静到理想城",
       "sections": [
         "寂静之巨",
         "寂静中的裂痕",
@@ -248,14 +252,10 @@
         "终结之后的开始"
       ]
     },
-    "humanMachines": {
-      "title": "人类与他们的机器",
-      "subtitle": "七个部分"
-    },
     "possibleMirror": {
+      "close": "返回",
       "title": "可能之镜",
-      "subtitle": "一部关于意志、可能与映照的小说",
-      "close": "返回"
+      "subtitle": "一部关于意志、可能与映照的小说"
     },
     "disturbedManifesto": {
       "title": "《扰动宣言》",
@@ -264,15 +264,15 @@
     "tabahian": {
       "title": "腐化者"
     },
-    "inventory": {
-      "title": "卡片清单 — SmartKazem"
-    },
     "emergence": {
       "title": "显现"
     },
     "emergence2": {
       "title": "第二章：显现",
       "subtitle": "《显现》第二章，共 11 集。"
+    },
+    "inventory": {
+      "title": "卡片清单 — SmartKazem"
     },
     "quantumMaze": {
       "title": "量子迷宫",

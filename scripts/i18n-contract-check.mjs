@@ -21,6 +21,32 @@ function flatten(value, prefix = '', result = new Set()) {
 }
 
 const keys = Object.fromEntries(languages.map((language) => [language, flatten(catalogs[language])]));
+
+function validateCatalogOrder(reference, value, language, prefix = '') {
+  if (Array.isArray(reference) && Array.isArray(value)) {
+    if (reference.length !== value.length) {
+      errors.push(language + '.json array length differs from fa.json at ' + (prefix || '<root>'));
+      return;
+    }
+    reference.forEach((item, index) => validateCatalogOrder(item, value[index], language, prefix + '[' + index + ']'));
+    return;
+  }
+  if (!reference || !value || typeof reference !== 'object' || typeof value !== 'object' ||
+      Array.isArray(reference) || Array.isArray(value)) return;
+
+  const referenceKeys = Object.keys(reference);
+  const valueKeys = Object.keys(value);
+  const expectedOrder = referenceKeys.filter((key) => Object.prototype.hasOwnProperty.call(value, key));
+  const actualOrder = valueKeys.filter((key) => Object.prototype.hasOwnProperty.call(reference, key));
+  if (expectedOrder.join('\\0') !== actualOrder.join('\\0')) {
+    errors.push(language + '.json key order differs from fa.json at ' + (prefix || '<root>'));
+  }
+  for (const key of referenceKeys) {
+    if (Object.prototype.hasOwnProperty.call(value, key)) {
+      validateCatalogOrder(reference[key], value[key], language, prefix ? prefix + '.' + key : key);
+    }
+  }
+}
 const htmlFiles = fs.readdirSync('.').filter((file) => file.endsWith('.html')).sort();
 const errors = [];
 let attributeCount = 0;
@@ -51,6 +77,10 @@ for (const file of htmlFiles) {
 
 // Every catalog must expose the same translation-key surface so the runtime
 // never silently falls back to Persian when a user selects another language.
+for (const language of languages.filter((item) => item !== 'fa')) {
+  validateCatalogOrder(catalogs.fa, catalogs[language], language);
+}
+
 const allKeys = new Set(languages.flatMap((language) => [...keys[language]]));
 for (const key of allKeys) {
   for (const language of languages) {
