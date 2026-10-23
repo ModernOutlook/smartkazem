@@ -88,6 +88,8 @@
     "homePage": "بازگشت به صفحه اصلی",
     "cards": "کارت‌ها",
     "cardInventory": "فهرست کارت‌ها",
+    "cardOwned": "فعال",
+    "cardLocked": "غیرفعال",
     "jokers": "جوکرها",
     "spades": "خال پیک",
     "hearts": "خال دل",

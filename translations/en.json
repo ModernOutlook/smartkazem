@@ -89,6 +89,8 @@
     "homePage": "Back to home page",
     "cards": "Cards",
     "cardInventory": "Card inventory",
+    "cardOwned": "Active",
+    "cardLocked": "Inactive",
     "jokers": "Jokers",
     "spades": "Spades",
     "hearts": "Hearts",
