@@ -99,6 +99,19 @@ try {
         document.querySelector('[data-site-lang="' + code + '"]')?.getAttribute('aria-pressed') === 'true',
       language, { timeout: 5000 });
     }
+    // Exercise the speech-accessibility keyboard toggle and text navigation
+    // in a real browser, not only by source-level contract assertions.
+    await page.keyboard.press('Control+Alt+Shift+a');
+    await page.waitForFunction(() => document.documentElement.dataset.audioAccessibility === 'on', null, { timeout: 3000 });
+    const readerState = await page.evaluate(() => ({
+      speechApi: 'speechSynthesis' in window,
+      navigableText: document.querySelectorAll('main p[tabindex="-1"], main h1[tabindex="-1"], main h2[tabindex="-1"], main li[tabindex="-1"]').length,
+    }));
+    if (!readerState.speechApi) fail('speech accessibility: Web Speech API is unavailable in Chromium');
+    if (!readerState.navigableText) fail('speech accessibility: no paragraph/heading/list text is keyboard navigable');
+    await page.keyboard.press('ArrowDown');
+    await page.keyboard.press('Control+Alt+Shift+a');
+    await page.waitForFunction(() => document.documentElement.dataset.audioAccessibility === 'off', null, { timeout: 3000 });
     if (pageErrors.length) fail('landing page: runtime exception: ' + pageErrors[0]);
   } catch (error) {
     fail('landing language switching: ' + String(error).split('\n')[0]);
