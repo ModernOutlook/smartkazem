@@ -29,6 +29,10 @@ Card Algorithm (Mandatory)
 
 Any level showing cards ⇒ window.PlayingCardsCatalog from content/playing-cards.js + PlayingCardsCatalog.imagePath(card); identify via catalog ID/rank/suit, never construct paths or separate text cards. Reference: Card Inventory and "Your Hand" in Five Realms. Prohibited: image duplication, parallel mapping, text-card substitution. Preserve: semantic/a11y labels, selection/status indicators, joker identity, responsive ratios. Adding a card level ⇒ audit all callers + verify image load in desktop/portrait/landscape.
 
+Card Collection Algorithm
+
+The card inventory starts empty for each browser profile. The 54 playable catalog entries (52 standard cards plus both jokers) participate in the Paragraph Machine collection; the card-back image is visual-only and never owned. A correct Recognition answer means all five user judgments match the machine's independent statuses. In Co-aging/Equivalence mode, a correct answer means the independent judgment statuses match the randomly displayed target statuses. A correct answer randomly adds one unowned playable card; an incorrect answer randomly removes one owned card. Lost cards return to the available pool. Ownership is persisted locally in the browser profile, not synchronized across devices/accounts. Until the user specifies decision-mechanism biases, card loss is uniformly random; future bias logic may select only from the user's currently owned cards. The inventory uses existing catalog IDs and image paths, shows unowned cards as inactive, and uses the catalog card-back image for reveal motion. Failed generation/judgment calls do not change the collection.
+
 Paragraph Machine
 
 Shared workspace inside index.html, not a separate page. Two entry paths: Experience Realm → Recognition → Paragraph Machine, and Simulation → Co-aging → Paragraph Machine. Recognition and Co-aging are two modes of the same workspace.
