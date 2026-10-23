@@ -154,7 +154,7 @@
       "observation": "سرزمین مشاهده؛ یک رود، یک جریان",
       "emergence": {
         "title": "فصل اول ظهور",
-        "subtitle": "Chapter One · The Emergence"
+        "subtitle": "فصل نخست · ظهور"
       }
     },
     "title": "نگرش نوین — Modern Outlook"
@@ -280,7 +280,7 @@
       "close": "بازگشت"
     },
     "pokerHands": {
-      "title": "Poker Hands"
+      "title": "دست‌های پوکر"
     },
     "gameHub": {
       "subtitle": "پنج بازی، پنج قلمرو",
@@ -354,10 +354,10 @@
       "unavailable": "نشانی در این قلمرو باقی نمانده است.",
       "depositAmount": "مقدار سپرده",
       "emptyBank": "سپرده فعالی وجود ندارد.",
-      "questionPlaceholder": "PLACEHOLDER پرسش: برای هر قلمرو یک پاسخ آزمایشی انتخاب کنید.",
-      "placeholderOption": "گزینه PLACEHOLDER",
+      "questionPlaceholder": "پرسش: برای هر قلمرو یک پاسخ آزمایشی انتخاب کنید.",
+      "placeholderOption": "گزینهٔ آزمایشی",
       "winner": "برنده: ",
-      "menu": "Poker Hands",
+      "menu": "دست‌های پوکر",
       "actualityCenter": "کانون فعلیت",
       "jokerNoPoker": "جوکر وارد دست پوکر نمی‌شود؛ برای آن کنش مبادله را انتخاب کنید.",
       "forgivenRealm": "اگر چند قلمرو در بیشترین تعداد کارت مساوی‌اند، انتخاب کنید پاسخ نادرست کدام قلمرو بخشوده شود.",
@@ -379,7 +379,7 @@
     },
     "tadbir": {
       "title": "تدبیر",
-      "subtitle": "ماشین سپرده‌گذاری و برداشت بانک بازی Poker Hands",
+      "subtitle": "ماشین واریز و برداشت بانک بازی دست‌های پوکر",
       "accountTitle": "حساب بازیکن فعال",
       "player": "بازیکن",
       "points": "امتیاز قابل‌مصرف",
@@ -389,9 +389,9 @@
       "deposit": "سپرده‌گذاری",
       "withdraw": "برداشت",
       "returnToGame": "بازگشت به بازی و واگذاری دستگاه",
-      "startGame": "ورود به بازی Poker Hands",
+      "startGame": "ورود به بازی دست‌های پوکر",
       "ruleNote": "تدبیر به حساب همان بازیکن در بازی متصل است. عملیات بانکی کنش نوبت محسوب می‌شود و پس از آن دستگاه باید به بازیکن بعدی واگذار شود.",
-      "noGame": "ابتدا بازی Poker Hands را آغاز کنید تا حساب بانکی بازیکن در دسترس باشد.",
+      "noGame": "برای دسترسی به حساب بانکی بازیکن، ابتدا بازی دست‌های پوکر را آغاز کنید.",
       "operationSaved": "عملیات ثبت شد. برای ادامه، به بازی بازگردید و دستگاه را واگذار کنید.",
       "handoff": "نوبت بازیکن بعدی هنوز در صفحه بازی آشکار نشده است. برای ادامه به بازی برگردید.",
       "gameOver": "بازی پایان یافته است. موجودی بانک در امتیاز نهایی حساب نمی‌شود مگر پیش از پایان بازی برداشت شود.",
@@ -447,13 +447,13 @@
     "realmC": "اقتصاد سهم",
     "apiKeyLabel": "کلید API",
     "showApiKey": "نمایش کلید API",
-    "baseUrlLabel": "Base URL",
-    "modelLabel": "Model ID",
-    "proxyUrlLabel": "Proxy URL",
+    "baseUrlLabel": "نشانی پایه",
+    "modelLabel": "شناسهٔ مدل",
+    "proxyUrlLabel": "نشانی پروکسی",
     "proxyUrlPlaceholder": "https://your-worker.workers.dev",
     "connectionMode": "حالت اتصال",
-    "direct": "Direct",
-    "proxy": "Proxy",
+    "direct": "مستقیم",
+    "proxy": "واسط",
     "connect": "اتصال",
     "connectionSettings": "تنظیمات اتصال",
     "localStorageNote": "حالت پیش‌فرض از پروکسی امن سمت سرور استفاده می‌کند؛ کلید API در مرورگر نمایش یا ذخیره نمی‌شود.",
