@@ -1170,3 +1170,42 @@ html[dir="rtl"] .home-page > .info {
   object-fit: fill;
   border-radius: inherit;
 }
+
+
+/* Audio-first blind-user mode: suppress visuals, preserve semantic navigation. */
+html[data-audio-accessibility="on"],
+html[data-audio-accessibility="on"] body {
+  background: #000 !important;
+}
+html[data-audio-accessibility="on"] body,
+html[data-audio-accessibility="on"] body * {
+  color: transparent !important;
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+  outline-color: transparent !important;
+  caret-color: transparent !important;
+}
+html[data-audio-accessibility="on"] body *::before,
+html[data-audio-accessibility="on"] body *::after {
+  content: none !important;
+  background: none !important;
+  box-shadow: none !important;
+}
+html[data-audio-accessibility="on"] body img,
+html[data-audio-accessibility="on"] body svg,
+html[data-audio-accessibility="on"] body canvas,
+html[data-audio-accessibility="on"] body video,
+html[data-audio-accessibility="on"] body picture {
+  opacity: 0 !important;
+}
+html[data-audio-accessibility="on"] body .sr-only,
+html[data-audio-accessibility="on"] body #smartkazem-accessibility-announcer {
+  position: fixed !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+}

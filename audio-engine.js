@@ -295,6 +295,8 @@
     state.accessibility=!state.accessibility;saveState();
     if(state.accessibility){const enabled=i18nGet('labels.accessibility.enabled','Accessibility mode enabled.');const repeat=i18nGet('labels.accessibility.repeat','Double-click to repeat the last announcement.');const hold=i18nGet('labels.accessibility.hold','Long-press to pause, resume, or repeat speech.');speak([enabled,repeat,hold].join(' '));}
     else if('speechSynthesis'in window)window.speechSynthesis.cancel();
+    // One switch controls speech navigation and visual presentation together.
+    // Keep semantic DOM available while hiding its visual layer in audio-first mode.
     document.documentElement.dataset.audioAccessibility=state.accessibility?'on':'off';
     if(state.accessibility)enableAccessibilityNavigation();else disableAccessibilityNavigation();
     document.dispatchEvent(new CustomEvent('audio:accessibilitychange',{detail:{enabled:state.accessibility}}));
