@@ -157,7 +157,8 @@
   }
   function navigationItems(){
     const root=document.querySelector('main')||document.body;
-    return [...root.querySelectorAll(NAV_SELECTOR)].filter(el=>{
+    const candidates=[...(root.matches?.(NAV_SELECTOR)?[root]:[]),...root.querySelectorAll(NAV_SELECTOR)];
+    return candidates.filter(el=>{
       if(el.matches('article,[data-a11y-read],h1,h2,h3,h4,h5,h6,p,li,blockquote,figcaption,td,th,dt,dd,pre,[role="heading"]')&&!el.hasAttribute('tabindex'))el.setAttribute('tabindex','-1');
       if(el.hidden||el.closest('[hidden],[aria-hidden="true"],[inert]')||el.getAttribute('aria-hidden')==='true')return false;
       const rect=el.getBoundingClientRect();
