@@ -35,6 +35,8 @@
       "id": "paragraph-machine",
       "required": true,
       "resources": [
+        "content/playing-cards.js",
+        "content/card-collection.js",
         "js/paragraph-page.js",
         "adapters/paragraph-workspace.js",
         "engine/paragraph-engine.js",
