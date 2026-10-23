@@ -1,0 +1,57 @@
+.doctor-page{
+  --doctor-ink:#173d59;--doctor-teal:#168f98;--doctor-glass:rgba(255,255,255,.66);
+  position:relative;isolation:isolate;overflow:hidden;min-height:100%;
+  color:var(--doctor-ink);
+  background-color:#e9f8f8;
+  background-image:radial-gradient(ellipse at 73% 12%,rgba(255,255,255,.98) 0 8%,rgba(255,255,255,.45) 23%,transparent 43%),radial-gradient(ellipse at 18% 36%,rgba(255,255,255,.9),transparent 36%),radial-gradient(ellipse at 82% 78%,rgba(76,201,208,.42),transparent 35%),linear-gradient(145deg,#f8ffff 0%,#d8f2f4 45%,#f9ffff 100%);
+}
+.doctor-page::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(115deg,transparent 0 92px,rgba(255,255,255,.2) 93px 95px,transparent 96px 174px),radial-gradient(ellipse at 50% 100%,rgba(255,255,255,.82),transparent 42%);opacity:.8}
+.doctor-head{position:relative;z-index:4;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:clamp(1rem,4vw,2rem);color:#173d59}
+.doctor-eyebrow{margin:0 0 .35rem;font-size:.7rem;letter-spacing:.16em;color:#168f98;font-weight:800}
+.doctor-head h1{margin:0;font-size:clamp(2rem,6vw,3.4rem);font-weight:800;text-shadow:0 2px 20px rgba(255,255,255,.95)}
+.doctor-head p:last-child{margin:.4rem 0 0;color:#416a7b}
+.doctor-close{border:1px solid rgba(255,255,255,.95)!important;border-radius:999px!important;padding:.7rem 1.1rem!important;color:#174a63!important;background:rgba(255,255,255,.65)!important;box-shadow:0 8px 28px rgba(56,141,158,.12),inset 0 1px 0 #fff!important;backdrop-filter:blur(16px)}
+.doctor-scene{position:relative;isolation:isolate;overflow:hidden;width:min(100%,900px);aspect-ratio:1.18;margin:0 auto;border:1px solid rgba(255,255,255,.82);border-radius:clamp(1.2rem,4vw,2.6rem);background:radial-gradient(ellipse at 72% 14%,rgba(255,255,255,.98),transparent 32%),linear-gradient(120deg,rgba(255,255,255,.7),rgba(255,255,255,.15)),linear-gradient(180deg,#e5f5f6,#bde5e8);box-shadow:0 24px 80px rgba(38,122,139,.15),inset 0 1px 0 #fff}
+.doctor-scene::before{content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(255,255,255,.8) 0 12%,transparent 12.5% 15%,rgba(255,255,255,.25) 15.5% 16%,transparent 16.5%),radial-gradient(ellipse at 50% 100%,rgba(255,255,255,.85),transparent 54%);z-index:-1}
+.doctor-clinic-window{position:absolute;left:2%;top:9%;width:21%;height:42%;border:7px solid rgba(255,255,255,.85);border-radius:1rem;background:linear-gradient(180deg,#b9e8f6,#effcff 72%,#b4e6d5);box-shadow:0 8px 30px rgba(51,124,147,.14)}
+.doctor-shelf{position:absolute;left:4%;top:54%;width:28%;height:3%;border-radius:8px;background:linear-gradient(#fff,#c2e6e8);box-shadow:0 8px 0 rgba(255,255,255,.45),0 14px 28px rgba(48,119,132,.13)}
+.doctor-plant{position:absolute;left:8%;top:40%;width:12%;height:17%;background:radial-gradient(ellipse at 50% 100%,#d8d5ca 0 28%,transparent 29%),radial-gradient(ellipse at 24% 22%,#69b98b 0 12%,transparent 13%),radial-gradient(ellipse at 66% 16%,#3f9d76 0 13%,transparent 14%),radial-gradient(ellipse at 45% 48%,#8bce9e 0 17%,transparent 18%)}
+.doctor-mark{position:absolute;right:8%;top:9%;width:19%;aspect-ratio:1;display:grid;place-items:center;border-radius:25%;background:linear-gradient(145deg,#38b6b8,#16818e);box-shadow:0 14px 32px rgba(32,132,147,.18),inset 0 2px 0 rgba(255,255,255,.6)}
+.doctor-cross{position:absolute;width:62%;height:20%;border-radius:8px;background:#eaffff}.doctor-cross::after{content:"";position:absolute;left:40%;top:-105%;width:32%;height:310%;border-radius:8px;background:#eaffff}
+.doctor-heart{position:relative;margin-top:2%;font-size:clamp(1.7rem,6vw,4rem);font-weight:700;color:white;text-shadow:0 0 16px rgba(255,255,255,.8)}
+.doctor-portrait{position:absolute;z-index:2;left:17%;bottom:-3%;width:43%;height:83%}
+.doctor-face{position:absolute;z-index:4;left:23%;top:6%;width:53%;height:35%;border-radius:47% 48% 45% 46%;background:radial-gradient(ellipse at 38% 36%,#ffd7b1 0 20%,transparent 45%),linear-gradient(115deg,#f6b98e,#ffdab7 53%,#e9a77e);box-shadow:inset -9px -8px 15px rgba(140,75,48,.14),0 8px 22px rgba(77,77,76,.1);transform:rotate(-4deg)}
+.doctor-hair{position:absolute;z-index:5;left:20%;top:1%;width:58%;height:17%;border-radius:58% 55% 24% 20%;background:radial-gradient(ellipse at 40% 20%,#5b4135,#1c2530 70%);transform:rotate(-4deg);box-shadow:inset 0 -6px 0 rgba(0,0,0,.13)}
+.doctor-eye{position:absolute;top:39%;width:14%;height:13%;border-radius:50%;background:#fff;box-shadow:inset 0 -2px 0 #c38d6a}.doctor-eye::after{content:"";position:absolute;left:28%;top:8%;width:58%;height:85%;border-radius:50%;background:radial-gradient(circle at 35% 28%,#fff 0 12%,#684a34 15% 55%,#182b35 58%)}
+.eye-left{left:23%}.eye-right{right:21%}
+.doctor-nose{position:absolute;left:48%;top:48%;width:9%;height:21%;border-radius:50%;border-right:2px solid rgba(180,103,67,.35);transform:rotate(9deg)}
+.doctor-smile{position:absolute;left:33%;top:70%;width:38%;height:13%;border-bottom:4px solid #965d4b;border-radius:0 0 60% 60%;transform:rotate(-3deg)}
+.doctor-stubble{position:absolute;left:15%;bottom:2%;width:70%;height:27%;border-radius:0 0 45% 45%;background:linear-gradient(180deg,transparent,rgba(76,66,59,.22));mask-image:linear-gradient(transparent,#000)}
+.doctor-neck{position:absolute;z-index:3;left:39%;top:35%;width:23%;height:15%;background:linear-gradient(90deg,#d99a73,#f5bd92);border-radius:0 0 15px 15px}
+.doctor-shirt{position:absolute;z-index:2;left:26%;top:44%;width:47%;height:47%;background:linear-gradient(90deg,#0d6d7a,#25a4ad 50%,#075765);clip-path:polygon(28% 0,72% 0,100% 100%,0 100%)}
+.doctor-coat{position:absolute;z-index:3;top:42%;height:58%;width:51%;background:linear-gradient(100deg,#fff,#e6f3f4 70%,#fff);box-shadow:0 0 0 1px rgba(255,255,255,.7)}
+.coat-left{left:0;clip-path:polygon(64% 0,100% 8%,86% 43%,100% 100%,0 100%,13% 40%,26% 8%)}
+.coat-right{right:0;clip-path:polygon(35% 0,75% 7%,90% 43%,100% 100%,0 100%,16% 44%)}
+.doctor-stethoscope{position:absolute;z-index:5;left:19%;top:43%;width:47%;height:28%;border:5px solid #294e5a;border-top-color:transparent;border-radius:0 0 45% 45%;transform:rotate(4deg);filter:drop-shadow(0 2px 2px rgba(0,0,0,.15))}
+.doctor-stethoscope::after{content:"";position:absolute;right:-10%;bottom:-10%;width:17%;aspect-ratio:1;border-radius:50%;background:linear-gradient(145deg,#fff,#526b72 55%,#dce9e9);border:2px solid #536b70}
+.doctor-robot{position:absolute;z-index:4;right:10%;bottom:0;width:38%;height:56%}
+.robot-antenna{position:absolute;z-index:3;top:-6%;left:47%;width:7%;height:12%;border-radius:8px;background:linear-gradient(90deg,#c5ffff,#168e9c)}
+.robot-antenna::after{content:"";position:absolute;top:-7px;left:-5px;width:18px;aspect-ratio:1;border-radius:50%;background:#42d6e2;box-shadow:0 0 18px #83f5ff}
+.robot-head{position:absolute;z-index:4;top:0;left:3%;width:94%;height:55%;border-radius:28% 28% 24% 24%;background:linear-gradient(145deg,#fff,#d8f0f2 66%,#fff);box-shadow:0 13px 26px rgba(40,115,131,.18),inset 0 2px 0 #fff}
+.robot-face{position:absolute;inset:10% 8%;border-radius:23%;background:radial-gradient(ellipse at 50% 0,rgba(65,133,168,.65),transparent 70%),linear-gradient(145deg,#0b2946,#102f50);box-shadow:inset 0 0 18px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:space-evenly}
+.robot-eye{width:18%;height:18%;border-radius:100% 100% 30% 30%;border-top:7px solid #65f4ff;filter:drop-shadow(0 0 7px #36d8f2);transform:rotate(12deg)}
+.robot-smile{position:absolute;left:39%;bottom:20%;width:23%;height:13%;border-bottom:6px solid #65f4ff;border-radius:0 0 50% 50%;filter:drop-shadow(0 0 6px #36d8f2)}
+.robot-neck{position:absolute;z-index:2;left:32%;top:48%;width:36%;height:15%;background:linear-gradient(90deg,#137582,#54d2d3,#116b77);border-radius:0 0 14px 14px}
+.robot-body{position:absolute;z-index:2;left:8%;bottom:-5%;width:84%;height:48%;border-radius:28% 28% 16% 16%;background:linear-gradient(110deg,#fff,#cce7e9 48%,#fff);box-shadow:0 12px 22px rgba(40,115,131,.13),inset 0 2px 0 white}
+.robot-tablet{position:absolute;left:13%;top:14%;width:74%;height:64%;border:5px solid #496f78;border-radius:12px;background:linear-gradient(145deg,#0d425c,#087b8b);box-shadow:inset 0 0 20px rgba(38,225,235,.2);color:#85ffff;text-align:center}
+.robot-heart{display:block;font-size:clamp(1.3rem,4vw,3rem);line-height:1.15;text-shadow:0 0 12px #6ff}
+.robot-pulse{position:absolute;left:36%;top:24%;font-size:clamp(1.3rem,3vw,2rem)}
+.robot-lines{display:block;width:48%;height:5px;margin:5% auto;background:rgba(92,250,255,.65);border-radius:10px;box-shadow:0 9px 0 rgba(92,250,255,.35)}
+.robot-arm{position:absolute;z-index:5;top:58%;width:22%;height:35%;border-radius:40px;background:linear-gradient(90deg,#e4f3f4,#fff,#c5e1e4);box-shadow:0 5px 14px rgba(40,115,131,.14)}
+.arm-left{left:-1%;transform:rotate(22deg)}.arm-right{right:-1%;transform:rotate(-22deg)}
+.doctor-scene-glow{position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse at 56% 40%,transparent 20%,rgba(255,255,255,.16) 60%,rgba(255,255,255,.5));mix-blend-mode:screen}
+.doctor-caption{position:relative;max-width:48rem;margin:1.2rem auto 2rem;padding:0 1.25rem;text-align:center;color:#416a7b;line-height:1.9}
+.fr-game-doctor{background-image:radial-gradient(circle at 50% 0,rgba(255,255,255,.98),rgba(255,255,255,.55) 28%,transparent 64%),linear-gradient(145deg,rgba(255,255,255,.92),rgba(220,250,251,.78))!important;border:1px solid rgba(255,255,255,.98)!important;color:#17485e!important;text-shadow:0 1px 0 white;box-shadow:0 0 30px rgba(255,255,255,.65),0 12px 32px rgba(112,203,210,.18),inset 0 1px 0 white!important}
+.fr-game-doctor .fr-game-number{background:rgba(255,255,255,.78);color:#168f98}
+@media(max-width:560px){.doctor-head{align-items:flex-start;padding:1rem}.doctor-head p:last-child{max-width:15rem;font-size:.86rem}.doctor-scene{width:calc(100% - 1.5rem);aspect-ratio:.86;border-radius:1.4rem}.doctor-clinic-window{top:11%;height:31%}.doctor-shelf{top:46%}.doctor-plant{top:34%}.doctor-mark{right:5%;top:5%;width:20%}.doctor-portrait{left:6%;width:54%;height:69%;bottom:0}.doctor-robot{right:3%;width:46%;height:46%;bottom:0}.doctor-robot .robot-head{height:52%}.doctor-robot .robot-body{height:47%}.doctor-caption{margin-bottom:1.5rem;font-size:.92rem}}
+@media(prefers-reduced-transparency:reduce){.doctor-close{background:#fff!important;backdrop-filter:none}.doctor-scene{box-shadow:none}}

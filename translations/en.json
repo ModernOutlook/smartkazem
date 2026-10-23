@@ -295,6 +295,7 @@
       "reference": "Imitation Reference",
       "comingSoon": "Coming soon",
       "tadbir": "Tadbir",
+      "doctor": "Doctor",
       "share": "Share Economy"
     },
     "talash": {
@@ -402,6 +403,11 @@
       "depositFailed": "Deposit failed. The amount may exceed the allowed limit or the account may not be eligible.",
       "withdrawFailed": "Withdrawal failed. There is no active deposit.",
       "returnFailed": "Could not return to the game."
+    },
+    "doctor": {
+      "title": "Doctor",
+      "subtitle": "An intelligent companion for care and well-being",
+      "caption": "Medical knowledge, human empathy, and intelligent tools in a bright, calming space."
     }
   },
   "paragraphMachine": {

@@ -295,6 +295,7 @@
       "reference": "模仿参照",
       "comingSoon": "即将推出",
       "tadbir": "统筹",
+      "doctor": "医生",
       "share": "份额经济"
     },
     "talash": {
@@ -402,6 +403,11 @@
       "depositFailed": "存款失败。金额可能超过限额或账户不符合条件。",
       "withdrawFailed": "取款失败。当前没有有效存款。",
       "returnFailed": "无法返回游戏。"
+    },
+    "doctor": {
+      "title": "医生",
+      "subtitle": "关怀与健康的智能伙伴",
+      "caption": "在明亮宁静的空间中融合医学知识、人文关怀与智能工具。"
     }
   },
   "paragraphMachine": {
