@@ -1150,3 +1150,23 @@ html[dir="rtl"] .home-page > .info {
     padding: 5px;
   }
 }
+
+
+/* Factory-standard playing-card geometry: 2.5 × 3.5 proportion and
+   corner radii equivalent to approximately 1/8 inch on a poker-size card. */
+:root {
+  --playing-card-ratio: 5 / 7;
+  --playing-card-radius: 5% / 3.57%;
+}
+.fr-card {
+  aspect-ratio: var(--playing-card-ratio);
+  overflow: hidden;
+  border-radius: var(--playing-card-radius);
+}
+.fr-card-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: inherit;
+}
