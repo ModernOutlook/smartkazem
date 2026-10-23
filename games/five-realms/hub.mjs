@@ -15,6 +15,8 @@ import { GAME_BACKGROUNDS } from "../shared/backgrounds.mjs";
   tile.dataset.backgroundAsset=asset.source;
  });
  root.addEventListener("click",event=>{
+  const doctor=event.target.closest("[data-doctor-link]");
+  if(doctor){event.preventDefault();window.SharedPages?.open("doctor","share").catch(error=>console.error("[Doctor]",error));return;}
   const button=event.target.closest("[data-talash-link]");
   if(!button)return;
   event.preventDefault();
