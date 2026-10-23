@@ -27,7 +27,7 @@ function getCookie(request, name) {
 }
 function validOrigin(request, env) {
   const origin = request.headers.get("Origin");
-  return !origin || origin === env.SITE_ORIGIN;
+  return origin === env.SITE_ORIGIN;
 }
 async function rateLimit(db, bucket, subject, max, seconds) {
   const stamp = Math.floor(Date.now() / 1000);
@@ -91,7 +91,7 @@ async function route(request, env) {
   const path = url.pathname.replace(/\/+$/, "") || "/";
   const method = request.method;
   if (method === "GET" && path === "/health") return json({ ok: true, service: "smartkazem-community", version: 1 });
-  if (!validOrigin(request, env)) return json({ error: "origin_not_allowed" }, 403);
+  if (method !== "GET" && method !== "HEAD" && !validOrigin(request, env)) return json({ error: "origin_not_allowed" }, 403);
   if (method === "POST" && path === "/auth/register") {
     const data = await body(request);
     const email = text(data.email, 254).toLowerCase();
