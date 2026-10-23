@@ -58,6 +58,31 @@ for (const key of keys.fa) {
 }
 errors.push(...parityMissing);
 
+
+function validateAccessibilityLanguage(language, value, prefix = 'labels.accessibility') {
+  if (typeof value === 'string') {
+    // Arabic-script text is expected only in Persian/Arabic accessibility labels.
+    // Persian-specific letters are not valid in the Arabic catalog.
+    if (['en', 'zh'].includes(language) && /[\\u0600-\\u06FF]/u.test(value)) {
+      errors.push(language + '.json contains Arabic/Persian text at ' + prefix + ': ' + value);
+    }
+    if (language === 'ar' && /[پچژگکی]/u.test(value)) {
+      errors.push(language + '.json contains Persian-specific letters at ' + prefix + ': ' + value);
+    }
+    if (!value.trim()) errors.push(language + '.json has an empty accessibility label at ' + prefix);
+    return;
+  }
+  if (value && typeof value === 'object') {
+    for (const [key, child] of Object.entries(value)) {
+      validateAccessibilityLanguage(language, child, prefix + '.' + key);
+    }
+  }
+}
+
+for (const language of languages) {
+  validateAccessibilityLanguage(language, catalogs[language].labels?.accessibility);
+}
+
 console.log('Root HTML files scanned: ' + htmlFiles.length);
 console.log('Translation attributes scanned: ' + attributeCount);
 console.log('Localized accessible-name hooks: ' + accessibleNameCount);
