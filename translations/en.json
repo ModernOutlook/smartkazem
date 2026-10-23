@@ -18,9 +18,9 @@
     "close": "Close",
     "comingSoon": "Coming later",
     "language": "Site language",
+    "skipToContent": "Skip to main content",
     "audio": "Audio",
     "audioControls": "Audio controls",
-    "skipToContent": "Skip to main content",
     "enable": "Enable sound",
     "continueSilent": "Continue without sound",
     "toggle": "Turn sound on or off",
@@ -33,6 +33,7 @@
     "volumeLabel": "Audio volume",
     "resumeFailed": "Sound could not be enabled automatically.",
     "shahnameh": "Shahnameh Reading",
+    "emergence": "Chapter One · The Emergence",
     "accessibility": {
       "enabled": "Accessibility mode enabled.",
       "disabled": "Accessibility mode disabled.",
@@ -70,11 +71,6 @@
       "article": "Article",
       "readingArticle": "Reading article"
     },
-    "episodeNavigation": "Episode navigation",
-    "previousEpisode": "Previous episode",
-    "nextEpisode": "Next episode",
-    "episodeReader": "Episode text",
-    "emergence": "Chapter One · The Emergence",
     "manifestoParts": "Manifesto parts",
     "partNavigation": "Part selection",
     "partText": "Part text",
@@ -87,6 +83,9 @@
     "book": "Book",
     "bookChapters": "Book chapters",
     "sectionList": "Section list",
+    "episodeNavigation": "Episode navigation",
+    "previousEpisode": "Previous episode",
+    "nextEpisode": "Next episode",
     "emergence1ImageAlt": "Image for Emergence, Chapter One",
     "emergence2ImageAlt": "Image for Emergence, Chapter Two",
     "chapterList": "Chapter list",
@@ -112,12 +111,13 @@
     "missingEpisodeText": "The text for this episode is not available in its source catalog.",
     "missingTranslation": "A translation for this section is not available.",
     "inventoryDescription": "55 images, each with its own identity and a fixed order.",
-    "fiveRealms": "Five realms"
+    "fiveRealms": "Five realms",
+    "episodeReader": "Episode text"
   },
   "meta": {
     "brand": "Modern Outlook",
-    "brandNative": "Modern Outlook",
-    "brandLatin": "Modern Outlook"
+    "brandLatin": "Modern Outlook",
+    "brandNative": "Modern Outlook"
   },
   "home": {
     "brand": "Modern Outlook",
@@ -187,15 +187,12 @@
       "subtitle": "Ten Chapters",
       "moral": "One who displays a skill goes only as far as there are spectators; one who practices a skill goes as far as they can themselves. And a forest in which everyone is a spectator ultimately has nothing left to see but the act of watching itself."
     },
+    "humanMachines": {
+      "title": "Humanity and Its Machines",
+      "subtitle": "Seven Parts"
+    },
     "shahnameh": {
       "placeholder": "The text for this section has not yet been added.",
-      "subtitle": "From the First Law to the Unknown Horizon",
-      "heroTitle": "From the First King to the End of the Tale",
-      "heroText": "Read the complete episodes of the Shahnameh as a continuous literary journey. Each episode contains its narrative, selected verses, and edition information.",
-      "findTitle": "Find an episode",
-      "searchPlaceholder": "Episode title or number…",
-      "visualLabel": "81 Stories, 81 Eras",
-      "visualAlbum": "81 Stories, 81 Eras",
       "eyebrow": "Modern Outlook",
       "ui": {
         "eyebrow": "Modern Outlook · Shahnameh",
@@ -215,19 +212,26 @@
         "empty": "No episode matches these criteria.",
         "imageMissing": "Image not found for this episode.",
         "part": "Part"
-      }
+      },
+      "visualLabel": "81 Stories, 81 Eras",
+      "visualAlbum": "81 Stories, 81 Eras",
+      "findTitle": "Find an episode",
+      "searchPlaceholder": "Episode title or number…",
+      "subtitle": "From the First Law to the Unknown Horizon",
+      "heroTitle": "From the First King to the End of the Tale",
+      "heroText": "Read the complete episodes of the Shahnameh as a continuous literary journey. Each episode contains its narrative, selected verses, and edition information."
     },
     "observation25": {
+      "close": "Back",
       "title": "The Land of Observation; 25 Times Reaching",
-      "subtitle": "Volume Two of the Philosophical Treatise on Modern Outlook",
-      "close": "Back"
+      "subtitle": "Volume Two of the Philosophical Treatise on Modern Outlook"
     },
     "layer3": {
+      "title": "The Echo of the Third Layer",
+      "subtitle": "A Coordination Protocol: From Silence to Utopia",
       "close": "Back",
       "chapter1": "Chapter One — Protocol of Coordination",
       "chapter2": "Chapter Two — Utopia",
-      "title": "The Echo of the Third Layer",
-      "subtitle": "A Coordination Protocol: From Silence to Utopia",
       "sections": [
         "The Great Silence",
         "Grooves in the Silence",
@@ -248,14 +252,10 @@
         "The Beginning After the End"
       ]
     },
-    "humanMachines": {
-      "title": "Humanity and Its Machines",
-      "subtitle": "Seven Parts"
-    },
     "possibleMirror": {
+      "close": "Back",
       "title": "The Mirror of Possibilities",
-      "subtitle": "A novel about will, possibility, and reflection",
-      "close": "Back"
+      "subtitle": "A novel about will, possibility, and reflection"
     },
     "disturbedManifesto": {
       "title": "Disturbed Manifesto",
@@ -264,15 +264,15 @@
     "tabahian": {
       "title": "The Corrupted"
     },
-    "inventory": {
-      "title": "Card Inventory — SmartKazem"
-    },
     "emergence": {
       "title": "Emergence"
     },
     "emergence2": {
       "title": "Chapter Two: Emergence",
       "subtitle": "Chapter Two of Emergence in 11 episodes."
+    },
+    "inventory": {
+      "title": "Card Inventory — SmartKazem"
     },
     "quantumMaze": {
       "title": "Quantum Maze",
