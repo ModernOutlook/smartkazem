@@ -15,14 +15,15 @@ Five procedural cues correspond to the five realms. The engine infers the realm 
 ## Blind accessibility mode
 There is deliberately no visible accessibility audio button.
 
-1. **Triple click / triple tap on a non-interactive area within about 620 ms:** toggle Blind Accessibility Mode.
-2. **Arrow keys:** move between headings, paragraphs, list items, quotes, table cells, links, and controls. **Home / End** move to the first / last item.
-3. **Enter / Space:** read the selected text block or activate a control.
-4. **P:** pause or resume speech. If speech is idle, P repeats the last announcement. **R** repeats the last speech.
-5. **Double click / double tap in Blind Mode:** repeat the last spoken announcement.
-6. **Long press / long pointer hold for about 720 ms in Blind Mode:** pause/resume speech; if idle, repeat the last announcement.
-7. **Escape:** cancel current speech.
-8. **Swipe horizontally on touch screens:** move to the next or previous navigable item.
+1. **Ctrl+Alt+Shift+A:** toggle Blind Accessibility Mode from the keyboard, without requiring a pointer gesture.
+2. **Triple click / triple tap on a non-interactive area within about 620 ms:** alternate pointer/touch activation.
+3. **Arrow keys:** move between headings, paragraphs, list items, quotes, table cells, links, and controls. **Home / End** move to the first / last item.
+4. **Enter / Space:** read the selected text block or activate a control.
+5. **P:** pause or resume speech. If speech is idle, P repeats the last announcement. **R** repeats the last speech.
+6. **Double click / double tap in Blind Mode:** repeat the last spoken announcement.
+7. **Long press / long pointer hold for about 720 ms in Blind Mode:** pause/resume speech; if idle, repeat the last announcement.
+8. **Escape:** cancel current speech.
+9. **Swipe horizontally on touch screens:** move to the next or previous navigable item.
 
 Long articles are read in sequential chunks capped by character count, with boundaries chosen at punctuation or spaces when possible. The chunker also supports languages without spaces, including Chinese. Pressing Enter on an article reads its full visible, language-selected text; pressing Enter on a paragraph or other text block reads only that block. The triple-click handler captures the third click before the underlying site control can activate.
 
