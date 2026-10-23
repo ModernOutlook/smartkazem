@@ -27,7 +27,7 @@ Inventory renders from content/page-templates/inventory.fragment in shared runti
 
 Card Algorithm (Mandatory)
 
-Any level showing cards ⇒ window.PlayingCardsCatalog from content/playing-cards.js + PlayingCardsCatalog.imagePath(card); identify via catalog ID/rank/suit, never construct paths or separate text cards. Reference: Card Inventory and "Your Hand" in Five Realms. Prohibited: image duplication, parallel mapping, text-card substitution. Preserve: semantic/a11y labels, selection/status indicators, joker identity, responsive ratios. Adding a card level ⇒ audit all callers + verify image load in desktop/portrait/landscape.
+Any level showing cards ⇒ window.PlayingCardsCatalog from content/playing-cards.js + PlayingCardsCatalog.imagePath(card); identify via catalog ID/rank/suit, never construct paths or separate text cards. Reference: Card Inventory and "Your Hand" in Five Realms. Prohibited: image duplication, parallel mapping, text-card substitution. Preserve: semantic/a11y labels, selection/status indicators, joker identity, factory geometry (5:7 poker-card ratio; corner radius equivalent to approximately 1/8 inch at 2.5-inch card width). Keep image, card container, and corner clipping aligned across inventory and game hands. Adding a card level ⇒ audit all callers + verify image load in desktop/portrait/landscape.
 
 Card Collection Algorithm
 
