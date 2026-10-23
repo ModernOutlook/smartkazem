@@ -24,13 +24,11 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          MAIL_FROM: ${{ secrets.MAIL_FROM }}
-          TURNSTILE_SECRET_KEY: ${{ secrets.TURNSTILE_SECRET_KEY }}
           COMMUNITY_SITE_ORIGIN: ${{ vars.COMMUNITY_SITE_ORIGIN }}
+          COMMUNITY_GOOGLE_CLIENT_ID: ${{ vars.COMMUNITY_GOOGLE_CLIENT_ID }}
         run: |
           set -euo pipefail
-          for name in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID RESEND_API_KEY MAIL_FROM TURNSTILE_SECRET_KEY COMMUNITY_SITE_ORIGIN; do
+          for name in CLOUDFLARE_API_TOKEN CLOUDFLARE_ACCOUNT_ID COMMUNITY_SITE_ORIGIN COMMUNITY_GOOGLE_CLIENT_ID; do
             if [ -z "${!name:-}" ]; then
               echo "::error::Missing required GitHub secret/variable: $name"
               exit 1
@@ -48,6 +46,7 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           COMMUNITY_SITE_ORIGIN: ${{ vars.COMMUNITY_SITE_ORIGIN }}
+          COMMUNITY_GOOGLE_CLIENT_ID: ${{ vars.COMMUNITY_GOOGLE_CLIENT_ID }}
         working-directory: community-worker
         run: |
           set -euo pipefail
@@ -70,6 +69,7 @@ jobs:
 
           sed -i "s/REPLACE_WITH_D1_DATABASE_ID/$d1_id/" wrangler.toml
           sed -i "s#https://modernoutlook.github.io#$COMMUNITY_SITE_ORIGIN#" wrangler.toml
+          sed -i "s#REPLACE_WITH_GOOGLE_CLIENT_ID#$COMMUNITY_GOOGLE_CLIENT_ID#" wrangler.toml
           echo "D1 and R2 resources are present; Worker configuration has been prepared."
 
       - name: Apply D1 migrations
@@ -85,14 +85,8 @@ jobs:
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-          MAIL_FROM: ${{ secrets.MAIL_FROM }}
-          TURNSTILE_SECRET_KEY: ${{ secrets.TURNSTILE_SECRET_KEY }}
         run: |
           set -euo pipefail
-          printf '%s' "$RESEND_API_KEY" | npx --yes wrangler@4.45.0 secret put RESEND_API_KEY
-          printf '%s' "$MAIL_FROM" | npx --yes wrangler@4.45.0 secret put MAIL_FROM
-          printf '%s' "$TURNSTILE_SECRET_KEY" | npx --yes wrangler@4.45.0 secret put TURNSTILE_SECRET_KEY
           deploy_log="$(npx --yes wrangler@4.45.0 deploy 2>&1)"
           printf '%s\\n' "$deploy_log"
           worker_url="$(printf '%s\\n' "$deploy_log" | grep -Eo 'https://[^[:space:]]+\\.workers\\.dev' | tail -n1)"
