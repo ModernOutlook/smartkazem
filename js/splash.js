@@ -29,9 +29,6 @@
   async function localizeLogoViewer(language) {
     if (!logoViewer) return;
     const data = await loadLogoViewerLanguage(language); if (!data) return;
-    let slogan = logoViewer.querySelector('.logo-slogan');
-    if (!slogan) { slogan = document.createElement('p'); slogan.className = 'logo-slogan'; logoViewer.prepend(slogan); }
-    slogan.textContent = data.slogan || '';
     const logoArt = logoViewer.querySelector('.logo-art'), logoImage = logoViewer.querySelector('.logo-art img'), inventory = logoViewer.querySelector('.inventory-link');
     logoViewer.setAttribute('aria-label', data.dialog || ''); if (logoArt) logoArt.setAttribute('aria-label', data.logo || ''); if (logoImage) logoImage.setAttribute('alt', data.logoAlt || data.logo || ''); if (inventory) inventory.textContent = data.inventory || '';
   }
