@@ -1222,3 +1222,22 @@ html[data-audio-accessibility="on"] body #smartkazem-accessibility-announcer {
   white-space: nowrap !important;
   border: 0 !important;
 }
+
+
+/* Doctor entry: retain the shared game-tile shape, with a clean white treatment and title only. */
+.fr-hub-page .fr-game-doctor {
+  color: #fff;
+  background-color: rgba(255,255,255,.08) !important;
+  background-image: none !important;
+  border-color: rgba(255,255,255,.72) !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.12), 0 8px 24px rgba(0,0,0,.22);
+}
+.fr-hub-page .fr-game-doctor strong {
+  color: #fff;
+  text-shadow: 0 1px 8px rgba(0,0,0,.28);
+}
+.fr-hub-page .fr-game-doctor:hover,
+.fr-hub-page .fr-game-doctor:focus-visible {
+  background-color: rgba(255,255,255,.16) !important;
+  border-color: #fff !important;
+}

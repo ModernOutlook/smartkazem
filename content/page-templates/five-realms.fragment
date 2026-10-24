@@ -9,6 +9,6 @@
   <button class="fr-game-tile fr-game-experience" type="button" data-quantum-maze-link><span class="fr-game-number">۳</span><strong data-i18n="pages.gameHub.experience">تجربه</strong><span data-i18n="pages.gameHub.experienceRealm">قلمرو تجربه</span></button>
   <button class="fr-game-tile fr-game-simulation" type="button" data-simulation-link><span class="fr-game-number">۴</span><strong data-i18n="pages.gameHub.simulation">شبیه‌سازی</strong><span data-i18n="pages.gameHub.reference">مرجع تقلید</span></button>
   <button class="fr-game-tile fr-game-tadbir" type="button" data-tadbir-link><span class="fr-game-number">۵</span><strong data-i18n="pages.gameHub.tadbir">تدبیر</strong><span data-i18n="pages.gameHub.share">اقتصاد سهم</span></button>
-  <button class="fr-game-tile fr-game-doctor" type="button" data-doctor-link><span class="fr-game-number">۶</span><strong data-i18n="pages.gameHub.doctor">دکتر</strong><span data-i18n="pages.gameHub.share">اقتصاد سهم</span></button>
+  <button class="fr-game-tile fr-game-doctor" type="button" data-doctor-link aria-label="دکتر"><strong data-i18n="pages.gameHub.doctor">دکتر</strong></button>
  </section>
 </main>
