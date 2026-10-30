@@ -360,7 +360,8 @@
       "placeholderOption": "示例选项",
       "winner": "获胜者：",
       "menu": "扑克手牌",
-      "actualityCenter": "现实中心",
+      "actualityCenter": "现实中心",,
+      "bazyaab": "巴齐亚布"
       "jokerNoPoker": "小丑牌不能进入扑克手牌，请使用交换行动。",
       "forgivenRealm": "如果多个领域持有的牌数并列最多，请选择哪个领域的错误答案可获免罚。",
       "jokerChooseCard": "选择一张要用小丑牌换取的牌",
