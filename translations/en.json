@@ -361,6 +361,7 @@
       "winner": "Winner: ",
       "menu": "Poker Hands",
       "actualityCenter": "Actuality Center",
+      "bazyaab": "Bazyaab",
       "jokerNoPoker": "Jokers cannot enter poker hands; use an exchange action.",
       "forgivenRealm": "If multiple realms tie for the most cards, choose which realm's wrong answer is forgiven.",
       "jokerChooseCard": "Choose a card to take with the joker",
